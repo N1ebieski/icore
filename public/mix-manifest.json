@@ -1,0 +1,13 @@
+{
+    "/js/admin/admin.js": "/js/admin/admin.js",
+    "/js/vendor/vendor.js": "/js/vendor/vendor.js",
+    "/css/vendor/vendor.css": "/css/vendor/vendor.css",
+    "/css/web/web.css": "/css/web/web.css",
+    "/css/web/web-dark.css": "/css/web/web-dark.css",
+    "/css/admin/admin.css": "/css/admin/admin.css",
+    "/css/admin/admin-dark.css": "/css/admin/admin-dark.css",
+    "/js/web/web.js": "/js/web/web.js",
+    "/js/web/scripts.js": "/js/web/scripts.js",
+    "/js/admin/scripts.js": "/js/admin/scripts.js",
+    "/js/vendor/jsvalidation/jsvalidation.min.js": "/js/vendor/jsvalidation/jsvalidation.min.js"
+}

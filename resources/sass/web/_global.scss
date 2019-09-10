@@ -1,0 +1,68 @@
+.content {
+    margin-top: $navbar-base-height;
+    min-height: calc(100vh - 290px);
+}
+
+.content .background {
+    background: url('/vendor/icore/img/background.jpg') no-repeat center center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.post img {
+    @extend .img-fluid
+}
+
+.spinner-border {
+    @extend .text-primary;
+    margin: 0 auto;
+}
+
+.spinner-grow {
+    @extend .text-primary;
+    margin: 0 auto;
+}
+
+.loader {
+    @extend .d-flex;
+}
+
+.loader-absolute {
+    left: calc(50% - 1rem);
+    top: calc(50% - 1rem);
+    position: absolute;
+    z-index: 1000;
+}
+
+.transition {
+    transition: all 0.9s ease-out 0s;
+}
+
+.scroll-to-top {
+    z-index: 100;
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    display: none;
+    min-width: 50px;
+    min-height: 50px;
+    text-align: center;
+    color: $white;
+    background: fade-out($gray-800, .5);
+    line-height: 40px;
+    padding: 5px;
+
+    &:focus,
+    &:hover {
+        color: white;
+    }
+
+    &:hover {
+        background: $gray-800;
+    }
+
+    i {
+        font-weight: 800;
+    }
+}

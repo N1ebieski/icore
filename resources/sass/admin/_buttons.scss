@@ -1,0 +1,25 @@
+.responsive-btn-group {
+    @extend .btn-group;
+    @include media-breakpoint-down(lg) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .btn:not(:first-child) {
+            margin-left: 0;
+        }
+    }
+
+    .btn {
+        width: 40px;
+        height: 40px;
+        @include media-breakpoint-up(sm) {
+            width: 120px;
+            height: 40px;
+        }
+    }
+}
+
+.btn-popover {
+    width: 100px;
+    text-align: center;
+}

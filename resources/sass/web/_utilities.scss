@@ -1,0 +1,46 @@
+.depth-0 {
+    margin-left: 0;
+}
+
+.depth-1 {
+    margin-left: 1rem;
+    @include media-breakpoint-up(sm) {
+        margin-left: 2rem;
+    }
+}
+
+.depth-2 {
+    margin-left: 2rem;
+    @include media-breakpoint-up(sm) {
+        margin-left: 4rem;
+    }
+}
+
+.depth-3 {
+    margin-left: 3rem;
+    @include media-breakpoint-up(sm) {
+        margin-left: 6rem;
+    }
+}
+
+.depth-4 {
+    margin-left: 4rem;
+    @include media-breakpoint-up(sm) {
+        margin-left: 8rem;
+    }
+}
+
+.depth-5 {
+    margin-left: 5rem;
+    @include media-breakpoint-up(sm) {
+        margin-left: 10rem;
+    }
+}
+
+.z-900 {
+    z-index: 900;
+}
+
+.hide {
+    display: none;
+}

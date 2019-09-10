@@ -1,0 +1,78 @@
+@extends('icore::web.layouts.layout', [
+    'title' => [$page->meta_title, (bool)$page->comment === true ? trans('icore::pagination.page', ['num' => $comments->currentPage()]) : null],
+    'desc' => [$page->meta_desc],
+    'keys' => [$page->tagList],
+    'index' => (bool)$page->seo_noindex === true ? 'noindex' : 'index',
+    'follow' => (bool)$page->seo_nofollow === true ? 'nofollow' : 'follow',
+    'og' => [
+        'title' => $page->meta_title,
+        'desc' => $page->meta_desc,
+        'image' => $page->first_image
+    ]
+])
+
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
+@if ($page->ancestors->isNotEmpty())
+    @foreach ($page->ancestors as $ancestor)
+        <li class="breadcrumb-item">
+            @if (!empty($ancestor->content))
+            <a href="{{ route('web.page.show', [$ancestor->slug]) }}">
+                {{ $ancestor->title }}
+            </a>
+            @else
+                {{ $ancestor->title }}
+            @endif
+        </li>
+    @endforeach
+@endif
+<li class="breadcrumb-item active" aria-current="page">{{ $page->title }}</li>
+@endsection
+
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 order-sm-1 order-md-2">
+            <div class="mb-5">
+                <h1 class="h4 border-bottom pb-2">
+                    @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>&nbsp;@endif{{ $page->title }}
+                </h1>
+                <div>{!! $page->no_more_content_html !!}</div>
+                @if ((bool)$page->comment === true)
+                <h3 class="h5 border-bottom pb-2" id="comments">{{ trans('icore::comments.comments') }}</h3>
+                <div id="filterContent">
+                    @if ($comments->isNotEmpty())
+                        @include('icore::web.comment.filter')
+                    @endif
+                    <div id="comment">
+                        @auth
+                        @include('icore::web.comment.create', ['model' => $page, 'parent_id' => 0])
+                        @else
+                        <a href="{{ route('login') }}">{{ trans('icore::comments.log_to_comment') }}</a>
+                        @endauth
+                    </div>
+                    @if ($comments->isNotEmpty())
+                    <div id="infinite-scroll">
+                        @foreach ($comments as $comment)
+                            @include('icore::web.comment.comment', ['comment' => $comment])
+                        @endforeach
+                        @include('icore::web.partials.pagination', ['items' => $comments, 'fragment'
+                        => 'comments'])
+                    </div>
+                    @component('icore::web.partials.modal')
+                    @slot('modal_id', 'createReportModal')
+                    @slot('modal_title')
+                    {{ trans('icore::reports.page.create') }}
+                    @endslot
+                    @endcomponent
+                    @endif
+                </div>
+                @endif
+            </div>
+        </div>
+        <div class="col-md-4 order-sm-2 order-md-1">
+            @include('icore::web.page.partials.sidebar', ['page' => $page])
+        </div>
+    </div>
+</div>
+@endsection

@@ -1,0 +1,61 @@
+<?php
+
+namespace N1ebieski\ICore\Http\Requests\Admin\Post;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateFullRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('tags')) {
+            $this->merge([
+                'tags' => explode(',', $this->get('tags'))
+            ]);
+        }
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'title' => 'required|min:3|max:255',
+            'tags' => 'array|between:0,10',
+            'tags.*' => 'min:3|max:30|alpha_num_spaces|distinct',
+            'categories' => 'required|array|between:1,'.config('icore.post.max_categories'),
+            'categories.*' => [
+                'integer',
+                'distinct',
+                Rule::exists('categories', 'id')->where(function ($query) {
+                    $query->where([
+                        ['status', 1],
+                        ['model_type', 'N1ebieski\ICore\\Models\\Post']
+                    ]);
+                }),
+            ],
+            'seo_title' => 'max:255',
+            'seo_desc' => 'max:255',
+            'seo_noindex' => 'boolean',
+            'seo_nofollow' => 'boolean',
+            'comment' => 'boolean',
+            'status' => 'required|in:0,1,2',
+            'date_published_at' => 'required_unless:status,0|date|no_js_validation',
+            'time_published_at' => 'required_unless:status,0|date_format:"H:i"|no_js_validation'
+        ];
+    }
+}

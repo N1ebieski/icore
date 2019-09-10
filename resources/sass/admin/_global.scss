@@ -1,0 +1,96 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.wrapper {
+    display: flex;
+
+    .content-wrapper {
+        overflow-x: hidden;
+        width: 100%;
+        padding-top: 0.3rem;
+        padding-bottom: $sticky-footer-height;
+        margin-top: $navbar-base-height;
+    }
+    position: relative;
+    min-height: 100vh;
+}
+// Scroll to top button
+
+.scroll-to-top {
+    z-index: 100;
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    display: none;
+    min-width: 50px;
+    min-height: 50px;
+    text-align: center;
+    color: $white;
+    background: fade-out($gray-800, .5);
+    line-height: 40px;
+    padding: 5px;
+
+    &:focus,
+    &:hover {
+        color: white;
+    }
+
+    &:hover {
+        background: $gray-800;
+    }
+
+    i {
+        font-weight: 800;
+    }
+}
+
+.loader-absolute {
+    left: calc(50% - 1rem);
+    top: calc(50% - 1rem);
+    position: absolute;
+    z-index: 1000;
+}
+
+.loader {
+    @extend .d-flex;
+}
+
+.spinner-border {
+    @extend .text-primary;
+    margin: 0 auto;
+}
+
+.spinner-grow {
+    @extend .text-primary;
+    margin: 0 auto;
+}
+
+.transition {
+    transition: all 0.9s ease-out 0s;
+}
+
+.select-action {
+    z-index: 100;
+    position: fixed;
+    right: 75px;
+    bottom: 15px;
+    display: none;
+    min-width: 50px;
+    min-height: 50px;
+    text-align: center;
+    color: $white;
+    background: fade-out($gray-800, .5);
+    padding: 5px;
+}
+
+@include media-breakpoint-down(xs) {
+    select.filter {
+        max-width: 190px;
+    }
+}

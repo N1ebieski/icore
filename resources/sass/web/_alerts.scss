@@ -1,0 +1,6 @@
+.alert-absolute {
+    @extend .position-absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: calc(#{$navbar-base-height} + 180px);
+}

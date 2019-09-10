@@ -1,0 +1,28 @@
+// Dark variables
+@import '~@forevolve/bootstrap-dark/scss/dark-variables';
+
+// Custom Variables
+@import "variables.scss";
+@import "variables-dark.scss";
+
+@import '~@forevolve/bootstrap-dark/scss/dark-mixins';
+
+//Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+@import '~@forevolve/bootstrap-dark/scss/dark-tables';
+@import '~@forevolve/bootstrap-dark/scss/dark-input-group';
+@import '~@forevolve/bootstrap-dark/scss/dark-styles';
+
+@import "alerts.scss";
+@import "mixins.scss";
+@import "navbar.scss";
+@import "global.scss";
+@import "buttons.scss";
+@import "utilities.scss";
+
+// Typeahead
+@import '../vendor/typeahead/typeahead.scss';
+
+// Dark styles
+@import 'dark.scss';

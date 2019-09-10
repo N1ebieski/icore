@@ -1,0 +1,79 @@
+// Dark bootstrap
+.breadcrumb.bg-light {
+    background-color: $body-bg !important;
+}
+
+.navbar.navbar-light {
+    @extend .navbar-dark;
+}
+
+.navbar.bg-light {
+    @extend .bg-dark;
+}
+
+.navbar-brand .logo {
+    filter: invert(100%) sepia(0%) saturate(7464%) hue-rotate(80deg) brightness(117%) contrast(101%);
+}
+
+.sidebar.bg-light {
+    @extend .bg-dark;
+}
+
+.sidebar {
+    .nav-item {
+      .nav-link {
+        color: $gray-500;
+        &:focus,
+        &:hover {
+          color: $gray-400;
+        }
+      }
+    }
+}
+
+.border {
+    border-color: $modal-content-border-color !important;
+}
+
+.border-bottom {
+    border-bottom-color: $modal-content-border-color !important;
+}
+
+.border-top {
+    border-top-color: $modal-content-border-color !important;
+}
+
+.border-right {
+    border-right-color: $modal-content-border-color !important;
+}
+
+.border-left {
+    border-left-color: $modal-content-border-color !important;
+}
+
+.btn-outline-secondary {
+    @extend .btn-outline-light
+}
+
+.dropdown-menu {
+    background-color: $gray-400;
+    .dropdown-header {
+        color: $black;
+    }
+}
+
+.popover-header {
+    background-color: $gray-400;
+    color: $black;
+}
+
+// Dark trumbowyg
+button[class^='trumbowyg-'] {
+	color: #ecf0f1;
+}
+
+//scroll-to-top
+.scroll-to-top {
+    color: $black;
+    background: fade-out($gray-100, .5);
+}

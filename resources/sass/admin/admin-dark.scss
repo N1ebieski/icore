@@ -1,0 +1,30 @@
+// Dark variables
+@import '~@forevolve/bootstrap-dark/scss/dark-variables';
+
+// Custom variables
+@import "variables.scss";
+@import "variables-dark.scss";
+
+@import '~@forevolve/bootstrap-dark/scss/dark-mixins';
+
+//Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+@import '~@forevolve/bootstrap-dark/scss/dark-tables';
+@import '~@forevolve/bootstrap-dark/scss/dark-input-group';
+@import '~@forevolve/bootstrap-dark/scss/dark-styles';
+
+//DataTables
+// @import '~datatables.net-bs4/css/dataTables.bootstrap4.css';
+
+// Import Custom SCSS
+@import "mixins.scss";
+@import "global.scss";
+@import "utilities.scss";
+@import "navbar.scss";
+@import "cards.scss";
+@import "footer.scss";
+@import "buttons.scss";
+
+// Dark styles
+@import 'dark.scss';
