@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::comments.page.index'), trans('icore::pagination.page', ['num' => $comments->currentPage()])],
     'desc' => [trans('icore::comments.page.index')],
     'keys' => [trans('icore::comments.page.index')]

@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout')
+@extends(config('icore.layout') . '::admin.layouts.layout')
 
 @section('breadcrumb')
 <li class="breadcrumb-item">

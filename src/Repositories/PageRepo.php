@@ -32,7 +32,7 @@ class PageRepo
     public function __construct(Page $page, Config $config)
     {
         $this->page = $page;
-        $this->paginate = $config->get('icore.database.paginate');
+        $this->paginate = $config->get('database.paginate');
     }
 
     /**

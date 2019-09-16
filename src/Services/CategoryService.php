@@ -49,7 +49,7 @@ class CategoryService implements Serviceable
     {
         $this->category = $category;
         $this->collect = $collect;
-        $this->paginate = $config->get('icore.database.paginate');
+        $this->paginate = $config->get('database.paginate');
     }
 
     /**

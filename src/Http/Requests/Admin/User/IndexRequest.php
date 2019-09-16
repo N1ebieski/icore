@@ -47,7 +47,7 @@ class IndexRequest extends FormRequest
         //     return Role::getIdsAsArray();
         // });
 
-        $paginate = config('icore.database.paginate');
+        $paginate = config('database.paginate');
 
         return [
             'page' => 'integer',

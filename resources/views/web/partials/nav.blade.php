@@ -1,7 +1,7 @@
 @section('logo')
 <div id="navbarLogo" class="flex-grow-1 mr-2">
     <a href="/" class="navbar-brand">
-        <img src="{{ asset('vendor/icore//svg/logo.svg') }}" class="pb-1 logo" alt="{{ config('app.name') }}">
+        <img src="{{ asset('svg/vendor/icore/logo.svg') }}" class="pb-1 logo" alt="{{ config('app.name') }}">
         <span class="pl-1 d-none d-lg-inline">
             {{ config('app.name') }}
         </span>
@@ -59,7 +59,7 @@
             @render('icore::page.menuComponent', ['limit' => 5])
             <ul class="navbar-nav">
                 @if (!app('Helpers\Active')->isUrl(route('web.home.index')))
-                <li class="nav-item d-none d-md-inline">
+                <li class="nav-item d-none d-md-inline mr-2">
                     @yield('search-toggler')
                 </li>
                 @endif
@@ -79,7 +79,7 @@
                         <a class="dropdown-item" href="{{ route('logout') }}">{{ trans('icore::auth.page.logout') }}</a>
                     </div>
                     @else
-                    <a class="nav-link btn-sm btn-primary text-white text-nowrap text-center" href="{{ route('login') }}"
+                    <a class="nav-link btn btn-sm btn-primary text-white text-nowrap text-center" href="{{ route('login') }}"
                     role="button">{{ trans('icore::auth.page.login') }}</a>
                     @endauth
                 </li>

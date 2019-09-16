@@ -35,7 +35,7 @@ class BanValueController
             'type' => $type,
             'bans' => $bans,
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 

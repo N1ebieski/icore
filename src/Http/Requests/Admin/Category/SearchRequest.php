@@ -23,7 +23,7 @@ class SearchRequest extends FormRequest
      */
     public function rules()
     {
-        $paginate = config('icore.database.paginate');
+        $paginate = config('database.paginate');
 
         return [
             'name' => 'required|string|min:3|max:255'

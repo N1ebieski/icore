@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [trans('icore::categories.page.show', ['category' => $category->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
     'desc' => [trans('icore::categories.page.show', ['category' => $category->name])],
     'keys' => [trans('icore::categories.page.show', ['category' => $category->name])]

@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [trans('icore::posts.page.search', ['search' => $search]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
     'desc' => [trans('icore::posts.page.search', ['search' => $search])],
     'keys' => [trans('icore::posts.page.search', ['search' => $search])]

@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [trans('icore::contact.page.index')],
     'desc' => [trans('icore::contact.page.index')],
     'keys' => [trans('icore::contact.page.index')]

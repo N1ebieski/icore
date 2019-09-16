@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout')
+@extends(config('icore.layout') . '::web.layouts.layout')
 
 @section('content')
         <div class="jumbotron jumbotron-fluid m-0 background">

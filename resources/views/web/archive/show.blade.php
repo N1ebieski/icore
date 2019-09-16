@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
     'desc' => [trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year])],
     'keys' => [trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year])]

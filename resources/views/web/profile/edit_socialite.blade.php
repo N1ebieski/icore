@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [trans('icore::profile.page.edit_socialite')],
     'desc' => [trans('icore::profile.page.edit_socialite')],
     'keys' => [trans('icore::profile.page.edit_socialite')]

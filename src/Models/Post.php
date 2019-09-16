@@ -318,8 +318,8 @@ class Post extends Model
     public function scopeActive(Builder $query) : Builder
     {
         return $query->where([
-            ['status', '=', 1],
-            ['published_at', '!=', null]
+            ['posts.status', '=', 1],
+            ['posts.published_at', '!=', null]
         ]);
     }
 

@@ -16,5 +16,5 @@
 </div>
 
 @push('script')
-<script src="{{ asset('vendor/icore/vendor/logic-captcha/js/captcha_reload.js') }}"></script>
+<script src="{{ asset('js/vendor/logic-captcha/captcha_reload.js') }}"></script>
 @endpush

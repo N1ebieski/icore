@@ -33,7 +33,7 @@ class PostRepo
     public function __construct(Post $post, Config $config)
     {
         $this->post = $post;
-        $this->paginate = $config->get('icore.database.paginate');
+        $this->paginate = $config->get('database.paginate');
     }
 
     /**
@@ -118,7 +118,7 @@ class PostRepo
     {
         return $this->post->active()
             ->withAnyTags($this->post->tagList)
-            ->where('posts.status', '=', 1)
+            ->where('posts.id', '<>', $this->post->id)
             ->limit($limit)
             ->inRandomOrder()
             ->get();

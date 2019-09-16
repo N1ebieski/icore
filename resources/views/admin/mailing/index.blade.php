@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::mailings.page.index'), trans('icore::pagination.page', ['num' => $mailings->currentPage()])],
     'desc' => [trans('icore::mailings.page.index')],
     'keys' => [trans('icore::mailings.page.index')]

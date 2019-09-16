@@ -1,6 +1,6 @@
 <?php
 
-namespace Seeds\ICore;
+namespace N1ebieski\ICore\Seeds;
 
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\Category\Post\Category;

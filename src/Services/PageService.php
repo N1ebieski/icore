@@ -49,7 +49,7 @@ class PageService implements Serviceable
     {
         $this->page = $page;
         $this->collect = $collect;
-        $this->paginate = $config->get('icore.database.paginate');
+        $this->paginate = $config->get('database.paginate');
     }
 
     /**

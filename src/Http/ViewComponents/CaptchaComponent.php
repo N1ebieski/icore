@@ -36,7 +36,7 @@ class CaptchaComponent implements Htmlable
     public function __construct(Config $config, int $id = null)
     {
         $this->driver = $config->get('icore.captcha.driver');
-        $this->site_key = $config->get('icore.captcha.configs.recaptcha_v2.site_key');
+        $this->site_key = $config->get('services.recaptcha_v2.site_key');
         $this->id = $id;
     }
 

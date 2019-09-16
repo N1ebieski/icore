@@ -11,7 +11,7 @@ data-id="{{ $user->id }}" id="update">
         class="form-control" id="email">
     </div>
     <div class="form-group">
-        <label for="roles">{{ trans('icore::user.roles') }}</label>
+        <label for="roles">{{ trans('icore::users.roles') }}</label>
         <select multiple class="form-control" id="roles" name="roles[]">
             @foreach ($roles as $role)
             <option value="{{ $role->name }}"

@@ -3,10 +3,10 @@ namespace N1ebieski\ICore\Models\Category;
 
 use Franzose\ClosureTable\Models\Entity;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Carbon\Carbon;
 use N1ebieski\ICore\Traits\FullTextSearchable;
 use N1ebieski\ICore\Traits\Filterable;
 use N1ebieski\ICore\Traits\Polymorphic;
+use N1ebieski\ICore\Traits\Carbonable;
 use Illuminate\Database\Eloquent\Builder;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
 use N1ebieski\ICore\Repositories\CategoryRepo;
@@ -18,7 +18,7 @@ use N1ebieski\ICore\Services\CategoryService;
  */
 class Category extends Entity implements CategoryInterface
 {
-    use Sluggable, Filterable, FullTextSearchable, Polymorphic;
+    use Sluggable, Filterable, FullTextSearchable, Polymorphic, Carbonable;
 
     // Configuration
 
@@ -251,24 +251,6 @@ class Category extends Entity implements CategoryInterface
     }
 
     // Accessors
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
-    }
 
     /**
      * [getRealPositionAttribute description]

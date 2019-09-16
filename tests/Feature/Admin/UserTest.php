@@ -216,7 +216,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_post_destroyGlobal_validation_fail()
+    public function test_user_destroyGlobal_validation_fail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -232,16 +232,16 @@ class UserTest extends TestCase
 
     public function test_user_destroyGlobal_with_self()
     {
-        $us[0] = factory(User::class)->states('super-admin')->create();
+        $user = factory(User::class)->states('super-admin')->create();
 
-        $us[] = factory(User::class, 10)->states(['active', 'user'])->create();
+        $us = factory(User::class, 10)->states(['active', 'user'])->create();
 
-        Auth::login($us[0], true);
+        Auth::login($user, true);
 
         $this->get(route('admin.user.index'));
 
         $response = $this->delete(route('admin.user.destroy_global'), [
-            'select' => collect($us)->pluck('id')->toArray(),
+            'select' => $us->push($user)->pluck('id')->toArray(),
         ]);
 
         $response->assertStatus(403);

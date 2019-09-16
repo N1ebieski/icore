@@ -32,7 +32,7 @@ class BanModelController implements UserPolymorphic
         return view('icore::admin.banmodel.user.index', [
             'bans' => $bans,
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 

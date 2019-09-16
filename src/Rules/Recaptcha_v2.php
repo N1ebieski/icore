@@ -46,7 +46,7 @@ class Recaptcha_v2 implements Rule
 
         $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
             'form_params' => [
-                'secret' => config('icore.captcha.configs.recaptcha_v2.secret_key'),
+                'secret' => config('services.recaptcha_v2.secret_key'),
                 'response' => $value
             ]
         ]);

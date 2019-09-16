@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::roles.page.create')],
     'desc' => [trans('icore::roles.page.create')],
     'keys' => [trans('icore::roles.page.create')]
@@ -13,7 +13,8 @@
 @section('content')
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
-        <i class="fas fa-create"></i>&nbsp;{{ trans('icore::roles.page.create') }}:
+        <i class="far fa-plus-square"></i>
+        <span> {{ trans('icore::roles.page.create') }}:</span>
     </h1>
     <form class="mb-3" method="post" action="{{ route('admin.role.store') }}" id="createRole">
         @csrf

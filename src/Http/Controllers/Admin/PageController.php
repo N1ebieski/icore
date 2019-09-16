@@ -36,7 +36,7 @@ class PageController
             'pages' => $pageService->paginateByFilter($filter->all()),
             'parents' => $pageService->getAsFlatTree(),
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 

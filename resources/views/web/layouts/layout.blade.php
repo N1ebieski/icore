@@ -5,8 +5,8 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="{{ app('Helpers\View')->makeMeta(array_merge($desc, [config('icore.app.desc')]), '. ') }}">
-    <meta name="keywords" content="{{ strtolower(app('Helpers\View')->makeMeta(array_merge($keys, [config('icore.app.keys')]), ', ')) }}">
+    <meta name="description" content="{{ app('Helpers\View')->makeMeta(array_merge($desc, [config('app.desc')]), '. ') }}">
+    <meta name="keywords" content="{{ strtolower(app('Helpers\View')->makeMeta(array_merge($keys, [config('app.keys')]), ', ')) }}">
     <meta name="robots" content="{{ $index }}">
     <meta name="robots" content="{{ $follow }}">
 
@@ -20,12 +20,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Styles -->
-    <link href="{{ asset('vendor/icore/css/vendor/vendor.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/vendor/icore/vendor/vendor.css') }}" rel="stylesheet">
     <link href="{{ app('Helpers\View')->getStylesheet() }}" rel="stylesheet">
 
     <!-- Scripts -->
-    <script src="{{ asset('vendor/icore/js/vendor/vendor.js') }}"></script>
-    <script src="{{ asset('vendor/icore/js/web/web.js') }}"></script>
+    <script src="{{ asset('js/vendor/icore/vendor/vendor.js') }}"></script>
+    <script src="{{ asset('js/vendor/icore/web/web.js') }}"></script>
 </head>
 <body>
 
@@ -42,7 +42,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <script src="{{ asset('vendor/icore/js/web/scripts.js') }}" defer></script>
+    <script src="{{ asset('js/vendor/icore/web/scripts.js') }}" defer></script>
     @stack('script')
 
 </body>

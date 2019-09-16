@@ -7,20 +7,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="{{ app('Helpers\View')->makeMeta(array_merge($desc, [trans('icore::admin.page.index'), config('icore.app.desc')]), '. ') }}">
-    <meta name="keywords" content="{{ strtolower(app('Helpers\View')->makeMeta(array_merge($keys, [trans('icore::admin.page.index'), config('icore.app.keys')]), ', ')) }}">
+    <meta name="description" content="{{ app('Helpers\View')->makeMeta(array_merge($desc, [trans('icore::admin.page.index'), config('app.desc')]), '. ') }}">
+    <meta name="keywords" content="{{ strtolower(app('Helpers\View')->makeMeta(array_merge($keys, [trans('icore::admin.page.index'), config('app.keys')]), ', ')) }}">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Styles -->
-    <link href="{{ asset('vendor/icore/css/vendor/vendor.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/vendor/icore/vendor/vendor.css') }}" rel="stylesheet">
     <link href="{{ app('Helpers\View')->getStylesheet() }}" rel="stylesheet">
 
     <!-- Scripts -->
-    <script src="{{ asset('vendor/icore/js/vendor/vendor.js') }}"></script>
-    <script src="{{ asset('vendor/icore/js/admin/admin.js') }}"></script>
+    <script src="{{ asset('js/vendor/icore/vendor/vendor.js') }}"></script>
+    <script src="{{ asset('js/vendor/icore/admin/admin.js') }}"></script>
 
 </head>
 <body>
@@ -49,7 +49,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <script src="{{ asset('vendor/icore/js/admin/scripts.js') }}" defer></script>
+    <script src="{{ asset('js/vendor/icore/admin/scripts.js') }}" defer></script>
     @stack('script')
 
 </body>

@@ -40,7 +40,7 @@ class CategoryController extends CategoryBaseController implements Polymorphic
     public function index(Category $category, IndexRequest $request, IndexFilter $filter) : View
     {
         $request->validate([
-            'category' => ['nullable', 'integer', Rule::exists('categories', 'id')->where(function($query) {
+            'filter._parent' => ['nullable', 'integer', Rule::exists('categories', 'id')->where(function($query) {
                 $query->where('model_type', $this->category->model_type);
             })],
         ]);

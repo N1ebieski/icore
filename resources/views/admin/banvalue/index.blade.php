@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::bans.value.'.$type.'.page.index'), trans('icore::pagination.page', ['num' => $bans->currentPage()])],
     'desc' => [trans('icore::bans.value.'.$type.'.page.index')],
     'keys' => [trans('icore::bans.value.'.$type.'.page.index')]

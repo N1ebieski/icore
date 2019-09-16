@@ -45,7 +45,7 @@ class ValidHelper
                 return 'is-invalid';
             }
             else {
-                if ($this->request->old($name)) {
+                if ($this->request->old($name) !== null) {
                     return 'is-valid';
                 }
             }

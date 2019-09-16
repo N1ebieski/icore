@@ -54,7 +54,7 @@ class CategoryController implements Polymorphic
             'categories' => $categoryService->paginateByFilter($filter->all()),
             'parents' => $categoryService->getAsFlatTree(),
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 

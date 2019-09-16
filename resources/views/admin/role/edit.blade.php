@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [$role->name, trans('icore::roles.page.edit')],
     'desc' => [$role->name, trans('icore::roles.page.edit')],
     'keys' => [$role->name, trans('icore::roles.page.edit')]

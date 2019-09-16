@@ -33,7 +33,7 @@ class MailingController
         return view('icore::admin.mailing.index', [
             'mailings' => $mailings,
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 

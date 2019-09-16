@@ -3,7 +3,7 @@
         @if ($items->currentPage() < $items->lastPage())
         <a href="{{ $items->appends(request()->input())->nextPageUrl() }}" id="is-next" role="button"
         class="btn btn-outline-secondary text-nowrap" title="{{ trans('icore::pagination.page', ['num' => $items->currentPage()+1]) }}">
-            {{ trans('icore::filter.next_items', ['paginate' => ($filter['paginate'] ?? config('icore.database.paginate'))]) }}
+            {{ trans('icore::filter.next_items', ['paginate' => ($filter['paginate'] ?? config('database.paginate'))]) }}
             <i class="fas fa-angle-down"></i>
         </a>
         @endif

@@ -37,7 +37,7 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        $paginate = config('icore.database.paginate');
+        $paginate = config('database.paginate');
 
         return [
             'page' => 'integer',

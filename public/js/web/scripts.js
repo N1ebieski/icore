@@ -635,12 +635,12 @@ jQuery(document).on('click', 'div#themeToggle button', function(e) {
     let $element = $(this);
 
     if ($element.hasClass('btn-light')) {
-        $('link[href*="web-dark.css"]').attr('href', window.location.origin + '/vendor/icore/css/web/web.css');
+        $('link[href*="web-dark.css"]').attr('href', window.location.origin + '/css/vendor/icore/web/web.css');
         $.cookie("themeToggle", 'light', { path: '/' });
-    } 
+    }
 
     if ($element.hasClass('btn-dark')) {
-        $('link[href*="web.css"]').attr('href', window.location.origin + '/vendor/icore/css/web/web-dark.css');
+        $('link[href*="web.css"]').attr('href', window.location.origin + '/css/vendor/icore/web/web-dark.css');
         $.cookie("themeToggle", 'dark', { path: '/' });
     }
 

@@ -32,7 +32,7 @@ class CategoryRepo
     public function __construct(Category $category, Config $config)
     {
         $this->category = $category;
-        $this->paginate = $config->get('icore.database.paginate');
+        $this->paginate = $config->get('database.paginate');
     }
 
     /**

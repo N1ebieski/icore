@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Rating\Rating;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -90,12 +91,11 @@ class CommentRepo
         return $this->comment->ratings()->where('user_id', $id)->first();
     }
 
-    public function countInactive()
-    {
-        return $this->comment->poliType()->inactive()->count();
-    }
-
-    public function countInactiveByModelType()
+    /**
+     * [countInactiveByModelType description]
+     * @return Collection [description]
+     */
+    public function countInactiveByModelType() : Collection
     {
         return $this->comment->inactive()
             ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, COUNT(*) AS `count`')

@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [trans('icore::tags.page.show', ['tag' => $tag->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
     'desc' => [trans('icore::tags.page.show', ['tag' => $tag->name])],
     'keys' => [trans('icore::tags.page.show', ['tag' => $tag->name])]

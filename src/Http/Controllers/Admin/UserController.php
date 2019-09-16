@@ -41,7 +41,7 @@ class UserController
             'users' => $users,
             'roles' => $role->all(),
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 
@@ -88,7 +88,7 @@ class UserController
      */
     public function destroyGlobal(User $user, BanModel $banModel, DestroyGlobalRequest $request) : RedirectResponse
     {
-        $this->authorize('deleteGlobalSelf', [User::class, $request->get('select')]);
+        $this->authorize('deleteGlobalSelf', [User::class, $request->input('select')]);
 
         $banModel->whereIn('model_id', $request->get('select'))
             ->where('model_type', 'N1ebieski\ICore\Models\User')->delete();

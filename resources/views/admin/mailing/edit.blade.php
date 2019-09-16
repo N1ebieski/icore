@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::mailings.page.edit')],
     'desc' => [trans('icore::mailings.page.edit')],
     'keys' => [trans('icore::mailings.page.edit')]

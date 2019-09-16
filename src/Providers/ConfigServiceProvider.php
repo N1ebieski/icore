@@ -19,7 +19,7 @@ class ConfigServiceProvider extends ServiceProvider
         // Carbon::setUTF8(true);
         // Carbon::setLocale(config('app.locale'));
         date_default_timezone_set('Europe/Warsaw');
-        setlocale(LC_ALL, Config::get('icore.app.locale_full'));
+        setlocale(LC_ALL, Config::get('app.locale_full'));
     }
 
     /**

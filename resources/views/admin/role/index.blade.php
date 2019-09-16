@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::roles.page.index'), trans('icore::pagination.page', ['num' => $roles->currentPage()])],
     'desc' => [trans('icore::roles.page.index')],
     'keys' => [trans('icore::roles.page.index')]

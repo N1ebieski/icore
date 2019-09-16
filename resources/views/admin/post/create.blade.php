@@ -1,4 +1,4 @@
-@extends('icore::admin.layouts.layout', [
+@extends(config('icore.layout') . '::admin.layouts.layout', [
     'title' => [trans('icore::posts.page.create')],
     'desc' => [trans('icore::posts.page.create')],
     'keys' => [trans('icore::posts.page.create')]

@@ -1,4 +1,4 @@
-@extends('icore::web.layouts.layout', [
+@extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [$page->meta_title, (bool)$page->comment === true ? trans('icore::pagination.page', ['num' => $comments->currentPage()]) : null],
     'desc' => [$page->meta_desc],
     'keys' => [$page->tagList],

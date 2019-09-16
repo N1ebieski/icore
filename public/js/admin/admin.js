@@ -104,7 +104,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Work\Laravel-Starter\packages\n1ebieski\icore\resources\js\admin\admin.js */"./packages/n1ebieski/icore/resources/js/admin/admin.js");
+module.exports = __webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\js\admin\admin.js */"./packages/n1ebieski/icore/resources/js/admin/admin.js");
 
 
 /***/ })

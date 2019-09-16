@@ -50,7 +50,7 @@ class ViewServiceProvider extends ServiceProvider
             return "<?php echo app('Helpers\Active')->isTheme($input, '$output'); ?>";
         });
 
-        $this->app['view']->composer('icore::admin.partials.sidebar',
+        $this->app['view']->composer($this->app['config']->get('icore.layout') . '::admin.partials.sidebar',
             function($view) {
                 $view->with([
                     'comments_inactive_count' => $this->app->make(\N1ebieski\ICore\Repositories\CommentRepo::class)
@@ -59,8 +59,8 @@ class ViewServiceProvider extends ServiceProvider
             });
 
         $this->app['view']->composer([
-                'icore::web.layouts.layout',
-                'icore::admin.layouts.layout'
+                $this->app['config']->get('icore.layout') . '::web.layouts.layout',
+                $this->app['config']->get('icore.layout') . '::admin.layouts.layout'
             ], function($view) {
                 $view->with(array_replace_recursive([
                     'title' => array(),

@@ -76,7 +76,7 @@ class ViewHelper
                 return '';
         }
 
-        return $this->config->get('icore.app.theme');
+        return $this->config->get('icore.theme');
     }
 
     /**
@@ -84,7 +84,7 @@ class ViewHelper
      * @param string $assets
      * @return string [description]
      */
-    public function getStylesheet(string $assets = 'vendor/icore/css') : string
+    public function getStylesheet(string $assets = 'css/vendor/icore') : string
     {
         $path = '/' . $assets . '/web/web';
 

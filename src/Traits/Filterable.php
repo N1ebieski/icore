@@ -45,7 +45,7 @@ trait Filterable
      */
     public function scopeFilterPaginate(Builder $query, int $paginate = null) : LengthAwarePaginator
     {
-        return $query->paginate($paginate ?? config('icore.database.paginate'));
+        return $query->paginate($paginate ?? config('database.paginate'));
     }
 
     /**

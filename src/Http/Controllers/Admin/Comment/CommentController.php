@@ -50,7 +50,7 @@ class CommentController implements Polymorphic
             'model' => $comment,
             'comments' => $comments,
             'filter' => $filter->all(),
-            'paginate' => config('icore.database.paginate')
+            'paginate' => config('database.paginate')
         ]);
     }
 
