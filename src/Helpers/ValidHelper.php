@@ -43,9 +43,8 @@ class ValidHelper
         if ($this->session->has('errors')) {
             if ($this->session->get('errors')->has($name)) {
                 return 'is-invalid';
-            }
-            else {
-                if ($this->request->old($name) !== null) {
+            } else {
+                if (array_key_exists($name, $this->request->session()->getOldInput())) {
                     return 'is-valid';
                 }
             }
