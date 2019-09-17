@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="perm{{ $permission->id }}"
-                        {{ (optional($permission->roles->first())->id === $role->id || old('perm.'.$permission->id) !== null) ? 'checked' : '' }}
+                        {{ old("perm.{$permission->id}", optional($permission->roles->first())->id) !== null ? 'checked' : '' }}
                         name="perm[{{ $permission->id }}]" value="{{ $permission->name }}">
                         <label class="custom-control-label" for="perm{{ $permission->id }}">
                             {{ $permission->name }}
@@ -51,8 +51,8 @@
 </div>
 @endsection
 
-@push('script')
+{{-- @push('script')
 @component('icore::admin.partials.jsvalidation')
 {!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest', '#editRole'); !!}
 @endcomponent
-@endpush
+@endpush --}}
