@@ -25,7 +25,11 @@ class ShowRequest extends FormRequest
     {
         return [
             'filter' => 'array|no_js_validation',
-            'filter.orderby' => ['in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc']
+            'filter.orderby' => [
+                'bail',
+                'nullable',
+                'in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc'
+            ]
         ];
     }
 }

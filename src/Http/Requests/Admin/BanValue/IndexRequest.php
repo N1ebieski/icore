@@ -28,9 +28,10 @@ class IndexRequest extends FormRequest
 
         return [
             'type' => 'required|string|in:ip,word',
-            'filter' => 'array|no_js_validation',            
-            'filter.search' => 'string|min:3|max:255',
+            'filter' => 'array|no_js_validation',
+            'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [
+                'nullable',
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,value|asc,value|desc',
                 'no_js_validation',
             ],

@@ -52,10 +52,17 @@ class IndexRequest extends FormRequest
         return [
             'page' => 'integer',
             'filter' => 'array|no_js_validation',
-            'filter.search' => 'string|min:3|max:255',
-            'filter.status' => 'integer|in:0,1|no_js_validation',
-            'filter.role' => Rule::in($this->role->getRepo()->getIdsAsArray()). '|no_js_validation',
+            'filter.search' => 'bail|nullable|string|min:3|max:255',
+            'filter.status' => 'bail|nullable|integer|in:0,1|no_js_validation',
+            'filter.role' => [
+                'bail',
+                'nullable',
+                Rule::in($this->role->getRepo()->getIdsAsArray()),
+                'no_js_validation'
+            ],
             'filter.orderby' => [
+                'bail',
+                'nullable',                
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc',
                 'no_js_validation'
             ],

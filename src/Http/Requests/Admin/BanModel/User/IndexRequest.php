@@ -27,9 +27,10 @@ class IndexRequest extends FormRequest
         $paginate = config('database.paginate');
 
         return [
-            'filter' => 'array|no_js_validation',            
-            'filter.search' => 'string|min:3|max:255',
+            'filter' => 'array|no_js_validation',
+            'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [
+                'nullable',
                 'in:bans_models.created_at|asc,bans_models.created_at|desc,bans_models.updated_at|asc,bans_models.updated_at|desc,users.name|asc,users.name|desc',
                 'no_js_validation',
             ],
