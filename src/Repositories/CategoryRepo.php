@@ -168,6 +168,7 @@ class CategoryRepo
     public function firstBySlug(string $slug)
     {
         return $this->category->where('slug', '=', $slug)
+            ->poliType()
             ->active()
             ->withAncestorsExceptSelf()
             ->first();

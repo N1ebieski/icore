@@ -58,7 +58,7 @@ class RoleService implements Serviceable
     {
         $role = $this->role->create(['name' => $attributes['name']]);
 
-        $role->givePermissionTo($attributes['perm'] ?? []);
+        $role->givePermissionTo(array_filter($attributes['perm']) ?? []);
 
         return $role;
     }
@@ -70,7 +70,7 @@ class RoleService implements Serviceable
      */
     public function update(array $attributes) : bool
     {
-        $this->role->syncPermissions($attributes['perm'] ?? []);
+        $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
 
         return $this->role->update(['name' => $attributes['name']]);
     }

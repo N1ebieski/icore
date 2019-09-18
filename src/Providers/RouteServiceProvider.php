@@ -77,9 +77,9 @@ class RouteServiceProvider extends ServiceProvider
                 ])->firstOrFail();
         });
 
-        Route::bind('category_cache', function($value) {
-            return App::make(\N1ebieski\ICore\Cache\CategoryCache::class)->rememberBySlug($value)
-                ?? abort(404);
+        Route::bind('category_post_cache', function($value) {
+            return App::make(\N1ebieski\ICore\Models\Category\Post\Category::class)
+                ->getCache()->rememberBySlug($value) ?? abort(404);
         });
 
         Route::bind('tag_cache', function($value) {

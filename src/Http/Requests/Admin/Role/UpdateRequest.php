@@ -38,6 +38,7 @@ class UpdateRequest extends FormRequest
             'perm' => 'array|no_js_validation',
             'perm.*' => [
                 'bail',
+                'nullable',
                 'string',
                 'distinct',
                 'exists:permissions,name',
