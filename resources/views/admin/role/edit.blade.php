@@ -24,6 +24,7 @@
                 @foreach ($chunk as $permission)
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="perm[{{ $permission->id }}]" value="">
                         <input type="checkbox" class="custom-control-input" id="perm{{ $permission->id }}"
                         {{ old("perm.{$permission->id}", optional($permission->roles->first())->id) !== null ? 'checked' : '' }}
                         name="perm[{{ $permission->id }}]" value="{{ $permission->name }}">
