@@ -40,6 +40,16 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        \N1ebieski\ICore\Models\Post::observe(\N1ebieski\ICore\Observers\PostObserver::class);
+
+        \N1ebieski\ICore\Models\Category\Category::observe(\N1ebieski\ICore\Observers\CategoryObserver::class);
+        \N1ebieski\ICore\Models\Category\Post\Category::observe(\N1ebieski\ICore\Observers\CategoryObserver::class);
+
+        \N1ebieski\ICore\Models\Comment\Comment::observe(\N1ebieski\ICore\Observers\CommentObserver::class);
+        \N1ebieski\ICore\Models\Comment\Post\Comment::observe(\N1ebieski\ICore\Observers\CommentObserver::class);
+        \N1ebieski\ICore\Models\Comment\Page\Comment::observe(\N1ebieski\ICore\Observers\CommentObserver::class);
+
+        \N1ebieski\ICore\Models\BanValue::observe(\N1ebieski\ICore\Observers\BanValueObserver::class);
+        \N1ebieski\ICore\Models\Page\Page::observe(\N1ebieski\ICore\Observers\PageObserver::class);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace N1ebieski\ICore\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Category\Category;
@@ -29,14 +28,14 @@ class RouteServiceProvider extends ServiceProvider
         //
         parent::boot();
 
-        Route::bind('mailing_inactive', function ($value) {
+        $this->app['router']->bind('mailing_inactive', function ($value) {
             return \N1ebieski\ICore\Models\Mailing::where([
                     ['status', '!=', 1],
                     ['id', $value]
                 ])->firstOrFail();
         });
 
-        Route::bind('post_active', function ($value) {
+        $this->app['router']->bind('post_active', function ($value) {
             return Post::where([
                     ['status', 1],
                     ['published_at', '!=', null],
@@ -44,30 +43,30 @@ class RouteServiceProvider extends ServiceProvider
                 ])->firstOrFail();
         });
 
-        Route::bind('post_cache', function($value) {
+        $this->app['router']->bind('post_cache', function($value) {
             return App::make(\N1ebieski\ICore\Cache\PostCache::class)->rememberBySlug($value)
                 ?? abort(404);
         });
 
-        Route::bind('page_cache', function($value) {
+        $this->app['router']->bind('page_cache', function($value) {
             return App::make(\N1ebieski\ICore\Cache\PageCache::class)->rememberBySlug($value)
                 ?? abort(404);
         });
 
-        Route::bind('page_active', function ($value) {
+        $this->app['router']->bind('page_active', function ($value) {
             return \N1ebieski\ICore\Models\Page\Page::where('id', $value)
                 ->active()
                 ->firstOrFail();
         });
 
-        Route::bind('comment_active', function ($value) {
+        $this->app['router']->bind('comment_active', function ($value) {
             return \N1ebieski\ICore\Models\Comment\Comment::where([
                     ['status', 1],
                     ['id', $value]
                 ])->firstOrFail();
         });
 
-        Route::bind('category_active', function ($value) {
+        $this->app['router']->bind('category_active', function ($value) {
             return Category::where([
                     ['status', 1],
                     ['id', $value]
@@ -77,12 +76,12 @@ class RouteServiceProvider extends ServiceProvider
                 ])->firstOrFail();
         });
 
-        Route::bind('category_post_cache', function($value) {
+        $this->app['router']->bind('category_post_cache', function($value) {
             return App::make(\N1ebieski\ICore\Models\Category\Post\Category::class)
                 ->getCache()->rememberBySlug($value) ?? abort(404);
         });
 
-        Route::bind('tag_cache', function($value) {
+        $this->app['router']->bind('tag_cache', function($value) {
             return App::make(\N1ebieski\ICore\Cache\TagCache::class)->rememberBySlug($value)
                 ?? abort(404);
         });
@@ -114,7 +113,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAuthRoutes()
     {
-        Route::middleware('icore.web')
+        $this->app['router']->middleware('icore.web')
              ->namespace($this->namespace)
              ->group(function ($router) {
                  if (file_exists($override = base_path('routes') . '/vendor/icore/auth.php')) {
@@ -134,7 +133,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware(['icore.web', 'icore.force.verified'])
+        $this->app['router']->middleware(['icore.web', 'icore.force.verified'])
              ->as('web.')
              ->namespace($this->namespace.'\Web')
              ->group(function ($router) {
@@ -157,7 +156,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
+        $this->app['router']->prefix('api')
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(function ($router) {
@@ -179,7 +178,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminRoutes()
     {
-        Route::middleware([
+        $this->app['router']->middleware([
                 'icore.web',
                 'auth',
                 'verified',
