@@ -1,6 +1,6 @@
 jQuery(document).on('readyAndAjax', function() {
     if (!$('.trumbowyg-box').length) {
-        $('#trumbowyg').trumbowyg({
+        $('#content_html_trumbowyg').trumbowyg({
             lang: 'pl',
             svgPath: false,
             hideButtonTexts: true,
@@ -9,7 +9,7 @@ jQuery(document).on('readyAndAjax', function() {
             btnsDef: {
                 more: {
                     fn: function() {
-                        $('#trumbowyg').trumbowyg('execCmd', {
+                        $('#content_html_trumbowyg').trumbowyg('execCmd', {
                         	cmd: 'insertHtml',
                         	param: '<p>[more]</p>',
                         	forceCss: false,

@@ -2822,7 +2822,7 @@ jQuery_2_1_3.extend(true, laravelValidation, {
                 return parseFloat(Math.floor(this.fileinfo(element).size));
             }
 
-            return parseFloat(this.strlen(value));
+            return parseFloat(this.strlen(jQuery_2_1_3($.parseHTML(value)).text()));
         },
 
 

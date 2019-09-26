@@ -93,9 +93,9 @@ class ViewHelper
         }
 
         if (file_exists( public_path() . $path . '-' . static::getTheme() . '.css' )) {
-            return $this->url->asset($path . '-' . static::getTheme() . '.css');
+            return $path . '-' . static::getTheme() . '.css';
         }
 
-        return $this->url->asset($path . '.css');
+        return $path . '.css';
     }
 }

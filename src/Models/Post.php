@@ -263,7 +263,7 @@ class Post extends Model
      */
     public function getFirstImageAttribute() : ?string
     {
-        preg_match('/<img.+src=[\'|"](.*?)[\'|"]/', $this->content_html, $image);
+        preg_match('/<img.+src=(?:\'|")(.*?)(?:\'|")/', $this->content_html, $image);
 
         return $image[1] ?? null;
     }

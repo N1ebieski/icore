@@ -58,5 +58,5 @@ function jsvalidation() {
     });
 }
 
-jQuery_2_1_3(document).on('mousemove', jsvalidation );
+jQuery(document).on('readyAndAjax', jsvalidation );
 </script>

@@ -9,8 +9,8 @@ return [
     'layout' => 'icore',
 
     'post' => [
-        'max_categories' => env('ICORE_BLOG_MAX_CATEGORIES', 5),
-        'max_tags' => env('ICORE_BLOG_MAX_TAGS', 10),
+        'max_categories' => env('ICORE_POST_MAX_CATEGORIES', 5),
+        'max_tags' => env('ICORE_POST_MAX_TAGS', 10),
     ],
 
     'captcha' => [

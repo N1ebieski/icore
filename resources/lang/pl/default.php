@@ -24,5 +24,7 @@ return [
     'type' => 'Typ',
     'theme_toggle' => 'Zmień motyw',
     'light' => 'Jasny',
-    'dark' => 'Ciemny'
+    'dark' => 'Ciemny',
+    'back' => 'Wstecz',
+    'next' => 'Dalej'
 ];

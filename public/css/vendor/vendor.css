@@ -4438,264 +4438,6 @@ readers do not read off random characters that represent icons */
       border: 1px solid #FFF;
       box-shadow: #000 0 0 2px;
       z-index: 10; }
-.trumbowyg-box {
-	margin-top: 0px;
-}
-
-.trumbowyg-viewHTML-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F121";
-	font-weight: 900;
-}
-
-.trumbowyg-undo-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0E2";
-	font-weight: 900;
-}
-
-.trumbowyg-redo-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F01E";
-	font-weight: 900;
-}
-
-.trumbowyg-formatting-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F1DD";
-	font-weight: 900;
-}
-
-.trumbowyg-strong-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F032";
-	font-weight: 900;
-}
-
-.trumbowyg-em-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F033";
-	font-weight: 900;
-}
-
-.trumbowyg-del-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0CC";
-	font-weight: 900;
-}
-
-.trumbowyg-superscript-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F12B";
-	font-weight: 900;
-}
-
-.trumbowyg-subscript-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F12C";
-	font-weight: 900;
-}
-
-.trumbowyg-link-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0C1";
-	font-weight: 900;
-}
-
-.trumbowyg-insertImage-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F03E";
-	font-weight: 900;
-}
-
-.trumbowyg-justifyLeft-button:after {
-	font-family: "Font Awesome 5 Free";
-	content: "\F036";
-	font-weight: 900;
-}
-
-.trumbowyg-justifyCenter-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F037";
-	font-weight: 900;
-}
-
-.trumbowyg-justifyRight-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F038";
-	font-weight: 900;
-}
-
-.trumbowyg-justifyFull-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F039";
-	font-weight: 900;
-}
-
-.trumbowyg-unorderedList-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F03A";
-	font-weight: 900;
-}
-
-.trumbowyg-orderedList-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0CB";
-	font-weight: 900;
-}
-
-.trumbowyg-horizontalRule-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F068";
-	font-weight: 900;
-}
-
-.trumbowyg-removeformat-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F12D";
-	font-weight: 900;
-}
-
-.trumbowyg-fullscreen-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0B2";
-	font-weight: 900;
-}
-
-.trumbowyg-bold-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F032";
-	font-weight: 900;
-}
-
-.trumbowyg-italic-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F033";
-	font-weight: 900;
-}
-
-.trumbowyg-underline-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0CD";
-	font-weight: 900;
-}
-
-.trumbowyg-strikethrough-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0CC";
-	font-weight: 900;
-}
-
-.trumbowyg-foreColor-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F031";
-	font-weight: 900;
-}
-
-.trumbowyg-backColor-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F031";
-	color: #ecf0f1;
-	background-color: #555555;
-	padding: 1px;
-	font-size: 85%;
-	line-height: 200%;
-	font-weight: 900;
-}
-
-
-/*===== DROPDOWN BUTTONS =====*/
-
-.trumbowyg-p-dropdown-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F1DD";
-	margin-right: 10px;
-	font-weight: 900;
-}
-
-.trumbowyg-blockquote-dropdown-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F10D";
-	margin-right: 10px;
-	font-weight: 900;
-}
-
-.trumbowyg-h1-dropdown-button:before,
-.trumbowyg-h2-dropdown-button:before,
-.trumbowyg-h3-dropdown-button:before,
-.trumbowyg-h4-dropdown-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F1DC";
-	margin-right: 10px;
-	font-weight: 900;
-}
-
-.trumbowyg-createLink-dropdown-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0C1";
-	margin-right: 10px;
-	font-weight: 900;
-}
-
-.trumbowyg-unlink-dropdown-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F127";
-	margin-right: 10px;
-	font-weight: 900;
-}
-
-.trumbowyg-bold-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F032";
-	font-weight: 900;
-}
-
-.trumbowyg-italic-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F033";
-	font-weight: 900;
-}
-
-.trumbowyg-underline-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0CD";
-	font-weight: 900;
-}
-
-.trumbowyg-strikethrough-button:after {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F0CC";
-	font-weight: 900;
-}
-
-.trumbowyg-foreColor-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F031";
-	font-weight: 900;
-}
-
-.trumbowyg-backColor-button:before {
-	font-family: "Font Awesome 5 Free";;
-	content: "\F031";
-	color: #ecf0f1;
-	background-color: #555555;
-	padding: 1px;
-	font-size: 85%;
-	line-height: 200%;
-	font-weight: 900;
-}
-
-.trumbowyg-table-button:before{
-    font-family: "Font Awesome 5 Free";;
-    content: "\F0CE";
-	font-weight: 900;
-}
-
-.trumbowyg-more-button:before{
-    font-family: "Font Awesome 5 Free";;
-    content: "\F150";
-	font-weight: 900;
-}
 .tagsinput,.tagsinput *{box-sizing:border-box}.tagsinput{display:flex;flex-wrap:wrap;background:#fff;font-family:sans-serif;font-size:14px;line-height:20px;color:#556270;padding:5px 5px 0;border:1px solid #e6e6e6;border-radius:2px}.tagsinput.focus{border-color:#ccc}.tagsinput .tag{position:relative;background:#556270;display:block;max-width:100%;word-wrap:break-word;color:#fff;padding:5px 30px 5px 5px;border-radius:2px;margin:0 5px 5px 0}.tagsinput .tag a{position:absolute;display:block;width:30px;height:30px;top:0;right:0;text-decoration:none;text-align:center;color:#ff6b6b;line-height:30px}.tagsinput .tag a:after,.tagsinput .tag a:before{background:#ff6b6b;position:absolute;display:block;width:10px;height:2px;top:14px;left:10px;content:''}.tagsinput .tag a:before{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.tagsinput .tag a:after{-webkit-transform:rotateZ(-45deg);transform:rotateZ(-45deg)}.tagsinput div{flex-grow:1}.tagsinput div input{background:0 0;display:block;width:100%;font-size:14px;line-height:20px;padding:5px;border:0;margin:0 5px 5px 0}.tagsinput div input.error{color:#ff6b6b}.tagsinput div input::-ms-clear{display:none}.tagsinput div input::-webkit-input-placeholder{color:#ccc;opacity:1}.tagsinput div input:-moz-placeholder{color:#ccc;opacity:1}.tagsinput div input::-moz-placeholder{color:#ccc;opacity:1}.tagsinput div input:-ms-input-placeholder{color:#ccc;opacity:1}/* ==========================================================================
    $BASE-PICKER
    ========================================================================== */
@@ -5290,5 +5032,263 @@ readers do not read off random characters that represent icons */
     margin-bottom: 5em;
   }
 }
+@charset "UTF-8";
 
+.trumbowyg-box {
+  margin-top: 0px;
+}
+
+.trumbowyg-viewHTML-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F121";
+  font-weight: 900;
+}
+
+.trumbowyg-undo-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0E2";
+  font-weight: 900;
+}
+
+.trumbowyg-redo-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F01E";
+  font-weight: 900;
+}
+
+.trumbowyg-formatting-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F1DD";
+  font-weight: 900;
+}
+
+.trumbowyg-strong-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F032";
+  font-weight: 900;
+}
+
+.trumbowyg-em-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F033";
+  font-weight: 900;
+}
+
+.trumbowyg-del-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CC";
+  font-weight: 900;
+}
+
+.trumbowyg-superscript-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F12B";
+  font-weight: 900;
+}
+
+.trumbowyg-subscript-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F12C";
+  font-weight: 900;
+}
+
+.trumbowyg-link-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0C1";
+  font-weight: 900;
+}
+
+.trumbowyg-insertImage-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F03E";
+  font-weight: 900;
+}
+
+.trumbowyg-justifyLeft-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F036";
+  font-weight: 900;
+}
+
+.trumbowyg-justifyCenter-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F037";
+  font-weight: 900;
+}
+
+.trumbowyg-justifyRight-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F038";
+  font-weight: 900;
+}
+
+.trumbowyg-justifyFull-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F039";
+  font-weight: 900;
+}
+
+.trumbowyg-unorderedList-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F03A";
+  font-weight: 900;
+}
+
+.trumbowyg-orderedList-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CB";
+  font-weight: 900;
+}
+
+.trumbowyg-horizontalRule-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F068";
+  font-weight: 900;
+}
+
+.trumbowyg-removeformat-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F12D";
+  font-weight: 900;
+}
+
+.trumbowyg-fullscreen-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0B2";
+  font-weight: 900;
+}
+
+.trumbowyg-bold-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F032";
+  font-weight: 900;
+}
+
+.trumbowyg-italic-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F033";
+  font-weight: 900;
+}
+
+.trumbowyg-underline-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CD";
+  font-weight: 900;
+}
+
+.trumbowyg-strikethrough-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CC";
+  font-weight: 900;
+}
+
+.trumbowyg-foreColor-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F031";
+  font-weight: 900;
+}
+
+.trumbowyg-backColor-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F031";
+  color: #ecf0f1;
+  background-color: #555555;
+  padding: 1px;
+  font-size: 85%;
+  line-height: 200%;
+  font-weight: 900;
+}
+
+/*===== DROPDOWN BUTTONS =====*/
+
+.trumbowyg-p-dropdown-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F1DD";
+  margin-right: 10px;
+  font-weight: 900;
+}
+
+.trumbowyg-blockquote-dropdown-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F10D";
+  margin-right: 10px;
+  font-weight: 900;
+}
+
+.trumbowyg-h1-dropdown-button:before,
+.trumbowyg-h2-dropdown-button:before,
+.trumbowyg-h3-dropdown-button:before,
+.trumbowyg-h4-dropdown-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F1DC";
+  margin-right: 10px;
+  font-weight: 900;
+}
+
+.trumbowyg-createLink-dropdown-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0C1";
+  margin-right: 10px;
+  font-weight: 900;
+}
+
+.trumbowyg-unlink-dropdown-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F127";
+  margin-right: 10px;
+  font-weight: 900;
+}
+
+.trumbowyg-bold-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F032";
+  font-weight: 900;
+}
+
+.trumbowyg-italic-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F033";
+  font-weight: 900;
+}
+
+.trumbowyg-underline-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CD";
+  font-weight: 900;
+}
+
+.trumbowyg-strikethrough-button:after {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CC";
+  font-weight: 900;
+}
+
+.trumbowyg-foreColor-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F031";
+  font-weight: 900;
+}
+
+.trumbowyg-backColor-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F031";
+  color: #ecf0f1;
+  background-color: #555555;
+  padding: 1px;
+  font-size: 85%;
+  line-height: 200%;
+  font-weight: 900;
+}
+
+.trumbowyg-table-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F0CE";
+  font-weight: 900;
+}
+
+.trumbowyg-more-button:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\F150";
+  font-weight: 900;
+}
 

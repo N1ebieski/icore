@@ -11507,6 +11507,10 @@ button[class^=trumbowyg-] {
   background-color: #000 !important;
 }
 
+.tagsinput div input {
+  color: #fff;
+}
+
 .scroll-to-top,
 .select-action {
   color: #000;

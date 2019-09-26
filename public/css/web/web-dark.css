@@ -11541,3 +11541,11 @@ button[class^=trumbowyg-] {
   background: rgba(248, 249, 250, 0.5);
 }
 
+.tagsinput {
+  background-color: #000 !important;
+}
+
+.tagsinput div input {
+  color: #fff;
+}
+

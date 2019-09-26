@@ -35,9 +35,9 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'tags' => 'array|between:0,10',
+            'tags' => 'array|between:0,' . config('icore.post.max_tags'),
             'tags.*' => 'min:3|max:30|alpha_num_spaces',
-            'categories' => 'required|array|between:1,'.config('icore.post.max_categories'),
+            'categories' => 'required|array|between:1,' . config('icore.post.max_categories'),
             'categories.*' => [
                 'integer',
                 'distinct',

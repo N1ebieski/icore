@@ -5,6 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * [CreatePostsTable description]
+ */
 class CreatePostsTable extends Migration
 {
     /**
@@ -26,7 +29,7 @@ class CreatePostsTable extends Migration
             $table->boolean('seo_noindex')->default(0);
             $table->boolean('seo_nofollow')->default(0);
             $table->integer('status')->unsigned();
-            $table->boolean('comment')->default(0);            
+            $table->boolean('comment')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });

@@ -25,6 +25,8 @@ return [
     'confirm' => 'Czy na pewno chcesz usunąć kategorie wraz ze wszystkimi podrzędnymi?',
     'create' => 'Dodaj kategorie',
     'categories' => 'Kategorie',
+    'categories_tooltip' => 'Min 1 kategoria, max :max_categories kategorii',
+    'search_categories' => 'Szukaj kategorii [min 3 znaki]',
     'position' => 'Pozycja',
     'type' => 'Typ',
     'typepost' => 'dotyczy bloga',

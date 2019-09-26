@@ -59,16 +59,16 @@ class ICoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->publishes([
-        //     __DIR__ . '/../../config/icore.php' => config_path('icore.php'),
-        //     __DIR__ . '/../../config/jsvalidation.php' => config_path('jsvalidation.php'),
-        //     __DIR__ . '/../../config/logic_captcha.php' => config_path('logic_captcha.php'),
-        //     __DIR__ . '/../../config/permission.php' => config_path('permission.php'),
-        //     __DIR__ . '/../../config/purifier.php' => config_path('purifier.php'),
-        //     __DIR__ . '/../../config/sluggable.php' => config_path('sluggable.php'),
-        //     __DIR__ . '/../../config/taggable.php' => config_path('taggable.php'),
-        //     __DIR__ . '/../../config/view-components.php' => config_path('view-components.php'),
-        // ]);
+        $this->publishes([
+            __DIR__ . '/../../config/icore.php' => config_path('icore.php'),
+            // __DIR__ . '/../../config/jsvalidation.php' => config_path('jsvalidation.php'),
+            // __DIR__ . '/../../config/logic_captcha.php' => config_path('logic_captcha.php'),
+            // __DIR__ . '/../../config/permission.php' => config_path('permission.php'),
+            // __DIR__ . '/../../config/purifier.php' => config_path('purifier.php'),
+            // __DIR__ . '/../../config/sluggable.php' => config_path('sluggable.php'),
+            // __DIR__ . '/../../config/taggable.php' => config_path('taggable.php'),
+            // __DIR__ . '/../../config/view-components.php' => config_path('view-components.php'),
+        ]);
 
         $this->publishes([
             __DIR__.'/../../routes/web' => base_path('routes') . '/vendor/icore/web'
@@ -114,6 +114,7 @@ class ICoreServiceProvider extends ServiceProvider
             __DIR__ . '/../../public/js' => public_path('js/vendor/icore'),
             __DIR__ . '/../../public/svg' => public_path('svg/vendor/icore'),
             __DIR__ . '/../../public/fonts/vendor' => public_path('fonts/vendor'),
+            __DIR__ . '/../../public/mix-manifest.json' => public_path('mix-manifest.json')
         ], 'icore.public');
 
         $this->app->make('Illuminate\Database\Eloquent\Factory')->load(base_path('database/factories') . '/vendor/icore');

@@ -59,7 +59,7 @@ class PostService implements Serviceable
         $this->post->user()->associate(auth()->user());
         $this->post->save();
 
-        $this->post->tag($attributes['tags']);
+        $this->post->tag($attributes['tags'] ?? []);
 
         $this->post->categories()->attach($attributes['categories']);
 
@@ -95,7 +95,7 @@ class PostService implements Serviceable
 
         $bool = $this->post->save();
 
-        $this->post->retag($attributes['tags']);
+        $this->post->retag($attributes['tags'] ?? []);
 
         $this->post->categories()->sync($attributes['categories']);
 

@@ -23,10 +23,10 @@
                     @includeWhen($errors->has('title'), 'icore::admin.partials.errors', ['name' => 'title'])
                 </div>
                 <div class="form-group">
-                    <label for="content_html">{{ trans('icore::posts.content') }}</label>
+                    <label for="content_html_trumbowyg">{{ trans('icore::posts.content') }}</label>
                     <div class="@isTheme('dark', 'trumbowyg-dark')">
-                        <textarea name="content_html" id="trumbowyg" class="form-control @isValid('content_html')"
-                        rows="10" id="content_html">{{ old('content_html') }}</textarea>
+                        <textarea name="content_html" id="content_html_trumbowyg"
+                        class="form-control @isValid('content_html')" rows="10">{{ old('content_html') }}</textarea>
                         @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
                     </div>
                 </div>
@@ -111,8 +111,8 @@
                 </div>
                 <div class="form-group">
                     <label for="category">
-                        {{ trans('icore::posts.categories') }} <i data-toggle="tooltip" data-placement="top"
-                        title="{{ trans('icore::posts.categories_tooltip', ['max_categories' => $max_categories]) }}"
+                        {{ trans('icore::categories.categories') }} <i data-toggle="tooltip" data-placement="top"
+                        title="{{ trans('icore::categories.categories_tooltip', ['max_categories' => $max_categories]) }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <div id="category">
@@ -126,7 +126,7 @@
                         class="position-relative">
                             <div class="input-group">
                                 <input type="text" class="form-control border border-right-0 @isValid('category')"
-                                placeholder="{{ trans('icore::posts.search_categories') }}">
+                                placeholder="{{ trans('icore::categories.search_categories') }}">
                                 <span class="input-group-append">
                                     <button class="btn btn-outline-secondary border border-left-0"
                                     type="button">

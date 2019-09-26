@@ -32,7 +32,7 @@
                 </div>
                 <div class="post">{!! $post->no_more_content_html !!}</div>
                 <div class="d-flex mb-2">
-                    <small class="mr-auto">{{ trans('icore::posts.categories') }}:
+                    <small class="mr-auto">{{ trans('icore::categories.categories') }}:
                         @if ($post->categories->isNotEmpty())
                         @foreach ($post->categories as $category)
                         <a href="{{ route('web.category.post.show', ['category_active' => $category->slug]) }}">{{ $category->name }}</a>

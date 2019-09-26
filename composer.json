@@ -12,7 +12,7 @@
         "laravel/socialite": "^4.1",
         "mews/purifier": "^2.1",
         "n1ebieski/logic-captcha": "^1.0",
-        "nckg/laravel-minify-html": "^1.2",
+        "nckg/laravel-minify-html": "dev-master",
         "nesbot/carbon": "2.24.0",
         "predis/predis": "^1.1",
         "proengsoft/laravel-jsvalidation": ">2.2.0",

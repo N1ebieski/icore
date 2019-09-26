@@ -6,9 +6,9 @@ data-id="{{ $page->id }}" id="update">
         class="form-control" id="title">
     </div>
     <div class="form-group">
-        <label for="content_html">{{ trans('icore::pages.content') }}</label>
+        <label for="content_html_trumbowyg">{{ trans('icore::pages.content') }}</label>
         <div class="@isTheme('dark', 'trumbowyg-dark')">
-            <textarea name="content_html" id="trumbowyg" class="form-control"
+            <textarea name="content_html" id="content_html_trumbowyg" class="form-control"
             rows="10" id="content_html">{{ old('content_html', $page->content_html) }}</textarea>
         </div>
     </div>

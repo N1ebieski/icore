@@ -25,9 +25,9 @@
                     @includeWhen($errors->has('title'), 'icore::admin.partials.errors', ['name' => 'title'])
                 </div>
                 <div class="form-group">
-                    <label for="content_html">{{ trans('icore::pages.content') }}</label>
+                    <label for="content_html_trumbowyg">{{ trans('icore::pages.content') }}</label>
                     <div class="@isTheme('dark', 'trumbowyg-dark')">
-                        <textarea name="content_html" id="trumbowyg" class="form-control @isValid('content_html')"
+                        <textarea name="content_html" id="content_html_trumbowyg" class="form-control @isValid('content_html')"
                         rows="10" id="content_html">{{ old('content_html', $page->content_html) }}</textarea>
                         @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
                     </div>

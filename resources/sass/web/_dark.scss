@@ -77,3 +77,11 @@ button[class^='trumbowyg-'] {
     color: $black;
     background: fade-out($gray-100, .5);
 }
+
+// Dark tagsinput
+.tagsinput {
+    background-color: $black !important;
+    div input {
+        color: $white;
+    }
+}

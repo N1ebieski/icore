@@ -6,7 +6,8 @@ use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Models\Comment\Comment;
-use Illuminate\Http\Request;
+use N1ebieski\ICore\Http\Requests\Admin\Post\CreateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest;
@@ -46,20 +47,11 @@ class PostController
     /**
      * Show the form for creating a new Post.
      *
-     * @param  Category $category [description]
-     * @param  Request  $request  [description]
+     * @param  CreateRequest  $request  [description]
      * @return View               [description]
      */
-    public function create(Category $category, Request $request) : View
+    public function create(CreateRequest $request) : View
     {
-        // Brzyki hook, ale nie mam innego pomyslu. Request dla kategorii zwraca tylko IDki
-        // a w widoku edycji posta potrzebujemy calej kolekcji, co w przypadku wstawiania
-        // danych z helpera old() stanowi problem
-        if ($request->old('categories')) {
-            session()->flash('_old_input.categories_collection',
-                $category->getRepo()->getByIds($request->old('categories')));
-        }
-
         return view('icore::admin.post.create', [
             'max_categories' => config('icore.post.max_categories'),
             'max_tags' => config('icore.post.max_tags'),
@@ -109,20 +101,11 @@ class PostController
      * Show the full-form for editing the specified Post.
      *
      * @param  Post     $post     [description]
-     * @param  Category $category [description]
-     * @param  Request  $request  [description]
+     * @param  EditFullRequest  $request  [description]
      * @return View               [description]
      */
-    public function editFull(Post $post, Category $category, Request $request) : View
+    public function editFull(Post $post, EditFullRequest $request) : View
     {
-        // Brzyki hook, ale nie mam innego pomyslu. Request dla kategorii zwraca tylko IDki
-        // a w widoku edycji posta potrzebujemy calej kolekcji, co w przypadku wstawiania
-        // danych z helpera old() stanowi problem
-        if ($request->old('categories')) {
-            session()->flash('_old_input.categories_collection',
-                $category->getRepo()->getByIds($request->old('categories')));
-        }
-
         return view('icore::admin.post.edit_full', [
             'post' => $post,
             'max_categories' => config('icore.post.max_categories'),

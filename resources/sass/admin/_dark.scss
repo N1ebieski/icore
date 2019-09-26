@@ -76,18 +76,21 @@ li.page-item:not(.active) .page-link:not(:hover) {
     background-color: $gray-400;
     color: $black;
 }
-// Dark trumbowyg
 
+// Dark trumbowyg
 button[class^='trumbowyg-'] {
     color: #ecf0f1;
 }
-// Dark tagsinput
 
+// Dark tagsinput
 .tagsinput {
     background-color: $black !important;
+    div input {
+        color: $white;
+    }
 }
-// Dark scroll-to-top
 
+// Dark scroll-to-top
 .scroll-to-top, .select-action {
     color: $black;
     background: fade-out($gray-100, .5);

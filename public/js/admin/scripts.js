@@ -148,6 +148,72 @@ jQuery(document).on('click', 'a.destroyCategory', function(e) {
     });
 });
 
+function categorySelect()
+{
+    return $('#categoryOptions .form-group').map(function() {
+       return '#' + $(this).attr('id');
+    }).get();
+}
+
+jQuery(document).on('click', '#searchCategory .btn', function(e) {
+    e.preventDefault();
+
+    let $searchCategory = $('#searchCategory');
+    $searchCategory.url = $searchCategory.attr('data-route');
+    $searchCategory.btn = $searchCategory.find('.btn');
+    $searchCategory.input = {
+        val: $('#searchCategory input').val()
+    };
+
+    $.ajax({
+        url: $searchCategory.url+'?name='+$searchCategory.input.val,
+        method: 'get',
+        dataType: 'json',
+        beforeSend: function() {
+            $searchCategory.btn.prop('disabled', true);
+            $('#searchCategoryOptions').empty();
+            $searchCategory.append($.getLoader('spinner-border'));
+        },
+        complete: function() {
+            $searchCategory.btn.prop('disabled', false);
+            $searchCategory.find('div.loader-absolute').remove();
+        },
+        success: function(response) {
+            let $response = $(response.view).find(categorySelect().join(',')).remove().end();
+
+            $searchCategory.find('#searchCategoryOptions').html($.sanitize($response.html()));
+        }
+    });
+});
+
+jQuery(document).on('change', '.categoryOption', function() {
+
+    let $searchCategory = $('#searchCategory');
+    $searchCategory.max = $searchCategory.attr('data-max');
+    let $input = $(this).closest('.form-group');
+
+    if ($(this).prop('checked') == true) {
+        $input.appendTo('#categoryOptions');
+    } else {
+        $input.remove();
+    }
+
+    if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
+        $searchCategory.fadeOut();
+    }
+
+    if (!$searchCategory.is(':visible') && categorySelect().length < $searchCategory.max) {
+        $searchCategory.fadeIn();
+    }
+});
+
+$('#searchCategory input').keypress(function(e) {
+    if (e.which == 13) {
+        $('#searchCategory .btn').trigger('click');
+        return false;
+    }
+});
+
 jQuery(document).on('click', 'button.statusCategory', function(e) {
     e.preventDefault();
 
@@ -897,72 +963,6 @@ jQuery(document).on('click', 'button.statusPage', function(e) {
     });
 });
 
-function categorySelect()
-{
-    return $('#categoryOptions .form-group').map(function() {
-       return '#' + $(this).attr('id');
-    }).get();
-}
-
-jQuery(document).on('click', '#searchCategory .btn', function(e) {
-    e.preventDefault();
-
-    let $searchCategory = $('#searchCategory');
-    $searchCategory.url = $searchCategory.attr('data-route');
-    $searchCategory.btn = $searchCategory.find('.btn');
-    $searchCategory.input = {
-        val: $('#searchCategory input').val()
-    };
-
-    $.ajax({
-        url: $searchCategory.url+'?name='+$searchCategory.input.val,
-        method: 'get',
-        dataType: 'json',
-        beforeSend: function() {
-            $searchCategory.btn.prop('disabled', true);
-            $('#searchCategoryOptions').empty();
-            $searchCategory.append($.getLoader('spinner-border'));
-        },
-        complete: function() {
-            $searchCategory.btn.prop('disabled', false);
-            $searchCategory.find('div.loader-absolute').remove();
-        },
-        success: function(response) {
-            let $response = $(response.view).find(categorySelect().join(',')).remove().end();
-
-            $searchCategory.find('#searchCategoryOptions').html($.sanitize($response.html()));
-        }
-    });
-});
-
-jQuery(document).on('change', '.categoryOption', function() {
-
-    let $searchCategory = $('#searchCategory');
-    $searchCategory.max = $searchCategory.attr('data-max');
-    let $input = $(this).closest('.form-group');
-
-    if ($(this).prop('checked') == true) {
-        $input.appendTo('#categoryOptions');
-    } else {
-        $input.remove();
-    }
-
-    if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
-        $searchCategory.fadeOut();
-    }
-
-    if (!$searchCategory.is(':visible') && categorySelect().length < $searchCategory.max) {
-        $searchCategory.fadeIn();
-    }
-});
-
-$('#searchCategory input').keypress(function(e) {
-    if (e.which == 13) {
-        $('#searchCategory .btn').trigger('click');
-        return false;
-    }
-});
-
 jQuery(document).on('click', 'button.clearReport', function(e) {
     e.preventDefault();
 
@@ -1103,12 +1103,16 @@ jQuery(document).on('click', 'div#themeToggle button', function(e) {
     let $element = $(this);
 
     if ($element.hasClass('btn-light')) {
-        $('link[href*="admin-dark.css"]').attr('href', window.location.origin + '/css/vendor/icore/admin/admin.css');
+        $('link[href*="admin-dark.css"]').attr('href', function() {
+            return $(this).attr('href').replace('admin-dark.css', 'admin.css');
+        });
         $.cookie("themeToggle", 'light', { path: '/' });
     }
 
     if ($element.hasClass('btn-dark')) {
-        $('link[href*="admin.css"]').attr('href', window.location.origin + '/css/vendor/icore/admin/admin-dark.css');
+        $('link[href*="admin.css"]').attr('href', function() {
+            return $(this).attr('href').replace('admin.css', 'admin-dark.css');
+        });
         $.cookie("themeToggle", 'dark', { path: '/' });
     }
 
