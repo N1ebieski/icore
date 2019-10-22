@@ -20,7 +20,7 @@ class PagesSeeder extends Seeder
     {
         $user = User::first();
 
-        for ($i=0; $i<3; $i++) {
+        for ($i=0; $i<6; $i++) {
             $page1[$i] = factory(Page::class)->make();
             $page1[$i]->user()->associate($user);
             $page1[$i]->save();

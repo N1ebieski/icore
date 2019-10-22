@@ -20,6 +20,7 @@ try {
     require('trumbowyg');
     require('trumbowyg/dist/langs/pl.min.js');
     require('trumbowyg/dist/plugins/colors/trumbowyg.colors.min.js');
+    require('trumbowyg/dist/plugins/history/trumbowyg.history.min.js');
 
     require('jquery.tagsinput-revisited/dist/jquery.tagsinput-revisited.min.js');
 

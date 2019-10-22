@@ -21,7 +21,8 @@ jQuery(document).on('readyAndAjax', function() {
             },
             btns: [
                 ['viewHTML'],
-                ['undo', 'redo'], // Only supported in Blink browsers
+                ['historyUndo', 'historyRedo'],
+                // ['undo', 'redo'], // Only supported in Blink browsers
                 ['formatting'],
                 ['foreColor', 'backColor'],
                 ['strong', 'em', 'del'],

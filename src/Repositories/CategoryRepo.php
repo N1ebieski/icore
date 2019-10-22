@@ -80,7 +80,6 @@ class CategoryRepo
      */
     public function getAsTreeExceptSelf() : Collection
     {
-        debug($this->category);
         return $this->category->getTreeByQuery(
                 $this->category->whereNotIn('id',
                     $this->category->find($this->category->id)

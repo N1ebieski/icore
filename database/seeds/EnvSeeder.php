@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 /**
  * [DatabaseSeeder description]
  */
-class DatabaseSeeder extends Seeder
+class EnvSeeder extends Seeder
 {
     /**
      * Seed the application's database.

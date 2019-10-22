@@ -10,6 +10,11 @@
     line-height: calc(#{$navbar-base-height} - 17px);
 }
 
+.navbar-search {
+    height: calc(#{$navbar-base-height} - 17px);
+    line-height: calc(#{$navbar-base-height} - 17px);
+}
+
 .navbar-toggler {
     border: 0;
     margin-top: calc(#{$navbar-base-height} - 60px);
@@ -90,7 +95,7 @@
         min-width: 22px;
         text-align: center;
     }
-    height: 37px;
+    line-height: initial;
 }
 
 .sidebar {
