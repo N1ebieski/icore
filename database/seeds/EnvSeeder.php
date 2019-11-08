@@ -22,6 +22,7 @@ class EnvSeeder extends Seeder
         $this->call(PostsSeeder::class);
         $this->call(CommentsSeeder::class);
         $this->call(PagesSeeder::class);
+        $this->call(LinksSeeder::class);
         //$this->call(MailingsSeeder::class);
     }
 }

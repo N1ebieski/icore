@@ -14,7 +14,7 @@ class TagRepo
      * [private description]
      * @var Tag
      */
-    private $tag;
+    protected $tag;
 
     /**
      * [__construct description]

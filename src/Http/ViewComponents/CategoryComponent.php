@@ -15,7 +15,7 @@ class CategoryComponent implements Htmlable
      * Model
      * @var Category
      */
-    private $category;
+    protected $category;
 
     /**
      * [__construct description]

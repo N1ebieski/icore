@@ -14,7 +14,7 @@ class PermissionRepo
      * [private description]
      * @var Permission
      */
-    private $permission;
+    protected $permission;
 
     /**
      * [__construct description]

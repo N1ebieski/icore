@@ -26,5 +26,7 @@ return [
     'light' => 'Jasny',
     'dark' => 'Ciemny',
     'back' => 'Wstecz',
-    'next' => 'Dalej'
+    'next' => 'Dalej',
+    'position' => 'Pozycja',
+    'choose_file' => 'Wybierz plik...'
 ];

@@ -14,7 +14,7 @@ class BanIp
      * [private description]
      * @var BanValue
      */
-    private $banValue;
+    protected $banValue;
 
     /**
      * [__construct description]

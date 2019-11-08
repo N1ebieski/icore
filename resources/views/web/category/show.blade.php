@@ -11,7 +11,7 @@
 @if ($category->ancestors->count() > 0)
 @foreach ($category->ancestors as $ancestor)
 <li class="breadcrumb-item">
-    <a href="{{ route('web.category.post.show', ['category_active' => $ancestor->slug]) }}">
+    <a href="{{ route('web.category.post.show', [$ancestor->slug]) }}">
         {{ $ancestor->name }}
     </a>
 </li>

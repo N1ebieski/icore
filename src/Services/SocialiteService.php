@@ -15,31 +15,31 @@ class SocialiteService
      * [private description]
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * [private description]
      * @var Social
      */
-    private $socialite;
+    protected $socialite;
 
     /**
      * Zwraca dane usera z Socialite
      * @var ProviderUser
      */
-    private $providerUser;
+    protected $providerUser;
 
     /**
      * Nazwa providera np "facebook"
      * @var string
      */
-    private $provider;
+    protected $provider;
 
     /**
      * Zautentykowany user
      * @var User
      */
-    private $socialiteUser;
+    protected $socialiteUser;
 
     /**
      * [__construct description]

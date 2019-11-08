@@ -19,19 +19,19 @@ class PageService implements Serviceable
      * [private description]
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * [private description]
      * @var int
      */
-    private $paginate;
+    protected $paginate;
 
     /**
      * [private description]
      * @var Collect
      */
-    private $collect;
+    protected $collect;
 
     /**
      * [protected description]

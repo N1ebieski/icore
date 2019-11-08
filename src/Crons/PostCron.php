@@ -13,7 +13,7 @@ class PostCron
      * [private description]
      * @var Post
      */
-    private $post;
+    protected $post;
 
     /**
      * [__construct description]

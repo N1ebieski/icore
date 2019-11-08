@@ -14,7 +14,10 @@ jQuery(document).on('click', '.store', function(e) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         method: 'post',
-        data: $form.serialize(),
+        // data: $form.serialize(),
+        data: new FormData($form[0]),
+        processData: false,
+        contentType: false,
         dataType: 'json',
         beforeSend: function() {
             $form.btn.prop('disabled', true);
@@ -37,7 +40,7 @@ jQuery(document).on('click', '.store', function(e) {
 
             $.each(errors.errors, function( key, value ) {
                 $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).after($.getError(key, value));
+                $form.find('#'+key).parent().append($.getError(key, value));
             });
         }
     });

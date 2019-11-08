@@ -13,13 +13,13 @@ trait FullTextSearchable
      * Search names
      * @var string
      */
-    private $term;
+    protected $term;
 
     /**
      * Words prepared for searching in boolean mode fulltext
      * @var [type]
      */
-    private $search = [];
+    protected $search = [];
 
     /**
      * Setter

@@ -16,19 +16,19 @@ class CaptchaComponent implements Htmlable
      * [private description]
      * @var string
      */
-    private $driver;
+    protected $driver;
 
     /**
      * [private description]
      * @var string
      */
-    private $site_key;
+    protected $site_key;
 
     /**
      * [private description]
      * @var int|null
      */
-    private $id;
+    protected $id;
 
     /**
      * [__construct description]

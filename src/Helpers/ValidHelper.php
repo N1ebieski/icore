@@ -14,13 +14,13 @@ class ValidHelper
      * [private description]
      * @var Session
      */
-    private $session;
+    protected $session;
 
     /**
      * [private description]
      * @var Request
      */
-    private $request;
+    protected $request;
 
     /**
      * @param Session $session

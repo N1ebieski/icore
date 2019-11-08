@@ -15,7 +15,7 @@ class ReportService implements Serviceable
      * [private description]
      * @var Report
      */
-    private $report;
+    protected $report;
 
     /**
      * [__construct description]

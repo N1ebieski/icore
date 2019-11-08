@@ -15,19 +15,19 @@ class TagCache
      * [private description]
      * @var Tag
      */
-    private $tag;
+    protected $tag;
 
     /**
      * [protected description]
      * @var Cache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * [protected description]
      * @var int
      */
-    private $minutes;
+    protected $minutes;
 
     /**
      * [__construct description]

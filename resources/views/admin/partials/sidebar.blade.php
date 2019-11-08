@@ -119,21 +119,30 @@
             </div>
         </li>
         @endcanany
-        @canany(['index bans'])
-        <li class="nav-item dropdown @isUrl([route('admin.banvalue.index', ['word'])])">
+        @canany(['index bans', 'index links'])
+        <li class="nav-item dropdown @isUrl([
+            route('admin.banvalue.index', ['word']),
+            route('admin.link.index', ['link'])
+        ])">
             <a class="nav-link dropdown-toggle"
             href="#" id="pagesDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-fw fa-tools"></i><span> {{ trans('icore::admin.page.settings') }}</span>
             </a>
-            @can('index bans')
             <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            @can('index bans')
                 <a class="dropdown-item @isUrl(route('admin.banvalue.index', ['word']))"
                 href="{{ route('admin.banvalue.index', ['word']) }}">
                     {{ trans('icore::bans.value.word.page.index') }}
                 </a>
-            </div>
             @endcan
+            @can('index links')
+                <a class="dropdown-item @isUrl(route('admin.link.index', ['link']))"
+                href="{{ route('admin.link.index', ['link']) }}">
+                    {{ trans('icore::links.link.page.index') }}
+                </a>
+            @endcan
+            </div>
         </li>
         @endcanany
     </ul>

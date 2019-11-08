@@ -17,7 +17,7 @@ class CommentService implements Serviceable
      * Comment model
      * @var Comment
      */
-    private $comment;
+    protected $comment;
 
     /**
      * Kolekcja zawierająca komentarze przeznaczone do wyświelenia na froncie

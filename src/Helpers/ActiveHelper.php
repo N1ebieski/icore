@@ -15,19 +15,19 @@ class ActiveHelper
      * [private description]
      * @var Request
      */
-    private $request;
+    protected $request;
 
     /**
      * [private description]
      * @var Str
      */
-    private $str;
+    protected $str;
 
     /**
      * [private description]
      * @var Url
      */
-    private $url;
+    protected $url;
 
     /**
      * @param Request $request

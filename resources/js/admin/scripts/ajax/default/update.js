@@ -8,13 +8,19 @@ jQuery(document).on('click', '.update', function(e) {
         body: $form.closest('.modal-body')
     };
 
+    let data = new FormData($form[0]);
+    data.append('_method', 'put');
+
     jQuery.ajax({
         url: $form.attr('data-route'),
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        method: 'put',
-        data: $form.serialize(),
+        method: 'post',
+        // data: $form.serialize(),
+        data: data,
+        processData: false,
+        contentType: false,
         dataType: 'json',
         beforeSend: function() {
             $form.btn.prop('disabled', true);
@@ -43,7 +49,7 @@ jQuery(document).on('click', '.update', function(e) {
 
             $.each(errors.errors, function( key, value ) {
                 $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).after($.getError(key, value));
+                $form.find('#'+key).parent().append($.getError(key, value));
             });
         }
     });

@@ -16,13 +16,13 @@ class PageRepo
      * [private description]
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * Config
      * @var int
      */
-    private $paginate;
+    protected $paginate;
 
     /**
      * [__construct description]

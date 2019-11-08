@@ -11,18 +11,18 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
     let $searchCategory = $('#searchCategory');
     $searchCategory.url = $searchCategory.attr('data-route');
     $searchCategory.btn = $searchCategory.find('.btn');
-    $searchCategory.input = {
-        val: $('#searchCategory input').val()
-    };
+    $searchCategory.input = $searchCategory.find('input');
 
     $.ajax({
-        url: $searchCategory.url+'?name='+$searchCategory.input.val,
+        url: $searchCategory.url+'?name='+$searchCategory.input.val(),
         method: 'get',
         dataType: 'json',
         beforeSend: function() {
             $searchCategory.btn.prop('disabled', true);
             $('#searchCategoryOptions').empty();
             $searchCategory.append($.getLoader('spinner-border'));
+            $searchCategory.input.removeClass('is-valid');
+            $searchCategory.input.removeClass('is-invalid');
         },
         complete: function() {
             $searchCategory.btn.prop('disabled', false);
@@ -32,6 +32,14 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
             let $response = $(response.view).find(categorySelect().join(',')).remove().end();
 
             $searchCategory.find('#searchCategoryOptions').html($.sanitize($response.html()));
+        },
+        error: function(response) {
+            var errors = response.responseJSON;
+
+            $.each(errors.errors, function( key, value ) {
+                $searchCategory.input.addClass('is-invalid');
+                $searchCategory.input.parent().after($.getError(key, value));
+            });
         }
     });
 });
@@ -48,18 +56,22 @@ jQuery(document).on('change', '.categoryOption', function() {
         $input.remove();
     }
 
-    if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
-        $searchCategory.fadeOut();
-    }
+    if ($.isNumeric($searchCategory.max)) {
+        if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
+            $searchCategory.fadeOut();
+        }
 
-    if (!$searchCategory.is(':visible') && categorySelect().length < $searchCategory.max) {
-        $searchCategory.fadeIn();
+        if (!$searchCategory.is(':visible') && categorySelect().length < $searchCategory.max) {
+            $searchCategory.fadeIn();
+        }
     }
 });
 
-$('#searchCategory input').keypress(function(e) {
-    if (e.which == 13) {
-        $('#searchCategory .btn').trigger('click');
-        return false;
-    }
+jQuery(document).on('readyAndAjax', function() {
+    $('#searchCategory input').keypress(function(e) {
+        if (e.which == 13) {
+            $('#searchCategory .btn').trigger('click');
+            return false;
+        }
+    });
 });

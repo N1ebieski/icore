@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class NewsletterComponent implements Htmlable
 {
-    private $newsletter;
+    protected $newsletter;
 
     public function __construct(Newsletter $newsletter)
     {

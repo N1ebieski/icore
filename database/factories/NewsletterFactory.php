@@ -4,12 +4,13 @@
 
 use N1ebieski\ICore\Models\Newsletter;
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 $factory->define(Newsletter::class, function (Faker $faker) {
     return [
         'email' => $faker->unique()->safeEmail,
         'status' => rand(0, 1),
-        'token' => str_random(10)
+        'token' => Str::random(10)
     ];
 });
 

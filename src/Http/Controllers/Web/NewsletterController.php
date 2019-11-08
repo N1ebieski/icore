@@ -8,6 +8,7 @@ use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Events\NewsletterStore;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 /**
  * [NewsletterController description]
@@ -25,7 +26,7 @@ class NewsletterController
     {
         $newsletter = $newsletter->firstOrCreate(
             ['email' => $request->get('email')],
-            ['token' => str_random(30), 'status' => 0]
+            ['token' => Str::random(30), 'status' => 0]
         );
 
         event(new NewsletterStore($newsletter));
@@ -49,7 +50,7 @@ class NewsletterController
         }
 
         $newsletter->status = (bool)$request->get('status');
-        $newsletter->token = str_random(30);
+        $newsletter->token = Str::random(30);
         $newsletter->save();
 
         return redirect()->route('web.home.index')->with('success', ($newsletter->status === true) ?

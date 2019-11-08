@@ -1,4 +1,4 @@
-<form id="editComment" class="position-relative" data-route="{{ route('web.comment.update', ['comment' => $comment->id]) }}" method="post">
+<form id="editComment" class="position-relative" data-route="{{ route('web.comment.update', [$comment->id]) }}" method="post">
     <div class="form-group">
         <textarea class="form-control" rows="3" id="content" name="content">{{ $comment->content_html }}</textarea>
     </div>

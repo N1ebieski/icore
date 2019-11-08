@@ -20,8 +20,8 @@
 @isset($actionText)
 @component('mail::subcopy')
 @lang(
-    trans('icore::subcopy.verify')."\n".
-    '[:actionURL](:actionURL)',
+    "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
+    'into your web browser: [:actionURL](:actionURL)',
     [
         'actionText' => $actionText,
         'actionURL' => $actionUrl,

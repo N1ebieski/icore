@@ -16,7 +16,7 @@ class BanValueCache
      * [private description]
      * @var BanValue
      */
-    private $banValue;
+    protected $banValue;
 
     /**
      * [protected description]
@@ -34,7 +34,7 @@ class BanValueCache
      * [private description]
      * @var Str
      */
-    private $str;
+    protected $str;
 
     /**
      * [__construct description]

@@ -15,13 +15,13 @@ class PostService implements Serviceable
      * [private description]
      * @var Post
      */
-    private $post;
+    protected $post;
 
     /**
      * [private description]
      * @var Comment
      */
-    private $comment;
+    protected $comment;
 
     /**
      * [protected description]

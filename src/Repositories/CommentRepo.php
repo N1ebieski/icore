@@ -16,7 +16,7 @@ class CommentRepo
      * [private description]
      * @var Comment
      */
-    private $comment;
+    protected $comment;
 
     /**
      * [__construct description]

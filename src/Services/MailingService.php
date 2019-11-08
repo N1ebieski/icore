@@ -19,31 +19,31 @@ class MailingService implements Serviceable
      * [private description]
      * @var Mailing
      */
-    private $mailing;
+    protected $mailing;
 
     /**
      * [private description]
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * [private description]
      * @var Newsletter
      */
-    private $newsletter;
+    protected $newsletter;
 
     /**
      * [private description]
      * @var MailingEmail
      */
-    private $mailingEmail;
+    protected $mailingEmail;
 
     /**
      * [private description]
      * @var Collect
      */
-    private $collect;
+    protected $collect;
 
     /**
      * [protected description]

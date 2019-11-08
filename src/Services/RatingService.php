@@ -16,13 +16,13 @@ class RatingService implements Serviceable
      * [private description]
      * @var Auth
      */
-    private $auth;
+    protected $auth;
 
     /**
      * [private description]
      * @var Rating
      */
-    private $rating;
+    protected $rating;
 
     /**
      * [__construct description]

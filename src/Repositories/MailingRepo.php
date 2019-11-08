@@ -16,7 +16,7 @@ class MailingRepo
      * [private description]
      * @var Mailing
      */
-    private $mailing;
+    protected $mailing;
 
     /**
      * [__construct description]

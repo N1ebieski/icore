@@ -51,12 +51,12 @@
                 </div>
                 <div class="d-flex my-3">
                     @if (isset($previous))
-                    <a class="mr-auto" href="{{ route('web.post.show', ['slug' => $previous->slug]) }}">
+                    <a class="mr-auto" href="{{ route('web.post.show', [$previous->slug]) }}">
                         &laquo; {{ $previous->title }}
                     </a>
                     @endif
                     @if (isset($next))
-                    <a class="ml-auto text-right" href="{{ route('web.post.show', ['slug' => $next->slug]) }}">
+                    <a class="ml-auto text-right" href="{{ route('web.post.show', [$next->slug]) }}">
                         {{ $next->title }} &raquo;
                     </a>
                     @endif

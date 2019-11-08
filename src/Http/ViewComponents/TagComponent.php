@@ -15,7 +15,7 @@ class TagComponent implements Htmlable
      * [private description]
      * @var Post
      */
-    private $post;
+    protected $post;
 
     /**
      * [__construct description]

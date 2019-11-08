@@ -14,7 +14,7 @@ class UserRepo
      * [private description]
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * [__construct description]

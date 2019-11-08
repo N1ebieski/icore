@@ -19,19 +19,19 @@ class PostCache
      * Post model
      * @var Post
      */
-    private $post;
+    protected $post;
 
     /**
      * Cache driver
      * @var Cache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * Configuration
      * @var int
      */
-    private $minutes;
+    protected $minutes;
 
     /**
      * [__construct description]

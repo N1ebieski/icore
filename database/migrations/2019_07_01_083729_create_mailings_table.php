@@ -51,6 +51,6 @@ class CreateMailingsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('mailings');
-        Schema::dropIfExists('emails');
+        Schema::dropIfExists('mailings_emails');
     }
 }

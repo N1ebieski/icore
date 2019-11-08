@@ -10,7 +10,7 @@ use Illuminate\Support\Collection as Collect;
 
 abstract class Filter
 {
-    private $collect;
+    protected $collect;
 
     public $parameters;
 

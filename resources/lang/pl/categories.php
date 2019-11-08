@@ -6,6 +6,9 @@ return [
         'store_global' => 'Drzewo kategorii zostało dodane.',
         'destroy_global' => 'Pomyślnie usunięto :affected kategorii wraz z kategoriami podrzędnymi.'
     ],
+    'error' => [
+        'search' => 'Nie znaleziono żadnej kategorii.'
+    ],
     'page' => [
         'index' => 'Kategorie',
         'type' => [

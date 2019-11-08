@@ -16,19 +16,19 @@ class PageCache
      * Post model
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * Cache driver
      * @var Cache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * Configuration
      * @var int
      */
-    private $minutes;
+    protected $minutes;
 
     /**
      * [__construct description]

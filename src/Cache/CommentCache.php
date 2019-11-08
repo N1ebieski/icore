@@ -17,25 +17,25 @@ class CommentCache
      * Model
      * @var Comment
      */
-    private $comment;
+    protected $comment;
 
     /**
      * Cache driver
      * @var Cache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * Config
      * @var int
      */
-    private $minutes;
+    protected $minutes;
 
     /**
      * [private description]
      * @var Collect
      */
-    private $collect;
+    protected $collect;
 
     /**
      * [__construct description]

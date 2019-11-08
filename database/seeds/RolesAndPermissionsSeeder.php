@@ -69,6 +69,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Permission::create(['name' => 'index roles']);
 
+        Permission::create(['name' => 'index links']);
+        Permission::create(['name' => 'create links']);
+        Permission::create(['name' => 'edit links']);
+        Permission::create(['name' => 'destroy links']);
+
         // create roles and assign created permissions
         $role = Role::create(['name' => 'super-admin']);
 

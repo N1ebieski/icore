@@ -16,13 +16,13 @@ class RoleRepo
      * [private description]
      * @var Role
      */
-    private $role;
+    protected $role;
 
     /**
      * Config
      * @var int
      */
-    private $paginate;
+    protected $paginate;
 
     /**
      * [__construct description]

@@ -19,19 +19,19 @@ class CategoryService implements Serviceable
      * Model
      * @var Category
      */
-    private $category;
+    protected $category;
 
     /**
      * [private description]
      * @var Collect
      */
-    private $collect;
+    protected $collect;
 
     /**
      * Config
      * @var int
      */
-    private $paginate;
+    protected $paginate;
 
     /**
      * Collection of categories

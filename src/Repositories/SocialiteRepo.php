@@ -13,7 +13,7 @@ class SocialiteRepo
      * [private description]
      * @var Socialite
      */
-    private $socialite;
+    protected $socialite;
 
     /**
      * [__construct description]

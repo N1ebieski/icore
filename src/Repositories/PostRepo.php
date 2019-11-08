@@ -17,13 +17,13 @@ class PostRepo
      * [private description]
      * @var Post
      */
-    private $post;
+    protected $post;
 
     /**
      * Config
      * @var int
      */
-    private $paginate;
+    protected $paginate;
 
     /**
      * [__construct description]

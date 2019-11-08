@@ -16,13 +16,13 @@ class CategoryRepo
      * [private description]
      * @var Category
      */
-    private $category;
+    protected $category;
 
     /**
      * Config
      * @var int
      */
-    private $paginate;
+    protected $paginate;
 
     /**
      * [__construct description]

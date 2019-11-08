@@ -16,25 +16,25 @@ class ViewHelper
      * [private description]
      * @var Request
      */
-    private $request;
+    protected $request;
 
     /**
      * [private description]
      * @var Config
      */
-    private $config;
+    protected $config;
 
     /**
      * [private description]
      * @var Str
      */
-    private $str;
+    protected $str;
 
     /**
      * [private description]
      * @var Url
      */
-    private $url;
+    protected $url;
 
     /**
      * [__construct description]

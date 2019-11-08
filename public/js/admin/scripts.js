@@ -161,18 +161,19 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
     let $searchCategory = $('#searchCategory');
     $searchCategory.url = $searchCategory.attr('data-route');
     $searchCategory.btn = $searchCategory.find('.btn');
-    $searchCategory.input = {
-        val: $('#searchCategory input').val()
-    };
+    $searchCategory.input = $searchCategory.find('input');
 
     $.ajax({
-        url: $searchCategory.url+'?name='+$searchCategory.input.val,
+        url: $searchCategory.url+'?name='+$searchCategory.input.val(),
         method: 'get',
         dataType: 'json',
         beforeSend: function() {
             $searchCategory.btn.prop('disabled', true);
             $('#searchCategoryOptions').empty();
             $searchCategory.append($.getLoader('spinner-border'));
+            $('.invalid-feedback').remove();
+            $searchCategory.input.removeClass('is-valid');
+            $searchCategory.input.removeClass('is-invalid');
         },
         complete: function() {
             $searchCategory.btn.prop('disabled', false);
@@ -182,6 +183,14 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
             let $response = $(response.view).find(categorySelect().join(',')).remove().end();
 
             $searchCategory.find('#searchCategoryOptions').html($.sanitize($response.html()));
+        },
+        error: function(response) {
+            var errors = response.responseJSON;
+
+            $.each(errors.errors, function( key, value ) {
+                $searchCategory.input.addClass('is-invalid');
+                $searchCategory.input.parent().after($.getError(key, value));
+            });
         }
     });
 });
@@ -198,20 +207,24 @@ jQuery(document).on('change', '.categoryOption', function() {
         $input.remove();
     }
 
-    if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
-        $searchCategory.fadeOut();
-    }
+    if ($.isInteger($searchCategory.max)) {
+        if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
+            $searchCategory.fadeOut();
+        }
 
-    if (!$searchCategory.is(':visible') && categorySelect().length < $searchCategory.max) {
-        $searchCategory.fadeIn();
+        if (!$searchCategory.is(':visible') && categorySelect().length < $searchCategory.max) {
+            $searchCategory.fadeIn();
+        }
     }
 });
 
-$('#searchCategory input').keypress(function(e) {
-    if (e.which == 13) {
-        $('#searchCategory .btn').trigger('click');
-        return false;
-    }
+jQuery(document).on('readyAndAjax', function() {
+    $('#searchCategory input').keypress(function(e) {
+        if (e.which == 13) {
+            $('#searchCategory .btn').trigger('click');
+            return false;
+        }
+    });
 });
 
 jQuery(document).on('click', 'button.statusCategory', function(e) {
@@ -666,7 +679,10 @@ jQuery(document).on('click', '.store', function(e) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         method: 'post',
-        data: $form.serialize(),
+        // data: $form.serialize(),
+        data: new FormData($form[0]),
+        processData: false,
+        contentType: false,
         dataType: 'json',
         beforeSend: function() {
             $form.btn.prop('disabled', true);
@@ -689,7 +705,7 @@ jQuery(document).on('click', '.store', function(e) {
 
             $.each(errors.errors, function( key, value ) {
                 $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).after($.getError(key, value));
+                $form.find('#'+key).parent().append($.getError(key, value));
             });
         }
     });
@@ -705,13 +721,19 @@ jQuery(document).on('click', '.update', function(e) {
         body: $form.closest('.modal-body')
     };
 
+    let data = new FormData($form[0]);
+    data.append('_method', 'put');
+
     jQuery.ajax({
         url: $form.attr('data-route'),
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        method: 'put',
-        data: $form.serialize(),
+        method: 'post',
+        // data: $form.serialize(),
+        data: data,
+        processData: false,
+        contentType: false,
         dataType: 'json',
         beforeSend: function() {
             $form.btn.prop('disabled', true);
@@ -740,7 +762,7 @@ jQuery(document).on('click', '.update', function(e) {
 
             $.each(errors.errors, function( key, value ) {
                 $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).after($.getError(key, value));
+                $form.find('#'+key).parent().append($.getError(key, value));
             });
         }
     });
@@ -1017,6 +1039,13 @@ jQuery(document).ready(function() {
     });
 });
 
+jQuery(document).on('readyAndAjax', function() {
+    $(".custom-file-input").on("change", function() {
+        let fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+});
+
 jQuery(document).on('click', '#selectAll', function() {
     $('#selectForm .select').prop('checked', $(this).prop('checked')).trigger('change');
 });
@@ -1195,7 +1224,7 @@ jQuery(document).ready(function() {
 
 jQuery(document).on('readyAndAjax', function() {
     if (!$('.trumbowyg-box').length) {
-        $('#trumbowyg').trumbowyg({
+        $('#content_html_trumbowyg').trumbowyg({
             lang: 'pl',
             svgPath: false,
             hideButtonTexts: true,
@@ -1204,7 +1233,7 @@ jQuery(document).on('readyAndAjax', function() {
             btnsDef: {
                 more: {
                     fn: function() {
-                        $('#trumbowyg').trumbowyg('execCmd', {
+                        $('#content_html_trumbowyg').trumbowyg('execCmd', {
                         	cmd: 'insertHtml',
                         	param: '<p>[more]</p>',
                         	forceCss: false,
@@ -1216,7 +1245,8 @@ jQuery(document).on('readyAndAjax', function() {
             },
             btns: [
                 ['viewHTML'],
-                ['undo', 'redo'], // Only supported in Blink browsers
+                ['historyUndo', 'historyRedo'],
+                // ['undo', 'redo'], // Only supported in Blink browsers
                 ['formatting'],
                 ['foreColor', 'backColor'],
                 ['strong', 'em', 'del'],

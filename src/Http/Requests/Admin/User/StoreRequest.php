@@ -12,7 +12,7 @@ class StoreRequest extends FormRequest
      * [private description]
      * @var Role
      */
-    private $role;
+    protected $role;
 
     /**
      * [__construct description]

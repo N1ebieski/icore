@@ -15,13 +15,13 @@ class MenuComponent implements Htmlable
      * Model
      * @var PageCache
      */
-    private $pageCache;
+    protected $pageCache;
 
     /**
      * [private description]
      * @var array
      */
-    private $config;
+    protected $config;
 
     /**
      * [__construct description]

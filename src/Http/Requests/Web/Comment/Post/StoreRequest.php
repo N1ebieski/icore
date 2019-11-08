@@ -19,7 +19,7 @@ class StoreRequest extends FormRequest
      * [private description]
      * @var string
      */
-    private $bans;
+    protected $bans;
 
     /**
      * [__construct description]

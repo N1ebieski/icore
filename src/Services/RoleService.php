@@ -17,13 +17,13 @@ class RoleService implements Serviceable
      * Model
      * @var Role
      */
-    private $role;
+    protected $role;
 
     /**
      * [private description]
      * @var Permission
      */
-    private $permission;
+    protected $permission;
 
     /**
      * [__construct description]

@@ -11,7 +11,7 @@ class UpdateRequest extends FormRequest
      * [private description]
      * @var string
      */
-    private $bans;
+    protected $bans;
 
     public function __construct(BanValue $banValue)
     {;

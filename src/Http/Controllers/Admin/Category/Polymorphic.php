@@ -8,6 +8,7 @@ use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
 use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
+use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
 interface Polymorphic
 {
@@ -19,5 +20,5 @@ interface Polymorphic
 
     public function storeGlobal(Category $category, StoreGlobalRequest $request);
 
-    public function search(Category $category, SearchRequest $request);
+    public function search(Category $category, SearchRequest $request, SearchResponse $response);
 }

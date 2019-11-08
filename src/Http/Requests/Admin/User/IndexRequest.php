@@ -12,7 +12,7 @@ class IndexRequest extends FormRequest
      * [private description]
      * @var Role
      */
-    private $role;
+    protected $role;
 
     /**
      * @param Role $role

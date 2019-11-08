@@ -14,13 +14,13 @@ class MailingCron
      * [private description]
      * @var Mailing
      */
-    private $mailing;
+    protected $mailing;
 
     /**
      * [private description]
      * @var SendMailing
      */
-    private $sendMailing;
+    protected $sendMailing;
 
     /**
      * [__construct description]

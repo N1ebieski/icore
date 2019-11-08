@@ -16,26 +16,26 @@ class FooterComponent implements Htmlable
      * Model
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * [private description]
      * @var Collect
      */
-    private $collect;
+    protected $collect;
 
     /**
      * Pattern by cols and pages IDs example [[18, 19, 32], [45], [3, 1]]]
      * means 3 cols, first with pages 18 id, 19 id etc.
      * @var array|null
      */
-    private $pattern;
+    protected $pattern;
 
     /**
      * Number of columns
      * @var int
      */
-    private $cols;
+    protected $cols;
 
     /**
      * [__construct description]

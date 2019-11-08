@@ -16,6 +16,7 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
+use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
 /**
  * Base Category Controller
@@ -59,21 +60,17 @@ class CategoryController implements Polymorphic
     }
 
     /**
-     * Search Categories for specified name.
-     *
-     * @param  Category      $category [description]
-     * @param  SearchRequest $request  [description]
-     * @return JsonResponse                [description]
+     * [search description]
+     * @param  Category       $category [description]
+     * @param  SearchRequest  $request  [description]
+     * @param  SearchResponse $response [description]
+     * @return JsonResponse             [description]
      */
-    public function search(Category $category, SearchRequest $request) : JsonResponse
+    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
     {
-        return response()->json([
-            'success' => '',
-            'view' => view('icore::admin.category.partials.search', [
-                'categories' => $category->getRepo()->getBySearch($request->get('name')),
-                'checked' => false
-            ])->render()
-        ]);
+        $categories = $category->getRepo()->getBySearch($request->get('name'));
+
+        return $response->setCategories($categories)->response();
     }
 
     /**

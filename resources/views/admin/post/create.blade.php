@@ -125,7 +125,7 @@
                         data-route="{{ route('admin.category.post.search') }}" data-max="{{ $max_categories }}"
                         class="position-relative">
                             <div class="input-group">
-                                <input type="text" class="form-control border border-right-0 @isValid('category')"
+                                <input type="text" class="form-control @isValid('category')"
                                 placeholder="{{ trans('icore::categories.search_categories') }}">
                                 <span class="input-group-append">
                                     <button class="btn btn-outline-secondary border border-left-0"

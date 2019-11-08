@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('categories/link/search', 'Category\CategoryController@search')
+    ->middleware('permission:index categories')
+    ->name('category.link.search');
+
 Route::get('categories/post/search', 'Category\Post\CategoryController@search')
     ->middleware(['permission:create posts|edit posts'])
     ->name('category.post.search');

@@ -17,19 +17,19 @@ class CategoryCache
      * Model
      * @var Category
      */
-    private $category;
+    protected $category;
 
     /**
      * Cache driver
      * @var Cache
      */
-    private $cache;
+    protected $cache;
 
     /**
      * Config
      * @var int
      */
-    private $minutes;
+    protected $minutes;
 
     /**
      * [__construct description]
