@@ -37,7 +37,7 @@ class CommentController
      */
     public function update(Comment $comment, UpdateRequest $request) : JsonResponse
     {
-        $comment->getService()->update($request->only('content'));
+        $comment->makeService()->update($request->only('content'));
 
         return response()->json([
             'success' => '',
@@ -57,7 +57,7 @@ class CommentController
      */
     public function take(Comment $comment, TakeRequest $request) : JsonResponse
     {
-        $comments = $comment->getService()->paginateChildrensByFilter([
+        $comments = $comment->makeService()->paginateChildrensByFilter([
             'except' => $request->get('except'),
             'orderby' => $request->get('orderby')
         ]);

@@ -9,7 +9,7 @@
 <li class="breadcrumb-item"><a href="{{ route('admin.mailing.index') }}">{{ trans('icore::mailings.page.index') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans('icore::mailings.page.create') }}</li>
 @endsection
-
+{{ debug(session('errors')) }}
 @section('content')
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">

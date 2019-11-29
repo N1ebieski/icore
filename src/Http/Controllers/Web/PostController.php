@@ -24,7 +24,7 @@ class PostController
      */
     public function index(Post $post, IndexRequest $request) : View
     {
-        $posts = $post->getCache()->rememberLatest($request->get('page') ?? 1);
+        $posts = $post->makeCache()->rememberLatest($request->get('page') ?? 1);
 
         return view('icore::web.post.index', [
             'posts' => $posts,
@@ -41,12 +41,12 @@ class PostController
      */
     public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter) : View
     {
-        $comments = $comment->setMorph($post)->getCache()->rememberRootsByFilter(
+        $comments = $comment->setMorph($post)->makeCache()->rememberRootsByFilter(
             $filter->all(),
             $request->get('page') ?? 1
         );
 
-        $postCache = $post->getCache();
+        $postCache = $post->makeCache();
 
         return view('icore::web.post.show', [
             'post' => $post,
@@ -71,7 +71,7 @@ class PostController
     public function search(Post $post, SearchRequest $request) : View
     {
         return view('icore::web.post.search', [
-            'posts' => $post->getRepo()->paginateBySearch($request->get('search')),
+            'posts' => $post->makeRepo()->paginateBySearch($request->get('search')),
             'search' => $request->get('search')
         ]);
     }

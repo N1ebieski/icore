@@ -69,7 +69,7 @@ class CommentController extends CommentBaseController implements Polymorphic, Pa
      */
     public function store(Page $page, StoreRequest $request) : JsonResponse
     {
-        $comment = $this->comment->setMorph($page)->getService()
+        $comment = $this->comment->setMorph($page)->makeService()
             ->create($request->only(['content', 'parent_id']));
 
         event(new CommentStore($comment));

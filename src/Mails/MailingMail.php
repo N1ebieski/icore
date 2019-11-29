@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Mail;
+namespace N1ebieski\ICore\Mails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -18,7 +18,7 @@ class MailingMail extends Mailable
      * [public description]
      * @var MailingEmail
      */
-    public $email;
+    protected $email;
 
     /**
      * Create a new event instance.
@@ -38,12 +38,14 @@ class MailingMail extends Mailable
      */
     public function build()
     {
+        $this->email->load('mailing');
+
         return $this->subject($this->email->mailing->title)
             ->from(config('mail.from.address'))
             ->to($this->email->email)
             ->markdown('icore::mails.mailing')
             ->with([
-                'slot' => $this->email->mailing->content_html,
+                'email' => $this->email,
                 'subcopy' => $this->subcopy(),
             ]);
     }
@@ -59,11 +61,11 @@ class MailingMail extends Mailable
                 return null;
 
             case 'N1ebieski\ICore\\Models\\Newsletter' :
-                $morph = $this->email->load('morph');
+                $this->email->load('morph');
                 return trans('icore::newsletter.subcopy.subscribe', [
                     'cancel' => route('web.newsletter.update_status', [
-                        $morph->model->id,
-                        'token' => $morph->model->token,
+                        $this->email->morph->id,
+                        'token' => $this->email->morph->token,
                         'status' => 0
                     ]),
                 ]);

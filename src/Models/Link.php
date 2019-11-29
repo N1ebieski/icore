@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\LinkService;
 use N1ebieski\ICore\Repositories\LinkRepo;
 use N1ebieski\ICore\Cache\LinkCache;
-use N1ebieski\ICore\Traits\Positionable;
-use N1ebieski\ICore\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Positionable;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 
@@ -135,31 +135,31 @@ class Link extends Model
             }]);
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return LinkRepo [description]
      */
-    public function getRepo() : LinkRepo
+    public function makeRepo() : LinkRepo
     {
         return app()->make(LinkRepo::class, ['link' => $this]);
     }
 
     /**
-     * [getCache description]
+     * [makeCache description]
      * @return LinkCache [description]
      */
-    public function getCache() : LinkCache
+    public function makeCache() : LinkCache
     {
         return app()->make(LinkCache::class, ['link' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return LinkService [description]
      */
-    public function getService() : LinkService
+    public function makeService() : LinkService
     {
         return app()->make(LinkService::class, ['link' => $this]);
     }

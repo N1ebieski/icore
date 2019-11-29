@@ -26,7 +26,7 @@ class LinkController
      */
     public function index(string $type, Link $link, IndexRequest $request) : View
     {
-        $links = $link->getRepo()->paginateByType($type);
+        $links = $link->makeRepo()->paginateByType($type);
 
         return view('icore::admin.link.index', [
             'type' => $type,
@@ -62,7 +62,7 @@ class LinkController
      */
     public function store(string $type, Link $link, StoreRequest $request) : JsonResponse
     {
-        $link->getService()->create($request->validated() + ['type' => $type]);
+        $link->makeService()->create($request->validated() + ['type' => $type]);
 
         $request->session()->flash('success', trans('icore::links.success.store'));
 
@@ -94,7 +94,7 @@ class LinkController
      */
     public function update(Link $link, UpdateRequest $request) : JsonResponse
     {
-        $link->getService()->update($request->validated());
+        $link->makeService()->update($request->validated());
 
         return response()->json([
             'success' => '',
@@ -128,11 +128,11 @@ class LinkController
      */
     public function updatePosition(Link $link, UpdatePositionRequest $request) : JsonResponse
     {
-        $link->getService()->updatePosition($request->only('position'));
+        $link->makeService()->updatePosition($request->only('position'));
 
         return response()->json([
             'success' => '',
-            'siblings' => $link->getRepo()->getSiblingsAsArray()
+            'siblings' => $link->makeRepo()->getSiblingsAsArray()
         ]);
     }
 
@@ -144,7 +144,7 @@ class LinkController
      */
     public function destroy(Link $link) : JsonResponse
     {
-        $link->getService()->delete();
+        $link->makeService()->delete();
 
         return response()->json(['success' => '']);
     }

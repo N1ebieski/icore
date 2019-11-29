@@ -30,7 +30,7 @@ class PageController
      */
     public function index(Page $page, IndexRequest $request, IndexFilter $filter) : View
     {
-        $pageService = $page->getService();
+        $pageService = $page->makeService();
 
         return view('icore::admin.page.index', [
             'pages' => $pageService->paginateByFilter($filter->all()),
@@ -48,7 +48,7 @@ class PageController
     public function create(Page $page) : View
     {
         return view('icore::admin.page.create', [
-            'parents' => $page->getService()->getAsFlatTree()
+            'parents' => $page->makeService()->getAsFlatTree()
         ]);
     }
 
@@ -60,7 +60,7 @@ class PageController
      */
     public function store(Page $page, StoreRequest $request) : RedirectResponse
     {
-        $page->getService()->create($request->all());
+        $page->makeService()->create($request->all());
 
         return redirect()->route('admin.page.index')->with('success', trans('icore::pages.success.store') );
     }
@@ -101,11 +101,11 @@ class PageController
      */
     public function updatePosition(Page $page, UpdatePositionRequest $request) : JsonResponse
     {
-        $page->getService()->updatePosition($request->only('position'));
+        $page->makeService()->updatePosition($request->only('position'));
 
         return response()->json([
             'success' => '',
-            'siblings' => $page->getRepo()->getSiblingsAsArray()+[$page->id => $page->position],
+            'siblings' => $page->makeRepo()->getSiblingsAsArray()+[$page->id => $page->position],
         ]);
     }
 
@@ -131,7 +131,7 @@ class PageController
     {
         return view('icore::admin.page.edit_full', [
             'page' => $page,
-            'parents' => $page->getService()->getAsFlatTreeExceptSelf()
+            'parents' => $page->makeService()->getAsFlatTreeExceptSelf()
         ]);
     }
 
@@ -143,7 +143,7 @@ class PageController
      */
     public function update(Page $page, UpdateRequest $request) : JsonResponse
     {
-        $page->getService()->update($request->only(['title', 'content_html']));
+        $page->makeService()->update($request->only(['title', 'content_html']));
 
         return response()->json([
             'success' => '',
@@ -159,7 +159,7 @@ class PageController
      */
     public function updateFull(Page $page, UpdateFullRequest $request) : RedirectResponse
     {
-        $page->getService()->updateFull($request->all());
+        $page->makeService()->updateFull($request->all());
 
         return redirect()->route('admin.page.edit_full', [$page->id])
             ->with('success', trans('icore::pages.success.update') );
@@ -173,17 +173,17 @@ class PageController
      */
     public function updateStatus(Page $page, UpdateStatusRequest $request) : JsonResponse
     {
-        $page->getService()->updateStatus($request->only('status'));
+        $page->makeService()->updateStatus($request->only('status'));
 
-        $pageRepo = $page->getRepo();
+        $pageRepo = $page->makeRepo();
 
         return response()->json([
             'success' => '',
             'status' => $page->status,
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
-            'ancestors' => $page->getRepo()->getAncestorsAsArray(),
-            'descendants' => $page->getRepo()->getDescendantsAsArray(),
+            'ancestors' => $page->makeRepo()->getAncestorsAsArray(),
+            'descendants' => $page->makeRepo()->getDescendantsAsArray(),
         ]);
     }
 
@@ -195,9 +195,9 @@ class PageController
     public function destroy(Page $page) : JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
-        $descendants = $page->getRepo()->getDescendantsAsArray();
+        $descendants = $page->makeRepo()->getDescendantsAsArray();
 
-        $page->getService()->delete();
+        $page->makeService()->delete();
 
         return response()->json([
             'success' => '',
@@ -214,7 +214,7 @@ class PageController
      */
     public function destroyGlobal(Page $page, DestroyGlobalRequest $request) : RedirectResponse
     {
-        $deleted = $page->getService()->deleteGlobal($request->get('select'));
+        $deleted = $page->makeService()->deleteGlobal($request->get('select'));
 
         return redirect()->back()->with('success', trans('icore::pages.success.destroy_global', ['affected' => $deleted]));
     }

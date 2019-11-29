@@ -62,7 +62,7 @@ class SocialiteController
         }
 
         try {
-            $authUser = $socialite->getService()->findOrCreateUser($providerUser, $provider);
+            $authUser = $socialite->makeService()->findOrCreateUser($providerUser, $provider);
         } catch (\N1ebieski\ICore\Exceptions\Socialite\NoEmailException $e) {
             return redirect()->route('register')
                 ->with('warning', trans('icore::auth.warning.no_email', ['provider' => ucfirst($provider)]));

@@ -45,7 +45,7 @@ class UpdateRequest extends FormRequest
                 Rule::exists('categories', 'id')->where(function($query) {
                     $query->where('model_type', $this->category->model_type);
                 }),
-                Rule::notIn($this->category->getRepo()->getDescendantsAsArray()),
+                Rule::notIn($this->category->makeRepo()->getDescendantsAsArray()),
             ]
         ];
     }

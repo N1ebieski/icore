@@ -40,7 +40,7 @@ class PageCache
     {
         $this->page = $page;
         $this->cache = $cache;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -54,7 +54,7 @@ class PageCache
             'page.getWithChildrensByComponent',
             now()->addMinutes($this->minutes),
             function() use ($component) {
-                return $this->page->getRepo()->getWithChildrensByComponent($component);
+                return $this->page->makeRepo()->getWithChildrensByComponent($component);
             }
         );
     }
@@ -70,7 +70,7 @@ class PageCache
             'page.getWithRecursiveChildrensByComponent',
             now()->addMinutes($this->minutes),
             function() use ($component) {
-                return $this->page->getRepo()->getWithRecursiveChildrensByComponent($component);
+                return $this->page->makeRepo()->getWithRecursiveChildrensByComponent($component);
             }
         );
     }
@@ -86,7 +86,7 @@ class PageCache
             "page.firstBySlug.{$slug}",
             now()->addMinutes($this->minutes),
             function () use ($slug) {
-                return $this->page->getRepo()->firstBySlug($slug);
+                return $this->page->makeRepo()->firstBySlug($slug);
             }
         );
     }

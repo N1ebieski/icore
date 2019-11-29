@@ -4,8 +4,8 @@ namespace N1ebieski\ICore\Models\Page;
 
 use Franzose\ClosureTable\Models\Entity;
 use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Page\PageInterface;
 use Mews\Purifier\Facades\Purifier;
 use Carbon\Carbon;
@@ -393,31 +393,31 @@ class Page extends Entity implements PageInterface
         });
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return PageRepo [description]
      */
-    public function getRepo() : PageRepo
+    public function makeRepo() : PageRepo
     {
         return app()->make(PageRepo::class, ['page' => $this]);
     }
 
     /**
-     * [getCache description]
+     * [makeCache description]
      * @return PageCache [description]
      */
-    public function getCache() : PageCache
+    public function makeCache() : PageCache
     {
         return app()->make(PageCache::class, ['page' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return PageService [description]
      */
-    public function getService() : PageService
+    public function makeService() : PageService
     {
         return app()->make(PageService::class, ['page' => $this]);
     }

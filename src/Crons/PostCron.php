@@ -39,6 +39,6 @@ class PostCron
      */
     private function publicateScheduled() : int
     {
-        return $this->post->getRepo()->updateScheduled(['status' => 1]);
+        return $this->post->makeRepo()->updateScheduled(['status' => 1]);
     }
 }

@@ -54,7 +54,7 @@ class CommentCache
         $this->comment = $comment;
         $this->cache = $cache;
         $this->collect = $collect;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -70,7 +70,7 @@ class CommentCache
         }
 
         if (!isset($comments) || !$comments) {
-            $comments = $this->comment->getService()->getRootsByFilter($filter);
+            $comments = $this->comment->makeService()->getRootsByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems()) {
                 $this->putRootsByFilter($comments, $page);

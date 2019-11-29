@@ -14,6 +14,6 @@ return [
     'content' => 'Treść wiadomości',
     'details' => 'Dane kontaktowe',
     'subcopy' => [
-        'form' => 'Wiadomość została wysłana za pośrednictwem formularza na stronie: :url',
+        'form' => 'Wiadomość została wysłana za pośrednictwem formularza na stronie: [:url](:url)',
     ]
 ];

@@ -41,7 +41,7 @@ class CategoryCache
     {
         $this->category = $category;
         $this->cache = $cache;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -55,7 +55,7 @@ class CategoryCache
             "category.firstBySlug.{$slug}",
             now()->addMinutes($this->minutes),
             function() use ($slug) {
-                return $this->category->getRepo()->firstBySlug($slug);
+                return $this->category->makeRepo()->firstBySlug($slug);
             }
         );
     }
@@ -71,7 +71,7 @@ class CategoryCache
             "category.getPosts.{$this->category->id}.{$page}",
             now()->addMinutes($this->minutes),
             function () {
-                return $this->category->getRepo()->paginatePosts();
+                return $this->category->makeRepo()->paginatePosts();
             }
         );
     }
@@ -86,7 +86,7 @@ class CategoryCache
             'category.getWithRecursiveChildrens',
             now()->addMinutes($this->minutes),
             function() {
-                return $this->category->getRepo()->getWithRecursiveChildrens();
+                return $this->category->makeRepo()->getWithRecursiveChildrens();
             }
         );
     }

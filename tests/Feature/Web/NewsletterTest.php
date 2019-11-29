@@ -6,7 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Mail;
-use N1ebieski\ICore\Mail\NewsletterConfirmation;
+use N1ebieski\ICore\Mails\NewsletterConfirmation;
 use Faker\Factory as Faker;
 
 class NewsletterTest extends TestCase

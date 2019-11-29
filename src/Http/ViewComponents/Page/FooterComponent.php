@@ -59,7 +59,7 @@ class FooterComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        $pages = $this->page->getCache()->rememberWithRecursiveChildrensByComponent([
+        $pages = $this->page->makeCache()->rememberWithRecursiveChildrensByComponent([
             'pattern' => $this->pattern !== null ?
                 $this->collect->make($this->pattern)->collapse()->toArray()
                 : null

@@ -21,7 +21,7 @@ class SearchController
      */
     public function autocomplete(Tag $tag, AutoCompleteRequest $request) : JsonResponse
     {
-        return response()->json($tag->getRepo()->getBySearch($request->get('search')));
+        return response()->json($tag->makeRepo()->getBySearch($request->get('search')));
     }
 
     /**

@@ -39,7 +39,7 @@ class TagCache
     {
         $this->tag = $tag;
         $this->cache = $cache;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -53,7 +53,7 @@ class TagCache
             "tag.firstBySlug.{$slug}",
             now()->addMinutes($this->minutes),
             function() use ($slug) {
-                return $this->tag->getRepo()->firstBySlug($slug);
+                return $this->tag->makeRepo()->firstBySlug($slug);
             }
         );
     }

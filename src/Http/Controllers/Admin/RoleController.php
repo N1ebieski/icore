@@ -25,7 +25,7 @@ class RoleController
     public function index(Role $role, IndexRequest $request) : View
     {
         return view('icore::admin.role.index', [
-            'roles' => $role->getRepo()->paginate(),
+            'roles' => $role->makeRepo()->paginate(),
         ]);
     }
 
@@ -54,7 +54,7 @@ class RoleController
      */
     public function store(Role $role, StoreRequest $request) : RedirectResponse
     {
-        $role->getService()->create($request->only(['name', 'perm']));
+        $role->makeService()->create($request->only(['name', 'perm']));
 
         return redirect()->route('admin.role.index')
             ->with('success', trans('icore::roles.success.store') );
@@ -79,7 +79,7 @@ class RoleController
      */
     public function edit(Role $role) : View
     {
-        $permissions = $role->getService()->getPermissionsByRole();
+        $permissions = $role->makeService()->getPermissionsByRole();
 
         return view('icore::admin.role.edit', [
             'role' => $role,
@@ -97,7 +97,7 @@ class RoleController
      */
     public function update(Role $role, UpdateRequest $request) : RedirectResponse
     {
-        $role->getService()->update($request->only(['perm', 'name']));
+        $role->makeService()->update($request->only(['perm', 'name']));
 
         return redirect()->route('admin.role.edit', [$role->id])
             ->with('success', trans('icore::roles.success.update') );

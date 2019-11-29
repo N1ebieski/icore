@@ -57,7 +57,7 @@ class IndexRequest extends FormRequest
             'filter.role' => [
                 'bail',
                 'nullable',
-                Rule::in($this->role->getRepo()->getIdsAsArray()),
+                Rule::in($this->role->makeRepo()->getIdsAsArray()),
                 'no_js_validation'
             ],
             'filter.orderby' => [

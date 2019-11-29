@@ -48,7 +48,7 @@ class CategoryController implements Polymorphic
      */
     public function index(Category $category, IndexRequest $request, IndexFilter $filter) : View
     {
-        $categoryService = $category->getService();
+        $categoryService = $category->makeService();
 
         return view('icore::admin.category.index', [
             'model' => $category,
@@ -68,7 +68,7 @@ class CategoryController implements Polymorphic
      */
     public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
     {
-        $categories = $category->getRepo()->getBySearch($request->get('name'));
+        $categories = $category->makeRepo()->getBySearch($request->get('name'));
 
         return $response->setCategories($categories)->response();
     }
@@ -85,7 +85,7 @@ class CategoryController implements Polymorphic
             'success' => '',
             'view' => view('icore::admin.category.create', [
                 'model' => $category,
-                'categories' => $category->getService()->getAsFlatTree()
+                'categories' => $category->makeService()->getAsFlatTree()
             ])->render()
         ]);
     }
@@ -99,7 +99,7 @@ class CategoryController implements Polymorphic
      */
     public function store(Category $category, StoreRequest $request) : JsonResponse
     {
-        $category->getService()->create($request->only(['name', 'icon', 'parent_id']));
+        $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
 
         $request->session()->flash('success', trans('icore::categories.success.store'));
 
@@ -115,7 +115,7 @@ class CategoryController implements Polymorphic
      */
     public function storeGlobal(Category $category, StoreGlobalRequest $request) : JsonResponse
     {
-        $category->getService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
+        $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
 
         $request->session()->flash('success', trans('icore::categories.success.store_global'));
 
@@ -145,7 +145,7 @@ class CategoryController implements Polymorphic
             'success' => '',
             'view' => view('icore::admin.category.edit', [
                 'category' => $category,
-                'categories' => $category->getService()->getAsFlatTreeExceptSelf()
+                'categories' => $category->makeService()->getAsFlatTreeExceptSelf()
             ])->render()
         ]);
     }
@@ -159,7 +159,7 @@ class CategoryController implements Polymorphic
      */
     public function update(Category $category, UpdateRequest $request) : JsonResponse
     {
-        $category->getService()->update($request->only(['parent_id', 'icon', 'name']));
+        $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
 
         return response()->json([
             'success' => '',
@@ -196,11 +196,11 @@ class CategoryController implements Polymorphic
      */
     public function updatePosition(Category $category, UpdatePositionRequest $request) : JsonResponse
     {
-        $category->getService()->updatePosition($request->only('position'));
+        $category->makeService()->updatePosition($request->only('position'));
 
         return response()->json([
             'success' => '',
-            'siblings' => $category->getRepo()->getSiblingsAsArray()+[$category->id => $category->position],
+            'siblings' => $category->makeRepo()->getSiblingsAsArray()+[$category->id => $category->position],
         ]);
     }
 
@@ -213,9 +213,9 @@ class CategoryController implements Polymorphic
      */
     public function updateStatus(Category $category, UpdateStatusRequest $request) : JsonResponse
     {
-        $category->getService()->updateStatus($request->only('status'));
+        $category->makeService()->updateStatus($request->only('status'));
 
-        $categoryRepo = $category->getRepo();
+        $categoryRepo = $category->makeRepo();
 
         return response()->json([
             'success' => '',
@@ -236,9 +236,9 @@ class CategoryController implements Polymorphic
     public function destroy(Category $category) : JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
-        $descendants = $category->getRepo()->getDescendantsAsArray();
+        $descendants = $category->makeRepo()->getDescendantsAsArray();
 
-        $category->getService()->delete();
+        $category->makeService()->delete();
 
         return response()->json([
             'success' => '',
@@ -255,7 +255,7 @@ class CategoryController implements Polymorphic
      */
     public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse
     {
-        $deleted = $category->getService()->deleteGlobal($request->get('select'));
+        $deleted = $category->makeService()->deleteGlobal($request->get('select'));
         //$deleted = $category->whereIn('id', $request->get('select'))->delete();
 
         return redirect()->back()->with('success', trans('icore::categories.success.destroy_global', ['affected' => $deleted]));

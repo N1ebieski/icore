@@ -28,7 +28,7 @@ class MailingController
      */
     public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter) : View
     {
-        $mailings = $mailing->getRepo()->paginateByFilter($filter->all());
+        $mailings = $mailing->makeRepo()->paginateByFilter($filter->all());
 
         return view('icore::admin.mailing.index', [
             'mailings' => $mailings,
@@ -56,7 +56,7 @@ class MailingController
      */
     public function store(Mailing $mailing, StoreRequest $request) : RedirectResponse
     {
-        $mailing = $mailing->getService()->create($request->all());
+        $mailing = $mailing->makeService()->create($request->all());
 
         return redirect()->route('admin.mailing.index')
             ->with('success', trans('icore::mailings.success.store', ['recipients' => $mailing->total]) );
@@ -82,14 +82,14 @@ class MailingController
      */
     public function update(Mailing $mailing, UpdateRequest $request) : RedirectResponse
     {
-        $mailing->getService()->update($request->all());
+        $mailing->makeService()->update($request->all());
 
         if ($mailing->status == 1) {
             return redirect()->route('admin.mailing.index')
                 ->with('success', trans('icore::mailings.success.update'));
         }
 
-        return redirect()->route('admin.mailing.edit', ['mailing' => $mailing->id])
+        return redirect()->route('admin.mailing.edit', [$mailing->id])
             ->with('success', trans('icore::mailings.success.update') );
     }
 
@@ -102,7 +102,7 @@ class MailingController
      */
     public function updateStatus(Mailing $mailing, UpdateStatusRequest $request) : JsonResponse
     {
-        $mailing->getService()->updateStatus($request->only('status'));
+        $mailing->makeService()->updateStatus($request->only('status'));
 
         return response()->json([
             'success' => '',
@@ -121,7 +121,7 @@ class MailingController
      */
     public function reset(Mailing $mailing) : JsonResponse
     {
-        $mailing->getService()->reset();
+        $mailing->makeService()->reset();
 
         return response()->json([
             'success' => '',
@@ -137,7 +137,7 @@ class MailingController
      */
     public function destroy(Mailing $mailing) : JsonResponse
     {
-        $mailing->getService()->delete();
+        $mailing->makeService()->delete();
 
         return response()->json(['success' => '']);
     }
@@ -151,7 +151,7 @@ class MailingController
      */
     public function destroyGlobal(Mailing $mailing, DestroyGlobalRequest $request) : RedirectResponse
     {
-        $deleted = $mailing->getService()->deleteGlobal($request->get('select'));
+        $deleted = $mailing->makeService()->deleteGlobal($request->get('select'));
 
         return redirect()->back()->with('success', trans('icore::mailings.success.destroy_global', ['affected' => $deleted]));
     }

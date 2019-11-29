@@ -3,10 +3,10 @@ namespace N1ebieski\ICore\Models\Category;
 
 use Franzose\ClosureTable\Models\Entity;
 use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Filterable;
-use N1ebieski\ICore\Traits\Polymorphic;
-use N1ebieski\ICore\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use Illuminate\Database\Eloquent\Builder;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
 use N1ebieski\ICore\Repositories\CategoryRepo;
@@ -274,31 +274,31 @@ class Category extends Entity implements CategoryInterface
         }]);;
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return CategoryRepo [description]
      */
-    public function getRepo() : CategoryRepo
+    public function makeRepo() : CategoryRepo
     {
         return app()->make(CategoryRepo::class, ['category' => $this]);
     }
 
     /**
-     * [getCache description]
+     * [makeCache description]
      * @return CategoryCache [description]
      */
-    public function getCache() : CategoryCache
+    public function makeCache() : CategoryCache
     {
         return app()->make(CategoryCache::class, ['category' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return CategoryService [description]
      */
-    public function getService() : CategoryService
+    public function makeService() : CategoryService
     {
         return app()->make(CategoryService::class, ['category' => $this]);
     }

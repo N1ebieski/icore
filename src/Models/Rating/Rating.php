@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use N1ebieski\ICore\Services\RatingService;
-use N1ebieski\ICore\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
 
 /**
  * [Rating description]
@@ -44,16 +44,16 @@ class Rating extends Model
      */
     public function morph() : MorphTo
     {
-        return $this->morphTo('model');
+        return $this->morphTo('morph', 'model_type', 'model_id');
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return RatingService [description]
      */
-    public function getService() : RatingService
+    public function makeService() : RatingService
     {
         return app()->make(RatingService::class, ['rating' => $this]);
     }

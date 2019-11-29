@@ -33,7 +33,7 @@ class TagComponent implements Htmlable
     public function toHtml() : View
     {
         return view('icore::web.components.tag', [
-            'tags' => $this->post->getCache()->rememberPopularTags()
+            'tags' => $this->post->makeCache()->rememberPopularTags()
         ]);
     }
 }

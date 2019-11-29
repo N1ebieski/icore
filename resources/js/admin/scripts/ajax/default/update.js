@@ -48,8 +48,8 @@ jQuery(document).on('click', '.update', function(e) {
             var errors = response.responseJSON;
 
             $.each(errors.errors, function( key, value ) {
-                $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).parent().append($.getError(key, value));
+                $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
+                $form.find('#' + $.escapeSelector(key)).parent().append($.getError(key, value));
             });
         }
     });

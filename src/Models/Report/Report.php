@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use N1ebieski\ICore\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
 
 /**
  * [Report description]
@@ -33,7 +33,7 @@ class Report extends Model
      */
     public function morph() : MorphTo
     {
-        return $this->morphTo('model');
+        return $this->morphTo('morph', 'model_type', 'model_id');
     }
 
     // Accessors
@@ -56,13 +56,13 @@ class Report extends Model
         return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return ReportService [description]
      */
-    public function getService() : ReportService
+    public function makeService() : ReportService
     {
         return app()->make(ReportService::class, ['report' => $this]);
     }

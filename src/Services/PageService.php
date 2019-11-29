@@ -58,7 +58,7 @@ class PageService implements Serviceable
      */
     public function getAsFlatTree() : Collection
     {
-        $this->pages = $this->page->getRepo()->getAsTree();
+        $this->pages = $this->page->makeRepo()->getAsTree();
 
         $this->pages = $this->flatten();
 
@@ -71,7 +71,7 @@ class PageService implements Serviceable
      */
     public function getAsFlatTreeExceptSelf() : Collection
     {
-        $this->pages = $this->page->getRepo()->getAsTreeExceptSelf();
+        $this->pages = $this->page->makeRepo()->getAsTreeExceptSelf();
 
         $this->pages = $this->flatten();
 
@@ -89,7 +89,7 @@ class PageService implements Serviceable
             return $this->getAsFlatTreeByFilter($filter);
         }
 
-        return $this->page->getRepo()->paginateByFilter($filter);
+        return $this->page->makeRepo()->paginateByFilter($filter);
     }
 
     /**
@@ -312,7 +312,7 @@ class PageService implements Serviceable
         // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
         foreach ($ids as $id) {
             if ($c = $this->page->find($id)) {
-                $c->getService()->delete();
+                $c->makeService()->delete();
 
                 $deleted += 1;
             }

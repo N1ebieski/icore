@@ -24,13 +24,13 @@ class PageController
     public function show(Page $page, Comment $comment, ShowFilter $filter, ShowRequest $request) : View
     {
         $comments = ((bool)$page->comment === true) ?
-            $comment->setMorph($page)->getCache()->rememberRootsByFilter(
+            $comment->setMorph($page)->makeCache()->rememberRootsByFilter(
                 $filter->all(),
                 $request->get('page') ?? 1
             ) : null;
 
         return view('icore::web.page.show', [
-            'page' => $page->getCache()->rememberLoadRecursiveChildrens(),
+            'page' => $page->makeCache()->rememberLoadRecursiveChildrens(),
             'comments' => $comments,
             'filter' => $filter->all()
         ]);

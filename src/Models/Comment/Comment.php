@@ -3,9 +3,9 @@
 namespace N1ebieski\ICore\Models\Comment;
 
 use Franzose\ClosureTable\Models\Entity;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Filterable;
-use N1ebieski\ICore\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
@@ -132,7 +132,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function morph()
     {
-        return $this->morphTo('model');
+        return $this->morphTo('morph', 'model_type', 'model_id');
     }
 
     // Accessors
@@ -380,31 +380,31 @@ class Comment extends Entity implements CommentInterface
         return !is_null($entity) ? (int)$entity->position : null;
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return CommentRepo [description]
      */
-    public function getRepo() : CommentRepo
+    public function makeRepo() : CommentRepo
     {
         return app()->make(CommentRepo::class, ['comment' => $this]);
     }
 
     /**
-     * [getCache description]
+     * [makeCache description]
      * @return CommentCache [description]
      */
-    public function getCache() : CommentCache
+    public function makeCache() : CommentCache
     {
         return app()->make(CommentCache::class, ['comment' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return CommentService [description]
      */
-    public function getService() : CommentService
+    public function makeService() : CommentService
     {
         return app()->make(CommentService::class, ['comment' => $this]);
     }

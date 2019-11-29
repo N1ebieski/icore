@@ -45,7 +45,7 @@ class StoreRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'roles' => 'required|array|min:1',
-            'roles.*' => Rule::in($this->role->getRepo()->getAvailableNamesAsArray())
+            'roles.*' => Rule::in($this->role->makeRepo()->getAvailableNamesAsArray())
         ];
     }
 }

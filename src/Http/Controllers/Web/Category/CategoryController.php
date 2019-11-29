@@ -38,7 +38,7 @@ class CategoryController implements Polymorphic
      */
     public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
     {
-        $categories = $category->getRepo()->getBySearch($request->get('name'));
+        $categories = $category->makeRepo()->getBySearch($request->get('name'));
 
         if ($categories->isEmpty()) {
             return response()->json([

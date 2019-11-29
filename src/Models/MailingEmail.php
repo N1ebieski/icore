@@ -52,6 +52,6 @@ class MailingEmail extends Model
      */
     public function morph()
     {
-        return $this->morphTo('model');
+        return $this->morphTo('morph', 'model_type', 'model_id');
     }
 }

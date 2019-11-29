@@ -45,7 +45,7 @@ class UpdateRequest extends FormRequest
             'name' => ['required', 'alpha_dash', 'max:255'],
             'email' => 'required|email|string|max:255|unique:users,email,' . $this->user->id,
             'roles' => 'required|array|min:1',
-            'roles.*' => Rule::in($this->role->getRepo()->getAvailableNamesAsArray())
+            'roles.*' => Rule::in($this->role->makeRepo()->getAvailableNamesAsArray())
         ];
     }
 }

@@ -21,7 +21,7 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
             $searchCategory.btn.prop('disabled', true);
             $('#searchCategoryOptions').empty();
             $searchCategory.append($.getLoader('spinner-border'));
-            $('.invalid-feedback').remove();
+            $searchCategory.find('.invalid-feedback').remove();
             $searchCategory.input.removeClass('is-valid');
             $searchCategory.input.removeClass('is-invalid');
         },

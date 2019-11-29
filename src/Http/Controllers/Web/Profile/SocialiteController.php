@@ -59,7 +59,7 @@ class SocialiteController
             return redirect()->route('web.profile.edit_socialite');
         }
 
-        $socialiteService = $socialite->getService();
+        $socialiteService = $socialite->makeService();
         $authUser = $socialiteService->findUser($providerUser, $provider);
 
         if (!is_null($authUser)) return redirect()->route('web.profile.edit_socialite')

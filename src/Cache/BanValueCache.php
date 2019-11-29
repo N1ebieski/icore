@@ -48,7 +48,7 @@ class BanValueCache
         $this->banValue = $banValue;
         $this->cache = $cache;
         $this->str = $str;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**

@@ -44,22 +44,22 @@ class Role extends BaseRole
         return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return RoleRepo [description]
      */
-    public function getRepo() : RoleRepo
+    public function makeRepo() : RoleRepo
     {
         return app()->make(RoleRepo::class, ['role' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return RoleService [description]
      */
-    public function getService() : RoleService
+    public function makeService() : RoleService
     {
         return app()->make(RoleService::class, ['role' => $this]);
     }

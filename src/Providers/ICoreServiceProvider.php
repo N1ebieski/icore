@@ -39,6 +39,7 @@ class ICoreServiceProvider extends ServiceProvider
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
+            \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
             \Nckg\Minify\Middleware\MinifyResponse::class
         ]);

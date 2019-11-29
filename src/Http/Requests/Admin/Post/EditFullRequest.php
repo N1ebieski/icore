@@ -39,7 +39,7 @@ class EditFullRequest extends FormRequest
         // danych z helpera old() stanowi problem
         if ($this->old('categories')) {
             session()->flash('_old_input.categories_collection',
-                $this->category->getRepo()->getByIds($this->old('categories')));
+                $this->category->makeRepo()->getByIds($this->old('categories')));
         }
     }
 

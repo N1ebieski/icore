@@ -43,7 +43,7 @@ class PostCache
     {
         $this->post = $post;
         $this->cache = $cache;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -57,7 +57,7 @@ class PostCache
             "post.paginateLatest.{$page}",
             now()->addMinutes($this->minutes),
             function () {
-                return $this->post->getRepo()->paginateLatest();
+                return $this->post->makeRepo()->paginateLatest();
             }
         );
     }
@@ -72,7 +72,7 @@ class PostCache
             "post.firstPrevious.{$this->post->id}",
             now()->addMinutes($this->minutes),
             function () {
-                return $this->post->getRepo()->firstPrevious();
+                return $this->post->makeRepo()->firstPrevious();
             }
         );
     }
@@ -87,7 +87,7 @@ class PostCache
             "post.firstNext.{$this->post->id}",
             now()->addMinutes($this->minutes),
             function () {
-                return $this->post->getRepo()->firstNext();
+                return $this->post->makeRepo()->firstNext();
             }
         );
     }
@@ -102,7 +102,7 @@ class PostCache
             "post.getRelated.{$this->post->id}",
             now()->addMinutes($this->minutes),
             function () {
-                return $this->post->getRepo()->getRelated();
+                return $this->post->makeRepo()->getRelated();
             }
         );
     }
@@ -118,7 +118,7 @@ class PostCache
             "post.firstBySlug.{$slug}",
             now()->addMinutes($this->minutes),
             function () use ($slug) {
-                return $this->post->getRepo()->firstBySlug($slug);
+                return $this->post->makeRepo()->firstBySlug($slug);
             }
         );
     }
@@ -135,7 +135,7 @@ class PostCache
             "post.paginateByTag.{$tag->normalized}.".$page,
             now()->addMinutes($this->minutes),
             function() use ($tag) {
-                return $this->post->getRepo()->paginateByTag($tag->name);
+                return $this->post->makeRepo()->paginateByTag($tag->name);
             }
         );
     }
@@ -153,7 +153,7 @@ class PostCache
             "post.paginateArchiveByDate.{$month}.{$year}.{$page}",
             now()->addMinutes($this->minutes),
             function() use ($month, $year) {
-                return $this->post->getRepo()->paginateArchiveByDate([
+                return $this->post->makeRepo()->paginateArchiveByDate([
                     'month' => $month,
                     'year' => $year
                 ]);
@@ -171,7 +171,7 @@ class PostCache
             'post.getArchives',
             now()->addMinutes($this->minutes),
             function() {
-                $posts = $this->post->getRepo()->getArchives();
+                $posts = $this->post->makeRepo()->getArchives();
 
                 $posts->map(function($item) {
                     $item->month_localized = Carbon::createFromFormat('m', $item->month)

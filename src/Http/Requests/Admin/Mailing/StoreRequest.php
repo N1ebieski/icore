@@ -29,7 +29,7 @@ class StoreRequest extends FormRequest
             'users' => 'in:true,false|no_js_validation',
             'newsletter' => 'in:true,false|no_js_validation',
             'emails' => 'in:true,false|no_js_validation',
-            'emails_json' => 'required_if:emails,true|json',
+            'emails_json' => 'nullable|required_if:emails,true|json',
             'date_activation_at' => 'required_if:status,2|date|no_js_validation',
             'time_activation_at' => 'required_if:status,2|date_format:"H:i"|no_js_validation'
         ];

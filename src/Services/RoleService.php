@@ -43,10 +43,10 @@ class RoleService implements Serviceable
     public function getPermissionsByRole() : Collection
     {
         if ($this->role->name === 'user') {
-            return $this->permission->getRepo()->getUserWithRole($this->role->id);
+            return $this->permission->makeRepo()->getUserWithRole($this->role->id);
         }
 
-        return $this->permission->getRepo()->getWithRole($this->role->id);
+        return $this->permission->makeRepo()->getWithRole($this->role->id);
     }
 
     /**

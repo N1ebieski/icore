@@ -10,8 +10,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\Repositories\UserRepo;
@@ -145,13 +145,13 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return UserRepo [description]
      */
-    public function getRepo() : UserRepo
+    public function makeRepo() : UserRepo
     {
         return app()->make(UserRepo::class, ['user' => $this]);
     }

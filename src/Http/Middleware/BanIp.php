@@ -34,7 +34,7 @@ class BanIp
      */
     public function handle($request, Closure $next)
     {
-        $bans = $this->banValue->getCache()->rememberAllIpsAsString();
+        $bans = $this->banValue->makeCache()->rememberAllIpsAsString();
 
         if (!empty($bans) && preg_match('/^('.$bans.')/i', $request->ip())) {
             return abort(403, 'You cannot perform this action because you are banned.');

@@ -41,7 +41,7 @@ class Report extends ReportBaseModel
         return $this;
     }
 
-    // Getters
+    // Makers
 
     /**
      * [getMorph description]

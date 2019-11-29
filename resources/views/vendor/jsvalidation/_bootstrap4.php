@@ -7,13 +7,12 @@ function jsvalidation() {
             errorClass: 'invalid-feedback font-weight-bold',
 
             errorPlacement: function (error, element) {
-                let selector = $.escapeSelector(element.attr('name').replace(/\[/g, '.').replace(/\]/g, '').replace(/\.$/, ''));
-                $('#error-' + selector).remove();
                 if (element.parent('.input-group').length ||
-                    element.prop('type') === 'checkbox' || element.prop('type') === 'radio' || element.prop('type') === 'file') {
-                    error.insertAfter(element.closest('#' + selector));
+                    element.prop('type') === 'checkbox' || element.prop('type') === 'radio') {
+                    error.insertAfter(element.parent());
                     // else just place the validation message immediately after the input
                 } else {
+                    $('#error-' +element.attr('name')).remove();
                     error.insertAfter(element);
                 }
             },
@@ -30,7 +29,7 @@ function jsvalidation() {
             unhighlight: function(element) {
                 var fields = <?= json_encode(array_keys($validator['rules'])); ?>;
 
-                if ($.inArray($(element).attr('name').replace('[]', ''), fields) != -1) {
+                if ($.inArray($(element).closest('.form-control').attr('name'), fields) != -1) {
                     $(element).closest('.form-control').removeClass('is-invalid').addClass('is-valid');
                 }
             },

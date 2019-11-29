@@ -91,7 +91,6 @@ return [
     ],
     'not_in' => 'Zaznaczony :attribute jest nieprawidłowy.',
     'not_regex' => 'Format :attribute jest nieprawidłowy.',
-    'not_regex_contains' => ':attribute zawiera któreś ze zbanowanych słów: :words',
     'numeric' => ':attribute musi być liczbą.',
     'present' => 'Pole :attribute musi być obecne.',
     'regex' => 'Format :attribute jest nieprawidłowy.',

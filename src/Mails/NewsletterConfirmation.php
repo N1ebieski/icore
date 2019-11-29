@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Mail;
+namespace N1ebieski\ICore\Mails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -15,10 +15,10 @@ class NewsletterConfirmation extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * [public description]
+     * [protected description]
      * @var Newsletter
      */
-    public $newsletter;
+    protected $newsletter;
 
     /**
      * Create a new event instance.

@@ -34,11 +34,11 @@ class PostController
      */
     public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter) : View
     {
-        $posts = $post->getRepo()->paginateByFilter($filter->all());
+        $posts = $post->makeRepo()->paginateByFilter($filter->all());
 
         return view('icore::admin.post.index', [
             'posts' => $posts,
-            'categories' => $category->getService()->getAsFlatTree(),
+            'categories' => $category->makeService()->getAsFlatTree(),
             'filter' => $filter->all(),
             'paginate' => config('database.paginate')
         ]);
@@ -67,7 +67,7 @@ class PostController
      */
     public function store(Post $post, StoreRequest $request) : RedirectResponse
     {
-        $post->getService()->create($request->all());
+        $post->makeService()->create($request->all());
 
         return redirect()->route('admin.post.index')->with('success', trans('icore::posts.success.store') );
     }
@@ -122,7 +122,7 @@ class PostController
      */
     public function updateStatus(Post $post, UpdateStatusRequest $request) : JsonResponse
     {
-        $post->getService()->updateStatus($request->only('status'));
+        $post->makeService()->updateStatus($request->only('status'));
 
         return response()->json([
             'success' => '',
@@ -140,7 +140,7 @@ class PostController
      */
     public function updateFull(Post $post, UpdateFullRequest $request) : RedirectResponse
     {
-        $post->getService()->updateFull($request->all());
+        $post->makeService()->updateFull($request->all());
 
         return redirect()->route('admin.post.edit_full', ['post' => $post->id])
             ->with('success', trans('icore::posts.success.update') );
@@ -155,7 +155,7 @@ class PostController
      */
     public function update(Post $post, UpdateRequest $request) : JsonResponse
     {
-        $post->getService()->update($request->only(['title', 'content_html']));
+        $post->makeService()->update($request->only(['title', 'content_html']));
 
         return response()->json([
             'success' => '',
@@ -171,7 +171,7 @@ class PostController
      */
     public function destroy(Post $post) : JsonResponse
     {
-        $post->getService()->delete();
+        $post->makeService()->delete();
 
         return response()->json(['success' => '']);
     }
@@ -186,7 +186,7 @@ class PostController
      */
     public function destroyGlobal(Post $post, Comment $comment, DestroyGlobalRequest $request) : RedirectResponse
     {
-        $deleted = $post->getService()->deleteGlobal($request->get('select'));
+        $deleted = $post->makeService()->deleteGlobal($request->get('select'));
 
         return redirect()->back()->with('success', trans('icore::posts.success.destroy_global', ['affected' => $deleted]));
     }

@@ -46,7 +46,7 @@ class UpdateFullRequest extends FormRequest
                 'nullable',
                 'integer',
                 'exists:pages,id',
-                Rule::notIn($this->page->getRepo()->getDescendantsAsArray()),
+                Rule::notIn($this->page->makeRepo()->getDescendantsAsArray()),
             ]
         ];
     }

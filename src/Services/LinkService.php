@@ -29,7 +29,7 @@ class LinkService implements Serviceable
      * [protected description]
      * @var string
      */
-    protected $img_dir = 'public/vendor/icore/links';
+    protected $img_dir = 'vendor/icore/links';
 
     /**
      * [__construct description]
@@ -69,7 +69,7 @@ class LinkService implements Serviceable
      */
     protected function uploadImage(UploadedFile $img) : string
     {
-        return $this->storage->disk('local')->putFile($this->img_dir, $img);
+        return $this->storage->disk('public')->putFile($this->img_dir, $img);
     }
 
     /**
@@ -79,8 +79,8 @@ class LinkService implements Serviceable
     protected function deleteImage() : bool
     {
         if ($this->link->img_url !== null) {
-            if ($this->storage->disk('local')->exists($this->link->img_url)) {
-                return $this->storage->disk('local')->delete($this->link->img_url);
+            if ($this->storage->disk('public')->exists($this->link->img_url)) {
+                return $this->storage->disk('public')->delete($this->link->img_url);
             }
         }
 

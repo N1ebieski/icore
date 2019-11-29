@@ -10,13 +10,13 @@ use N1ebieski\ICore\Repositories\PermissionRepo;
  */
 class Permission extends BasePermission
 {
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return PermissionRepo [description]
      */
-    public function getRepo() : PermissionRepo
+    public function makeRepo() : PermissionRepo
     {
         return app()->make(PermissionRepo::class, ['permission' => $this]);
     }

@@ -48,7 +48,7 @@ class MailingCron
      */
     private function addToQueue() : void
     {
-        $mailings = $this->mailing->getRepo()->getActiveWithUnsentEmails();
+        $mailings = $this->mailing->makeRepo()->getActiveWithUnsentEmails();
 
         foreach ($mailings as $mailing) {
             if ($mailing->emails->isNotEmpty()) {
@@ -72,6 +72,6 @@ class MailingCron
      */
     private function activateScheduled() : int
     {
-        return $this->mailing->getRepo()->updateScheduled(['status' => 1]);
+        return $this->mailing->makeRepo()->updateScheduled(['status' => 1]);
     }
 }

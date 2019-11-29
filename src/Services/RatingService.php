@@ -68,7 +68,7 @@ class RatingService implements Serviceable
      */
     public function findByUser()
     {
-        $rating = $this->rating->getMorph()->getRepo()->firstRatingByUser($this->auth->user()->id);
+        $rating = $this->rating->getMorph()->makeRepo()->firstRatingByUser($this->auth->user()->id);
 
         if ($rating) {
             return $this->rating = $rating;

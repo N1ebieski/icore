@@ -7,7 +7,7 @@
         @endcan
                 <ul class="list-unstyled mb-0 pb-0">
                     <li>
-                        <a class="show" href="#" data-toggle="modal" data-target="#showCommentModal" data-route="{{ route('admin.comment.show', ['comment' => $comment->id]) }}">{{ trans('icore::comments.disqus', ['name' => $comment->model->title]) }}</a>
+                        <a class="show" href="#" data-toggle="modal" data-target="#showCommentModal" data-route="{{ route('admin.comment.show', ['comment' => $comment->id]) }}">{{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}</a>
                         @if ($comment->reports_count > 0)
                         &nbsp;<a href="#" class="badge badge-danger show" data-toggle="modal"
                         data-route="{{ route('admin.report.comment.show', ['comment' => $comment->id]) }}"
@@ -48,7 +48,7 @@
                         $comment->model_id,
                         'parent_id' => $comment->id
                     ]) }}" type="button" class="btn btn-primary answer create"
-                    {{ ($comment->status === 1 && (bool)$comment->model->comment === true) ? '' : 'disabled' }}>
+                    {{ ($comment->status === 1 && (bool)$comment->morph->comment === true) ? '' : 'disabled' }}>
                         <i class="far fa-comment"></i>
                         <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.answer') }}</span>
                     </button>

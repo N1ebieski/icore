@@ -89,7 +89,7 @@ class SocialiteService
         $this->provider = $provider;
 
         // Sprawdzenie czy uzytkownik jest zarejestrowany jako Socialite
-        $socialite = $this->socialite->getRepo()->firstByProvider(
+        $socialite = $this->socialite->makeRepo()->firstByProvider(
             $this->provider,
             $this->providerUser->getId()
         );
@@ -112,7 +112,7 @@ class SocialiteService
         }
 
         // Sprawdzenie czy uzytkownik jest zarejestrowany jako User
-        $this->socialiteUser = $this->user->getRepo()->firstByEmail($this->providerUser->getEmail());
+        $this->socialiteUser = $this->user->makeRepo()->firstByEmail($this->providerUser->getEmail());
 
         // Jesli tak, odrzucamy request i prosimy usera by powiazal konto z poziomu edycji profilu
         if ($this->socialiteUser) {

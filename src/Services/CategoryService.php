@@ -58,7 +58,7 @@ class CategoryService implements Serviceable
      */
     public function getAsFlatTree() : Collection
     {
-        $this->categories = $this->category->getRepo()->getAsTree();
+        $this->categories = $this->category->makeRepo()->getAsTree();
 
         $this->categories = $this->flatten();
 
@@ -76,7 +76,7 @@ class CategoryService implements Serviceable
             return $this->getAsFlatTreeByFilter($filter);
         }
 
-        return $this->category->getRepo()->paginateByFilter($filter);
+        return $this->category->makeRepo()->paginateByFilter($filter);
     }
 
     /**
@@ -97,7 +97,7 @@ class CategoryService implements Serviceable
      */
     public function getAsFlatTreeExceptSelf() : Collection
     {
-        $this->categories = $this->category->getRepo()->getAsTreeExceptSelf();
+        $this->categories = $this->category->makeRepo()->getAsTreeExceptSelf();
 
         $this->categories = $this->flatten();
 
@@ -205,7 +205,7 @@ class CategoryService implements Serviceable
         // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
         foreach ($ids as $id) {
             if ($c = $this->category->find($id)) {
-                $c->getService()->delete();
+                $c->makeService()->delete();
 
                 $deleted += 1;
             }

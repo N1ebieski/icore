@@ -3,8 +3,8 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Traits\Filterable;
-use N1ebieski\ICore\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Repositories\BanValueRepo;
@@ -77,22 +77,22 @@ class BanValue extends Model
         return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return BanValueRepo [description]
      */
-    public function getRepo() : BanValueRepo
+    public function makeRepo() : BanValueRepo
     {
         return app()->make(BanValueRepo::class, ['banvalue' => $this]);
     }
 
     /**
-     * [getCache description]
+     * [makeCache description]
      * @return BanValueCache [description]
      */
-    public function getCache() : BanValueCache
+    public function makeCache() : BanValueCache
     {
         return app()->make(BanValueCache::class, ['banvalue' => $this]);
     }

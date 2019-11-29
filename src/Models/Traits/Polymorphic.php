@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Traits;
+namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 

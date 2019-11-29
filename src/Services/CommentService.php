@@ -42,7 +42,7 @@ class CommentService implements Serviceable
      */
     public function getRootsByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->comments = $this->comment->getMorph()->getRepo()->paginateCommentsByFilter($filter);
+        $this->comments = $this->comment->getMorph()->makeRepo()->paginateCommentsByFilter($filter);
 
         $this->comments = $this->paginateChildrens();
 
@@ -57,7 +57,7 @@ class CommentService implements Serviceable
      */
     public function paginateChildrensByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->comments = $this->comment->getRepo()->paginateChildrensByFilter($filter);
+        $this->comments = $this->comment->makeRepo()->paginateChildrensByFilter($filter);
 
         $this->comments = $this->paginateChildrens();
 

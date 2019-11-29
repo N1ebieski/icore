@@ -78,7 +78,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->app['router']->bind('category_post_cache', function($value) {
             return App::make(\N1ebieski\ICore\Models\Category\Post\Category::class)
-                ->getCache()->rememberBySlug($value) ?? abort(404);
+                ->makeCache()->rememberBySlug($value) ?? abort(404);
         });
 
         $this->app['router']->bind('tag_cache', function($value) {

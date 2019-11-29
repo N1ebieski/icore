@@ -49,7 +49,7 @@ class LinkComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        $links = $this->link->getCache()->rememberLinksByComponent([
+        $links = $this->link->makeCache()->rememberLinksByComponent([
             'cats' => $this->cats,
             'limit' => $this->limit
         ]);

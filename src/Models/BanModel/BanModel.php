@@ -3,9 +3,9 @@
 namespace N1ebieski\ICore\Models\BanModel;
 
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Traits\Filterable;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -42,7 +42,7 @@ class BanModel extends Model
      */
     public function morph()
     {
-        return $this->morphTo('model');
+        return $this->morphTo('morph', 'model_type', 'model_id');
     }
 
     // Scopes
@@ -83,5 +83,5 @@ class BanModel extends Model
     public function getUpdatedAtDiffAttribute() : string
     {
         return Carbon::parse($this->updated_at)->diffForHumans();
-    }  
+    }
 }

@@ -41,22 +41,22 @@ class Socialite extends Model
         return $this->belongsTo('N1ebieski\ICore\Models\User');
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return SocialiteRepo [description]
      */
-    public function getRepo() : SocialiteRepo
+    public function makeRepo() : SocialiteRepo
     {
         return app()->make(SocialiteRepo::class, ['socialite' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return SocialiteService [description]
      */
-    public function getService() : SocialiteService
+    public function makeService() : SocialiteService
     {
         return app()->make(SocialiteService::class, ['socialite' => $this]);
     }

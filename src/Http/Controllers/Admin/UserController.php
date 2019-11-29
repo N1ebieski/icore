@@ -35,7 +35,7 @@ class UserController
      */
     public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter) : View
     {
-        $users = $user->getRepo()->paginateByFilter($filter->all());
+        $users = $user->makeRepo()->paginateByFilter($filter->all());
 
         return view('icore::admin.user.index', [
             'users' => $users,
@@ -107,7 +107,7 @@ class UserController
      */
     public function edit(User $user, Role $role) : JsonResponse
     {
-        $roles = $role->getRepo()->getAvailable();
+        $roles = $role->makeRepo()->getAvailable();
 
         return response()->json([
             'success' => '',
@@ -142,7 +142,7 @@ class UserController
      */
     public function create(Role $role) : JsonResponse
     {
-        $roles = $role->getRepo()->getAvailable();
+        $roles = $role->makeRepo()->getAvailable();
 
         return response()->json([
             'success' => '',

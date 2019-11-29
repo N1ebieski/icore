@@ -44,7 +44,7 @@ class CommentController implements Polymorphic
      */
     public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : View
     {
-        $comments = $comment->getRepo()->paginateByFilter($filter->all());
+        $comments = $comment->makeRepo()->paginateByFilter($filter->all());
 
         return view('icore::admin.comment.index', [
             'model' => $comment,
@@ -95,7 +95,7 @@ class CommentController implements Polymorphic
      */
     public function update(Comment $comment, UpdateRequest $request) : JsonResponse
     {
-        $comment->getService()->update($request->only('content'));
+        $comment->makeService()->update($request->only('content'));
 
         return response()->json([
             'success' => '',
@@ -134,9 +134,9 @@ class CommentController implements Polymorphic
      */
     public function updateStatus(Comment $comment, UpdateStatusRequest $request) : JsonResponse
     {
-        $comment->getService()->updateStatus($request->only('status'));
+        $comment->makeService()->updateStatus($request->only('status'));
 
-        $commentRepo = $comment->getRepo();
+        $commentRepo = $comment->makeRepo();
 
         return response()->json([
             'success' => '',
@@ -157,9 +157,9 @@ class CommentController implements Polymorphic
     public function destroy(Comment $comment) : JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
-        $descendants = $comment->getRepo()->getDescendantsAsArray();
+        $descendants = $comment->makeRepo()->getDescendantsAsArray();
 
-        $comment->getService()->delete();
+        $comment->makeService()->delete();
 
         return response()->json([
             'success' => '',
@@ -181,7 +181,7 @@ class CommentController implements Polymorphic
         // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
         foreach ($ids = $request->get('select') as $id) {
             if ($c = $comment->find($id)) {
-                $c->getService()->delete();
+                $c->makeService()->delete();
 
                 $deleted += 1;
             }

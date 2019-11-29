@@ -40,7 +40,7 @@ class LinkCache
     {
         $this->link = $link;
         $this->cache = $cache;
-        $this->minutes = $config->get('icore.cache.minutes');
+        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -56,7 +56,7 @@ class LinkCache
             "link.getLinksByComponent.{$cats}",
             now()->addMinutes($this->minutes),
             function() use ($component) {
-                return $this->link->getRepo()->getLinksByComponent($component);
+                return $this->link->makeRepo()->getLinksByComponent($component);
             }
         );
     }

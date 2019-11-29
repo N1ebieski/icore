@@ -22,7 +22,7 @@ class CategoryController implements Polymorphic
     public function show(Category $category, ShowRequest $request) : View
     {
         return view('icore::web.category.show', [
-            'posts' => $category->getCache()->rememberPosts($request->get('page') ?? 1),
+            'posts' => $category->makeCache()->rememberPosts($request->get('page') ?? 1),
             'category' => $category,
             'catsAsArray' => array_merge($category->ancestors->pluck('id')->toArray(), [$category->id])
         ]);

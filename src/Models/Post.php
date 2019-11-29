@@ -5,8 +5,8 @@ namespace N1ebieski\ICore\Models;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentTaggable\Taggable;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Carbon\Carbon;
@@ -323,31 +323,31 @@ class Post extends Model
         ]);
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return PostRepo [description]
      */
-    public function getRepo() : PostRepo
+    public function makeRepo() : PostRepo
     {
         return app()->make(PostRepo::class, ['post' => $this]);
     }
 
     /**
-     * [getCache description]
+     * [makeCache description]
      * @return PostCache [description]
      */
-    public function getCache() : PostCache
+    public function makeCache() : PostCache
     {
         return app()->make(PostCache::class, ['post' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return PostService [description]
      */
-    public function getService() : PostService
+    public function makeService() : PostService
     {
         return app()->make(PostService::class, ['post' => $this]);
     }

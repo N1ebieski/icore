@@ -33,7 +33,7 @@ class CategoryComponent implements Htmlable
     public function toHtml() : View
     {
         return view('icore::web.components.category.index', [
-            'categories' => $this->category->getCache()->rememberWithRecursiveChildrens()
+            'categories' => $this->category->makeCache()->rememberWithRecursiveChildrens()
         ]);
     }
 }

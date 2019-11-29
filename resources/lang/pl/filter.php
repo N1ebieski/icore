@@ -35,5 +35,6 @@ return [
     'category' => 'Kategoria',
     'parent' => 'Rodzic',
     'title' => 'Tytuł',
-    'position' => 'Pozycja'
+    'position' => 'Pozycja',
+    'type' => 'Typ'
 ];

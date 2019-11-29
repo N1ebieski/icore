@@ -60,7 +60,7 @@ class Comment extends CommentBaseModel
         return $this;
     }
 
-    // Getters
+    // Makers
 
     /**
      * [getMorph description]

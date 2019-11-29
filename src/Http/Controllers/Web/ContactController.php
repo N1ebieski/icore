@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use N1ebieski\ICore\Http\Requests\Web\Contact\SendRequest;
-use N1ebieski\ICore\Mail\ContactMail;
+use N1ebieski\ICore\Mails\ContactMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,7 +30,7 @@ class ContactController
      */
     public function send(SendRequest $request, ContactMail $mail) : RedirectResponse
     {
-        Mail::send($mail->build($request->validated()));
+        Mail::send(app()->make(ContactMail::class));
 
         return redirect()->route('web.contact.index')->with('success', trans('icore::contact.success.send'));
     }

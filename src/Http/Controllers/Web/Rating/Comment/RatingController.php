@@ -23,7 +23,7 @@ class RatingController implements CommentPolymorphic
      */
     public function rate(Rating $rating, Comment $comment, RateRequest $request) : JsonResponse
     {
-        $rating->setMorph($comment)->getService()->createOrUpdateOrDelete($request->only('rating'));
+        $rating->setMorph($comment)->makeService()->createOrUpdateOrDelete($request->only('rating'));
 
         return response()->json([
             'success' => '',

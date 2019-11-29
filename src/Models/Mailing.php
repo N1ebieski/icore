@@ -3,8 +3,8 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Traits\FullTextSearchable;
-use N1ebieski\ICore\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\Filterable;
 use Carbon\Carbon;
 use Mews\Purifier\Facades\Purifier;
 use N1ebieski\ICore\Repositories\MailingRepo;
@@ -158,22 +158,22 @@ class Mailing extends Model
         $this->attributes['content'] = strip_tags(str_replace('[more]', '', $value));
     }
 
-    // Getters
+    // Makers
 
     /**
-     * [getRepo description]
+     * [makeRepo description]
      * @return MailingRepo [description]
      */
-    public function getRepo() : MailingRepo
+    public function makeRepo() : MailingRepo
     {
         return app()->make(MailingRepo::class, ['mailing' => $this]);
     }
 
     /**
-     * [getService description]
+     * [makeService description]
      * @return MailingService [description]
      */
-    public function getService() : MailingService
+    public function makeService() : MailingService
     {
         return app()->make(MailingService::class, ['mailing' => $this]);
     }

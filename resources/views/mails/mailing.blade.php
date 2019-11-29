@@ -10,7 +10,7 @@
 @endif
 @endif
 
-{!! $slot !!}
+{!! $email->mailing->content_html !!}
 
 {{-- Subcopy --}}
 @isset($subcopy)

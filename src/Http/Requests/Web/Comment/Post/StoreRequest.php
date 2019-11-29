@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
     {
         $this->captcha = $captcha;
 
-        $this->bans = $banValue->getCache()->rememberAllWordsAsString();
+        $this->bans = $banValue->makeCache()->rememberAllWordsAsString();
     }
 
     /**
@@ -75,7 +75,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'min:3',
                 'max:10000',
-                'not_regex:/(.*)(\s|^)('.$this->bans.')(\s|\.|,|\?|$)(.*)/i'
+                !empty($this->bans) ? 'not_regex:/(.*)(\s|^)('.$this->bans.')(\s|\.|,|\?|$)(.*)/i' : null
             ],
             'parent_id' => [
                 'nullable',

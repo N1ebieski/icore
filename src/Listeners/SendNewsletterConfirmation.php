@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Listeners;
 
 use N1ebieski\ICore\Events\NewsletterStore;
-use N1ebieski\ICore\Mail\NewsletterConfirmation;
+use N1ebieski\ICore\Mails\NewsletterConfirmation;
 use Illuminate\Support\Facades\Mail;
 
 /**

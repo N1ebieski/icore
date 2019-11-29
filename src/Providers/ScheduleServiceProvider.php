@@ -31,9 +31,11 @@ class ScheduleServiceProvider extends ServiceProvider
              $schedule = $this->app->make(Schedule::class);
 
              $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
-                ->name('MailingCron')->everyThirtyMinutes();
+                ->name('MailingCron')
+                ->everyThirtyMinutes();
              $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
-                ->name('PostCron')->everyThirtyMinutes();
+                ->name('PostCron')
+                ->everyThirtyMinutes();
 
              $schedule->command('queue:restart');
              $schedule->command('queue:work --daemon --stop-when-empty --tries=3');
