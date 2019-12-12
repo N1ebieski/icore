@@ -51,8 +51,12 @@
     border-left-color: $modal-content-border-color !important;
 }
 
+.border-primary {
+    border-color: $primary !important;
+}
+
 .btn-outline-secondary {
-    @extend .btn-outline-light
+    @extend .btn-outline-light;
 }
 
 .dropdown-menu {

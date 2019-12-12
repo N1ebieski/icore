@@ -22,9 +22,7 @@ class PostsSeeder extends Seeder
     {
         $categories = Category::get(['id'])->pluck('id')->toArray();
 
-        factory(User::class, 100)->create()->each(function ($u) use ($categories) {
-            $u->assignRole('user');
-
+        factory(User::class, 100)->states('user')->create()->each(function ($u) use ($categories) {
             for ($i=0; $i<rand(0, 5); $i++) {
                 $post = $u->posts()->save(factory(Post::class)->make());
                 $post->tag(Faker::create()->words(rand(1, 5)));

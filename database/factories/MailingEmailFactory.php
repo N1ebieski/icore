@@ -17,7 +17,7 @@ $factory->state(MailingEmail::class, 'with_user', function() {
         'model_id' => function() {
             return factory(User::class)->create()->id;
         },
-        'model_type' => function(array $mailingEmail) {
+        'model_type' => function() {
             return User::class;
         }
     ];

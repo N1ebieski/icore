@@ -6,86 +6,6 @@ jQuery(document).ajaxComplete(function() {
     $(document).trigger('readyAndAjax');
 });
 
-(function($) {
-    $.fn.removeClassStartingWith = function(begin) {
-        this.removeClass(function(index, className) {
-            return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');
-        });
-    };
-
-    $.sanitize = function(html) {
-        let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
-
-        $output.find('*').each(function(index, node) {
-            $.each(node.attributes, function() {
-                let attrName = this.name;
-                let attrValue = this.value;
-
-                if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
-                    $(node).removeAttr(attrName);
-                }
-            });
-        });
-
-        return $output.html();
-    };
-
-    $.getUrlParameter = function(url, name) {
-        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
-    };
-
-    /**
-     * Plugin refreshujący recaptche v2. Potrzebne w przypadku pobrania formularza przez ajax
-     */
-    $.fn.recaptcha = function() {
-        if (this.hasClass('g-recaptcha')) {
-            var widgetId;
-            // Przypadek, gdy nowy token generowany jest w momencie pobrania formularza
-            // przez ajax. Wówczas trzeba go na nowo zrenderować pod nowym widgetId
-            if (!this.html().length) {
-                widgetId = grecaptcha.render(this[0], {
-                    'sitekey' : this.attr('data-sitekey')
-                });
-            }
-            // W przeciwnym razie (tzn. jeśli token jest prawidłowo wygenerowany) pobieramy
-            // jego widgetId
-            else {
-                widgetId = parseInt(this.find('textarea[name="g-recaptcha-response"]').attr('id').match(/\d+$/), 10);
-            }
-
-            // Resetowanie tokena. Konieczne w przypadku gdy formularz został wypełniony
-            // błędnie, ajax zwrócił errory, bez nowego formularza. W takim przypadku
-            // recaptcha nie rozpozna już wcześniejszego rozwiązania, trzeba zresetować i
-            // dać użytkownikowi możliwość ponownego przesłania formularza
-            if (Number.isInteger(widgetId)) grecaptcha.reset(widgetId);
-            else grecaptcha.reset();
-        }
-    };
-
-    $.fn.captcha = function() {
-        if (this.hasClass('logic_captcha')) {
-            this.find('input[name="captcha"]').val('');
-            this.find('.reload_captcha_base64').trigger('click');
-        }
-    };
-
-    $.getLoader = function(type, loader = 'loader-absolute') {
-        return '<div class="'+loader+'"><div class="'+type+'"><span class="sr-only">Loading...</span></div></div>';
-    };
-
-    $.getAlert = function(response, type) {
-        return $.sanitize('<div class="alert alert-'+type+' alert-time" role="alert">'+response+'</div>');
-    };
-
-    $.getError = function(key, value) {
-        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-'+ key+'">'+value+'</span>');
-    };
-
-    $.getMessage = function(response) {
-        return $.sanitize('<span class="valid-feedback d-block font-weight-bold">'+response+'</span>');
-    };
-})(jQuery);
-
 function categorySelect()
 {
     return $('#categoryOptions .form-group').map(function() {
@@ -109,6 +29,7 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
             $searchCategory.btn.prop('disabled', true);
             $('#searchCategoryOptions').empty();
             $searchCategory.append($.getLoader('spinner-border'));
+            $searchCategory.find('.invalid-feedback').remove();
             $searchCategory.input.removeClass('is-valid');
             $searchCategory.input.removeClass('is-invalid');
         },
@@ -446,6 +367,31 @@ jQuery(document).on('click', 'button.updateComment', function(e) {
     });
 });
 
+jQuery(document).on('click', '.destroy', function(e) {
+    e.preventDefault();
+
+    let $element = $(this);
+    let $row = $('#row'+$element.attr('data-id'));
+
+    jQuery.ajax({
+        url: $element.attr('data-route'),
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        method: 'delete',
+        beforeSend: function() {
+            $row.find('.responsive-btn-group').addClass('disabled');
+            $row.append($.getLoader('spinner-border'));
+        },
+        complete: function() {
+            $row.find('div.loader-absolute').remove();
+        },
+        success: function(response) {
+            $row.fadeOut('slow');
+        }
+    });
+});
+
 (function($) {
     function ajaxFilter($form, href) {
         $.ajax({
@@ -623,120 +569,90 @@ jQuery(document).on('click', 'button.storeReport', function(e) {
     });
 });
 
-jQuery(document).on('readyAndAjax', function() {
-    $(".alert-time").delay(20000).fadeOut();
-});
-
-jQuery(document).on('readyAndAjax', function() {
-  $('[data-toggle="tooltip"]').tooltip();
-});
-
-jQuery(document).ready(function() {
-    let c, currentScrollTop = 0;
-    let $navbar = $('.navbar');
-
-    $(window).scroll(function () {
-       var a = $(window).scrollTop();
-       var b = $navbar.height()+10;
-
-       currentScrollTop = a;
-
-       if (c < currentScrollTop && c > b) {
-         $navbar.fadeOut();
-       } else {
-         $navbar.fadeIn();
-       }
-       c = currentScrollTop;
-   });
-});
-
-jQuery(document).on('click', ".modal-backdrop, #navbarToggle", function(e) {
-    e.preventDefault();
-
-    if ($('.modal-backdrop').length) {
-        $('.navbar-collapse').collapse('hide');
-        $('.modal-backdrop').fadeOut('slow', function() {
-            $(this).remove();
+(function($) {
+    $.fn.removeClassStartingWith = function(begin) {
+        this.removeClass(function(index, className) {
+            return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');
         });
-        $('body').removeClass('modal-open');
-    } else {
-        $('.navbar-collapse').collapse('show');
-        $('<div class="modal-backdrop show z-900"></div>').appendTo('body').hide().fadeIn();
-        $('body').addClass('modal-open');
-    }
-});
+    };
 
-// Scroll to top button appear
-$(document).on('scroll', function() {
-    var scrollDistance = $(this).scrollTop();
-    if (scrollDistance > 100) {
-        $('.scroll-to-top').fadeIn();
-    } else {
-        $('.scroll-to-top').fadeOut();
-    }
-});
+    $.sanitize = function(html) {
+        let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
 
-// Smooth scrolling using jQuery easing
-$(document).on('click', 'a.scroll-to-top', function(event) {
-    var $anchor = $(this);
-    $('html, body').stop().animate({
-        scrollTop: (0)
-    }, 1000, 'easeInOutExpo');
-    event.preventDefault();
-});
+        $output.find('*').each(function(index, node) {
+            $.each(node.attributes, function() {
+                let attrName = this.name;
+                let attrValue = this.value;
 
-$(document).on('click', '.search-toggler', function(e) {
-    e.preventDefault();
+                if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
+                    $(node).removeAttr(attrName);
+                }
+            });
+        });
 
-    if (window.innerWidth >= 768) {
-        $('#pagesToggle').fadeToggle(0);
-    } else {
-        $('#navbarLogo').fadeToggle(0);
-        $('#navbarToggle').fadeToggle(0);
-    }
-    $('#searchForm').fadeToggle(0);
-    $('.search-toggler').find('i').toggleClass("fa-search fa-times");
-});
+        return $output.html();
+    };
 
-$(document).ready(function() {
-    let $form = $('form#searchForm');
-    $form.btn = $form.find('button');
+    $.getUrlParameter = function(url, name) {
+        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+    };
 
-    $form.find('input[name="search"]').keyup(function(e) {
-        if ($(this).val().trim().length >= 3) {
-            $form.btn.prop('disabled', false);
-        } else {
-            $form.btn.prop('disabled', true);
+    /**
+     * Plugin refreshujący recaptche v2. Potrzebne w przypadku pobrania formularza przez ajax
+     */
+    $.fn.recaptcha = function() {
+        if (this.hasClass('g-recaptcha')) {
+            var widgetId;
+            // Przypadek, gdy nowy token generowany jest w momencie pobrania formularza
+            // przez ajax. Wówczas trzeba go na nowo zrenderować pod nowym widgetId
+            if (!this.html().length) {
+                widgetId = grecaptcha.render(this[0], {
+                    'sitekey' : this.attr('data-sitekey')
+                });
+            }
+            // W przeciwnym razie (tzn. jeśli token jest prawidłowo wygenerowany) pobieramy
+            // jego widgetId
+            else {
+                widgetId = parseInt(this.find('textarea[name="g-recaptcha-response"]').attr('id').match(/\d+$/), 10);
+            }
+
+            // Resetowanie tokena. Konieczne w przypadku gdy formularz został wypełniony
+            // błędnie, ajax zwrócił errory, bez nowego formularza. W takim przypadku
+            // recaptcha nie rozpozna już wcześniejszego rozwiązania, trzeba zresetować i
+            // dać użytkownikowi możliwość ponownego przesłania formularza
+            if (Number.isInteger(widgetId)) grecaptcha.reset(widgetId);
+            else grecaptcha.reset();
         }
-    });
-});
+    };
 
-jQuery(document).on('click', 'div#themeToggle button', function(e) {
-    e.preventDefault();
+    $.fn.captcha = function() {
+        if (this.hasClass('logic_captcha')) {
+            this.find('input[name="captcha"]').val('');
+            this.find('.reload_captcha_base64').trigger('click');
+        }
+    };
 
-    let $element = $(this);
+    $.getLoader = function(type, loader = 'loader-absolute') {
+        return '<div class="'+loader+'"><div class="'+type+'"><span class="sr-only">Loading...</span></div></div>';
+    };
 
-    if ($element.hasClass('btn-light')) {
-        $('link[href*="web-dark.css"]').attr('href', function() {
-            return $(this).attr('href').replace('web-dark.css', 'web.css');
-        });
-        $.cookie("themeToggle", 'light', { path: '/' });
-    }
+    $.getAlert = function(response, type) {
+        return $.sanitize('<div class="alert alert-'+type+' alert-time" role="alert">'+response+'</div>');
+    };
 
-    if ($element.hasClass('btn-dark')) {
-        $('link[href*="web.css"]').attr('href', function() {
-            return $(this).attr('href').replace('web.css', 'web-dark.css');
-        });
-        $.cookie("themeToggle", 'dark', { path: '/' });
-    }
+    $.getError = function(key, value) {
+        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-'+ key+'">'+value+'</span>');
+    };
 
-    $element.prop('disabled', true);
-    $element.siblings('button').prop('disabled', false);
-});
+    $.getMessage = function(response) {
+        return $.sanitize('<span class="valid-feedback d-block font-weight-bold">'+response+'</span>');
+    };
+})(jQuery);
 
-jQuery(document).ready(function() {
+jQuery(document).on('readyAndAjax', function() {
     $('[data-toggle=confirmation]').confirmation({
         rootSelector: '[data-toggle=confirmation]',
+        copyAttributes: 'data-route data-id',
         singleton: true,
         popout: true,
         onConfirm: function() {
@@ -826,3 +742,120 @@ jQuery(document).ready(function() {
         });
     });
 })(jQuery);
+
+jQuery(document).on('readyAndAjax', function() {
+    $(".alert-time").delay(20000).fadeOut();
+});
+
+jQuery(document).on('readyAndAjax', function() {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
+jQuery(document).on('readyAndAjax', function() {
+    $(".custom-file-input").on("change", function() {
+        let fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+});
+
+jQuery(document).ready(function() {
+    let c, currentScrollTop = 0;
+    let $navbar = $('.navbar');
+
+    $(window).scroll(function () {
+       var a = $(window).scrollTop();
+       var b = $navbar.height()+10;
+
+       currentScrollTop = a;
+
+       if (c < currentScrollTop && c > b) {
+         $navbar.fadeOut();
+       } else {
+         $navbar.fadeIn();
+       }
+       c = currentScrollTop;
+   });
+});
+
+jQuery(document).on('click', ".modal-backdrop, #navbarToggle", function(e) {
+    e.preventDefault();
+
+    if ($('.modal-backdrop').length) {
+        $('.navbar-collapse').collapse('hide');
+        $('.modal-backdrop').fadeOut('slow', function() {
+            $(this).remove();
+        });
+        $('body').removeClass('modal-open');
+    } else {
+        $('.navbar-collapse').collapse('show');
+        $('<div class="modal-backdrop show z-900"></div>').appendTo('body').hide().fadeIn();
+        $('body').addClass('modal-open');
+    }
+});
+
+// Scroll to top button appear
+$(document).on('scroll', function() {
+    var scrollDistance = $(this).scrollTop();
+    if (scrollDistance > 100) {
+        $('.scroll-to-top').fadeIn();
+    } else {
+        $('.scroll-to-top').fadeOut();
+    }
+});
+
+// Smooth scrolling using jQuery easing
+$(document).on('click', 'a.scroll-to-top', function(event) {
+    $('html, body').stop().animate({
+        scrollTop: (0)
+    }, 1000, 'easeInOutExpo');
+    event.preventDefault();
+});
+
+$(document).on('click', '.search-toggler', function(e) {
+    e.preventDefault();
+
+    if (window.innerWidth >= 768) {
+        $('#pagesToggle').fadeToggle(0);
+    } else {
+        $('#navbarLogo').fadeToggle(0);
+        $('#navbarToggle').fadeToggle(0);
+    }
+    $('#searchForm').fadeToggle(0);
+    $('.search-toggler').find('i').toggleClass("fa-search fa-times");
+});
+
+$(document).ready(function() {
+    let $form = $('form#searchForm');
+    $form.btn = $form.find('button');
+
+    $form.find('input[name="search"]').keyup(function(e) {
+        if ($(this).val().trim().length >= 3) {
+            $form.btn.prop('disabled', false);
+        } else {
+            $form.btn.prop('disabled', true);
+        }
+    });
+});
+
+jQuery(document).on('click', 'div#themeToggle button', function(e) {
+    e.preventDefault();
+
+    let $element = $(this);
+
+    if ($element.hasClass('btn-light')) {
+        $('link[href*="web-dark.css"]').attr('href', function() {
+            return $(this).attr('href').replace('web-dark.css', 'web.css');
+        });
+        $.cookie("themeToggle", 'light', { path: '/' });
+    }
+
+    if ($element.hasClass('btn-dark')) {
+        $('link[href*="web.css"]').attr('href', function() {
+            return $(this).attr('href').replace('web.css', 'web-dark.css');
+        });
+        $.cookie("themeToggle", 'dark', { path: '/' });
+    }
+
+    $element.prop('disabled', true);
+    $element.siblings('button').prop('disabled', false);
+});

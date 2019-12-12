@@ -1,4 +1,4 @@
-<form data-route="{{ route('admin.banvalue.index', ['type' => $type]) }}" id="filter">
+<form data-route="{{ route('admin.banmodel.user.index') }}" id="filter">
     <div class="row position-relative">
         <div class="col mb-3">
             <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $bans->total() }}</span>&nbsp;
@@ -9,7 +9,7 @@
             </a>&nbsp;
             @endif
             @if (array_filter($filter))
-            <a href="{{ route('admin.banvalue.index', ['type' => $type]) }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
+            <a href="{{ route('admin.banmodel.user.index') }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
             @endif
         </div>
         <div class="col-xs-3 text-right mx-3">
@@ -24,23 +24,23 @@
                     <label class="sr-only" for="filterOrderBy">{{ trans('icore::filter.order') }}</label>
                     <select class="form-control custom-select filter" name="filter[orderby]" id="filterOrderBy">
                         <option value="">{{ trans('icore::filter.order') }} {{ trans('icore::filter.default') }}</option>
-                        <option value="created_at|desc"
-                        {{ ($filter['orderby'] == 'created_at|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.created_at')) }}
+                        <option value="bans_models.created_at|desc"
+                        {{ ($filter['orderby'] == 'bans_models.created_at|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.created_at')) }}
                             {{ trans('icore::filter.desc') }}</option>
-                        <option value="created_at|asc"
-                        {{ ($filter['orderby'] == 'created_at|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.created_at')) }}
+                        <option value="bans_models.created_at|asc"
+                        {{ ($filter['orderby'] == 'bans_models.created_at|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.created_at')) }}
                             {{ trans('icore::filter.asc') }}</option>
-                        <option value="updated_at|desc"
-                        {{ ($filter['orderby'] == 'updated_at|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.updated_at')) }}
+                        <option value="bans_models.updated_at|desc"
+                        {{ ($filter['orderby'] == 'bans_models.updated_at|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.updated_at')) }}
                             {{ trans('icore::filter.desc') }}</option>
-                        <option value="updated_at|asc"
-                        {{ ($filter['orderby'] == 'updated_at|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.updated_at')) }}
+                        <option value="bans_models.updated_at|asc"
+                        {{ ($filter['orderby'] == 'bans_models.updated_at|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.updated_at')) }}
                             {{ trans('icore::filter.asc') }}</option>
-                        <option value="value|desc"
-                        {{ ($filter['orderby'] == 'value|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::bans.value.value')) }}
+                        <option value="users.name|desc"
+                        {{ ($filter['orderby'] == 'users.name|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.name')) }}
                             {{ trans('icore::filter.desc') }}</option>
-                        <option value="value|asc"
-                        {{ ($filter['orderby'] == 'value|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::bans.value.value')) }}
+                        <option value="users.name|asc"
+                        {{ ($filter['orderby'] == 'users.name|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.name')) }}
                             {{ trans('icore::filter.asc') }}</option>
                     </select>
                 </div>
@@ -55,5 +55,5 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.banvalue.filter_filter')
+    @include('icore::admin.banmodel.user.partials.filter_filter')
 </form>

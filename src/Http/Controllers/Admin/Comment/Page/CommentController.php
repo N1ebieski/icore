@@ -76,7 +76,7 @@ class CommentController extends CommentBaseController implements Polymorphic, Pa
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.comment.comment', [
+            'view' => view('icore::admin.comment.partials.comment', [
                     'comment' => $comment
                 ])->render()
         ]);

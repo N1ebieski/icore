@@ -1,6 +1,7 @@
 @mixin rotate {
     transform: rotate(15deg);
 }
+
 @mixin sidebar-icons {
     .nav-item {
         &:last-child {

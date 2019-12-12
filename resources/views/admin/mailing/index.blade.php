@@ -24,7 +24,7 @@
     @endcan
 </h1>
 <div id="filterContent">
-    @include('icore::admin.mailing.filter')
+    @include('icore::admin.mailing.partials.filter')
     @if ($mailings->isNotEmpty())
     <form action="{{ route('admin.mailing.destroy_global') }}" method="post" id="selectForm">
     @csrf
@@ -41,7 +41,7 @@
         @endcan
         <div id="infinite-scroll">
             @foreach ($mailings as $mailing)
-                @include('icore::admin.mailing.mailing')
+                @include('icore::admin.mailing.partials.mailing')
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $mailings])
         </div>

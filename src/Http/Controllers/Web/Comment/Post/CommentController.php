@@ -49,7 +49,7 @@ class CommentController implements PostPolymorphic
         return response()->json([
             'success' => $comment->status === 1 ? '' : trans('icore::comments.success.store_0'),
             'view' => $comment->status === 1 ?
-                view('icore::web.comment.comment', [
+                view('icore::web.comment.partials.comment', [
                     'comment' => $comment
                 ])->render() : null
         ]);

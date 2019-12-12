@@ -66,7 +66,7 @@ class SearchResponse
      * [response description]
      * @return JsonResponse [description]
      */
-    public function response() : JsonResponse
+    public function makeResponse() : JsonResponse
     {
         if ($this->categories->isEmpty()) {
             return $this->response->json([

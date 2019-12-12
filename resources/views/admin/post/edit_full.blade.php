@@ -6,7 +6,6 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-
 <li class="breadcrumb-item"><a href="{{ route('admin.post.index') }}">{{ trans('icore::posts.page.index') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.page.edit') }}</li>
 @endsection

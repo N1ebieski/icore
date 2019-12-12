@@ -110,6 +110,12 @@ class ActiveHelper
         return null;
     }
 
+    /**
+     * [isTheme description]
+     * @param  string|array  $input  [description]
+     * @param  string  $output [description]
+     * @return string|null         [description]
+     */
     function isTheme($input, string $output = "active") : ?string
     {
         $theme = app()->make('Helpers\View')->getTheme();

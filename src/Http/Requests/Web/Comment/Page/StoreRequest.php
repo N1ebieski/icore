@@ -35,11 +35,11 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        if ((bool)$this->page_active->comment === false) {
+        if ((bool)$this->page->comment === false) {
             abort(403, 'Adding comments has been disabled for this page.');
         }
 
-        return true;
+        return $this->page->status === 1;
     }
 
     protected function prepareForValidation()

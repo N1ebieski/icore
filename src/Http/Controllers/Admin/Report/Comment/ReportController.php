@@ -42,7 +42,7 @@ class ReportController implements CommentPolymorphic
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.comment.comment', [
+            'view' => view('icore::admin.comment.partials.comment', [
                 'comment' => $comment->load('morph:id,title')
             ])->render()
         ]);

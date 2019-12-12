@@ -38,7 +38,7 @@ id="depth{{ $comment->id }}" data-id="{{ $comment->id }}">
                     @endcanany
                     @can('update', $comment)
                     &nbsp;|&nbsp;
-                    <a class="editComment" href="#" data-route="{{ route('web.comment.edit', ['comment_active' => $comment->id]) }}">
+                    <a class="editComment" href="#" data-route="{{ route('web.comment.edit', [$comment->id]) }}">
                         {{ trans('icore::comments.edit') }}
                     </a>
                     @endcan
@@ -59,7 +59,7 @@ id="depth{{ $comment->id }}" data-id="{{ $comment->id }}">
     </div>
     @if ($comment->childrens_count > 0)
     <div>
-        <a href="#" data-route="{{ route('web.comment.take', ['comment_active' => $comment->id]) }}" role="button"
+        <a href="#" data-route="{{ route('web.comment.take', [$comment->id]) }}" role="button"
         class="btn btn-outline-secondary text-nowrap depth-1 takeComment">
             {{ trans('icore::comments.next_answers') }}
             <i class="fas fa-angle-down"></i>
@@ -68,11 +68,11 @@ id="depth{{ $comment->id }}" data-id="{{ $comment->id }}">
     @endif
     @if ($comment->relationLoaded('childrens'))
         @foreach ($comment->childrens as $children)
-            @include('icore::web.comment.comment', ['comment' => $children])
+            @include('icore::web.comment.partials.comment', ['comment' => $children])
         @endforeach
         @if ($comment->childrens->currentPage() < $comment->childrens->lastPage())
         <div class="mt-3">
-            <a href="#" data-route="{{ route('web.comment.take', ['comment_active' => $comment->id]) }}" type="button"
+            <a href="#" data-route="{{ route('web.comment.take', [$comment->id]) }}" type="button"
             class="btn btn-outline-secondary text-nowrap depth-1 takeComment">
                 {{ trans('icore::comments.next_comments') }}
                 <i class="fas fa-angle-down"></i>

@@ -206,15 +206,14 @@ class PostRepo
 
     /**
      * [updateActivateScheduled description]
-     * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateScheduled(array $attributes) : bool
+    public function activateScheduled() : bool
     {
         return $this->post
             ->whereDate('published_at', '<=', Carbon::now()->format('Y-m-d'))
             ->whereTime('published_at', '<=', Carbon::now()->format('H:i:s'))
             ->whereStatus(2)
-            ->update($attributes);
+            ->update(['status' => 1]);
     }
 }

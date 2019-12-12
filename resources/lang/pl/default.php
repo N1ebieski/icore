@@ -28,5 +28,6 @@ return [
     'back' => 'Wstecz',
     'next' => 'Dalej',
     'position' => 'Pozycja',
-    'choose_file' => 'Wybierz plik...'
+    'choose_file' => 'Wybierz plik...',
+    'delete_img' => 'Usunąć obrazek?'
 ];

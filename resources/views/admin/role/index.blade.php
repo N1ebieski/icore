@@ -27,7 +27,7 @@
     @if ($roles->isNotEmpty())
     <div id="infinite-scroll">
         @foreach ($roles as $role)
-            @include('icore::admin.role.role')
+            @include('icore::admin.role.partials.role')
         @endforeach
         @include('icore::admin.partials.pagination', ['items' => $roles])
     </div>

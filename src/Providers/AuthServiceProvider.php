@@ -18,8 +18,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         \N1ebieski\ICore\Models\User::class => \N1ebieski\ICore\Policies\UserPolicy::class,
         \N1ebieski\ICore\Models\Socialite::class => \N1ebieski\ICore\Policies\SocialitePolicy::class,
-        \N1ebieski\ICore\Models\Comment\Comment::class => \N1ebieski\ICore\Policies\CommentPolicy::class,
-        \N1ebieski\ICore\Models\Role::class => \N1ebieski\ICore\Policies\RolePolicy::class
+        \N1ebieski\ICore\Models\Comment\Comment::class => \N1ebieski\ICore\Policies\CommentPolicy::class
     ];
 
     /**

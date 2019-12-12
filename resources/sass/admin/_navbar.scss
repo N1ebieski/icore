@@ -90,6 +90,21 @@
     min-height: 100vh;
     @include sidebar-icons;
 
+    &:not(.toggled) {
+        .nav-item {
+            &.dropdown {
+                &.active {
+                    .dropdown-toggle::after {
+                        content: '\f107';
+                    }
+                    .dropdown-menu {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+
     &.position {
         position: relative;
         @media (max-width: 767.98px) {

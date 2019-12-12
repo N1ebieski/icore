@@ -17,7 +17,7 @@
     </div>
 </h1>
 <div id="filterContent">
-    @include('icore::admin.banmodel.user.filter')
+    @include('icore::admin.banmodel.user.partials.filter')
     @if ($bans->isNotEmpty())
     <form action="{{ route('admin.banmodel.destroy_global') }}" method="post" id="selectForm">
     @csrf
@@ -34,7 +34,7 @@
         @endcan
         <div id="infinite-scroll">
             @foreach ($bans as $ban)
-                @include('icore::admin.banmodel.user.ban')
+                @include('icore::admin.banmodel.user.partials.ban')
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $bans])
         </div>

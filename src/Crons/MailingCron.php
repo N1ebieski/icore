@@ -72,6 +72,6 @@ class MailingCron
      */
     private function activateScheduled() : int
     {
-        return $this->mailing->makeRepo()->updateScheduled(['status' => 1]);
+        return $this->mailing->makeRepo()->activateScheduled();
     }
 }

@@ -20,7 +20,7 @@
             @if ($posts->isNotEmpty())
             <div id="infinite-scroll">
                 @foreach ($posts as $item)
-                    @include('icore::web.post.post', ['post' => $item])
+                    @include('icore::web.post.partials.post', ['post' => $item])
                 @endforeach
                 @include('icore::admin.partials.pagination', ['items' => $posts])
             </div>

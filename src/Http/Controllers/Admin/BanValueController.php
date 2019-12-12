@@ -68,7 +68,7 @@ class BanValueController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.banvalue.ban', [
+            'view' => view('icore::admin.banvalue.partials.ban', [
                 'ban' => $banValue,
             ])->render()
         ]);

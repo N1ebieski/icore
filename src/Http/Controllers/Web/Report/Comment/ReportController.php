@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Report\Comment;
 
+use N1ebieski\ICore\Http\Requests\Web\Report\Comment\CreateRequest;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Report\Comment\Report;
 use N1ebieski\ICore\Http\Requests\Web\Report\Comment\StoreRequest;
@@ -17,9 +18,10 @@ class ReportController implements CommentPolymorphic
      * Display all the specified Reports for Comment.
      *
      * @param  Comment  $comment [description]
+     * @param CreateRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function create(Comment $comment) : JsonResponse
+    public function create(Comment $comment, CreateRequest $request) : JsonResponse
     {
         return response()->json([
             'success' => '',

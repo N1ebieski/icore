@@ -18,7 +18,7 @@ class StoreRequest extends FormRequest
             abort(403, 'Adding comments has been disabled for this post.');
         }
 
-        return true;
+        return $this->post->status === 1;
     }
 
     /**

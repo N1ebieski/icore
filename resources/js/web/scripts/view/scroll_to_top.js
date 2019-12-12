@@ -10,7 +10,6 @@ $(document).on('scroll', function() {
 
 // Smooth scrolling using jQuery easing
 $(document).on('click', 'a.scroll-to-top', function(event) {
-    var $anchor = $(this);
     $('html, body').stop().animate({
         scrollTop: (0)
     }, 1000, 'easeInOutExpo');

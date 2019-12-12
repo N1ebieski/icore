@@ -14,7 +14,7 @@
     <i class="fas fa-fw fa-comments"></i>&nbsp;{{ trans('icore::comments.page.index') }}
 </h1>
 <div id="filterContent">
-    @include('icore::admin.comment.filter')
+    @include('icore::admin.comment.partials.filter')
     @if ($comments->isNotEmpty())
     <form action="{{ route('admin.comment.destroy_global') }}" method="post" id="selectForm">
     @csrf
@@ -31,7 +31,7 @@
         @endcan
         <div id="infinite-scroll">
             @foreach ($comments as $comment)
-                @include('icore::admin.comment.comment', ['comment' => $comment])
+                @include('icore::admin.comment.partials.comment', ['comment' => $comment])
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $comments])
         </div>

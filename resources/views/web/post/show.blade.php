@@ -35,7 +35,7 @@
                     <small class="mr-auto">{{ trans('icore::categories.categories') }}:
                         @if ($post->categories->isNotEmpty())
                         @foreach ($post->categories as $category)
-                        <a href="{{ route('web.category.post.show', ['category_active' => $category->slug]) }}">{{ $category->name }}</a>
+                        <a href="{{ route('web.category.post.show', [$category->slug]) }}">{{ $category->name }}</a>
                         {{ (!$loop->last) ? ', ' : '' }}
                         @endforeach
                         @endif
@@ -43,7 +43,7 @@
                     <small class="ml-auto text-right">{{ trans('icore::posts.tags') }}:
                         @if ($post->tags->isNotEmpty())
                         @foreach ($post->tags as $tag)
-                        <a href="{{ route('web.tag.post.show', ['slug' => $tag->normalized]) }}">{{ $tag->name }}</a>
+                        <a href="{{ route('web.tag.post.show', [$tag->normalized]) }}">{{ $tag->name }}</a>
                         {{ (!$loop->last) ? ', ' : '' }}
                         @endforeach
                         @endif
@@ -75,7 +75,7 @@
                 <h3 class="h5 border-bottom pb-2" id="comments">{{ trans('icore::comments.comments') }}</h3>
                 <div id="filterContent">
                     @if ($comments->isNotEmpty())
-                        @include('icore::web.comment.filter')
+                        @include('icore::web.comment.partials.filter')
                     @endif
                     <div id="comment">
                         @auth
@@ -87,7 +87,7 @@
                     @if ($comments->isNotEmpty())
                     <div id="infinite-scroll">
                         @foreach ($comments as $comment)
-                            @include('icore::web.comment.comment', ['comment' => $comment])
+                            @include('icore::web.comment.partials.comment', ['comment' => $comment])
                         @endforeach
                         @include('icore::web.partials.pagination', ['items' => $comments, 'fragment'
                         => 'comments'])

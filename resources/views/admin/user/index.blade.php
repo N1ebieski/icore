@@ -26,7 +26,7 @@
     @endrole
 </h1>
 <div id="filterContent">
-    @include('icore::admin.user.filter')
+    @include('icore::admin.user.partials.filter')
     @if ($users->isNotEmpty())
     <form action="{{ route('admin.user.destroy_global') }}" method="post" id="selectForm">
     @csrf
@@ -43,7 +43,7 @@
         @endrole
         <div id="infinite-scroll">
             @foreach ($users as $user)
-                @include('icore::admin.user.user')
+                @include('icore::admin.user.partials.user')
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $users])
         </div>

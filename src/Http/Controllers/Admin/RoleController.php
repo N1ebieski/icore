@@ -2,10 +2,12 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
+use N1ebieski\ICore\Http\Requests\Admin\Role\EditRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\StoreRequest;
 use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Http\Requests\Admin\Role\DestroyRequest;
 use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\Models\Permission;
 use Illuminate\View\View;
@@ -75,9 +77,10 @@ class RoleController
      * Show the form for editing the specified resource.
      *
      * @param  Role       $role       [description]
+     * @param  EditRequest $request   [description]
      * @return View                   [description]
      */
-    public function edit(Role $role) : View
+    public function edit(Role $role, EditRequest $request) : View
     {
         $permissions = $role->makeService()->getPermissionsByRole();
 
@@ -106,10 +109,11 @@ class RoleController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Role   $role [description]
-     * @return RedirectResponse       [description]
+     * @param  Role           $role     [description]
+     * @param  DestroyRequest $request  [description]
+     * @return RedirectResponse         [description]
      */
-    public function destroy(Role $role) : RedirectResponse
+    public function destroy(Role $role, DestroyRequest $request) : RedirectResponse
     {
         $role->delete();
 

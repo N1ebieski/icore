@@ -99,7 +99,7 @@ class CommentController implements Polymorphic
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.comment.comment', [
+            'view' => view('icore::admin.comment.partials.comment', [
                 'comment' => $comment->loadAllRels()
             ])->render()
         ]);
@@ -119,7 +119,7 @@ class CommentController implements Polymorphic
         return response()->json([
             'success' => '',
             'censored' => $comment->censored,
-            'view' => view('icore::admin.comment.comment', [
+            'view' => view('icore::admin.comment.partials.comment', [
                 'comment' => $comment->loadAllRels()
             ])->render()
         ]);

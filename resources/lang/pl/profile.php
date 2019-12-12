@@ -23,5 +23,6 @@ return [
         'index' => 'Profil',
         'edit' => 'Edycja profilu',
         'edit_socialite' => 'Połącz z SocialMedia'
-    ]
+    ],
+    'pages' => 'Podstrony'
 ];

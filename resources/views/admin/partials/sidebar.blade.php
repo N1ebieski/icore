@@ -30,8 +30,7 @@
             route('admin.comment.post.index'),
             route('admin.comment.page.index'),
         ])">
-            <a class="nav-link dropdown-toggle"
-            href="#" id="commentDropdown" role="button"
+            <a class="nav-link dropdown-toggle" href="#" id="commentDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-fw fa-comments"></i>
                 <span> {{ trans('icore::comments.page.index') }} </span>

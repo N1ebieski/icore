@@ -26,6 +26,12 @@ class User extends Authenticatable implements MustVerifyEmail
     // Configuration
 
     /**
+     * [protected description]
+     * @var string
+     */
+    protected $guard_name = 'web';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

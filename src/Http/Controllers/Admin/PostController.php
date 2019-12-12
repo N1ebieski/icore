@@ -127,7 +127,7 @@ class PostController
         return response()->json([
             'success' => '',
             'status' => $post->status,
-            'view' => view('icore::admin.post.post', ['post' => $post])->render(),
+            'view' => view('icore::admin.post.partials.post', ['post' => $post])->render(),
         ]);
     }
 
@@ -159,7 +159,7 @@ class PostController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.post.post', ['post' => $post])->render()
+            'view' => view('icore::admin.post.partials.post', ['post' => $post])->render()
         ]);
     }
 

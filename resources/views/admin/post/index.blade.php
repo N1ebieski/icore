@@ -24,7 +24,7 @@
     @endcan
 </h1>
 <div id="filterContent">
-    @include('icore::admin.post.filter')
+    @include('icore::admin.post.partials.filter')
     @if ($posts->isNotEmpty())
     <form action="{{ route('admin.post.destroy_global') }}" method="post" id="selectForm">
     @csrf
@@ -41,7 +41,7 @@
         @endcan
         <div id="infinite-scroll">
             @foreach ($posts as $post)
-                @include('icore::admin.post.post')
+                @include('icore::admin.post.partials.post')
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $posts])
         </div>

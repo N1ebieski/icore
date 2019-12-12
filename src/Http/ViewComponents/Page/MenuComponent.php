@@ -19,9 +19,9 @@ class MenuComponent implements Htmlable
 
     /**
      * [private description]
-     * @var array
+     * @var string
      */
-    protected $config;
+    protected $limit;
 
     /**
      * [__construct description]
@@ -31,7 +31,8 @@ class MenuComponent implements Htmlable
     public function __construct(PageCache $pageCache, int $limit = 5)
     {
         $this->pageCache = $pageCache;
-        $this->config['limit'] = $limit;
+
+        $this->limit = $limit;
     }
 
     /**
@@ -41,7 +42,7 @@ class MenuComponent implements Htmlable
     public function toHtml() : View
     {
         return view('icore::web.components.page.menu', [
-            'pages' => $this->pageCache->rememberWithChildrensByComponent($this->config)
+            'pages' => $this->pageCache->rememberWithChildrensByComponent(['limit' => $this->limit])
         ]);
     }
 }

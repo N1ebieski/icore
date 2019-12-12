@@ -147,7 +147,7 @@ class PageController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.page.page', ['page' => $page])->render()
+            'view' => view('icore::admin.page.partials.page', ['page' => $page])->render()
         ]);
     }
 

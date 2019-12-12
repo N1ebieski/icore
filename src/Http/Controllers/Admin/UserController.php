@@ -59,7 +59,7 @@ class UserController
         return response()->json([
             'success' => '',
             'status' => $user->status,
-            'view' => view('icore::admin.user.user', ['user' => $user])->render(),
+            'view' => view('icore::admin.user.partials.user', ['user' => $user])->render(),
         ]);
     }
 
@@ -130,7 +130,7 @@ class UserController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.user.user', ['user' => $user])->render(),
+            'view' => view('icore::admin.user.partials.user', ['user' => $user])->render(),
         ]);
     }
 

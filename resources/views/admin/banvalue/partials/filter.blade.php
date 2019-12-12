@@ -1,27 +1,15 @@
-<form data-route="{{ route('admin.category.'.$model->poli.'.index') }}" id="filter">
+<form data-route="{{ route('admin.banvalue.index', ['type' => $type]) }}" id="filter">
     <div class="row position-relative">
         <div class="col mb-3">
-            <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $categories->total() }}</span>&nbsp;
+            <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $bans->total() }}</span>&nbsp;
             @if ($filter['search'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[search]">
                 {{ trans('icore::filter.search') }}: {{ $filter['search'] }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
-            @if ($filter['status'] !== null)
-            <a href="#" class="badge badge-primary filterOption" data-name="filter[status]">
-                {{ trans('icore::filter.status') }}: {{ trans('icore::filter.status_'.$filter['status']) }}
-                <span aria-hidden="true">&times;</span>
-            </a>&nbsp;
-            @endif
-            @if ($filter['parent'] !== null)
-            <a href="#" class="badge badge-primary filterOption" data-name="filter[parent]">
-                {{ trans('icore::filter.parent') }}: {{ $filter['parent']->name ?? trans('icore::categories.roots') }}
-                <span aria-hidden="true">&times;</span>
-            </a>&nbsp;
-            @endif
             @if (array_filter($filter))
-            <a href="{{ route('admin.category.'.$model->poli.'.index') }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
+            <a href="{{ route('admin.banvalue.index', ['type' => $type]) }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
             @endif
         </div>
         <div class="col-xs-3 text-right mx-3">
@@ -48,17 +36,11 @@
                         <option value="updated_at|asc"
                         {{ ($filter['orderby'] == 'updated_at|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.updated_at')) }}
                             {{ trans('icore::filter.asc') }}</option>
-                        <option value="name|desc"
-                        {{ ($filter['orderby'] == 'name|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.name')) }}
+                        <option value="value|desc"
+                        {{ ($filter['orderby'] == 'value|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::bans.value.value')) }}
                             {{ trans('icore::filter.desc') }}</option>
-                        <option value="name|asc"
-                        {{ ($filter['orderby'] == 'name|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.name')) }}
-                            {{ trans('icore::filter.asc') }}</option>
-                        <option value="position|desc"
-                        {{ ($filter['orderby'] == 'position|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.position')) }}
-                            {{ trans('icore::filter.desc') }}</option>
-                        <option value="position|asc"
-                        {{ ($filter['orderby'] == 'position|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.position')) }}
+                        <option value="value|asc"
+                        {{ ($filter['orderby'] == 'value|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::bans.value.value')) }}
                             {{ trans('icore::filter.asc') }}</option>
                     </select>
                 </div>
@@ -73,5 +55,5 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.category.filter_filter')
+    @include('icore::admin.banvalue.partials.filter_filter')
 </form>

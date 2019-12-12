@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Models;
 use Spatie\Permission\Models\Role as BaseRole;
 use N1ebieski\ICore\Repositories\RoleRepo;
 use N1ebieski\ICore\Services\RoleService;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use Carbon\Carbon;
 
 /**
@@ -12,6 +13,8 @@ use Carbon\Carbon;
  */
 class Role extends BaseRole
 {
+    use Carbonable;
+
     // Configuration
 
     /**
@@ -24,24 +27,24 @@ class Role extends BaseRole
         'guard_name'
     ];
 
-    // Accessors
+    // Checkers
 
     /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
+     * [isEditDefault description]
+     * @return bool [description]
      */
-    public function getCreatedAtDiffAttribute() : string
+    public function isEditNotDefault() : bool
     {
-        return Carbon::parse($this->created_at)->diffForHumans();
+        return !in_array($this->name, ['super-admin', 'admin']);
     }
 
     /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
+     * [isDeleteDefault description]
+     * @return bool [description]
      */
-    public function getUpdatedAtDiffAttribute() : string
+    public function isDeleteNotDefault() : bool
     {
-        return Carbon::parse($this->updated_at)->diffForHumans();
+        return !in_array($this->name, ['super-admin', 'admin', 'user']);
     }
 
     // Makers

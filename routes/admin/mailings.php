@@ -6,11 +6,11 @@ Route::get('mailings', 'MailingController@index')
     ->name('mailing.index')
     ->middleware('permission:index mailings');
 
-Route::get('mailings/{mailing_inactive}/edit', 'MailingController@edit')
+Route::get('mailings/{mailing}/edit', 'MailingController@edit')
     ->name('mailing.edit')
     ->middleware('permission:edit mailings')
     ->where('mailing', '[0-9]+');
-Route::put('mailings/{mailing_inactive}', 'MailingController@update')
+Route::put('mailings/{mailing}', 'MailingController@update')
     ->name('mailing.update')
     ->middleware('permission:edit mailings')
     ->where('mailing', '[0-9]+');

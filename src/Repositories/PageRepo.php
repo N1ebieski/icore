@@ -119,7 +119,16 @@ class PageRepo
             }])
             ->limit($component['limit'])
             ->orderBy('position', 'asc')
-            ->get();
+            ->get()
+            ->map(function($item) {
+                if ($item->childrens->isNotEmpty()) {
+                    $item->urls = $item->childrens->pluck('slug')->map(function($item) {
+                        return '*/' . $item;
+                    });
+                }
+
+                return $item;
+            });
     }
 
     /**

@@ -98,7 +98,7 @@ class LinkController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.link.link', [
+            'view' => view('icore::admin.link.partials.link', [
                 'link' => $link,
             ])->render()
         ]);

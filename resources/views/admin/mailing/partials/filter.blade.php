@@ -1,7 +1,7 @@
-<form data-route="{{ route('admin.post.index') }}" id="filter">
+<form data-route="{{ route('admin.mailing.index') }}" id="filter">
     <div class="row position-relative">
         <div class="col mb-3">
-            <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $posts->total() }}</span>&nbsp;
+            <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $mailings->total() }}</span>&nbsp;
             @if ($filter['search'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[search]">
                 {{ trans('icore::filter.search') }}: {{ $filter['search'] }}
@@ -10,18 +10,12 @@
             @endif
             @if ($filter['status'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[status]">
-                {{ trans('icore::filter.status') }}: {{ trans('icore::posts.status_'.$filter['status']) }}
-                <span aria-hidden="true">&times;</span>
-            </a>&nbsp;
-            @endif
-            @if ($filter['category'] !== null)
-            <a href="#" class="badge badge-primary filterOption" data-name="filter[category]">
-                {{ trans('icore::filter.category') }}: {{ $filter['category']->name }}
+                {{ trans('icore::filter.status') }}: {{ trans('icore::mailings.status_'.$filter['status']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
             @if (array_filter($filter))
-            <a href="{{ route('admin.post.index') }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
+            <a href="{{ route('admin.mailing.index') }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
             @endif
         </div>
         <div class="col-xs-3 text-right mx-3">
@@ -67,5 +61,5 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.post.filter_filter')
+    @include('icore::admin.mailing.partials.filter_filter')
 </form>

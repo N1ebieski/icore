@@ -70,7 +70,7 @@ class CategoryController implements Polymorphic
     {
         $categories = $category->makeRepo()->getBySearch($request->get('name'));
 
-        return $response->setCategories($categories)->response();
+        return $response->setCategories($categories)->makeResponse();
     }
 
     /**
@@ -163,7 +163,7 @@ class CategoryController implements Polymorphic
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.category.category', [
+            'view' => view('icore::admin.category.partials.category', [
                 // Niezbyt ładny hook, ale trzeba na nowo pobrać ancestory
                 'category' => $category->resolveRouteBinding($category->id),
                 'show_ancestors' => true

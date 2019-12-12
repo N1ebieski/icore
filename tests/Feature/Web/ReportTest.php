@@ -44,7 +44,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('web.report.comment.create', [$comment->id]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
         $this->assertTrue(Auth::check());
     }
@@ -95,7 +95,7 @@ class ReportTest extends TestCase
 
         $response = $this->post(route('web.report.comment.store', [$comment->id]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
         $this->assertTrue(Auth::check());
     }

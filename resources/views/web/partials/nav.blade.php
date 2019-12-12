@@ -24,7 +24,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top border-bottom">
     <div class="container">
         @if (!app('Helpers\Active')->isUrl(route('web.home.index')))
-        <div class="d-flex flex-grow-1 navbar-search">
+        <div class="d-flex flex-grow-1 navbar-search pr-3 pr-md-0">
             @yield('logo')
             <form id="searchForm" method="GET" action="{{ route('web.search.index') }}" class="my-auto w-100 hide search">
                 <div class="input-group">
@@ -52,18 +52,20 @@
             @yield('navbar-toggler')
         </div>
         @else
-        @yield('logo')
-        @yield('navbar-toggler')
+        <div class="d-flex flex-grow-1 pr-3 pr-md-0">
+            @yield('logo')
+            @yield('navbar-toggler')
+        </div>
         @endif
-        <div class="navbar-collapse collapse flex-grow-0 justify-content-end">
+        <div class="navbar-collapse scroll collapse flex-grow-0 justify-content-end">
             @render('icore::page.menuComponent', ['limit' => 5])
-            <ul class="navbar-nav">
+            <ul class="navbar-nav pr-3 pr-md-0">
                 @if (!app('Helpers\Active')->isUrl(route('web.home.index')))
-                <li class="nav-item d-none d-md-inline mr-2">
+                <li class="nav-item d-none d-md-inline mr-1">
                     @yield('search-toggler')
                 </li>
                 @endif
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown @isUrl([route('web.profile.edit')])">
                     @auth
                     <a class="nav-link text-nowrap" href="#" role="button" id="navbarDropdownMenuProfile"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -71,7 +73,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuProfile">
                         <h6 class="dropdown-header">{{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}</h6>
-                        <a class="dropdown-item @isUrl('profile.edit')" href="{{ route('web.profile.edit') }}">{{ trans('icore::profile.page.edit') }}</a>
+                        <a class="dropdown-item @isUrl(route('web.profile.edit'))" href="{{ route('web.profile.edit') }}">{{ trans('icore::profile.page.edit') }}</a>
                         @can('index dashboard')
                         <a class="dropdown-item" href="{{ route('admin.home.index') }}">{{ trans('icore::admin.page.index') }}</a>
                         @endcan

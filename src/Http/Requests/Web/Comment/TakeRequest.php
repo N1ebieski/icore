@@ -13,7 +13,7 @@ class TakeRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->comment->status === 1;
     }
 
     /**
@@ -24,7 +24,7 @@ class TakeRequest extends FormRequest
     public function rules()
     {
         return [
-            'orderby' => ['in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc'],
+            'orderby' => ['nullable', 'in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc'],
             'except' => 'filled|array',
             'except.*' => 'filled|integer'
         ];

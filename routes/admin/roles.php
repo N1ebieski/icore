@@ -7,16 +7,16 @@ Route::get('/roles', 'RoleController@index')
     ->middleware('permission:index roles');
 
 Route::delete('/roles/{role}', 'RoleController@destroy')
-    ->middleware(['role:super-admin', 'can:deleteDefault,role'])
+    ->middleware('role:super-admin')
     ->name('role.destroy')
     ->where('role', '[0-9]+');
 
 Route::get('/roles/{role}/edit', 'RoleController@edit')
-    ->middleware(['role:super-admin', 'can:editDefault,role'])
+    ->middleware('role:super-admin')
     ->name('role.edit')
     ->where('role', '[0-9]+');
 Route::put('/roles/{role}', 'RoleController@update')
-    ->middleware(['role:super-admin', 'can:editDefault,role'])
+    ->middleware('role:super-admin')
     ->name('role.update')
     ->where('role', '[0-9]+');
 

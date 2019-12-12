@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
 use N1ebieski\ICore\Filters\Admin\Mailing\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Mailing\EditRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateStatusRequest;
@@ -65,10 +66,11 @@ class MailingController
     /**
      * Show the full-form for editing the specified Mailing.
      *
-     * @param Mailing $mailing
-     * @return View               [description]
+     * @param Mailing     $mailing [description]
+     * @param EditRequest $request [description]
+     * @return View                [description]
      */
-    public function edit(Mailing $mailing) : View
+    public function edit(Mailing $mailing, EditRequest $request) : View
     {
         return view('icore::admin.mailing.edit', ['mailing' => $mailing]);
     }
@@ -107,7 +109,7 @@ class MailingController
         return response()->json([
             'success' => '',
             'status' => $mailing->status,
-            'view' => view('icore::admin.mailing.mailing', [
+            'view' => view('icore::admin.mailing.partials.mailing', [
                 'mailing' => $mailing->load('emails')
             ])->render(),
         ]);
@@ -125,7 +127,9 @@ class MailingController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::admin.mailing.mailing', ['mailing' => $mailing])->render(),
+            'view' => view('icore::admin.mailing.partials.mailing', [
+                'mailing' => $mailing
+            ])->render(),
         ]);
     }
 

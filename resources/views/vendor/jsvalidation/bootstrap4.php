@@ -7,7 +7,7 @@ function jsvalidation() {
             errorClass: 'invalid-feedback font-weight-bold',
 
             errorPlacement: function (error, element) {
-                let selector = $.escapeSelector(element.attr('name').replace(/\[/g, '.').replace(/\]/g, '').replace(/\.$/, ''));
+                let selector = jQuery.escapeSelector(element.attr('name').replace(/\[/g, '.').replace(/\]/g, '').replace(/\.$/, ''));
                 $('#error-' + selector).remove();
                 if (element.parent('.input-group').length ||
                     element.prop('type') === 'checkbox' || element.prop('type') === 'radio' || element.prop('type') === 'file') {
@@ -47,7 +47,7 @@ function jsvalidation() {
                     return;
 
                 $('html, body').animate({
-                    scrollTop: $(validator.errorList[0].element).offset().top
+                    scrollTop: $(validator.errorList[0].element).offset().top - 100
                 }, <?= Config::get('jsvalidation.duration_animate') ?>);
                 $(validator.errorList[0].element).focus();
 

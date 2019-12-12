@@ -1,7 +1,7 @@
-<form data-route="{{ route('admin.user.index') }}" id="filter">
+<form data-route="{{ route('admin.page.index') }}" id="filter">
     <div class="row position-relative">
         <div class="col mb-3">
-            <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $users->total() }}</span>&nbsp;
+            <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $pages->total() }}</span>&nbsp;
             @if ($filter['search'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[search]">
                 {{ trans('icore::filter.search') }}: {{ $filter['search'] }}
@@ -10,18 +10,18 @@
             @endif
             @if ($filter['status'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[status]">
-                {{ trans('icore::filter.status') }}: {{ trans('icore::filter.status_'.$filter['status']) }}
+                {{ trans('icore::filter.status') }}: {{ trans('icore::posts.status_'.$filter['status']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
-            @if ($filter['role'] !== null)
-            <a href="#" class="badge badge-primary filterOption" data-name="filter[role]">
-                {{ trans('icore::filter.role') }}: {{ $filter['role']->name }}
+            @if ($filter['parent'] !== null)
+            <a href="#" class="badge badge-primary filterOption" data-name="filter[parent]">
+                {{ trans('icore::filter.parent') }}: {{ $filter['parent']->title ?? trans('icore::pages.roots') }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
             @if (array_filter($filter))
-            <a href="{{ route('admin.user.index') }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
+            <a href="{{ route('admin.page.index') }}" class="badge badge-dark">{{ trans('icore::default.clear') }}</a>&nbsp;
             @endif
         </div>
         <div class="col-xs-3 text-right mx-3">
@@ -48,6 +48,18 @@
                         <option value="updated_at|asc"
                         {{ ($filter['orderby'] == 'updated_at|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.updated_at')) }}
                             {{ trans('icore::filter.asc') }}</option>
+                        <option value="title|desc"
+                        {{ ($filter['orderby'] == 'title|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.title')) }}
+                            {{ trans('icore::filter.desc') }}</option>
+                        <option value="title|asc"
+                        {{ ($filter['orderby'] == 'title|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.title')) }}
+                            {{ trans('icore::filter.asc') }}</option>
+                        <option value="position|desc"
+                        {{ ($filter['orderby'] == 'position|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.position')) }}
+                            {{ trans('icore::filter.desc') }}</option>
+                        <option value="position|asc"
+                        {{ ($filter['orderby'] == 'position|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.position')) }}
+                            {{ trans('icore::filter.asc') }}</option>
                     </select>
                 </div>
                 <div class="form-group col-xs-4">
@@ -61,5 +73,5 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.user.filter_filter')
+    @include('icore::admin.page.partials.filter_filter')
 </form>

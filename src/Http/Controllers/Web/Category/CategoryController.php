@@ -40,20 +40,6 @@ class CategoryController implements Polymorphic
     {
         $categories = $category->makeRepo()->getBySearch($request->get('name'));
 
-        if ($categories->isEmpty()) {
-            return response()->json([
-                'errors' => [
-                    'category' => [trans('icore::categories.error.search')]
-                ]
-            ], 404);
-        }
-
-        return response()->json([
-            'success' => '',
-            'view' => view('icore::web.category.partials.search', [
-                'categories' => $categories,
-                'checked' => false
-            ])->render()
-        ]);
+        return $response->setCategories($categories)->makeResponse();
     }
 }

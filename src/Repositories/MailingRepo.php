@@ -53,16 +53,15 @@ class MailingRepo
     }
 
     /**
-     * [updateActivateScheduled description]
-     * @param  array $attributes [description]
+     * [activateScheduled description]
      * @return bool              [description]
      */
-    public function updateScheduled(array $attributes) : bool
+    public function activateScheduled() : bool
     {
         return $this->mailing
             ->whereDate('activation_at', '<=', Carbon::now()->format('Y-m-d'))
             ->whereTime('activation_at', '<=', Carbon::now()->format('H:i:s'))
             ->whereStatus(2)
-            ->update($attributes);
+            ->update(['status' => 1]);
     }
 }

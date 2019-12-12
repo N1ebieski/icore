@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Http\Controllers\Web\Comment;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Http\Requests\Web\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\TakeRequest;
+use N1ebieski\ICore\Http\Requests\Web\Comment\EditRequest;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -16,9 +17,10 @@ class CommentController
      * Show the form for editing the specified Comment.
      *
      * @param  Comment      $comment [description]
+     * @param  EditRequest  $request [description]
      * @return JsonResponse          [description]
      */
-    public function edit(Comment $comment) : JsonResponse
+    public function edit(Comment $comment, EditRequest $request) : JsonResponse
     {
         return response()->json([
             'success' => '',
@@ -41,7 +43,7 @@ class CommentController
 
         return response()->json([
             'success' => '',
-            'view' => view('icore::web.comment.comment', [
+            'view' => view('icore::web.comment.partials.comment', [
                 'comment' => $comment,
                 'post_id' => $comment->model_id
             ])->render()

@@ -42,7 +42,7 @@
                 <h3 class="h5 border-bottom pb-2" id="comments">{{ trans('icore::comments.comments') }}</h3>
                 <div id="filterContent">
                     @if ($comments->isNotEmpty())
-                        @include('icore::web.comment.filter')
+                        @include('icore::web.comment.partials.filter')
                     @endif
                     <div id="comment">
                         @auth
@@ -54,7 +54,7 @@
                     @if ($comments->isNotEmpty())
                     <div id="infinite-scroll">
                         @foreach ($comments as $comment)
-                            @include('icore::web.comment.comment', ['comment' => $comment])
+                            @include('icore::web.comment.partials.comment', ['comment' => $comment])
                         @endforeach
                         @include('icore::web.partials.pagination', ['items' => $comments, 'fragment'
                         => 'comments'])

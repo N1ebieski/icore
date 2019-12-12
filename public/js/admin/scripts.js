@@ -6,73 +6,6 @@ jQuery(document).ajaxComplete(function() {
     $(document).trigger('readyAndAjax');
 });
 
-(function($) {
-    $.fn.removeClassStartingWith = function(begin) {
-        this.removeClass(function(index, className) {
-            return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');
-        });
-    };
-
-    $.sanitize = function(html) {
-        let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
-
-        $output.find('*').each(function(index, node) {
-            $.each(node.attributes, function() {
-                let attrName = this.name;
-                let attrValue = this.value;
-
-                if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
-                    $(node).removeAttr(attrName);
-                }
-            });
-        });
-
-        return $output.html();
-    };
-
-    $.getUrlParameter = function(url, name) {
-        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
-    };
-
-    $.getLoader = function(type, loader = 'loader-absolute') {
-        return '<div class="'+loader+'"><div class="'+type+'"><span class="sr-only">Loading...</span></div></div>';
-    };
-
-    $.getAlert = function(response, type) {
-        return $.sanitize('<div class="alert alert-'+type+'" role="alert">'+response+'</div>');
-    };
-
-    $.getError = function(key, value) {
-        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-'+ key+'">'+value+'</span>');
-    };
-})(jQuery);
-
-// // jQuery(document).ready(function() {
-// //     var button = $('#buttonFilters');
-// //
-// //     $('#collapseFilters').on('show.bs.collapse', function() {
-// //         $(button).html($(button).attr('data-name-up') + ' <i class="fas fa-angle-up"></i>');
-// //     });
-// //     $('#collapseFilters').on('hide.bs.collapse', function() {
-// //         $(button).html($(button).attr('data-name-down') + ' <i class="fas fa-angle-down"></i>');
-// //     });
-// // });
-//
-// (function($) {
-//     "use strict"; // Start of use strict
-//
-//     // // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-//     // $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
-//     //     if ($(window).width() > 768) {
-//     //         var e0 = e.originalEvent,
-//     //             delta = e0.wheelDelta || -e0.detail;
-//     //         this.scrollTop += (delta < 0 ? 1 : -1) * 30;
-//     //         e.preventDefault();
-//     //     }
-//     // });
-//
-// })(jQuery); // End of use strict
-
 jQuery(document).on('click', 'button.storeBanUser', function(e) {
     e.preventDefault();
 
@@ -171,7 +104,7 @@ jQuery(document).on('click', '#searchCategory .btn', function(e) {
             $searchCategory.btn.prop('disabled', true);
             $('#searchCategoryOptions').empty();
             $searchCategory.append($.getLoader('spinner-border'));
-            $('.invalid-feedback').remove();
+            $searchCategory.find('.invalid-feedback').remove();
             $searchCategory.input.removeClass('is-valid');
             $searchCategory.input.removeClass('is-invalid');
         },
@@ -704,8 +637,8 @@ jQuery(document).on('click', '.store', function(e) {
             var errors = response.responseJSON;
 
             $.each(errors.errors, function( key, value ) {
-                $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).parent().append($.getError(key, value));
+                $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
+                $form.find('#' + $.escapeSelector(key)).parent().append($.getError(key, value));
             });
         }
     });
@@ -761,8 +694,8 @@ jQuery(document).on('click', '.update', function(e) {
             var errors = response.responseJSON;
 
             $.each(errors.errors, function( key, value ) {
-                $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).parent().append($.getError(key, value));
+                $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
+                $form.find('#' + $.escapeSelector(key)).parent().append($.getError(key, value));
             });
         }
     });
@@ -1020,6 +953,188 @@ jQuery(document).on('click', 'button.clearReport', function(e) {
     });
 });
 
+(function($) {
+    $.fn.removeClassStartingWith = function(begin) {
+        this.removeClass(function(index, className) {
+            return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');
+        });
+    };
+
+    $.sanitize = function(html) {
+        let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
+
+        $output.find('*').each(function(index, node) {
+            $.each(node.attributes, function() {
+                let attrName = this.name;
+                let attrValue = this.value;
+
+                if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
+                    $(node).removeAttr(attrName);
+                }
+            });
+        });
+
+        return $output.html();
+    };
+
+    $.getUrlParameter = function(url, name) {
+        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+    };
+
+    $.getLoader = function(type, loader = 'loader-absolute') {
+        return '<div class="'+loader+'"><div class="'+type+'"><span class="sr-only">Loading...</span></div></div>';
+    };
+
+    $.getAlert = function(response, type) {
+        return $.sanitize('<div class="alert alert-'+type+'" role="alert">'+response+'</div>');
+    };
+
+    $.getError = function(key, value) {
+        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-'+ key+'">'+value+'</span>');
+    };
+})(jQuery);
+
+jQuery(document).on('readyAndAjax', function() {
+    $('[data-toggle=confirmation]').confirmation({
+        rootSelector: '[data-toggle=confirmation]',
+        copyAttributes: 'data-route data-id',
+        singleton: true,
+        popout: true,
+        onConfirm: function() {
+            if ($(this).hasClass('submit')) {
+        		$(this).parents('form:first').submit();
+            }
+        }
+    });
+});
+
+//$('ul.pagination').hide();
+jQuery(document).on('readyAndAjax', function() {
+    $('#infinite-scroll').jscroll({
+        debug: true,
+        autoTrigger: false,
+        loadingHtml: $.getLoader('spinner-border', 'loader'),
+        loadingFunction: function() {
+            $('#is-pagination').first().remove();
+        },
+        padding: 0,
+        nextSelector: 'a#is-next:last',
+        contentSelector: '#infinite-scroll',
+        pagingSelector: '.pagination',
+        callback: function(nextHref) {
+            let href = nextHref.split(' ')[0];
+            let page = $.getUrlParameter(href, 'page');
+            let title = $('a#is-next:last').attr('title').replace(/(\d+)/, '').trim();
+
+            if ($.isNumeric(page)) {
+                let regex = new RegExp(title+"\\s(\\d+)");
+                document.title = document.title.replace(regex, title+': '+page);
+            }
+
+            history.replaceState(null, null, href);
+        }
+    });
+});
+
+jQuery(document).ready(function() {
+    $('form#createPost .datepicker, form#editFullPost .datepicker').pickadate({
+        clear: '',
+        formatSubmit: 'yyyy-m-dd',
+        hiddenName: true
+    });
+    $('form#createMailing .datepicker, form#editMailing .datepicker').pickadate({
+        clear: '',
+        formatSubmit: 'yyyy-m-dd',
+        hiddenName: true,
+        min: new Date(),
+    });
+    $('.timepicker').pickatime({
+        clear: '',
+        format: 'H:i',
+        formatSubmit: 'HH:i',
+        hiddenName: true
+    });
+});
+
+jQuery(document).ready(function() {
+    $('.tagsinput').tagsInput({
+        placeholder: $('.tagsinput').attr('placeholder'),
+        minChars: 3,
+        maxChars: 30,
+        limit: $('.tagsinput').attr('data-max'),
+        validationPattern: new RegExp('^(?:^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\u00E0-\u00FC ]+$)$'),
+        unique: true,
+    });
+});
+
+jQuery(document).on('readyAndAjax', function() {
+    if (!$('.trumbowyg-box').length) {
+        $('#content_html_trumbowyg').trumbowyg({
+            lang: 'pl',
+            svgPath: false,
+            hideButtonTexts: true,
+            tagsToRemove: ['script'],
+            autogrow: true,
+            btnsDef: {
+                more: {
+                    fn: function() {
+                        $('#content_html_trumbowyg').trumbowyg('execCmd', {
+                        	cmd: 'insertHtml',
+                        	param: '<p>[more]</p>',
+                        	forceCss: false,
+                        });
+                    },
+                    title: 'Button "show more"',
+                    ico: 'more'
+                }
+            },
+            btns: [
+                ['viewHTML'],
+                ['historyUndo', 'historyRedo'],
+                // ['undo', 'redo'], // Only supported in Blink browsers
+                ['formatting'],
+                ['foreColor', 'backColor'],
+                ['strong', 'em', 'del'],
+                ['superscript', 'subscript'],
+                ['link'],
+                ['insertImage'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['unorderedList', 'orderedList'],
+                ['horizontalRule'],
+                ['removeformat'],
+                ['more'],
+                ['fullscreen']
+            ]
+        });
+    }
+});
+
+// // jQuery(document).ready(function() {
+// //     var button = $('#buttonFilters');
+// //
+// //     $('#collapseFilters').on('show.bs.collapse', function() {
+// //         $(button).html($(button).attr('data-name-up') + ' <i class="fas fa-angle-up"></i>');
+// //     });
+// //     $('#collapseFilters').on('hide.bs.collapse', function() {
+// //         $(button).html($(button).attr('data-name-down') + ' <i class="fas fa-angle-down"></i>');
+// //     });
+// // });
+//
+// (function($) {
+//     "use strict"; // Start of use strict
+//
+//     // // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
+//     // $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
+//     //     if ($(window).width() > 768) {
+//     //         var e0 = e.originalEvent,
+//     //             delta = e0.wheelDelta || -e0.detail;
+//     //         this.scrollTop += (delta < 0 ? 1 : -1) * 30;
+//     //         e.preventDefault();
+//     //     }
+//     // });
+//
+// })(jQuery); // End of use strict
+
 jQuery(document).on('readyAndAjax', function() {
     $(".alert-time").delay(20000).fadeOut();
 });
@@ -1147,119 +1262,4 @@ jQuery(document).on('click', 'div#themeToggle button', function(e) {
 
     $element.prop('disabled', true);
     $element.siblings('button').prop('disabled', false);
-});
-
-jQuery(document).on('readyAndAjax', function() {
-    $('[data-toggle=confirmation]').confirmation({
-        rootSelector: '[data-toggle=confirmation]',
-        copyAttributes: 'data-route data-id',
-        singleton: true,
-        popout: true,
-        onConfirm: function() {
-            if ($(this).hasClass('submit')) {
-        		$(this).parents('form:first').submit();
-            }
-        }
-    });
-});
-
-//$('ul.pagination').hide();
-jQuery(document).on('readyAndAjax', function() {
-    $('#infinite-scroll').jscroll({
-        debug: true,
-        autoTrigger: false,
-        loadingHtml: $.getLoader('spinner-border', 'loader'),
-        loadingFunction: function() {
-            $('#is-pagination').first().remove();
-        },
-        padding: 0,
-        nextSelector: 'a#is-next:last',
-        contentSelector: '#infinite-scroll',
-        pagingSelector: '.pagination',
-        callback: function(nextHref) {
-            let href = nextHref.split(' ')[0];
-            let page = $.getUrlParameter(href, 'page');
-            let title = $('a#is-next:last').attr('title').replace(/(\d+)/, '').trim();
-
-            if ($.isNumeric(page)) {
-                let regex = new RegExp(title+"\\s(\\d+)");
-                document.title = document.title.replace(regex, title+': '+page);
-            }
-
-            history.replaceState(null, null, href);
-        }
-    });
-});
-
-jQuery(document).ready(function() {
-    $('form#createPost .datepicker, form#editFullPost .datepicker').pickadate({
-        clear: '',
-        formatSubmit: 'yyyy-m-dd',
-        hiddenName: true
-    });
-    $('form#createMailing .datepicker, form#editMailing .datepicker').pickadate({
-        clear: '',
-        formatSubmit: 'yyyy-m-dd',
-        hiddenName: true,
-        min: new Date(),
-    });
-    $('.timepicker').pickatime({
-        clear: '',
-        format: 'H:i',
-        formatSubmit: 'HH:i',
-        hiddenName: true
-    });
-});
-
-jQuery(document).ready(function() {
-    $('.tagsinput').tagsInput({
-        placeholder: $('.tagsinput').attr('placeholder'),
-        minChars: 3,
-        maxChars: 30,
-        limit: $('.tagsinput').attr('data-max'),
-        validationPattern: new RegExp('^(?:^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\u00E0-\u00FC ]+$)$'),
-        unique: true,
-    });
-});
-
-jQuery(document).on('readyAndAjax', function() {
-    if (!$('.trumbowyg-box').length) {
-        $('#content_html_trumbowyg').trumbowyg({
-            lang: 'pl',
-            svgPath: false,
-            hideButtonTexts: true,
-            tagsToRemove: ['script'],
-            autogrow: true,
-            btnsDef: {
-                more: {
-                    fn: function() {
-                        $('#content_html_trumbowyg').trumbowyg('execCmd', {
-                        	cmd: 'insertHtml',
-                        	param: '<p>[more]</p>',
-                        	forceCss: false,
-                        });
-                    },
-                    title: 'Button "show more"',
-                    ico: 'more'
-                }
-            },
-            btns: [
-                ['viewHTML'],
-                ['historyUndo', 'historyRedo'],
-                // ['undo', 'redo'], // Only supported in Blink browsers
-                ['formatting'],
-                ['foreColor', 'backColor'],
-                ['strong', 'em', 'del'],
-                ['superscript', 'subscript'],
-                ['link'],
-                ['insertImage'],
-                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                ['unorderedList', 'orderedList'],
-                ['horizontalRule'],
-                ['removeformat'],
-                ['more'],
-                ['fullscreen']
-            ]
-        });
-    }
 });

@@ -3,8 +3,6 @@
 namespace N1ebieski\ICore\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Support\Facades\App;
 
 class RouteServiceProvider extends ServiceProvider
@@ -28,21 +26,6 @@ class RouteServiceProvider extends ServiceProvider
         //
         parent::boot();
 
-        $this->app['router']->bind('mailing_inactive', function ($value) {
-            return \N1ebieski\ICore\Models\Mailing::where([
-                    ['status', '!=', 1],
-                    ['id', $value]
-                ])->firstOrFail();
-        });
-
-        $this->app['router']->bind('post_active', function ($value) {
-            return Post::where([
-                    ['status', 1],
-                    ['published_at', '!=', null],
-                    ['id', $value]
-                ])->firstOrFail();
-        });
-
         $this->app['router']->bind('post_cache', function($value) {
             return App::make(\N1ebieski\ICore\Cache\PostCache::class)->rememberBySlug($value)
                 ?? abort(404);
@@ -51,29 +34,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->app['router']->bind('page_cache', function($value) {
             return App::make(\N1ebieski\ICore\Cache\PageCache::class)->rememberBySlug($value)
                 ?? abort(404);
-        });
-
-        $this->app['router']->bind('page_active', function ($value) {
-            return \N1ebieski\ICore\Models\Page\Page::where('id', $value)
-                ->active()
-                ->firstOrFail();
-        });
-
-        $this->app['router']->bind('comment_active', function ($value) {
-            return \N1ebieski\ICore\Models\Comment\Comment::where([
-                    ['status', 1],
-                    ['id', $value]
-                ])->firstOrFail();
-        });
-
-        $this->app['router']->bind('category_active', function ($value) {
-            return Category::where([
-                    ['status', 1],
-                    ['id', $value]
-                ])->orWhere([
-                    ['status', 1],
-                    ['slug', $value]
-                ])->firstOrFail();
         });
 
         $this->app['router']->bind('category_post_cache', function($value) {

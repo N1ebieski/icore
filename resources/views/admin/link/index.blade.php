@@ -32,7 +32,7 @@
     @if ($links->isNotEmpty())
     <div id="infinite-scroll">
         @foreach ($links as $link)
-            @include('icore::admin.link.link')
+            @include('icore::admin.link.partials.link')
         @endforeach
         @include('icore::admin.partials.pagination', ['items' => $links])
     </div>

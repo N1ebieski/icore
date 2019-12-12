@@ -22,8 +22,8 @@ class CreatePostsTable extends Migration
             $table->string('slug')->unique();
             $table->unsignedInteger('user_id')->index();
             $table->string('title');
-            $table->longText('content_html');
-            $table->longText('content');
+            $table->longText('content_html')->nullable();
+            $table->longText('content')->nullable();
             $table->string('seo_title')->nullable();
             $table->text('seo_desc')->nullable();
             $table->boolean('seo_noindex')->default(0);
