@@ -21,14 +21,17 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         \Illuminate\Auth\Events\Login::class => [
-            \N1ebieski\ICore\Listeners\RefreshIp::class,
+            \N1ebieski\ICore\Listeners\User\RefreshIp::class,
         ],
-        \N1ebieski\ICore\Events\NewsletterStore::class => [
-            \N1ebieski\ICore\Listeners\SendNewsletterConfirmation::class,
+        \N1ebieski\ICore\Events\Web\Newsletter\Store::class => [
+            \N1ebieski\ICore\Listeners\Newsletter\SendConfirmation::class,
         ],
-        \N1ebieski\ICore\Events\CommentStore::class => [
-            \N1ebieski\ICore\Listeners\ActivateComment::class
-        ]
+        \N1ebieski\ICore\Events\Web\Comment\Store::class => [
+            \N1ebieski\ICore\Listeners\Comment\Activate::class
+        ],
+        \N1ebieski\ICore\Events\Admin\Comment\Store::class => [
+            \N1ebieski\ICore\Listeners\Comment\Activate::class
+        ],
     ];
 
     /**

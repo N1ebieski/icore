@@ -5,7 +5,7 @@
 
 .responsive-btn-group {
     @extend .btn-group;
-    @include media-breakpoint-down(lg) {
+    @media (max-width: 1366px) {
         flex-direction: column;
         align-items: flex-start;
         .btn:not(:first-child) {

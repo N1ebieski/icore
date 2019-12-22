@@ -19,17 +19,19 @@
         </div>
         @endcan
         <div class="text-right ml-3">
-            @can('delete bans')
-            <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
-            data-route="{{ route('admin.banmodel.destroy', [$ban->id_ban]) }}" data-id="{{ $ban->id_ban }}"
-            type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check"
-            data-btn-ok-class="btn-primary btn-popover destroy" data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-            data-btn-cancel-class="btn-secondary btn-popover" data-btn-cancel-icon-class="fas fa-ban"
-            data-title="{{ trans('icore::default.confirm') }}">
-                <i class="far fa-trash-alt"></i>
-                <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
-            </button>
-            @endcan
+            <div class="responsive-btn-group">
+                @can('delete bans')
+                <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
+                data-route="{{ route('admin.banmodel.destroy', [$ban->id_ban]) }}" data-id="{{ $ban->id_ban }}"
+                type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check"
+                data-btn-ok-class="btn-primary btn-popover destroy" data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                data-btn-cancel-class="btn-secondary btn-popover" data-btn-cancel-icon-class="fas fa-ban"
+                data-title="{{ trans('icore::default.confirm') }}">
+                    <i class="far fa-trash-alt"></i>
+                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
+                </button>
+                @endcan
+            </div>
         </div>
     </div>
 </div>

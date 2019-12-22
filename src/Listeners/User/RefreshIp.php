@@ -1,11 +1,11 @@
 <?php
 
-namespace N1ebieski\ICore\Listeners;
+namespace N1ebieski\ICore\Listeners\User;
 
 /**
- * [ActivateComment description]
+ * [LogSuccessfulLogin description]
  */
-class ActivateComment
+class RefreshIp
 {
     /**
      * Create the event listener.
@@ -14,7 +14,6 @@ class ActivateComment
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -25,8 +24,8 @@ class ActivateComment
      */
     public function handle($event)
     {
-        if (auth()->user()->can('create comments')) {
-            $event->comment->update(['status' => 1]);
-        }
+        auth()->user()->update([
+            'ip' => request()->ip()
+        ]);
     }
 }

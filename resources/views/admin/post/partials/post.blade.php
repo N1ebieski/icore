@@ -13,7 +13,7 @@
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $post->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $post->updated_at_diff }}</small></li>
                 </ul>
-        @can('destroy users')
+        @can('destroy posts')
             </label>
         </div>
         @endcan

@@ -116,9 +116,8 @@
         .dropdown-menu {
             .badge {
                 font-size: 0.7rem;
-                position: absolute;
-                top: 7px;
-                right: 20px;
+                margin-left: 0.6rem;
+                min-width: 2rem;
             }
         }
 
@@ -128,6 +127,11 @@
             &:focus,
             &:hover {
                 color: $dark;
+            }
+
+            .badge {
+                display: inline-block;
+                min-width: 2rem;
             }
         }
     }
@@ -208,6 +212,9 @@
                     span {
                         margin-left: 0;
                     }
+                    .badge {
+                        display: block;
+                    }
                 }
             }
         }
@@ -260,6 +267,9 @@
                 .nav-link {
                     span {
                         margin-left: 0;
+                    }
+                    .badge {
+                        display: block;
                     }
                 }
             }

@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Mails;
+namespace N1ebieski\ICore\Mails\Contact;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Http\Request;
@@ -8,9 +8,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * [ContactMail description]
+ * [Mail description]
  */
-class ContactMail extends Mailable
+class Mail extends Mailable
 {
     use Queueable, SerializesModels;
 

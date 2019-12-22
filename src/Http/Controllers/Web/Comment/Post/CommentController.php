@@ -7,7 +7,7 @@ use N1ebieski\ICore\Http\Requests\Web\Comment\Post\StoreRequest;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Http\JsonResponse;
-use N1ebieski\ICore\Events\CommentStore;
+use N1ebieski\ICore\Events\Web\Comment\Store as CommentStore;
 use N1ebieski\ICore\Http\Controllers\Web\Comment\Post\Polymorphic as PostPolymorphic;
 
 /**

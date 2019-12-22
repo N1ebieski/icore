@@ -6,7 +6,7 @@ use N1ebieski\ICore\Http\Requests\Web\Newsletter\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Http\JsonResponse;
-use N1ebieski\ICore\Events\NewsletterStore;
+use N1ebieski\ICore\Events\Web\Newsletter\Store as NewsletterStore;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 

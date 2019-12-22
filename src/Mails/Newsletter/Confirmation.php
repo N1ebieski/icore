@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Mails;
+namespace N1ebieski\ICore\Mails\Newsletter;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -8,9 +8,9 @@ use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
 
 /**
- * [NewsletterConfirmation description]
+ * [Confirmation description]
  */
-class NewsletterConfirmation extends Mailable
+class Confirmation extends Mailable
 {
     use Queueable, SerializesModels;
 

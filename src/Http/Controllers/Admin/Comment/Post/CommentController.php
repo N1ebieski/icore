@@ -11,7 +11,7 @@ use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
 use Illuminate\View\View;
-use N1ebieski\ICore\Events\CommentStore;
+use N1ebieski\ICore\Events\Admin\Comment\Store as CommentStore;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as CommentBaseController;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Post\Polymorphic as PostPolymorphic;

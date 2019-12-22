@@ -19,8 +19,8 @@
     <link href="{{ mix(app('Helpers\View')->getStylesheet()) }}" rel="stylesheet">
 
     <!-- Scripts -->
-    <script src="{{ mix('js/vendor/icore/vendor/vendor.js') }}" async></script>
-    <script src="{{ mix('js/vendor/icore/admin/admin.js') }}" async></script>
+    <script src="{{ mix('js/vendor/icore/vendor/vendor.js') }}"></script>
+    <script src="{{ mix('js/vendor/icore/admin/admin.js') }}"></script>
 
 </head>
 <body>

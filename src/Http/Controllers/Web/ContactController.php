@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use N1ebieski\ICore\Http\Requests\Web\Contact\SendRequest;
-use N1ebieski\ICore\Mails\ContactMail;
+use N1ebieski\ICore\Mails\Contact\Mail as ContactMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 
