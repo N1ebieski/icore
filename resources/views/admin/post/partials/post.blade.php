@@ -1,4 +1,5 @@
-<div id="row{{ $post->id }}" class="row border-bottom py-3 position-relative transition">
+<div id="row{{ $post->id }}" class="row border-bottom py-3 position-relative transition"
+data-id="{{ $post->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @can('destroy posts')
         <div class="custom-control custom-checkbox">

@@ -29,7 +29,9 @@ class MailingController
      */
     public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter) : View
     {
-        $mailings = $mailing->makeRepo()->paginateByFilter($filter->all());
+        $mailings = $mailing->makeRepo()->paginateByFilter($filter->all() + [
+            'except' => $request->input('except')
+        ]);
 
         return view('icore::admin.mailing.index', [
             'mailings' => $mailings,

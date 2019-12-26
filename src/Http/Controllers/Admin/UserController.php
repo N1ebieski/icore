@@ -35,7 +35,11 @@ class UserController
      */
     public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter) : View
     {
-        $users = $user->makeRepo()->paginateByFilter($filter->all());
+        $users = $user->makeRepo()->paginateByFilter($filter->all() + [
+            'except' => $request->input('except')
+        ]);
+
+        debug($request->all());
 
         return view('icore::admin.user.index', [
             'users' => $users,

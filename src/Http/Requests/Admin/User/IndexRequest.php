@@ -51,6 +51,8 @@ class IndexRequest extends FormRequest
 
         return [
             'page' => 'integer',
+            'except' => 'filled|array',
+            'except.*' => 'integer',
             'filter' => 'array|no_js_validation',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
             'filter.status' => 'bail|nullable|integer|in:0,1|no_js_validation',
@@ -62,7 +64,7 @@ class IndexRequest extends FormRequest
             ],
             'filter.orderby' => [
                 'bail',
-                'nullable',                
+                'nullable',
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc',
                 'no_js_validation'
             ],

@@ -52,7 +52,9 @@ class CategoryController implements Polymorphic
 
         return view('icore::admin.category.index', [
             'model' => $category,
-            'categories' => $categoryService->paginateByFilter($filter->all()),
+            'categories' => $categoryService->paginateByFilter($filter->all() + [
+                'except' => $request->input('except')
+            ]),
             'parents' => $categoryService->getAsFlatTree(),
             'filter' => $filter->all(),
             'paginate' => config('database.paginate')

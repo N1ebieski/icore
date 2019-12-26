@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('bans/user', 'BanModel\User\BanModelController@index')
+Route::match(['get', 'post'], 'bans/user/index', 'BanModel\User\BanModelController@index')
     ->name('banmodel.user.index')
     ->middleware('permission:index bans');
-Route::get('bans/{type}', 'BanValueController@index')
+Route::match(['get', 'post'], 'bans/{type}/index', 'BanValueController@index')
     ->name('banvalue.index')
     ->middleware('permission:index bans')
     ->where('type', '[A-Za-z]+');

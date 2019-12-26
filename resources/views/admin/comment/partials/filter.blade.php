@@ -28,7 +28,7 @@
             @endif
             @if ($filter['author'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[author]">
-                Autor: {{ $filter['author']->name }}
+                {{ trans('icore::filter.author') }}: {{ $filter['author']->name }}
                 <input type="hidden" name="filter[author]" value="{{ $filter['author']->id }}">
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;

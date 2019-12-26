@@ -13,9 +13,6 @@ jQuery(document).on('click', '.update', function(e) {
 
     jQuery.ajax({
         url: $form.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
         method: 'post',
         // data: $form.serialize(),
         data: data,

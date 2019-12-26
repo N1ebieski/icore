@@ -35,9 +35,9 @@ class CommentRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->comment->poliType()
-            ->with('morph:id,title,comment')
-            ->with('user:id,name')
+            ->with(['morph', 'user'])
             ->withCount('reports')
+            ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
             ->filterCensored($filter['censored'])

@@ -27,7 +27,9 @@ class BanModelController implements UserPolymorphic
      */
     public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : View
     {
-        $bans = $banModel->paginateByFilter($filter->all());
+        $bans = $banModel->paginateByFilter($filter->all() + [
+            'except' => $request->input('except')
+        ]);
 
         return view('icore::admin.banmodel.user.index', [
             'bans' => $bans,

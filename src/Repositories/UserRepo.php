@@ -33,6 +33,7 @@ class UserRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->user->filterSearch($filter['search'])
+            ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->filterRole($filter['role'])
             ->filterOrderBy($filter['orderby'])

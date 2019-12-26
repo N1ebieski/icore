@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/users', 'UserController@index')
+Route::match(['get', 'post'], '/users/index', 'UserController@index')
     ->name('user.index')
     ->middleware('permission:index users');
 

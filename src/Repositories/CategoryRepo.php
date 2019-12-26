@@ -54,6 +54,7 @@ class CategoryRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->category->filterSearch($filter['search'])
+            ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->poliType()
             ->filterParent($filter['parent'])

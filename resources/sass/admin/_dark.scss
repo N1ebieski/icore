@@ -72,7 +72,7 @@ li.page-item:not(.active) .page-link:not(:hover) {
     }
 }
 
-.popover-header {
+.popover-header, .popover-body {
     background-color: $gray-400;
     color: $black;
 }

@@ -34,7 +34,9 @@ class PostController
      */
     public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter) : View
     {
-        $posts = $post->makeRepo()->paginateByFilter($filter->all());
+        $posts = $post->makeRepo()->paginateByFilter($filter->all() + [
+            'except' => $request->input('except')
+        ]);
 
         return view('icore::admin.post.index', [
             'posts' => $posts,

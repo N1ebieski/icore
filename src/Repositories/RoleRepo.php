@@ -36,12 +36,14 @@ class RoleRepo
     }
 
     /**
-     * [paginate description]
-     * @return LengthAwarePaginator [description]
+     * [paginateByFilter description]
+     * @param  array                $filter [description]
+     * @return LengthAwarePaginator         [description]
      */
-    public function paginate() : LengthAwarePaginator
+    public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->role->orderBy('id', 'asc')
+            ->filterExcept($filter['except'])
             ->paginate($this->paginate);
     }
 

@@ -1,4 +1,5 @@
-<div id="row{{ $page->id }}" class="row border-bottom py-3 position-relative transition">
+<div id="row{{ $page->id }}" class="row border-bottom py-3 position-relative transition"
+data-id="{{ $page->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @can('destroy pages')
         <div class="custom-control custom-checkbox">

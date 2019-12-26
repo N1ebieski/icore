@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('links/{type}', 'LinkController@index')
+Route::match(['get', 'post'], 'links/{type}/index', 'LinkController@index')
     ->name('link.index')
     ->middleware('permission:index links')
     ->where('type', '[A-Za-z]+');

@@ -25,6 +25,8 @@ class IndexRequest extends FormRequest
     {
         return [
             'page' => 'integer',
+            'except' => 'filled|array',
+            'except.*' => 'integer'
         ];
     }
 }

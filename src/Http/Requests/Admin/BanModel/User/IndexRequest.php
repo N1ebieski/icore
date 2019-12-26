@@ -28,6 +28,8 @@ class IndexRequest extends FormRequest
 
         return [
             'filter' => 'array|no_js_validation',
+            'except' => 'filled|array',
+            'except.*' => 'integer',            
             'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [
                 'nullable',

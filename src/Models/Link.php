@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Models;
 
+use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\LinkService;
 use N1ebieski\ICore\Repositories\LinkRepo;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Link extends Model
 {
-    use Positionable, Carbonable;
+    use Positionable, Carbonable, Filterable;
 
     // Configuration
 

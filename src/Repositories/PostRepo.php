@@ -60,6 +60,7 @@ class PostRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->post->with('tags')
+            ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
             ->filterOrderBy($filter['orderby'])

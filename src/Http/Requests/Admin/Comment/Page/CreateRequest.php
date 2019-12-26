@@ -14,7 +14,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if ((bool)$this->page->comment === false) {
+        if ((bool)$this->page->isCommentable() === false) {
             abort(403, 'Adding comments has been disabled for this page.');
         }
 

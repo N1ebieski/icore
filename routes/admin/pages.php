@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('pages', 'PageController@index')
+Route::match(['get', 'post'], 'pages/index', 'PageController@index')
     ->name('page.index')
     ->middleware('permission:index pages');
 

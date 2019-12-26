@@ -25,6 +25,9 @@ class IndexRequest extends FormRequest
     {
         return [
             'type' => 'bail|required|string|in:link,backlink',
+            'page' => 'integer',
+            'except' => 'filled|array',
+            'except.*' => 'integer'
         ];
     }
 

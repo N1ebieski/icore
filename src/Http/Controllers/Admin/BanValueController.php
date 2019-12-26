@@ -29,7 +29,10 @@ class BanValueController
      */
     public function index(string $type, BanValue $banValue, IndexRequest $request, IndexFilter $filter) : View
     {
-        $bans = $banValue->makeRepo()->paginateByFilter(array_merge(['type' => $type], $filter->all()));
+        $bans = $banValue->makeRepo()->paginateByFilter($filter->all() + [
+            'type' => $type,
+            'except' => $request->input('except')
+        ]);
 
         return view('icore::admin.banvalue.index', [
             'type' => $type,

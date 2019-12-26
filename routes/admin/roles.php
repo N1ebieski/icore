@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/roles', 'RoleController@index')
+Route::match(['get', 'post'], '/roles/index', 'RoleController@index')
     ->name('role.index')
     ->middleware('permission:index roles');
 

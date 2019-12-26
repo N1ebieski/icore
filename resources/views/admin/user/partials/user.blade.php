@@ -1,4 +1,5 @@
-<div id="row{{ $user->id }}" class="row border-bottom py-3 position-relative transition">
+<div id="row{{ $user->id }}" class="row border-bottom py-3 position-relative transition"
+data-id="{{ $user->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @role('super-admin')
         @can('actionSelf', $user)

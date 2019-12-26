@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Carbon\Carbon;
 use Mews\Purifier\Facades\Purifier;
-use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Services\TagService;
 use N1ebieski\ICore\Services\PostService;
 use N1ebieski\ICore\Cache\PostCache;
@@ -293,22 +292,27 @@ class Post extends Model
         $this->attributes['content'] = strip_tags(str_replace('[more]', '', $value));
     }
 
-    // Scopes
+    // Checkers
 
     /**
-     * [scopeFilterCategory description]
-     * @param  Builder $query    [description]
-     * @param  Category|null  $category [description]
-     * @return Builder|null            [description]
+     * [isCommentable description]
+     * @return bool [description]
      */
-    public function scopeFilterCategory(Builder $query, Category $category = null) : ?Builder
+    public function isCommentable() : bool
     {
-        return $query->when($category !== null, function($query) use ($category) {
-            $query->whereHas('categories', function($q) use ($category) {
-                return $q->where('category_id', $category->id);
-            });
-        });
+        return (bool)$this->comment === true;
     }
+
+    /**
+     * [isActive description]
+     * @return bool [description]
+     */
+    public function isActive() : bool
+    {
+        return $this->status === 1;
+    }
+
+    // Scopes
 
     /**
      * [scopeActive description]

@@ -44,7 +44,9 @@ class CommentController implements Polymorphic
      */
     public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : View
     {
-        $comments = $comment->makeRepo()->paginateByFilter($filter->all());
+        $comments = $comment->makeRepo()->paginateByFilter($filter->all() + [
+            'except' => $request->input('except')
+        ]);
 
         return view('icore::admin.comment.index', [
             'model' => $comment,

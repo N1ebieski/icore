@@ -36,5 +36,6 @@ return [
     'parent' => 'Rodzic',
     'title' => 'Tytuł',
     'position' => 'Pozycja',
-    'type' => 'Typ'
+    'type' => 'Typ',
+    'author' => 'Autor'
 ];

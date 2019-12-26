@@ -26,7 +26,10 @@ class LinkController
      */
     public function index(string $type, Link $link, IndexRequest $request) : View
     {
-        $links = $link->makeRepo()->paginateByType($type);
+        $links = $link->makeRepo()->paginateByFilter([
+            'type' => $type,
+            'except' => $request->input('except')
+        ]);
 
         return view('icore::admin.link.index', [
             'type' => $type,

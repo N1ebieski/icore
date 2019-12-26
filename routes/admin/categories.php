@@ -10,7 +10,7 @@ Route::get('categories/post/search', 'Category\Post\CategoryController@search')
     ->middleware(['permission:create posts|edit posts'])
     ->name('category.post.search');
 
-Route::get('categories/post', 'Category\Post\CategoryController@index')
+Route::match(['get', 'post'], 'categories/post/index', 'Category\Post\CategoryController@index')
     ->name('category.post.index')
     ->middleware('permission:index categories');
 

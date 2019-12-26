@@ -28,6 +28,9 @@ class IndexRequest extends FormRequest
 
         return [
             'type' => 'required|string|in:ip,word',
+            'page' => 'integer',
+            'except' => 'filled|array',
+            'except.*' => 'integer',
             'filter' => 'array|no_js_validation',
             'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [

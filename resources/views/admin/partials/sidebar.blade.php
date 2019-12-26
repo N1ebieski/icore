@@ -39,15 +39,17 @@
             <div class="dropdown-menu" aria-labelledby="commentDropdown">
                 <h6 class="dropdown-header">{{ trans('icore::default.type') }}:</h6>
                 @foreach(['post', 'page'] as $type)
-                <div class="position-relative">
-                    <a class="dropdown-item @isUrl(route("admin.comment.{$type}.index"))" href="{{ route("admin.comment.{$type}.index") }}">
-                        {{ trans("icore::comments.page.type.{$type}") }}
-                    </a>
+                <div class="dropdown-item @isUrl(route("admin.comment.{$type}.index"))"
+                onclick="window.location.href='{{ route("admin.comment.{$type}.index") }}'"
+                style="cursor: pointer;">
+                    {{ trans("icore::comments.page.type.{$type}") }}
                     @if ($count = $comments_inactive_count->where('model', $type)->first())
-                    <a href="{{ route("admin.comment.{$type}.index", ['filter[status]' => 0]) }}"
-                    class="badge badge-warning">
-                        {{ $count->count }}
-                    </a>
+                    <span>
+                        <a href="{{ route("admin.comment.{$type}.index", ['filter[status]' => 0]) }}"
+                        class="badge badge-warning">
+                            {{ $count->count }}
+                        </a>
+                    </span>
                     @endif
                 </div>
                 @endforeach

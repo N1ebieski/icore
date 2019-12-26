@@ -62,6 +62,7 @@ class BanModel extends BaseBanModel
                 $query->on('bans_models.model_id', '=', 'users.id');
                 $query->where('bans_models.model_type', '=', 'N1ebieski\ICore\Models\User');
             })
+            ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);

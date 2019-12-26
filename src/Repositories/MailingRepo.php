@@ -35,10 +35,11 @@ class MailingRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->mailing->filterSearch($filter['search'])
-           ->filterStatus($filter['status'])
-           ->filterOrderBy($filter['orderby'])
-           ->with('emails')
-           ->filterPaginate($filter['paginate']);
+            ->filterExcept($filter['except'])
+            ->filterStatus($filter['status'])
+            ->filterOrderBy($filter['orderby'])
+            ->with('emails')
+            ->filterPaginate($filter['paginate']);
     }
 
     /**

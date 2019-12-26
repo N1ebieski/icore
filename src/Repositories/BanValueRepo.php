@@ -33,6 +33,7 @@ class BanValueRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->banValue->filterType($filter['type'])
+            ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);

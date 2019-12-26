@@ -23,3 +23,12 @@ $(document).ready(function() {
         }
     });
 });
+
+jQuery(document).on('readyAndAjax', function() {
+    $('form#searchForm').keypress(function(e) {
+        if (e.which == 13) {
+            $(this).submit();
+            return false;
+        }
+    });
+});

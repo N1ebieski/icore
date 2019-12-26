@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('mailings', 'MailingController@index')
+Route::match(['get', 'post'], 'mailings/index', 'MailingController@index')
     ->name('mailing.index')
     ->middleware('permission:index mailings');
 

@@ -1,4 +1,5 @@
-<div id="row{{ $category->id }}" class="row border-bottom py-3 position-relative transition">
+<div id="row{{ $category->id }}" class="row border-bottom py-3 position-relative transition"
+    data-id="{{ $category->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @can('destroy categories')
         <div class="custom-control custom-checkbox">

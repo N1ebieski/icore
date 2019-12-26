@@ -2,18 +2,18 @@
 
 namespace N1ebieski\ICore\Models;
 
+use N1ebieski\ICore\Models\Traits\Filterable;
 use Spatie\Permission\Models\Role as BaseRole;
 use N1ebieski\ICore\Repositories\RoleRepo;
 use N1ebieski\ICore\Services\RoleService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
-use Carbon\Carbon;
 
 /**
  * [Role description]
  */
 class Role extends BaseRole
 {
-    use Carbonable;
+    use Carbonable, Filterable;
 
     // Configuration
 

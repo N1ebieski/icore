@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -90,5 +91,31 @@ trait Filterable
         return $query->when($author !== null, function($query) use ($author) {
             return $query->where('user_id', $author->id);
         });
+    }
+
+    /**
+     * [scopeFilterCategory description]
+     * @param  Builder $query    [description]
+     * @param  Category|null  $category [description]
+     * @return Builder|null            [description]
+     */
+    public function scopeFilterCategory(Builder $query, Category $category = null) : ?Builder
+    {
+        return $query->when($category !== null, function($query) use ($category) {
+            $query->whereHas('categories', function($q) use ($category) {
+                return $q->where('category_id', $category->id);
+            });
+        });
+    }
+
+    /**
+     * [scopeFilterExcept description]
+     * @param  Builder $query  [description]
+     * @param  array|null  $except [description]
+     * @return Builder|null         [description]
+     */
+    public function scopeFilterExcept(Builder $query, array $except = null)
+    {
+        if ($except !== null) return $query->whereNotIn('id', $except);
     }
 }

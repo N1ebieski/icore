@@ -14,11 +14,11 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        if ((bool)$this->post->comment === false) {
+        if ((bool)$this->post->isCommentable() === false) {
             abort(403, 'Adding comments has been disabled for this post.');
         }
 
-        return $this->post->status === 1;
+        return $this->post->isActive();
     }
 
     /**

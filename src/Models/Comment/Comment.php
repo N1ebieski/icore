@@ -193,6 +193,28 @@ class Comment extends Entity implements CommentInterface
         $this->attributes['content'] = strip_tags(preg_replace('/\s+/', ' ', str_replace(['\n', '\r'], '', $value)));
     }
 
+    // Checkers
+
+    /**
+     * [isActive description]
+     * @return bool [description]
+     */
+    public function isActive() : bool
+    {
+        return $this->status === 1;
+    }
+
+    /**
+     * [isCommentable description]
+     * @return bool [description]
+     */
+    public function isCommentable() : bool
+    {
+        return $this->isActive()
+            && $this->getRelation('morph')->isActive()
+            && $this->getRelation('morph')->isCommentable();
+    }
+
     // Scopes
 
     /**

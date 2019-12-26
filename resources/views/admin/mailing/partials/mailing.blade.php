@@ -1,4 +1,5 @@
-<div id="row{{ $mailing->id }}" class="row border-bottom py-3 position-relative transition">
+<div id="row{{ $mailing->id }}" class="row border-bottom py-3 position-relative transition"
+data-id="{{ $mailing->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @can('destroy mailings')
         <div class="custom-control custom-checkbox flex-grow-1">

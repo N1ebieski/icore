@@ -72,7 +72,7 @@ class CategoryService implements Serviceable
      */
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
-        if ($this->collect->make($filter)->except('paginate')->isEmptyItems()) {
+        if ($this->collect->make($filter)->except(['paginate', 'except'])->isEmptyItems()) {
             return $this->getAsFlatTreeByFilter($filter);
         }
 
@@ -88,7 +88,8 @@ class CategoryService implements Serviceable
     {
         $this->categories = $this->getAsFlatTree();
 
-        return $this->categories->paginate($filter['paginate'] ?? $this->paginate);
+        return $this->categories->whereNotIn('id', $filter['except'])
+            ->paginate($filter['paginate'] ?? $this->paginate);
     }
 
     /**

@@ -1,4 +1,5 @@
-<div id="row{{ $ban->id }}" class="row border-bottom py-3 position-relative transition">
+<div id="row{{ $ban->id }}" class="row border-bottom py-3 position-relative transition"
+data-id="{{ $ban->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @can('delete bans')
         <div class="custom-control custom-checkbox">

@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('comments/post', 'Comment\Post\CommentController@index')
+Route::match(['get', 'post'], 'comments/post/index', 'Comment\Post\CommentController@index')
     ->name('comment.post.index')
     ->middleware('permission:index comments');
 
-Route::get('comments/page', 'Comment\Page\CommentController@index')
+Route::match(['get', 'post'], 'comments/page/index', 'Comment\Page\CommentController@index')
     ->name('comment.page.index')
     ->middleware('permission:index comments');
 

@@ -11485,7 +11485,7 @@ span.twitter-typeahead .sidebar .nav-item.tt-suggestion.tt-cursor .nav-link {
   text-align: center;
 }
 
-@media (max-width: 1199.98px) {
+@media (max-width: 1366px) {
   .responsive-btn-group {
     flex-direction: column;
     align-items: flex-start;
@@ -11651,7 +11651,8 @@ span.twitter-typeahead .tt-menu .dropdown-header {
   color: #000;
 }
 
-.popover-header {
+.popover-header,
+.popover-body {
   background-color: #ced4da;
   color: #000;
 }

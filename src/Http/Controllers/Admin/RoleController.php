@@ -27,7 +27,9 @@ class RoleController
     public function index(Role $role, IndexRequest $request) : View
     {
         return view('icore::admin.role.index', [
-            'roles' => $role->makeRepo()->paginate(),
+            'roles' => $role->makeRepo()->paginateByFilter([
+                'except' => $request->input('except')
+            ]),
         ]);
     }
 

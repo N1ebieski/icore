@@ -36,13 +36,14 @@ class LinkRepo
     }
 
     /**
-     * [paginateByType description]
-     * @param  string                $type  [description]
+     * [paginateByFilter description]
+     * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByType(string $type) : LengthAwarePaginator
+    public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
-        return $this->link->where('type', $type)
+        return $this->link->where('type', $filter['type'])
+            ->filterExcept($filter['except'])
             ->orderBy('position', 'asc')
             ->paginate($this->paginate);
     }

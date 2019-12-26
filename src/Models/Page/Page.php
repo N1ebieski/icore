@@ -319,6 +319,26 @@ class Page extends Entity implements PageInterface
         $this->attributes['content'] = strip_tags(str_replace('[more]', '', $value));
     }
 
+    // Checkers
+
+    /**
+     * [isCommentable description]
+     * @return bool [description]
+     */
+    public function isCommentable() : bool
+    {
+        return (bool)$this->comment === true;
+    }
+
+    /**
+     * [isActive description]
+     * @return bool [description]
+     */
+    public function isActive() : bool
+    {
+        return $this->status === 1;
+    }
+
     // Scopes
 
     /**

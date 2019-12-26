@@ -1,4 +1,5 @@
-<div id="row{{ $comment->id }}" class="row py-3 border-bottom position-relative transition">
+<div id="row{{ $comment->id }}" class="row py-3 border-bottom position-relative transition"
+data-id="{{ $comment->id }}">
     <div class="col my-auto d-flex justify-content-between">
         @can('destroy comments')
         <div class="custom-control custom-checkbox">
@@ -48,7 +49,7 @@
                         $comment->model_id,
                         'parent_id' => $comment->id
                     ]) }}" type="button" class="btn btn-primary answer create"
-                    {{ ($comment->status === 1 && (bool)$comment->morph->comment === true) ? '' : 'disabled' }}>
+                    {{ ($comment->isCommentable()) ? null : 'disabled' }}>
                         <i class="far fa-comment"></i>
                         <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.answer') }}</span>
                     </button>
