@@ -1,5 +1,5 @@
 <div class="{{ ($comment->real_depth < 5 && $comment->real_depth > 0) ? 'depth-1' : '' }}"
-id="depth{{ $comment->id }}" data-id="{{ $comment->id }}">
+id="row{{ $comment->id }}" data-id="{{ $comment->id }}">
     <div id="comment{{ $comment->id }}" class="transition my-3">
         <div>
             <div class="d-flex mb-2">

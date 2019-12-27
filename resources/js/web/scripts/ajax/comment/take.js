@@ -2,7 +2,7 @@ jQuery(document).on('click', 'a.takeComment', function(e) {
     e.preventDefault();
 
     let $element = $(this);
-    let $depth = $element.closest('[id^=depth]');
+    let $row = $element.closest('[id^=row]');
     let $div = $element.closest('div');
 
     $.ajax({
@@ -14,7 +14,7 @@ jQuery(document).on('click', 'a.takeComment', function(e) {
         data: {
             // Pobieramy IDki wcześniejszych komentarzy i podajemy je do backendu,
             // żeby wykluczył je z paginacji
-            except: $depth.children('[id^=depth]').map(function(){
+            except: $row.children('[id^=row]').map(function(){
                 return $(this).attr('data-id');
             }).get(),
             orderby: $element.closest('#filterContent').find('#filterCommentOrderBy').val()
@@ -27,7 +27,7 @@ jQuery(document).on('click', 'a.takeComment', function(e) {
             $div.find('div.loader').remove();
         },
         success: function(response) {
-            $depth.append($.sanitize(response.view));
+            $row.append($.sanitize(response.view));
         }
     });
 });

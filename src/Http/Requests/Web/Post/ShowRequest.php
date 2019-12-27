@@ -24,6 +24,9 @@ class ShowRequest extends FormRequest
     public function rules()
     {
         return [
+            'page' => 'filled|integer',
+            'except' => 'filled|array',
+            'except.*' => 'integer',
             'filter' => 'array|no_js_validation',
             'filter.orderby' => [
                 'bail',

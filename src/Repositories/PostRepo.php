@@ -48,6 +48,7 @@ class PostRepo
                 ['comments.status', 1]
             ])
             ->withAllRels($filter['orderby'])
+            ->filterExcept($filter['except'])
             ->filterCommentsOrderBy($filter['orderby'])
             ->filterPaginate($this->paginate);
     }

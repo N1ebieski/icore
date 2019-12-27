@@ -25,9 +25,9 @@ $(document).ready(function() {
 });
 
 jQuery(document).on('readyAndAjax', function() {
-    $('form#searchForm').keypress(function(e) {
+    $('form#searchForm input[name="search"]').keypress(function(e) {
         if (e.which == 13) {
-            $(this).submit();
+            $('form#searchForm').submit();
             return false;
         }
     });

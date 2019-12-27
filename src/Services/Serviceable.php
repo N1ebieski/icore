@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * [abstract description]
- * @var [type]
  */
 interface Serviceable
 {

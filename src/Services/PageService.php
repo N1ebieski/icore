@@ -16,16 +16,16 @@ use Illuminate\Support\Collection as Collect;
 class PageService implements Serviceable
 {
     /**
-     * [private description]
+     * [protected description]
      * @var Page
      */
-    protected $page;
+    protected Page $page;
 
     /**
-     * [private description]
+     * [protected description]
      * @var int
      */
-    protected $paginate;
+    protected int $paginate;
 
     /**
      * [private description]

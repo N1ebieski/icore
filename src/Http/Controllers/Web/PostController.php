@@ -42,8 +42,8 @@ class PostController
     public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter) : View
     {
         $comments = $comment->setMorph($post)->makeCache()->rememberRootsByFilter(
-            $filter->all(),
-            $request->get('page') ?? 1
+            $filter->all() + ['except' => $request->input('except')],
+            $request->input('page') ?? 1
         );
 
         $postCache = $post->makeCache();

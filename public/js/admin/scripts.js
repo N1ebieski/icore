@@ -1025,7 +1025,7 @@ jQuery(document).on('readyAndAjax', function() {
         autoTrigger: false,
         data: function() {
             return {
-                except: jQuery(document).find('[id^=row]').map(function() {
+                except: $(this).find('[id^=row]').map(function() {
                     return $(this).attr('data-id');
                 }).get()
             };
