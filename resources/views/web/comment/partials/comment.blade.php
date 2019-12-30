@@ -30,17 +30,19 @@ id="row{{ $comment->id }}" data-id="{{ $comment->id }}">
                     <a class="rateComment" href="#" data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => -1]) }}">
                         <i class="fas fa-angle-down"></i>
                     </a>
-                    @canany('create comments', 'suggest comments')
+                    @canany(['create comments', 'suggest comments'])
                     &nbsp;|&nbsp;
                     <a class="createComment" href="#" data-route="{{ route('web.comment.'.$comment->poli.'.create', [$comment->model_id, 'parent_id' => $comment->id]) }}">
                         {{ trans('icore::comments.answer') }}
                     </a>
                     @endcanany
+                    @can('edit comments')
                     @can('update', $comment)
                     &nbsp;|&nbsp;
                     <a class="editComment" href="#" data-route="{{ route('web.comment.edit', [$comment->id]) }}">
                         {{ trans('icore::comments.edit') }}
                     </a>
+                    @endcan
                     @endcan
                     @else
                     <a href="{{ route('login') }}">{{ trans('icore::comments.log_to_answer') }}</a>

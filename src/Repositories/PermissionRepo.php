@@ -36,7 +36,8 @@ class PermissionRepo
                 $query->where('id', $id);
             }])->whereIn('name', [
                 'create comments',
-                'suggest comments'
+                'suggest comments',
+                'edit comments'
             ])->orderBy('name', 'asc')
             ->get();
     }

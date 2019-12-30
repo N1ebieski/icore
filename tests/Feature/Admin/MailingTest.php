@@ -47,7 +47,7 @@ class MailingTest extends TestCase
         $response = $this->get(route('admin.mailing.index', ['page' => 2, 'orderby' => 'created_at|asc']));
 
         $response->assertViewIs('icore::admin.mailing.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$mailing[30]->title, $mailing[30]->shortContent]);
     }
 

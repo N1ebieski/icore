@@ -117,7 +117,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $role = Role::create(['name' => 'user'])
             ->givePermissionTo([
-                'create comments'
+                'create comments',
+                'edit comments'
             ]);
 
         $user = User::create([

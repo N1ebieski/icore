@@ -60,6 +60,10 @@ li.page-item:not(.active) .page-link:not(:hover) {
     border-left-color: $modal-content-border-color !important;
 }
 
+.border-primary {
+    border-color: $primary !important;
+}
+
 .btn-outline-secondary {
     @extend .btn-outline-light;
 }

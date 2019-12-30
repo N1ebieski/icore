@@ -8,12 +8,18 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Services\Serviceable;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 
 /**
  * [CategoryService description]
  */
-class CategoryService implements Serviceable
+class CategoryService implements Creatable, Updatable, StatusUpdatable,
+PositionUpdatable, Deletable, GlobalDeletable
 {
     /**
      * Model

@@ -3,8 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin\Comment\Page;
 
 use N1ebieski\ICore\Models\Page\Page;
-use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\Models\Comment\Page\Comment as PageComment;
+use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
@@ -13,23 +12,13 @@ use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
 use Illuminate\View\View;
 use N1ebieski\ICore\Events\Admin\Comment\Store as CommentStore;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as CommentBaseController;
-use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
-use N1ebieski\ICore\Http\Controllers\Admin\Comment\Page\Polymorphic as PagePolymorphic;
+use N1ebieski\ICore\Http\Controllers\Admin\Comment\Page\Polymorphic;
 
 /**
  * [CommentController description]
  */
-class CommentController extends CommentBaseController implements Polymorphic, PagePolymorphic
+class CommentController extends CommentBaseController implements Polymorphic
 {
-    /**
-     * [__construct description]
-     * @param PageComment        $comment        [description]]
-     */
-    public function __construct(PageComment $comment)
-    {
-        parent::__construct($comment);
-    }
-
     /**
      * Display a listing of Comments.
      *
@@ -40,7 +29,16 @@ class CommentController extends CommentBaseController implements Polymorphic, Pa
      */
     public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : View
     {
-        return parent::index($this->comment, $request, $filter);
+        $comments = $comment->makeRepo()->paginateByFilter($filter->all() + [
+            'except' => $request->input('except')
+        ]);
+
+        return view('icore::admin.comment.index', [
+            'model' => $comment,
+            'comments' => $comments,
+            'filter' => $filter->all(),
+            'paginate' => config('database.paginate')
+        ]);
     }
 
     /**
@@ -64,12 +62,13 @@ class CommentController extends CommentBaseController implements Polymorphic, Pa
     /**
      * [store description]
      * @param  Page         $page    [description]
+     * @param  Comment      $comment [description]
      * @param  StoreRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function store(Page $page, StoreRequest $request) : JsonResponse
+    public function store(Page $page, Comment $comment, StoreRequest $request) : JsonResponse
     {
-        $comment = $this->comment->setMorph($page)->makeService()
+        $comment = $comment->setMorph($page)->makeService()
             ->create($request->only(['content', 'parent_id']));
 
         event(new CommentStore($comment));

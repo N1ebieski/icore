@@ -7,11 +7,12 @@ use N1ebieski\ICore\Http\Requests\Web\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\TakeRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\EditRequest;
 use Illuminate\Http\JsonResponse;
+use N1ebieski\ICore\Http\Controllers\Web\Comment\Polymorphic;
 
 /**
  * [CommentController description]
  */
-class CommentController
+class CommentController implements Polymorphic
 {
     /**
      * Show the form for editing the specified Comment.

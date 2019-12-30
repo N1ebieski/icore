@@ -51,7 +51,7 @@ class CommentTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::admin.comment.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$comment[30]->title, $comment[30]->shortContent]);
     }
 

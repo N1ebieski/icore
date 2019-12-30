@@ -98,7 +98,7 @@ class CategoryTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::admin.category.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$category[30]->title, $category[30]->shortContent]);
     }
 

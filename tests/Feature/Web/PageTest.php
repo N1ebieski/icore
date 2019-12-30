@@ -44,7 +44,7 @@ class PageTest extends TestCase
             'orderby' => 'created_at|asc'
         ]));
 
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSee($page->title);
         $response->assertSee($comment[30]->content);
     }

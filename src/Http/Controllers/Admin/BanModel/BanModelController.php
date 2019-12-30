@@ -6,11 +6,12 @@ use N1ebieski\ICore\Models\BanModel\BanModel;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\DestroyGlobalRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Http\Controllers\Admin\BanModel\Polymorphic;
 
 /**
  * [BanModelController description]
  */
-class BanModelController
+class BanModelController implements Polymorphic
 {
     /**
      * Remove the specified BanModel from storage.

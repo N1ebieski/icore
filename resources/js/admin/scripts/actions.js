@@ -16,5 +16,7 @@ jQuery(document).on('readyAndAjax', function() {
 });
 
 jQuery(window).on('readyAndAjax', function() {
-    $('[contenteditable="true"]').focus();
+    if (navigator.userAgent.indexOf("Firefox") != -1) {
+        $('[spellcheck="true"]:first').focusWithoutScrolling();
+    }
 });

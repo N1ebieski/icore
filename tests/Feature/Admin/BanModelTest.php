@@ -171,7 +171,7 @@ class BanModelTest extends TestCase
         $response = $this->get(route('admin.banmodel.user.index', ['page' => 2, 'orderby' => 'bans_models.created_at|desc']));
 
         $response->assertViewIs('icore::admin.banmodel.user.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$users[30]->name]);
     }
 

@@ -13,7 +13,7 @@
         </div>
     </div>
     @endif
-    <button type="button" class="btn btn-primary storeBanUser">
+    <button type="button" class="btn btn-primary storeBanModel">
         <i class="fas fa-check"></i>
         {{ trans('icore::default.save') }}
     </button>

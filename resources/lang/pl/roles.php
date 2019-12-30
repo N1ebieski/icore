@@ -3,7 +3,7 @@
 return [
     'success' => [
         'destroy' => 'Pomyślnie usunięto rolę.',
-        'update' => 'Rola zostaa zmieniona.',
+        'update' => 'Rola została zmieniona.',
         'create' => 'Rola została dodana'
     ],
     'page' => [

@@ -41,7 +41,7 @@ class RoleTest extends TestCase
         $response = $this->get(route('admin.role.index', ['page' => 2]));
 
         $response->assertViewIs('icore::admin.role.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$role[30]->name]);
     }
 

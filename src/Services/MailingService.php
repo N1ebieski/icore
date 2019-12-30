@@ -4,16 +4,19 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\Models\Newsletter;
-use N1ebieski\ICore\Models\MailingEmail;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Services\Serviceable;
 use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 
 /**
  * [MailingService description]
  */
-class MailingService implements Serviceable
+class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable, GlobalDeletable
 {
     /**
      * [private description]
@@ -35,12 +38,6 @@ class MailingService implements Serviceable
 
     /**
      * [private description]
-     * @var MailingEmail
-     */
-    protected $mailingEmail;
-
-    /**
-     * [private description]
      * @var Collect
      */
     protected $collect;
@@ -54,23 +51,21 @@ class MailingService implements Serviceable
     /**
      * [__construct description]
      * @param Mailing      $mailing    [description]
-     * @param MailingEmail $email      [description]
      * @param User         $user       [description]
      * @param Newsletter   $newsletter [description]
      * @param Collect      $collect
      */
     public function __construct(
         Mailing $mailing,
-        MailingEmail $email,
         User $user,
         Newsletter $newsletter,
         Collect $collect
     )
     {
         $this->mailing = $mailing;
-        $this->email = $email;
         $this->user = $user;
         $this->newsletter = $newsletter;
+
         $this->collect = $collect;
     }
 
@@ -201,7 +196,7 @@ class MailingService implements Serviceable
         $users = $this->user->all(['id', 'email']);
 
         foreach ($users as $user) {
-            $this->models[] = $email = $this->email->make();
+            $this->models[] = $email = $this->mailing->emails()->make();
             $email->morph()->associate($user);
             $email->email = $user->email;
         }
@@ -219,7 +214,7 @@ class MailingService implements Serviceable
         $subscribers = $this->newsletter->whereStatus(1)->get(['id', 'email']);
 
         foreach ($subscribers as $subscriber) {
-            $this->models[] = $email = $this->email->make();
+            $this->models[] = $email = $this->mailing->emails()->make();
             $email->morph()->associate($subscriber);
             $email->email = $subscriber->email;
         }
@@ -236,7 +231,7 @@ class MailingService implements Serviceable
     public function makeEmailRecipients(array $emails_json) : ?array
     {
         foreach ($emails_json as $email_json) {
-            $this->models[] = $email = $this->email->make();
+            $this->models[] = $email = $this->mailing->emails()->make();
             $email->email = $email_json->email;
         }
 

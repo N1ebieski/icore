@@ -26,11 +26,11 @@ Route::group(['middleware' => 'auth'], function() {
         ->where('page', '[0-9]+');
 
     Route::get('comments/{comment}/edit', 'Comment\CommentController@edit')
-        ->middleware(['icore.ban.user', 'icore.ban.ip', 'can:update,comment'])
+        ->middleware(['icore.ban.user', 'icore.ban.ip', 'permission:edit comments', 'can:update,comment'])
         ->name('comment.edit')
         ->where('comment', '[0-9]+');
     Route::put('comments/{comment}', 'Comment\CommentController@update')
-        ->middleware(['icore.ban.user', 'icore.ban.ip', 'can:update,comment'])
+        ->middleware(['icore.ban.user', 'icore.ban.ip', 'permission:edit comments', 'can:update,comment'])
         ->name('comment.update')
         ->where('comment', '[0-9]+');
 });

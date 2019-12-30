@@ -6,12 +6,15 @@ use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Serviceable;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
 
 /**
  * [CommentService description]
  */
-class CommentService implements Serviceable
+class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
 {
     /**
      * Comment model
@@ -164,11 +167,4 @@ class CommentService implements Serviceable
 
         return $delete;
     }
-
-    /**
-     * [deleteGlobal description]
-     * @param  array $ids [description]
-     * @return int        [description]
-     */
-    public function deleteGlobal(array $ids) : int {}
 }

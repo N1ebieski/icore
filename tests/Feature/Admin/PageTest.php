@@ -41,7 +41,7 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.index', ['page' => 2, 'orderby' => 'created_at|asc']));
 
         $response->assertViewIs('icore::admin.page.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$page[30]->title, $page[30]->shortContent]);
     }
 

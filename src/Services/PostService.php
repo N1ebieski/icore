@@ -4,24 +4,26 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\Services\Serviceable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\FullUpdatable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 
-class PostService implements Serviceable
+/**
+ * [PostService description]
+ */
+class PostService implements Creatable, Updatable, FullUpdatable, StatusUpdatable,
+Deletable, GlobalDeletable
 {
     /**
      * [private description]
      * @var Post
      */
     protected $post;
-
-    /**
-     * [private description]
-     * @var Comment
-     */
-    protected $comment;
 
     /**
      * [protected description]
@@ -32,12 +34,10 @@ class PostService implements Serviceable
     /**
      * [__construct description]
      * @param Post    $post    [description]
-     * @param Comment $comment [description]
      */
-    public function __construct(Post $post, Comment $comment)
+    public function __construct(Post $post)
     {
         $this->post = $post;
-        $this->comment = $comment;
     }
 
     /**
@@ -149,7 +149,7 @@ class PostService implements Serviceable
             ->whereIn('model_id', $ids)
             ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
 
-        $this->comment->whereIn('model_id', $ids)
+        $this->post->comments()->make()->whereIn('model_id', $ids)
             ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
 
         return $this->post->whereIn('id', $ids)->delete();

@@ -5,13 +5,16 @@ namespace N1ebieski\ICore\Services;
 use Illuminate\Http\UploadedFile;
 use N1ebieski\ICore\Models\Link;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Services\Serviceable;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
 
 /**
  * [LinkService description]
  */
-class LinkService implements Serviceable
+class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
 {
     /**
      * Model
@@ -123,15 +126,6 @@ class LinkService implements Serviceable
     }
 
     /**
-     * [updateStatus description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
-     */
-    public function updateStatus(array $attributes) : bool
-    {
-    }
-
-    /**
      * [delete description]
      * @return bool [description]
      */
@@ -142,15 +136,5 @@ class LinkService implements Serviceable
         $this->link->categories()->detach();
 
         return $this->link->delete();
-    }
-
-    /**
-     * [deleteGlobal description]
-     * @param  array $ids [description]
-     * @return int        [description]
-     */
-    public function deleteGlobal(array $ids) : int
-    {
-
     }
 }

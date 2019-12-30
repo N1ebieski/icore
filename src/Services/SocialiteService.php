@@ -5,18 +5,13 @@ namespace N1ebieski\ICore\Services;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Socialite as Social;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
 
 /**
  * [SocialiteService description]
  */
-class SocialiteService
+class SocialiteService implements Creatable
 {
-    /**
-     * [private description]
-     * @var User
-     */
-    protected $user;
-
     /**
      * [private description]
      * @var Social
@@ -43,12 +38,10 @@ class SocialiteService
 
     /**
      * [__construct description]
-     * @param User   $user      [description]
      * @param Social $socialite [description]
      */
-    public function __construct(User $user, Social $socialite)
+    public function __construct(Social $socialite)
     {
-        $this->user = $user;
         $this->socialite = $socialite;
     }
 
@@ -112,7 +105,8 @@ class SocialiteService
         }
 
         // Sprawdzenie czy uzytkownik jest zarejestrowany jako User
-        $this->socialiteUser = $this->user->makeRepo()->firstByEmail($this->providerUser->getEmail());
+        $this->socialiteUser = $this->socialite->user()->make()
+            ->makeRepo()->firstByEmail($this->providerUser->getEmail());
 
         // Jesli tak, odrzucamy request i prosimy usera by powiazal konto z poziomu edycji profilu
         if ($this->socialiteUser) {
@@ -122,7 +116,7 @@ class SocialiteService
         }
 
         // Jesli nie, tworzymy go
-        $this->socialiteUser = $this->user->create([
+        $this->socialiteUser = $this->socialite->user()->create([
             'name' => str_replace(' ', '_', $this->providerUser->getName()),
             'email' => $this->providerUser->getEmail(),
         ]);

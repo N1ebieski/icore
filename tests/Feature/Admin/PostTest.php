@@ -47,7 +47,7 @@ class PostTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::admin.post.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$post[30]->title, $post[30]->shortContent]);
     }
 

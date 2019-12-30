@@ -43,7 +43,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('web.category.post.show', [$category->slug, 'page' => 2]));
 
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$category->name, $post[10]->title]);
     }
 }

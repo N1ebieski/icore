@@ -2,34 +2,23 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category\Post;
 
-use Illuminate\Validation\Rule;
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Models\Category\Post\Category as PostCategory;
-use N1ebieski\ICore\Http\Requests\Admin\Category\IndexRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
+use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Http\Requests\Admin\Category\Post\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
 use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
-use N1ebieski\ICore\Http\Controllers\Admin\Category\CategoryController as CategoryBaseController;
+use N1ebieski\ICore\Http\Controllers\Admin\Category\Post\Polymorphic;
+use N1ebieski\ICore\Http\Controllers\Admin\Category\CategoryController as BaseCategoryController;
 use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
 /**
  * [CategoryController description]
  */
-class CategoryController extends CategoryBaseController implements Polymorphic
+class CategoryController extends BaseCategoryController implements Polymorphic
 {
-    /**
-     * [__construct description]
-     * @param PostCategory        $category        [description]
-     */
-    public function __construct(PostCategory $category)
-    {
-        parent::__construct($category);
-    }
-
     /**
      * Display a listing of the Category.
      *
@@ -40,13 +29,17 @@ class CategoryController extends CategoryBaseController implements Polymorphic
      */
     public function index(Category $category, IndexRequest $request, IndexFilter $filter) : View
     {
-        $request->validate([
-            'filter._parent' => ['nullable', 'integer', Rule::exists('categories', 'id')->where(function($query) {
-                $query->where('model_type', $this->category->model_type);
-            })],
-        ]);
+        $categoryService = $category->makeService();
 
-        return parent::index($this->category, $request, $filter);
+        return view('icore::admin.category.index', [
+            'model' => $category,
+            'categories' => $categoryService->paginateByFilter($filter->all() + [
+                'except' => $request->input('except')
+            ]),
+            'parents' => $categoryService->getAsFlatTree(),
+            'filter' => $filter->all(),
+            'paginate' => config('database.paginate')
+        ]);
     }
 
     /**
@@ -57,7 +50,13 @@ class CategoryController extends CategoryBaseController implements Polymorphic
      */
     public function create(Category $category) : JsonResponse
     {
-        return parent::create($this->category);
+        return response()->json([
+            'success' => '',
+            'view' => view('icore::admin.category.create', [
+                'model' => $category,
+                'categories' => $category->makeService()->getAsFlatTree()
+            ])->render()
+        ]);
     }
 
     /**
@@ -69,13 +68,11 @@ class CategoryController extends CategoryBaseController implements Polymorphic
      */
     public function store(Category $category, StoreRequest $request) : JsonResponse
     {
-        $request->validate([
-            'parent_id' => ['nullable', Rule::exists('categories', 'id')->where(function($query) {
-                $query->where('model_type', $this->category->model_type);
-            })],
-        ]);
+        $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
 
-        return parent::store($this->category, $request);
+        $request->session()->flash('success', trans('icore::categories.success.store'));
+
+        return response()->json(['success' => '' ]);
     }
 
     /**
@@ -87,13 +84,11 @@ class CategoryController extends CategoryBaseController implements Polymorphic
      */
     public function storeGlobal(Category $category, StoreGlobalRequest $request) : JsonResponse
     {
-        $request->validate([
-            'parent_id' => ['nullable', Rule::exists('categories', 'id')->where(function($query) {
-                $query->where('model_type', $this->category->model_type);
-            })],
-        ]);
+        $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
 
-        return parent::storeGlobal($this->category, $request);
+        $request->session()->flash('success', trans('icore::categories.success.store_global'));
+
+        return response()->json(['success' => '' ]);
     }
 
     /**
@@ -106,6 +101,8 @@ class CategoryController extends CategoryBaseController implements Polymorphic
      */
     public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
     {
-        return parent::search($this->category, $request, $response);
+        $categories = $category->makeRepo()->getBySearch($request->get('name'));
+
+        return $response->setCategories($categories)->makeResponse();
     }
 }

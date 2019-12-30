@@ -5,7 +5,6 @@ namespace N1ebieski\ICore\Http\Controllers\Admin;
 use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Category\Post\Category;
-use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Http\Requests\Admin\Post\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
@@ -182,11 +181,10 @@ class PostController
      * Remove the collection of Posts from storage.
      *
      * @param  Post                 $post    [description]
-     * @param  Comment              $comment [description]
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(Post $post, Comment $comment, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Post $post, DestroyGlobalRequest $request) : RedirectResponse
     {
         $deleted = $post->makeService()->deleteGlobal($request->get('select'));
 

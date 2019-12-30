@@ -4,12 +4,12 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Report\Report;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Services\Serviceable;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
 
 /**
  * [ReportService description]
  */
-class ReportService implements Serviceable
+class ReportService implements Creatable
 {
     /**
      * [private description]
@@ -43,12 +43,4 @@ class ReportService implements Serviceable
 
         return $this->report;
     }
-
-    public function update(array $attributes) : bool {}
-
-    public function updateStatus(array $attributes) : bool {}
-
-    public function delete() : bool {}
-
-    public function deleteGlobal(array $ids) : int {}
 }

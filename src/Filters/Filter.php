@@ -2,53 +2,53 @@
 
 namespace N1ebieski\ICore\Filters;
 
-use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as Collect;
 
+/**
+ * [abstract description]
+ */
 abstract class Filter
 {
-    protected $collect;
+    /**
+     * [protected description]
+     * @var Collect
+     */
+    protected Collect $collect;
 
-    public $parameters;
+    /**
+     * [public description]
+     * @var array
+     */
+    public array $parameters;
 
+    /**
+     * [__construct description]
+     * @param Request $request [description]
+     * @param Collect $collect [description]
+     */
     public function __construct(Request $request, Collect $collect)
     {
         $this->collect = $collect;
+        
         $this->setFilters((array)$request->input('filter'));
     }
 
-    public function setRole(Role $role)
-    {
-        $this->parameters['role'] = $role;
-
-        return $role;
-    }
-
-    public function setAuthor(User $user)
-    {
-        $this->parameters['author'] = $user;
-
-        return $this;
-    }
-
-    public function setCategory(Category $category)
-    {
-        $this->parameters['category'] = $category;
-
-        return $this;
-    }
-
+    /**
+     * [setFilters description]
+     * @param  array $attributes [description]
+     * @return self              [description]
+     */
     public function setFilters(array $attributes) : self
     {
-        foreach ($this->filters as $filter) {
-            $method_name = 'filter'.ucfirst($filter);
-            if (method_exists($this, $method_name)) {
-                $this->$method_name(
-                    array_key_exists($filter, $attributes) ?
-                    (strlen($attributes[$filter]) ? $attributes[$filter] : null)
+        foreach (class_uses(static::class) as $filter) {
+            $filterName = $this->makeFilterName($filter);
+            $methodName = $this->makeMethodName($filterName);
+
+            if (method_exists($this, $methodName)) {
+                $this->$methodName(
+                    array_key_exists($filterName, $attributes) ?
+                    (strlen($attributes[$filterName]) ? $attributes[$filterName] : null)
                     : null
                 );
             }
@@ -57,112 +57,40 @@ abstract class Filter
         return $this;
     }
 
-    public function filterSearch(string $value = null) : void
+    /**
+     * [makeMethodName description]
+     * @param  string $value [description]
+     * @return string        [description]
+     */
+    protected function makeMethodName(string $value) : string
     {
-        $this->parameters['search'] = $value;
+        return 'filter' . ucfirst($value);
     }
 
-    public function filterReport(int $value = null) : void
+    /**
+     * [makeFilterName description]
+     * @param  string $value [description]
+     * @return string        [description]
+     */
+    protected function makeFilterName(string $value) : string
     {
-        $this->parameters['report'] = $value;
+        return strtolower(str_replace('Has', '', basename($value)));
     }
 
-    public function filterPaginate(int $value = null) : void
-    {
-        $this->parameters['paginate'] = $value;
-    }
-
-    public function filterOrderBy(string $value = null) : void
-    {
-        $this->parameters['orderby'] = $value;
-    }
-
-    public function filterCensored(int $value = null) : void
-    {
-        $this->parameters['censored'] = $value;
-    }
-
-    public function filterStatus(int $value = null) : void
-    {
-        $this->parameters['status'] = $value;
-    }
-
-    public function filterRole(int $id = null) : void
-    {
-        $this->parameters['role'] = null;
-
-        if ($id !== null) {
-            if ($role = $this->findRole($id))
-            {
-                $this->setRole($role);
-            }
-        }
-    }
-
-    public function findRole(int $id = null) : Role
-    {
-        return Role::find($id, ['id', 'name']);
-    }
-
-    public function filterParent(int $id = null)
-    {
-        $this->parameters['parent'] = null;
-
-        if ($id === 0) {
-            return $this->parameters['parent'] = 0;
-        }
-
-        if ($id !== null) {
-            if ($parent = $this->findParent($id))
-            {
-                return $this->setParent($parent);
-            }
-        }
-    }
-
-    public function filterCategory(int $id = null)
-    {
-        $this->parameters['category'] = null;
-
-        if ($id === 0) {
-            return $this->parameters['category'] = 0;
-        }
-
-        if ($id !== null) {
-            if ($category = $this->findCategory($id))
-            {
-                return $this->setCategory($category);
-            }
-        }
-    }
-
-    public function findCategory(int $id = null) : Category
-    {
-        return Category::find($id, ['id', 'name']);
-    }
-
-    public function filterAuthor(int $id = null) : void
-    {
-        $this->parameters['author'] = null;
-
-        if ($id !== null) {
-            if ($author = $this->findAuthor($id))
-            {
-                $this->setAuthor($author);
-            }
-        }
-    }
-
-    protected function findAuthor(int $id) : User
-    {
-        return User::find($id, ['id', 'name']);
-    }
-
+    /**
+     * [all description]
+     * @return array [description]
+     */
     public function all() : array
     {
         return (array)$this->parameters;
     }
 
+    /**
+     * [get description]
+     * @param  string $parameter [description]
+     * @return mixed             [description]
+     */
     public function get(string $parameter)
     {
         return $this->parameters[$parameter] ?? null;

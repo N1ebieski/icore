@@ -6,12 +6,9 @@ use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\DestroyGlobalRequest;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
 
 /**
@@ -19,43 +16,6 @@ use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
  */
 class CommentController implements Polymorphic
 {
-    /**
-     * Model. Must be protected!
-     * @var Comment
-     */
-    protected $comment;
-
-    /**
-     * [__construct description]
-     * @param Comment        $comment        [description]
-     */
-    public function __construct(Comment $comment)
-    {
-        $this->comment = $comment;
-    }
-
-    /**
-     * Display a listing of Comments.
-     *
-     * @param  Comment       $comment       [description]
-     * @param  IndexRequest  $request       [description]
-     * @param  IndexFilter   $filter        [description]
-     * @return View                         [description]
-     */
-    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : View
-    {
-        $comments = $comment->makeRepo()->paginateByFilter($filter->all() + [
-            'except' => $request->input('except')
-        ]);
-
-        return view('icore::admin.comment.index', [
-            'model' => $comment,
-            'comments' => $comments,
-            'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
-        ]);
-    }
-
     /**
      * Display the specified Comment.
      *

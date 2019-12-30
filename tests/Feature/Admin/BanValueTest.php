@@ -154,7 +154,7 @@ class BanValueTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::admin.banvalue.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$banvalue[30]->ip]);
     }
 

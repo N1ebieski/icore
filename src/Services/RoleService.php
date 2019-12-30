@@ -3,15 +3,15 @@
 namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Role;
-use N1ebieski\ICore\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use N1ebieski\ICore\Services\Serviceable;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
 
 /**
  * [RoleService description]
  */
-class RoleService implements Serviceable
+class RoleService implements Creatable, Updatable
 {
     /**
      * Model
@@ -20,20 +20,12 @@ class RoleService implements Serviceable
     protected $role;
 
     /**
-     * [private description]
-     * @var Permission
-     */
-    protected $permission;
-
-    /**
      * [__construct description]
      * @param Role $role     [description]
-     * @param Permission $permission    [description]
      */
-    public function __construct(Role $role, Permission $permission)
+    public function __construct(Role $role)
     {
         $this->role = $role;
-        $this->permission = $permission;
     }
 
     /**
@@ -43,10 +35,10 @@ class RoleService implements Serviceable
     public function getPermissionsByRole() : Collection
     {
         if ($this->role->name === 'user') {
-            return $this->permission->makeRepo()->getUserWithRole($this->role->id);
+            return $this->role->permissions()->make()->makeRepo()->getUserWithRole($this->role->id);
         }
 
-        return $this->permission->makeRepo()->getWithRole($this->role->id);
+        return $this->role->permissions()->make()->makeRepo()->getWithRole($this->role->id);
     }
 
     /**
@@ -73,34 +65,5 @@ class RoleService implements Serviceable
         $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
 
         return $this->role->update(['name' => $attributes['name']]);
-    }
-
-    /**
-     * [updateStatus description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
-     */
-    public function updateStatus(array $attributes) : bool
-    {
-
-    }
-
-    /**
-     * [delete description]
-     * @return bool [description]
-     */
-    public function delete() : bool
-    {
-
-    }
-
-    /**
-     * [deleteGlobal description]
-     * @param  array $ids [description]
-     * @return int        [description]
-     */
-    public function deleteGlobal(array $ids) : int
-    {
-
     }
 }

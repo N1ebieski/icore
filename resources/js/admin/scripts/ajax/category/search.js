@@ -57,7 +57,7 @@ jQuery(document).on('change', '.categoryOption', function() {
         $input.remove();
     }
 
-    if ($.isInteger($searchCategory.max)) {
+    if ($.isNumeric($searchCategory.max)) {
         if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
             $searchCategory.fadeOut();
         }

@@ -5,12 +5,14 @@ namespace N1ebieski\ICore\Services;
 use N1ebieski\ICore\Models\Rating\Rating;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Guard as Auth;
-use N1ebieski\ICore\Services\Serviceable;
+use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
 
 /**
  * [RatingService description]
  */
-class RatingService implements Serviceable
+class RatingService implements Creatable, Updatable, Deletable
 {
     /**
      * [private description]
@@ -104,8 +106,6 @@ class RatingService implements Serviceable
         return $this->rating->delete();
     }
 
-    public function deleteGlobal(array $ids) : int {}
-
     /**
      * Edytuje istniejącą ocenę
      *
@@ -118,6 +118,4 @@ class RatingService implements Serviceable
             'rating' => $attributes['rating']
         ]);
     }
-
-    public function updateStatus(array $attributes) : bool {}
 }

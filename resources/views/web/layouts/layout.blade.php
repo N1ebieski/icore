@@ -42,7 +42,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <script src="{{ mix('js/vendor/icore/web/scripts.js') }}" defer></script>
+    <script src="{{ mix('js/vendor/icore/web/scripts.js') }}" async defer></script>
     @stack('script')
 
 </body>

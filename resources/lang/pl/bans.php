@@ -29,7 +29,7 @@ return [
     ],
     'model' => [
         'success' => [
-            'store' => 'Pomyślnie wpisano użytkownika na czarną listę.'
+            'store' => 'Pomyślnie wpisano na czarną listę.'
         ],
         'user' => [
             'user' => 'Użytkownik',

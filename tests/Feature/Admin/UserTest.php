@@ -44,7 +44,7 @@ class UserTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::admin.user.index');
-        $response->assertSee('role="navigation"');
+        $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$us[30]->name, $us[30]->email]);
     }
 

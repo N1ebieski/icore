@@ -116,6 +116,6 @@ trait Filterable
      */
     public function scopeFilterExcept(Builder $query, array $except = null)
     {
-        if ($except !== null) return $query->whereNotIn('id', $except);
+        if ($except !== null) return $query->whereNotIn("{$this->getTable()}.id", $except);
     }
 }
