@@ -62,7 +62,7 @@ class Report extends Model
      * [makeService description]
      * @return ReportService [description]
      */
-    public function makeService() : ReportService
+    public function makeService()
     {
         return app()->make(ReportService::class, ['report' => $this]);
     }

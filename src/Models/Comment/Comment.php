@@ -13,6 +13,7 @@ use Franzose\ClosureTable\Extensions\QueryBuilder;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Cache\CommentCache;
 use N1ebieski\ICore\Services\CommentService;
+use Illuminate\Support\Facades\DB;
 
 class Comment extends Entity implements CommentInterface
 {
@@ -263,12 +264,18 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeWithSumRating(Builder $query) : Builder
     {
-        return $query->selectRaw('comments.*, COALESCE(SUM(ratings.rating), 0) AS sum_rating')
-            ->leftJoin('ratings', function($q) {
-                 $q->on('ratings.model_id', '=', 'comments.id');
-                 $q->where('ratings.model_type', '=', 'N1ebieski\ICore\Models\Comment\Comment');
-            })
-            ->groupBy('comments.id');
+        return $query->withCount([
+            'ratings AS sum_rating' => function($query) {
+                $query->select(DB::raw('COALESCE(SUM(`ratings`.`rating`), 0) as `sum_rating`'));
+            }
+        ]);
+
+        // return $query->selectRaw('comments.*, COALESCE(SUM(ratings.rating), 0) AS sum_rating')
+        //     ->leftJoin('ratings', function($q) {
+        //          $q->on('ratings.model_id', '=', 'comments.id');
+        //          $q->where('ratings.model_type', '=', 'N1ebieski\ICore\Models\Comment\Comment');
+        //     })
+        //     ->groupBy('comments.id');
     }
 
     /**
@@ -408,7 +415,7 @@ class Comment extends Entity implements CommentInterface
      * [makeRepo description]
      * @return CommentRepo [description]
      */
-    public function makeRepo() : CommentRepo
+    public function makeRepo()
     {
         return app()->make(CommentRepo::class, ['comment' => $this]);
     }
@@ -417,7 +424,7 @@ class Comment extends Entity implements CommentInterface
      * [makeCache description]
      * @return CommentCache [description]
      */
-    public function makeCache() : CommentCache
+    public function makeCache()
     {
         return app()->make(CommentCache::class, ['comment' => $this]);
     }
@@ -426,7 +433,7 @@ class Comment extends Entity implements CommentInterface
      * [makeService description]
      * @return CommentService [description]
      */
-    public function makeService() : CommentService
+    public function makeService()
     {
         return app()->make(CommentService::class, ['comment' => $this]);
     }

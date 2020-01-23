@@ -44,7 +44,7 @@
         e.preventDefault();
 
         let $form = $('#filter');
-        $form.href = $form.attr('data-route')+'?'+$form.find('[name!='+$(this).attr('data-name')+']').serialize();
+        $form.href = $form.attr('data-route')+'?'+$form.find('[name!='+$.escapeSelector($(this).attr('data-name'))+']').serialize();
 
         ajaxFilter($form, $form.href);
     });

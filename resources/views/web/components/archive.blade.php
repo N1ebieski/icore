@@ -1,5 +1,5 @@
-<h3 class="h5">{{ trans('icore::archives.archive') }}</h3>
 @if ($archives->isNotEmpty())
+<h3 class="h5">{{ trans('icore::archives.archive') }}</h3>
 <ul class="list-group list-group-flush mb-3">
     @foreach ($archives as $archive)
     <li class="list-group-item d-flex justify-content-between align-items-center">

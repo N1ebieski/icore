@@ -28,7 +28,6 @@ return [
     'asc' => 'rosnąco',
     'more' => 'Więcej opcji',
     'less' => 'Mniej opcji',
-    'next_items' => 'Wczytaj następne :paginate wpisów',
     'filter_title' => 'Filtruj wyniki',
     'default' => 'domyślnie',
     'paginate' => 'rekordów na stronę',

@@ -100,13 +100,15 @@ class Category extends Entity implements CategoryInterface
         return $this->belongsToMany('N1ebieski\ICore\Models\Category\Category', 'categories_closure', 'ancestor', 'descendant');
     }
 
+    // Relations
+
     /**
      * [childrens description]
      * @return [type] [description]
      */
     public function childrens()
     {
-        return $this->hasMany('N1ebieski\ICore\Models\Category\Category', 'parent_id');
+        return $this->hasMany(static::class, 'parent_id');
     }
 
     /**
@@ -116,15 +118,6 @@ class Category extends Entity implements CategoryInterface
     public function childrensRecursiveWithAllRels()
     {
         return $this->childrens()->withRecursiveAllRels();
-    }
-
-    /**
-     * [posts description]
-     * @return [type] [description]
-     */
-    public function posts()
-    {
-        return $this->morphedByMany('N1ebieski\ICore\Models\Post', 'model', 'categories_models', 'category_id');
     }
 
     // Overrides
@@ -207,7 +200,7 @@ class Category extends Entity implements CategoryInterface
         return $query->with([
             'childrensRecursiveWithAllRels' => function($query) {
                 $query->withCount([
-                    'posts' => function($query) {
+                    'morphs' => function($query) {
                         $query->active();
                     }
                 ])
@@ -280,7 +273,7 @@ class Category extends Entity implements CategoryInterface
      * [makeRepo description]
      * @return CategoryRepo [description]
      */
-    public function makeRepo() : CategoryRepo
+    public function makeRepo()
     {
         return app()->make(CategoryRepo::class, ['category' => $this]);
     }
@@ -289,7 +282,7 @@ class Category extends Entity implements CategoryInterface
      * [makeCache description]
      * @return CategoryCache [description]
      */
-    public function makeCache() : CategoryCache
+    public function makeCache()
     {
         return app()->make(CategoryCache::class, ['category' => $this]);
     }
@@ -298,7 +291,7 @@ class Category extends Entity implements CategoryInterface
      * [makeService description]
      * @return CategoryService [description]
      */
-    public function makeService() : CategoryService
+    public function makeService()
     {
         return app()->make(CategoryService::class, ['category' => $this]);
     }

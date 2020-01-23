@@ -142,7 +142,7 @@ class Link extends Model
      * [makeRepo description]
      * @return LinkRepo [description]
      */
-    public function makeRepo() : LinkRepo
+    public function makeRepo()
     {
         return app()->make(LinkRepo::class, ['link' => $this]);
     }
@@ -151,7 +151,7 @@ class Link extends Model
      * [makeCache description]
      * @return LinkCache [description]
      */
-    public function makeCache() : LinkCache
+    public function makeCache()
     {
         return app()->make(LinkCache::class, ['link' => $this]);
     }
@@ -160,7 +160,7 @@ class Link extends Model
      * [makeService description]
      * @return LinkService [description]
      */
-    public function makeService() : LinkService
+    public function makeService()
     {
         return app()->make(LinkService::class, ['link' => $this]);
     }

@@ -29,5 +29,8 @@ return [
     'next' => 'Dalej',
     'position' => 'Pozycja',
     'choose_file' => 'Wybierz plik...',
-    'delete_img' => 'Usunąć obrazek?'
+    'delete_img' => 'Usunąć obrazek?',
+    'created_at' => 'Data dodania',
+    'updated_at' => 'Data aktualizacji',
+    'created_at_diff' => 'Dodano'    
 ];

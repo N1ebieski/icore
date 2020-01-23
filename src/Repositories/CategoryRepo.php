@@ -135,7 +135,7 @@ class CategoryRepo
      */
     public function paginatePosts() : LengthAwarePaginator
     {
-        return $this->category->posts()
+        return $this->category->morphs()
             ->active()
             ->with('user:id,name')
             ->orderBy('published_at', 'desc')
@@ -150,7 +150,7 @@ class CategoryRepo
     {
         return $this->category->withRecursiveAllRels()
             ->withCount([
-                'posts' => function($query) {
+                'morphs' => function($query) {
                     $query->active();
                 }
             ])

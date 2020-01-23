@@ -68,7 +68,7 @@ class CategoryCache
     public function rememberPosts(int $page) : LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "category.getPosts.{$this->category->id}.{$page}",
+            "category.{$this->category->id}.paginatePosts.{$page}",
             now()->addMinutes($this->minutes),
             function () {
                 return $this->category->makeRepo()->paginatePosts();
@@ -83,7 +83,7 @@ class CategoryCache
     public function rememberWithRecursiveChildrens() : Collection
     {
         return $this->cache->tags(['categories'])->remember(
-            'category.getWithRecursiveChildrens',
+            "category.{$this->category->poli}.getWithRecursiveChildrens",
             now()->addMinutes($this->minutes),
             function() {
                 return $this->category->makeRepo()->getWithRecursiveChildrens();

@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use N1ebieski\ICore\Http\Requests\Web\Search\AutoCompleteRequest;
 use N1ebieski\ICore\Http\Requests\Web\Search\IndexRequest;
-use N1ebieski\ICore\Models\Tag;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 

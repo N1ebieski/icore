@@ -9,7 +9,7 @@ data-id="{{ $post->id }}">
                 <ul class="list-unstyled mb-0 pb-0">
                     <li><a href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}" target="_blank">{{ $post->title }}</a></li>
                     <li>{{ $post->shortContent }}...</li>
-                    <li>{{ $post->tagList }}</li>
+                    <li><small>{{ $post->tagList }}</small></li>
                     <li><small>{{ trans('icore::posts.published_at') }}: {{ $post->published_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $post->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $post->updated_at_diff }}</small></li>

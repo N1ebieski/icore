@@ -16,7 +16,7 @@ class Permission extends BasePermission
      * [makeRepo description]
      * @return PermissionRepo [description]
      */
-    public function makeRepo() : PermissionRepo
+    public function makeRepo()
     {
         return app()->make(PermissionRepo::class, ['permission' => $this]);
     }

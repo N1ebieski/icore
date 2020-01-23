@@ -1,3 +1,4 @@
+@if ($pages->isNotEmpty())
 @if ($pattern)
     @foreach ($pattern as $chunk)
     <div class="col-md-3 col-sm-6">
@@ -14,4 +15,5 @@
         </div>
     </div>
     @endforeach
+@endif
 @endif

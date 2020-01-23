@@ -7,6 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Services\TagService;
 
 /**
  * [PostRepo description]
@@ -218,4 +219,22 @@ class PostRepo
             ->whereStatus(2)
             ->update(['status' => 1]);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $component
+     * @return array
+     */
+    public function getPopularTagsByComponent(array $component) : array
+    {
+        $tags = app(TagService::class)->getPopularTags(
+            $component['limit'], 
+            $this->post, 
+            1,
+            $component['cats']
+        );
+
+        return $tags->shuffle()->all();
+    }    
 }

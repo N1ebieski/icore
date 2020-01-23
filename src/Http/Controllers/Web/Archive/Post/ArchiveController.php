@@ -24,7 +24,7 @@ class ArchiveController implements Polymorphic
      */
     public function show(int $month, int $year, Post $post, IndexRequest $request) : View
     {
-        return view('icore::web.archive.show', [
+        return view('icore::web.archive.post.show', [
             'posts' => $post->makeCache()->rememeberArchiveByDate($month, $year, $request->get('page') ?? 1),
             'month' => $month,
             'month_localized' => Carbon::createFromFormat('m', $month)->formatLocalized('%B'),

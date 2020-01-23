@@ -253,7 +253,7 @@ class Page extends Entity implements PageInterface
      */
     public function getShortContentAttribute() : string
     {
-        return substr($this->content, 0, 300);
+        return substr($this->content, 0, 500);
     }
 
     /**
@@ -419,7 +419,7 @@ class Page extends Entity implements PageInterface
      * [makeRepo description]
      * @return PageRepo [description]
      */
-    public function makeRepo() : PageRepo
+    public function makeRepo()
     {
         return app()->make(PageRepo::class, ['page' => $this]);
     }
@@ -428,7 +428,7 @@ class Page extends Entity implements PageInterface
      * [makeCache description]
      * @return PageCache [description]
      */
-    public function makeCache() : PageCache
+    public function makeCache()
     {
         return app()->make(PageCache::class, ['page' => $this]);
     }
@@ -437,7 +437,7 @@ class Page extends Entity implements PageInterface
      * [makeService description]
      * @return PageService [description]
      */
-    public function makeService() : PageService
+    public function makeService()
     {
         return app()->make(PageService::class, ['page' => $this]);
     }

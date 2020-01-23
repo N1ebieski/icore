@@ -56,6 +56,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-lg-8 offset-lg-4">
+                                <input type="hidden" name="redirect" value="{{ url()->previous() ?? null }}">
                                 <button type="submit" class="btn btn-primary">
                                     {{ trans('icore::auth.login') }}
                                 </button>

@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Category\Post;
 
 use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
-use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\View\View;
 
 /**

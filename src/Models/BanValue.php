@@ -83,7 +83,7 @@ class BanValue extends Model
      * [makeRepo description]
      * @return BanValueRepo [description]
      */
-    public function makeRepo() : BanValueRepo
+    public function makeRepo()
     {
         return app()->make(BanValueRepo::class, ['banvalue' => $this]);
     }
@@ -92,7 +92,7 @@ class BanValue extends Model
      * [makeCache description]
      * @return BanValueCache [description]
      */
-    public function makeCache() : BanValueCache
+    public function makeCache()
     {
         return app()->make(BanValueCache::class, ['banvalue' => $this]);
     }

@@ -95,21 +95,6 @@ class Post extends Model
     // Overrides
 
     /**
-    * Override metody z paczki Taggable bo ma hardcodowane nazwy tabel w SQL
-     *
-     * @param int|null $limit
-     * @param int $minCount
-     *
-     * @return array
-     */
-    public function popularTags(int $limit = null, int $minCount = 1): array
-    {
-        $tags = app(TagService::class)->getPopularTags($limit, static::class, $minCount);
-
-        return $tags->shuffle()->all();
-    }
-
-    /**
      * Override relacji tags, bo ma hardcodowane nazwy pól
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
@@ -230,7 +215,7 @@ class Post extends Model
      */
     public function getShortContentAttribute() : string
     {
-        return substr($this->content, 0, 300);
+        return mb_substr($this->content, 0, 500);
     }
 
     /**
@@ -333,7 +318,7 @@ class Post extends Model
      * [makeRepo description]
      * @return PostRepo [description]
      */
-    public function makeRepo() : PostRepo
+    public function makeRepo()
     {
         return app()->make(PostRepo::class, ['post' => $this]);
     }
@@ -342,7 +327,7 @@ class Post extends Model
      * [makeCache description]
      * @return PostCache [description]
      */
-    public function makeCache() : PostCache
+    public function makeCache()
     {
         return app()->make(PostCache::class, ['post' => $this]);
     }
@@ -351,7 +336,7 @@ class Post extends Model
      * [makeService description]
      * @return PostService [description]
      */
-    public function makeService() : PostService
+    public function makeService()
     {
         return app()->make(PostService::class, ['post' => $this]);
     }

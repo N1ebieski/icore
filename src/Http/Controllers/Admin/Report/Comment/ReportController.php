@@ -4,12 +4,12 @@ namespace N1ebieski\ICore\Http\Controllers\Admin\Report\Comment;
 
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Http\JsonResponse;
-use N1ebieski\ICore\Http\Controllers\Admin\Report\Comment\Polymorphic as CommentPolymorphic;
+use N1ebieski\ICore\Http\Controllers\Admin\Report\Comment\Polymorphic;
 
 /**
  * [ReportController description]
  */
-class ReportController implements CommentPolymorphic
+class ReportController implements Polymorphic
 {
     /**
      * Display all the specified Reports for Comment.

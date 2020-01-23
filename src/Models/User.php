@@ -157,7 +157,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * [makeRepo description]
      * @return UserRepo [description]
      */
-    public function makeRepo() : UserRepo
+    public function makeRepo() 
     {
         return app()->make(UserRepo::class, ['user' => $this]);
     }

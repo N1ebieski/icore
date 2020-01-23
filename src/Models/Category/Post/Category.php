@@ -29,6 +29,17 @@ class Category extends CategoryBaseModel
         return 'N1ebieski\\ICore\\Models\\Category\\Category';
     }
 
+    // Relations
+
+    /**
+     * [morphs description]
+     * @return [type] [description]
+     */
+    public function morphs()
+    {
+        return $this->morphedByMany('N1ebieski\ICore\Models\Post', 'model', 'categories_models', 'category_id');
+    }
+
     // Accessors
 
     /**

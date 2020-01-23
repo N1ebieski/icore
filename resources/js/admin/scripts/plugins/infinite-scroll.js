@@ -18,17 +18,16 @@ jQuery(document).on('readyAndAjax', function() {
         nextSelector: 'a#is-next:last',
         contentSelector: '#infinite-scroll',
         pagingSelector: '.pagination',
-        // callback: function(nextHref) {
-        //     let href = nextHref.split(' ')[0];
-        //     let page = $.getUrlParameter(href, 'page');
-        //     let title = $('a#is-next:last').attr('title').replace(/(\d+)/, '').trim();
-        //
-        //     if ($.isNumeric(page)) {
-        //         let regex = new RegExp(title+"\\s(\\d+)");
-        //         document.title = document.title.replace(regex, title+': '+page);
-        //     }
-        //
-        //     history.replaceState(null, null, href);
-        // }
+        callback: function(nextHref) {
+            let href = nextHref.split(' ')[0];
+            let page = $.getUrlParameter(href, 'page');
+            let title = $('#is-pagination:last').attr('data-title').replace(/(\d+)/, '').trim();
+
+            if ($.isNumeric(page) && title.length) {
+                let regex = new RegExp(title+"\\s(\\d+)");
+                document.title = document.title.replace(regex, title + ' ' + page);
+                history.replaceState(null, null, href);
+            }
+        }
     });
 });

@@ -130,7 +130,7 @@ class Mailing extends Model
      */
     public function getShortContentAttribute() : string
     {
-        return substr($this->content, 0, 300);
+        return mb_substr($this->content, 0, 300);
     }
 
     // Mutators
@@ -164,7 +164,7 @@ class Mailing extends Model
      * [makeRepo description]
      * @return MailingRepo [description]
      */
-    public function makeRepo() : MailingRepo
+    public function makeRepo()
     {
         return app()->make(MailingRepo::class, ['mailing' => $this]);
     }
@@ -173,7 +173,7 @@ class Mailing extends Model
      * [makeService description]
      * @return MailingService [description]
      */
-    public function makeService() : MailingService
+    public function makeService()
     {
         return app()->make(MailingService::class, ['mailing' => $this]);
     }

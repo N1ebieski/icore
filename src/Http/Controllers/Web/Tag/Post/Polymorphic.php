@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Http\Controllers\Web\Tag\Post;
 
 use N1ebieski\ICore\Http\Requests\Web\Tag\ShowRequest;
 use Illuminate\View\View;
-use N1ebieski\ICore\Models\Tag;
+use N1ebieski\ICore\Models\Tag\Tag;
 use N1ebieski\ICore\Models\Post;
 
 /**

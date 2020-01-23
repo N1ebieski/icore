@@ -53,7 +53,7 @@ class Rating extends Model
      * [makeService description]
      * @return RatingService [description]
      */
-    public function makeService() : RatingService
+    public function makeService()
     {
         return app()->make(RatingService::class, ['rating' => $this]);
     }

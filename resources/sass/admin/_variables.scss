@@ -7,3 +7,16 @@ $sidebar-base-width: 270px;
 $sidebar-collapsed-width: 90px;
 // Change below variable to change the height of the sticky footer
 $sticky-footer-height: 60px;
+
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1368px
+);

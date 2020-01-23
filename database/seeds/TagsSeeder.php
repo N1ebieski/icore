@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Seeds;
 
 use Illuminate\Database\Seeder;
-use N1ebieski\ICore\Models\Tag;
+use N1ebieski\ICore\Models\Tag\Tag;Tag;
 use Faker\Factory as Faker;
 
 /**

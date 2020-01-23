@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Tag;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 

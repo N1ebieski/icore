@@ -55,10 +55,10 @@ class PostController
             'related' => $postCache->rememberRelated(),
             'comments' => $comments,
             'filter' => $filter->all(),
-            'catsAsArray' => array_merge(
-                $post->categories->pluck('ancestors')->flatten()->pluck('id')->toArray(),
-                $post->categories->pluck('id')->toArray()
-            )
+            'catsAsArray' => [
+                'ancestors' => $post->categories->pluck('ancestors')->flatten()->pluck('id')->toArray(),
+                'self' => $post->categories->pluck('id')->toArray()
+            ]
         ]);
     }
 

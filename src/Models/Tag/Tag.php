@@ -1,19 +1,20 @@
 <?php
 
-namespace N1ebieski\ICore\Models;
+namespace N1ebieski\ICore\Models\Tag;
 
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use N1ebieski\ICore\Services\TagService;
 use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Cache\TagCache;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
 
 /**
  * [Tag description]
  */
 class Tag extends Taggable
 {
-    use FullTextSearchable;
+    use FullTextSearchable, Polymorphic;
 
     // Configuration
 
@@ -47,7 +48,7 @@ class Tag extends Taggable
      * [makeRepo description]
      * @return TagRepo [description]
      */
-    public function makeRepo() : TagRepo
+    public function makeRepo()
     {
         return app()->make(TagRepo::class, ['tag' => $this]);
     }
@@ -56,7 +57,7 @@ class Tag extends Taggable
      * [makeCache description]
      * @return TagCache [description]
      */
-    public function makeCache() : TagCache
+    public function makeCache()
     {
         return app()->make(TagCache::class, ['tag' => $this]);
     }
@@ -65,7 +66,7 @@ class Tag extends Taggable
      * [makeService description]
      * @return TagService [description]
      */
-    public function makeService() : TagService
+    public function makeService()
     {
         return app()->make(TagService::class, ['tag' => $this]);
     }

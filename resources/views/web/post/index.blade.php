@@ -18,14 +18,14 @@
                 @foreach ($posts as $post)
                     @include('icore::web.post.partials.post', [$post])
                 @endforeach
-                @include('icore::web.partials.pagination', ['items' => $posts])
+                @include('icore::web.partials.pagination', ['items' => $posts, 'next' => true])
             </div>
             @else
             <p>{{ trans('icore::default.empty') }}</p>
             @endif
         </div>
         <div class="col-md-4 order-sm-2 order-md-1">
-            @include('icore::web.partials.sidebar')
+            @include('icore::web.post.partials.sidebar')
         </div>
     </div>
 </div>

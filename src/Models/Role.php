@@ -53,7 +53,7 @@ class Role extends BaseRole
      * [makeRepo description]
      * @return RoleRepo [description]
      */
-    public function makeRepo() : RoleRepo
+    public function makeRepo()
     {
         return app()->make(RoleRepo::class, ['role' => $this]);
     }
@@ -62,7 +62,7 @@ class Role extends BaseRole
      * [makeService description]
      * @return RoleService [description]
      */
-    public function makeService() : RoleService
+    public function makeService()
     {
         return app()->make(RoleService::class, ['role' => $this]);
     }

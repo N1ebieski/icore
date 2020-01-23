@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents;
+namespace N1ebieski\ICore\Http\ViewComponents\Category\Post;
 
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Support\Htmlable;
@@ -32,8 +32,8 @@ class CategoryComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return view('icore::web.components.category.index', [
-            'categories' => $this->category->makeCache()->rememberWithRecursiveChildrens()
+        return view('icore::web.components.category.post.index', [
+            'categories' => $this->category->makeCache()->rememberWithRecursiveChildrens()          
         ]);
     }
 }

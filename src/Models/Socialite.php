@@ -47,7 +47,7 @@ class Socialite extends Model
      * [makeRepo description]
      * @return SocialiteRepo [description]
      */
-    public function makeRepo() : SocialiteRepo
+    public function makeRepo()
     {
         return app()->make(SocialiteRepo::class, ['socialite' => $this]);
     }
@@ -56,7 +56,7 @@ class Socialite extends Model
      * [makeService description]
      * @return SocialiteService [description]
      */
-    public function makeService() : SocialiteService
+    public function makeService()
     {
         return app()->make(SocialiteService::class, ['socialite' => $this]);
     }

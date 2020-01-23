@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Filters\Admin\Category;
 
 use N1ebieski\ICore\Filters\Filter;
+use N1ebieski\ICore\Filters\Traits\HasCategory;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Filters\Traits\HasSearch;
 use N1ebieski\ICore\Filters\Traits\HasStatus;
@@ -15,7 +16,7 @@ use N1ebieski\ICore\Filters\Traits\HasPaginate;
  */
 class IndexFilter extends Filter
 {
-    use HasSearch, HasStatus, HasParent, HasOrderBy, HasPaginate;
+    use HasSearch, HasStatus, HasParent, HasCategory, HasOrderBy, HasPaginate;
 
     /**
      * [setParent description]
@@ -35,6 +36,6 @@ class IndexFilter extends Filter
      */
     public function findParent(int $id = null) : Category
     {
-        return parent::findCategory($id);
+        return $this->findCategory($id);
     }
 }

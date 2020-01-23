@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Category\Post;
 
 use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
-use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\View\View;
 use N1ebieski\ICore\Http\Controllers\Web\Category\Post\Polymorphic;
 
@@ -21,10 +21,13 @@ class CategoryController implements Polymorphic
      */
     public function show(Category $category, ShowRequest $request) : View
     {
-        return view('icore::web.category.show', [
+        return view('icore::web.category.post.show', [
             'posts' => $category->makeCache()->rememberPosts($request->get('page') ?? 1),
             'category' => $category,
-            'catsAsArray' => array_merge($category->ancestors->pluck('id')->toArray(), [$category->id])
+            'catsAsArray' => [
+                'ancestors' => $category->ancestors->pluck('id')->toArray(),
+                'self' => [$category->id]
+            ]
         ]);
     }
 }

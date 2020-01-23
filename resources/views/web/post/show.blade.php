@@ -66,7 +66,7 @@
                 <ul class="list-group list-group-flush mb-3">
                     @foreach ($related as $rel)
                     <li class="list-group-item">
-                        <a href="{{ route('web.post.show', ['slug' => $rel->slug]) }}">{{ $rel->title }}</a>
+                        <a href="{{ route('web.post.show', [$rel->slug]) }}">{{ $rel->title }}</a>
                     </li>
                     @endforeach
                 </ul>
@@ -106,7 +106,7 @@
             </div>
         </div>
         <div class="col-md-4 order-sm-2 order-md-1">
-            @include('icore::web.partials.sidebar')
+            @include('icore::web.post.partials.sidebar')
         </div>
     </div>
 </div>

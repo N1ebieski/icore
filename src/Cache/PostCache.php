@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Cache;
 
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Tag;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -179,21 +179,6 @@ class PostCache
                 });
 
                 return $posts;
-            }
-        );
-    }
-
-    /**
-     * [rememberPopularTags description]
-     * @return array [description]
-     */
-    public function rememberPopularTags() : array
-    {
-        return $this->cache->remember(
-            'post.popularTags',
-            now()->addMinutes($this->minutes),
-            function() {
-                return $this->post->popularTags(25);
             }
         );
     }

@@ -30,7 +30,7 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app->register(ScheduleServiceProvider::class);
 
         $this->app['router']->middlewareGroup('icore.web', [
-            'throttle:60,1',
+            // 'throttle:60,1',
             \N1ebieski\ICore\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
