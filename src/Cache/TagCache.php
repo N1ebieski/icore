@@ -6,6 +6,7 @@ use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * [TagCache description]
@@ -74,6 +75,24 @@ class TagCache
             function() use ($component) {
                 return $this->tag->makeRepo()->getPopularByComponent($component);
             }
+        );
+    }
+    
+    /**
+     * Undocumented function
+     *
+     * @param Collection $tags
+     * @param array $component
+     * @return bool
+     */
+    public function putPopularByComponent(Collection $tags, array $component) : bool
+    {
+        $cats = $component['cats'] !== null ? implode('.', $component['cats']) : null;
+
+        return $this->cache->put(
+            "tag.{$this->tag->poli}.getPopularByComponent.{$cats}",
+            $tags,
+            now()->addMinutes($this->minutes)
         );
     }    
 }

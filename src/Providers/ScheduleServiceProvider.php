@@ -36,6 +36,9 @@ class ScheduleServiceProvider extends ServiceProvider
              $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
                 ->name('PostCron')
                 ->everyThirtyMinutes();
+            $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Tag\Post\PopularTagsCron::class))
+                ->name('Post.PopularTagsCron')
+                ->daily();
 
              $schedule->command('queue:restart');
              $schedule->command('queue:work --daemon --stop-when-empty --tries=3');

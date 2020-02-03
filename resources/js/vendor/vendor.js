@@ -24,12 +24,14 @@ try {
 
     require('jquery.tagsinput-revisited/dist/jquery.tagsinput-revisited.min.js');
 
-    require('../vendor/bootstrap-confirmation/bootstrap-confirmation.js');
+    require('bootstrap-confirmation2/dist/bootstrap-confirmation.js');
 
     require('pickadate/lib/picker.js');
     require('pickadate/lib/picker.date.js');
     require('pickadate/lib/picker.time.js');
     require('pickadate/lib/compressed/translations/pl_PL.js');
+
+    require('jquery-googlemap/jquery.googlemap.js');
 
     require('corejs-typeahead/dist/typeahead.jquery.js');
     Bloodhound = require('corejs-typeahead/dist/bloodhound.js');

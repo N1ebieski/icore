@@ -447,7 +447,7 @@ jQuery(document).on('click', '.destroy', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');
-        $form.href = $form.attr('data-route')+'?'+$form.find('[name!='+$(this).attr('data-name')+']').serialize();
+        $form.href = $form.attr('data-route')+'?'+$form.find('[name!='+$.escapeSelector($(this).attr('data-name'))+']').serialize();
 
         ajaxFilter($form, $form.href);
     });
@@ -678,11 +678,15 @@ jQuery(document).on('readyAndAjax', function() {
         debug: false,
         autoTrigger: false,
         data: function() {
-            return {
-                except: $(this).find('[id^=row]').map(function() {
-                    return $(this).attr('data-id');
-                }).get()
-            };
+            let except = $(this).find('[id^=row]').map(function() {
+                return $(this).attr('data-id');
+            }).get();
+
+            if (except.length) {
+                return {
+                    except: except
+                };
+            }
         },
         loadingHtml: $.getLoader('spinner-border', 'loader'),
         loadingFunction: function() {
@@ -692,18 +696,17 @@ jQuery(document).on('readyAndAjax', function() {
         nextSelector: 'a#is-next:last',
         contentSelector: '#infinite-scroll',
         pagingSelector: '.pagination',
-        // callback: function(nextHref) {
-        //     let href = nextHref.split(' ')[0];
-        //     let page = $.getUrlParameter(href, 'page');
-        //     let title = $('a#is-next:last').attr('title').replace(/(\d+)/, '').trim();
-        //
-        //     if ($.isNumeric(page)) {
-        //         let regex = new RegExp(title+"\\s(\\d+)");
-        //         document.title = document.title.replace(regex, title+': '+page);
-        //     }
-        //
-        //     history.replaceState(null, null, href);
-        // }
+        callback: function(nextHref) {
+            let href = nextHref.split(' ')[0];
+            let page = $.getUrlParameter(href, 'page');
+            let title = $('#is-pagination:last').attr('data-title').replace(/(\d+)/, '').trim();
+
+            if ($.isNumeric(page) && title.length) {
+                let regex = new RegExp(title+"\\s(\\d+)");
+                document.title = document.title.replace(regex, title + ' ' + page);
+                history.replaceState(null, null, href);
+            }
+        }
     });
 });
 

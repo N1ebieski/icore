@@ -71,7 +71,7 @@ class TagRepo
                         });
                 });
             })
-            ->groupBy('tags.tag_id', 'tags.name', 'tags.normalized', 'tags.created_at', 'tags.updated_at')
+            ->groupBy('tags.tag_id')
             ->having('taggable_count', '>=', 1)
             ->orderBy('taggable_count', 'desc')
             ->limit($component['limit'])

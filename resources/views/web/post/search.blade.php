@@ -29,7 +29,7 @@
             @endif
         </div>
         <div class="col-md-4 order-sm-2 order-md-1">
-            @include('icore::web.partials.sidebar')
+            @include('icore::web.post.partials.sidebar')
         </div>
     </div>
 </div>

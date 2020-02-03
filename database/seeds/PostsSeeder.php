@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Seeds;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Models\Category\Post\Category;
 use Faker\Factory as Faker;
 
 /**

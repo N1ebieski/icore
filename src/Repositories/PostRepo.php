@@ -218,23 +218,5 @@ class PostRepo
             ->whereTime('published_at', '<=', Carbon::now()->format('H:i:s'))
             ->whereStatus(2)
             ->update(['status' => 1]);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param array $component
-     * @return array
-     */
-    public function getPopularTagsByComponent(array $component) : array
-    {
-        $tags = app(TagService::class)->getPopularTags(
-            $component['limit'], 
-            $this->post, 
-            1,
-            $component['cats']
-        );
-
-        return $tags->shuffle()->all();
-    }    
+    }   
 }

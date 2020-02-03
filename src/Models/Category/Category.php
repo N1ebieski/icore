@@ -88,7 +88,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function ancestors()
     {
-        return $this->belongsToMany('N1ebieski\ICore\Models\Category\Category', 'categories_closure', 'descendant', 'ancestor');
+        return $this->belongsToMany(static::class, 'categories_closure', 'descendant', 'ancestor');
     }
 
     /**
@@ -97,7 +97,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function descendants()
     {
-        return $this->belongsToMany('N1ebieski\ICore\Models\Category\Category', 'categories_closure', 'ancestor', 'descendant');
+        return $this->belongsToMany(static::class, 'categories_closure', 'ancestor', 'descendant');
     }
 
     // Relations

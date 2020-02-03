@@ -88,9 +88,9 @@ class CommentCache
     public function getRootsByFilter(int $page) : ?LengthAwarePaginator
     {
         return $this->cache->tags([
-            'comments.'.$this->comment->poli.'.'.$this->comment->getMorph()->id
+            "comment.{$this->comment->poli}.{$this->comment->getMorph()->id}"
         ])->get(
-            $this->comment->poli.'.getRootsByFilter.'.$this->comment->getMorph()->id.'.'.$page
+            "{$this->comment->poli}.getRootsByFilter.{$this->comment->getMorph()->id}.{$page}"
         );
     }
 
@@ -103,10 +103,10 @@ class CommentCache
     public function putRootsByFilter(LengthAwarePaginator $comments, int $page) : bool
     {
         return $this->cache->tags([
-            'comments.'.$this->comment->poli.'.'.$this->comment->getMorph()->id
+            "comment.{$this->comment->poli}.{$this->comment->getMorph()->id}"
         ])
         ->put(
-            $this->comment->poli.'.getRootsByFilter.'.$this->comment->getMorph()->id.'.'.$page,
+            "{$this->comment->poli}.getRootsByFilter.{$this->comment->getMorph()->id}.{$page}",
             $comments,
             now()->addMinutes($this->minutes)
         );

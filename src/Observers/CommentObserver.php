@@ -15,8 +15,8 @@ class CommentObserver
      * @return void
      */
     public function created(Comment $comment)
-    {       
-        cache()->tags(['comments.'.$comment->poli.'.'.$comment->model_id])->flush();
+    {   
+        cache()->tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
@@ -27,7 +27,7 @@ class CommentObserver
      */
     public function updated(Comment $comment)
     {
-        cache()->tags(['comments.'.$comment->poli.'.'.$comment->model_id])->flush();
+        cache()->tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
@@ -38,7 +38,7 @@ class CommentObserver
      */
     public function deleted(Comment $comment)
     {
-        cache()->tags(['comments.'.$comment->poli.'.'.$comment->model_id])->flush();
+        cache()->tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**

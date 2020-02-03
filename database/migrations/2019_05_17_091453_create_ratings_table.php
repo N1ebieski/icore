@@ -18,7 +18,7 @@ class CreateRatingsTable extends Migration
             $table->unsignedInteger('user_id')->index();
             $table->unsignedInteger('model_id');
             $table->string('model_type');
-            $table->integer('rating')->default(0);
+            $table->integer('rating')->default(0)->index();
             $table->timestamps();
 
             $table->index(['model_type', 'model_id']);

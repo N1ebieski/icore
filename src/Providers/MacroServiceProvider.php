@@ -70,6 +70,6 @@ class MacroServiceProvider extends ServiceProvider
             $value = str_replace('\|', '|', $value);
 
             return $value;
-        });
+        });          
     }
 }

@@ -21,7 +21,7 @@ class SearchController
      */
     public function autocomplete(Tag $tag, AutoCompleteRequest $request) : JsonResponse
     {
-        return response()->json($tag->makeRepo()->getBySearch($request->get('search')));
+        return response()->json($tag->makeRepo()->getBySearch($request->input('search')));
     }
 
     /**
@@ -31,8 +31,8 @@ class SearchController
      */
     public function index(IndexRequest $request) : RedirectResponse
     {
-        return redirect()->route('web.'.$request->get('source').'.search', [
-            'search' => $request->get('search')
+        return redirect()->route('web.'.$request->input('source').'.search', [
+            'search' => $request->input('search')
         ]);
     }
 }

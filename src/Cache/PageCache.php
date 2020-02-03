@@ -98,7 +98,7 @@ class PageCache
     public function rememberLoadRecursiveChildrens() : Page
     {
         return $this->cache->tags(['page.'.$this->page->slug])->remember(
-            'page.loadRecursiveChildrens',
+            "page.loadRecursiveChildrens.{$this->page->slug}",
             now()->addMinutes($this->minutes),
             function() {
                 return $this->page->loadRecursiveChildrens();

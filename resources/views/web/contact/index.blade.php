@@ -51,6 +51,11 @@
                 tel. XXX-XXX-XX-XX<br>
                 e-mail: xxxxxxx@xxxxxxxxx.pl<br>
             </p>
+            <div>
+                @render('icore::map.mapComponent', [
+                    'address_marker' => ['Platynowa 15/22 80-041 Gdańsk']
+                ])
+            </div>
         </div>
     </div>
 </div>

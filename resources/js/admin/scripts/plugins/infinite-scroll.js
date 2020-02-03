@@ -4,11 +4,15 @@ jQuery(document).on('readyAndAjax', function() {
         debug: false,
         autoTrigger: false,
         data: function() {
-            return {
-                except: $(this).find('[id^=row]').map(function() {
-                    return $(this).attr('data-id');
-                }).get()
-            };
+            let except = $(this).find('[id^=row]').map(function() {
+                return $(this).attr('data-id');
+            }).get();
+
+            if (except.length) {
+                return {
+                    except: except
+                };
+            }
         },
         loadingHtml: $.getLoader('spinner-border', 'loader'),
         loadingFunction: function() {

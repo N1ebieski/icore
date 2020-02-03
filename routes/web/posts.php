@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::match(['get', 'post'], 'posts', 'PostController@index')
+Route::get('posts/index', 'PostController@index')
     ->name('post.index');
 Route::get('posts/search', 'PostController@search')
     ->name('post.search');

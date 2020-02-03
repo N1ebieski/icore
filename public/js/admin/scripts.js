@@ -16,10 +16,12 @@ jQuery(document).on('readyAndAjax', function() {
 });
 
 jQuery(window).on('readyAndAjax', function() {
-    $('[contenteditable="true"]').focus();
+    if (navigator.userAgent.indexOf("Firefox") != -1) {
+        $('[spellcheck="true"]:first').focusWithoutScrolling();
+    }
 });
 
-jQuery(document).on('click', 'button.storeBanUser', function(e) {
+jQuery(document).on('click', 'button.storeBanModel', function(e) {
     e.preventDefault();
 
     let $form = $(this).closest('form');
@@ -153,7 +155,7 @@ jQuery(document).on('change', '.categoryOption', function() {
         $input.remove();
     }
 
-    if ($.isInteger($searchCategory.max)) {
+    if ($.isNumeric($searchCategory.max)) {
         if ($searchCategory.is(':visible') && categorySelect().length >= $searchCategory.max) {
             $searchCategory.fadeOut();
         }
@@ -568,7 +570,7 @@ jQuery(document).on('click', '.edit', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');
-        $form.href = $form.attr('data-route')+'?'+$form.find('[name!="'+$(this).attr('data-name')+'"]').serialize();
+        $form.href = $form.attr('data-route')+'?'+$form.find('[name!="'+$.escapeSelector($(this).attr('data-name'))+'"]').serialize();
 
         ajaxFilter($form, $form.href);
     });
@@ -970,6 +972,12 @@ jQuery(document).on('click', 'button.clearReport', function(e) {
         });
     };
 
+    $.fn.focusWithoutScrolling = function() {
+        var x = window.scrollX, y = window.scrollY;
+        this.focus();
+        window.scrollTo(x, y);
+    };
+
     $.sanitize = function(html) {
         let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
 
@@ -1024,11 +1032,15 @@ jQuery(document).on('readyAndAjax', function() {
         debug: false,
         autoTrigger: false,
         data: function() {
-            return {
-                except: $(this).find('[id^=row]').map(function() {
-                    return $(this).attr('data-id');
-                }).get()
-            };
+            let except = $(this).find('[id^=row]').map(function() {
+                return $(this).attr('data-id');
+            }).get();
+
+            if (except.length) {
+                return {
+                    except: except
+                };
+            }
         },
         loadingHtml: $.getLoader('spinner-border', 'loader'),
         loadingFunction: function() {
@@ -1038,18 +1050,17 @@ jQuery(document).on('readyAndAjax', function() {
         nextSelector: 'a#is-next:last',
         contentSelector: '#infinite-scroll',
         pagingSelector: '.pagination',
-        // callback: function(nextHref) {
-        //     let href = nextHref.split(' ')[0];
-        //     let page = $.getUrlParameter(href, 'page');
-        //     let title = $('a#is-next:last').attr('title').replace(/(\d+)/, '').trim();
-        //
-        //     if ($.isNumeric(page)) {
-        //         let regex = new RegExp(title+"\\s(\\d+)");
-        //         document.title = document.title.replace(regex, title+': '+page);
-        //     }
-        //
-        //     history.replaceState(null, null, href);
-        // }
+        callback: function(nextHref) {
+            let href = nextHref.split(' ')[0];
+            let page = $.getUrlParameter(href, 'page');
+            let title = $('#is-pagination:last').attr('data-title').replace(/(\d+)/, '').trim();
+
+            if ($.isNumeric(page) && title.length) {
+                let regex = new RegExp(title+"\\s(\\d+)");
+                document.title = document.title.replace(regex, title + ' ' + page);
+                history.replaceState(null, null, href);
+            }
+        }
     });
 });
 
@@ -1073,15 +1084,17 @@ jQuery(document).ready(function() {
     });
 });
 
-jQuery(document).ready(function() {
-    $('.tagsinput').tagsInput({
-        placeholder: $('.tagsinput').attr('placeholder'),
-        minChars: 3,
-        maxChars: 30,
-        limit: $('.tagsinput').attr('data-max'),
-        validationPattern: new RegExp('^(?:^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\u00E0-\u00FC ]+$)$'),
-        unique: true,
-    });
+jQuery(document).on('readyAndAjax', function() {
+    if (!$('[id$="_tagsinput"]').length) {    
+        $('.tagsinput').tagsInput({
+            placeholder: $('.tagsinput').attr('placeholder'),
+            minChars: 3,
+            maxChars: 30,
+            limit: $('.tagsinput').attr('data-max'),
+            validationPattern: new RegExp('^(?:^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\u00E0-\u00FC ]+$)$'),
+            unique: true,
+        });
+    }
 });
 
 jQuery(document).on('readyAndAjax', function() {
