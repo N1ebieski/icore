@@ -32,22 +32,22 @@
                 </div>
                 <div class="post">{!! $post->no_more_content_html !!}</div>
                 <div class="d-flex mb-2">
+                    @if ($post->categories->isNotEmpty())
                     <small class="mr-auto">{{ trans('icore::categories.categories') }}:
-                        @if ($post->categories->isNotEmpty())
                         @foreach ($post->categories as $category)
                         <a href="{{ route('web.category.post.show', [$category->slug]) }}">{{ $category->name }}</a>
                         {{ (!$loop->last) ? ', ' : '' }}
                         @endforeach
-                        @endif
                     </small>
+                    @endif
+                    @if ($post->tags->isNotEmpty())
                     <small class="ml-auto text-right">{{ trans('icore::posts.tags') }}:
-                        @if ($post->tags->isNotEmpty())
                         @foreach ($post->tags as $tag)
                         <a href="{{ route('web.tag.post.show', [$tag->normalized]) }}">{{ $tag->name }}</a>
                         {{ (!$loop->last) ? ', ' : '' }}
                         @endforeach
-                        @endif
                     </small>
+                    @endif
                 </div>
                 <div class="d-flex my-3">
                     @if (isset($previous))
@@ -99,7 +99,8 @@
                 @component('icore::web.partials.modal')
                 @slot('modal_id', 'createReportModal')
                 @slot('modal_title')
-                {{ trans('icore::reports.page.create') }}
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>{{ trans('icore::reports.page.create') }}</span>
                 @endslot
                 @endcomponent
                 @endif

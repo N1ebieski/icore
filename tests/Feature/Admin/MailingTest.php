@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use N1ebieski\ICore\Crons\MailingCron;
 // use App\Jobs\SendMailing;
-use N1ebieski\ICore\Mails\Mailing\Mail as MailingMail;
+use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Support\Facades\Artisan;
 
 class MailingTest extends TestCase

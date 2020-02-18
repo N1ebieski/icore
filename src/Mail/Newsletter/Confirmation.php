@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Mails\Newsletter;
+namespace N1ebieski\ICore\Mail\Newsletter;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

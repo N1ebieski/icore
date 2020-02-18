@@ -24,10 +24,8 @@ span.twitter-typeahead {
         }
 
         .tt-menu {
-            @include media-breakpoint-down(xs) {
-                width: calc(100% + 140px);
-            }
-            width: calc(100% + 240px);
+            line-height: initial;
+            width: 100%;
         }
     }
 }

@@ -2,47 +2,35 @@
 
 namespace N1ebieski\ICore\Http\ViewComponents\Tag\Post;
 
-use Illuminate\Contracts\Support\Htmlable;
+use N1ebieski\ICore\Http\ViewComponents\Tag\TagComponent as BaseTagComponent;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\View\View;
 
 /**
  * [TagComponent description]
  */
-class TagComponent implements Htmlable
+class TagComponent extends BaseTagComponent
 {
-    /**
-     * [private description]
-     * @var Tag
-     */
-    protected $tag;
-
-    /**
-     * Undocumented variable
-     *
-     * @var int
-     */
-    protected $limit;
-
     /**
      * Undocumented variable
      *
      * @var array|null
      */
-    protected $cats;    
+    protected $cats;
 
     /**
-     * [__construct description]
-     * @param Tag  $tag [description]
-     * @param int  $limit [description]
-     * @param array $cats [description]
+     * Undocumented function
+     *
+     * @param Tag $tag
+     * @param integer $limit
+     * @param array $cats
+     * @param array $colors
      */
-    public function __construct(Tag $tag, int $limit = 25, array $cats = null)
+    public function __construct(Tag $tag, int $limit = 25, array $colors = null, array $cats = null)
     {
-        $this->tag = $tag;
+        parent::__construct($tag, $limit, $colors);
 
-        $this->limit = $limit;
-        $this->cats = $cats;        
+        $this->cats = $cats;
     }
 
     /**
@@ -54,8 +42,9 @@ class TagComponent implements Htmlable
         return view('icore::web.components.tag.post.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([
                 'limit' => $this->limit,
-                'cats' => $this->cats                
-            ])
+                'cats' => $this->cats
+            ]),
+            'colors' => $this->colors
         ]);
     }
 }

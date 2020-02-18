@@ -5,7 +5,7 @@ return [
         'send' => 'Wiadomość została wysłana. Odpowiemy w najkrótszym możliwym terminie.'
     ],
     'page' => [
-        'index' => 'Kontakt'
+        'show' => 'Kontakt'
     ],
     'address' => 'Adres e-mail',
     'enter_address' => 'Wpisz adres e-mail',

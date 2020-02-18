@@ -27,21 +27,26 @@ class ScheduleServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->booted(function() {
-             $schedule = $this->app->make(Schedule::class);
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
 
-             $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
+            $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
                 ->name('MailingCron')
-                ->everyThirtyMinutes();
-             $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
-                ->name('PostCron')
-                ->everyThirtyMinutes();
-            $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Tag\Post\PopularTagsCron::class))
-                ->name('Post.PopularTagsCron')
-                ->daily();
+                ->everyThirtyMinutes()
+                ->runInBackground();
 
-             $schedule->command('queue:restart');
-             $schedule->command('queue:work --daemon --stop-when-empty --tries=3');
-         });
+            $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
+                ->name('PostCron')
+                ->everyThirtyMinutes()
+                ->runInBackground();
+
+            // $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Tag\Post\PopularTagsCron::class))
+            //     ->name('Post.PopularTagsCron')
+            //     ->daily()
+            //     ->runInBackground();
+
+            $schedule->command('queue:restart')->runInBackground();
+            $schedule->command('queue:work --daemon --stop-when-empty --tries=3')->runInBackground();
+        });
     }
 }

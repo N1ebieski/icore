@@ -13,7 +13,7 @@
         "mews/purifier": "^3.1",
         "n1ebieski/logic-captcha": "^1.0",
         "nckg/laravel-minify-html": "dev-master",
-        "nesbot/carbon": "2.24.0",
+        "nesbot/carbon": "2.29.1",
         "predis/predis": "^1.1",
         "proengsoft/laravel-jsvalidation": ">2.5.0",
         "spatie/laravel-permission": "^3.2",

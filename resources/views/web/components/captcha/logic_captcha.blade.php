@@ -15,6 +15,6 @@
     @includeWhen($errors->has('captcha'), 'icore::web.partials.errors', ['name' => 'captcha'])
 </div>
 
-@push('script')
+@pushonce('script.captcha')
 <script src="{{ asset('js/vendor/logic-captcha/captcha_reload.js') }}" defer></script>
-@endpush
+@endpushonce

@@ -44,7 +44,7 @@ class ReportController implements CommentPolymorphic
         $report->setMorph($comment)->makeService()->create($request->only('content'));
 
         return response()->json([
-            'success' => trans('icore::comments.success.report')
+            'success' => trans('icore::reports.success.store')
         ]);
     }
 }

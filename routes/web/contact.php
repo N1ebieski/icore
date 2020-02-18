@@ -2,6 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('contact', 'ContactController@index')
-    ->name('contact.index');
+Route::get('contact', 'ContactController@show')
+    ->name('contact.show');
 Route::post('contact', 'ContactController@send');

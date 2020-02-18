@@ -4,7 +4,6 @@ return [
     'success' => [
         'store_0' => 'Komentarz został dodany i oczekuje na moderację.',
         'destroy_global' => 'Pomyślnie usunięto :affected komentarzy wraz z odpowiedziami.',
-        'report' => 'Komentarz został zgłoszony do moderacji. Dziękujemy.'
     ],
     'page' => [
         'index' => 'Komentarze',
@@ -34,5 +33,6 @@ return [
     'log_to_comment' => 'Zaloguj się, by skomentować',
     'next_answers' => 'Wczytaj odpowiedzi',
     'next_comments' => 'Wczytaj następne komentarze',
-    'comments' => 'Komentarze'
+    'comments' => 'Komentarze',
+    'latest' => 'Ostatnio skomentowane'
 ];

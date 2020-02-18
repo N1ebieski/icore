@@ -34,7 +34,12 @@
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-fw fa-comments"></i>
                 <span> {{ trans('icore::comments.page.index') }} </span>
-                <span class="badge badge-warning">{{ $comments_inactive_count->sum('count') }}</span>
+                @if ($count = $comments_inactive_count->sum('count'))
+                <span class="badge badge-warning">{{ $count }}</span>
+                @endif
+                @if ($count = $comments_reported_count->sum('count'))
+                <span class="badge badge-danger">{{ $comments_reported_count->sum('count') }}</span>
+                @endif
             </a>
             <div class="dropdown-menu" aria-labelledby="commentDropdown">
                 <h6 class="dropdown-header">{{ trans('icore::default.type') }}:</h6>
@@ -47,6 +52,14 @@
                     <span>
                         <a href="{{ route("admin.comment.{$type}.index", ['filter[status]' => 0]) }}"
                         class="badge badge-warning">
+                            {{ $count->count }}
+                        </a>
+                    </span>
+                    @endif
+                    @if ($count = $comments_reported_count->where('model', $type)->first())
+                    <span>
+                        <a href="{{ route("admin.comment.{$type}.index", ['filter[report]' => 1]) }}"
+                        class="badge badge-danger">
                             {{ $count->count }}
                         </a>
                     </span>

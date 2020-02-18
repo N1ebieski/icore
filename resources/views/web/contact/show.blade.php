@@ -1,12 +1,12 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::contact.page.index')],
-    'desc' => [trans('icore::contact.page.index')],
-    'keys' => [trans('icore::contact.page.index')]
+    'title' => [trans('icore::contact.page.show')],
+    'desc' => [trans('icore::contact.page.show')],
+    'keys' => [trans('icore::contact.page.show')]
 ])
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="/">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::contact.page.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::contact.page.show') }}</li>
 @endsection
 
 @section('content')
@@ -14,11 +14,12 @@
     <div class="row">
         <div class="col-md-8">
             @include('icore::web.partials.alerts')
-            <form method="post" action="{{ route('web.contact.index') }}" id="contact">
+            <form method="post" action="{{ url()->current() }}" id="contact">
                 @csrf
                 <div class="form-group">
                     <label for="email">{{ trans('icore::contact.address') }}</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}"
+                    <input type="email" name="email" id="email" 
+                    value="{{ old('email', auth()->user()->email ?? null) }}"
                     class="form-control @isValid('email')"
                     placeholder="{{ trans('icore::contact.enter_address') }}">
                     @includeWhen($errors->has('email'), 'icore::web.partials.errors', ['name' => 'email'])

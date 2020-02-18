@@ -3,9 +3,7 @@
 {{ strip_tags($content) }}
 
 @component('mail::subcopy')
-{{ trans('icore::contact.subcopy.form', [
-    'url' => route('web.contact.index')
-]) }}
+{{ $subcopy }}
 @endcomponent
 
 @endcomponent

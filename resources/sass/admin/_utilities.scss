@@ -64,3 +64,19 @@
     pointer-events: none;
     opacity: 0.5;
 }
+
+@include create-breakpoint-class('w', '25') {
+    width: 25% !important; 
+}
+
+@include create-breakpoint-class('w', '50') {
+    width: 50% !important; 
+}
+
+@include create-breakpoint-class('w', '75') {
+    width: 75% !important; 
+}
+
+@include create-breakpoint-class('w', '100') {
+    width: 100% !important; 
+}

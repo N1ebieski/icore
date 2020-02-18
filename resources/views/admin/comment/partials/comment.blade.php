@@ -8,7 +8,11 @@ data-id="{{ $comment->id }}">
         @endcan
                 <ul class="list-unstyled mb-0 pb-0">
                     <li>
-                        <a class="show" href="#" data-toggle="modal" data-target="#showCommentModal" data-route="{{ route('admin.comment.show', ['comment' => $comment->id]) }}">{{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}</a>
+                        <a class="show" href="#" data-toggle="modal" 
+                        data-target="#showCommentModal" 
+                        data-route="{{ route('admin.comment.show', ['comment' => $comment->id]) }}">
+                            {{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}
+                        </a>
                         @if ($comment->reports_count > 0)
                         &nbsp;<a href="#" class="badge badge-danger show" data-toggle="modal"
                         data-route="{{ route('admin.report.comment.show', ['comment' => $comment->id]) }}"

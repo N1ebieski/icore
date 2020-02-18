@@ -214,9 +214,12 @@ class PostRepo
     public function activateScheduled() : bool
     {
         return $this->post
-            ->whereDate('published_at', '<=', Carbon::now()->format('Y-m-d'))
-            ->whereTime('published_at', '<=', Carbon::now()->format('H:i:s'))
+            ->whereDate('published_at', '<', Carbon::now()->format('Y-m-d'))
+            ->orWhere(function ($query) {
+                $query->whereDate('published_at', '=', Carbon::now()->format('Y-m-d'))
+                    ->whereTime('published_at', '<=', Carbon::now()->format('H:i:s'));
+            })
             ->whereStatus(2)
             ->update(['status' => 1]);
-    }   
+    }
 }

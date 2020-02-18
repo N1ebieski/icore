@@ -157,6 +157,16 @@ class Comment extends Entity implements CommentInterface
     }
 
     /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getContentAsHtmlAttribute() : string
+    {
+        return nl2br($this->content_html);
+    }
+
+    /**
      * [getCreatedAtDiffAttribute description]
      * @return string [description]
      */
@@ -311,6 +321,16 @@ class Comment extends Entity implements CommentInterface
     }
 
     /**
+     * [scopeUncensored description]
+     * @param  Builder $query [description]
+     * @return Builder        [description]
+     */
+    public function scopeUncensored(Builder $query) : Builder
+    {
+        return $query->where('censored', 0);
+    }
+
+    /**
      * [scopeActive description]
      * @param  Builder $query [description]
      * @return Builder        [description]
@@ -341,7 +361,7 @@ class Comment extends Entity implements CommentInterface
         // Laravel nie posiada loadCount dla modelu? Serio?
         // $this->reports_count = $this->reports()->count();
         $this->loadCount('reports');
-        $this->load('morph:id,title,comment');
+        $this->load('morph');
 
         return $this;
     }

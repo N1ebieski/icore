@@ -6,6 +6,9 @@ return [
     'reason' => 'Powód zgłoszenia',
     'page' => [
         'show' => 'Raporty',
-        'create' => 'Raportuj'        
+        'create' => 'Raportuj'
+    ],
+    'success' => [
+        'store' => 'Raport został zgłoszony moderacji. Dziękujemy.'
     ]
 ];

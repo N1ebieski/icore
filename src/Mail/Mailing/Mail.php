@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Mails\Mailing;
+namespace N1ebieski\ICore\Mail\Mailing;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

@@ -6,6 +6,7 @@ use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 
 /**
@@ -49,8 +50,7 @@ class CommentCache
         Cache $cache,
         Config $config,
         Collect $collect
-    )
-    {
+    ) {
         $this->comment = $comment;
         $this->cache = $cache;
         $this->collect = $collect;
@@ -109,6 +109,22 @@ class CommentCache
             "{$this->comment->poli}.getRootsByFilter.{$this->comment->getMorph()->id}.{$page}",
             $comments,
             now()->addMinutes($this->minutes)
+        );
+    }
+
+    /**
+     * [rememberLatestByComponent description]
+     * @param  array $component [description]
+     * @return Collection [description]
+     */
+    public function rememberLatestByComponent(array $component) : Collection
+    {
+        return $this->cache->remember(
+            "comment.{$this->comment->poli}.getLatestByComponent",
+            now()->addMinutes($this->minutes),
+            function () use ($component) {
+                return $this->comment->makeRepo()->getLatestByComponent($component);
+            }
         );
     }
 }

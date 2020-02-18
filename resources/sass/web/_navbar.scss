@@ -7,6 +7,13 @@
     }
 }
 
+.navbar .tt-menu {
+    @include media-breakpoint-down(xs) {
+        width: calc(100% + 140px) !important;
+    }
+    width: calc(100% + 240px) !important;
+}
+
 .navbar-collapse {
     @include media-breakpoint-down(sm) {
         &.scroll {

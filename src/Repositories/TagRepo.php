@@ -60,11 +60,11 @@ class TagRepo
         return $this->tag->selectRaw('`tags`.*, COUNT(`tags`.`tag_id`) AS taggable_count')
             ->leftJoin('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
             ->poliType()
-            ->when($component['cats'] !== null, function($query) use ($component) {
-                $query->whereExists(function($query) use ($component) {
+            ->when($component['cats'] !== null, function ($query) use ($component) {
+                $query->whereExists(function ($query) use ($component) {
                     $query->select(DB::raw(1))
                         ->from('categories_models')
-                        ->where(function($query) use ($component) {
+                        ->where(function ($query) use ($component) {
                             $query->whereColumn('categories_models.model_id', 'tags_models.model_id')
                                 ->where('categories_models.model_type', $this->tag->model_type)
                                 ->whereIn('categories_models.category_id', $component['cats']);

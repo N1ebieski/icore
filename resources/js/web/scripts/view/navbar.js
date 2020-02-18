@@ -3,18 +3,20 @@ jQuery(document).ready(function() {
     let $navbar = $('.navbar');
 
     $(window).scroll(function () {
-       var a = $(window).scrollTop();
-       var b = $navbar.height()+10;
-
-       currentScrollTop = a;
-
-       if (c < currentScrollTop && c > b) {
-         $navbar.fadeOut();
-       } else {
-         $navbar.fadeIn();
-       }
-       c = currentScrollTop;
-   });
+        if (!$('body').hasClass('modal-open')) {
+            var a = $(window).scrollTop();
+            var b = $navbar.height() + 10;
+    
+            currentScrollTop = a;
+    
+            if (c < currentScrollTop && c > b) {
+                $navbar.fadeOut();
+            } else {
+                $navbar.fadeIn();
+            }
+            c = currentScrollTop;
+        }
+    });
 });
 
 jQuery(document).on('click', ".modal-backdrop, #navbarToggle", function(e) {

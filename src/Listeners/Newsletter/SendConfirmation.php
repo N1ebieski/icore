@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Listeners\Newsletter;
 
-use N1ebieski\ICore\Mails\Newsletter\Confirmation;
+use N1ebieski\ICore\Mail\Newsletter\Confirmation;
 use Illuminate\Support\Facades\Mail;
 
 /**

@@ -12,7 +12,7 @@ id="row{{ $comment->id }}" data-id="{{ $comment->id }}">
                 @if ($comment->censored == true)
                 <em>{{ trans('icore::comments.censored') }}</em>
                 @else
-                {!! nl2br(e($comment->content_html)) !!}
+                {!! $comment->content_as_html !!}
                 @endif
             </div>
             <div class="d-flex my-2">

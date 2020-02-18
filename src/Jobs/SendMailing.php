@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Support\Facades\Mail;
-use N1ebieski\ICore\Mails\Mailing\Mail as MailingMail;
+use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Exception;
 
 /**

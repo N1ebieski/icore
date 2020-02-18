@@ -24,7 +24,7 @@
             templates: {
                 suggestion: function(data) {
                     let name = $($.parseHTML(data.name)).text();
-                    let href = $form.attr('action')+'?source='+$form.find('select[name="source"]').val()+'&search='+name;
+                    let href = $form.attr('action')+'?source='+$form.find('[name="source"]').val()+'&search='+name;
 
                     return $.sanitize('<a href="'+href+'" class="list-group-item py-2 text-truncate">'+name+'</a>');
                 }

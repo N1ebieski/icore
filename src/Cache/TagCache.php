@@ -6,7 +6,6 @@ use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * [TagCache description]
@@ -54,7 +53,7 @@ class TagCache
         return $this->cache->remember(
             "tag.firstBySlug.{$slug}",
             now()->addMinutes($this->minutes),
-            function() use ($slug) {
+            function () use ($slug) {
                 return $this->tag->makeRepo()->firstBySlug($slug);
             }
         );
@@ -72,7 +71,7 @@ class TagCache
         return $this->cache->remember(
             "tag.{$this->tag->poli}.getPopularByComponent.{$cats}",
             now()->addMinutes($this->minutes),
-            function() use ($component) {
+            function () use ($component) {
                 return $this->tag->makeRepo()->getPopularByComponent($component);
             }
         );
@@ -94,5 +93,5 @@ class TagCache
             $tags,
             now()->addMinutes($this->minutes)
         );
-    }    
+    }
 }

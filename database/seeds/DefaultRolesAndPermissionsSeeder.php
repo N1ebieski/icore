@@ -9,9 +9,9 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * [RolesAndPermissionsSeeder description]
+ * [DefaultRolesAndPermissionsSeeder description]
  */
-class RolesAndPermissionsSeeder extends Seeder
+class DefaultRolesAndPermissionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -129,6 +129,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'email_verified_at' => now(),
             'status' => 1
         ]);
-        $user->assignRole(['super-admin', 'user']);
+        $user->assignRole(['super-admin', 'admin', 'user']);
     }
 }

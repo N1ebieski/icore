@@ -31,7 +31,7 @@
         @endcan
         <div id="infinite-scroll">
             @foreach ($comments as $comment)
-                @include('icore::admin.comment.partials.comment', ['comment' => $comment])
+                @includeWhen(isset($comment->morph), 'icore::admin.comment.partials.comment', ['comment' => $comment])
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $comments])
         </div>

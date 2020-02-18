@@ -17,7 +17,7 @@ class EnvSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        $this->call(RolesAndPermissionsSeeder::class);
+        $this->call(DefaultRolesAndPermissionsSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(PostsSeeder::class);
         $this->call(CommentsSeeder::class);

@@ -60,8 +60,11 @@ class MailingRepo
     public function activateScheduled() : bool
     {
         return $this->mailing
-            ->whereDate('activation_at', '<=', Carbon::now()->format('Y-m-d'))
-            ->whereTime('activation_at', '<=', Carbon::now()->format('H:i:s'))
+            ->whereDate('activation_at', '<', Carbon::now()->format('Y-m-d'))
+            ->orWhere(function ($query) {
+                $query->whereDate('activation_at', '=', Carbon::now()->format('Y-m-d'))
+                    ->whereTime('activation_at', '<=', Carbon::now()->format('H:i:s'));
+            })
             ->whereStatus(2)
             ->update(['status' => 1]);
     }

@@ -102,4 +102,36 @@ class CommentRepo
             ->groupBy('model_type')
             ->get();
     }
+
+    /**
+     * [countReportedByModelType description]
+     * @return Collection [description]
+     */
+    public function countReportedByModelType() : Collection
+    {
+        return $this->comment->whereHas('reports')
+            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, COUNT(*) AS `count`')
+            ->groupBy('model_type')
+            ->get();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $component
+     * @return Collection
+     */
+    public function getLatestByComponent(array $component) : Collection
+    {
+        return $this->comment->active()
+            ->uncensored()
+            ->poliType()
+            ->whereHasMorph('morph', '*', function ($query) {
+                $query->active();
+            })
+            ->with(['morph', 'user'])
+            ->latest()
+            ->limit($component['limit'])
+            ->get();
+    }
 }

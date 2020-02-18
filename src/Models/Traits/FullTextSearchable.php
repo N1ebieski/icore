@@ -42,8 +42,8 @@ trait FullTextSearchable
         preg_match_all('/"(.*?)"/', $this->term, $words);
 
         foreach ($words[0] as $word) {
-        	$this->search[] = '+' . $word;
-        	$this->term = str_replace($word, '', $this->term);
+            $this->search[] = '+' . $word;
+            $this->term = str_replace($word, '', $this->term);
         }
 
         $this->term = trim($this->term);
@@ -70,13 +70,13 @@ trait FullTextSearchable
 
         $words = explode(' ', $term);
 
-        foreach($words as $word) {
-        	if (strlen($word) >= 3) {
+        foreach ($words as $word) {
+            if (strlen($word) >= 3) {
                 if ($word === end($words)) {
                     $word .= '*';
                 }
-        		$this->search[] = '+' . $word;
-        	}
+                $this->search[] = '+' . $word;
+            }
         }
     }
 
@@ -89,7 +89,7 @@ trait FullTextSearchable
         $this->exactWords();
         $this->words();
 
-        return implode(' ', $this->search);
+        return implode(' ', (array)$this->search);
     }
 
     /**
@@ -102,7 +102,7 @@ trait FullTextSearchable
     {
         $columns = implode(',', $this->searchable);
 
-        return $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)" , [
+        return $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", [
             $this->setTerm($term)->fullText()
         ]);
     }

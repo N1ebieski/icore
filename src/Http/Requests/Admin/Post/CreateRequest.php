@@ -40,6 +40,8 @@ class CreateRequest extends FormRequest
         if ($this->old('categories')) {
             session()->flash('_old_input.categories_collection',
                 $this->category->makeRepo()->getByIds($this->old('categories')));
+        } else {
+            session()->forget('_old_input.categories_collection');
         }
     }
 
