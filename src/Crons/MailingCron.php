@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Crons;
 
-use N1ebieski\ICore\Models\Mailing;
+use N1ebieski\ICore\Models\MailingEmail;
 use N1ebieski\ICore\Jobs\SendMailing;
 
 /**
@@ -12,9 +12,9 @@ class MailingCron
 {
     /**
      * [private description]
-     * @var Mailing
+     * @var MailingEmail
      */
-    protected $mailing;
+    protected $mailingEmail;
 
     /**
      * [private description]
@@ -24,12 +24,12 @@ class MailingCron
 
     /**
      * [__construct description]
-     * @param Mailing     $mailing     [description]
+     * @param MailingEmail     $mailingEmail     [description]
      * @param SendMailing $sendMailing [description]
      */
-    public function __construct(Mailing $mailing, SendMailing $sendMailing)
+    public function __construct(MailingEmail $mailingEmail, SendMailing $sendMailing)
     {
-        $this->mailing = $mailing;
+        $this->mailingEmail = $mailingEmail;
         $this->sendMailing = $sendMailing;
     }
 
@@ -41,6 +41,8 @@ class MailingCron
         $this->activateScheduled();
 
         $this->addToQueue();
+
+        $this->deactivateCompleted();
     }
 
     /**
@@ -48,30 +50,32 @@ class MailingCron
      */
     private function addToQueue() : void
     {
-        $mailings = $this->mailing->makeRepo()->getActiveWithUnsentEmails();
-
-        foreach ($mailings as $mailing) {
-            if ($mailing->emails->isNotEmpty()) {
-                foreach ($mailing->emails as $email) {
-                    $this->sendMailing->dispatch($email);
-                }
+        $this->mailingEmail->makeRepo()->chunkUnsentHasActiveMailing(
+            function ($items) {
+                $items->each(function ($item) {
+                    $this->sendMailing->dispatch($item);
+                });
             }
-            else {
-                $mailing->update([
-                    'status' => 0,
-                    'activation_at' => null
-                ]);
-            }
-        }
+        );
     }
 
     /**
      * Activates all scheduled mailings with a date earlier than now()
      *
-     * @return int [description]
+     * @return void
      */
-    private function activateScheduled() : int
+    protected function activateScheduled() : void
     {
-        return $this->mailing->makeRepo()->activateScheduled();
+        $this->mailingEmail->mailing()->make()->makeRepo()->activateScheduled();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    protected function deactivateCompleted() : void
+    {
+        $this->mailingEmail->mailing()->make()->makeRepo()->deactivateCompleted();
     }
 }

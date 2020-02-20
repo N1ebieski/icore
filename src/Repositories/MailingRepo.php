@@ -43,17 +43,6 @@ class MailingRepo
     }
 
     /**
-     * [getActiveWithUnsentEmails description]
-     * @return Collection [description]
-     */
-    public function getActiveWithUnsentEmails() : Collection
-    {
-        return $this->mailing->with(['emails' => function($query) {
-            $query->whereSend(0);
-        }])->whereStatus(1)->get();
-    }
-
-    /**
      * [activateScheduled description]
      * @return bool              [description]
      */
@@ -67,5 +56,22 @@ class MailingRepo
             })
             ->whereStatus(2)
             ->update(['status' => 1]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function deactivateCompleted() : bool
+    {
+        return $this->mailing->active()
+            ->whereDoesntHave('emails', function ($query) {
+                $query->where('status', 0);
+            })
+            ->update([
+                'status' => 0,
+                'activation_at' => null
+            ]);
     }
 }
