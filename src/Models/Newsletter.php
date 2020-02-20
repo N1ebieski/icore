@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -37,4 +38,17 @@ class Newsletter extends Model
     protected $attributes = [
         'status' => 0,
     ];
+
+    // Scopes
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive(Builder $query) : Builder
+    {
+        return $query->where('status', 1);
+    }
 }

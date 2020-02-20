@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Mews\Purifier\Facades\Purifier;
 use N1ebieski\ICore\Repositories\MailingRepo;
 use N1ebieski\ICore\Services\MailingService;
@@ -71,9 +72,8 @@ class Mailing extends Model
     public function getProgressSuccessAttribute() : ?int
     {
         return ($this->emails->isNotEmpty()) ?
-            (int)round(
-                ($this->emails->where('send', 1)->count()/$this->emails->count())*100
-            , 0) : null;
+            (int)round(($this->emails->where('send', 1)->count()/$this->emails->count())*100, 0)
+            : null;
     }
 
     /**
@@ -83,9 +83,8 @@ class Mailing extends Model
     public function getProgressFailedAttribute() : ?int
     {
         return ($this->emails->isNotEmpty()) ?
-            (int)round(
-                ($this->emails->where('send', 2)->count()/$this->emails->count())*100
-            , 0) : null;
+            (int)round(($this->emails->where('send', 2)->count()/$this->emails->count())*100, 0)
+            : null;
     }
 
     /**
@@ -131,6 +130,19 @@ class Mailing extends Model
     public function getShortContentAttribute() : string
     {
         return mb_substr($this->content, 0, 300);
+    }
+
+    // Scopes
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive(Builder $query) : Builder
+    {
+        return $query->where('status', 1);
     }
 
     // Mutators

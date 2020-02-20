@@ -29,7 +29,7 @@ class CreateMailingsTable extends Migration
             $table->unsignedInteger('mailing_id')->index();
             $table->string('model_type')->nullable();
             $table->integer('model_id')->nullable();
-            $table->string('email')->nullable();
+            $table->string('email')->unique();
             $table->integer('send')->unsigned();
             $table->timestamps();
 

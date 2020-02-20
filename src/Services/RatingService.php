@@ -50,12 +50,10 @@ class RatingService implements Creatable, Updatable, Deletable
         if ($this->findByUser()) {
             if ($this->rating->rating == $attributes['rating']) {
                 $rating = $this->delete();
-            }
-            else {
+            } else {
                 $rating = $this->update($attributes);
             }
-        }
-        else {
+        } else {
             $rating = $this->create($attributes);
         }
 

@@ -3,20 +3,22 @@
 namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Mailing;
-use N1ebieski\ICore\Models\Newsletter;
-use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
 use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
 
 /**
  * [MailingService description]
  */
-class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable, GlobalDeletable
+class MailingService implements
+    Creatable,
+    Updatable,
+    StatusUpdatable,
+    Deletable,
+    GlobalDeletable
 {
     /**
      * [private description]
@@ -25,48 +27,12 @@ class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable
     protected $mailing;
 
     /**
-     * [private description]
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * [private description]
-     * @var Newsletter
-     */
-    protected $newsletter;
-
-    /**
-     * [private description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * [protected description]
-     * @var array|null
-     */
-    protected $models;
-
-    /**
      * [__construct description]
      * @param Mailing      $mailing    [description]
-     * @param User         $user       [description]
-     * @param Newsletter   $newsletter [description]
-     * @param Collect      $collect
      */
-    public function __construct(
-        Mailing $mailing,
-        User $user,
-        Newsletter $newsletter,
-        Collect $collect
-    )
+    public function __construct(Mailing $mailing)
     {
         $this->mailing = $mailing;
-        $this->user = $user;
-        $this->newsletter = $newsletter;
-
-        $this->collect = $collect;
     }
 
     /**
@@ -91,7 +57,10 @@ class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable
         $this->mailing->save();
 
         // Dodanie grup odbiorców mailingu
-        $this->createRecipients($attributes);
+        $this->mailing->emails()->make()
+            ->setMailing($this->mailing)
+            ->makeService()
+            ->createGlobal($attributes);
 
         return $this->mailing;
     }
@@ -115,7 +84,10 @@ class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable
         }
 
         if ($this->mailing->emails->count() === 0) {
-            $this->createRecipients($attributes);
+            $this->mailing->emails()->make()
+                ->setMailing($this->mailing)
+                ->makeService()
+                ->createGlobal($attributes);
         }
 
         return $this->mailing->save();
@@ -129,43 +101,7 @@ class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function updateStatus(array $attributes) : bool
     {
-        // if ($attributes['status'] == 1) {
-        //     $this->sendMailing->dispatch($this->mailing);
-        // }
-
         return $this->mailing->update(['status' => $attributes['status']]);
-    }
-
-    /**
-     * Store Recipients for Mailing in storage.
-     *
-     * @param  array  $attributes [description]
-     * @return Collect|null             [description]
-     */
-    public function createRecipients(array $attributes) : ?Collect
-    {
-        // Pobieramy poszczególne grupy odbiorców zaczynając od tych, które
-        // mają powiązanie z modelem
-        if (isset($attributes['users']) && (bool)$attributes['users'] === true) {
-            $this->makeUserRecipients();
-        }
-
-        if (isset($attributes['newsletters']) && (bool)$attributes['newsletters'] === true) {
-            $this->makeNewsletterRecipients();
-        }
-
-        if (isset($attributes['emails']) && (bool)$attributes['emails'] === true) {
-            $this->makeEmailRecipients(json_decode($attributes['emails_json']));
-        }
-
-        if (isset($this->models)) {
-            // Usuwamy duplikaty emailów, w pierwszej kolejności zostawiając te
-            // powiązanie z modelem
-            $models = $this->collect->make($this->models)->unique('email');
-            return $this->mailing->emails()->saveMany($models);
-        }
-
-        return null;
     }
 
     /**
@@ -173,69 +109,10 @@ class MailingService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function reset() : void
     {
-        $this->deleteRecipients();
-    }
-
-    /**
-     * Remove the Mailing's Recipients from storage.
-     *
-     * @return bool [description]
-     */
-    public function deleteRecipients() : bool
-    {
-        return $this->mailing->emails()->delete();
-    }
-
-    /**
-     * Make array of UserRecipients.
-     *
-     * @return array|null [description]
-     */
-    public function makeUserRecipients() : ?array
-    {
-        $users = $this->user->all(['id', 'email']);
-
-        foreach ($users as $user) {
-            $this->models[] = $email = $this->mailing->emails()->make();
-            $email->morph()->associate($user);
-            $email->email = $user->email;
-        }
-
-        return $this->models ?? null;
-    }
-
-    /**
-     * Make array of NewsletterRecipients.
-     *
-     * @return array|null [description]
-     */
-    public function makeNewsletterRecipients() : ?array
-    {
-        $subscribers = $this->newsletter->whereStatus(1)->get(['id', 'email']);
-
-        foreach ($subscribers as $subscriber) {
-            $this->models[] = $email = $this->mailing->emails()->make();
-            $email->morph()->associate($subscriber);
-            $email->email = $subscriber->email;
-        }
-
-        return $this->models ?? null;
-    }
-
-    /**
-     * Make array of EmailRecipients.
-     *
-     * @param array $emails_json
-     * @return array|null [description]
-     */
-    public function makeEmailRecipients(array $emails_json) : ?array
-    {
-        foreach ($emails_json as $email_json) {
-            $this->models[] = $email = $this->mailing->emails()->make();
-            $email->email = $email_json->email;
-        }
-
-        return $this->models ?? null;
+        $this->mailing->emails()->make()
+            ->setMailing($this->mailing)
+            ->makeService()
+            ->clear();
     }
 
     /**
