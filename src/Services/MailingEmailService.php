@@ -161,4 +161,5 @@ class MailingEmailService
             ->where('mailing_id', $this->mailingEmail->getMailing()->id)
             ->delete();
     }
+    
 }
