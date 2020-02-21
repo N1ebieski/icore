@@ -11321,6 +11321,21 @@ p a {
   top: calc(67px + 180px);
 }
 
+/**
+ * Creates a "breakpoint" based class, for example:
+ *    $create-breakpoint-class('btn', 'purple')
+ *      --> .btn-purple, .btn-sm-purple, .btn-md-purple, ...
+ *    Where the class' content is applicable to that screen size.
+ */
+
+.policy-height {
+  margin-top: 67px;
+}
+
+.menu-height {
+  margin-bottom: 67px;
+}
+
 .navbar {
   min-height: 67px;
   z-index: 1000;
@@ -11329,6 +11344,16 @@ p a {
 @media (max-width: 767.98px) {
   .navbar {
     padding-right: 0;
+  }
+}
+
+.navbar .tt-menu {
+  width: calc(100% + 240px) !important;
+}
+
+@media (max-width: 575.98px) {
+  .navbar .tt-menu {
+    width: calc(100% + 140px) !important;
   }
 }
 
@@ -11676,7 +11701,6 @@ span.twitter-typeahead .sidebar .nav-item.tt-suggestion.tt-cursor .nav-link {
 }
 
 .content {
-  margin-top: 67px;
   min-height: calc(100vh - 290px);
 }
 
@@ -11707,7 +11731,7 @@ span.twitter-typeahead .sidebar .nav-item.tt-suggestion.tt-cursor .nav-link {
 }
 
 .scroll-to-top {
-  z-index: 100;
+  z-index: 1001;
   position: fixed;
   right: 15px;
   bottom: 15px;
@@ -11829,6 +11853,123 @@ span.twitter-typeahead .sidebar .nav-item.tt-suggestion.tt-cursor .nav-link {
   opacity: 0.5;
 }
 
+.w-25 {
+  width: 25% !important;
+}
+
+@media (min-width: 576px) {
+  .w-sm-25 {
+    width: 25% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-25 {
+    width: 25% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .w-lg-25 {
+    width: 25% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-xl-25 {
+    width: 25% !important;
+  }
+}
+
+.w-50 {
+  width: 50% !important;
+}
+
+@media (min-width: 576px) {
+  .w-sm-50 {
+    width: 50% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-50 {
+    width: 50% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .w-lg-50 {
+    width: 50% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-xl-50 {
+    width: 50% !important;
+  }
+}
+
+.w-75 {
+  width: 75% !important;
+}
+
+@media (min-width: 576px) {
+  .w-sm-75 {
+    width: 75% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-75 {
+    width: 75% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .w-lg-75 {
+    width: 75% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-xl-75 {
+    width: 75% !important;
+  }
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+@media (min-width: 576px) {
+  .w-sm-100 {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-100 {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .w-lg-100 {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-xl-100 {
+    width: 100% !important;
+  }
+}
+
+.map {
+  height: 300px;
+  width: 100%;
+}
+
 .input-group span.twitter-typeahead {
   display: flex !important;
   align-items: center;
@@ -11843,13 +11984,8 @@ span.twitter-typeahead .sidebar .nav-item.tt-suggestion.tt-cursor .nav-link {
 }
 
 .input-group span.twitter-typeahead .tt-menu {
-  width: calc(100% + 240px);
-}
-
-@media (max-width: 575.98px) {
-  .input-group span.twitter-typeahead .tt-menu {
-    width: calc(100% + 140px);
-  }
+  line-height: initial;
+  width: 100%;
 }
 
 .breadcrumb.bg-white {

@@ -711,6 +711,28 @@ jQuery(document).on('readyAndAjax', function() {
 });
 
 jQuery(document).ready(function() {
+    let $map = $("#map");
+
+    if ($map.length) {
+        $map.data = $map.data();
+
+        if (typeof $map.data.addressMarker !== 'undefined' && $map.data.addressMarker.length) {
+            $map.googleMap({
+                zoom: parseInt($map.data.zoom),
+                scrollwheel: true,              
+                type: "ROADMAP"
+            })
+            .addClass($map.data.containerClass);
+    
+            $.each($map.data.addressMarker, function(key, value) {
+                $map.addMarker({
+                    address: value
+                });
+            });
+        }
+    }
+});
+jQuery(document).ready(function() {
     $('.tagsinput').tagsInput({
         placeholder: $('.tagsinput').attr('placeholder'),
         minChars: 3,
@@ -747,7 +769,7 @@ jQuery(document).ready(function() {
             templates: {
                 suggestion: function(data) {
                     let name = $($.parseHTML(data.name)).text();
-                    let href = $form.attr('action')+'?source='+$form.find('select[name="source"]').val()+'&search='+name;
+                    let href = $form.attr('action')+'?source='+$form.find('[name="source"]').val()+'&search='+name;
 
                     return $.sanitize('<a href="'+href+'" class="list-group-item py-2 text-truncate">'+name+'</a>');
                 }
@@ -779,21 +801,23 @@ jQuery(document).on('readyAndAjax', function() {
 
 jQuery(document).ready(function() {
     let c, currentScrollTop = 0;
-    let $navbar = $('.navbar');
+    let $navbar = $('.menu.navbar');
 
     $(window).scroll(function () {
-       var a = $(window).scrollTop();
-       var b = $navbar.height()+10;
-
-       currentScrollTop = a;
-
-       if (c < currentScrollTop && c > b) {
-         $navbar.fadeOut();
-       } else {
-         $navbar.fadeIn();
-       }
-       c = currentScrollTop;
-   });
+        if (!$('body').hasClass('modal-open')) {
+            var a = $(window).scrollTop();
+            var b = $navbar.height() + 10;
+    
+            currentScrollTop = a;
+    
+            if (c < currentScrollTop && c > b) {
+                $navbar.fadeOut();
+            } else {
+                $navbar.fadeIn();
+            }
+            c = currentScrollTop;
+        }
+    });
 });
 
 jQuery(document).on('click', ".modal-backdrop, #navbarToggle", function(e) {
@@ -812,6 +836,16 @@ jQuery(document).on('click', ".modal-backdrop, #navbarToggle", function(e) {
     }
 });
 
+jQuery(document).on('click', '#policy #agree', function (e) {
+    e.preventDefault();
+
+    $('#policy').remove();
+
+    $.cookie("policyAgree", 1, { 
+        path: '/',
+        expires: 365
+    });
+});
 // Scroll to top button appear
 $(document).on('scroll', function() {
     var scrollDistance = $(this).scrollTop();
@@ -874,14 +908,20 @@ jQuery(document).on('click', 'div#themeToggle button', function(e) {
         $('link[href*="web-dark.css"]').attr('href', function() {
             return $(this).attr('href').replace('web-dark.css', 'web.css');
         });
-        $.cookie("themeToggle", 'light', { path: '/' });
+        $.cookie("themeToggle", 'light', { 
+            path: '/',
+            expires: 365
+        });
     }
 
     if ($element.hasClass('btn-dark')) {
         $('link[href*="web.css"]').attr('href', function() {
             return $(this).attr('href').replace('web.css', 'web-dark.css');
         });
-        $.cookie("themeToggle", 'dark', { path: '/' });
+        $.cookie("themeToggle", 'dark', { 
+            path: '/',
+            expires: 365
+        });
     }
 
     $element.prop('disabled', true);

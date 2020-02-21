@@ -1,5 +1,4 @@
 .content {
-    margin-top: $navbar-base-height;
     min-height: calc(100vh - 290px);
 }
 
@@ -40,7 +39,7 @@
 }
 
 .scroll-to-top {
-    z-index: 100;
+    z-index: 1001;
     position: fixed;
     right: 15px;
     bottom: 15px;

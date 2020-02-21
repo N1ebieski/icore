@@ -38,6 +38,8 @@
 
     @include('icore::web.partials.footer')
 
+    @include('icore::web.partials.policy')
+
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>

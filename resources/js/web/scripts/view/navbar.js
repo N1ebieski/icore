@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
     let c, currentScrollTop = 0;
-    let $navbar = $('.navbar');
+    let $navbar = $('.menu.navbar');
 
     $(window).scroll(function () {
         if (!$('body').hasClass('modal-open')) {

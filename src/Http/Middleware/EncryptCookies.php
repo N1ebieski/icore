@@ -12,6 +12,8 @@ class EncryptCookies extends Middleware
      * @var array
      */
     protected $except = [
-        'sidebarToggle', 'themeToggle'
+        'sidebarToggle',
+        'themeToggle',
+        'policyAgree'
     ];
 }

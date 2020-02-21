@@ -1,3 +1,11 @@
+.policy-height {
+    margin-top: $navbar-base-height;
+}
+
+.menu-height {
+    margin-bottom: $navbar-base-height;
+}
+
 .navbar {
     min-height: $navbar-base-height;
     z-index: 1000;
