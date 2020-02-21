@@ -29,7 +29,7 @@ class CreateMailingsTable extends Migration
             $table->unsignedInteger('mailing_id')->index();
             $table->string('model_type')->nullable();
             $table->integer('model_id')->nullable();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->integer('send')->unsigned();
             $table->timestamps();
 
@@ -37,6 +37,8 @@ class CreateMailingsTable extends Migration
                 ->references('id')
                 ->on('mailings')
                 ->onDelete('cascade');
+
+            $table->unique(['mailing_id', 'email']);
         });
 
         // Full Text Index
