@@ -130,7 +130,7 @@ class ReportTest extends TestCase
         ]);
 
         $response->assertOk()->assertJson([
-            'success' => trans('icore::comments.success.report')
+            'success' => trans('icore::reports.success.store')
         ]);
 
         $this->assertDatabaseHas('reports', [

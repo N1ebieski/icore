@@ -22,7 +22,7 @@ class SocialiteTest extends TestCase
         parent::setUp();
 
         $this->socialLoginRedirects = [
-            'facebook' => 'https://www.facebook.com/v3.0/dialog/oauth',
+            'facebook' => 'https://www.facebook.com/v3.3/dialog/oauth',
             'google'   => 'https://accounts.google.com/o/oauth2/auth',
             'github'   => 'https://github.com/login/oauth/authorize',
             'twitter'  => 'https://api.twitter.com/oauth/authenticate'
@@ -49,7 +49,7 @@ class SocialiteTest extends TestCase
 
     public function test_redirect_provider()
     {
-        $providers = ['facebook', 'twitter'];
+        $providers = ['twitter', 'facebook'];
 
         foreach ($providers as $provider) {
             //Check that the user is redirected to the Social Platform Login Page

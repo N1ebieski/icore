@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 /**
  * [Recaptcha_v2 description]
  */
-class Recaptcha_v2 implements Rule
+class Recaptcha_v2Rule implements Rule
 {
     /**
      * Create a new rule instance.

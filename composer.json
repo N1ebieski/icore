@@ -8,7 +8,7 @@
         "cviebrock/eloquent-sluggable": "6.0.*",
         "cviebrock/eloquent-taggable": "6.0.*",
         "franzose/closure-table": "^5.1",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "6.5.0",
         "laravel/socialite": "^4.1",
         "mews/purifier": "^3.1",
         "n1ebieski/logic-captcha": "^1.0",

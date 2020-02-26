@@ -10,7 +10,7 @@ use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
 use Illuminate\View\View;
-use N1ebieski\ICore\Events\Admin\Comment\Store as CommentStore;
+use N1ebieski\ICore\Events\Admin\Comment\StoreEvent as CommentStoreEvent;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as CommentBaseController;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Post\Polymorphic;
 
@@ -71,7 +71,7 @@ class CommentController extends CommentBaseController implements Polymorphic
         $comment = $comment->setMorph($post)->makeService()
             ->create($request->only(['content', 'parent_id']));
 
-        event(new CommentStore($comment));
+        event(new CommentStoreEvent($comment));
 
         return response()->json([
             'success' => '',

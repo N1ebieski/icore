@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Http\ViewComponents;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\LogicCaptcha\Rules\LogicCaptcha;
-use N1ebieski\ICore\Rules\Recaptcha_v2;
+use N1ebieski\ICore\Rules\Recaptcha_v2Rule;
 
 /**
  * [CaptchaComponent description]
@@ -62,12 +62,12 @@ class CaptchaComponent implements Htmlable
         switch ($this->driver) {
             case 'recaptcha_v2':
                 return [
-                    'g-recaptcha-response' => ['required', app()->make(Recaptcha_v2::class), 'no_js_validation']
+                    'g-recaptcha-response' => ['required', app()->make(Recaptcha_v2Rule::class), 'no_js_validation']
                 ];
 
             case 'logic_captcha':
                 return [
-                    'captcha' => ['required', 'string', app()->make(LogicCaptcha::class), 'no_js_validation']
+                    'captcha' => ['required', 'string', app()->make(LogicCaptchaRule::class), 'no_js_validation']
                 ];
         }
         return [];

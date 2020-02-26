@@ -15,7 +15,7 @@ use Exception;
 /**
  * [SendMailing description]
  */
-class SendMailing implements ShouldQueue
+class SendMailingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

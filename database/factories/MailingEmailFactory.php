@@ -13,13 +13,14 @@ $factory->define(MailingEmail::class, function(Faker $faker) {
 });
 
 $factory->state(MailingEmail::class, 'with_user', function() {
+    $user = factory(User::class)->create();
+
     return [
-        'model_id' => function() {
-            return factory(User::class)->create()->id;
-        },
-        'model_type' => function() {
+        'model_id' => $user->id,
+        'model_type' => function () {
             return User::class;
-        }
+        },
+        'email' => $user->email
     ];
 });
 

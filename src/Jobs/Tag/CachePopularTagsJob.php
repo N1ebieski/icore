@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 /**
  * [CachePopularTags description]
  */
-class CachePopularTags implements ShouldQueue
+class CachePopularTagsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Listeners\Newsletter;
 
-use N1ebieski\ICore\Mail\Newsletter\Confirmation;
+use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -18,6 +18,6 @@ class SendConfirmation
      */
     public function handle($event) : void
     {
-        Mail::send(app()->makeWith(Confirmation::class, ['newsletter' => $event->newsletter]));
+        Mail::send(app()->makeWith(ConfirmationMail::class, ['newsletter' => $event->newsletter]));
     }
 }

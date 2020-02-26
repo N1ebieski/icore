@@ -10,7 +10,7 @@ use N1ebieski\ICore\Models\Newsletter;
 /**
  * [Confirmation description]
  */
-class Confirmation extends Mailable
+class ConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 

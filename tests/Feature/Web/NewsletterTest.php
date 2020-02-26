@@ -6,7 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Mail;
-use N1ebieski\ICore\Mail\Newsletter\Confirmation;
+use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Faker\Factory as Faker;
 
 class NewsletterTest extends TestCase
@@ -56,7 +56,7 @@ class NewsletterTest extends TestCase
             'success' => trans('icore::newsletter.success.store')
         ]);
 
-        Mail::assertSent(Confirmation::class, function ($mail) use ($newsletter) {
+        Mail::assertSent(ConfirmationMail::class, function ($mail) use ($newsletter) {
             $mail->build();
 
             $this->assertEquals(route('web.newsletter.update_status', [

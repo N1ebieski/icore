@@ -1,33 +1,33 @@
 <?php
 
-namespace N1ebieski\ICore\Events\Web\Newsletter;
+namespace N1ebieski\ICore\Events\Admin\Comment;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\Models\Comment\Comment;
 
 /**
  * [Store description]
  */
-class Store
+class StoreEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * [public description]
-     * @var Newsletter
+     * @var Comment
      */
-    public $newsletter;
+    public $comment;
 
     /**
      * Create a new event instance.
      *
-     * @param Newsletter $newsletter
+     * @param Comment $comment
      * @return void
      */
-    public function __construct(Newsletter $newsletter)
+    public function __construct(Comment $comment)
     {
-        $this->newsletter = $newsletter;
+        $this->comment = $comment;
     }
 }

@@ -3,8 +3,8 @@
 namespace N1ebieski\ICore\Models\Tag;
 
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
+use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Services\TagService;
 use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Cache\TagCache;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
@@ -23,7 +23,7 @@ class Tag extends Taggable
      *
      * @var string
      */
-    public $table = 'tags';
+    protected $table = 'tags';
 
     /**
      * The columns of the full text index
@@ -62,12 +62,12 @@ class Tag extends Taggable
         return app()->make(TagCache::class, ['tag' => $this]);
     }
 
-    /**
-     * [makeService description]
-     * @return TagService [description]
-     */
-    public function makeService()
-    {
-        return app()->make(TagService::class, ['tag' => $this]);
-    }
+    // /**
+    //  * [makeService description]
+    //  * @return TagService [description]
+    //  */
+    // public function makeService()
+    // {
+    //     return app()->make(TagService::class, ['tag' => $this]);
+    // }
 }

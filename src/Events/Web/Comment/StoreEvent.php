@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Events\Admin\Comment;
+namespace N1ebieski\ICore\Events\Web\Comment;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -10,7 +10,7 @@ use N1ebieski\ICore\Models\Comment\Comment;
 /**
  * [Store description]
  */
-class Store
+class StoreEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

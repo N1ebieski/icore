@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Exceptions;
 use Exception;
 use Illuminate\Http\Request;
 
-class Custom extends Exception
+class CustomException extends Exception
 {
     /**
      * Report the exception.

@@ -65,7 +65,7 @@ class SocialiteController
         if (!is_null($authUser)) return redirect()->route('web.profile.edit_socialite')
             ->with('danger', trans('icore::profile.error.symlinkExist', ['provider' => ucfirst($provider)]));
 
-        $socialiteService->setSocialiteUser(auth()->user())->create();
+        $socialiteService->setSocialiteUser(auth()->user())->create([]);
 
         return redirect()->route('web.profile.edit_socialite')
             ->with('success', trans('icore::profile.success.symlink_create', ['provider' => ucfirst($provider)]));

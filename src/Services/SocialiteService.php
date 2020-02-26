@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Socialite as Social;
@@ -125,16 +126,17 @@ class SocialiteService implements Creatable
         $this->socialiteUser->sendEmailVerificationNotification();
 
         // Tworzymy mu jeszcze powiazanie z Socialite
-        $this->create();
+        $this->create([]);
 
         return $this->socialiteUser;
     }
 
     /**
      * Tworzy powiazanie usera z socialite
-     * @return Social
+     * @param  array  $attributes
+     * @return Model
      */
-    public function create() : Social
+    public function create(array $attributes) : Model
     {
         return $this->socialiteUser->socialites()->create([
             'provider_id'   => $this->providerUser->getId(),

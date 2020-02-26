@@ -23,7 +23,7 @@ class ArchiveTest extends TestCase
     {
         $response = $this->get(route('web.archive.post.show', ['month' => 12, 'year' => 2018]));
 
-        $response->assertViewIs('icore::web.archive.show');
+        $response->assertViewIs('icore::web.archive.post.show');
     }
 
     public function test_archive_show_paginate()
@@ -37,7 +37,7 @@ class ArchiveTest extends TestCase
 
         $response = $this->get(route('web.archive.post.show', ['month' => 12, 'year' => 2018, 'page' => 2]));
 
-        $response->assertViewIs('icore::web.archive.show');
+        $response->assertViewIs('icore::web.archive.post.show');
         $response->assertSee('class="pagination"');
         $response->assertSeeText($post[10]->title);
     }

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Rule;
 /**
  * [AlphaNumSpaces description]
  */
-class AlphaNumSpaces implements Rule
+class AlphaNumSpacesRule implements Rule
 {
     /**
      * Create a new rule instance.

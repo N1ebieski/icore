@@ -26,7 +26,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('web.category.post.show', [$category->slug]));
 
-        $response->assertViewIs('icore::web.category.show');
+        $response->assertViewIs('icore::web.category.post.show');
     }
 
     public function test_category_show_paginate()

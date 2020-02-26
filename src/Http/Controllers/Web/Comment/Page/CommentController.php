@@ -7,7 +7,7 @@ use N1ebieski\ICore\Http\Requests\Web\Comment\Page\StoreRequest;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 use Illuminate\Http\JsonResponse;
-use N1ebieski\ICore\Events\Web\Comment\Store as CommentStore;
+use N1ebieski\ICore\Events\Web\Comment\StoreEvent as CommentStoreEvent;
 use N1ebieski\ICore\Http\Controllers\Web\Comment\Page\Polymorphic as PagePolymorphic;
 
 /**
@@ -44,7 +44,7 @@ class CommentController implements PagePolymorphic
     {
         $comment = $comment->setMorph($page)->makeService()->create($request->only(['content', 'parent_id']));
 
-        event(new CommentStore($comment));
+        event(new CommentStoreEvent($comment));
 
         return response()->json([
             'success' => $comment->status === 1 ? '' : trans('icore::comments.success.store_0'),

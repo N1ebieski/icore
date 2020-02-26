@@ -33,7 +33,7 @@ class TagTest extends TestCase
 
         $response = $this->get(route('web.tag.post.show', [$post[0]->tags->first()->normalized, 'page' => 2]));
 
-        $response->assertViewIs('icore::web.tag.show');
+        $response->assertViewIs('icore::web.tag.post.show');
         $response->assertSee('class="pagination"');
         $response->assertSeeInOrder([$post[0]->tags->first()->name, $post[10]->title]);
     }

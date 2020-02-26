@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Crons\Tag;
 
 use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Jobs\Tag\CachePopularTags;
+use N1ebieski\ICore\Jobs\Tag\CachePopularTagsJob;
 
 /**
  * [PopularTagsCron description]
@@ -14,24 +14,24 @@ class PopularTagsCron
      * [private description]
      * @var Category
      */
-    protected $category;   
-
+    protected $category;
+    
     /**
      * [private description]
-     * @var CachePopularTags
+     * @var CachePopularTagsJob
      */
-    protected $cachePopularTags;
+    protected $cachePopularTagsJob;
 
     /**
      * Undocumented function
      *
      * @param Category $category
-     * @param CachePopularTag $cachePopularTag
+     * @param CachePopularTagJob $cachePopularTagJob
      */
-    public function __construct(Category $category, CachePopularTags $cachePopularTags)
+    public function __construct(Category $category, CachePopularTagsJob $cachePopularTagsJob)
     {
         $this->category = $category;
-        $this->cachePopularTags = $cachePopularTags;
+        $this->cachePopularTagsJob = $cachePopularTagsJob;
     }
 
     /**
@@ -49,12 +49,12 @@ class PopularTagsCron
      */
     private function addToQueue() : void
     {
-        $this->cachePopularTags->dispatch();
+        $this->cachePopularTagsJob->dispatch();
 
         $categories = $this->category->all();
 
         foreach ($categories as $category) {
-            $this->cachePopularTags->dispatch([$category->id]);
+            $this->cachePopularTagsJob->dispatch([$category->id]);
         }
     }
 }

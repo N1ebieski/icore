@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Crons;
 
 use N1ebieski\ICore\Models\MailingEmail;
-use N1ebieski\ICore\Jobs\SendMailing;
+use N1ebieski\ICore\Jobs\SendMailingJob;
 
 /**
  * [MailingCron description]
@@ -18,19 +18,19 @@ class MailingCron
 
     /**
      * [private description]
-     * @var SendMailing
+     * @var SendMailingJob
      */
-    protected $sendMailing;
+    protected $sendMailingJob;
 
     /**
      * [__construct description]
      * @param MailingEmail     $mailingEmail     [description]
-     * @param SendMailing $sendMailing [description]
+     * @param SendMailingJob   $sendMailingJob   [description]
      */
-    public function __construct(MailingEmail $mailingEmail, SendMailing $sendMailing)
+    public function __construct(MailingEmail $mailingEmail, SendMailingJob $sendMailingJob)
     {
         $this->mailingEmail = $mailingEmail;
-        $this->sendMailing = $sendMailing;
+        $this->sendMailingJob = $sendMailingJob;
     }
 
     /**
@@ -53,7 +53,7 @@ class MailingCron
         $this->mailingEmail->makeRepo()->chunkUnsentHasActiveMailing(
             function ($items) {
                 $items->each(function ($item) {
-                    $this->sendMailing->dispatch($item);
+                    $this->sendMailingJob->dispatch($item);
                 });
             }
         );

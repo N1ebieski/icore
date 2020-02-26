@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Http\Controllers\Web;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
-use N1ebieski\ICore\Events\Web\Newsletter\Store as NewsletterStore;
+use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
 use N1ebieski\ICore\Models\Newsletter;
@@ -29,7 +29,7 @@ class NewsletterController
             ['token' => Str::random(30), 'status' => 0]
         );
 
-        event(new NewsletterStore($newsletter));
+        event(new NewsletterStoreEvent($newsletter));
 
         return response()->json([
             'success' => trans('icore::newsletter.success.store'),
