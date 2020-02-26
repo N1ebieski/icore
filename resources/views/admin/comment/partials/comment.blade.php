@@ -89,7 +89,9 @@ data-id="{{ $comment->id }}">
                     </button>
                 </div>
                 @endcan
+                @if ($comment->user)
                 <div class="btn-group-vertical">
+                @endif
                     @can('destroy comments')
                     <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                     data-route="{{ route('admin.comment.destroy', ['comment' => $comment->id]) }}" data-id="{{ $comment->id }}"
@@ -104,14 +106,18 @@ data-id="{{ $comment->id }}">
                     </button>
                     @endcan
                     @can('create bans')
+                    @if ($comment->user)
                     <button type="button" class="btn btn-dark create"
-                    data-route="{{ route('admin.banmodel.user.create', [$comment->user_id]) }}"
+                    data-route="{{ route('admin.banmodel.user.create', [$comment->user->id]) }}"
                     data-toggle="modal" data-target="#createBanUserModal">
                         <i class="fas fa-user-slash"></i>
                         <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.ban') }}</span>
                     </button>
+                    @endif
                     @endcan
+                @if ($comment->user)    
                 </div>
+                @endif
             </div>
         </div>
     </div>
