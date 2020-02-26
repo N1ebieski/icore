@@ -163,7 +163,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function getContentAsHtmlAttribute() : string
     {
-        return nl2br($this->content_html);
+        return nl2br(e($this->content_html));
     }
 
     /**

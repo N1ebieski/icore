@@ -22,24 +22,24 @@ class XSSProtection
      * @param  \Closure  $next
      * @return mixed
      */
-     public function handle($request, Closure $next)
-     {
-         // if (!in_array(strtolower($request->method()), ['put', 'post'])) {
-         //     return $next($request);
-         // }
+    public function handle($request, Closure $next)
+    {
+        // if (!in_array(strtolower($request->method()), ['put', 'post'])) {
+        //     return $next($request);
+        // }
 
-         $input = $request->all();
+        $input = $request->all();
 
-         array_walk_recursive($input, function(&$value, &$key) {
-             if (in_array($key, $this->except, true)) {
-                 $value = Purifier::clean($value);
-             } else {
-                 $value = strip_tags($value);
-             }
-         });
+        array_walk_recursive($input, function (&$value, &$key) {
+            if (in_array($key, $this->except, true)) {
+                $value = Purifier::clean($value);
+            } else {
+                $value = strip_tags($value);
+            }
+        });
 
-         $request->merge($input);
+        $request->merge($input);
 
-         return $next($request);
-     }
+        return $next($request);
+    }
 }

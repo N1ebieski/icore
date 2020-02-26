@@ -23,7 +23,7 @@ data-id="{{ $comment->id }}">
                     </li>
                     <li>
                         @if ($comment->censored == true)<em>@endif
-                        {!! nl2br(e($comment->content_html)) !!}
+                        {!! $comment->content_as_html !!}
                         @if ($comment->censored == true)</em>@endif
                     </li>
                     @if ($comment->user)

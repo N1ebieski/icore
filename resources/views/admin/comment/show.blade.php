@@ -8,7 +8,7 @@
                 </div>
                 <div>
                     @if ($ancestor->censored == true)<em>@endif
-                    {!! nl2br(e($ancestor->content_html)) !!}
+                    {!! $ancestor->content_as_html !!}
                     @if ($ancestor->censored == true)</em>@endif
                 </div>
             </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="font-weight-bold">
             @if ($comment->censored == true)<em>@endif
-            {!! nl2br(e($comment->content_html)) !!}
+            {!! $comment->content_as_html !!}
             @if ($comment->censored == true)</em>@endif
         </div>
     </div>
@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     @if ($children->censored == true)<em>@endif
-                    {!! nl2br(e($children->content_html)) !!}
+                    {!! $children->content_as_html !!}
                     @if ($children->censored == true)</em>@endif
                 </div>
             </div>

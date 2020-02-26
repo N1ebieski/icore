@@ -110,12 +110,12 @@ class Link extends Model
      */
     public function getLinkAsHtmlAttribute() : string
     {
-        $output = '<a href="' . $this->url . '" title="' . $this->name . '">';
+        $output = '<a href="' . e($this->url) . '" title="' . e($this->name) . '">';
 
         if ($this->img_url !== null) {
-            $output .= '<img src="' . $this->img_url_from_storage . '" alt="' . $this->name . '">';
+            $output .= '<img src="' . e($this->img_url_from_storage) . '" alt="' . e($this->name) . '">';
         } else {
-            $output .= $this->name;
+            $output .= e($this->name);
         }
 
         $output .= '</a>';
