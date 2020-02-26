@@ -71,9 +71,11 @@ data-id="{{ $mailing->id }}">
                     @if ($mailing->emails->count() !== 0)
                     <button class="btn btn-danger" data-toggle="confirmation"
                     data-route="{{ route('admin.mailing.reset', [$mailing->id]) }}" data-id="{{ $mailing->id }}"
-                    type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check"
-                    data-btn-ok-class="btn-primary btn-popover resetMailing" data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn-secondary btn-popover" data-btn-cancel-icon-class="fas fa-ban"
+                    type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
+                    data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover resetMailing" 
+                    data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                    data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                    data-btn-cancel-icon-class="fas fa-ban mr-1"
                     data-title="{{ trans('icore::mailings.confirm') }}">
                         <i class="fas fa-power-off"></i>
                         <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::mailings.reset') }}</span>

@@ -93,9 +93,11 @@ data-id="{{ $comment->id }}">
                     @can('destroy comments')
                     <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                     data-route="{{ route('admin.comment.destroy', ['comment' => $comment->id]) }}" data-id="{{ $comment->id }}"
-                    type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check"
-                    data-btn-ok-class="btn-primary btn-popover destroyComment" data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn-secondary btn-popover" data-btn-cancel-icon-class="fas fa-ban"
+                    type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
+                    data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover destroyComment" 
+                    data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                    data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                    data-btn-cancel-icon-class="fas fa-ban mr-1"
                     data-title="{{ trans('icore::comments.confirm') }}">
                         <i class="far fa-trash-alt"></i>
                         <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>

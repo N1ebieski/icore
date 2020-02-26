@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Http\ViewComponents;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\LogicCaptcha\Rules\LogicCaptcha;
+use N1ebieski\LogicCaptcha\Rules\LogicCaptchaRule;
 use N1ebieski\ICore\Rules\Recaptcha_v2Rule;
 
 /**

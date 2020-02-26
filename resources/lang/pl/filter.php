@@ -4,7 +4,7 @@ return [
     'items' => 'Rekordów',
     'created_at' => 'Data dodania',
     'updated_at' => 'Data aktualizacji',
-    'sum_rating' => 'ilość głosów',
+    'sum_rating' => 'ocena',
     'name' => 'Nazwa',
     'search' => 'Szukaj',
     'search_placeholder' => 'Szukaj [min 3 znaki]',

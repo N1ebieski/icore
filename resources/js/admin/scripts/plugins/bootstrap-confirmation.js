@@ -3,7 +3,7 @@ jQuery(document).on('readyAndAjax', function() {
         rootSelector: '[data-toggle=confirmation]',
         copyAttributes: 'data-route data-id',
         singleton: true,
-        popout: true,
+        popout: true,      
         onConfirm: function() {
             if ($(this).hasClass('submit')) {
         		$(this).parents('form:first').submit();

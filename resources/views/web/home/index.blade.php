@@ -4,20 +4,26 @@
 @include('icore::web.partials.alerts-absolute')
 <div class="jumbotron jumbotron-fluid m-0 background">
     <div class="container">
-        <h1 class="display-4 text-white text-center">Fluid jumbotron</h1>
-        <p class="lead text-white text-center">This is a modified jumbotron that occupies the
+        <div class="w-md-75 mx-auto">
+            <h1 class="display-4 text-white text-center">Fluid jumbotron</h1>
+            <p class="lead text-white text-center">This is a modified jumbotron that occupies the
             entire horizontal space of its parent.</p>
-        <form id="searchForm" class="justify-content-center">
-            <div class="input-group justify-content-center">
-                <input type="text" class="border border-right-0 form-control-lg w-75" placeholder="Search...">
-                <span class="input-group-append">
-                    <button class="btn btn-outline-secondary bg-primary border-left-0" 
-                    type="button" disabled>
-                        <i class="fa fa-search text-white"></i>
-                    </button>
-                </span>
-            </div>
-        </form>
+            <form id="searchForm" method="get" action="{{ route('web.search.index') }}"
+            class="justify-content-center search">
+                <div class="input-group justify-content-center">
+                    <input type="text" class="border border-right-0 form-control-lg" 
+                    id="typeahead" data-route="{{ route('web.search.autocomplete') }}"
+                    placeholder="{{ trans('icore::search.search') }}" name="search">
+                    <input type="hidden" name="source" value="post">
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary bg-primary border-0" 
+                        type="submit" disabled>
+                            <i class="fa fa-search text-white"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

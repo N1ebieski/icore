@@ -525,7 +525,7 @@ class CategoryTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $category = factory(Category::class)->states('active')->make();
+        $category = factory(Category::class)->states('active')->create();
 
         Auth::login($user, true);
 
