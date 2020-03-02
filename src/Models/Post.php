@@ -26,6 +26,60 @@ class Post extends Model
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SCHEDULED = 2;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const WITH_COMMENT = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const WITHOUT_COMMENT = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_NOINDEX = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_INDEX = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_NOFOLLOW = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_FOLLOW = 0;    
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -59,7 +113,7 @@ class Post extends Model
      * @var array
      */
     protected $attributes = [
-        'comment' => 1,
+        'comment' => self::ACTIVE,
     ];
 
     /**
@@ -285,7 +339,7 @@ class Post extends Model
      */
     public function isCommentable() : bool
     {
-        return (bool)$this->comment === true;
+        return $this->comment === static::WITH_COMMENT;
     }
 
     /**
@@ -294,7 +348,7 @@ class Post extends Model
      */
     public function isActive() : bool
     {
-        return $this->status === 1;
+        return $this->status === static::ACTIVE;
     }
 
     // Scopes
@@ -307,7 +361,21 @@ class Post extends Model
     public function scopeActive(Builder $query) : Builder
     {
         return $query->where([
-            ['posts.status', '=', 1],
+            ['posts.status', '=', static::ACTIVE],
+            ['posts.published_at', '!=', null]
+        ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeScheduled(Builder $query) : Builder
+    {
+        return $query->where([
+            ['posts.status', '=', static::SCHEDULED],
             ['posts.published_at', '!=', null]
         ]);
     }

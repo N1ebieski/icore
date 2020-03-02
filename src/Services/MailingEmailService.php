@@ -87,7 +87,7 @@ class MailingEmailService
                     'model_type' => get_class($item),
                     'model_id' => $item->id,
                     'email' => $item->email,
-                    'send' => 0,
+                    'sent' => 0,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ];
@@ -116,7 +116,7 @@ class MailingEmailService
                         'model_type' => get_class($item),
                         'model_id' => $item->id,
                         'email' => $item->email,
-                        'send' => 0,
+                        'sent' => 0,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now()
                     ];
@@ -142,7 +142,7 @@ class MailingEmailService
                 'model_type' => null,
                 'model_id' => null,
                 'email' => $item->email,
-                'send' => 0,
+                'sent' => 0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

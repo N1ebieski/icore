@@ -232,12 +232,12 @@ PositionUpdatable, Deletable, GlobalDeletable
 
         if ($updateStatus === true) {
             // Deaktywacja kategorii nadrzędnej, deaktywuje wszystkich potomków
-            if ($attributes['status'] == 0) {
+            if ($attributes['status'] == Category::INACTIVE) {
                 $this->category->descendants()->update(['status' => $attributes['status']]);
             }
 
             // Aktywacja kategorii podrzędnej, aktywuje wszystkich przodków
-            if ($attributes['status'] == 1) {
+            if ($attributes['status'] == Category::ACTIVE) {
                 $this->category->ancestors()->update(['status' => $attributes['status']]);
             }
         }

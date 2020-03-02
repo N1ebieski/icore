@@ -1,8 +1,11 @@
+@inject('mailing', 'N1ebieski\ICore\Models\Mailing')
+
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'filterModal')
 
 @slot('modal_title')
-<i class="fas fa-sort-amount-up"></i> {{ trans('icore::filter.filter_title') }}
+<i class="fas fa-sort-amount-up"></i> 
+<span>{{ trans('icore::filter.filter_title') }}</span>
 @endslot
 
 @slot('modal_body')
@@ -15,9 +18,15 @@
         <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status') }}"</label>
         <select class="form-control custom-select" id="FormStatus" name="filter[status]">
             <option value="">{{ trans('icore::filter.default') }}</option>
-            <option value="1" {{ ($filter['status'] === 1) ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-            <option value="0" {{ ($filter['status'] === 0) ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
-            <option value="2" {{ ($filter['status'] === 2) ? 'selected' : '' }}>{{ trans('icore::filter.planned') }}</option>
+            <option value="{{ $mailing::ACTIVE }}" {{ ($filter['status'] === $mailing::ACTIVE) ? 'selected' : '' }}>
+                {{ trans('icore::mailings.status.'.$mailing::ACTIVE) }}
+            </option>
+            <option value="{{ $mailing::INACTIVE }}" {{ ($filter['status'] === $mailing::INACTIVE) ? 'selected' : '' }}>
+                {{ trans('icore::mailings.status.'.$mailing::INACTIVE) }}
+            </option>
+            <option value="{{ $mailing::SCHEDULED }}" {{ ($filter['status'] === $mailing::SCHEDULED) ? 'selected' : '' }}>
+                {{ trans('icore::mailings.status.'.$mailing::SCHEDULED) }}
+            </option>
         </select>
     </div>
     <button type="button" class="btn btn-primary btn-send" id="filterFilter">

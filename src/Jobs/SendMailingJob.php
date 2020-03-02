@@ -50,10 +50,10 @@ class SendMailingJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->email->send === 0) {
+        if ($this->email->sent === 0) {
             if ($this->email->mailing->status === 1) {
                 Mail::send(app()->makeWith(MailingMail::class, ['email' => $this->email]));
-                $this->email->update(['send' => 1]);
+                $this->email->update(['sent' => 1]);
             }
         }
     }
@@ -66,6 +66,6 @@ class SendMailingJob implements ShouldQueue
      */
     public function failed(Exception $exception)
     {
-        $this->email->update(['send' => 2]);
+        $this->email->update(['sent' => 2]);
     }
 }

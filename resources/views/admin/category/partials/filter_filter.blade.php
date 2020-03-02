@@ -1,3 +1,5 @@
+@inject('category', 'N1ebieski\ICore\Models\Category\Category')
+
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'filterModal')
 
@@ -15,8 +17,12 @@
     <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status') }}"</label>
     <select class="form-control custom-select" id="FormStatus" name="filter[status]">
         <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="1" {{ ($filter['status'] == '1') ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-        <option value="0" {{ ($filter['status'] == '0') ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
+        <option value="{{ $category::ACTIVE }}" {{ ($filter['status'] === $category::ACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::filter.active') }}
+        </option>
+        <option value="{{ $category::INACTIVE }}" {{ ($filter['status'] === $category::INACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::filter.inactive') }}
+        </option>
     </select>
 </div>
 @if ($parents->count() > 0)

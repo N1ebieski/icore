@@ -10,7 +10,7 @@
             @endif
             @if ($filter['status'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[status]">
-                {{ trans('icore::filter.status') }}: {{ trans('icore::mailings.status_'.$filter['status']) }}
+                {{ trans('icore::filter.status') }}: {{ trans('icore::mailings.status.'.$filter['status']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif

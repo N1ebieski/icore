@@ -27,8 +27,10 @@ return [
     'more' => 'pokaż więcej &raquo',
     'comment' => 'Komentarze włączone',
     // Przeniesione statusy z filter, bo w przypadku postów jest dodatkowy stan
-    'status_1' => 'aktywne',
-    'status_0' => 'nieaktywne',
-    'status_2' => 'zaplanowane',
+    'status' => [
+        '1' => 'aktywne',
+        '0' => 'nieaktywne',
+        '2' => 'zaplanowane',
+    ],
     'related' => 'Podobne posty'
 ];

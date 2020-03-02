@@ -16,6 +16,20 @@ class Report extends Model
 {
     use Polymorphic;
 
+    // Configuration
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const REPORTED = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const UNREPORTED = 0;
+
     // Relations
 
     /**

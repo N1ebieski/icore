@@ -24,6 +24,54 @@ class Page extends Entity implements PageInterface
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const WITH_COMMENT = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const WITHOUT_COMMENT = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_NOINDEX = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_INDEX = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_NOFOLLOW = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SEO_FOLLOW = 0;
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -93,10 +141,10 @@ class Page extends Entity implements PageInterface
      * @var array
      */
     protected $attributes = [
-        'seo_noindex' => 0,
-        'seo_nofollow' => 0,
-        'status' => 0,
-        'comment' => 0,
+        'seo_noindex' => self::SEO_INDEX,
+        'seo_nofollow' => self::SEO_FOLLOW,
+        'status' => self::ACTIVE,
+        'comment' => self::WITHOUT_COMMENT,
         'icon' => null
     ];
 
@@ -285,7 +333,7 @@ class Page extends Entity implements PageInterface
      */
     public function getRealPositionAttribute() : string
     {
-        return $this->position+1;
+        return $this->position + 1;
     }
 
     /**
@@ -327,7 +375,7 @@ class Page extends Entity implements PageInterface
      */
     public function isCommentable() : bool
     {
-        return (bool)$this->comment === true;
+        return $this->comment === static::WITH_COMMENT;
     }
 
     /**
@@ -336,7 +384,7 @@ class Page extends Entity implements PageInterface
      */
     public function isActive() : bool
     {
-        return $this->status === 1;
+        return $this->status === static::ACTIVE;
     }
 
     // Scopes
@@ -373,7 +421,7 @@ class Page extends Entity implements PageInterface
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->whereStatus(1);
+        return $query->where('status', static::ACTIVE);
     }
 
     /**

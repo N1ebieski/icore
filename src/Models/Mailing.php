@@ -21,6 +21,24 @@ class Mailing extends Model
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const SCHEDULED = 2;
+
+    /**
     * The attributes that are mass assignable.
     *
     * @var array
@@ -49,7 +67,7 @@ class Mailing extends Model
      * @var array
      */
     protected $attributes = [
-        'status' => 0,
+        'status' => self::INACTIVE,
     ];
 
     // Relations
@@ -72,7 +90,7 @@ class Mailing extends Model
     public function getProgressSuccessAttribute() : ?int
     {
         return ($this->emails->isNotEmpty()) ?
-            (int)round(($this->emails->where('send', 1)->count()/$this->emails->count())*100, 0)
+            (int)round(($this->emails->where('sent', 1)->count()/$this->emails->count())*100, 0)
             : null;
     }
 
@@ -83,7 +101,7 @@ class Mailing extends Model
     public function getProgressFailedAttribute() : ?int
     {
         return ($this->emails->isNotEmpty()) ?
-            (int)round(($this->emails->where('send', 2)->count()/$this->emails->count())*100, 0)
+            (int)round(($this->emails->where('sent', 2)->count()/$this->emails->count())*100, 0)
             : null;
     }
 
@@ -142,7 +160,18 @@ class Mailing extends Model
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->where('status', 1);
+        return $query->where('status', static::ACTIVE);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeScheduled(Builder $query) : Builder
+    {
+        return $query->where('status', static::SCHEDULED);
     }
 
     // Mutators

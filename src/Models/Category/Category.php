@@ -1,4 +1,5 @@
 <?php
+
 namespace N1ebieski\ICore\Models\Category;
 
 use Franzose\ClosureTable\Models\Entity;
@@ -21,6 +22,18 @@ class Category extends Entity implements CategoryInterface
     use Sluggable, Filterable, FullTextSearchable, Polymorphic, Carbonable;
 
     // Configuration
+
+    /**
+     * [public description]
+     * @var int
+     */ 
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
 
     /**
      * Indicates if the model should be timestamped.
@@ -77,7 +90,7 @@ class Category extends Entity implements CategoryInterface
      * @var array
      */
     protected $attributes = [
-        'status' => 1,
+        'status' => self::ACTIVE,
     ];
 
     // Relations
@@ -230,7 +243,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->whereStatus(1);
+        return $query->where('status', static::ACTIVE);
     }
 
     /**
@@ -251,7 +264,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function getRealPositionAttribute() : string
     {
-        return $this->position+1;
+        return $this->position + 1;
     }
 
     // Loads
@@ -264,7 +277,7 @@ class Category extends Entity implements CategoryInterface
     {
         return $this->load(['ancestors' => function($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
-        }]);;
+        }]);
     }
 
     // Makers

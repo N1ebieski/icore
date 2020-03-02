@@ -1,3 +1,6 @@
+@inject('comment', 'N1ebieski\ICore\Models\Comment\Comment')
+@inject('report', 'N1ebieski\ICore\Models\Report\Comment\Report')
+
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'filterModal')
 
@@ -15,24 +18,36 @@
     <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status') }}"</label>
     <select class="form-control custom-select" id="FormStatus" name="filter[status]">
         <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="1" {{ ($filter['status'] == '1') ? 'selected' : '' }}>{{ trans('icore::filter.status_1') }}</option>
-        <option value="0" {{ ($filter['status'] == '0') ? 'selected' : '' }}>{{ trans('icore::filter.status_0') }}</option>
+        <option value="{{ $comment::ACTIVE }}" {{ ($filter['status'] === $comment::ACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::filter.status_'.$comment::ACTIVE) }}
+        </option>
+        <option value="{{ $comment::INACTIVE }}" {{ ($filter['status'] === $comment::INACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::filter.status_.'.$comment::INACTIVE) }}
+        </option>
     </select>
 </div>
 <div class="form-group">
     <label for="FormCensored">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.censored') }}"</label>
     <select class="form-control custom-select" id="FormCensored" name="filter[censored]">
         <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="1" {{ ($filter['censored'] == '1') ? 'selected' : '' }}>{{ trans('icore::filter.censored_1') }}</option>
-        <option value="0" {{ ($filter['censored'] == '0') ? 'selected' : '' }}>{{ trans('icore::filter.censored_0') }}</option>
+        <option value="{{ $comment::CENSORED }}" {{ ($filter['censored'] === $comment::CENSORED) ? 'selected' : '' }}>
+            {{ trans('icore::filter.censored_'.$comment::CENSORED) }}
+        </option>
+        <option value="{{ $comment::UNCENSORED }}" {{ ($filter['censored'] === $comment::UNCENSORED) ? 'selected' : '' }}>
+            {{ trans('icore::filter.censored_'.$comment::UNCENSORED) }}
+        </option>
     </select>
 </div>
 <div class="form-group">
     <label for="FormReport">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.report') }}"</label>
     <select class="form-control custom-select" id="FormReport" name="filter[report]">
         <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="1" {{ ($filter['report'] == '1') ? 'selected' : '' }}>{{ trans('icore::filter.report_1') }}</option>
-        <option value="0" {{ ($filter['report'] == '0') ? 'selected' : '' }}>{{ trans('icore::filter.report_0') }}</option>
+        <option value="{{ $report::REPORTED }}" {{ ($filter['report'] === $report::REPORTED) ? 'selected' : '' }}>
+            {{ trans('icore::filter.report_'.$report::REPORTED) }}
+        </option>
+        <option value="{{ $report::UNREPORTED }}" {{ ($filter['report'] === $report::UNREPORTED) ? 'selected' : '' }}>
+            {{ trans('icore::filter.report_'.$report::UNREPORTED) }}
+        </option>
     </select>
 </div>
 <button type="button" class="btn btn-primary btn-send" id="filterFilter">

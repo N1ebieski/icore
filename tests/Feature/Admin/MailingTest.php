@@ -559,7 +559,7 @@ class MailingTest extends TestCase
     //
     //     $this->assertDatabaseHas('mailings_emails', [
     //         'id' => $email->id,
-    //         'send' => 0
+    //         'sent' => 0
     //     ]);
     //
     //     $schedule = app()->make(MailingCron::class);
@@ -571,7 +571,7 @@ class MailingTest extends TestCase
     //
     //     $this->assertDatabaseHas('mailings_emails', [
     //         'id' => $email->id,
-    //         'send' => 2
+    //         'sent' => 2
     //     ]);
     //
     //     // $this->artisan('schedule:run --env=testing');
@@ -593,7 +593,7 @@ class MailingTest extends TestCase
 
         $this->assertDatabaseHas('mailings_emails', [
             'id' => $email->id,
-            'send' => 0
+            'sent' => 0
         ]);
 
         // Uruchamiamy zadanie crona bezpośrednio, bo przez schedule:run ma ustalony delay
@@ -612,7 +612,7 @@ class MailingTest extends TestCase
 
         $this->assertDatabaseHas('mailings_emails', [
             'id' => $email->id,
-            'send' => 1
+            'sent' => 1
         ]);
 
         $schedule = app()->make(MailingCron::class);

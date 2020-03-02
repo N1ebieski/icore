@@ -20,9 +20,11 @@ return [
     'subscribers' => 'subskrybenci newslettera',
     'custom' => 'własna baza adresów email',
     // Przeniesione statusy z filter, bo w przypadku mailingów jest dodatkowy stan
-    'status_1' => 'aktywne',
-    'status_0' => 'nieaktywne',
-    'status_2' => 'zaplanowane',
+    'status' => [
+        '1' => 'aktywne',
+        '0' => 'nieaktywne',
+        '2' => 'zaplanowane'
+    ],
     'page' => [
         'index' => 'Mailing',
         'edit' => 'Edycja mailingu',

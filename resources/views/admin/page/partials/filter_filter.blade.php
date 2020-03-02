@@ -1,8 +1,11 @@
+@inject('page', 'N1ebieski\ICore\Models\Page\Page')
+
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'filterModal')
 
 @slot('modal_title')
-<i class="fas fa-sort-amount-up"></i> {{ trans('icore::filter.filter_title') }}
+<i class="fas fa-sort-amount-up"></i> 
+<span>{{ trans('icore::filter.filter_title') }}</span>
 @endslot
 
 @slot('modal_body')
@@ -15,8 +18,12 @@
     <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status') }}"</label>
     <select class="form-control custom-select" id="FormStatus" name="filter[status]">
         <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="1" {{ ($filter['status'] == '1') ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-        <option value="0" {{ ($filter['status'] == '0') ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
+        <option value="{{ $page::ACTIVE }}" {{ ($filter['status'] === $page::ACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::filter.active') }}
+        </option>
+        <option value="{{ $page::INACTIVE }}" {{ ($filter['status'] === $page::INACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::filter.inactive') }}
+        </option>
     </select>
 </div>
 @if ($parents->count() > 0)

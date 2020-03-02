@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\MailingEmailService;
@@ -16,6 +17,24 @@ class MailingEmail extends Model
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const SENT = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const UNSENT = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const ERROR = 2;
+
+    /**
      * [private description]
      * @var Mailing
      */
@@ -26,7 +45,7 @@ class MailingEmail extends Model
     *
     * @var array
     */
-    protected $fillable = ['send'];
+    protected $fillable = ['sent'];
 
     /**
      * The table associated with the model.
@@ -41,7 +60,7 @@ class MailingEmail extends Model
      * @var array
      */
     protected $attributes = [
-        'send' => 0,
+        'sent' => self::UNSENT,
     ];
 
     // Setters
@@ -83,6 +102,19 @@ class MailingEmail extends Model
     public function morph()
     {
         return $this->morphTo('morph', 'model_type', 'model_id');
+    }
+
+    // Scopes
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeUnsent(Builder $query) : Builder
+    {
+        return $query->where('sent', static::UNSENT);
     }
 
     // Makers

@@ -46,7 +46,7 @@ class PostRepo
     {
         return $this->post->comments()->where([
                 ['comments.parent_id', null],
-                ['comments.status', 1]
+                ['comments.status', Post::ACTIVE]
             ])
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
@@ -219,7 +219,7 @@ class PostRepo
                 $query->whereDate('published_at', '=', Carbon::now()->format('Y-m-d'))
                     ->whereTime('published_at', '<=', Carbon::now()->format('H:i:s'));
             })
-            ->whereStatus(2)
-            ->update(['status' => 1]);
+            ->scheduled()
+            ->update(['status' => Post::ACTIVE]);
     }
 }

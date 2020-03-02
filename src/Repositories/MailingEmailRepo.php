@@ -27,16 +27,16 @@ class MailingEmailRepo
     /**
      * Undocumented function
      *
-     * @param Closure $closure
+     * @param Closure $callback
      * @return bool
      */
-    public function chunkUnsentHasActiveMailing(Closure $closure) : bool
+    public function chunkUnsentHasActiveMailing(Closure $callback) : bool
     {
-        return $this->mailingEmail->where('send', 0)
+        return $this->mailingEmail->unsent()
             ->whereHas('mailing', function ($query) {
-                $query->where('status', 1);
+                $query->active();
             })
             ->orderBy('mailing_id', 'asc')
-            ->chunk(1000, $closure);
+            ->chunk(1000, $callback);
     }
 }

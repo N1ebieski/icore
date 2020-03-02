@@ -13,6 +13,18 @@ class Newsletter extends Model
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -36,7 +48,7 @@ class Newsletter extends Model
      * @var array
      */
     protected $attributes = [
-        'status' => 0,
+        'status' => self::ACTIVE,
     ];
 
     // Scopes
@@ -49,6 +61,6 @@ class Newsletter extends Model
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->where('status', 1);
+        return $query->where('status', static::ACTIVE);
     }
 }

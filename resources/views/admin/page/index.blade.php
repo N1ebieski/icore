@@ -47,9 +47,11 @@
         @can('destroy pages')
         <div class="select-action rounded">
             <button class="btn btn-danger submit" data-toggle="confirmation"
-            type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check"
-            data-btn-ok-class="btn-primary btn-popover" data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-            data-btn-cancel-class="btn-secondary btn-popover" data-btn-cancel-icon-class="fas fa-ban"
+            type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
+            data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover" 
+            data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+            data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+            data-btn-cancel-icon-class="fas fa-ban mr-1"
             data-title="{{ trans('icore::pages.confirm') }}">
                 <i class="far fa-trash-alt"></i>&nbsp;{{ trans('icore::default.delete_global') }}
             </button>

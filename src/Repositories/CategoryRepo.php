@@ -103,7 +103,7 @@ class CategoryRepo
         if (!empty($name)) {
             return $this->category->withAncestorsExceptSelf()
                 ->search($name)
-                ->whereStatus(1)
+                ->active()
                 ->poliType()
                 ->orderBy('real_depth', 'desc')
                 ->limit(10)

@@ -22,6 +22,30 @@ class Comment extends Entity implements CommentInterface
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const CENSORED = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const UNCENSORED = 0;
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -62,8 +86,8 @@ class Comment extends Entity implements CommentInterface
      * @var array
      */
     protected $attributes = [
-        'status' => 0,
-        'censored' => false
+        'status' => self::INACTIVE,
+        'censored' => self::UNCENSORED
     ];
 
     // Relations
@@ -212,7 +236,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function isActive() : bool
     {
-        return $this->status === 1;
+        return $this->status === static::ACTIVE;
     }
 
     /**
@@ -327,7 +351,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeUncensored(Builder $query) : Builder
     {
-        return $query->where('censored', 0);
+        return $query->where('censored', static::UNCENSORED);
     }
 
     /**
@@ -337,7 +361,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->whereStatus(1);
+        return $query->where('status', static::ACTIVE);
     }
 
     /**
@@ -347,7 +371,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeInactive(Builder $query) : Builder
     {
-        return $query->whereStatus(0);
+        return $query->where('status', static::INACTIVE);
     }
 
     // Loads

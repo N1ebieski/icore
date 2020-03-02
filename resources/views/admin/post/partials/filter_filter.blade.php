@@ -1,8 +1,11 @@
+@inject('post', 'N1ebieski\ICore\Models\Post')
+
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'filterModal')
 
 @slot('modal_title')
-<i class="fas fa-sort-amount-up"></i> {{ trans('icore::filter.filter_title') }}
+<i class="fas fa-sort-amount-up"></i> 
+<span>{{ trans('icore::filter.filter_title') }}</span>
 @endslot
 
 @slot('modal_body')
@@ -15,9 +18,15 @@
     <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status') }}"</label>
     <select class="form-control custom-select" id="FormStatus" name="filter[status]">
         <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="1" {{ ($filter['status'] == '1') ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-        <option value="0" {{ ($filter['status'] == '0') ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
-        <option value="2" {{ ($filter['status'] === 2) ? 'selected' : '' }}>{{ trans('icore::filter.planned') }}</option>
+        <option value="{{ $post::ACTIVE }}" {{ ($filter['status'] === $post::ACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::posts.status.'.$post::ACTIVE) }}
+        </option>
+        <option value="{{ $post::INACTIVE }}" {{ ($filter['status'] === $post::INACTIVE) ? 'selected' : '' }}>
+            {{ trans('icore::posts.status.'.$post::INACTIVE) }}
+        </option>
+        <option value="{{ $post::SCHEDULED }}" {{ ($filter['status'] === $post::SCHEDULED) ? 'selected' : '' }}>
+            {{ trans('icore::posts.status.'.$post::SCHEDULED) }}
+        </option>
     </select>
 </div>
 @if ($categories->count() > 0)

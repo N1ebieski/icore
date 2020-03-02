@@ -26,6 +26,18 @@ class User extends Authenticatable implements MustVerifyEmail
     // Configuration
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const ACTIVE = 1;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const INACTIVE = 0;
+
+    /**
      * [protected description]
      * @var string
      */

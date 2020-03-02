@@ -54,8 +54,8 @@ class MailingRepo
                 $query->whereDate('activation_at', '=', Carbon::now()->format('Y-m-d'))
                     ->whereTime('activation_at', '<=', Carbon::now()->format('H:i:s'));
             })
-            ->whereStatus(2)
-            ->update(['status' => 1]);
+            ->scheduled()
+            ->update(['status' => Mailing::ACTIVE]);
     }
 
     /**
@@ -67,10 +67,10 @@ class MailingRepo
     {
         return $this->mailing->active()
             ->whereDoesntHave('emails', function ($query) {
-                $query->where('status', 0);
+                $query->where('sent', 0);
             })
             ->update([
-                'status' => 0,
+                'status' => Mailing::INACTIVE,
                 'activation_at' => null
             ]);
     }
