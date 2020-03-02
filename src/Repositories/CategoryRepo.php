@@ -32,6 +32,7 @@ class CategoryRepo
     public function __construct(Category $category, Config $config)
     {
         $this->category = $category;
+
         $this->paginate = $config->get('database.paginate');
     }
 
@@ -43,7 +44,8 @@ class CategoryRepo
     public function getByIds(array $ids) : Collection
     {
         return $this->category->withAncestorsExceptSelf()
-            ->whereIn('id', $ids)->get();
+            ->whereIn('id', $ids)
+            ->get();
     }
 
     /**
@@ -59,9 +61,10 @@ class CategoryRepo
             ->poliType()
             ->filterParent($filter['parent'])
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
-            ->when($filter['parent'] === null, function($query) {
+            ->when($filter['parent'] === null, function ($query) {
                 return $query->withAncestorsExceptSelf();
-            })->filterPaginate($filter['paginate']);
+            })
+            ->filterPaginate($filter['paginate']);
     }
 
     /**
@@ -71,7 +74,8 @@ class CategoryRepo
     public function getAsTree() : Collection
     {
         return $this->category->getTreeByQuery(
-            $this->category->poliType()->orderBy('position', 'asc')
+            $this->category->poliType()
+                ->orderBy('position', 'asc')
         );
     }
 
@@ -82,15 +86,17 @@ class CategoryRepo
     public function getAsTreeExceptSelf() : Collection
     {
         return $this->category->getTreeByQuery(
-                $this->category->whereNotIn('id',
-                    $this->category->find($this->category->id)
+            $this->category->whereNotIn(
+                'id',
+                $this->category->find($this->category->id)
                     ->descendants()
                     ->get(['id'])
                     ->pluck('id')
                     ->toArray()
-                )->poliType()
-                ->orderBy('position', 'asc')
-            );
+            )
+            ->poliType()
+            ->orderBy('position', 'asc')
+        );
     }
 
     /**
@@ -100,15 +106,13 @@ class CategoryRepo
      */
     public function getBySearch(string $name)
     {
-        if (!empty($name)) {
-            return $this->category->withAncestorsExceptSelf()
-                ->search($name)
-                ->active()
-                ->poliType()
-                ->orderBy('real_depth', 'desc')
-                ->limit(10)
-                ->get();
-        }
+        return $this->category->withAncestorsExceptSelf()
+            ->search($name)
+            ->active()
+            ->poliType()
+            ->orderBy('real_depth', 'desc')
+            ->limit(10)
+            ->get();
     }
 
     /**
@@ -117,7 +121,10 @@ class CategoryRepo
      */
     public function getAncestorsAsArray() : array
     {
-        return $this->category->ancestors()->get(['id'])->pluck('id')->toArray();
+        return $this->category->ancestors()
+            ->get(['id'])
+            ->pluck('id')
+            ->toArray();
     }
 
     /**
@@ -126,7 +133,10 @@ class CategoryRepo
      */
     public function getDescendantsAsArray() : array
     {
-        return $this->category->descendants()->get(['id'])->pluck('id')->toArray();
+        return $this->category->descendants()
+            ->get(['id'])
+            ->pluck('id')
+            ->toArray();
     }
 
     /**
@@ -137,7 +147,7 @@ class CategoryRepo
     {
         return $this->category->morphs()
             ->active()
-            ->with('user:id,name')
+            ->with('user')
             ->orderBy('published_at', 'desc')
             ->paginate($this->paginate);
     }
@@ -150,7 +160,7 @@ class CategoryRepo
     {
         return $this->category->withRecursiveAllRels()
             ->withCount([
-                'morphs' => function($query) {
+                'morphs' => function ($query) {
                     $query->active();
                 }
             ])
@@ -168,7 +178,7 @@ class CategoryRepo
      */
     public function firstBySlug(string $slug)
     {
-        return $this->category->where('slug', '=', $slug)
+        return $this->category->where('slug', $slug)
             ->poliType()
             ->active()
             ->withAncestorsExceptSelf()
@@ -182,6 +192,7 @@ class CategoryRepo
     public function getSiblingsAsArray() : array
     {
         return $this->category->getSiblings(['id', 'position'])
-            ->pluck('position', 'id')->toArray();
+            ->pluck('position', 'id')
+            ->toArray();
     }
 }
