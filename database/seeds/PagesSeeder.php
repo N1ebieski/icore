@@ -20,31 +20,36 @@ class PagesSeeder extends Seeder
     {
         $user = User::first();
 
-        for ($i=0; $i<6; $i++) {
-            $page1[$i] = factory(Page::class)->make();
-            $page1[$i]->user()->associate($user);
-            $page1[$i]->save();
+        $pattern = [
+            0 => 6,
+            1 => [0, 3],
+            2 => [0, 3],
+            3 => [0, 3]
+        ];
 
-            for ($j=0; $j<rand(0, 3); $j++) {
-                $page2[$j] = factory(Page::class)->make();
-                $page2[$j]->user()->associate($user);
-                $page2[$j]->parent_id = $page1[$i]->id;
-                $page2[$j]->save();
+        $depth = 0;
 
-                for ($k=0; $k<rand(0, 3); $k++) {
-                    $page3[$k] = factory(Page::class)->make();
-                    $page3[$k]->user()->associate($user);
-                    $page3[$k]->parent_id = $page2[$j]->id;
-                    $page3[$k]->save();
+        $closure = function ($parent_id) use ($pattern, $user, &$closure, &$depth) {
+            if (is_array($pattern[$depth])) {
+                $loop = rand($pattern[$depth][0], $pattern[$depth][1]);
+            } else {
+                $loop = $pattern[$depth];
+            }
 
-                    for ($l=0; $l<rand(0, 3); $l++) {
-                        $page4[$l] = factory(Page::class)->make();
-                        $page4[$l]->user()->associate($user);
-                        $page4[$l]->parent_id = $page3[$k]->id;
-                        $page4[$l]->save();
-                    }
+            for ($i = 0; $i < $loop; $i++) {
+                $page = factory(Page::class)->create([
+                    'parent_id' => $parent_id,
+                    'user_id' => $user->id
+                ]);
+
+                $depth = $page->real_depth + 1;
+
+                if (isset($pattern[$depth])) {
+                    $closure($page->id);
                 }
             }
-        }
+        };
+
+        $closure(null);
     }
 }

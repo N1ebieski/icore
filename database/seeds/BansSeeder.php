@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Seeds;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\BanModel\User\BanModel;
 
@@ -18,10 +19,9 @@ class BansSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::take(50)->get();
-
-        foreach($users as $user) {
-            app(BanModel::class)->morph()->associate($user)->save();
-        }
+        User::take(50)->get()
+            ->each(function ($user) {
+                App::make(BanModel::class)->morph()->associate($user)->save();
+            });
     }
 }

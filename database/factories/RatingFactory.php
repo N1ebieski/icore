@@ -11,7 +11,7 @@ $factory->define(Rating::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Rating::class, 'one', function() {
+$factory->state(Rating::class, 'one', function () {
     return [
         'rating' => 1
     ];

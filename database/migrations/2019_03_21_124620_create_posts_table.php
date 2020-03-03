@@ -18,9 +18,9 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('slug')->unique();
-            $table->unsignedInteger('user_id')->index();
+            $table->bigInteger('user_id')->unsigned()->index();
             $table->string('title');
             $table->longText('content_html')->nullable();
             $table->longText('content')->nullable();
@@ -28,7 +28,7 @@ class CreatePostsTable extends Migration
             $table->text('seo_desc')->nullable();
             $table->boolean('seo_noindex')->default(0);
             $table->boolean('seo_nofollow')->default(0);
-            $table->integer('status')->unsigned();
+            $table->tinyInteger('status')->unsigned();
             $table->boolean('comment')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();

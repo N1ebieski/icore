@@ -14,8 +14,8 @@ class CreateSocialitesTable extends Migration
     public function up()
     {
         Schema::create('socialites', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned();
             $table->string('provider_name')->nullable();
             $table->string('provider_id')->unique()->nullable();
             $table->timestamps();

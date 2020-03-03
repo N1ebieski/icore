@@ -16,25 +16,25 @@ $factory->define(Comment::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Comment::class, 'active', function() {
+$factory->state(Comment::class, 'active', function () {
     return [
         'status' => 1
     ];
 });
 
-$factory->state(Comment::class, 'inactive', function() {
+$factory->state(Comment::class, 'inactive', function () {
     return [
         'status' => 0
     ];
 });
 
-$factory->state(Comment::class, 'with_user', function() {
+$factory->state(Comment::class, 'with_user', function () {
     return [
         'user_id' => factory(User::class)->create()->id
     ];
 });
 
-$factory->afterMakingState(Comment::class, 'with_post', function($comment) {
+$factory->afterMakingState(Comment::class, 'with_post', function ($comment) {
     $comment->morph()->associate(
         factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])->create()
     );

@@ -15,14 +15,14 @@ class CreateBansTable extends Migration
     public function up()
     {
         Schema::create('bans_models', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('model_type')->index();
-            $table->unsignedInteger('model_id');
+            $table->bigInteger('model_id')->unsigned();
             $table->timestamps();
         });
 
         Schema::create('bans_values', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('type')->index();
             $table->string('value');
             $table->timestamps();

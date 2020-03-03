@@ -14,14 +14,14 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->nullable()->index();
-            $table->unsignedInteger('model_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned()->nullable()->index();
+            $table->bigInteger('model_id')->unsigned();
             $table->string('model_type');
-            $table->unsignedInteger('parent_id')->index()->nullable();
+            $table->bigInteger('parent_id')->unsigned()->index()->nullable();
             $table->text('content_html');
             $table->text('content');
-            $table->boolean('status')->unsigned();
+            $table->tinyInteger('status')->unsigned();
             $table->boolean('censored')->unsigned()->default(false);
             $table->integer('position', false, true);
             $table->integer('real_depth', false, true);
@@ -40,10 +40,10 @@ class CreateCommentsTable extends Migration
         DB::statement('ALTER TABLE comments ADD FULLTEXT fulltext_index (content)');
 
         Schema::create('comments_closure', function (Blueprint $table) {
-            $table->increments('closure_id');
+            $table->bigIncrements('closure_id');
 
-            $table->integer('ancestor', false, true);
-            $table->integer('descendant', false, true);
+            $table->bigInteger('ancestor', false, true);
+            $table->bigInteger('descendant', false, true);
             $table->integer('depth', false, true);
 
             $table->foreign('ancestor')

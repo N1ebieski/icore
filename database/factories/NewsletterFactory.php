@@ -14,13 +14,13 @@ $factory->define(Newsletter::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Newsletter::class, 'active', function() {
+$factory->state(Newsletter::class, 'active', function () {
     return [
         'status' => 1
     ];
 });
 
-$factory->state(Newsletter::class, 'inactive', function() {
+$factory->state(Newsletter::class, 'inactive', function () {
     return [
         'status' => 0
     ];

@@ -15,22 +15,22 @@ class CreateMailingsTable extends Migration
     public function up()
     {
         Schema::create('mailings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('title');
             $table->longText('content_html');
             $table->longText('content');
-            $table->integer('status')->unsigned();
+            $table->tinyInteger('status')->unsigned();
             $table->timestamp('activation_at')->nullable();
             $table->timestamps();
         });
 
         Schema::create('mailings_emails', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('mailing_id')->index();
+            $table->bigIncrements('id');
+            $table->bigInteger('mailing_id')->unsigned()->index();
             $table->string('model_type')->nullable();
-            $table->integer('model_id')->nullable();
+            $table->bigInteger('model_id')->unsigned()->nullable();
             $table->string('email');
-            $table->integer('sent')->unsigned();
+            $table->tinyInteger('sent')->unsigned();
             $table->timestamps();
 
             $table->foreign('mailing_id')

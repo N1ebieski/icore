@@ -14,9 +14,9 @@ class CreateReportsTable extends Migration
     public function up()
     {
         Schema::create('reports', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->index();
-            $table->unsignedInteger('model_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->bigInteger('model_id')->unsigned();
             $table->string('model_type');
             $table->string('content');
             $table->timestamps();

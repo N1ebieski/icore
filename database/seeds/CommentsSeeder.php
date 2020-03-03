@@ -23,39 +23,37 @@ class CommentsSeeder extends Seeder
         $post = Post::first();
         $users = User::all();
 
-        // $posts->each(function($post) use ($users) {
-            for ($i=0; $i<100; $i++) {
-                $com[$i] = factory(Comment::class)->make();
-                $com[$i]->morph()->associate($post);
-                $com[$i]->user()->associate($users->random()->id);
-                $com[$i]->save();
+        $pattern = [
+            0 => 50,
+            1 => [2, 10],
+            2 => [0, 10],
+            3 => [0, 5]
+        ];
 
-                for ($j=0; $j<rand(2, 10); $j++) {
-                    $comcom[$j] = factory(Comment::class)->make();
-                    $comcom[$j]->morph()->associate($post);
-                    $comcom[$j]->user()->associate($users->random()->id);
-                    $comcom[$j]->parent_id = $com[$i]->id;
-                    $comcom[$j]->save();
+        $depth = 0;
 
-                    for ($k=0; $k<rand(0, 5); $k++) {
-                        $comcomcom[$k] = factory(Comment::class)->make();
-                        $comcomcom[$k]->morph()->associate($post);
-                        $comcomcom[$k]->user()->associate($users->random()->id);
-                        $comcomcom[$k]->parent_id = $comcom[$j]->id;
-                        $comcomcom[$k]->save();
+        $closure = function ($parent_id) use ($pattern, $post, $users, &$closure, &$depth) {
+            if (is_array($pattern[$depth])) {
+                $loop = rand($pattern[$depth][0], $pattern[$depth][1]);
+            } else {
+                $loop = $pattern[$depth];
+            }
 
-                        if (rand(0, 1) == 1) {
-                            for ($l=0; $l<rand(0, 5); $l++) {
-                                $comcomcomcom[$l] = factory(Comment::class)->make();
-                                $comcomcomcom[$l]->morph()->associate($post);
-                                $comcomcomcom[$l]->user()->associate($users->random()->id);
-                                $comcomcomcom[$l]->parent_id = $comcomcom[$k]->id;
-                                $comcomcomcom[$l]->save();
-                            }
-                        }
-                    }
+            for ($i = 0; $i < $loop; $i++) {
+                $comment = factory(Comment::class)->make();
+                $comment->parent_id = $parent_id;
+                $comment->morph()->associate($post);
+                $comment->user()->associate($users->random()->id);
+                $comment->save();
+
+                $depth = $comment->real_depth + 1;
+
+                if (isset($pattern[$depth])) {
+                    $closure($comment->id);
                 }
             }
-        // });
+        };
+
+        $closure(null);
     }
 }

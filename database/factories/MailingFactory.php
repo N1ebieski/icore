@@ -5,7 +5,7 @@
 use N1ebieski\ICore\Models\Mailing;
 use Faker\Generator as Faker;
 
-$factory->define(Mailing::class, function(Faker $faker) {
+$factory->define(Mailing::class, function (Faker $faker) {
     $content = $faker->text(2000);
 
     return [
@@ -16,7 +16,7 @@ $factory->define(Mailing::class, function(Faker $faker) {
     ];
 });
 
-$factory->state(Mailing::class, 'active', function(Faker $faker) {
+$factory->state(Mailing::class, 'active', function (Faker $faker) {
     return [
         'status' => 1
     ];

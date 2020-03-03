@@ -15,9 +15,9 @@ class CreatePagesTable extends Migration
     public function up()
     {
         Schema::create('pages', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('slug')->unique();
-            $table->unsignedInteger('user_id')->index();
+            $table->bigInteger('user_id')->unsigned()->index();
             $table->string('icon')->nullable();
             $table->string('title');
             $table->longText('content_html')->nullable();
@@ -26,9 +26,9 @@ class CreatePagesTable extends Migration
             $table->text('seo_desc')->nullable();
             $table->boolean('seo_noindex')->default(0);
             $table->boolean('seo_nofollow')->default(0);
-            $table->integer('status')->unsigned();
+            $table->tinyInteger('status')->unsigned();
             $table->boolean('comment')->default(0);
-            $table->unsignedInteger('parent_id')->index()->nullable();
+            $table->bigInteger('parent_id')->unsigned()->index()->nullable();
             $table->integer('position', false, true);
             $table->integer('real_depth', false, true);
             $table->timestamps();
@@ -43,10 +43,10 @@ class CreatePagesTable extends Migration
         DB::statement('ALTER TABLE pages ADD FULLTEXT fulltext_index (title, content)');
 
         Schema::create('pages_closure', function (Blueprint $table) {
-            $table->increments('closure_id');
+            $table->bigIncrements('closure_id');
 
-            $table->integer('ancestor', false, true);
-            $table->integer('descendant', false, true);
+            $table->bigInteger('ancestor', false, true);
+            $table->bigInteger('descendant', false, true);
             $table->integer('depth', false, true);
 
             $table->foreign('ancestor')

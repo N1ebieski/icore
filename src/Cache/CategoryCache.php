@@ -7,6 +7,7 @@ use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 /**
  * [CategoryCache description]
@@ -26,21 +27,33 @@ class CategoryCache
     protected $cache;
 
     /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * Config
      * @var int
      */
     protected $minutes;
 
     /**
-     * [__construct description]
-     * @param Category     $category     [description]
-     * @param Cache        $cache        [description]
-     * @param Config       $config       [description]
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param Cache $cache
+     * @param Config $config
+     * @param Carbon $carbon
      */
-    public function __construct(Category $category, Cache $cache, Config $config)
+    public function __construct(Category $category, Cache $cache, Config $config, Carbon $carbon)
     {
         $this->category = $category;
+
         $this->cache = $cache;
+        $this->carbon = $carbon;
+
         $this->minutes = $config->get('cache.minutes');
     }
 
@@ -53,8 +66,8 @@ class CategoryCache
     {
         return $this->cache->remember(
             "category.firstBySlug.{$slug}",
-            now()->addMinutes($this->minutes),
-            function() use ($slug) {
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () use ($slug) {
                 return $this->category->makeRepo()->firstBySlug($slug);
             }
         );
@@ -69,7 +82,7 @@ class CategoryCache
     {
         return $this->cache->tags(['posts'])->remember(
             "category.{$this->category->id}.paginatePosts.{$page}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () {
                 return $this->category->makeRepo()->paginatePosts();
             }
@@ -84,8 +97,8 @@ class CategoryCache
     {
         return $this->cache->tags(['categories'])->remember(
             "category.{$this->category->poli}.getWithRecursiveChildrens",
-            now()->addMinutes($this->minutes),
-            function() {
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
                 return $this->category->makeRepo()->getWithRecursiveChildrens();
             }
         );

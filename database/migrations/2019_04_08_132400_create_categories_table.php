@@ -10,13 +10,13 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('model_type');
             $table->string('slug')->unique();
-            $table->string('icon')->nullable();            
+            $table->string('icon')->nullable();
             $table->string('name');
-            $table->integer('status')->unsigned();
-            $table->unsignedInteger('parent_id')->index()->nullable();
+            $table->tinyInteger('status')->unsigned();
+            $table->bigInteger('parent_id')->unsigned()->index()->nullable();
             $table->integer('position', false, true);
             $table->integer('real_depth', false, true);
             $table->timestamps();
@@ -33,10 +33,10 @@ class CreateCategoriesTable extends Migration
         DB::statement('ALTER TABLE categories ADD FULLTEXT fulltext_index (name)');
 
         Schema::create('categories_closure', function (Blueprint $table) {
-            $table->increments('closure_id');
+            $table->bigIncrements('closure_id');
 
-            $table->integer('ancestor', false, true);
-            $table->integer('descendant', false, true);
+            $table->bigInteger('ancestor', false, true);
+            $table->bigInteger('descendant', false, true);
             $table->integer('depth', false, true);
 
             $table->foreign('ancestor')
@@ -51,8 +51,8 @@ class CreateCategoriesTable extends Migration
         });
 
         Schema::create('categories_models', function (Blueprint $table) {
-            $table->unsignedInteger('category_id');
-            $table->unsignedInteger('model_id');
+            $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('model_id')->unsigned();
             $table->string('model_type');
             $table->index(['model_type', 'model_id']);
 
@@ -61,8 +61,10 @@ class CreateCategoriesTable extends Migration
                 ->on('categories')
                 ->onDelete('cascade');
 
-            $table->primary(['category_id', 'model_type', 'model_id'],
-                    'categorables_primary');
+            $table->primary(
+                ['category_id', 'model_type', 'model_id'],
+                'categorables_primary'
+            );
         });
     }
 

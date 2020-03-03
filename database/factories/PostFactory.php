@@ -5,7 +5,7 @@ use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Post;
 use Carbon\Carbon;
 
-$factory->define(Post::class, function(Faker $faker) {
+$factory->define(Post::class, function (Faker $faker) {
 
     $content = $faker->text(2000);
 
@@ -26,38 +26,38 @@ $factory->define(Post::class, function(Faker $faker) {
     ];
 });
 
-$factory->state(Post::class, 'active', function(Faker $faker) {
+$factory->state(Post::class, 'active', function (Faker $faker) {
     return [
         'status' => 1
     ];
 });
 
-$factory->state(Post::class, 'commentable', function(Faker $faker) {
+$factory->state(Post::class, 'commentable', function (Faker $faker) {
     return [
         'comment' => 1
     ];
 });
 
-$factory->state(Post::class, 'not_commentable', function(Faker $faker) {
+$factory->state(Post::class, 'not_commentable', function (Faker $faker) {
     return [
         'comment' => 0
     ];
 });
 
-$factory->state(Post::class, 'publish', function(Faker $faker) {
+$factory->state(Post::class, 'publish', function (Faker $faker) {
     return [
         'published_at' => $faker->dateTimeThisYear()->format('Y-m-d H:i:s')
     ];
 });
 
-$factory->state(Post::class, 'scheduled', function(Faker $faker) {
+$factory->state(Post::class, 'scheduled', function (Faker $faker) {
     return [
         'status' => 2,
         'published_at' => Carbon::now()->format('Y-m-d H:i:s')
     ];
 });
 
-$factory->state(Post::class, 'with_user', function(Faker $faker) {
+$factory->state(Post::class, 'with_user', function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id
     ];

@@ -12,7 +12,7 @@ $factory->define(Report::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Report::class, 'with_user', function(Faker $faker) {
+$factory->state(Report::class, 'with_user', function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id
     ];

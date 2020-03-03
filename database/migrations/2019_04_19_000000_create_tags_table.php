@@ -18,8 +18,8 @@ class CreateTagsTable extends Migration
         $connection = config('taggable.connection');
 
         if (!Schema::connection($connection)->hasTable('tags')) {
-            Schema::connection($connection)->create('tags', function(Blueprint $table) {
-                $table->increments('tag_id');
+            Schema::connection($connection)->create('tags', function (Blueprint $table) {
+                $table->bigIncrements('tag_id');
                 $table->string('name');
                 $table->string('normalized');
                 $table->timestamps();
@@ -31,9 +31,9 @@ class CreateTagsTable extends Migration
         // Full Text Index
         DB::statement('ALTER TABLE tags ADD FULLTEXT fulltext_index (name)');
 
-        Schema::connection($connection)->create('tags_models', function(Blueprint $table) {
-            $table->unsignedInteger('tag_id');
-            $table->unsignedInteger('model_id');
+        Schema::connection($connection)->create('tags_models', function (Blueprint $table) {
+            $table->bigInteger('tag_id')->unsigned();
+            $table->bigInteger('model_id')->unsigned();
             $table->string('model_type');
             $table->timestamps();
 

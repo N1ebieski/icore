@@ -15,13 +15,13 @@ $factory->define(Comment::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Comment::class, 'active', function(Faker $faker) {
+$factory->state(Comment::class, 'active', function (Faker $faker) {
     return [
         'status' => 1
     ];
 });
 
-$factory->state(Comment::class, 'with_user', function(Faker $faker) {
+$factory->state(Comment::class, 'with_user', function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id
     ];

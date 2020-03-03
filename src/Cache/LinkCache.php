@@ -6,6 +6,7 @@ use N1ebieski\ICore\Models\Link;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 /**
  * [LinkCache description]
@@ -25,21 +26,33 @@ class LinkCache
     protected $cache;
 
     /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * Configuration
      * @var int
      */
     protected $minutes;
 
     /**
-     * [__construct description]
-     * @param Link   $link   [description]
-     * @param Cache  $cache  [description]
-     * @param Config $config [description]
+     * Undocumented function
+     *
+     * @param Link $link
+     * @param Cache $cache
+     * @param Config $config
+     * @param Carbon $carbon
      */
-    public function __construct(Link $link, Cache $cache, Config $config)
+    public function __construct(Link $link, Cache $cache, Config $config, Carbon $carbon)
     {
         $this->link = $link;
+
         $this->cache = $cache;
+        $this->carbon = $carbon;
+
         $this->minutes = $config->get('cache.minutes');
     }
 
@@ -54,8 +67,8 @@ class LinkCache
 
         return $this->cache->tags(['links'])->remember(
             "link.getLinksByComponent.{$cats}",
-            now()->addMinutes($this->minutes),
-            function() use ($component) {
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () use ($component) {
                 return $this->link->makeRepo()->getLinksByComponent($component);
             }
         );

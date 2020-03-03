@@ -6,7 +6,7 @@ use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Page\Page;
 use Faker\Generator as Faker;
 
-$factory->define(Page::class, function(Faker $faker) {
+$factory->define(Page::class, function (Faker $faker) {
     $content = $faker->text(2000);
 
     return [
@@ -22,25 +22,25 @@ $factory->define(Page::class, function(Faker $faker) {
     ];
 });
 
-$factory->state(Page::class, 'active', function() {
+$factory->state(Page::class, 'active', function () {
     return [
         'status' => 1
     ];
 });
 
-$factory->state(Page::class, 'commentable', function(Faker $faker) {
+$factory->state(Page::class, 'commentable', function (Faker $faker) {
     return [
         'comment' => 1
     ];
 });
 
-$factory->state(Page::class, 'not_commentable', function(Faker $faker) {
+$factory->state(Page::class, 'not_commentable', function (Faker $faker) {
     return [
         'comment' => 0
     ];
 });
 
-$factory->state(Page::class, 'with_user', function(Faker $faker) {
+$factory->state(Page::class, 'with_user', function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id
     ];
