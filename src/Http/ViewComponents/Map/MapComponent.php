@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\ViewComponents\Map;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
 
 /**
@@ -10,6 +11,13 @@ use Illuminate\View\View;
  */
 class MapComponent implements Htmlable
 {
+    /**
+     * Undocumented variable
+     *
+     * @var ViewFactory
+     */
+    protected $view;
+
     /**
      * Undocumented variable
      *
@@ -32,11 +40,13 @@ class MapComponent implements Htmlable
     protected $address_marker;
 
     public function __construct(
-        string $container_class = 'map', 
+        ViewFactory $view,
+        string $container_class = 'map',
         int $zoom = 15, 
         array $address_marker = null
-    )
-    {
+    ) {
+        $this->view = $view;
+
         $this->container_class = $container_class;
         $this->zoom = $zoom;
         $this->address_marker = $address_marker;
@@ -48,7 +58,7 @@ class MapComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return view('icore::web.components.map.map', [
+        return $this->view->make('icore::web.components.map.map', [
             'containerClass' => $this->container_class,
             'zoom' => $this->zoom,
             'addressMarker' => json_encode($this->address_marker)

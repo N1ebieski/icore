@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\ViewComponents\Comment;
 
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
 
 /**
@@ -20,18 +21,29 @@ class LatestComponent implements Htmlable
     /**
      * Undocumented variable
      *
+     * @var ViewFactory
+     */
+    protected $view;
+
+    /**
+     * Undocumented variable
+     *
      * @var int
      */
     protected $limit;
 
     /**
-     * [__construct description]
-     * @param Tag  $comment [description]
-     * @param int  $limit [description]
+     * Undocumented function
+     *
+     * @param Comment $comment
+     * @param ViewFactory $view
+     * @param integer $limit
      */
-    public function __construct(Comment $comment, int $limit = 5)
+    public function __construct(Comment $comment, ViewFactory $view, int $limit = 5)
     {
         $this->comment = $comment;
+
+        $this->view = $view;
 
         $this->limit = $limit;
     }
@@ -42,7 +54,7 @@ class LatestComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return view('icore::web.components.comment.latest', [
+        return $this->view->make('icore::web.components.comment.latest', [
             'comments' => $this->comment->makeCache()->rememberLatestByComponent([
                 'limit' => $this->limit,
             ])

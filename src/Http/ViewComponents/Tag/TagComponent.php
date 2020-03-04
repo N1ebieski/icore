@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\ViewComponents\Tag;
 
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
 
 /**
@@ -20,6 +21,13 @@ class TagComponent implements Htmlable
     /**
      * Undocumented variable
      *
+     * @var ViewFactory
+     */
+    protected $view;
+
+    /**
+     * Undocumented variable
+     *
      * @var int
      */
     protected $limit;
@@ -32,14 +40,18 @@ class TagComponent implements Htmlable
     protected $colors;
 
     /**
-     * [__construct description]
-     * @param Tag  $tag [description]
-     * @param int  $limit [description]
-     * @param array $cats [description]
+     * Undocumented function
+     *
+     * @param Tag $tag
+     * @param ViewFactory $view
+     * @param integer $limit
+     * @param array $colors
      */
-    public function __construct(Tag $tag, int $limit = 25, array $colors = null)
+    public function __construct(Tag $tag, ViewFactory $view, int $limit = 25, array $colors = null)
     {
         $this->tag = $tag;
+
+        $this->view = $view;
 
         $this->limit = $limit;
         $this->colors = $colors;
@@ -51,7 +63,7 @@ class TagComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return view('icore::web.components.tag.tag', [
+        return $this->view->make('icore::web.components.tag.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([
                 'limit' => $this->limit,
             ]),

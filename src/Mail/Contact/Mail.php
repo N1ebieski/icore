@@ -6,6 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Translation\Translator as Lang;
+use Illuminate\Contracts\Routing\UrlGenerator as URL;
+use Illuminate\Contracts\Config\Repository as Config;
 
 /**
  * [Mail description]
@@ -21,14 +24,47 @@ class Mail extends Mailable
     protected $request;
 
     /**
-     * [__construct description]
-     * @param Request $request [description]
+     * Undocumented variable
+     *
+     * @var Lang
      */
-    public function __construct(Request $request)
+    protected $lang;
+
+    /**
+     * Undocumented variable
+     *
+     * @var URL
+     */
+    protected $url;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * [protected description]
+     * @var string
+     */
+    protected string $email;
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param Lang $lang
+     * @param URL $url
+     * @param Config $config
+     */
+    public function __construct(Request $request, Lang $lang, URL $url, Config $config)
     {
         $this->request = $request;
+        $this->lang = $lang;
+        $this->url = $url;
 
-        $this->email = config('mail.from.address');
+        $this->email = $config->get('mail.from.address');
     }
 
     /**
@@ -54,8 +90,8 @@ class Mail extends Mailable
      */
     protected function subcopy() : string
     {
-        return trans('icore::contact.subcopy.form', [
-            'url' => route('web.contact.show')
+        return $this->lang->get('icore::contact.subcopy.form', [
+            'url' => $this->url->route('web.contact.show')
         ]);
     }
 }
