@@ -38,10 +38,12 @@ class CreateRequest extends FormRequest
         // a w widoku edycji posta potrzebujemy calej kolekcji, co w przypadku wstawiania
         // danych z helpera old() stanowi problem
         if ($this->old('categories')) {
-            session()->flash('_old_input.categories_collection',
-                $this->category->makeRepo()->getByIds($this->old('categories')));
+            $this->session()->flash(
+                '_old_input.categories_collection',
+                $this->category->makeRepo()->getByIds($this->old('categories'))
+            );
         } else {
-            session()->forget('_old_input.categories_collection');
+            $this->session()->forget('_old_input.categories_collection');
         }
     }
 

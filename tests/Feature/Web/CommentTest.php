@@ -160,7 +160,7 @@ class CommentTest extends TestCase
 
     public function test_root_comment_post_store_with_banned_word()
     {
-        $this->mock(\N1ebieski\ICore\Rules\Recaptcha_v2Rule::class, function ($mock) {
+        $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
@@ -189,7 +189,7 @@ class CommentTest extends TestCase
 
     public function test_comment_post_with_disable_comments_store()
     {
-        $this->mock(\N1ebieski\ICore\Rules\Recaptcha_v2Rule::class, function ($mock) {
+        $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
@@ -211,7 +211,7 @@ class CommentTest extends TestCase
 
     public function test_root_comment_post_store()
     {
-        $this->mock(\N1ebieski\ICore\Rules\Recaptcha_v2Rule::class, function ($mock) {
+        $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
@@ -261,7 +261,7 @@ class CommentTest extends TestCase
 
     public function test_children_comment_post_store()
     {
-        $this->mock(\N1ebieski\ICore\Rules\Recaptcha_v2Rule::class, function ($mock) {
+        $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
         });
 

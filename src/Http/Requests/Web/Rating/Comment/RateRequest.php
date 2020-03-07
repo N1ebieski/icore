@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Rating\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\Comment\Comment;
 
 class RateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class RateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->comment->status === 1;
+        return $this->comment->status === Comment::ACTIVE;
     }
 
     /**

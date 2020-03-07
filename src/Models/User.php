@@ -2,19 +2,20 @@
 
 namespace N1ebieski\ICore\Models;
 
+use Carbon\Carbon;
+use N1ebieski\ICore\Models\Role;
+use Illuminate\Support\Facades\App;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Repositories\UserRepo;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use Carbon\Carbon;
-use N1ebieski\ICore\Models\Role;
-use N1ebieski\ICore\Repositories\UserRepo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * [User description]
@@ -78,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $attributes = [
-        'status' => 1,
+        'status' => self::ACTIVE,
     ];
 
     // Relations
@@ -158,7 +159,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeFilterRole(Builder $query, Role $role = null) : ?Builder
     {
-        return $query->when($role !== null, function($query) use ($role) {
+        return $query->when($role !== null, function ($query) use ($role) {
             $query->role($role->name);
         });
     }
@@ -169,8 +170,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * [makeRepo description]
      * @return UserRepo [description]
      */
-    public function makeRepo() 
+    public function makeRepo()
     {
-        return app()->make(UserRepo::class, ['user' => $this]);
+        return App::make(UserRepo::class, ['user' => $this]);
     }
 }

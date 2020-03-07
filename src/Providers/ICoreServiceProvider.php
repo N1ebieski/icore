@@ -117,7 +117,7 @@ class ICoreServiceProvider extends ServiceProvider
             __DIR__ . '/../../public/mix-manifest.json' => public_path('mix-manifest.json')
         ], 'icore.public');
 
-        if ($this->app->environment('local')) {        
+        if ($this->app->environment('local')) {
             $this->app->make('Illuminate\Database\Eloquent\Factory')->load(base_path('database/factories') . '/vendor/icore');
         }
 

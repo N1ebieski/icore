@@ -2,15 +2,17 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
+use N1ebieski\ICore\Models\Role;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Models\Permission;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Admin\Role\EditRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\IndexRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\StoreRequest;
-use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\DestroyRequest;
-use N1ebieski\ICore\Models\Role;
-use N1ebieski\ICore\Models\Permission;
-use Illuminate\View\View;
 
 /**
  * [RoleController description]
@@ -20,13 +22,13 @@ class RoleController
     /**
      *  Display a listing of the Role.
      *
-     * @param  Role $role [description]
+     * @param  Role        $role    [description]
      * @param IndexRequest $request [description]
-     * @return View       [description]
+     * @return HttpResponse         [description]
      */
-    public function index(Role $role, IndexRequest $request) : View
+    public function index(Role $role, IndexRequest $request) : HttpResponse
     {
-        return view('icore::admin.role.index', [
+        return Response::view('icore::admin.role.index', [
             'roles' => $role->makeRepo()->paginateByFilter([
                 'except' => $request->input('except')
             ]),
@@ -37,13 +39,13 @@ class RoleController
      * Show the form for creating a new resource
      *
      * @param  Permission $permission [description]
-     * @return View                 [description]
+     * @return HttpResponse           [description]
      */
-    public function create(Permission $permission) : View
+    public function create(Permission $permission) : HttpResponse
     {
         $permissions = $permission->orderBy('name', 'asc')->get();
 
-        return view('icore::admin.role.create', [
+        return Response::view('icore::admin.role.create', [
             'permissions' => $permissions,
             'col_count' => (int)round($permissions->count() / 3, 0)
         ]);
@@ -60,19 +62,8 @@ class RoleController
     {
         $role->makeService()->create($request->only(['name', 'perm']));
 
-        return redirect()->route('admin.role.index')
-            ->with('success', trans('icore::roles.success.store') );
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return Response::redirectToRoute('admin.role.index')
+            ->with('success', Lang::get('icore::roles.success.store'));
     }
 
     /**
@@ -80,13 +71,13 @@ class RoleController
      *
      * @param  Role       $role       [description]
      * @param  EditRequest $request   [description]
-     * @return View                   [description]
+     * @return HttpResponse           [description]
      */
-    public function edit(Role $role, EditRequest $request) : View
+    public function edit(Role $role, EditRequest $request) : HttpResponse
     {
         $permissions = $role->makeService()->getPermissionsByRole();
 
-        return view('icore::admin.role.edit', [
+        return Response::view('icore::admin.role.edit', [
             'role' => $role,
             'permissions' => $permissions,
             'col_count' => (int)round($permissions->count() / 3, 0)
@@ -104,8 +95,8 @@ class RoleController
     {
         $role->makeService()->update($request->only(['perm', 'name']));
 
-        return redirect()->route('admin.role.edit', [$role->id])
-            ->with('success', trans('icore::roles.success.update') );
+        return Response::redirectToRoute('admin.role.edit', [$role->id])
+            ->with('success', Lang::get('icore::roles.success.update'));
     }
 
     /**
@@ -119,6 +110,7 @@ class RoleController
     {
         $role->delete();
 
-        return redirect()->route('admin.role.index')->with('success', trans('icore::roles.success.destroy'));
+        return Response::redirectToRoute('admin.role.index')
+            ->with('success', Lang::get('icore::roles.success.destroy'));
     }
 }

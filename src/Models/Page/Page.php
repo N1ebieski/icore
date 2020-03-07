@@ -10,6 +10,9 @@ use N1ebieski\ICore\Models\Page\PageInterface;
 use Mews\Purifier\Facades\Purifier;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
 use N1ebieski\ICore\Repositories\PageRepo;
 use N1ebieski\ICore\Services\PageService;
 use N1ebieski\ICore\Cache\PageCache;
@@ -212,9 +215,9 @@ class Page extends Entity implements PageInterface
      */
     public function loadAncestorsExceptSelf() : self
     {
-        return $this->load(['ancestors' => function($q) {
+        return $this->load(['ancestors' => function ($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
-        }]);;
+        }]);
     }
 
     /**
@@ -224,7 +227,7 @@ class Page extends Entity implements PageInterface
     public function loadRecursiveChildrens() : self
     {
         return $this->load([
-            'childrensRecursiveWithAllRels' => function($query) {
+            'childrensRecursiveWithAllRels' => function ($query) {
                 $query->active()->orderBy('position', 'asc');
             }
         ]);
@@ -321,10 +324,10 @@ class Page extends Entity implements PageInterface
     {
         $cut = explode('<p>[more]</p>', $this->content_html);
 
-        return (!empty($cut[1])) ? $cut[0] . '<a href="' . route('web.post.show', [
+        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
                 'post' => $this->slug,
                 '#more'
-            ]) . '">' . trans('icore::posts.more') . '</a>' : $this->content_html;
+            ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->content_html;
     }
 
     /**
@@ -397,7 +400,7 @@ class Page extends Entity implements PageInterface
     */
     public function scopeFilterParent(Builder $query, $parent = null) : ?Builder
     {
-        return $query->when($parent !== null, function($query) use ($parent) {
+        return $query->when($parent !== null, function ($query) use ($parent) {
             $query->where('parent_id', $parent->id ?? null);
         });
     }
@@ -409,7 +412,7 @@ class Page extends Entity implements PageInterface
     */
     public function scopeWithAncestorsExceptSelf(Builder $query) : Builder
     {
-        return $query->with(['ancestors' => function($q) {
+        return $query->with(['ancestors' => function ($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
@@ -442,7 +445,7 @@ class Page extends Entity implements PageInterface
     public function scopeWithRecursiveAllRels(Builder $query) : Builder
     {
         return $query->with([
-            'childrensRecursiveWithAllRels' => function($query) {
+            'childrensRecursiveWithAllRels' => function ($query) {
                 $query->active()->orderBy('position', 'asc');
             }
         ]);
@@ -456,7 +459,7 @@ class Page extends Entity implements PageInterface
      */
     public function scopeComponentOnly(Builder $query, array $only = null) : ?Builder
     {
-        return $query->when($only !== null, function($query) use ($only) {
+        return $query->when($only !== null, function ($query) use ($only) {
             $query->whereIn('id', $only);
         });
     }
@@ -469,7 +472,7 @@ class Page extends Entity implements PageInterface
      */
     public function makeRepo()
     {
-        return app()->make(PageRepo::class, ['page' => $this]);
+        return App::make(PageRepo::class, ['page' => $this]);
     }
 
     /**
@@ -478,7 +481,7 @@ class Page extends Entity implements PageInterface
      */
     public function makeCache()
     {
-        return app()->make(PageCache::class, ['page' => $this]);
+        return App::make(PageCache::class, ['page' => $this]);
     }
 
     /**
@@ -487,6 +490,6 @@ class Page extends Entity implements PageInterface
      */
     public function makeService()
     {
-        return app()->make(PageService::class, ['page' => $this]);
+        return App::make(PageService::class, ['page' => $this]);
     }
 }

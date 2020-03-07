@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Mailing;
-use Illuminate\Database\Eloquent\Collection;
+use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Carbon\Carbon;
 
 /**
  * [MailingRepo description]
@@ -19,12 +19,23 @@ class MailingRepo
     protected $mailing;
 
     /**
-     * [__construct description]
-     * @param Mailing $mailing [description]
+     * Undocumented variable
+     *
+     * @var Carbon
      */
-    public function __construct(Mailing $mailing)
+    protected $carbon;
+
+    /**
+     * Undocumented function
+     *
+     * @param Mailing $mailing
+     * @param Carbon $carbon
+     */
+    public function __construct(Mailing $mailing, Carbon $carbon)
     {
         $this->mailing = $mailing;
+
+        $this->carbon = $carbon;
     }
 
     /**
@@ -49,10 +60,10 @@ class MailingRepo
     public function activateScheduled() : bool
     {
         return $this->mailing
-            ->whereDate('activation_at', '<', Carbon::now()->format('Y-m-d'))
+            ->whereDate('activation_at', '<', $this->carbon->now()->format('Y-m-d'))
             ->orWhere(function ($query) {
-                $query->whereDate('activation_at', '=', Carbon::now()->format('Y-m-d'))
-                    ->whereTime('activation_at', '<=', Carbon::now()->format('H:i:s'));
+                $query->whereDate('activation_at', '=', $this->carbon->now()->format('Y-m-d'))
+                    ->whereTime('activation_at', '<=', $this->carbon->now()->format('H:i:s'));
             })
             ->scheduled()
             ->update(['status' => Mailing::ACTIVE]);
@@ -67,7 +78,7 @@ class MailingRepo
     {
         return $this->mailing->active()
             ->whereDoesntHave('emails', function ($query) {
-                $query->where('sent', 0);
+                $query->where('sent', MailingEmail::UNSENT);
             })
             ->update([
                 'status' => Mailing::INACTIVE,

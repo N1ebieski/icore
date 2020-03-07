@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Mailing;
 
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\Mailing;
 
 class EditRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class EditRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->mailing->status !== 1;
+        return $this->mailing->status !== Mailing::ACTIVE;
     }
 
     /**

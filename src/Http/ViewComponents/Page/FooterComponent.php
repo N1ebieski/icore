@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\ViewComponents\Page;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\View\View;
@@ -17,6 +18,13 @@ class FooterComponent implements Htmlable
      * @var Page
      */
     protected $page;
+
+    /**
+     * Undocumented variable
+     *
+     * @var ViewFactory
+     */
+    protected $view;
 
     /**
      * [private description]
@@ -44,10 +52,17 @@ class FooterComponent implements Htmlable
      * @param array|null $pattern  [description]
      * @param int $cols [description]
      */
-    public function __construct(Page $page, Collect $collect, array $pattern = null, int $cols = 3)
-    {
+    public function __construct(
+        Page $page,
+        Collect $collect,
+        ViewFactory $view,
+        array $pattern = null,
+        int $cols = 3
+    ) {
         $this->page = $page;
+
         $this->collect = $collect;
+        $this->view = $view;
 
         $this->pattern = $pattern;
         $this->cols = $cols;
@@ -65,7 +80,7 @@ class FooterComponent implements Htmlable
                 : null
         ]);
 
-        return view('icore::web.components.page.footer.index', [
+        return $this->view->make('icore::web.components.page.footer.index', [
             'pages' => $pages,
             'cols' => $this->pattern ?: (int)round($pages->count() / $this->cols, 0),
             'pattern' => $this->pattern

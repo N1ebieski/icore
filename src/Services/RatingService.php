@@ -34,6 +34,7 @@ class RatingService implements Creatable, Updatable, Deletable
     public function __construct(Rating $rating, Auth $auth)
     {
         $this->rating = $rating;
+
         $this->auth = $auth;
     }
 
@@ -64,17 +65,14 @@ class RatingService implements Creatable, Updatable, Deletable
      * Wyszukuje zapisaną wcześniej ocenę danego usera. W zależności od tego
      * wykonana zostanie akcja (dodanie nowej, edytowanie istniejącej, usunięcie)
      *
-     * @return Rating|false
+     * @return Rating|null
      */
-    public function findByUser()
+    public function findByUser() : ?Rating
     {
-        $rating = $this->rating->getMorph()->makeRepo()->firstRatingByUser($this->auth->user()->id);
+        $rating = $this->rating->getMorph()->makeRepo()
+            ->firstRatingByUser($this->auth->user()->id);
 
-        if ($rating) {
-            return $this->rating = $rating;
-        }
-
-        return false;
+        return $rating instanceof Rating ? $this->rating = $rating : null;
     }
 
     /**

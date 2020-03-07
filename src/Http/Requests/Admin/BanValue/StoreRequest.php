@@ -31,18 +31,24 @@ class StoreRequest extends FormRequest
             'value' => [
                 'required',
                 'string',
-                Rule::unique('bans_values', 'value')->where(function($query) use ($type) {
+                Rule::unique('bans_values', 'value')->where(function ($query) use ($type) {
                     $query->where('type', $type);
                 })
             ]
         ];
     }
 
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @param  array|mixed|null  $keys
+     * @return array
+     */
     public function all($keys = null)
     {
-       $data = parent::all($keys);
-       $data['type'] = $this->route('type');
+        $data = parent::all($keys);
+        $data['type'] = $this->route('type');
 
-       return $data;
+        return $data;
     }
 }

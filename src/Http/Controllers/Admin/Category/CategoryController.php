@@ -2,31 +2,24 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
+use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
 
 /**
  * Base Category Controller
  */
 class CategoryController implements Polymorphic
 {
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified Category.
      *
@@ -35,9 +28,9 @@ class CategoryController implements Polymorphic
      */
     public function edit(Category $category) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.category.edit', [
+            'view' => View::make('icore::admin.category.edit', [
                 'category' => $category,
                 'categories' => $category->makeService()->getAsFlatTreeExceptSelf()
             ])->render()
@@ -55,9 +48,9 @@ class CategoryController implements Polymorphic
     {
         $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.category.partials.category', [
+            'view' => View::make('icore::admin.category.partials.category', [
                 // Niezbyt ładny hook, ale trzeba na nowo pobrać ancestory
                 'category' => $category->resolveRouteBinding($category->id),
                 'show_ancestors' => true
@@ -72,11 +65,11 @@ class CategoryController implements Polymorphic
      */
     public function editPosition(Category $category) : JsonResponse
     {
-        $category->siblings_count = $category->countSiblings()+1;
+        $category->siblings_count = $category->countSiblings() + 1;
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.category.edit_position', [
+            'view' => View::make('icore::admin.category.edit_position', [
                 'category' => $category
             ])->render()
         ]);
@@ -92,7 +85,7 @@ class CategoryController implements Polymorphic
     {
         $category->makeService()->updatePosition($request->only('position'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'siblings' => $category->makeRepo()->getSiblingsAsArray()+[$category->id => $category->position],
         ]);
@@ -111,7 +104,7 @@ class CategoryController implements Polymorphic
 
         $categoryRepo = $category->makeRepo();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'status' => $category->status,
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
@@ -134,7 +127,7 @@ class CategoryController implements Polymorphic
 
         $category->makeService()->delete();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'descendants' => $descendants,
         ]);
@@ -150,8 +143,12 @@ class CategoryController implements Polymorphic
     public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse
     {
         $deleted = $category->makeService()->deleteGlobal($request->get('select'));
-        //$deleted = $category->whereIn('id', $request->get('select'))->delete();
 
-        return redirect()->back()->with('success', trans('icore::categories.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::categories.success.destroy_global', [
+                'affected' => $deleted
+            ])
+        );
     }
 }

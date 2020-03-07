@@ -11,15 +11,12 @@ class CommentPolicy
     use HandlesAuthorization;
 
     /**
-     * Create a new policy instance.
+     * Undocumented function
      *
+     * @param User $current_user
+     * @param Comment $comment
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
-
     public function update(User $current_user, Comment $comment)
     {
         return $current_user->id === $comment->user_id;

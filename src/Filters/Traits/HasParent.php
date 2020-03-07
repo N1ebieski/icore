@@ -20,8 +20,7 @@ trait HasParent
         }
 
         if ($id !== null) {
-            if ($parent = $this->findParent($id))
-            {
+            if ($parent = $this->findParent($id)) {
                 return $this->setParent($parent);
             }
         }

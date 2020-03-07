@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
 
 class IndexRequest extends FormRequest
@@ -17,6 +18,11 @@ class IndexRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         if ($this->has('filter.parent')) {
@@ -37,7 +43,7 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        $paginate = config('database.paginate');
+        $paginate = Config::get('database.paginate');
 
         return [
             'page' => 'integer',

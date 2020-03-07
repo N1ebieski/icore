@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\Requests\Web\Newsletter;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Newsletter;
 
 class StoreRequest extends FormRequest
 {
@@ -30,8 +31,8 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 'email',
-                Rule::unique('newsletters', 'email')->where(function($query) {
-                    $query->whereStatus(1);
+                Rule::unique('newsletters', 'email')->where(function ($query) {
+                    $query->where('status', Newsletter::ACTIVE);
                 })
             ]
         ];

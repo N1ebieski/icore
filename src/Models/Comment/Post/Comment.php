@@ -10,6 +10,8 @@ use N1ebieski\ICore\Models\Post;
  */
 class Comment extends CommentBaseModel
 {
+    // Configuration
+
     /**
      * [protected description]
      * @var Post

@@ -1,6 +1,8 @@
 <?php
 
 namespace N1ebieski\ICore\Observers;
+
+use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Comment\Comment;
 
 /**
@@ -15,8 +17,8 @@ class CommentObserver
      * @return void
      */
     public function created(Comment $comment)
-    {   
-        cache()->tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
+    {
+        Cache::tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
@@ -27,7 +29,7 @@ class CommentObserver
      */
     public function updated(Comment $comment)
     {
-        cache()->tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
+        Cache::tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
@@ -38,7 +40,7 @@ class CommentObserver
      */
     public function deleted(Comment $comment)
     {
-        cache()->tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
+        Cache::tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**

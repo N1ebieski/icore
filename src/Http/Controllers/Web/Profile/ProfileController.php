@@ -3,11 +3,14 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Profile;
 
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateEmailRequest;
-use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateRequest;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateEmailRequest;
 
 /**
  * [ProfileController description]
@@ -17,68 +20,26 @@ class ProfileController
     use SendsPasswordResetEmails;
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified Auth User Profile.
      *
-     * @return View
+     * @return HttpResponse
      */
-    public function edit() : View
+    public function edit() : HttpResponse
     {
-        return view('icore::web.profile.edit', [
-            'user' => auth()->user()
+        return Response::view('icore::web.profile.edit', [
+            'user' => Auth::user()
         ]);
     }
 
     /**
      * Show the form for editing Socialite Symlinks the specified Auth User Profile.
      *
-     * @return View
+     * @return HttpResponse
      */
-    public function editSocialite() : View
+    public function editSocialite() : HttpResponse
     {
-        return view('icore::web.profile.edit_socialite', [
-            'user' => auth()->user()->load('socialites')
+        return Response::view('icore::web.profile.edit_socialite', [
+            'user' => Auth::user()->load('socialites')
         ]);
     }
 
@@ -90,13 +51,16 @@ class ProfileController
      */
     public function redirectPassword(Request $request) : RedirectResponse
     {
-        $request->request->add(['email' => auth()->user()->email]);
+        $request->request->add(['email' => Auth::user()->email]);
 
         $this->sendResetLinkEmail($request);
 
-        auth()->logout();
+        Auth::logout();
 
-        return redirect()->route('login')->with('success', trans('icore::passwords.sent'));
+        return Response::redirectToRoute('login')->with(
+            'success',
+            Lang::get('icore::passwords.sent')
+        );
     }
 
     /**
@@ -107,14 +71,17 @@ class ProfileController
      */
     public function updateEmail(UpdateEmailRequest $request) : RedirectResponse
     {
-        auth()->user()->update([
+        Auth::user()->update([
             'email' => $request->get('email'),
             'email_verified_at' => null
         ]);
 
-        auth()->user()->sendEmailVerificationNotification();
+        Auth::user()->sendEmailVerificationNotification();
 
-        return redirect()->route('web.profile.edit')->with('success', trans('icore::profile.success.update_email'));
+        return Response::redirectToRoute('web.profile.edit')->with(
+            'success',
+            Lang::get('icore::profile.success.update_email')
+        );
     }
 
     /**
@@ -125,19 +92,11 @@ class ProfileController
      */
     public function update(UpdateRequest $request) : RedirectResponse
     {
-        auth()->user()->update($request->only(['name']));
+        Auth::user()->update($request->only(['name']));
 
-        return redirect()->route('web.profile.edit')->with('success', trans('icore::profile.success.update'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return Response::redirectToRoute('web.profile.edit')->with(
+            'success',
+            Lang::get('icore::profile.success.update')
+        );
     }
 }

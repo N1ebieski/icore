@@ -2,13 +2,18 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
-use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Event;
+use N1ebieski\ICore\Models\Newsletter;
+use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
-use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
 
 /**
  * [NewsletterController description]
@@ -26,13 +31,13 @@ class NewsletterController
     {
         $newsletter = $newsletter->firstOrCreate(
             ['email' => $request->get('email')],
-            ['token' => Str::random(30), 'status' => 0]
+            ['token' => Str::random(30), 'status' => Newsletter::ACTIVE]
         );
 
-        event(new NewsletterStoreEvent($newsletter));
+        Event::dispatch(App::make(NewsletterStoreEvent::class, ['newsletter' => $newsletter]));
 
-        return response()->json([
-            'success' => trans('icore::newsletter.success.store'),
+        return Response::json([
+            'success' => Lang::get('icore::newsletter.success.store'),
         ]);
     }
 
@@ -46,14 +51,18 @@ class NewsletterController
     public function updateStatus(Newsletter $newsletter, UpdateStatusRequest $request) : RedirectResponse
     {
         if ($newsletter->token !== $request->get('token')) {
-            abort(403, 'The token is invalid.');
+            abort(HttpResponse::HTTP_FORBIDDEN, 'The token is invalid.');
         }
 
         $newsletter->status = (bool)$request->get('status');
         $newsletter->token = Str::random(30);
         $newsletter->save();
 
-        return redirect()->route('web.home.index')->with('success', ($newsletter->status === true) ?
-            trans('icore::newsletter.success.update_status_1') : trans('icore::newsletter.success.update_status_0'));
+        return Response::redirectToRoute('web.home.index')->with(
+            'success',
+            $newsletter->status === true ?
+                Lang::get('icore::newsletter.success.update_status_1')
+                : Lang::get('icore::newsletter.success.update_status_0')
+        );
     }
 }

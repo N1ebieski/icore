@@ -20,6 +20,8 @@ class StoreRequest extends FormRequest
      */
     public function __construct(Role $role)
     {
+        parent::__construct();
+
         $this->role = $role;
     }
 

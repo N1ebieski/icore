@@ -10,6 +10,8 @@ use N1ebieski\ICore\Models\Page\Page;
  */
 class Comment extends CommentBaseModel
 {
+    // Configuration
+
     /**
      * [protected description]
      * @var Page

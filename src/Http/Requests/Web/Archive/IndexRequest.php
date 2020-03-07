@@ -26,16 +26,22 @@ class IndexRequest extends FormRequest
         return [
             'month' => 'required|integer|between:1,12',
             'year' => 'required|integer|digits:4',
-            'page' => 'integer'            
+            'page' => 'integer'
         ];
     }
 
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @param  array|mixed|null  $keys
+     * @return array
+     */
     public function all($keys = null)
     {
-       $data = parent::all($keys);
-       $data['month'] = $this->route('month');
-       $data['year'] = $this->route('year');
+        $data = parent::all($keys);
+        $data['month'] = $this->route('month');
+        $data['year'] = $this->route('year');
 
-       return $data;
+        return $data;
     }
 }

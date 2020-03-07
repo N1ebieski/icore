@@ -2,13 +2,13 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Comment;
 
-use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\DestroyGlobalRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateStatusRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\DestroyGlobalRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
 
 /**
  * [interface description]

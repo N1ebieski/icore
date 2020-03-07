@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Models\Tag;
 
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Cache\TagCache;
@@ -50,7 +50,7 @@ class Tag extends Taggable
      */
     public function makeRepo()
     {
-        return app()->make(TagRepo::class, ['tag' => $this]);
+        return App::make(TagRepo::class, ['tag' => $this]);
     }
 
     /**
@@ -59,7 +59,7 @@ class Tag extends Taggable
      */
     public function makeCache()
     {
-        return app()->make(TagCache::class, ['tag' => $this]);
+        return App::make(TagCache::class, ['tag' => $this]);
     }
 
     // /**

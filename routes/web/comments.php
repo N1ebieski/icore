@@ -6,7 +6,7 @@ Route::post('comments/{comment}/take', 'Comment\CommentController@take')
     ->name('comment.take')
     ->where('comment', '[0-9]+');
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('comments/post/{post}/create', 'Comment\Post\CommentController@create')
         ->middleware(['icore.ban.user', 'icore.ban.ip', 'permission:create comments|suggest comments'])
         ->name('comment.post.create')

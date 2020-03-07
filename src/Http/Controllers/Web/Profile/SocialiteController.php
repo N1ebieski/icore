@@ -2,9 +2,14 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Profile;
 
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
 use Laravel\Socialite\Facades\Socialite;
 use N1ebieski\ICore\Models\Socialite as Social;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * [SocialiteController description]
@@ -20,9 +25,10 @@ class SocialiteController
     {
         // Troche partyzantka, ale musze tak zrobic bo Socialite dla Twittera nie daje
         // zdefiniowac innego callbacku przez metode redirectUrl
-        config(['services.' . $provider . '.redirect' =>
-            route('web.profile.socialite.callback', ['provider' => $provider])
-        ]);
+        Config::set(
+            "services.{$provider}.redirect",
+            URL::route('web.profile.socialite.callback', ['provider' => $provider])
+        );
     }
 
     /**
@@ -38,7 +44,7 @@ class SocialiteController
         try {
             return Socialite::driver($provider)->redirect();
         } catch (\Exception $e) {
-            return redirect()->route('web.profile.edit_socialite');
+            return Response::redirectToRroute('web.profile.edit_socialite');
         }
     }
 
@@ -56,19 +62,25 @@ class SocialiteController
         try {
             $providerUser = Socialite::driver($provider)->user();
         } catch (\Exception $e) {
-            return redirect()->route('web.profile.edit_socialite');
+            return Response::redirectToRoute('web.profile.edit_socialite');
         }
 
         $socialiteService = $socialite->makeService();
         $authUser = $socialiteService->findUser($providerUser, $provider);
 
-        if (!is_null($authUser)) return redirect()->route('web.profile.edit_socialite')
-            ->with('danger', trans('icore::profile.error.symlinkExist', ['provider' => ucfirst($provider)]));
+        if (!is_null($authUser)) {
+            return Response::redirectToRoute('web.profile.edit_socialite')->with(
+                'danger',
+                Lang::get('icore::profile.error.symlink_exist', ['provider' => ucfirst($provider)])
+            );
+        }
 
-        $socialiteService->setSocialiteUser(auth()->user())->create([]);
+        $socialiteService->setSocialiteUser(Auth::user())->create([]);
 
-        return redirect()->route('web.profile.edit_socialite')
-            ->with('success', trans('icore::profile.success.symlink_create', ['provider' => ucfirst($provider)]));
+        return Response::redirectToRoute('web.profile.edit_socialite')->with(
+            'success',
+            Lang::get('icore::profile.success.symlink_create', ['provider' => ucfirst($provider)])
+        );
     }
 
     /**
@@ -80,6 +92,9 @@ class SocialiteController
     {
         $socialite->delete();
 
-        return redirect()->route('web.profile.edit_socialite')->with('success', trans('icore::profile.success.symlink_delete'));
+        return Response::redirectToRoute('web.profile.edit_socialite')->with(
+            'success',
+            Lang::get('icore::profile.success.symlink_delete')
+        );
     }
 }

@@ -49,7 +49,7 @@ class MailingService implements
         $this->mailing->title = $attributes['title'];
         $this->mailing->status = (int)$attributes['status'];
 
-        if ($this->mailing->status === 2) {
+        if ($this->mailing->status === Mailing::SCHEDULED) {
             $this->mailing->activation_at =
                 $attributes['date_activation_at'].$attributes['time_activation_at'];
         }
@@ -78,7 +78,7 @@ class MailingService implements
         $this->mailing->title = $attributes['title'];
         $this->mailing->status = (int)$attributes['status'];
 
-        if ($this->mailing->status === 2) {
+        if ($this->mailing->status === Mailing::SCHEDULED) {
             $this->mailing->activation_at =
                 $attributes['date_activation_at'].$attributes['time_activation_at'];
         }

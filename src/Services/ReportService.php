@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Services;
 use N1ebieski\ICore\Models\Report\Report;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
+use Illuminate\Contracts\Auth\Guard as Auth;
 
 /**
  * [ReportService description]
@@ -18,12 +19,23 @@ class ReportService implements Creatable
     protected $report;
 
     /**
-     * [__construct description]
-     * @param Report $report [description]
+     * Undocumented variable
+     *
+     * @var Auth
      */
-    public function __construct(Report $report)
+    protected $auth;
+
+    /**
+     * Undocumented function
+     *
+     * @param Report $report
+     * @param Auth $auth
+     */
+    public function __construct(Report $report, Auth $auth)
     {
         $this->report = $report;
+
+        $this->auth = $auth;
     }
 
     /**
@@ -34,7 +46,7 @@ class ReportService implements Creatable
      */
     public function create(array $attributes) : Model
     {
-        $this->report->user()->associate(auth()->user()->id);
+        $this->report->user()->associate($this->auth->user()->id);
         $this->report->morph()->associate($this->report->getMorph());
 
         $this->report->content = $attributes['content'];

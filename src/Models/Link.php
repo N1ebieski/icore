@@ -10,6 +10,7 @@ use N1ebieski\ICore\Cache\LinkCache;
 use N1ebieski\ICore\Models\Traits\Positionable;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -41,19 +42,19 @@ class Link extends Model
     {
         parent::boot();
 
-        static::saving(function(Link $link) {
+        static::saving(function (Link $link) {
             $link->position = $link->position ?? $link->getNextAfterLastPosition();
         });
 
         // Everytime the model is removed, we have to decrement siblings position by 1
-        static::deleted(function(Link $link) {
+        static::deleted(function (Link $link) {
             $link->decrementSiblings($link->position, null);
         });
 
         // Everytime the model's position
         // is changed, all siblings reordering will happen,
         // so they will always keep the proper order.
-        static::saved(function(Link $link) {
+        static::saved(function (Link $link) {
             $link->reorderSiblings();
         });
     }
@@ -75,7 +76,13 @@ class Link extends Model
      */
     public function categories()
     {
-        return $this->morphToMany('N1ebieski\ICore\Models\Category\Category', 'model', 'categories_models', 'model_id', 'category_id');
+        return $this->morphToMany(
+            'N1ebieski\ICore\Models\Category\Category',
+            'model',
+            'categories_models',
+            'model_id',
+            'category_id'
+        );
     }
 
     // Scopes
@@ -88,7 +95,7 @@ class Link extends Model
      */
     public function scopeFilterType(Builder $query, string $type = null) : ?Builder
     {
-        return $query->when($type !== null, function($query) use ($type) {
+        return $query->when($type !== null, function ($query) use ($type) {
             $query->where('type', $type);
         });
     }
@@ -131,9 +138,9 @@ class Link extends Model
      */
     public function loadAncestorsWithoutSelf() : self
     {
-        return $this->load(['categories' => function($query) {
-                $query->withAncestorsExceptSelf();
-            }]);
+        return $this->load(['categories' => function ($query) {
+            $query->withAncestorsExceptSelf();
+        }]);
     }
 
     // Makers
@@ -144,7 +151,7 @@ class Link extends Model
      */
     public function makeRepo()
     {
-        return app()->make(LinkRepo::class, ['link' => $this]);
+        return App::make(LinkRepo::class, ['link' => $this]);
     }
 
     /**
@@ -153,7 +160,7 @@ class Link extends Model
      */
     public function makeCache()
     {
-        return app()->make(LinkCache::class, ['link' => $this]);
+        return App::make(LinkCache::class, ['link' => $this]);
     }
 
     /**
@@ -162,6 +169,6 @@ class Link extends Model
      */
     public function makeService()
     {
-        return app()->make(LinkService::class, ['link' => $this]);
+        return App::make(LinkService::class, ['link' => $this]);
     }
 }

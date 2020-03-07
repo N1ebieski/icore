@@ -2,11 +2,14 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Report\Comment;
 
-use N1ebieski\ICore\Http\Requests\Web\Report\Comment\CreateRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Report\Comment\Report;
 use N1ebieski\ICore\Http\Requests\Web\Report\Comment\StoreRequest;
-use Illuminate\Http\JsonResponse;
+use N1ebieski\ICore\Http\Requests\Web\Report\Comment\CreateRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Report\Comment\Polymorphic as CommentPolymorphic;
 
 /**
@@ -23,9 +26,9 @@ class ReportController implements CommentPolymorphic
      */
     public function create(Comment $comment, CreateRequest $request) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::web.report.create', [
+            'view' => View::make('icore::web.report.create', [
                 'model' => $comment
             ])->render()
         ]);
@@ -43,8 +46,8 @@ class ReportController implements CommentPolymorphic
     {
         $report->setMorph($comment)->makeService()->create($request->only('content'));
 
-        return response()->json([
-            'success' => trans('icore::reports.success.store')
+        return Response::json([
+            'success' => Lang::get('icore::reports.success.store')
         ]);
     }
 }

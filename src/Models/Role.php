@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Models;
 
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Spatie\Permission\Models\Role as BaseRole;
 use N1ebieski\ICore\Repositories\RoleRepo;
@@ -55,7 +56,7 @@ class Role extends BaseRole
      */
     public function makeRepo()
     {
-        return app()->make(RoleRepo::class, ['role' => $this]);
+        return App::make(RoleRepo::class, ['role' => $this]);
     }
 
     /**
@@ -64,6 +65,6 @@ class Role extends BaseRole
      */
     public function makeService()
     {
-        return app()->make(RoleService::class, ['role' => $this]);
+        return App::make(RoleService::class, ['role' => $this]);
     }
 }

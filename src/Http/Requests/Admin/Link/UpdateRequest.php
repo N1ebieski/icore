@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Category\Category;
 
 class UpdateRequest extends FormRequest
 {
@@ -63,18 +64,24 @@ class UpdateRequest extends FormRequest
                 'bail',
                 'integer',
                 'distinct',
-                Rule::exists('categories', 'id')->where(function($query) {
-                    $query->where('status', 1);
+                Rule::exists('categories', 'id')->where(function ($query) {
+                    $query->where('status', Category::ACTIVE);
                 })
             ],
         ];
     }
 
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @param  array|mixed|null  $keys
+     * @return array
+     */
     public function all($keys = null)
     {
-       $data = parent::all($keys);
-       $data['type'] = $this->route('type');
+        $data = parent::all($keys);
+        $data['type'] = $this->route('type');
 
-       return $data;
+        return $data;
     }
 }

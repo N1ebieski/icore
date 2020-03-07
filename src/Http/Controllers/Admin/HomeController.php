@@ -2,18 +2,18 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use N1ebieski\ICore\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 
-class HomeController extends Controller
+class HomeController
 {
     /**
-     * Show the application dashboard.
+     * Undocumented function
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return HttpResponse
      */
-    public function index()
+    public function index() : HttpResponse
     {
-        return view('icore::admin.home.index');
+        return Response::view('icore::admin.home.index');
     }
 }

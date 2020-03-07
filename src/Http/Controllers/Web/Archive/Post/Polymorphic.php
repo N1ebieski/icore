@@ -3,8 +3,8 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Archive\Post;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Archive\IndexRequest;
-use Illuminate\View\View;
 
 /**
  * [interface description]
@@ -18,7 +18,7 @@ interface Polymorphic
      * @param  int          $year    [description]
      * @param  Post         $post    [description]
      * @param  IndexRequest $request [description]
-     * @return View                  [description]
+     * @return HttpResponse          [description]
      */
-    public function show(int $month, int $year, Post $post, IndexRequest $request) : View;
+    public function show(int $month, int $year, Post $post, IndexRequest $request) : HttpResponse;
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('symlink/{provider}', 'Profile\SocialiteController@redirect')
         ->name('profile.socialite.redirect')->where('provider', '[A-Za-z]+');
     Route::get('symlink/{provider}/callback', 'Profile\SocialiteController@callback')

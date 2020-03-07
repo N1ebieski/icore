@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Post;
 
 class PostObserver
@@ -14,7 +15,7 @@ class PostObserver
      */
     public function created(Post $post)
     {
-        cache()->tags(['posts'])->flush();
+        Cache::tags(['posts'])->flush();
     }
 
     /**
@@ -25,7 +26,7 @@ class PostObserver
      */
     public function updated(Post $post)
     {
-        cache()->tags(['post.'.$post->slug, 'posts'])->flush();
+        Cache::tags(['post.'.$post->slug, 'posts'])->flush();
     }
 
     /**
@@ -36,7 +37,7 @@ class PostObserver
      */
     public function deleted(Post $post)
     {
-        cache()->tags(['post.'.$post->slug, 'posts'])->flush();
+        Cache::tags(['post.'.$post->slug, 'posts'])->flush();
     }
 
     /**

@@ -19,14 +19,20 @@ use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 /**
  * [PageService description]
  */
-class PageService implements Creatable, Updatable, FullUpdatable, StatusUpdatable,
-PositionUpdatable, Deletable, GlobalDeletable
+class PageService implements
+    Creatable,
+    Updatable,
+    FullUpdatable,
+    StatusUpdatable,
+    PositionUpdatable,
+    Deletable,
+    GlobalDeletable
 {
     /**
      * [protected description]
      * @var Page
      */
-    protected Page $page;
+    protected $page;
 
     /**
      * [protected description]
@@ -56,7 +62,8 @@ PositionUpdatable, Deletable, GlobalDeletable
     {
         $this->page = $page;
         $this->collect = $collect;
-        $this->paginate = $config->get('database.paginate');
+
+        $this->paginate = (int)$config->get('database.paginate');
     }
 
     /**
@@ -138,7 +145,7 @@ PositionUpdatable, Deletable, GlobalDeletable
 
         foreach ($array as $value) {
             if (is_array($value)) {
-                $result[] = array_filter($value, function($k) {
+                $result[] = array_filter($value, function ($k) {
                     if ($k != 'children') {
                         return true;
                     }
@@ -167,7 +174,8 @@ PositionUpdatable, Deletable, GlobalDeletable
         if ($attributes['parent_id'] !== null) {
             $parent = $this->page->findOrFail($attributes['parent_id']);
             // Jeśli rodzic jest nieaktywny, dziecko musi dziedziczyć ten stan
-            $this->page->status = ($parent->status === 0) ? 0 : $attributes['status'];
+            $this->page->status = $parent->status === Page::INACTIVE ?
+                Page::INACTIVE : $attributes['status'];
             $this->page->parent_id = $attributes['parent_id'];
         }
 
@@ -254,12 +262,12 @@ PositionUpdatable, Deletable, GlobalDeletable
 
         if ($updateStatus === true) {
             // Deaktywacja kategorii nadrzędnej, deaktywuje wszystkich potomków
-            if ((int)$attributes['status'] === 0) {
+            if ((int)$attributes['status'] === Page::INACTIVE) {
                 $this->page->descendants()->update(['status' => $attributes['status']]);
             }
 
             // Aktywacja kategorii podrzędnej, aktywuje wszystkich przodków
-            if ((int)$attributes['status'] === 1) {
+            if ((int)$attributes['status'] === Page::ACTIVE) {
                 $this->page->ancestors()->update(['status' => $attributes['status']]);
             }
         }

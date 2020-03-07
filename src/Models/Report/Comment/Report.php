@@ -10,6 +10,8 @@ use N1ebieski\ICore\Models\Comment\Comment;
  */
 class Report extends ReportBaseModel
 {
+    // Configuration
+
     /**
      * [protected description]
      * @var Report

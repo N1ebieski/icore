@@ -18,8 +18,7 @@ trait Positionable
         if (is_int($originalPosition)) {
             if ($this->position > $originalPosition) {
                 $this->decrementSiblings($originalPosition, $this->position);
-            }
-            else if ($this->position < $originalPosition) {
+            } elseif ($this->position < $originalPosition) {
                 $this->incrementSiblings($this->position, $originalPosition);
             }
         } else {
@@ -36,10 +35,10 @@ trait Positionable
     public function decrementSiblings(int $from = null, int $to = null) : bool
     {
         return $this->siblings()
-            ->when($from !== null, function($query) use ($from) {
+            ->when($from !== null, function ($query) use ($from) {
                 $query->where('position', '>', $from);
             })
-            ->when($to !== null, function($query) use ($to) {
+            ->when($to !== null, function ($query) use ($to) {
                 $query->where('position', '<=', $to);
             })
             ->where('id', '<>', $this->id)
@@ -55,10 +54,10 @@ trait Positionable
     public function incrementSiblings(int $from = null, int $to = null) : bool
     {
         return $this->siblings()
-            ->when($from !== null, function($query) use ($from) {
+            ->when($from !== null, function ($query) use ($from) {
                 $query->where('position', '>=', $from);
             })
-            ->when($to !== null, function($query) use ($to) {
+            ->when($to !== null, function ($query) use ($to) {
                 $query->where('position', '<', $to);
             })
             ->where('id', '<>', $this->id)

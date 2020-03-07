@@ -2,8 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Report\Comment;
 
-use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
+use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Http\Controllers\Admin\Report\Comment\Polymorphic;
 
 /**
@@ -21,9 +23,9 @@ class ReportController implements Polymorphic
     {
         $reports = $comment->reports()->with('user:id,name')->get();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.report.show', [
+            'view' => View::make('icore::admin.report.show', [
                 'reports' => $reports,
                 'model' => $comment
             ])->render()
@@ -40,9 +42,9 @@ class ReportController implements Polymorphic
     {
         $comment->reports()->delete();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.comment.partials.comment', [
+            'view' => View::make('icore::admin.comment.partials.comment', [
                 'comment' => $comment->load('morph:id,title')
             ])->render()
         ]);

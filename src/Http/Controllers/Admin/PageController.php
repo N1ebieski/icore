@@ -2,18 +2,23 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Admin\Page\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Page\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Page\UpdatePositionRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\DestroyGlobalRequest;
-use N1ebieski\ICore\Filters\Admin\Page\IndexFilter;
-use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Http\Requests\Admin\Page\UpdatePositionRequest;
 
 /**
  * [PageController description]
@@ -26,30 +31,30 @@ class PageController
      * @param  Page            $page            [description]
      * @param  IndexRequest    $request         [description]
      * @param  IndexFilter     $filter          [description]
-     * @return View                             [description]
+     * @return HttpResponse                             [description]
      */
-    public function index(Page $page, IndexRequest $request, IndexFilter $filter) : View
+    public function index(Page $page, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         $pageService = $page->makeService();
 
-        return view('icore::admin.page.index', [
+        return Response::view('icore::admin.page.index', [
             'pages' => $pageService->paginateByFilter($filter->all() + [
                 'except' => $request->input('except')
             ]),
             'parents' => $pageService->getAsFlatTree(),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
     /**
      * [create description]
      * @param Page $page
-     * @return View [description]
+     * @return HttpResponse [description]
      */
-    public function create(Page $page) : View
+    public function create(Page $page) : HttpResponse
     {
-        return view('icore::admin.page.create', [
+        return Response::view('icore::admin.page.create', [
             'parents' => $page->makeService()->getAsFlatTree()
         ]);
     }
@@ -64,18 +69,10 @@ class PageController
     {
         $page->makeService()->create($request->all());
 
-        return redirect()->route('admin.page.index')->with('success', trans('icore::pages.success.store') );
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return Response::redirectToRoute('admin.page.index')->with(
+            'success',
+            Lang::get('icore::pages.success.store')
+        );
     }
 
     /**
@@ -85,11 +82,11 @@ class PageController
      */
     public function editPosition(Page $page) : JsonResponse
     {
-        $page->siblings_count = $page->countSiblings()+1;
+        $page->siblings_count = $page->countSiblings() + 1;
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.page.edit_position', [
+            'view' => View::make('icore::admin.page.edit_position', [
                 'page' => $page
             ])->render()
         ]);
@@ -105,9 +102,9 @@ class PageController
     {
         $page->makeService()->updatePosition($request->only('position'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'siblings' => $page->makeRepo()->getSiblingsAsArray()+[$page->id => $page->position],
+            'siblings' => $page->makeRepo()->getSiblingsAsArray()+[$page->id => $page->position]
         ]);
     }
 
@@ -118,20 +115,20 @@ class PageController
      */
     public function edit(Page $page) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.page.edit', ['page' => $page])->render(),
+            'view' => View::make('icore::admin.page.edit', ['page' => $page])->render()
         ]);
     }
 
     /**
      * [editFull description]
      * @param  Page $page [description]
-     * @return View       [description]
+     * @return HttpResponse       [description]
      */
-    public function editFull(Page $page) : View
+    public function editFull(Page $page) : HttpResponse
     {
-        return view('icore::admin.page.edit_full', [
+        return Response::view('icore::admin.page.edit_full', [
             'page' => $page,
             'parents' => $page->makeService()->getAsFlatTreeExceptSelf()
         ]);
@@ -147,9 +144,11 @@ class PageController
     {
         $page->makeService()->update($request->only(['title', 'content_html']));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.page.partials.page', ['page' => $page])->render()
+            'view' => View::make('icore::admin.page.partials.page', [
+                'page' => $page
+            ])->render()
         ]);
     }
 
@@ -163,8 +162,8 @@ class PageController
     {
         $page->makeService()->updateFull($request->all());
 
-        return redirect()->route('admin.page.edit_full', [$page->id])
-            ->with('success', trans('icore::pages.success.update') );
+        return Response::redirectToRoute('admin.page.edit_full', [$page->id])
+            ->with('success', Lang::get('icore::pages.success.update'));
     }
 
     /**
@@ -179,13 +178,13 @@ class PageController
 
         $pageRepo = $page->makeRepo();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'status' => $page->status,
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
-            'ancestors' => $page->makeRepo()->getAncestorsAsArray(),
-            'descendants' => $page->makeRepo()->getDescendantsAsArray(),
+            'ancestors' => $pageRepo->getAncestorsAsArray(),
+            'descendants' => $pageRepo->getDescendantsAsArray()
         ]);
     }
 
@@ -201,10 +200,10 @@ class PageController
 
         $page->makeService()->delete();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
-            'descendants' => $descendants,
+            'descendants' => $descendants
         ]);
     }
 
@@ -218,6 +217,9 @@ class PageController
     {
         $deleted = $page->makeService()->deleteGlobal($request->get('select'));
 
-        return redirect()->back()->with('success', trans('icore::pages.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::pages.success.destroy_global', ['affected' => $deleted])
+        );
     }
 }

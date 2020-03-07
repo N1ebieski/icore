@@ -11,8 +11,8 @@ trait HasPaginate
      * [filterPaginate description]
      * @param int|null $value [description]
      */
-     public function filterPaginate(int $value = null) : void
-     {
-         $this->parameters['paginate'] = $value;
-     }
+    public function filterPaginate(int $value = null) : void
+    {
+        $this->parameters['paginate'] = $value;
+    }
 }

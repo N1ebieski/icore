@@ -13,9 +13,14 @@ use N1ebieski\ICore\Http\Requests\Admin\User\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\User\DestroyGlobalRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 
 /**
  * [UserController description]
@@ -31,21 +36,17 @@ class UserController
      * @param  Role          $role          [description]
      * @param  IndexRequest  $request       [description]
      * @param  IndexFilter   $filter        [description]
-     * @return View                         [description]
+     * @return HttpResponse                         [description]
      */
-    public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter) : View
+    public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
-        $users = $user->makeRepo()->paginateByFilter($filter->all() + [
-            'except' => $request->input('except')
-        ]);
-
-        debug($request->all());
-
-        return view('icore::admin.user.index', [
-            'users' => $users,
+        return Response::view('icore::admin.user.index', [
+            'users' => $user->makeRepo()->paginateByFilter($filter->all() + [
+                'except' => $request->input('except')
+            ]),
             'roles' => $role->all(),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
@@ -60,10 +61,12 @@ class UserController
     {
         $user->update($request->only('status'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'status' => $user->status,
-            'view' => view('icore::admin.user.partials.user', ['user' => $user])->render(),
+            'view' => View::make('icore::admin.user.partials.user', [
+                'user' => $user
+            ])->render(),
         ]);
     }
 
@@ -79,7 +82,7 @@ class UserController
 
         $user->delete();
 
-        return response()->json(['success' => '']);
+        return Response::json(['success' => '']);
     }
 
     /**
@@ -99,7 +102,10 @@ class UserController
 
         $deleted = $user->whereIn('id', $request->get('select'))->delete();
 
-        return redirect()->back()->with('success', trans('icore::users.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::users.success.destroy_global', ['affected' => $deleted])
+        );
     }
 
     /**
@@ -113,9 +119,9 @@ class UserController
     {
         $roles = $role->makeRepo()->getAvailable();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.user.edit', compact('user', 'roles'))->render()
+            'view' => View::make('icore::admin.user.edit', compact('user', 'roles'))->render()
         ]);
     }
 
@@ -132,9 +138,11 @@ class UserController
 
         $user->syncRoles(array_merge($request->get('roles'), ['user']));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.user.partials.user', ['user' => $user])->render(),
+            'view' => View::make('icore::admin.user.partials.user', [
+                'user' => $user
+            ])->render(),
         ]);
     }
 
@@ -148,9 +156,11 @@ class UserController
     {
         $roles = $role->makeRepo()->getAvailable();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.user.create', ['roles' => $roles])->render()
+            'view' => View::make('icore::admin.user.create', [
+                'roles' => $roles
+            ])->render()
         ]);
     }
 
@@ -171,8 +181,8 @@ class UserController
 
         $user->assignRole(array_merge($request->get('roles'), ['user']));
 
-        $request->session()->flash('success', trans('icore::users.success.store') );
+        $request->session()->flash('success', Lang::get('icore::users.success.store'));
 
-        return response()->json(['success' => '']);
+        return Response::json(['success' => '']);
     }
 }

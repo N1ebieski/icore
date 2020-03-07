@@ -7,6 +7,11 @@ use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
 
 class SendRequest extends FormRequest
 {
+    /**
+     * Undocumented variable
+     *
+     * @var Captcha
+     */
     protected $captcha;
 
     public function __construct(Captcha $captcha)
@@ -26,9 +31,7 @@ class SendRequest extends FormRequest
 
     public function attributes()
     {
-        return array_merge([
-
-        ], $this->captcha->toAttributes());
+        return array_merge([], $this->captcha->toAttributes());
     }
 
     /**

@@ -2,7 +2,7 @@
 
 return [
     'error' => [
-        'symlinkExist' => 'Jest już utworzone powiązanie użytkownika z tym :provider ID.',
+        'symlink_exist' => 'Jest już utworzone powiązanie użytkownika z tym :provider ID.',
     ],
     'success' => [
         'symlink_create' => 'Pomyślnie stworzono powiązanie z :provider.',

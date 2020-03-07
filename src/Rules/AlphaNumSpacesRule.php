@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Translation\Translator as Lang;
 
 /**
  * [AlphaNumSpaces description]
@@ -10,13 +11,20 @@ use Illuminate\Contracts\Validation\Rule;
 class AlphaNumSpacesRule implements Rule
 {
     /**
-     * Create a new rule instance.
+     * Undocumented variable
      *
-     * @return void
+     * @var Lang
      */
-    public function __construct()
+    protected $lang;
+
+    /**
+     * Undocumented function
+     *
+     * @param Lang $lang
+     */
+    public function __construct(Lang $lang)
     {
-        //
+        $this->lang = $lang;
     }
 
     /**
@@ -51,6 +59,6 @@ class AlphaNumSpacesRule implements Rule
      */
     public function message()
     {
-        return trans('icore::validation.alpha_num_spaces');
+        return $this->lang->get('icore::validation.alpha_num_spaces');
     }
 }

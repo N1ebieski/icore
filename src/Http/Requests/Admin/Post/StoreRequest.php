@@ -3,7 +3,9 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Category\Post\Category;
 
 class StoreRequest extends FormRequest
 {
@@ -35,15 +37,15 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'tags' => 'array|between:0,' . config('icore.post.max_tags'),
+            'tags' => 'array|between:0,' . Config::get('icore.post.max_tags'),
             'tags.*' => 'min:3|max:30|alpha_num_spaces',
-            'categories' => 'required|array|between:1,' . config('icore.post.max_categories'),
+            'categories' => 'required|array|between:1,' . Config::get('icore.post.max_categories'),
             'categories.*' => [
                 'integer',
                 'distinct',
                 Rule::exists('categories', 'id')->where(function ($query) {
                     $query->where([
-                        ['status', 1],
+                        ['status', Category::ACTIVE],
                         ['model_type', 'N1ebieski\ICore\\Models\\Post']
                     ]);
                 }),

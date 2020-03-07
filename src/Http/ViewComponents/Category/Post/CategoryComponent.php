@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Http\ViewComponents\Category\Post;
 
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\View\View;
@@ -18,12 +19,23 @@ class CategoryComponent implements Htmlable
     protected $category;
 
     /**
-     * [__construct description]
-     * @param Category      $category      [description]
+     * Undocumented variable
+     *
+     * @var ViewFactory
      */
-    public function __construct(Category $category)
+    protected $view;
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param ViewFactory $view
+     */
+    public function __construct(Category $category, ViewFactory $view)
     {
         $this->category = $category;
+
+        $this->view = $view;
     }
 
     /**
@@ -32,8 +44,8 @@ class CategoryComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return view('icore::web.components.category.post.index', [
-            'categories' => $this->category->makeCache()->rememberWithRecursiveChildrens()          
+        return $this->view->make('icore::web.components.category.post.index', [
+            'categories' => $this->category->makeCache()->rememberWithRecursiveChildrens()
         ]);
     }
 }

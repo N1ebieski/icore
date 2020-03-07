@@ -2,19 +2,21 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Cviebrock\EloquentTaggable\Taggable;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
-use N1ebieski\ICore\Services\TagService;
-use N1ebieski\ICore\Services\PostService;
+use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Cache\PostCache;
+use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentTaggable\Taggable;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Services\PostService;
+use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * [Post description]
@@ -77,7 +79,7 @@ class Post extends Model
      * [public description]
      * @var int
      */
-    public const SEO_FOLLOW = 0;    
+    public const SEO_FOLLOW = 0;
 
     /**
      * The attributes that are mass assignable.
@@ -140,10 +142,10 @@ class Post extends Model
     {
         return $this->where('id', $value)
             ->with([
-                'categories' => function($query) {
+                'categories' => function ($query) {
                     $query->withAncestorsExceptSelf();
                 },
-            ])->first() ?? abort(404);
+            ])->first() ?? App::abort(404);
     }
 
     // Overrides
@@ -156,6 +158,7 @@ class Post extends Model
     public function tags(): MorphToMany
     {
         $model = config('taggable.model');
+
         return $this->morphToMany($model, 'model', 'tags_models', 'model_id', 'tag_id')
             ->withTimestamps();
     }
@@ -168,7 +171,13 @@ class Post extends Model
      */
     public function categories()
     {
-        return $this->morphToMany('N1ebieski\ICore\Models\Category\Category', 'model', 'categories_models', 'model_id', 'category_id');
+        return $this->morphToMany(
+            'N1ebieski\ICore\Models\Category\Category',
+            'model',
+            'categories_models',
+            'model_id',
+            'category_id'
+        );
     }
 
     /**
@@ -289,10 +298,10 @@ class Post extends Model
     {
         $cut = explode('<p>[more]</p>', $this->content_html);
 
-        return (!empty($cut[1])) ? $cut[0] . '<a href="' . route('web.post.show', [
+        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
                 'post' => $this->slug,
                 '#more'
-            ]) . '">' . trans('icore::posts.more') . '</a>' : $this->content_html;
+            ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->content_html;
     }
 
     /**
@@ -388,7 +397,7 @@ class Post extends Model
      */
     public function makeRepo()
     {
-        return app()->make(PostRepo::class, ['post' => $this]);
+        return App::make(PostRepo::class, ['post' => $this]);
     }
 
     /**
@@ -397,7 +406,7 @@ class Post extends Model
      */
     public function makeCache()
     {
-        return app()->make(PostCache::class, ['post' => $this]);
+        return App::make(PostCache::class, ['post' => $this]);
     }
 
     /**
@@ -406,6 +415,6 @@ class Post extends Model
      */
     public function makeService()
     {
-        return app()->make(PostService::class, ['post' => $this]);
+        return App::make(PostService::class, ['post' => $this]);
     }
 }

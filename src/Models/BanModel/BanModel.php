@@ -62,7 +62,7 @@ class BanModel extends Model
                 ->orderBy('bans_models.id', 'asc');
         }
 
-        return $query->latest();
+        return $query->latest('bans_models.created_at');
     }
 
     // Accessors

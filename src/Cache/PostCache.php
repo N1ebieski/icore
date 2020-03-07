@@ -8,7 +8,7 @@ use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 /**
  * [PostCache description]
@@ -28,21 +28,33 @@ class PostCache
     protected $cache;
 
     /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * Configuration
      * @var int
      */
     protected $minutes;
 
     /**
-     * [__construct description]
-     * @param Post     $post     [description]
-     * @param Cache    $cache    [description]
-     * @param Config   $config   [description]
+     * Undocumented function
+     *
+     * @param Post $post
+     * @param Cache $cache
+     * @param Config $config
+     * @param Carbon $carbon
      */
-    public function __construct(Post $post, Cache $cache, Config $config)
+    public function __construct(Post $post, Cache $cache, Config $config, Carbon $carbon)
     {
         $this->post = $post;
+        
         $this->cache = $cache;
+        $this->carbon = $carbon;
+
         $this->minutes = $config->get('cache.minutes');
     }
 
@@ -55,7 +67,7 @@ class PostCache
     {
         return $this->cache->tags(['posts'])->remember(
             "post.paginateLatest.{$page}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () {
                 return $this->post->makeRepo()->paginateLatest();
             }
@@ -70,7 +82,7 @@ class PostCache
     {
         return $this->cache->tags(['post.'.$this->post->slug])->remember(
             "post.firstPrevious.{$this->post->id}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () {
                 return $this->post->makeRepo()->firstPrevious();
             }
@@ -85,7 +97,7 @@ class PostCache
     {
         return $this->cache->tags(['post.'.$this->post->slug])->remember(
             "post.firstNext.{$this->post->id}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () {
                 return $this->post->makeRepo()->firstNext();
             }
@@ -100,7 +112,7 @@ class PostCache
     {
         return $this->cache->tags(['post.'.$this->post->slug])->remember(
             "post.getRelated.{$this->post->id}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () {
                 return $this->post->makeRepo()->getRelated();
             }
@@ -116,7 +128,7 @@ class PostCache
     {
         return $this->cache->tags(['post.'.$slug])->remember(
             "post.firstBySlug.{$slug}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () use ($slug) {
                 return $this->post->makeRepo()->firstBySlug($slug);
             }
@@ -133,8 +145,8 @@ class PostCache
     {
         return cache()->tags(['posts'])->remember(
             "post.paginateByTag.{$tag->normalized}.".$page,
-            now()->addMinutes($this->minutes),
-            function() use ($tag) {
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () use ($tag) {
                 return $this->post->makeRepo()->paginateByTag($tag->name);
             }
         );
@@ -151,8 +163,8 @@ class PostCache
     {
         return $this->cache->tags(['posts'])->remember(
             "post.paginateArchiveByDate.{$month}.{$year}.{$page}",
-            now()->addMinutes($this->minutes),
-            function() use ($month, $year) {
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () use ($month, $year) {
                 return $this->post->makeRepo()->paginateArchiveByDate([
                     'month' => $month,
                     'year' => $year
@@ -169,12 +181,12 @@ class PostCache
     {
         return $this->cache->tags(['posts'])->remember(
             'post.getArchives',
-            now()->addMinutes($this->minutes),
-            function() {
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
                 $posts = $this->post->makeRepo()->getArchives();
 
-                $posts->map(function($item) {
-                    $item->month_localized = Carbon::createFromFormat('m', $item->month)
+                $posts->map(function ($item) {
+                    $item->month_localized = $this->carbon->createFromFormat('m', $item->month)
                     ->formatLocalized('%B');
                 });
 

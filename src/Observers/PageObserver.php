@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Page\Page;
 
 /**
@@ -17,7 +18,7 @@ class PageObserver
      */
     public function created(Page $page)
     {
-        cache()->tags(['pages'])->flush();
+        Cache::tags(['pages'])->flush();
     }
 
     /**
@@ -28,7 +29,7 @@ class PageObserver
      */
     public function updated(Page $page)
     {
-        cache()->tags(['page.'.$page->slug, 'pages'])->flush();
+        Cache::tags(['page.'.$page->slug, 'pages'])->flush();
     }
 
     /**
@@ -39,7 +40,7 @@ class PageObserver
      */
     public function deleted(Page $page)
     {
-        cache()->tags(['page.'.$page->slug, 'pages'])->flush();
+        Cache::tags(['page.'.$page->slug, 'pages'])->flush();
     }
 
     /**

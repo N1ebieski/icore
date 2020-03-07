@@ -6,6 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
+use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\UrlGenerator as URL;
+use Illuminate\Contracts\Translation\Translator as Lang;
 
 /**
  * [Confirmation description]
@@ -21,14 +24,43 @@ class ConfirmationMail extends Mailable
     protected $newsletter;
 
     /**
+     * Undocumented variable
+     *
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * Undocumented variable
+     *
+     * @var URL
+     */
+    protected $url;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Lang
+     */
+    protected $lang;
+
+    /**
      * Create a new event instance.
      *
      * @param Newsletter $newsletter
      * @return void
      */
-    public function __construct(Newsletter $newsletter)
-    {
+    public function __construct(
+        Newsletter $newsletter,
+        Config $config,
+        URL $url,
+        Lang $lang
+    ) {
         $this->newsletter = $newsletter;
+
+        $this->config = $config;
+        $this->url = $url;
+        $this->lang = $lang;
     }
 
     /**
@@ -38,17 +70,17 @@ class ConfirmationMail extends Mailable
      */
     public function build() : self
     {
-        return $this->subject(trans('icore::newsletter.subscribe_confirm'))
-            ->from(config('mail.from.address'))
+        return $this->subject($this->lang->get('icore::newsletter.subscribe_confirm'))
+            ->from($this->config->get('mail.from.address'))
             ->to($this->newsletter->email)
             ->markdown('icore::mails.newsletter_confirmation')
             ->with([
-                'actionUrl' => route('web.newsletter.update_status', [
+                'actionUrl' => $this->url->route('web.newsletter.update_status', [
                     $this->newsletter->id,
                     'token' => $this->newsletter->token,
-                    'status' => 1
+                    'status' => $this->newsletter::ACTIVE
                 ]),
-                'actionText' => trans('icore::newsletter.subscribe_confirm')
+                'actionText' => $this->lang->get('icore::newsletter.subscribe_confirm')
             ]);
     }
 }

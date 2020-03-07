@@ -30,7 +30,7 @@ class UpdateRequest extends FormRequest
             'value' => [
                 'required',
                 'string',
-                Rule::unique('bans_values', 'value')->where(function($query) use ($type) {
+                Rule::unique('bans_values', 'value')->where(function ($query) use ($type) {
                     $query->where('type', $type);
                 })
             ],

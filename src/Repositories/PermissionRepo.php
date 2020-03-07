@@ -32,13 +32,17 @@ class PermissionRepo
      */
     public function getUserWithRole(int $id) : Collection
     {
-        return $this->permission->with(['roles' => function($query) use ($id) {
-                $query->where('id', $id);
-            }])->whereIn('name', [
+        return $this->permission->with([
+                'roles' => function ($query) use ($id) {
+                    $query->where('id', $id);
+                }
+            ])
+            ->whereIn('name', [
                 'create comments',
                 'suggest comments',
                 'edit comments'
-            ])->orderBy('name', 'asc')
+            ])
+            ->orderBy('name', 'asc')
             ->get();
     }
 
@@ -49,9 +53,12 @@ class PermissionRepo
      */
     public function getWithRole(int $id) : Collection
     {
-        return $this->permission->with(['roles' => function($query) use ($id) {
-                $query->where('id', $id);
-            }])->orderBy('name', 'asc')
+        return $this->permission->with([
+                'roles' => function ($query) use ($id) {
+                    $query->where('id', $id);
+                }
+            ])
+            ->orderBy('name', 'asc')
             ->get();
     }
 }

@@ -2,14 +2,18 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Comment;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
+use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\DestroyGlobalRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
 
 /**
  * [CommentController description]
@@ -24,9 +28,9 @@ class CommentController implements Polymorphic
      */
     public function show(Comment $comment) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.comment.show', [
+            'view' => View::make('icore::admin.comment.show', [
                 'comment' => $comment->loadAncestorsAndChildrens()
             ])->render()
         ]);
@@ -40,9 +44,9 @@ class CommentController implements Polymorphic
      */
     public function edit(Comment $comment) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.comment.edit', [
+            'view' => View::make('icore::admin.comment.edit', [
                 'comment' => $comment
             ])->render()
         ]);
@@ -59,9 +63,9 @@ class CommentController implements Polymorphic
     {
         $comment->makeService()->update($request->only('content'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.comment.partials.comment', [
+            'view' => View::make('icore::admin.comment.partials.comment', [
                 'comment' => $comment->loadAllRels()
             ])->render()
         ]);
@@ -78,10 +82,10 @@ class CommentController implements Polymorphic
     {
         $comment->update($request->only('censored'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'censored' => $comment->censored,
-            'view' => view('icore::admin.comment.partials.comment', [
+            'view' => View::make('icore::admin.comment.partials.comment', [
                 'comment' => $comment->loadAllRels()
             ])->render()
         ]);
@@ -100,7 +104,7 @@ class CommentController implements Polymorphic
 
         $commentRepo = $comment->makeRepo();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'status' => $comment->status,
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
@@ -123,7 +127,7 @@ class CommentController implements Polymorphic
 
         $comment->makeService()->delete();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'descendants' => $descendants,
         ]);
@@ -149,6 +153,9 @@ class CommentController implements Polymorphic
             }
         }
 
-        return redirect()->back()->with('success', trans('icore::comments.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::comments.success.destroy_global', ['affected' => $deleted])
+        );
     }
 }

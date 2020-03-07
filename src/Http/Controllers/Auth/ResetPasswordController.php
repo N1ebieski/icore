@@ -2,9 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
-use N1ebieski\ICore\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller
 {
@@ -38,10 +40,18 @@ class ResetPasswordController extends Controller
         $this->middleware('icore.guest');
     }
 
-    public function showResetForm(Request $request, $token = null)
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param string $token
+     * @return HttpResponse
+     */
+    public function showResetForm(Request $request, string $token = null) : HttpResponse
     {
-        return view('icore::auth.passwords.reset')->with(
-            ['token' => $token, 'email' => $request->email]
-        );
+        return Response::view('icore::auth.passwords.reset')->with([
+            'token' => $token,
+            'email' => $request->email
+        ]);
     }
 }

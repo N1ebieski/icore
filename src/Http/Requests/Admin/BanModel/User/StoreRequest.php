@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
                 'integer',
                 'required_without_all:ip',
                 'exists:users,id',
-                Rule::unique('bans_models', 'model_id')->where(function($query) {
+                Rule::unique('bans_models', 'model_id')->where(function ($query) {
                     $query->where('model_type', 'N1ebieski\ICore\Models\User');
                 })
             ],
@@ -38,7 +38,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
                 'required_without_all:user',
-                Rule::unique('bans_values', 'value')->where(function($query) {
+                Rule::unique('bans_values', 'value')->where(function ($query) {
                     $query->where('type', 'ip');
                 })
             ]

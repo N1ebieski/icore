@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Models;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Services\MailingEmailService;
 use N1ebieski\ICore\Repositories\MailingEmailRepo;
 
@@ -87,8 +88,9 @@ class MailingEmail extends Model
     // Relations
 
     /**
-     * [mailing description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function mailing()
     {
@@ -125,7 +127,7 @@ class MailingEmail extends Model
      */
     public function makeRepo()
     {
-        return app()->make(MailingEmailRepo::class, ['mailingEmail' => $this]);
+        return App::make(MailingEmailRepo::class, ['mailingEmail' => $this]);
     }
 
     /**
@@ -134,6 +136,6 @@ class MailingEmail extends Model
      */
     public function makeService()
     {
-        return app()->make(MailingEmailService::class, ['mailingEmail' => $this]);
+        return App::make(MailingEmailService::class, ['mailingEmail' => $this]);
     }
 }

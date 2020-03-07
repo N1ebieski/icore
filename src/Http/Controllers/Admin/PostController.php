@@ -2,20 +2,25 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
-use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
-use N1ebieski\ICore\Http\Requests\Admin\Post\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
+use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Post\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\DestroyGlobalRequest;
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * [PostController description]
@@ -29,19 +34,17 @@ class PostController
      * @param  Category        $category        [description]
      * @param  IndexRequest    $request         [description]
      * @param  IndexFilter     $filter          [description]
-     * @return View                             [description]
+     * @return HttpResponse                     [description]
      */
-    public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter) : View
+    public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
-        $posts = $post->makeRepo()->paginateByFilter($filter->all() + [
-            'except' => $request->input('except')
-        ]);
-
-        return view('icore::admin.post.index', [
-            'posts' => $posts,
+        return Response::view('icore::admin.post.index', [
+            'posts' => $post->makeRepo()->paginateByFilter($filter->all() + [
+                'except' => $request->input('except')
+            ]),
             'categories' => $category->makeService()->getAsFlatTree(),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
@@ -49,13 +52,13 @@ class PostController
      * Show the form for creating a new Post.
      *
      * @param  CreateRequest  $request  [description]
-     * @return View               [description]
+     * @return HttpResponse             [description]
      */
-    public function create(CreateRequest $request) : View
+    public function create(CreateRequest $request) : HttpResponse
     {
-        return view('icore::admin.post.create', [
-            'max_categories' => config('icore.post.max_categories'),
-            'max_tags' => config('icore.post.max_tags'),
+        return Response::view('icore::admin.post.create', [
+            'max_categories' => Config::get('icore.post.max_categories'),
+            'max_tags' => Config::get('icore.post.max_tags'),
         ]);
     }
 
@@ -70,18 +73,10 @@ class PostController
     {
         $post->makeService()->create($request->all());
 
-        return redirect()->route('admin.post.index')->with('success', trans('icore::posts.success.store') );
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return Response::redirectToRoute('admin.post.index')->with(
+            'success',
+            Lang::get('icore::posts.success.store')
+        );
     }
 
     /**
@@ -92,9 +87,11 @@ class PostController
      */
     public function edit(Post $post) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.post.edit', ['post' => $post])->render(),
+            'view' => View::make('icore::admin.post.edit', [
+                'post' => $post
+            ])->render(),
         ]);
     }
 
@@ -103,14 +100,14 @@ class PostController
      *
      * @param  Post     $post     [description]
      * @param  EditFullRequest  $request  [description]
-     * @return View               [description]
+     * @return HttpResponse               [description]
      */
-    public function editFull(Post $post, EditFullRequest $request) : View
+    public function editFull(Post $post, EditFullRequest $request) : HttpResponse
     {
-        return view('icore::admin.post.edit_full', [
+        return Response::view('icore::admin.post.edit_full', [
             'post' => $post,
-            'max_categories' => config('icore.post.max_categories'),
-            'max_tags' => config('icore.post.max_tags'),
+            'max_categories' => Config::get('icore.post.max_categories'),
+            'max_tags' => Config::get('icore.post.max_tags'),
         ]);
     }
 
@@ -125,10 +122,12 @@ class PostController
     {
         $post->makeService()->updateStatus($request->only('status'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'status' => $post->status,
-            'view' => view('icore::admin.post.partials.post', ['post' => $post])->render(),
+            'view' => View::make('icore::admin.post.partials.post', [
+                'post' => $post
+            ])->render(),
         ]);
     }
 
@@ -143,8 +142,8 @@ class PostController
     {
         $post->makeService()->updateFull($request->all());
 
-        return redirect()->route('admin.post.edit_full', ['post' => $post->id])
-            ->with('success', trans('icore::posts.success.update') );
+        return Response::redirectToRoute('admin.post.edit_full', ['post' => $post->id])
+            ->with('success', Lang::get('icore::posts.success.update'));
     }
 
     /**
@@ -158,9 +157,11 @@ class PostController
     {
         $post->makeService()->update($request->only(['title', 'content_html']));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.post.partials.post', ['post' => $post])->render()
+            'view' => View::make('icore::admin.post.partials.post', [
+                'post' => $post
+            ])->render()
         ]);
     }
 
@@ -174,7 +175,7 @@ class PostController
     {
         $post->makeService()->delete();
 
-        return response()->json(['success' => '']);
+        return Response::json(['success' => '']);
     }
 
     /**
@@ -188,6 +189,9 @@ class PostController
     {
         $deleted = $post->makeService()->deleteGlobal($request->get('select'));
 
-        return redirect()->back()->with('success', trans('icore::posts.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::posts.success.destroy_global', ['affected' => $deleted])
+        );
     }
 }

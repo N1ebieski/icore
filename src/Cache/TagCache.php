@@ -6,6 +6,7 @@ use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 /**
  * [TagCache description]
@@ -25,21 +26,33 @@ class TagCache
     protected $cache;
 
     /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * [protected description]
      * @var int
      */
     protected $minutes;
 
     /**
-     * [__construct description]
-     * @param Tag    $tag    [description]
-     * @param Cache  $cache  [description]
-     * @param Config $config [description]
+     * Undocumented function
+     *
+     * @param Tag $tag
+     * @param Cache $cache
+     * @param Config $config
+     * @param Carbon $carbon
      */
-    public function __construct(Tag $tag, Cache $cache, Config $config)
+    public function __construct(Tag $tag, Cache $cache, Config $config, Carbon $carbon)
     {
         $this->tag = $tag;
+
         $this->cache = $cache;
+        $this->carbon = $carbon;
+
         $this->minutes = $config->get('cache.minutes');
     }
 
@@ -52,7 +65,7 @@ class TagCache
     {
         return $this->cache->remember(
             "tag.firstBySlug.{$slug}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () use ($slug) {
                 return $this->tag->makeRepo()->firstBySlug($slug);
             }
@@ -70,7 +83,7 @@ class TagCache
 
         return $this->cache->remember(
             "tag.{$this->tag->poli}.getPopularByComponent.{$cats}",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->tag->makeRepo()->getPopularByComponent($component);
             }
@@ -91,7 +104,7 @@ class TagCache
         return $this->cache->put(
             "tag.{$this->tag->poli}.getPopularByComponent.{$cats}",
             $tags,
-            now()->addMinutes($this->minutes)
+            $this->carbon->now()->addMinutes($this->minutes)
         );
     }
 }

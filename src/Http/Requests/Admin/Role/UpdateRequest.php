@@ -42,11 +42,13 @@ class UpdateRequest extends FormRequest
                 'string',
                 'distinct',
                 'exists:permissions,name',
-                $this->role->name === 'user' ? Rule::in([
-                    'create comments',
-                    'suggest comments',
-                    'edit comments'
-                ]) : null,
+                $this->role->name === 'user' ?
+                    Rule::in([
+                        'create comments',
+                        'suggest comments',
+                        'edit comments'
+                    ])
+                    : null,
                 'no_js_validation'
             ]
         ];

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Cache\CommentCache;
 use N1ebieski\ICore\Services\CommentService;
@@ -98,7 +99,12 @@ class Comment extends Entity implements CommentInterface
      */
     public function ancestors()
     {
-        return $this->belongsToMany('N1ebieski\ICore\Models\Comment\Comment', 'comments_closure', 'descendant', 'ancestor');
+        return $this->belongsToMany(
+            'N1ebieski\ICore\Models\Comment\Comment',
+            'comments_closure',
+            'descendant',
+            'ancestor'
+        );
     }
 
     /**
@@ -107,7 +113,12 @@ class Comment extends Entity implements CommentInterface
      */
     public function descendants()
     {
-        return $this->belongsToMany('N1ebieski\ICore\Models\Comment\Comment', 'comments_closure', 'ancestor', 'descendant');
+        return $this->belongsToMany(
+            'N1ebieski\ICore\Models\Comment\Comment',
+            'comments_closure',
+            'ancestor',
+            'descendant'
+        );
     }
 
     /**
@@ -277,7 +288,9 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeFilterCensored(Builder $query, $censored = null)
     {
-        if ($censored !== null) return $query->where('censored', $censored);
+        $query->when($censored !== null, function ($query) use ($censored) {
+            return $query->where('censored', $censored);
+        });
     }
 
     /**
@@ -288,7 +301,9 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeFilterExcept(Builder $query, array $except = null)
     {
-        if ($except !== null) return $query->whereNotIn('comments.id', $except);
+        $query->when($except !== null, function ($query) use ($except) {
+            return $query->whereNotIn('comments.id', $except);
+        });
     }
 
     /**
@@ -299,17 +314,10 @@ class Comment extends Entity implements CommentInterface
     public function scopeWithSumRating(Builder $query) : Builder
     {
         return $query->withCount([
-            'ratings AS sum_rating' => function($query) {
+            'ratings AS sum_rating' => function ($query) {
                 $query->select(DB::raw('COALESCE(SUM(`ratings`.`rating`), 0) as `sum_rating`'));
             }
         ]);
-
-        // return $query->selectRaw('comments.*, COALESCE(SUM(ratings.rating), 0) AS sum_rating')
-        //     ->leftJoin('ratings', function($q) {
-        //          $q->on('ratings.model_id', '=', 'comments.id');
-        //          $q->where('ratings.model_type', '=', 'N1ebieski\ICore\Models\Comment\Comment');
-        //     })
-        //     ->groupBy('comments.id');
     }
 
     /**
@@ -324,22 +332,25 @@ class Comment extends Entity implements CommentInterface
             ->with([
                 'user:id,name',
                 'ratings',
-                'childrens' => function($query) use ($orderby) {
+                'childrens' => function ($query) use ($orderby) {
                     $query->withSumRating()
-                    ->with(['user:id,name', 'ratings'])
-                    ->with(['childrens' => function($query) use ($orderby) {
-                        $query->withSumRating()
-                        ->with(['user:id,name', 'ratings'])
-                        ->withCount([
-                            'childrens' => function($query) {
-                                $query->active();
+                        ->with([
+                            'user:id,name',
+                            'ratings',
+                            'childrens' => function ($query) use ($orderby) {
+                                $query->withSumRating()
+                                    ->with(['user:id,name', 'ratings'])
+                                    ->withCount([
+                                        'childrens' => function ($query) {
+                                            $query->active();
+                                        }
+                                    ])
+                                    ->active()
+                                    ->filterCommentsOrderBy($orderby);
                             }
                         ])
                         ->active()
                         ->filterCommentsOrderBy($orderby);
-                    }])
-                    ->active()
-                    ->filterCommentsOrderBy($orderby);
                 }
             ]);
     }
@@ -382,12 +393,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function loadAllRels() : self
     {
-        // Laravel nie posiada loadCount dla modelu? Serio?
-        // $this->reports_count = $this->reports()->count();
-        $this->loadCount('reports');
-        $this->load('morph');
-
-        return $this;
+        return $this->loadCount('reports')->load('morph');
     }
 
     /**
@@ -396,17 +402,15 @@ class Comment extends Entity implements CommentInterface
      */
     public function loadAncestorsAndChildrens() : self
     {
-        $this->load([
-            'ancestors' => function($q) {
+        return $this->load([
+            'ancestors' => function ($q) {
                 $q->with('user:id,name')->whereColumn('ancestor', '!=', 'descendant')
-                ->orderBy('depth', 'desc');
+                    ->orderBy('depth', 'desc');
             },
-            'childrens' => function($q) {
+            'childrens' => function ($q) {
                 $q->with('user:id,name')->orderBy('created_at', 'asc');
             }
         ]);
-
-        return $this;
     }
 
     // Overrides
@@ -461,7 +465,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function makeRepo()
     {
-        return app()->make(CommentRepo::class, ['comment' => $this]);
+        return App::make(CommentRepo::class, ['comment' => $this]);
     }
 
     /**
@@ -470,7 +474,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function makeCache()
     {
-        return app()->make(CommentCache::class, ['comment' => $this]);
+        return App::make(CommentCache::class, ['comment' => $this]);
     }
 
     /**
@@ -479,6 +483,6 @@ class Comment extends Entity implements CommentInterface
      */
     public function makeService()
     {
-        return app()->make(CommentService::class, ['comment' => $this]);
+        return App::make(CommentService::class, ['comment' => $this]);
     }
 }

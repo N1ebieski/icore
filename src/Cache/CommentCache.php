@@ -8,6 +8,7 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
+use Illuminate\Support\Carbon;
 
 /**
  * [CategoryCache description]
@@ -39,21 +40,32 @@ class CommentCache
     protected $collect;
 
     /**
+     * [protected description]
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * [__construct description]
      * @param Comment        $comment        [description]
      * @param Cache          $cache          [description]
      * @param Config         $config         [description]
      * @param Collect        $collect        [description]
+     * @param Carbon         $carbon         [description]
      */
     public function __construct(
         Comment $comment,
         Cache $cache,
         Config $config,
-        Collect $collect
+        Collect $collect,
+        Carbon $carbon
     ) {
         $this->comment = $comment;
+
         $this->cache = $cache;
         $this->collect = $collect;
+        $this->carbon = $carbon;
+
         $this->minutes = $config->get('cache.minutes');
     }
 
@@ -108,7 +120,7 @@ class CommentCache
         ->put(
             "{$this->comment->poli}.getRootsByFilter.{$this->comment->getMorph()->id}.{$page}",
             $comments,
-            now()->addMinutes($this->minutes)
+            $this->carbon->now()->addMinutes($this->minutes)
         );
     }
 
@@ -121,7 +133,7 @@ class CommentCache
     {
         return $this->cache->remember(
             "comment.{$this->comment->poli}.getLatestByComponent",
-            now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->comment->makeRepo()->getLatestByComponent($component);
             }

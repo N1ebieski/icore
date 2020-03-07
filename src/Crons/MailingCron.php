@@ -30,6 +30,7 @@ class MailingCron
     public function __construct(MailingEmail $mailingEmail, SendMailingJob $sendMailingJob)
     {
         $this->mailingEmail = $mailingEmail;
+
         $this->sendMailingJob = $sendMailingJob;
     }
 
@@ -40,16 +41,6 @@ class MailingCron
     {
         $this->activateScheduled();
 
-        $this->addToQueue();
-
-        $this->deactivateCompleted();
-    }
-
-    /**
-     * Adds new jobs to the queue or (if there are none), disables mailing.
-     */
-    private function addToQueue() : void
-    {
         $this->mailingEmail->makeRepo()->chunkUnsentHasActiveMailing(
             function ($items) {
                 $items->each(function ($item) {
@@ -57,6 +48,18 @@ class MailingCron
                 });
             }
         );
+
+        $this->deactivateCompleted();
+    }
+
+    /**
+     * Adds new jobs to the queue or (if there are none), disables mailing.
+     *
+     * @param MailingEmail   $mailingEmail   [description]
+     */
+    protected function addToQueue(MailingEmail $mailingEmail) : void
+    {
+        $this->sendMailingJob->dispatch($mailingEmail);
     }
 
     /**

@@ -8,9 +8,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use N1ebieski\ICore\Models\MailingEmail;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Contracts\Container\Container as App;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Exception;
+use N1ebieski\ICore\Models\Mailing;
 
 /**
  * [SendMailing description]
@@ -30,17 +32,30 @@ class SendMailingJob implements ShouldQueue
      * [protected description]
      * @var MailingEmail
      */
-    protected $email;
+    protected $mailingEmail;
 
     /**
-     * Create a new job instance.
+     * Undocumented variable
      *
-     * @param MailingEmail $email
-     * @return void
+     * @var App
      */
-    public function __construct(MailingEmail $email)
+    protected $app;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Mailer
+     */
+    protected $mailer;
+
+    /**
+     * Undocumented function
+     *
+     * @param MailingEmail $mailingEmail
+     */
+    public function __construct(MailingEmail $mailingEmail)
     {
-        $this->email = $email;
+        $this->mailingEmail = $mailingEmail;
     }
 
     /**
@@ -48,12 +63,18 @@ class SendMailingJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(App $app, Mailer $mailer)
     {
-        if ($this->email->sent === 0) {
-            if ($this->email->mailing->status === 1) {
-                Mail::send(app()->makeWith(MailingMail::class, ['email' => $this->email]));
-                $this->email->update(['sent' => 1]);
+        $this->app = $app;
+        $this->mailer = $mailer;
+
+        if ($this->mailingEmail->sent === MailingEmail::UNSENT) {
+            if ($this->mailingEmail->mailing->status === Mailing::ACTIVE) {
+                $this->mailer->send(
+                    $this->app->make(MailingMail::class, ['mailingEmail' => $this->mailingEmail])
+                );
+
+                $this->mailingEmail->makeRepo()->markAsSent();
             }
         }
     }
@@ -66,6 +87,6 @@ class SendMailingJob implements ShouldQueue
      */
     public function failed(Exception $exception)
     {
-        $this->email->update(['sent' => 2]);
+        $this->mailingEmail->makeRepo()->markAsError();
     }
 }

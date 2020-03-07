@@ -2,10 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Rating\Comment;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Rating\Comment\Rating;
 use N1ebieski\ICore\Http\Requests\Web\Rating\Comment\RateRequest;
-use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Http\Controllers\Web\Rating\Comment\Polymorphic as CommentPolymorphic;
 
 /**
@@ -25,7 +26,7 @@ class RatingController implements CommentPolymorphic
     {
         $rating->setMorph($comment)->makeService()->createOrUpdateOrDelete($request->only('rating'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'sum_rating' => (int)$comment->ratings->sum('rating')
         ]);

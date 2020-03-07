@@ -11,15 +11,12 @@ class SocialitePolicy
     use HandlesAuthorization;
 
     /**
-     * Create a new policy instance.
+     * Undocumented function
      *
+     * @param User $current_user
+     * @param Socialite $socialite
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
-
     public function delete(User $current_user, Socialite $socialite)
     {
         return $current_user->id === $socialite->user_id;

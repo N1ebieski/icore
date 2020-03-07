@@ -3,7 +3,8 @@
 namespace N1ebieski\ICore\Http\ViewComponents\Page;
 
 use Illuminate\Contracts\Support\Htmlable;
-use N1ebieski\ICore\Cache\PageCache;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
 
 /**
@@ -13,9 +14,16 @@ class MenuComponent implements Htmlable
 {
     /**
      * Model
-     * @var PageCache
+     * @var Page
      */
-    protected $pageCache;
+    protected $page;
+
+    /**
+     * Undocumented variable
+     *
+     * @var ViewFactory
+     */
+    protected $view;
 
     /**
      * [private description]
@@ -24,13 +32,17 @@ class MenuComponent implements Htmlable
     protected $limit;
 
     /**
-     * [__construct description]
-     * @param PageCache    $pageCache  [description]
-     * @param int $limit [description]
+     * Undocumented function
+     *
+     * @param Page $page
+     * @param ViewFactory $view
+     * @param integer $limit
      */
-    public function __construct(PageCache $pageCache, int $limit = 5)
+    public function __construct(Page $page, ViewFactory $view, int $limit = 5)
     {
-        $this->pageCache = $pageCache;
+        $this->page = $page;
+
+        $this->view = $view;
 
         $this->limit = $limit;
     }
@@ -41,8 +53,10 @@ class MenuComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return view('icore::web.components.page.menu', [
-            'pages' => $this->pageCache->rememberWithChildrensByComponent(['limit' => $this->limit])
+        return $this->view->make('icore::web.components.page.menu', [
+            'pages' => $this->page->makeCache()->rememberWithChildrensByComponent([
+                'limit' => $this->limit
+            ])
         ]);
     }
 }

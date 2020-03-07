@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Models\Rating;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Services\RatingService;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 
@@ -55,6 +56,6 @@ class Rating extends Model
      */
     public function makeService()
     {
-        return app()->make(RatingService::class, ['rating' => $this]);
+        return App::make(RatingService::class, ['rating' => $this]);
     }
 }

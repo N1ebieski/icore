@@ -104,9 +104,9 @@ abstract class Filter
     public function isNull() : bool
     {
         if ($this->parameters) {
-            if (!array_filter($this->parameters, function($value) {
-                return $value === null;
-            })) return false;
+            if (!array_filter($this->parameters, fn($value) => $value === null)) {
+                return false;
+            }
         }
 
         return true;

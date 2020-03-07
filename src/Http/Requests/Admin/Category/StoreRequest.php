@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -35,7 +34,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:255',
-            'icon' => 'nullable|string|max:255',            
+            'icon' => 'nullable|string|max:255',
             'parent_id' => 'nullable|integer|exists:categories,id'
         ];
     }

@@ -2,10 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Archive\Post;
 
-use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Http\Requests\Web\Archive\IndexRequest;
-use Illuminate\View\View;
 use Carbon\Carbon;
+use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Http\Requests\Web\Archive\IndexRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Archive\Post\Polymorphic;
 
 /**
@@ -20,11 +21,11 @@ class ArchiveController implements Polymorphic
      * @param  int          $year    [description]
      * @param  Post         $post    [description]
      * @param  IndexRequest $request [description]
-     * @return View                  [description]
+     * @return HttpResponse          [description]
      */
-    public function show(int $month, int $year, Post $post, IndexRequest $request) : View
+    public function show(int $month, int $year, Post $post, IndexRequest $request) : HttpResponse
     {
-        return view('icore::web.archive.post.show', [
+        return Response::view('icore::web.archive.post.show', [
             'posts' => $post->makeCache()->rememeberArchiveByDate($month, $year, $request->get('page') ?? 1),
             'month' => $month,
             'month_localized' => Carbon::createFromFormat('m', $month)->formatLocalized('%B'),

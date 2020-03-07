@@ -2,10 +2,15 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Comment\Page;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
+use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\BanValue;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\Comment\Page\Comment;
+use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
 
 class StoreRequest extends FormRequest
 {
@@ -35,11 +40,14 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        if ((bool)$this->page->comment === false) {
-            abort(403, 'Adding comments has been disabled for this page.');
+        if ($this->page->comment === Page::WITHOUT_COMMENT) {
+            App::abort(
+                HttpResponse::HTTP_FORBIDDEN,
+                'Adding comments has been disabled for this page.'
+            );
         }
 
-        return $this->page->status === 1;
+        return $this->page->status === Page::ACTIVE;
     }
 
     protected function prepareForValidation()
@@ -53,9 +61,7 @@ class StoreRequest extends FormRequest
 
     public function attributes()
     {
-        return array_merge([
-
-        ], $this->captcha->toAttributes());
+        return array_merge([], $this->captcha->toAttributes());
     }
 
     /**
@@ -75,8 +81,8 @@ class StoreRequest extends FormRequest
             'parent_id' => [
                 'nullable',
                 'integer',
-                Rule::exists('comments', 'id')->where(function($query) {
-                    $query->where('status', 1);
+                Rule::exists('comments', 'id')->where(function ($query) {
+                    $query->where('status', Comment::ACTIVE);
                 }),
             ]
         ], $this->captcha->toRules());
@@ -90,7 +96,9 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'content.not_regex' => trans('icore::validation.not_regex_contains', ['words' => str_replace('|', ', ', $this->bans)])
+            'content.not_regex' => Lang::get('icore::validation.not_regex_contains', [
+                'words' => str_replace('|', ', ', $this->bans)
+            ])
         ];
     }
 }

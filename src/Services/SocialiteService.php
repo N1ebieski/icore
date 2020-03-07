@@ -2,11 +2,12 @@
 
 namespace N1ebieski\ICore\Services;
 
-use Illuminate\Database\Eloquent\Model;
-use Laravel\Socialite\Contracts\User as ProviderUser;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Socialite as Social;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
+use Laravel\Socialite\Contracts\User as ProviderUser;
 
 /**
  * [SocialiteService description]
@@ -64,8 +65,7 @@ class SocialiteService implements Creatable
      */
     public function findOrCreateUser(ProviderUser $providerUser, string $provider) : User
     {
-        if (is_null($this->socialiteUser = $this->findUser($providerUser, $provider)))
-        {
+        if (is_null($this->findUser($providerUser, $provider))) {
             $this->socialiteUser = $this->createUser();
         }
 
@@ -88,9 +88,8 @@ class SocialiteService implements Creatable
             $this->providerUser->getId()
         );
 
-        if ($socialite) return $this->socialiteUser = $socialite->user;
-
-        return null;
+        return $socialite instanceof Social ?
+            $this->socialiteUser = $socialite->user : null;
     }
 
     /**
@@ -101,7 +100,8 @@ class SocialiteService implements Creatable
         // Sprawdzenie czy provider zwraca adres e-mail
         if (empty($this->providerUser->getEmail())) {
             throw new \N1ebieski\ICore\Exceptions\Socialite\NoEmailException(
-                'Provider has not provided the user\'s email address.'
+                'Provider has not provided the user\'s email address.',
+                HttpResponse::HTTP_FORBIDDEN
             );
         }
 
@@ -112,7 +112,8 @@ class SocialiteService implements Creatable
         // Jesli tak, odrzucamy request i prosimy usera by powiazal konto z poziomu edycji profilu
         if ($this->socialiteUser) {
             throw new \N1ebieski\ICore\Exceptions\Socialite\EmailExistException(
-                'There is a registered account for the email address provided.'
+                'There is a registered account for the email address provided.',
+                HttpResponse::HTTP_FORBIDDEN
             );
         }
 

@@ -3,8 +3,6 @@
 namespace N1ebieski\ICore\Repositories;
 
 use N1ebieski\ICore\Models\MailingEmail;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Closure;
 
 class MailingEmailRepo
@@ -22,6 +20,26 @@ class MailingEmailRepo
     public function __construct(MailingEmail $mailingEmail)
     {
         $this->mailingEmail = $mailingEmail;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function markAsSent() : bool
+    {
+        return $this->mailingEmail->update(['sent' => MailingEmail::SENT]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function markAsError() : bool
+    {
+        return $this->mailingEmail->update(['sent' => MailingEmail::ERROR]);
     }
 
     /**

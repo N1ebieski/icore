@@ -2,18 +2,37 @@
 
 namespace N1ebieski\ICore\Listeners\User;
 
+use Illuminate\Contracts\Auth\Guard as Auth;
+use Illuminate\Http\Request;
+
 /**
  * [LogSuccessfulLogin description]
  */
 class RefreshIp
 {
     /**
-     * Create the event listener.
+     * Undocumented variable
      *
-     * @return void
+     * @var Auth
      */
-    public function __construct()
+    protected $auth;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * Undocumented function
+     *
+     * @param Auth $auth
+     */
+    public function __construct(Auth $auth, Request $request)
     {
+        $this->auth = $auth;
+        $this->request = $request;
     }
 
     /**
@@ -24,8 +43,8 @@ class RefreshIp
      */
     public function handle($event)
     {
-        auth()->user()->update([
-            'ip' => request()->ip()
+        $this->auth->user()->update([
+            'ip' => $this->request->ip()
         ]);
     }
 }

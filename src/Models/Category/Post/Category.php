@@ -16,7 +16,7 @@ class Category extends CategoryBaseModel
      */
     protected $attributes = [
         'model_type' => 'N1ebieski\\ICore\\Models\\Post',
-        'status' => 1,
+        'status' => self::ACTIVE,
     ];
 
     /**

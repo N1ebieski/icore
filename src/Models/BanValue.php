@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\Cache\BanValueCache;
 
@@ -52,7 +53,7 @@ class BanValue extends Model
      */
     public function scopeFilterType(Builder $query, string $type = null) : ?Builder
     {
-        return $query->when($type !== null, function($query) use ($type) {
+        return $query->when($type !== null, function ($query) use ($type) {
             $query->where('type', $type);
         });
     }
@@ -85,7 +86,7 @@ class BanValue extends Model
      */
     public function makeRepo()
     {
-        return app()->make(BanValueRepo::class, ['banvalue' => $this]);
+        return App::make(BanValueRepo::class, ['banvalue' => $this]);
     }
 
     /**
@@ -94,6 +95,6 @@ class BanValue extends Model
      */
     public function makeCache()
     {
-        return app()->make(BanValueCache::class, ['banvalue' => $this]);
+        return App::make(BanValueCache::class, ['banvalue' => $this]);
     }
 }

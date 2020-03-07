@@ -74,12 +74,12 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     protected function paginateChildrens() : LengthAwarePaginator
     {
-        $this->comments->map(function($item) {
+        $this->comments->map(function ($item) {
             $item->setRelation('childrens', $item->childrens
-            ->paginate(5, null, null, 'page_childrens'));
-            $item->childrens->map(function($i) {
-                $i->setRelation('childrens', $i->childrens
                 ->paginate(5, null, null, 'page_childrens'));
+            $item->childrens->map(function ($i) {
+                $i->setRelation('childrens', $i->childrens
+                    ->paginate(5, null, null, 'page_childrens'));
             });
         });
 
@@ -133,12 +133,12 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
 
         if ($updateStatus === true) {
             // Deaktywacja komentarza nadrzędnego, deaktywuje wszystkich potomków
-            if ($attributes['status'] == 0) {
+            if ((int)$attributes['status'] === Comment::INACTIVE) {
                 $this->comment->descendants()->update(['status' => $attributes['status']]);
             }
 
             // Aktywacja komentarza podrzędnego, aktywuje wszystkich przodków
-            if ($attributes['status'] == 1) {
+            if ((int)$attributes['status'] === Comment::ACTIVE) {
                 $this->comment->ancestors()->update(['status' => $attributes['status']]);
             }
         }

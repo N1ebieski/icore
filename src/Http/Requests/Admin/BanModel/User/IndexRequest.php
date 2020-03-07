@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\BanModel\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
 
 class IndexRequest extends FormRequest
@@ -24,12 +25,12 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        $paginate = config('database.paginate');
+        $paginate = Config::get('database.paginate');
 
         return [
             'filter' => 'array|no_js_validation',
             'except' => 'filled|array',
-            'except.*' => 'integer',            
+            'except.*' => 'integer',
             'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [
                 'nullable',

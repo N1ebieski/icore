@@ -3,12 +3,13 @@
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Comment\Post\Comment;
-use N1ebieski\ICore\Http\Requests\Web\Post\IndexRequest;
-use N1ebieski\ICore\Http\Requests\Web\Post\ShowRequest;
-use N1ebieski\ICore\Http\Requests\Web\Post\SearchRequest;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Filters\Web\Post\ShowFilter;
+use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\Http\Requests\Web\Post\ShowRequest;
+use N1ebieski\ICore\Http\Requests\Web\Post\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Web\Post\SearchRequest;
 
 /**
  * [PostController description]
@@ -20,14 +21,12 @@ class PostController
      *
      * @param Post $post
      * @param IndexRequest $request
-     * @return View
+     * @return HttpResponse
      */
-    public function index(Post $post, IndexRequest $request) : View
+    public function index(Post $post, IndexRequest $request) : HttpResponse
     {
-        $posts = $post->makeCache()->rememberLatest($request->get('page') ?? 1);
-
-        return view('icore::web.post.index', [
-            'posts' => $posts,
+        return Response::view('icore::web.post.index', [
+            'posts' => $post->makeCache()->rememberLatest($request->get('page') ?? 1),
         ]);
     }
 
@@ -37,23 +36,21 @@ class PostController
      * @param  Comment     $comment [description]
      * @param  ShowRequest $request [description]
      * @param  ShowFilter  $filter  [description]
-     * @return View                 [description]
+     * @return HttpResponse                 [description]
      */
-    public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter) : View
+    public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter) : HttpResponse
     {
-        $comments = $comment->setMorph($post)->makeCache()->rememberRootsByFilter(
-            $filter->all() + ['except' => $request->input('except')],
-            $request->input('page') ?? 1
-        );
-
         $postCache = $post->makeCache();
 
-        return view('icore::web.post.show', [
+        return Response::view('icore::web.post.show', [
             'post' => $post,
             'previous' => $postCache->rememberPrevious(),
             'next' => $postCache->rememberNext(),
             'related' => $postCache->rememberRelated(),
-            'comments' => $comments,
+            'comments' => $comment->setMorph($post)->makeCache()->rememberRootsByFilter(
+                $filter->all() + ['except' => $request->input('except')],
+                $request->input('page') ?? 1
+            ),
             'filter' => $filter->all(),
             'catsAsArray' => [
                 'ancestors' => $post->categories->pluck('ancestors')->flatten()->pluck('id')->toArray(),
@@ -66,11 +63,11 @@ class PostController
      * [search description]
      * @param  Post          $post    [description]
      * @param  SearchRequest $request [description]
-     * @return View                   [description]
+     * @return HttpResponse                   [description]
      */
-    public function search(Post $post, SearchRequest $request) : View
+    public function search(Post $post, SearchRequest $request) : HttpResponse
     {
-        return view('icore::web.post.search', [
+        return Response::view('icore::web.post.search', [
             'posts' => $post->makeRepo()->paginateBySearch($request->get('search')),
             'search' => $request->get('search')
         ]);

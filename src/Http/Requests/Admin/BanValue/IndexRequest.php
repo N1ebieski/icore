@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\BanValue;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
 
 class IndexRequest extends FormRequest
@@ -24,7 +25,7 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        $paginate = config('database.paginate');
+        $paginate = Config::get('database.paginate');
 
         return [
             'type' => 'required|string|in:ip,word',
@@ -42,11 +43,17 @@ class IndexRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @param  array|mixed|null  $keys
+     * @return array
+     */
     public function all($keys = null)
     {
-       $data = parent::all($keys);
-       $data['type'] = $this->route('type');
+        $data = parent::all($keys);
+        $data['type'] = $this->route('type');
 
-       return $data;
+        return $data;
     }
 }

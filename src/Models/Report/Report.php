@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 
 /**
@@ -78,6 +79,6 @@ class Report extends Model
      */
     public function makeService()
     {
-        return app()->make(ReportService::class, ['report' => $this]);
+        return App::make(ReportService::class, ['report' => $this]);
     }
 }

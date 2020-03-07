@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
-use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
-use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\TagService;
 
 /**
  * [PostRepo description]
@@ -21,19 +21,31 @@ class PostRepo
     protected $post;
 
     /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * Config
      * @var int
      */
     protected $paginate;
 
     /**
-     * [__construct description]
-     * @param Post   $post   [description]
-     * @param Config $config [description]
+     * Undocumented function
+     *
+     * @param Post $post
+     * @param Config $config
+     * @param Carbon $carbon
      */
-    public function __construct(Post $post, Config $config)
+    public function __construct(Post $post, Config $config, Carbon $carbon)
     {
         $this->post = $post;
+
+        $this->carbon = $carbon;
+
         $this->paginate = $config->get('database.paginate');
     }
 
@@ -46,7 +58,7 @@ class PostRepo
     {
         return $this->post->comments()->where([
                 ['comments.parent_id', null],
-                ['comments.status', Post::ACTIVE]
+                ['comments.status', Comment::ACTIVE]
             ])
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
@@ -80,7 +92,7 @@ class PostRepo
         return $this->post->whereSlug($slug)
             ->active()
             ->with([
-                'categories' => function($query) {
+                'categories' => function ($query) {
                     $query->withAncestorsExceptSelf()->active();
                 },
                 'user:id,name',
@@ -127,16 +139,6 @@ class PostRepo
             ->get();
     }
 
-    // public function getAsTree()
-    // {
-    //     return $this->comments()
-    //         ->with(['user:id,name', 'ratings'])
-    //         ->orderBy('parent_id', 'asc')
-    //         ->orderByRaw('CASE WHEN `parent_id` IS NULL THEN `created_at` END ASC')
-    //         ->orderByRaw('CASE WHEN `parent_id` IS NOT NULL THEN `created_at` END ASC')
-    //         ->get()->toTree();
-    // }
-
     /**
      * [paginateArchiveByDate description]
      * @param  array                $date [description]
@@ -146,8 +148,10 @@ class PostRepo
     {
         return $this->post->with('user:id,name')
             ->active()
-            ->whereRaw('MONTH(published_at) = ? and YEAR(published_at) = ?',
-                [(int)$date['month'], (int)$date['year']])
+            ->whereRaw(
+                'MONTH(published_at) = ? and YEAR(published_at) = ?',
+                [(int)$date['month'], (int)$date['year']]
+            )
             ->orderBy('published_at', 'desc')
             ->paginate($this->paginate);
     }
@@ -214,10 +218,10 @@ class PostRepo
     public function activateScheduled() : bool
     {
         return $this->post
-            ->whereDate('published_at', '<', Carbon::now()->format('Y-m-d'))
+            ->whereDate('published_at', '<', $this->carbon->now()->format('Y-m-d'))
             ->orWhere(function ($query) {
-                $query->whereDate('published_at', '=', Carbon::now()->format('Y-m-d'))
-                    ->whereTime('published_at', '<=', Carbon::now()->format('H:i:s'));
+                $query->whereDate('published_at', '=', $this->carbon->now()->format('Y-m-d'))
+                    ->whereTime('published_at', '<=', $this->carbon->now()->format('H:i:s'));
             })
             ->scheduled()
             ->update(['status' => Post::ACTIVE]);

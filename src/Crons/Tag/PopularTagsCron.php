@@ -31,6 +31,7 @@ class PopularTagsCron
     public function __construct(Category $category, CachePopularTagsJob $cachePopularTagsJob)
     {
         $this->category = $category;
+        
         $this->cachePopularTagsJob = $cachePopularTagsJob;
     }
 

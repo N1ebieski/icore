@@ -34,8 +34,7 @@ trait HasCategory
         }
 
         if ($id !== null) {
-            if ($category = $this->findCategory($id))
-            {
+            if ($category = $this->findCategory($id)) {
                 return $this->setCategory($category);
             }
         }

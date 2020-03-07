@@ -2,14 +2,14 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Comment\Page;
 
-use N1ebieski\ICore\Models\Page\Page;
-use N1ebieski\ICore\Models\Comment\Page\Comment;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use Illuminate\Http\JsonResponse;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
-use Illuminate\View\View;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\CreateRequest;
 
 /**
  * [interface description]
@@ -22,9 +22,9 @@ interface Polymorphic
      * @param  Comment       $comment       [description]
      * @param  IndexRequest  $request       [description]
      * @param  IndexFilter   $filter        [description]
-     * @return View                         [description]
+     * @return HttpResponse                 [description]
      */
-    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : View;
+    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : HttpResponse;
 
     /**
      * Show the form for creating a new Comment for Page.

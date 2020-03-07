@@ -10,6 +10,8 @@ use N1ebieski\ICore\Models\Comment\Comment;
  */
 class Rating extends RatingBaseModel
 {
+    // Configuration
+
     /**
      * [protected description]
      * @var Rating

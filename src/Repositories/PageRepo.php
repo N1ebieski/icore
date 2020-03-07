@@ -3,8 +3,9 @@
 namespace N1ebieski\ICore\Repositories;
 
 use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
 
 /**
@@ -32,6 +33,7 @@ class PageRepo
     public function __construct(Page $page, Config $config)
     {
         $this->page = $page;
+
         $this->paginate = $config->get('database.paginate');
     }
 
@@ -47,7 +49,7 @@ class PageRepo
             ->filterStatus($filter['status'])
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->filterParent($filter['parent'])
-            ->when($filter['parent'] === null, function($query) {
+            ->when($filter['parent'] === null, function ($query) {
                 return $query->withAncestorsExceptSelf();
             })->filterPaginate($filter['paginate']);
     }
@@ -68,14 +70,15 @@ class PageRepo
     public function getAsTreeExceptSelf() : Collection
     {
         return $this->page->getTreeByQuery(
-                $this->page->whereNotIn('id',
-                    $this->page->find($this->page->id)
+            $this->page->whereNotIn(
+                'id',
+                $this->page->find($this->page->id)
                     ->descendants()
                     ->get(['id'])
                     ->pluck('id')
                     ->toArray()
-                )
-            );
+            )
+        );
     }
 
     /**
@@ -115,15 +118,15 @@ class PageRepo
     {
         return $this->page->active()
             ->root()
-            ->with(['childrens' => function($query) {
+            ->with(['childrens' => function ($query) {
                 $query->active()->orderBy('position', 'asc');
             }])
             ->limit($component['limit'])
             ->orderBy('position', 'asc')
             ->get()
-            ->map(function($item) {
+            ->map(function ($item) {
                 if ($item->childrens->isNotEmpty()) {
-                    $item->urls = $item->childrens->pluck('slug')->map(function($item) {
+                    $item->urls = $item->childrens->pluck('slug')->map(function ($item) {
                         return '*/' . $item;
                     });
                 }
@@ -140,14 +143,14 @@ class PageRepo
     public function getWithRecursiveChildrensByComponent(array $component) : Collection
     {
         return $this->page->withRecursiveAllRels()
-            ->when($component['pattern'] !== null, function($query) use ($component) {
+            ->when($component['pattern'] !== null, function ($query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
+                
                 $query->whereIn('id', $component['pattern'])
-                      ->orderByRaw("FIELD(id, ?)", [$patternString]);
-            }, function($query) {
-                $query->orderBy('position', 'asc');
+                    ->orderByRaw("FIELD(id, ?)", [$patternString]);
+            }, function ($query) {
+                $query->root()->orderBy('position', 'asc');
             })
-            ->root()
             ->active()
             ->get();
     }
@@ -174,7 +177,7 @@ class PageRepo
     {
         return $this->page->comments()->where([
                 ['comments.parent_id', null],
-                ['comments.status', 1]
+                ['comments.status', Comment::ACTIVE]
             ])
             ->withAllRels($filter['orderby'])
             ->filterCommentsOrderBy($filter['orderby'])

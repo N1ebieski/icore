@@ -2,14 +2,14 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\BanModel\User;
 
+use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
+use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Models\BanModel\User\BanModel;
 use N1ebieski\ICore\Filters\Admin\BanModel\User\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\StoreRequest;
-use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\BanModel\User\BanModel;
-use N1ebieski\ICore\Models\BanValue;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 /**
  * [interface description]
@@ -23,9 +23,9 @@ interface Polymorphic
      * @param BanModel $banModel
      * @param  IndexRequest $request  [description]
      * @param  IndexFilter  $filter   [description]
-     * @return View                 [description]
+     * @return HttpResponse           [description]
      */
-    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : View;
+    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : HttpResponse;
 
     /**
      * Show the form for creating a new BanModel.

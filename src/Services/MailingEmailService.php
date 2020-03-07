@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Services;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\MailingEmail;
 use N1ebieski\ICore\Models\Newsletter;
@@ -31,19 +31,31 @@ class MailingEmailService
     protected $newsletter;
 
     /**
-     * [__construct description]
-     * @param MailingEmail      $mailingEmail    [description]
-     * @param User              $user       [description]
-     * @param Newsletter        $newsletter [description]
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
+     * Undocumented function
+     *
+     * @param MailingEmail $mailingEmail
+     * @param User $user
+     * @param Newsletter $newsletter
+     * @param Carbon $carbon
      */
     public function __construct(
         MailingEmail $mailingEmail,
         User $user,
-        Newsletter $newsletter
+        Newsletter $newsletter,
+        Carbon $carbon
     ) {
         $this->mailingEmail = $mailingEmail;
         $this->user = $user;
         $this->newsletter = $newsletter;
+
+        $this->carbon = $carbon;
     }
 
     /**
@@ -87,9 +99,9 @@ class MailingEmailService
                     'model_type' => get_class($item),
                     'model_id' => $item->id,
                     'email' => $item->email,
-                    'sent' => 0,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
+                    'sent' => MailingEmail::UNSENT,
+                    'created_at' => $this->carbon->now(),
+                    'updated_at' => $this->carbon->now()
                 ];
 
                 $this->mailingEmail->insertIgnore($attributes);
@@ -116,9 +128,9 @@ class MailingEmailService
                         'model_type' => get_class($item),
                         'model_id' => $item->id,
                         'email' => $item->email,
-                        'sent' => 0,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now()
+                        'sent' => MailingEmail::UNSENT,
+                        'created_at' => $this->carbon->now(),
+                        'updated_at' => $this->carbon->now()
                     ];
 
                     $this->mailingEmail->insertIgnore($attributes);
@@ -142,9 +154,9 @@ class MailingEmailService
                 'model_type' => null,
                 'model_id' => null,
                 'email' => $item->email,
-                'sent' => 0,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'sent' => MailingEmail::UNSENT,
+                'created_at' => $this->carbon->now(),
+                'updated_at' => $this->carbon->now()
             ];
 
             $this->mailingEmail->insertIgnore($attributes);

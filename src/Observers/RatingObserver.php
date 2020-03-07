@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Rating\Rating;
 
 /**
@@ -17,7 +18,7 @@ class RatingObserver
      */
     public function created(Rating $rating)
     {
-        cache()->tags(["{$rating->poli}.{$rating->morph->slug}"])->flush();
+        Cache::tags(["{$rating->poli}.{$rating->morph->slug}"])->flush();
     }
 
     /**
@@ -28,7 +29,7 @@ class RatingObserver
      */
     public function updated(Rating $rating)
     {
-        cache()->tags(["{$rating->poli}.{$rating->morph->slug}"])->flush();
+        Cache::tags(["{$rating->poli}.{$rating->morph->slug}"])->flush();
     }
 
     /**
@@ -39,7 +40,7 @@ class RatingObserver
      */
     public function deleted(Rating $rating)
     {
-        cache()->tags(["{$rating->poli}.{$rating->morph->slug}"])->flush();
+        Cache::tags(["{$rating->poli}.{$rating->morph->slug}"])->flush();
     }
 
     /**

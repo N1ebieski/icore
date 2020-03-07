@@ -2,9 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Category\Post;
 
-use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
-use Illuminate\View\View;
+use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Category\Post\Polymorphic;
 
 /**
@@ -17,11 +18,11 @@ class CategoryController implements Polymorphic
      *
      * @param  Category $category [description]
      * @param ShowRequest $request
-     * @return View [description]
+     * @return HttpResponse [description]
      */
-    public function show(Category $category, ShowRequest $request) : View
+    public function show(Category $category, ShowRequest $request) : HttpResponse
     {
-        return view('icore::web.category.post.show', [
+        return Response::view('icore::web.category.post.show', [
             'posts' => $category->makeCache()->rememberPosts($request->get('page') ?? 1),
             'category' => $category,
             'catsAsArray' => [

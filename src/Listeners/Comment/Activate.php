@@ -2,19 +2,29 @@
 
 namespace N1ebieski\ICore\Listeners\Comment;
 
+use Illuminate\Contracts\Auth\Guard as Auth;
+use N1ebieski\ICore\Models\Comment\Comment;
+
 /**
  * [Activate description]
  */
 class Activate
 {
     /**
-     * Create the event listener.
+     * Undocumented variable
      *
-     * @return void
+     * @var Auth
      */
-    public function __construct()
+    protected $auth;
+
+    /**
+     * Undocumented function
+     *
+     * @param Auth $auth
+     */
+    public function __construct(Auth $auth)
     {
-        //
+        $this->auth = $auth;
     }
 
     /**
@@ -25,8 +35,8 @@ class Activate
      */
     public function handle($event)
     {
-        if (auth()->user()->can('create comments')) {
-            $event->comment->update(['status' => 1]);
+        if ($this->auth->user()->can('create comments')) {
+            $event->comment->update(['status' => Comment::ACTIVE]);
         }
     }
 }

@@ -2,10 +2,14 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
-use N1ebieski\ICore\Http\Requests\Web\Contact\SendRequest;
-use N1ebieski\ICore\Mail\Contact\Mail as ContactMail;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Mail\Contact\Mail as ContactMail;
+use N1ebieski\ICore\Http\Requests\Web\Contact\SendRequest;
 
 /**
  * [ContactController description]
@@ -13,25 +17,27 @@ use Illuminate\Support\Facades\Mail;
 class ContactController
 {
     /**
-     * Show the application dashboard.
+     * Undocumented function
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return HttpResponse
      */
-    public function show()
+    public function show() : HttpResponse
     {
-        return view('icore::web.contact.show');
+        return Response::view('icore::web.contact.show');
     }
 
     /**
      * [send description]
      * @param  SendRequest $request [description]
-     * @param  ContactMail $mail    [description]
      * @return RedirectResponse     [description]
      */
-    public function send(SendRequest $request, ContactMail $mail) : RedirectResponse
+    public function send(SendRequest $request) : RedirectResponse
     {
-        Mail::send(app()->make(ContactMail::class));
+        Mail::send(App::make(ContactMail::class));
 
-        return redirect()->route('web.contact.show')->with('success', trans('icore::contact.success.send'));
+        return Response::redirectToRoute('web.contact.show')->with(
+            'success',
+            Lang::get('icore::contact.success.send')
+        );
     }
 }

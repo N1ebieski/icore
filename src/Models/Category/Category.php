@@ -10,6 +10,7 @@ use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use Illuminate\Database\Eloquent\Builder;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Repositories\CategoryRepo;
 use N1ebieski\ICore\Cache\CategoryCache;
 use N1ebieski\ICore\Services\CategoryService;
@@ -26,7 +27,7 @@ class Category extends Entity implements CategoryInterface
     /**
      * [public description]
      * @var int
-     */ 
+     */
     public const ACTIVE = 1;
 
     /**
@@ -198,7 +199,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function scopeWithAncestorsExceptSelf(Builder $query) : Builder
     {
-        return $query->with(['ancestors' => function($q) {
+        return $query->with(['ancestors' => function ($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
@@ -211,9 +212,9 @@ class Category extends Entity implements CategoryInterface
     public function scopeWithRecursiveAllRels(Builder $query) : Builder
     {
         return $query->with([
-            'childrensRecursiveWithAllRels' => function($query) {
+            'childrensRecursiveWithAllRels' => function ($query) {
                 $query->withCount([
-                    'morphs' => function($query) {
+                    'morphs' => function ($query) {
                         $query->active();
                     }
                 ])
@@ -275,7 +276,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function loadAncestorsExceptSelf() : self
     {
-        return $this->load(['ancestors' => function($q) {
+        return $this->load(['ancestors' => function ($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
@@ -288,7 +289,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function makeRepo()
     {
-        return app()->make(CategoryRepo::class, ['category' => $this]);
+        return App::make(CategoryRepo::class, ['category' => $this]);
     }
 
     /**
@@ -297,7 +298,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function makeCache()
     {
-        return app()->make(CategoryCache::class, ['category' => $this]);
+        return App::make(CategoryCache::class, ['category' => $this]);
     }
 
     /**
@@ -306,6 +307,6 @@ class Category extends Entity implements CategoryInterface
      */
     public function makeService()
     {
-        return app()->make(CategoryService::class, ['category' => $this]);
+        return App::make(CategoryService::class, ['category' => $this]);
     }
 }

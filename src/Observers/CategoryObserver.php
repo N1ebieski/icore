@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Category\Category;
 
 /**
@@ -17,7 +18,7 @@ class CategoryObserver
      */
     public function created(Category $category)
     {
-        cache()->tags(['categories'])->flush();
+        Cache::tags(['categories'])->flush();
     }
 
     /**
@@ -28,7 +29,7 @@ class CategoryObserver
      */
     public function updated(Category $category)
     {
-        cache()->tags(['categories'])->flush();
+        Cache::tags(['categories'])->flush();
     }
 
     /**
@@ -39,7 +40,7 @@ class CategoryObserver
      */
     public function deleted(Category $category)
     {
-        cache()->tags(['categories'])->flush();
+        Cache::tags(['categories'])->flush();
     }
 
     /**

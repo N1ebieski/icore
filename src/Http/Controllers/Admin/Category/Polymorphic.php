@@ -2,13 +2,13 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
 
 /**
  * [interface description]

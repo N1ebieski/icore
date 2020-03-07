@@ -32,6 +32,7 @@ class RoleRepo
     public function __construct(Role $role, Config $config)
     {
         $this->role = $role;
+        
         $this->paginate = $config->get('database.paginate');
     }
 

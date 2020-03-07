@@ -92,7 +92,7 @@ class ViewHelper
             $path = '/' . $assets . '/admin/admin';
         }
 
-        if (file_exists( public_path() . $path . '-' . static::getTheme() . '.css' )) {
+        if (file_exists(public_path() . $path . '-' . static::getTheme() . '.css')) {
             return $path . '-' . static::getTheme() . '.css';
         }
 

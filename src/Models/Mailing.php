@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
 use Mews\Purifier\Facades\Purifier;
 use N1ebieski\ICore\Repositories\MailingRepo;
 use N1ebieski\ICore\Services\MailingService;
@@ -207,7 +208,7 @@ class Mailing extends Model
      */
     public function makeRepo()
     {
-        return app()->make(MailingRepo::class, ['mailing' => $this]);
+        return App::make(MailingRepo::class, ['mailing' => $this]);
     }
 
     /**
@@ -216,6 +217,6 @@ class Mailing extends Model
      */
     public function makeService()
     {
-        return app()->make(MailingService::class, ['mailing' => $this]);
+        return App::make(MailingService::class, ['mailing' => $this]);
     }
 }

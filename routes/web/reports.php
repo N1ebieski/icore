@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('reports/comment/{comment}/create', 'Report\Comment\ReportController@create')
         ->name('report.comment.create')
         ->where('comment', '[0-9]+');

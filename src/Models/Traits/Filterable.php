@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Models\Report\Report;
 
 /**
  * [trait description]
@@ -20,7 +21,7 @@ trait Filterable
      */
     public function scopeFilterSearch(Builder $query, string $search = null) : ?Builder
     {
-        return $query->when($search !== null, function($query) use ($search) {
+        return $query->when($search !== null, function ($query) use ($search) {
             return $query->search($search);
         });
     }
@@ -33,7 +34,7 @@ trait Filterable
      */
     public function scopeFilterStatus(Builder $query, int $status = null) : ?Builder
     {
-        return $query->when($status !== null, function($query) use ($status) {
+        return $query->when($status !== null, function ($query) use ($status) {
             return $query->where('status', $status);
         });
     }
@@ -75,7 +76,7 @@ trait Filterable
      */
     public function scopeFilterReport(Builder $query, int $report = null) : ?Builder
     {
-        return $query->when($report === 1, function($query) use ($report) {
+        return $query->when($report === Report::REPORTED, function ($query) {
             return $query->whereHas('reports');
         });
     }
@@ -88,7 +89,7 @@ trait Filterable
      */
     public function scopeFilterAuthor(Builder $query, User $author = null) : ?Builder
     {
-        return $query->when($author !== null, function($query) use ($author) {
+        return $query->when($author !== null, function ($query) use ($author) {
             return $query->where('user_id', $author->id);
         });
     }
@@ -101,8 +102,8 @@ trait Filterable
      */
     public function scopeFilterCategory(Builder $query, Category $category = null) : ?Builder
     {
-        return $query->when($category !== null, function($query) use ($category) {
-            $query->whereHas('categories', function($q) use ($category) {
+        return $query->when($category !== null, function ($query) use ($category) {
+            $query->whereHas('categories', function ($q) use ($category) {
                 return $q->where('category_id', $category->id);
             });
         });
@@ -116,6 +117,8 @@ trait Filterable
      */
     public function scopeFilterExcept(Builder $query, array $except = null)
     {
-        if ($except !== null) return $query->whereNotIn("{$this->getTable()}.id", $except);
+        return $query->when($except !== null, function ($query) use ($except) {
+            $query->whereNotIn("{$this->getTable()}.id", $except);
+        });
     }
 }

@@ -42,7 +42,7 @@ class UpdateRequest extends FormRequest
             'parent_id' => [
                 'nullable',
                 'integer',
-                Rule::exists('categories', 'id')->where(function($query) {
+                Rule::exists('categories', 'id')->where(function ($query) {
                     $query->where('model_type', $this->category->model_type);
                 }),
                 Rule::notIn($this->category->makeRepo()->getDescendantsAsArray()),

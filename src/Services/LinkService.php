@@ -42,6 +42,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
     public function __construct(Link $link, Storage $storage)
     {
         $this->link = $link;
+        
         $this->storage = $storage;
     }
 

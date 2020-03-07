@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Newsletter;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateStatusRequest extends FormRequest
 {

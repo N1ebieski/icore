@@ -2,14 +2,18 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
-use N1ebieski\ICore\Http\Requests\Admin\Link\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Link\IndexRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Link\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Link\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Link\UpdateRequest;
 use N1ebieski\ICore\Models\Link;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Http\Requests\Admin\Link\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Link\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Link\CreateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Link\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Link\UpdatePositionRequest;
 
 /**
  * [LinkController description]
@@ -22,19 +26,17 @@ class LinkController
      * @param  string       $type     [description]
      * @param  Link     $link [description]
      * @param  IndexRequest $request  [description]
-     * @return View                   [description]
+     * @return HttpResponse                   [description]
      */
-    public function index(string $type, Link $link, IndexRequest $request) : View
+    public function index(string $type, Link $link, IndexRequest $request) : HttpResponse
     {
-        $links = $link->makeRepo()->paginateByFilter([
+        return Response::view('icore::admin.link.index', [
             'type' => $type,
-            'except' => $request->input('except')
-        ]);
-
-        return view('icore::admin.link.index', [
-            'type' => $type,
-            'links' => $links,
-            'paginate' => config('database.paginate')
+            'links' => $link->makeRepo()->paginateByFilter([
+                'type' => $type,
+                'except' => $request->input('except')
+            ]),
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
@@ -47,9 +49,9 @@ class LinkController
      */
     public function create(string $type, CreateRequest $request) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.link.create', [
+            'view' => View::get('icore::admin.link.create', [
                 'type' => $type,
             ])->render()
         ]);
@@ -67,9 +69,9 @@ class LinkController
     {
         $link->makeService()->create($request->validated() + ['type' => $type]);
 
-        $request->session()->flash('success', trans('icore::links.success.store'));
+        $request->session()->flash('success', Lang::get('icore::links.success.store'));
 
-        return response()->json(['success' => '' ]);
+        return Response::json(['success' => '' ]);
     }
 
     /**
@@ -80,9 +82,9 @@ class LinkController
      */
     public function edit(Link $link) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.link.edit', [
+            'view' => View::make('icore::admin.link.edit', [
                 'link' => $link->loadAncestorsWithoutSelf(),
             ])->render()
         ]);
@@ -99,9 +101,9 @@ class LinkController
     {
         $link->makeService()->update($request->validated());
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.link.partials.link', [
+            'view' => View::make('icore::admin.link.partials.link', [
                 'link' => $link,
             ])->render()
         ]);
@@ -114,9 +116,9 @@ class LinkController
      */
     public function editPosition(Link $link) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.link.edit_position', [
+            'view' => View::make('icore::admin.link.edit_position', [
                 'link' => $link,
                 'siblings_count' => $link->countSiblings()
             ])->render()
@@ -133,7 +135,7 @@ class LinkController
     {
         $link->makeService()->updatePosition($request->only('position'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'siblings' => $link->makeRepo()->getSiblingsAsArray()
         ]);
@@ -149,6 +151,6 @@ class LinkController
     {
         $link->makeService()->delete();
 
-        return response()->json(['success' => '']);
+        return Response::json(['success' => '']);
     }
 }

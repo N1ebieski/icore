@@ -42,7 +42,7 @@ class MapComponent implements Htmlable
     public function __construct(
         ViewFactory $view,
         string $container_class = 'map',
-        int $zoom = 15, 
+        int $zoom = 15,
         array $address_marker = null
     ) {
         $this->view = $view;

@@ -2,17 +2,22 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
+use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Filters\Admin\Mailing\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\EditRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\DestroyGlobalRequest;
-use N1ebieski\ICore\Models\Mailing;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\JsonResponse;
 
 /**
  * [MailingController description]
@@ -25,29 +30,27 @@ class MailingController
      * @param  Mailing         $mailing         [description]
      * @param  IndexRequest    $request         [description]
      * @param  IndexFilter     $filter          [description]
-     * @return View                             [description]
+     * @return HttpResponse                             [description]
      */
-    public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter) : View
+    public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
-        $mailings = $mailing->makeRepo()->paginateByFilter($filter->all() + [
-            'except' => $request->input('except')
-        ]);
-
-        return view('icore::admin.mailing.index', [
-            'mailings' => $mailings,
+        return Response::view('icore::admin.mailing.index', [
+            'mailings' => $mailing->makeRepo()->paginateByFilter($filter->all() + [
+                'except' => $request->input('except')
+            ]),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
     /**
      * Show the form for creating a new Mailing.
      *
-     * @return View               [description]
+     * @return HttpResponse               [description]
      */
-    public function create() : View
+    public function create() : HttpResponse
     {
-        return view('icore::admin.mailing.create');
+        return Response::view('icore::admin.mailing.create');
     }
 
     /**
@@ -61,8 +64,10 @@ class MailingController
     {
         $mailing = $mailing->makeService()->create($request->all());
 
-        return redirect()->route('admin.mailing.index')
-            ->with('success', trans('icore::mailings.success.store', ['recipients' => $mailing->total]) );
+        return Response::redirectToRoute('admin.mailing.index')->with(
+            'success',
+            Lang::get('icore::mailings.success.store', ['recipients' => $mailing->total])
+        );
     }
 
     /**
@@ -70,11 +75,11 @@ class MailingController
      *
      * @param Mailing     $mailing [description]
      * @param EditRequest $request [description]
-     * @return View                [description]
+     * @return HttpResponse                [description]
      */
-    public function edit(Mailing $mailing, EditRequest $request) : View
+    public function edit(Mailing $mailing, EditRequest $request) : HttpResponse
     {
-        return view('icore::admin.mailing.edit', ['mailing' => $mailing]);
+        return Response::view('icore::admin.mailing.edit', ['mailing' => $mailing]);
     }
 
     /**
@@ -88,13 +93,13 @@ class MailingController
     {
         $mailing->makeService()->update($request->all());
 
-        if ($mailing->status == 1) {
-            return redirect()->route('admin.mailing.index')
-                ->with('success', trans('icore::mailings.success.update'));
+        if ($mailing->status == Mailing::ACTIVE) {
+            return Response::redirectToRoute('admin.mailing.index')
+                ->with('success', Lang::get('icore::mailings.success.update'));
         }
 
-        return redirect()->route('admin.mailing.edit', [$mailing->id])
-            ->with('success', trans('icore::mailings.success.update') );
+        return Response::redirectToRoute('admin.mailing.edit', [$mailing->id])
+            ->with('success', Lang::get('icore::mailings.success.update'));
     }
 
     /**
@@ -108,12 +113,12 @@ class MailingController
     {
         $mailing->makeService()->updateStatus($request->only('status'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
             'status' => $mailing->status,
-            'view' => view('icore::admin.mailing.partials.mailing', [
+            'view' => View::make('icore::admin.mailing.partials.mailing', [
                 'mailing' => $mailing->load('emails')
-            ])->render(),
+            ])->render()
         ]);
     }
 
@@ -127,11 +132,11 @@ class MailingController
     {
         $mailing->makeService()->reset();
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.mailing.partials.mailing', [
+            'view' => View::make('icore::admin.mailing.partials.mailing', [
                 'mailing' => $mailing
-            ])->render(),
+            ])->render()
         ]);
     }
 
@@ -145,7 +150,7 @@ class MailingController
     {
         $mailing->makeService()->delete();
 
-        return response()->json(['success' => '']);
+        return Response::json(['success' => '']);
     }
 
     /**
@@ -159,6 +164,9 @@ class MailingController
     {
         $deleted = $mailing->makeService()->deleteGlobal($request->get('select'));
 
-        return redirect()->back()->with('success', trans('icore::mailings.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::mailings.success.destroy_global', ['affected' => $deleted])
+        );
     }
 }

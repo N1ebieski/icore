@@ -3,7 +3,9 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Category\Post\Category;
 
 class UpdateFullRequest extends FormRequest
 {
@@ -37,13 +39,13 @@ class UpdateFullRequest extends FormRequest
             'title' => 'required|min:3|max:255',
             'tags' => 'array|between:0,10',
             'tags.*' => 'min:3|max:30|alpha_num_spaces|distinct',
-            'categories' => 'required|array|between:1,'.config('icore.post.max_categories'),
+            'categories' => 'required|array|between:1,' . Config::get('icore.post.max_categories'),
             'categories.*' => [
                 'integer',
                 'distinct',
                 Rule::exists('categories', 'id')->where(function ($query) {
                     $query->where([
-                        ['status', 1],
+                        ['status', Category::ACTIVE],
                         ['model_type', 'N1ebieski\ICore\\Models\\Post']
                     ]);
                 }),

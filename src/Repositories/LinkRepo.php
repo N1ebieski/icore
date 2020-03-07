@@ -32,6 +32,7 @@ class LinkRepo
     public function __construct(Link $link, Config $config)
     {
         $this->link = $link;
+
         $this->paginate = $config->get('database.paginate');
     }
 
@@ -56,9 +57,9 @@ class LinkRepo
     public function getAvailableBacklinksByCats(array $ids) : Collection
     {
         return $this->link->where('type', 'backlink')
-            ->where(function($query) use ($ids) {
+            ->where(function ($query) use ($ids) {
                 $query->whereDoesntHave('categories')
-                    ->orWhereHas('categories', function($query) use ($ids) {
+                    ->orWhereHas('categories', function ($query) use ($ids) {
                         $query->whereIn('id', array_values($ids));
                     });
             })->orderBy('position', 'asc')
@@ -86,7 +87,7 @@ class LinkRepo
     {
         return $this->link->where('type', 'link')
             ->whereDoesntHave('categories')
-            ->when($component['cats'] !== null, function($query) use ($component) {
+            ->when($component['cats'] !== null, function ($query) use ($component) {
                 $query->orWhereHas('categories', function ($query) use ($component) {
                     $query->whereIn('id', $component['cats']);
                 });

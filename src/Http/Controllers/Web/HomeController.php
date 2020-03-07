@@ -2,7 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Response;
 
 /**
  * [HomeController description]
@@ -10,22 +11,12 @@ use Illuminate\Http\Request;
 class HomeController
 {
     /**
-     * Create a new controller instance.
+     * Undocumented function
      *
-     * @return void
+     * @return HttpResponse
      */
-    public function __construct()
+    public function index() : HttpResponse
     {
-        //$this->middleware(['auth', 'verified']);
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
-    {
-        return view('icore::web.home.index');
+        return Response::view('icore::web.home.index');
     }
 }

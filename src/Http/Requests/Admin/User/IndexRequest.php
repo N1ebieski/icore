@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +20,8 @@ class IndexRequest extends FormRequest
      */
     public function __construct(Role $role)
     {
+        parent::__construct();
+
         $this->role = $role;
     }
 
@@ -39,15 +42,7 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        // Keszuje bo JS validator w blade odwoluje sie do tej metody i duplikuje
-        // zapytanie o liste dostepnych rol uzytkownikow, a przez dependency injection
-        // sie nie da
-        // $roles = cache()->remember('indexRequest.rules.roles',
-        // now()->addMinutes(config('icore.cache.minutes')), function() {
-        //     return Role::getIdsAsArray();
-        // });
-
-        $paginate = config('database.paginate');
+        $paginate = Config::get('database.paginate');
 
         return [
             'page' => 'integer',
@@ -71,18 +66,4 @@ class IndexRequest extends FormRequest
             'filter.paginate' => Rule::in([$paginate, ($paginate*2), ($paginate*4)]) . '|integer|no_js_validation'
         ];
     }
-
-    // /**
-    //  * Inject GET parameter "type" into validation data
-    //  *
-    //  * @param array $keys Properties to only return
-    //  *
-    //  * @return array
-    //  */
-    // public function all($keys = null)
-    // {
-    //     $request = parent::all($keys);
-    //
-    //     return $request;
-    // }
 }

@@ -3,7 +3,9 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\BanValue;
+use N1ebieski\ICore\Models\Comment\Comment;
 
 class UpdateRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class UpdateRequest extends FormRequest
     protected $bans;
 
     public function __construct(BanValue $banValue)
-    {;
+    {
         $this->bans = $banValue->makeCache()->rememberAllWordsAsString();
     }
 
@@ -25,7 +27,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->comment->status === 1;
+        return $this->comment->status === Comment::ACTIVE;
     }
 
     /**
@@ -53,7 +55,9 @@ class UpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'content.not_regex' => trans('icore::validation.not_regex_contains', ['words' => str_replace('|', ', ', $this->bans)])
+            'content.not_regex' => Lang::get('icore::validation.not_regex_contains', [
+                'words' => str_replace('|', ', ', $this->bans)
+            ])
         ];
     }
 }

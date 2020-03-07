@@ -2,14 +2,18 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\BanModel\User;
 
+use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Models\BanModel\User\BanModel;
 use N1ebieski\ICore\Filters\Admin\BanModel\User\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\StoreRequest;
-use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\BanModel\User\BanModel;
-use N1ebieski\ICore\Models\BanValue;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use N1ebieski\ICore\Http\Controllers\Admin\BanModel\User\Polymorphic as UserPolymorphic;
 
 /**
@@ -20,21 +24,19 @@ class BanModelController implements UserPolymorphic
     /**
      * Display a listing of the BanModel.
      *
-     * @param BanModel $banModel
+     * @param   BanModel $banModel
      * @param  IndexRequest $request  [description]
      * @param  IndexFilter  $filter   [description]
-     * @return View                 [description]
+     * @return HttpResponse                 [description]
      */
-    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : View
+    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
-        $bans = $banModel->paginateByFilter($filter->all() + [
-            'except' => $request->input('except')
-        ]);
-
-        return view('icore::admin.banmodel.user.index', [
-            'bans' => $bans,
+        return Response::view('icore::admin.banmodel.user.index', [
+            'bans' => $banModel->paginateByFilter($filter->all() + [
+                'except' => $request->input('except')
+            ]),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
@@ -46,9 +48,9 @@ class BanModelController implements UserPolymorphic
      */
     public function create(User $user) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.banmodel.user.create', [
+            'view' => View::make('icore::admin.banmodel.user.create', [
                 'model' => $user
             ])->render()
         ]);
@@ -76,8 +78,8 @@ class BanModelController implements UserPolymorphic
             ]);
         }
 
-        return response()->json([
-            'success' => trans('icore::bans.model.success.store'),
+        return Response::json([
+            'success' => Lang::get('icore::bans.model.success.store'),
         ]);
     }
 }

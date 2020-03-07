@@ -3,6 +3,10 @@
 namespace N1ebieski\ICore\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\App;
 
 class VerifyEmail
 {
@@ -15,12 +19,13 @@ class VerifyEmail
      */
     public function handle($request, Closure $next)
     {
-
-        if (auth()->user() && !auth()->user()->hasVerifiedEmail())
-        {
-            return $request->expectsJson()
-                    ? abort(403, 'Your email address is not verified.')
-                    : redirect()->route('verification.notice');
+        if (Auth::user() && !Auth::user()->hasVerifiedEmail()) {
+            return $request->expectsJson() ?
+                App::abort(
+                    HttpResponse::HTTP_FORBIDDEN,
+                    'Your email address is not verified.'
+                )
+                : Response::redirectToRoute('verification.notice');
         }
 
         return $next($request);

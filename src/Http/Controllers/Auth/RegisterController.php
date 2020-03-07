@@ -3,12 +3,14 @@
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
 use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
+use App\Http\Controllers\Controller;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
+use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
 
 class RegisterController extends Controller
 {
@@ -32,6 +34,11 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
 
+    /**
+     * Undocumented variable
+     *
+     * @var Captcha
+     */
     protected $captcha;
 
     /**
@@ -43,12 +50,18 @@ class RegisterController extends Controller
     public function __construct(Captcha $captcha)
     {
         $this->middleware('icore.guest');
+
         $this->captcha = $captcha;
     }
 
-    public function showRegistrationForm()
+    /**
+     * Undocumented function
+     *
+     * @return HttpResponse
+     */
+    public function showRegistrationForm() : HttpResponse
     {
-        return view('icore::auth.register');
+        return Response::view('icore::auth.register');
     }
 
     /**
@@ -62,8 +75,12 @@ class RegisterController extends Controller
         //Antywzorzec, ale konieczny ze wzgledu na jsvalidation, ktory wymaga reguly w FormRequest
         $register = new StoreRequest;
 
-        return Validator::make($data, array_merge($register->rules(),
-            $this->captcha->toRules()), [], $this->captcha->toAttributes());
+        return Validator::make(
+            $data,
+            array_merge($register->rules(), $this->captcha->toRules()),
+            [],
+            $this->captcha->toAttributes()
+        );
     }
 
     /**
@@ -78,7 +95,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'status' => 1
+            'status' => User::ACTIVE
         ]);
 
         $user->assignRole('user');

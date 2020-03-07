@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
-use N1ebieski\ICore\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
@@ -30,8 +32,13 @@ class ForgotPasswordController extends Controller
         $this->middleware('icore.guest');
     }
 
-    public function showLinkRequestForm()
+    /**
+     * Undocumented function
+     *
+     * @return HttpResponse
+     */
+    public function showLinkRequestForm() : HttpResponse
     {
-        return view('icore::auth.passwords.email');
+        return Response::view('icore::auth.passwords.email');
     }
 }

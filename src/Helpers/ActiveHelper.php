@@ -65,7 +65,7 @@ class ActiveHelper
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    function isUrl($input, string $output = "active") : ?string
+    public function isUrl($input, string $output = "active") : ?string
     {
         foreach ((array)$input as $url) {
             if ((string)$url === $this->url->current()) {
@@ -82,7 +82,7 @@ class ActiveHelper
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    function isRouteContains($input, string $output = "active") : ?string
+    public function isRouteContains($input, string $output = "active") : ?string
     {
         foreach ((array)$input as $string) {
             if ($this->str->contains($this->request->route()->getName(), $string)) {
@@ -99,7 +99,7 @@ class ActiveHelper
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    function isUrlContains($input, string $output = "active") : ?string
+    public function isUrlContains($input, string $output = "active") : ?string
     {
         foreach ((array)$input as $string) {
             if ($this->request->is($string)) {
@@ -116,7 +116,7 @@ class ActiveHelper
      * @param  string  $output [description]
      * @return string|null         [description]
      */
-    function isTheme($input, string $output = "active") : ?string
+    public function isTheme($input, string $output = "active") : ?string
     {
         $theme = app()->make('Helpers\View')->getTheme();
 

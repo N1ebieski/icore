@@ -38,7 +38,7 @@ class MacroServiceProvider extends ServiceProvider
          * @param string $pageName
          * @return array
          */
-        Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
             return new LengthAwarePaginator(
                 $this->forPage($page, $perPage),
@@ -52,24 +52,24 @@ class MacroServiceProvider extends ServiceProvider
             );
         });
 
-        Collection::macro('isEmptyItems', function() {
-            return $this->every(function($value, $key) {
+        Collection::macro('isEmptyItems', function () {
+            return $this->every(function ($value, $key) {
                 return strlen($value) === 0;
             });
         });
 
-        Collection::macro('isNullItems', function() {
-            return $this->every(function($value, $key) {
+        Collection::macro('isNullItems', function () {
+            return $this->every(function ($value, $key) {
                 return $value === null;
             });
         });
 
-        Str::macro('escaped', function($value) {
+        Str::macro('escaped', function ($value) {
             $value = str_replace('*', '', $value);
             $value = preg_quote($value, '/');
             $value = str_replace('\|', '|', $value);
 
             return $value;
-        });          
+        });
     }
 }

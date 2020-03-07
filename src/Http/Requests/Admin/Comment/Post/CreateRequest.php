@@ -3,7 +3,11 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Comment\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\Models\Post;
 
 class CreateRequest extends FormRequest
 {
@@ -14,8 +18,11 @@ class CreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if ((bool)$this->post->isCommentable() === false) {
-            abort(403, 'Adding comments has been disabled for this post.');
+        if ($this->post->isCommentable() === Post::WITHOUT_COMMENT) {
+            App::abort(
+                HttpResponse::HTTP_FORBIDDEN,
+                'Adding comments has been disabled for this post.'
+            );
         }
 
         return $this->post->isActive();
@@ -32,8 +39,8 @@ class CreateRequest extends FormRequest
             'parent_id' => [
                 'required',
                 'integer',
-                Rule::exists('comments', 'id')->where(function($query) {
-                    $query->where('status', 1);
+                Rule::exists('comments', 'id')->where(function ($query) {
+                    $query->where('status', Comment::ACTIVE);
                 }),
             ]
         ];

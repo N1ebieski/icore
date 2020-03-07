@@ -7,6 +7,7 @@ use N1ebieski\ICore\Http\Requests\Web\Search\IndexRequest;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
 
 /**
  * [SearchController description]
@@ -21,7 +22,7 @@ class SearchController
      */
     public function autocomplete(Tag $tag, AutoCompleteRequest $request) : JsonResponse
     {
-        return response()->json($tag->makeRepo()->getBySearch($request->input('search')));
+        return Response::json($tag->makeRepo()->getBySearch($request->input('search')));
     }
 
     /**
@@ -31,7 +32,7 @@ class SearchController
      */
     public function index(IndexRequest $request) : RedirectResponse
     {
-        return redirect()->route('web.'.$request->input('source').'.search', [
+        return Response::redirectToRoute("web.{$request->input('source')}.search", [
             'search' => $request->input('search')
         ]);
     }

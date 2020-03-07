@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\Comment\Comment;
 
 class TakeRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class TakeRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->comment->status === 1;
+        return $this->comment->status === Comment::ACTIVE;
     }
 
     /**

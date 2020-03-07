@@ -29,8 +29,7 @@ trait HasAuthor
         $this->parameters['author'] = null;
 
         if ($id !== null) {
-            if ($author = $this->findAuthor($id))
-            {
+            if ($author = $this->findAuthor($id)) {
                 $this->setAuthor($author);
             }
         }

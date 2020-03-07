@@ -25,7 +25,7 @@ class CachePopularTagsJob implements ShouldQueue
 
     /**
      * Undocumented function
-     * 
+     *
      * @param array|null $cats
      */
     protected $cats;
@@ -47,7 +47,7 @@ class CachePopularTagsJob implements ShouldQueue
      * @return void
      */
     public function handle(Tag $tag)
-    { 
+    {
         $component = [
             'cats' => $this->cats,
             'limit' => 25

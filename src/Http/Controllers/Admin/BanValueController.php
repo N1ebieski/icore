@@ -2,16 +2,21 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Filters\Admin\BanModel\User\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\BanValue\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanValue\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanValue\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\BanValue\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanValue\UpdateRequest;
-use N1ebieski\ICore\Models\BanValue;
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use N1ebieski\ICore\Http\Requests\Admin\BanValue\DestroyGlobalRequest;
 
 /**
  * [BanValueController description]
@@ -25,20 +30,18 @@ class BanValueController
      * @param  BanValue     $banValue [description]
      * @param  IndexRequest $request  [description]
      * @param  IndexFilter  $filter   [description]
-     * @return View                   [description]
+     * @return HttpResponse           [description]
      */
-    public function index(string $type, BanValue $banValue, IndexRequest $request, IndexFilter $filter) : View
+    public function index(string $type, BanValue $banValue, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
-        $bans = $banValue->makeRepo()->paginateByFilter($filter->all() + [
+        return Response::view('icore::admin.banvalue.index', [
             'type' => $type,
-            'except' => $request->input('except')
-        ]);
-
-        return view('icore::admin.banvalue.index', [
-            'type' => $type,
-            'bans' => $bans,
+            'bans' => $banValue->makeRepo()->paginateByFilter($filter->all() + [
+                'type' => $type,
+                'except' => $request->input('except')
+            ]),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
@@ -50,9 +53,9 @@ class BanValueController
      */
     public function edit(BanValue $banValue) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.banvalue.edit', [
+            'view' => View::make('icore::admin.banvalue.edit', [
                 'ban' => $banValue,
             ])->render()
         ]);
@@ -69,9 +72,9 @@ class BanValueController
     {
         $banValue->update($request->only(['value']));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.banvalue.partials.ban', [
+            'view' => View::make('icore::admin.banvalue.partials.ban', [
                 'ban' => $banValue,
             ])->render()
         ]);
@@ -86,9 +89,9 @@ class BanValueController
      */
     public function create(string $type, CreateRequest $request) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.banvalue.create', [
+            'view' => View::make('icore::admin.banvalue.create', [
                 'type' => $type,
             ])->render()
         ]);
@@ -109,9 +112,9 @@ class BanValueController
             'value' => $request->get('value')
         ]);
 
-        $request->session()->flash('success', trans('icore::bans.value.success.store'));
+        $request->session()->flash('success', Lang::get('icore::bans.value.success.store'));
 
-        return response()->json(['success' => '' ]);
+        return Response::json(['success' => '' ]);
     }
 
     /**
@@ -124,7 +127,7 @@ class BanValueController
     {
         $banValue->delete();
 
-        return response()->json(['success' => '']);
+        return Response::json(['success' => '']);
     }
 
     /**
@@ -138,6 +141,9 @@ class BanValueController
     {
         $deleted = $banValue->whereIn('id', $request->get('select'))->delete();
 
-        return redirect()->back()->with('success', trans('icore::bans.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())->with(
+            'success',
+            Lang::get('icore::bans.success.destroy_global', ['affected' => $deleted])
+        );
     }
 }

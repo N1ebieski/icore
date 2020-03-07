@@ -29,8 +29,7 @@ trait HasRole
         $this->parameters['role'] = null;
 
         if ($id !== null) {
-            if ($role = $this->findRole($id))
-            {
+            if ($role = $this->findRole($id)) {
                 $this->setRole($role);
             }
         }

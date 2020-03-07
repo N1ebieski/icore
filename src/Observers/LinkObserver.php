@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Link;
 
 /**
@@ -17,7 +18,7 @@ class LinkObserver
      */
     public function created(Link $link)
     {
-        cache()->tags(['links'])->flush();
+        Cache::tags(['links'])->flush();
     }
 
     /**
@@ -28,7 +29,7 @@ class LinkObserver
      */
     public function updated(Link $link)
     {
-        cache()->tags(['links'])->flush();
+        Cache::tags(['links'])->flush();
     }
 
     /**
@@ -39,7 +40,7 @@ class LinkObserver
      */
     public function deleted(Link $link)
     {
-        cache()->tags(['links'])->flush();
+        Cache::tags(['links'])->flush();
     }
 
     /**

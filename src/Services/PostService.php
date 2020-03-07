@@ -16,8 +16,13 @@ use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 /**
  * [PostService description]
  */
-class PostService implements Creatable, Updatable, FullUpdatable, StatusUpdatable,
-Deletable, GlobalDeletable
+class PostService implements
+    Creatable,
+    Updatable,
+    FullUpdatable,
+    StatusUpdatable,
+    Deletable,
+    GlobalDeletable
 {
     /**
      * [private description]
@@ -51,7 +56,7 @@ Deletable, GlobalDeletable
         $this->post->fill($attributes);
         $this->post->content = $this->post->content_html;
 
-        if ($this->post->status !== 0) {
+        if ($this->post->status !== Post::INACTIVE) {
             $this->post->published_at =
                 $attributes['date_published_at'].$attributes['time_published_at'];
         }
@@ -88,7 +93,7 @@ Deletable, GlobalDeletable
         $this->post->fill($attributes);
         $this->post->content = $this->post->content_html;
 
-        if ($this->post->status !== 0) {
+        if ($this->post->status !== Post::INACTIVE) {
             $this->post->published_at =
                 $attributes['date_published_at'].$attributes['time_published_at'];
         }

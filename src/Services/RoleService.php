@@ -35,10 +35,12 @@ class RoleService implements Creatable, Updatable
     public function getPermissionsByRole() : Collection
     {
         if ($this->role->name === 'user') {
-            return $this->role->permissions()->make()->makeRepo()->getUserWithRole($this->role->id);
+            return $this->role->permissions()->make()->makeRepo()
+                ->getUserWithRole($this->role->id);
         }
 
-        return $this->role->permissions()->make()->makeRepo()->getWithRole($this->role->id);
+        return $this->role->permissions()->make()->makeRepo()
+            ->getWithRole($this->role->id);
     }
 
     /**

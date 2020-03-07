@@ -2,11 +2,13 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Comment;
 
-use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\Http\Requests\Web\Comment\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Web\Comment\TakeRequest;
-use N1ebieski\ICore\Http\Requests\Web\Comment\EditRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
+use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Http\Requests\Web\Comment\EditRequest;
+use N1ebieski\ICore\Http\Requests\Web\Comment\TakeRequest;
+use N1ebieski\ICore\Http\Requests\Web\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Comment\Polymorphic;
 
 /**
@@ -23,9 +25,9 @@ class CommentController implements Polymorphic
      */
     public function edit(Comment $comment, EditRequest $request) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::web.comment.edit', [
+            'view' => View::make('icore::web.comment.edit', [
                 'comment' => $comment
             ])->render()
         ]);
@@ -42,9 +44,9 @@ class CommentController implements Polymorphic
     {
         $comment->makeService()->update($request->only('content'));
 
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::web.comment.partials.comment', [
+            'view' => View::make('icore::web.comment.partials.comment', [
                 'comment' => $comment,
                 'post_id' => $comment->model_id
             ])->render()
@@ -60,15 +62,13 @@ class CommentController implements Polymorphic
      */
     public function take(Comment $comment, TakeRequest $request) : JsonResponse
     {
-        $comments = $comment->makeService()->paginateChildrensByFilter([
-            'except' => $request->get('except'),
-            'orderby' => $request->get('orderby')
-        ]);
-
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::web.comment.take', [
-                'comments' => $comments,
+            'view' => View::make('icore::web.comment.take', [
+                'comments' => $comment->makeService()->paginateChildrensByFilter([
+                    'except' => $request->get('except'),
+                    'orderby' => $request->get('orderby')
+                ]),
                 'parent' => $comment
             ])->render()
         ]);

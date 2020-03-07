@@ -2,17 +2,21 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category\Post;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
+use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 use N1ebieski\ICore\Http\Requests\Admin\Category\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreGlobalRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
-use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Post\Polymorphic;
+use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\CategoryController as BaseCategoryController;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
 /**
  * [CategoryController description]
@@ -25,20 +29,20 @@ class CategoryController extends BaseCategoryController implements Polymorphic
      * @param  Category      $category      [description]
      * @param  IndexRequest  $request       [description]
      * @param  IndexFilter   $filter        [description]
-     * @return View                         [description]
+     * @return HttpResponse                 [description]
      */
-    public function index(Category $category, IndexRequest $request, IndexFilter $filter) : View
+    public function index(Category $category, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         $categoryService = $category->makeService();
 
-        return view('icore::admin.category.index', [
+        return Response::view('icore::admin.category.index', [
             'model' => $category,
             'categories' => $categoryService->paginateByFilter($filter->all() + [
                 'except' => $request->input('except')
             ]),
             'parents' => $categoryService->getAsFlatTree(),
             'filter' => $filter->all(),
-            'paginate' => config('database.paginate')
+            'paginate' => Config::get('database.paginate')
         ]);
     }
 
@@ -50,9 +54,9 @@ class CategoryController extends BaseCategoryController implements Polymorphic
      */
     public function create(Category $category) : JsonResponse
     {
-        return response()->json([
+        return Response::json([
             'success' => '',
-            'view' => view('icore::admin.category.create', [
+            'view' => View::make('icore::admin.category.create', [
                 'model' => $category,
                 'categories' => $category->makeService()->getAsFlatTree()
             ])->render()
@@ -70,9 +74,9 @@ class CategoryController extends BaseCategoryController implements Polymorphic
     {
         $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
 
-        $request->session()->flash('success', trans('icore::categories.success.store'));
+        $request->session()->flash('success', Lang::get('icore::categories.success.store'));
 
-        return response()->json(['success' => '' ]);
+        return Response::json(['success' => '' ]);
     }
 
     /**
@@ -86,9 +90,9 @@ class CategoryController extends BaseCategoryController implements Polymorphic
     {
         $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
 
-        $request->session()->flash('success', trans('icore::categories.success.store_global'));
+        $request->session()->flash('success', Lang::get('icore::categories.success.store_global'));
 
-        return response()->json(['success' => '' ]);
+        return Response::json(['success' => '' ]);
     }
 
     /**

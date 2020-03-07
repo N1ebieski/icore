@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Category\Post;
 
-use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
-use Illuminate\View\View;
+use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
 
 /**
  * [interface description]
@@ -16,7 +16,7 @@ interface Polymorphic
      *
      * @param  Category $category [description]
      * @param ShowRequest $request
-     * @return View [description]
+     * @return HttpResponse [description]
      */
-    public function show(Category $category, ShowRequest $request) : View;
+    public function show(Category $category, ShowRequest $request) : HttpResponse;
 }

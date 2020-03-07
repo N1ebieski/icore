@@ -2,11 +2,12 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
-use N1ebieski\ICore\Filters\Web\Page\ShowFilter;
-use N1ebieski\ICore\Http\Requests\Web\Page\ShowRequest;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Web\Page\ShowFilter;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
-use Illuminate\View\View;
+use N1ebieski\ICore\Http\Requests\Web\Page\ShowRequest;
 
 /**
  * [PageController description]
@@ -19,19 +20,18 @@ class PageController
      * @param  Comment     $comment [description]
      * @param  ShowFilter  $filter  [description]
      * @param  ShowRequest $request [description]
-     * @return View                 [description]
+     * @return HttpResponse                 [description]
      */
-    public function show(Page $page, Comment $comment, ShowFilter $filter, ShowRequest $request) : View
+    public function show(Page $page, Comment $comment, ShowFilter $filter, ShowRequest $request) : HttpResponse
     {
-        $comments = ((bool)$page->comment === true) ?
-            $comment->setMorph($page)->makeCache()->rememberRootsByFilter(
-                $filter->all(),
-                $request->get('page') ?? 1
-            ) : null;
-
-        return view('icore::web.page.show', [
+        return Response::view('icore::web.page.show', [
             'page' => $page->makeCache()->rememberLoadRecursiveChildrens(),
-            'comments' => $comments,
+            'comments' => (bool)$page->comment === true ?
+                $comment->setMorph($page)->makeCache()->rememberRootsByFilter(
+                    $filter->all(),
+                    $request->get('page') ?? 1
+                )
+                : null,
             'filter' => $filter->all()
         ]);
     }

@@ -2,10 +2,11 @@
 
 namespace N1ebieski\ICore\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use N1ebieski\ICore\Repositories\SocialiteRepo;
 use N1ebieski\ICore\Services\SocialiteService;
+use N1ebieski\ICore\Repositories\SocialiteRepo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * [Socialite description]
@@ -49,7 +50,7 @@ class Socialite extends Model
      */
     public function makeRepo()
     {
-        return app()->make(SocialiteRepo::class, ['socialite' => $this]);
+        return App::make(SocialiteRepo::class, ['socialite' => $this]);
     }
 
     /**
@@ -58,6 +59,6 @@ class Socialite extends Model
      */
     public function makeService()
     {
-        return app()->make(SocialiteService::class, ['socialite' => $this]);
+        return App::make(SocialiteService::class, ['socialite' => $this]);
     }
 }

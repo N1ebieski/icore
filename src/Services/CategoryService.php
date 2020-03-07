@@ -18,8 +18,13 @@ use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 /**
  * [CategoryService description]
  */
-class CategoryService implements Creatable, Updatable, StatusUpdatable,
-PositionUpdatable, Deletable, GlobalDeletable
+class CategoryService implements
+    Creatable,
+    Updatable,
+    StatusUpdatable,
+    PositionUpdatable,
+    Deletable,
+    GlobalDeletable
 {
     /**
      * Model
@@ -55,6 +60,7 @@ PositionUpdatable, Deletable, GlobalDeletable
     {
         $this->category = $category;
         $this->collect = $collect;
+
         $this->paginate = $config->get('database.paginate');
     }
 
@@ -270,8 +276,7 @@ PositionUpdatable, Deletable, GlobalDeletable
         if ($attributes['parent_id'] != $this->category->parent_id) {
             if ($attributes['parent_id'] === null) {
                 $this->moveToRoot();
-            }
-            else {
+            } else {
                 $this->moveToParent($attributes['parent_id']);
             }
         }
@@ -318,7 +323,7 @@ PositionUpdatable, Deletable, GlobalDeletable
 
         foreach ($array as $value) {
             if (is_array($value)) {
-                $result[] = array_filter($value, function($k) {
+                $result[] = array_filter($value, function ($k) {
                     if ($k != 'children') {
                         return true;
                     }
