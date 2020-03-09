@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents\Category\Post;
+namespace N1ebieski\ICore\View\Components\Category\Post;
 
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use N1ebieski\ICore\Models\Category\Post\Category;

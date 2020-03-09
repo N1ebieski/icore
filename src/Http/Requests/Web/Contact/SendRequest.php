@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Contact;
 
 use Illuminate\Foundation\Http\FormRequest;
-use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
+use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 
 class SendRequest extends FormRequest
 {

@@ -7,7 +7,7 @@ use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\Rule;
-use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
+use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 use N1ebieski\ICore\Models\BanValue;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use N1ebieski\ICore\Models\Post;

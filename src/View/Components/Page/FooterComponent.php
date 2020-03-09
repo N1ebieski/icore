@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents\Page;
+namespace N1ebieski\ICore\View\Components\Page;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\Factory as ViewFactory;

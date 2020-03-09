@@ -1,11 +1,11 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents\Tag\Post;
+namespace N1ebieski\ICore\View\Components\Tag\Post;
 
 use Illuminate\View\View;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use N1ebieski\ICore\Http\ViewComponents\Tag\TagComponent as BaseTagComponent;
+use N1ebieski\ICore\View\Components\Tag\TagComponent as BaseTagComponent;
 
 /**
  * [TagComponent description]

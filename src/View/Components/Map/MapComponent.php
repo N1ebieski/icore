@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents\Map;
+namespace N1ebieski\ICore\View\Components\Map;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\Factory as ViewFactory;

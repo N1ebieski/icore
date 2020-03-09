@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents;
+namespace N1ebieski\ICore\View\Components;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Container\Container as App;

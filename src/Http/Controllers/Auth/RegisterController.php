@@ -10,7 +10,7 @@ use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Http\Controllers\Controller;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
-use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
+use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 
 class RegisterController extends Controller
 {

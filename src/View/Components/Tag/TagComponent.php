@@ -1,22 +1,22 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents\Comment;
+namespace N1ebieski\ICore\View\Components\Tag;
 
 use Illuminate\Contracts\Support\Htmlable;
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
 
 /**
- * [LatestComponent description]
+ * [TagComponent description]
  */
-class LatestComponent implements Htmlable
+class TagComponent implements Htmlable
 {
     /**
      * [private description]
-     * @var Comment
+     * @var Tag
      */
-    protected $comment;
+    protected $tag;
 
     /**
      * Undocumented variable
@@ -33,19 +33,28 @@ class LatestComponent implements Htmlable
     protected $limit;
 
     /**
+     * Undocumented variable
+     *
+     * @var array|null
+     */
+    protected $colors;
+
+    /**
      * Undocumented function
      *
-     * @param Comment $comment
+     * @param Tag $tag
      * @param ViewFactory $view
      * @param integer $limit
+     * @param array $colors
      */
-    public function __construct(Comment $comment, ViewFactory $view, int $limit = 5)
+    public function __construct(Tag $tag, ViewFactory $view, int $limit = 25, array $colors = null)
     {
-        $this->comment = $comment;
+        $this->tag = $tag;
 
         $this->view = $view;
 
         $this->limit = $limit;
+        $this->colors = $colors;
     }
 
     /**
@@ -54,10 +63,11 @@ class LatestComponent implements Htmlable
      */
     public function toHtml() : View
     {
-        return $this->view->make('icore::web.components.comment.latest', [
-            'comments' => $this->comment->makeCache()->rememberLatestByComponent([
+        return $this->view->make('icore::web.components.tag.tag', [
+            'tags' => $this->tag->makeCache()->rememberPopularByComponent([
                 'limit' => $this->limit,
-            ])
+            ]),
+            'colors' => $this->colors
         ]);
     }
 }

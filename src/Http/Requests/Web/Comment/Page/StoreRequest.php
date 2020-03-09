@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
-use N1ebieski\ICore\Http\ViewComponents\CaptchaComponent as Captcha;
+use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 
 class StoreRequest extends FormRequest
 {

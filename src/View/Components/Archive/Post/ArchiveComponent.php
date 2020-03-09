@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\ViewComponents\Archive\Post;
+namespace N1ebieski\ICore\View\Components\Archive\Post;
 
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Post;
