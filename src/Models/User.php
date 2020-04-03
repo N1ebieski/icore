@@ -82,6 +82,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'status' => self::ACTIVE,
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'status' => 'integer',
+        'email_verified_at' => 'timestamp',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Relations
 
     /**

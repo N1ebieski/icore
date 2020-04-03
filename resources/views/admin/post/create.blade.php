@@ -1,18 +1,23 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans('icore::posts.page.create')],
-    'desc' => [trans('icore::posts.page.create')],
-    'keys' => [trans('icore::posts.page.create')]
+    'title' => [trans('icore::posts.route.create')],
+    'desc' => [trans('icore::posts.route.create')],
+    'keys' => [trans('icore::posts.route.create')]
 ])
 
+@inject('post', 'N1ebieski\ICore\Models\Post')
+
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.post.index') }}">{{ trans('icore::posts.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.page.create') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('admin.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.route.create') }}</li>
 @endsection
 
 @section('content')
 <div class="w-100">
-    <h1 class="h5 mb-4 border-bottom pb-2"><i class="far fa-plus-square"></i>&nbsp;{{ trans('icore::posts.page.create') }}:</h1>
+    <h1 class="h5 mb-4 border-bottom pb-2">
+        <i class="far fa-plus-square"></i>
+        <span>{{ trans('icore::posts.route.create') }}:</span>
+    </h1>
     <form class="mb-3" method="post" action="{{ route('admin.post.store') }}" id="createPost">
         @csrf
         <div class="row">
@@ -32,7 +37,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        {{ trans('icore::posts.tags') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.tags_tooltip', ['max_tags' => $max_tags]) }}"
+                        {{ trans('icore::posts.tags.label') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.tags.tooltip', ['max_tags' => $max_tags]) }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <input name="tags" id="tags" class="form-control tagsinput @isValid('tags')"
@@ -42,7 +47,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        SEO Title <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.seo_tooltip') }}"
+                        SEO Title <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.seo.tooltip') }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <input type="text" value="{{ old('seo_title') }}" name="seo_title" id="seo_title"
@@ -51,7 +56,7 @@
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        SEO Description <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.seo_tooltip') }}"
+                        SEO Description <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.seo.tooltip') }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <textarea name="seo_desc" class="form-control @isValid('seo_desc')" rows="3"
@@ -63,38 +68,44 @@
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="seo_noindex" name="seo_noindex"
-                        value="1" {{ (old('seo_noindex') == 1) ? 'checked' : '' }}>
+                        value="1" {{ (old('seo_noindex') == $post::SEO_NOINDEX) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="seo_noindex">SEO noindex?</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="seo_nofollow" name="seo_nofollow"
-                        value="1" {{ (old('seo_nofollow') == 1) ? 'checked' : '' }}>
+                        value="1" {{ (old('seo_nofollow') == $post::SEO_NOFOLLOW) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="seo_nofollow">SEO nofollow?</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="comment" name="comment"
-                        value="1" {{ (old('comment') != 1) ? '' : 'checked' }}>
+                        value="1" {{ (old('comment') != $post::WITH_COMMENT) ? '' : 'checked' }}>
                         <label class="custom-control-label" for="comment">{{ trans('icore::posts.comment') }}?</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="status">{{ trans('icore::filter.status') }}</label>
+                    <label for="status">{{ trans('icore::filter.status.label') }}</label>
                     <select class="custom-select" data-toggle="collapse" aria-expanded="false"
                     aria-controls="collapsePublishedAt" id="status" name="status">
-                        <option value="1" {{ (old('status') == 1) ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-                        <option value="0" {{ (!old('status') || old('status') == 0) ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
-                        <option value="2" {{ (old('status') == 2) ? 'selected' : '' }}>{{ trans('icore::filter.planned') }}</option>
+                        <option value="{{ $post::ACTIVE }}" {{ (old('status') == $post::ACTIVE) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.active') }}
+                        </option>
+                        <option value="{{ $post::INACTIVE }}" {{ (!old('status') || old('status') == $post::INACTIVE) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.inactive') }}
+                        </option>
+                        <option value="{{ $post::SCHEDULED }}" {{ (old('status') == $post::SCHEDULED) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.scheduled') }}
+                        </option>
                     </select>
                 </div>
-                <div class="form-group collapse {{ (old('status') && old('status') != 0) ? 'show' : '' }}"
+                <div class="form-group collapse {{ (old('status') && old('status') != $post::INACTIVE) ? 'show' : '' }}"
                 id="collapsePublishedAt">
                     <label for="published_at">
-                        {{ trans('icore::posts.published_at') }} <i data-toggle="tooltip" data-placement="top"
-                        title="{{ trans('icore::posts.published_at_tooltip') }}" class="far fa-question-circle"></i>
+                        {{ trans('icore::posts.published_at.label') }} <i data-toggle="tooltip" data-placement="top"
+                        title="{{ trans('icore::posts.published_at.tooltip') }}" class="far fa-question-circle"></i>
                     </label>
                     <div id="published_at">
                         <div class="form-group">
@@ -111,8 +122,8 @@
                 </div>
                 <div class="form-group">
                     <label for="category">
-                        {{ trans('icore::categories.categories') }} <i data-toggle="tooltip" data-placement="top"
-                        title="{{ trans('icore::categories.categories_tooltip', ['max_categories' => $max_categories]) }}"
+                        {{ trans('icore::categories.categories.label') }} <i data-toggle="tooltip" data-placement="top"
+                        title="{{ trans('icore::categories.categories.tooltip', ['max_categories' => $max_categories]) }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <div id="category">

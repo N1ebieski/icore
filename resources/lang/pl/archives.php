@@ -2,7 +2,7 @@
 
 return [
     'archive' => 'Archiwum',
-    'page' => [
+    'route' => [
         'index' => 'Archiwum',
         'show' => 'Archiwum: :month :year'
     ]

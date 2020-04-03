@@ -11,6 +11,19 @@ use N1ebieski\ICore\Repositories\PermissionRepo;
  */
 class Permission extends BasePermission
 {
+    // Configuration
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Makers
 
     /**

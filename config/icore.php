@@ -2,15 +2,15 @@
 
 return [
 
-    'license_key' => env('ICORE_LICENSE_KEY'),
+    'version' => \N1ebieski\ICore\Providers\ICoreServiceProvider::VERSION,
 
     'theme' => env('ICORE_THEME'),
 
-    'layout' => 'icore',
+    'layout' => env('ICORE_LAYOUT', 'icore'),
 
     'post' => [
-        'max_categories' => env('ICORE_POST_MAX_CATEGORIES', 5),
-        'max_tags' => env('ICORE_POST_MAX_TAGS', 10),
+        'max_categories' => (int)env('ICORE_POST_MAX_CATEGORIES', 5),
+        'max_tags' => (int)env('ICORE_POST_MAX_TAGS', 10),
     ],
 
     'captcha' => [

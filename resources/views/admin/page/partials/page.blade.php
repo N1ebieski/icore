@@ -41,40 +41,40 @@ data-id="{{ $page->id }}">
                     data-route="{{ route('admin.page.edit', ['page' => $page->id]) }}"
                     type="button" class="btn btn-primary edit">
                         <i class="far fa-edit"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.edit') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                     </button>
                     <a class="btn btn-primary align-bottom" href="{{ route('admin.page.edit_full', ['page' => $page->id]) }}"
                     role="button" target="_blank">
                         <i class="fas fa-edit"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.editFull') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.editFull') }}</span>
                     </a>
                 </div>
                 @endcan
                 @can('status pages')
                 <button data-status="1" type="button" class="btn btn-success statusPage"
                 data-route="{{ route('admin.page.update_status', ['page' => $page->id]) }}"
-                {{ $page->status == 1 ? 'disabled' : '' }}>
+                {{ $page->status == $page::ACTIVE ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-on"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.active') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button data-status="0" type="button" class="btn btn-warning statusPage"
                 data-route="{{ route('admin.page.update_status', ['page' => $page->id]) }}"
-                {{ $page->status == 0 ? 'disabled' : '' }}>
+                {{ $page->status == $page::INACTIVE ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-off"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.inactive') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>
                 </button>
                 @endcan
                 @can('destroy pages')
                 <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                 data-route="{{ route('admin.page.destroy', ['page' => $page->id]) }}" data-id="{{ $page->id }}"
                 type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-                data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover destroyPage" 
+                data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroyPage" 
                 data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                 data-btn-cancel-icon-class="fas fa-ban mr-1"
                 data-title="{{ trans('icore::pages.confirm') }}">
                     <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                 </button>
                 @endcan
             </div>

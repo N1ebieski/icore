@@ -81,7 +81,9 @@ class SocialiteTest extends TestCase
 
     public function test_callback_as_logged_user()
     {
-        Auth::loginUsingId(1, true);
+        $user = factory(User::class)->create();
+
+        Auth::login($user, true);
 
         $response = $this->get(route('auth.socialite.callback', [self::PROVIDER]));
 

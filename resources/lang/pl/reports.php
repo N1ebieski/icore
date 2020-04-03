@@ -4,7 +4,7 @@ return [
     'created_at' => 'Dodano',
     'author' => 'Autor',
     'reason' => 'Powód zgłoszenia',
-    'page' => [
+    'route' => [
         'show' => 'Raporty',
         'create' => 'Raportuj'
     ],

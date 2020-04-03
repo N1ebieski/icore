@@ -32,5 +32,5 @@ return [
     'delete_img' => 'Usunąć obrazek?',
     'created_at' => 'Data dodania',
     'updated_at' => 'Data aktualizacji',
-    'created_at_diff' => 'Dodano'    
+    'created_at_diff' => 'Dodano'
 ];

@@ -6,21 +6,29 @@ return [
     'updated_at' => 'Data aktualizacji',
     'sum_rating' => 'ocena',
     'name' => 'Nazwa',
-    'search' => 'Szukaj',
-    'search_placeholder' => 'Szukaj [min 3 znaki]',
-    'status' => 'Status',
-    'status_1' => 'aktywne',
-    'status_0' => 'nieaktywne',
-    'censored' => 'Cenzura',
-    'censored_1' => 'ocenzurowane',
-    'censored_0' => 'nieocenzurowane',
-    'report' => 'Raport',
-    'report_1' => 'zaraportowane',
-    'report_0' => 'nieraportowane',
+    'search' => [
+        'label' => 'Szukaj',
+        'placeholder' => 'Szukaj [min 3 znaki]'
+    ],
+    'status' => [
+        'label' => 'Status',
+        '1' => 'aktywne',
+        '0' => 'nieaktywne'
+    ],
+    'censored' => [
+        'label' => 'Cenzura',
+        '1' => 'ocenzurowane',
+        '0' => 'nieocenzurowane'
+    ],
+    'report' => [
+        'label' => 'Raport',
+        '1' => 'zaraportowane',
+        '0' => 'nieraportowane'
+    ],
     'filter' => 'Filtr',
     'active' => 'aktywne',
     'inactive' => 'nieaktywne',
-    'planned' => 'zaplanowane',
+    'scheduled' => 'zaplanowane',
     'role' => 'Rola',
     'order' => 'Sortuj',
     'by' => 'Kolejność',

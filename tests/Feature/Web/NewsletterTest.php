@@ -94,7 +94,7 @@ class NewsletterTest extends TestCase
         ]));
 
         $response->assertRedirect(route('web.home.index'));
-        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status_1')]);
+        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status.1')]);
 
         $this->assertDatabaseHas('newsletters', [
             'id' => $newsletter->id,
@@ -113,7 +113,7 @@ class NewsletterTest extends TestCase
         ]));
 
         $response->assertRedirect(route('web.home.index'));
-        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status_0')]);
+        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status.'.Newsletter::INACTIVE)]);
 
         $this->assertDatabaseHas('newsletters', [
             'id' => $newsletter->id,

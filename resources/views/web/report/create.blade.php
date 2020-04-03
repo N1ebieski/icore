@@ -6,10 +6,10 @@ data-route="{{ route("web.report.{$model->poli_self}.store", [$model->id]) }}">
     </div>
     <button type="button" class="btn btn-primary storeReport">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.submit') }}
+        <span>{{ trans('icore::default.submit') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </form>

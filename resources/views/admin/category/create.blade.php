@@ -13,11 +13,11 @@
             </div>
             <div class="form-group">
                 <label for="icon">
-                    {{ trans('icore::categories.icon') }} <i data-toggle="tooltip" data-placement="top"
-                    title="{{ trans('icore::categories.icon_tooltip') }}" class="far fa-question-circle"></i>
+                    {{ trans('icore::categories.icon.label') }} <i data-toggle="tooltip" data-placement="top"
+                    title="{{ trans('icore::categories.icon.tooltip') }}" class="far fa-question-circle"></i>
                 </label>
                 <input type="text" value="{{ old('icon') }}" name="icon" id="icon"
-                class="form-control @isValid('icon')" placeholder="{{ trans('icore::categories.icon_placeholder') }}">
+                class="form-control @isValid('icon')" placeholder="{{ trans('icore::categories.icon.placeholder') }}">
             </div>
             @if ($categories->count() > 0)
             <div class="form-group">
@@ -37,11 +37,11 @@
             @endif
             <button type="button" class="btn btn-primary store">
                 <i class="fas fa-check"></i>
-                {{ trans('icore::default.submit') }}
+                <span>{{ trans('icore::default.submit') }}</span>
             </button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 <i class="fas fa-ban"></i>
-                {{ trans('icore::default.cancel') }}
+                <span>{{ trans('icore::default.cancel') }}</span>
             </button>
         </form>
     </div>
@@ -65,9 +65,9 @@
                     <select class="form-control" id="parent_id" name="parent_id">
                         <option value="0">{{ trans('icore::categories.null') }}</option>
                         @foreach ($categories as $cats)
-                            @if ($cats->real_depth == 0)
-                                <optgroup label="----------"></optgroup>
-                            @endif
+                        @if ($cats->real_depth == 0)
+                        <optgroup label="----------"></optgroup>
+                        @endif
                         <option value="{{ $cats->id }}">
                             {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
                         </option>
@@ -78,11 +78,11 @@
             </div>
             <button type="button" class="btn btn-primary store">
                 <i class="fas fa-check"></i>
-                {{ trans('icore::default.submit') }}
+                <span>{{ trans('icore::default.submit') }}</span>
             </button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 <i class="fas fa-ban"></i>
-                {{ trans('icore::default.cancel') }}
+                <span>{{ trans('icore::default.cancel') }}</span>
             </button>
         </form>
     </div>

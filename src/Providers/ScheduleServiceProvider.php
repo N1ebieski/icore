@@ -44,9 +44,6 @@ class ScheduleServiceProvider extends ServiceProvider
             //     ->name('Post.PopularTagsCron')
             //     ->daily()
             //     ->runInBackground();
-
-            $schedule->command('queue:restart')->runInBackground();
-            $schedule->command('queue:work --daemon --stop-when-empty --tries=3')->runInBackground();
         });
     }
 }

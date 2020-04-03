@@ -1,13 +1,13 @@
 <form data-route="{{ route('admin.user.store') }}" id="store">
     <div class="form-group">
-        <label for="name">{{ trans('icore::auth.name') }}</label>
+        <label for="name">{{ trans('icore::auth.name.label') }}</label>
         <input type="text" value="{{ old('name') }}" name="name"
-        class="form-control" id="name" placeholder="{{ trans('icore::auth.enter_name') }}">
+        class="form-control" id="name" placeholder="{{ trans('icore::auth.name.placeholder') }}">
     </div>
     <div class="form-group">
-        <label for="email">{{ trans('icore::auth.address') }}</label>
+        <label for="email">{{ trans('icore::auth.address.label') }}</label>
         <input type="email" value="{{ old('email') }}" name="email"
-        class="form-control" id="email" placeholder="{{ trans('icore::auth.enter_address') }}">
+        class="form-control" id="email" placeholder="{{ trans('icore::auth.address.placeholder') }}">
     </div>
     <div class="form-group">
         <label for="password">{{ trans('icore::auth.password') }}</label>
@@ -27,10 +27,10 @@
     </div>
     <button type="button" class="btn btn-primary store">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.submit') }}
+        <span>{{ trans('icore::default.submit') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </form>

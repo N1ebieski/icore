@@ -19,7 +19,7 @@ trait Polymorphic
     public function scopePoliType(Builder $query) : ?Builder
     {
         return $query->when($this->model_type !== null, function ($query) {
-            $query->where('model_type', $this->model_type);
+            $query->where("{$this->getTable()}.model_type", $this->model_type);
         });
     }
 
@@ -31,7 +31,7 @@ trait Polymorphic
     public function scopePoli(Builder $query) : ?Builder
     {
         return $query->when($this->model_id !== null, function ($query) {
-            $query->poliType()->where('model_id', $this->model_id);
+            $query->poliType()->where("{$this->getTable()}.model_id", $this->model_id);
         });
     }
 

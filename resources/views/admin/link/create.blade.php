@@ -18,7 +18,7 @@
     </div>
     <div class="form-group">
         <label for="category">
-            {{ trans('icore::categories.categories') }}:
+            {{ trans('icore::categories.categories.label') }}:
         </label>
         <div id="category">
             <div id="categoryOptions"></div>
@@ -40,10 +40,10 @@
     </div>
     <button type="button" class="btn btn-primary store">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.save') }}
+        <span>{{ trans('icore::default.save') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </form>

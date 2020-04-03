@@ -10,9 +10,9 @@
     @csrf
     @method('patch')
     <div class="form-group">
-        <label for="email">{{ trans('icore::auth.address') }}</label>
+        <label for="email">{{ trans('icore::auth.address.label') }}</label>
         <input type="email" value="{{ $user->email }}" name="email"
-        class="form-control" id="email" placeholder="{{ trans('icore::auth.enter_address') }}">
+        class="form-control" id="email" placeholder="{{ trans('icore::auth.address.placeholder') }}">
     </div>
     <div class="form-group">
         <label for="password">{{ trans('icore::auth.password_confirm') }}</label>
@@ -20,11 +20,11 @@
     </div>
     <button type="submit" class="btn btn-primary">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.submit') }}
+        <span>{{ trans('icore::default.submit') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </form>
 @endslot

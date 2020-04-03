@@ -1,6 +1,6 @@
 <script>
 function jsvalidation() {
-
+    
     $("<?= $validator['selector']; ?>").each(function() {
         jQuery_2_1_3(this).validate({
             errorElement: 'span',
@@ -59,5 +59,6 @@ function jsvalidation() {
     });
 }
 
-jQuery(document).on('readyAndAjax', jsvalidation );
+jQuery_2_1_3(document).ready(jsvalidation);
+jQuery_2_1_3(document).ajaxComplete(jsvalidation);
 </script>

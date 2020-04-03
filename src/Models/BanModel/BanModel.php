@@ -34,6 +34,18 @@ class BanModel extends Model
      */
     protected $table = 'bans_models';
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'model_id' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Relations
 
     /**

@@ -1,12 +1,10 @@
 <?php
 
-namespace N1ebieski\ICore\Seeds;
+namespace N1ebieski\ICore\Seeds\Install;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use N1ebieski\ICore\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * [DefaultRolesAndPermissionsSeeder description]
@@ -120,15 +118,5 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
                 'create comments',
                 'edit comments'
             ]);
-
-        $user = User::create([
-            'name' => 'N1ebieski',
-            'ip' => '324.544.23.67',
-            'email' => 'mariusz.wysokinski@neostrada.pl',
-            'password' => Hash::make('depet1'),
-            'email_verified_at' => now(),
-            'status' => 1
-        ]);
-        $user->assignRole(['super-admin', 'admin', 'user']);
     }
 }

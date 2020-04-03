@@ -1,16 +1,22 @@
 <?php
 
+use N1ebieski\ICore\Models\Comment\Comment;
+
 return [
-    'success' => [
-        'store_0' => 'Komentarz został dodany i oczekuje na moderację.',
-        'destroy_global' => 'Pomyślnie usunięto :affected komentarzy wraz z odpowiedziami.',
+    'post' => [
+        'post' => 'Posty'
     ],
     'page' => [
-        'index' => 'Komentarze',
-        'type' => [
-            'post' => 'Posty',
-            'page' => 'Podstrony'
+        'page' => 'Podstrony'
+    ],
+    'success' => [
+        'store' => [
+            Comment::INACTIVE => 'Komentarz został dodany i oczekuje na moderację.'
         ],
+        'destroy_global' => 'Pomyślnie usunięto :affected komentarzy wraz z odpowiedziami.',
+    ],
+    'route' => [
+        'index' => 'Komentarze',
         'edit' => 'Edycja komentarza',
         'create' => 'Dodaj komentarz',
         'show_disqus' => 'Fragment dyskusji'

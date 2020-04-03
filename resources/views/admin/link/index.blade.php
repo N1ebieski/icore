@@ -5,8 +5,8 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item">{{ trans('icore::links.page.index') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item">{{ trans('icore::links.route.index') }}</li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans("icore::links.{$type}.page.index") }}</li>
 @endsection
 
@@ -14,7 +14,7 @@
 <h1 class="h5 border-bottom pb-2 d-flex">
     <div class="mr-auto my-auto">
         <i class="fas fa-link"></i>
-        <span> {{ trans("icore::links.{$type}.page.index") }}</span>
+        <span>{{ trans("icore::links.{$type}.page.index") }}</span>
     </div>
     @can('create links')
     <div class="ml-auto text-right">
@@ -22,7 +22,7 @@
             <a href="#" data-route="{{ route('admin.link.create', [$type]) }}" role="button"
             class="btn btn-primary text-nowrap create" data-toggle="modal" data-target="#createModal">
                 <i class="far fa-plus-square"></i>
-                <span class="d-none d-sm-inline"> {{ trans('icore::default.create') }}</span>
+                <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
             </a>
         </div>
     </div>
@@ -45,7 +45,7 @@
 @slot('modal_id', 'editModal')
 @slot('modal_title')
 <i class="far fa-edit"></i>
-<span> {{ trans('icore::links.page.edit') }}</span>
+<span> {{ trans('icore::links.route.edit') }}</span>
 @endslot
 @endcomponent
 
@@ -53,7 +53,7 @@
 @slot('modal_id', 'createModal')
 @slot('modal_title')
 <i class="far fa-plus-square"></i>
-<span> {{ trans('icore::links.page.create') }}</span>
+<span> {{ trans('icore::links.route.create') }}</span>
 @endslot
 @endcomponent
 
@@ -61,7 +61,7 @@
 @slot('modal_id', 'editPositionModal')
 @slot('modal_title')
 <i class="fas fa-sort-amount-up"></i>
-<span> {{ trans('icore::links.page.edit_position') }}</span>
+<span> {{ trans('icore::links.route.edit_position') }}</span>
 @endslot
 @endcomponent
 

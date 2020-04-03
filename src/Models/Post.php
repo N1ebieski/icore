@@ -133,6 +133,23 @@ class Post extends Model
     }
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'seo_noindex' => 'integer',
+        'seo_nofollow' => 'integer',
+        'status' => 'integer',
+        'comment' => 'integer',
+        'published_at' => 'timestamp',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
+    /**
      * Retrieve the model for a bound value.
      *
      * @param  mixed  $value

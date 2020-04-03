@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="32px" height="32px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 3.8.1 (29687) - http://www.bohemiancoding.com/sketch -->
+    <style>
+    @media (prefers-color-scheme: dark) {
+        g {
+            filter: invert(100%) sepia(0%) saturate(7464%) hue-rotate(80deg) brightness(117%) contrast(101%);
+        }
+    }
+    </style>    
     <title>directory_plus_plus [#1661]</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>

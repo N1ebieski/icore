@@ -4,13 +4,13 @@
         @if (($next ??= false) === true)
         <a href="{{ $items->appends(request()->input())->nextPageUrl() }}" rel="nofollow" id="is-next" role="button"
         class="btn btn-outline-secondary text-nowrap">
-            {{ trans('icore::pagination.next_page') }}
+            <span>{{ trans('icore::pagination.next_page') }}</span>
             <i class="fas fa-angle-down"></i>
         </a>
         @else
         <a href="{{ url()->full() }}" rel="nofollow" id="is-next" role="button"
         class="btn btn-outline-secondary text-nowrap">
-            {{ trans('icore::pagination.next_items', ['paginate' => ($filter['paginate'] ?? config('database.paginate'))]) }}
+            <span>{{ trans('icore::pagination.next_items', ['paginate' => ($filter['paginate'] ?? config('database.paginate'))]) }}</span>
             <i class="fas fa-angle-down"></i>
         </a>
         @endif

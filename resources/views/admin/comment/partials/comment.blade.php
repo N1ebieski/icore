@@ -44,7 +44,7 @@ data-id="{{ $comment->id }}">
                     data-route="{{ route('admin.comment.edit', ['comment' => $comment->id]) }}"
                     type="button" class="btn btn-primary edit">
                         <i class="far fa-edit"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.edit') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                     </button>
                     @endcan
                     @can('create comments')
@@ -55,7 +55,7 @@ data-id="{{ $comment->id }}">
                     ]) }}" type="button" class="btn btn-primary answer create"
                     {{ ($comment->isCommentable()) ? null : 'disabled' }}>
                         <i class="far fa-comment"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.answer') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.answer') }}</span>
                     </button>
                     @endcan
                 </div>
@@ -65,13 +65,13 @@ data-id="{{ $comment->id }}">
                     data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
                     {{ $comment->status == 1 ? 'disabled' : '' }}>
                         <i class="fas fa-toggle-on"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.active') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                     </button>
                     <button data-censored="0" type="button" class="btn btn-success censoreComment"
                     data-route="{{ route('admin.comment.update_censored', ['comment' => $comment->id]) }}"
                     {{ $comment->censored == 0 ? 'disabled' : '' }}>
                         <i class="far fa-eye"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.uncensored') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.uncensored') }}</span>
                     </button>
                 </div>
                 <div class="btn-group-vertical">
@@ -79,13 +79,13 @@ data-id="{{ $comment->id }}">
                     data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
                     {{ $comment->status == 0 ? 'disabled' : '' }}>
                         <i class="fas fa-toggle-off"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.inactive') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>
                     </button>
                     <button data-censored="1" type="button" class="btn btn-warning censoreComment"
                     data-route="{{ route('admin.comment.update_censored', ['comment' => $comment->id]) }}"
                     {{ $comment->censored == 1 ? 'disabled' : '' }}>
                         <i class="far fa-eye-slash"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.censored') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.censored') }}</span>
                     </button>
                 </div>
                 @endcan
@@ -96,13 +96,13 @@ data-id="{{ $comment->id }}">
                     <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                     data-route="{{ route('admin.comment.destroy', ['comment' => $comment->id]) }}" data-id="{{ $comment->id }}"
                     type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover destroyComment" 
+                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroyComment" 
                     data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                     data-btn-cancel-icon-class="fas fa-ban mr-1"
                     data-title="{{ trans('icore::comments.confirm') }}">
                         <i class="far fa-trash-alt"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                     </button>
                     @endcan
                     @can('create bans')
@@ -111,7 +111,7 @@ data-id="{{ $comment->id }}">
                     data-route="{{ route('admin.banmodel.user.create', [$comment->user->id]) }}"
                     data-toggle="modal" data-target="#createBanUserModal">
                         <i class="fas fa-user-slash"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.ban') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.ban') }}</span>
                     </button>
                     @endif
                     @endcan

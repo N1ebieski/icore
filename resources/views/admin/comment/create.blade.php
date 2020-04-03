@@ -8,10 +8,10 @@ data-id="{{ $parent_id }}">
     </div>
     <button type="button" class="btn btn-primary storeComment">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.save') }}
+        <span>{{ trans('icore::default.save') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </form>

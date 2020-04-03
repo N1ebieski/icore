@@ -25,7 +25,7 @@ data-id="{{ $mailing->id }}">
                     </li>
                     <li>{{ $mailing->shortContent }}...</li>
                     @if ($mailing->activation_at_diff)
-                    <li><small>{{ trans('icore::mailings.activation_at') }}: {{ $mailing->activation_at_diff }}</small></li>
+                    <li><small>{{ trans('icore::mailings.activation_at.label') }}: {{ $mailing->activation_at_diff }}</small></li>
                     @endif
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $mailing->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $mailing->updated_at_diff }}</small></li>
@@ -40,7 +40,7 @@ data-id="{{ $mailing->id }}">
                 <a class="btn btn-primary align-bottom {{ $mailing->status == 1 ? 'disabled' : '' }}"
                 href="{{ route('admin.mailing.edit', [$mailing->id]) }}" role="button" target="_blank">
                     <i class="far fa-edit"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.edit') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </a>
                 @endcan
                 @can('status mailings')
@@ -48,13 +48,13 @@ data-id="{{ $mailing->id }}">
                 data-route="{{ route('admin.mailing.update_status', [$mailing->id]) }}"
                 {{ $mailing->status == 1 ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-on"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.active') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button data-status="0" type="button" class="btn btn-warning status"
                 data-route="{{ route('admin.mailing.update_status', [$mailing->id]) }}"
                 {{ $mailing->status == 0 ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-off"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.inactive') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>
                 </button>
                 @endcan
                 @can('destroy mailings')
@@ -62,25 +62,25 @@ data-id="{{ $mailing->id }}">
                     <button class="btn btn-danger" data-toggle="confirmation"
                     data-route="{{ route('admin.mailing.destroy', [$mailing->id]) }}" data-id="{{ $mailing->id }}"
                     type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover destroy" 
+                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy" 
                     data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                     data-btn-cancel-icon-class="fas fa-ban mr-1"
                     data-title="{{ trans('icore::default.confirm') }}">
                         <i class="far fa-trash-alt"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                     </button>
                     @if ($mailing->emails->count() !== 0)
                     <button class="btn btn-danger" data-toggle="confirmation"
                     data-route="{{ route('admin.mailing.reset', [$mailing->id]) }}" data-id="{{ $mailing->id }}"
                     type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover resetMailing" 
+                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover resetMailing" 
                     data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                     data-btn-cancel-icon-class="fas fa-ban mr-1"
                     data-title="{{ trans('icore::mailings.confirm') }}">
                         <i class="fas fa-power-off"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::mailings.reset') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::mailings.reset') }}</span>
                     </button>
                     @endif
                 </div>

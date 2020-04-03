@@ -4,25 +4,25 @@
             <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $comments->total() }}</span>&nbsp;
             @if ($filter['search'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[search]">
-                {{ trans('icore::filter.search') }}: {{ $filter['search'] }}
+                {{ trans('icore::filter.search.label') }}: {{ $filter['search'] }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
             @if ($filter['status'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[status]">
-                {{ trans('icore::filter.status') }}: {{ trans('icore::filter.status_'.$filter['status']) }}
+                {{ trans('icore::filter.status.label') }}: {{ trans('icore::filter.status.'.$filter['status']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
             @if ($filter['censored'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[censored]">
-                {{ trans('icore::filter.censored') }}: {{ trans('icore::filter.censored_'.$filter['censored']) }}
+                {{ trans('icore::filter.censored.label') }}: {{ trans('icore::filter.censored.'.$filter['censored']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
             @if ($filter['report'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[report">
-                {{ trans('icore::filter.report') }}: {{ trans('icore::filter.report_'.$filter['report']) }}
+                {{ trans('icore::filter.report.label') }}: {{ trans('icore::filter.report.'.$filter['report']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif

@@ -4,7 +4,7 @@ return [
     'success' => [
         'destroy_global' => 'Pomyślnie usunięto z czarnej listy :affected zbanowanych.'
     ],
-    'page' => [
+    'route' => [
         'index' => 'Zbanowani',
         'create' => 'Dodaj do czarnej listy',
         'edit' => 'Edycja bana'
@@ -15,12 +15,12 @@ return [
         ],
         'ip' => [
             'ip' => 'Adres IP',
-            'page' => [
+            'route' => [
                 'index' => 'Zbanowane adresy IP'
             ],
         ],
         'word' => [
-            'page' => [
+            'route' => [
                 'index' => 'Zbanowane słowa'
             ]
         ],
@@ -33,7 +33,7 @@ return [
         ],
         'user' => [
             'user' => 'Użytkownik',
-            'page' => [
+            'route' => [
                 'index' => 'Zbanowani użytkownicy'
             ],
         ],

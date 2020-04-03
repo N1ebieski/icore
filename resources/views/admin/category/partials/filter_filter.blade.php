@@ -4,17 +4,18 @@
 @slot('modal_id', 'filterModal')
 
 @slot('modal_title')
-<i class="fas fa-sort-amount-up"></i> {{ trans('icore::filter.filter_title') }}
+<i class="fas fa-sort-amount-up"></i>
+<span> {{ trans('icore::filter.filter_title') }}</span>
 @endslot
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">{{ trans('icore::filter.search') }}</label>
-    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search_placeholder') }}"
+    <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
+    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
     name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
 </div>
 <div class="form-group">
-    <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status') }}"</label>
+    <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"</label>
     <select class="form-control custom-select" id="FormStatus" name="filter[status]">
         <option value="">{{ trans('icore::filter.default') }}</option>
         <option value="{{ $category::ACTIVE }}" {{ ($filter['status'] === $category::ACTIVE) ? 'selected' : '' }}>
@@ -47,11 +48,11 @@
 @endif
 <button type="button" class="btn btn-primary btn-send" id="filterFilter">
     <i class="fas fa-check"></i>
-    {{ trans('icore::default.apply') }}
+    <span>{{ trans('icore::default.apply') }}</span>
 </button>
 <button type="button" class="btn btn-secondary" data-dismiss="modal">
     <i class="fas fa-ban"></i>
-    {{ trans('icore::default.cancel') }}
+    <span>{{ trans('icore::default.cancel') }}</span>
 </button>
 @endslot
 @endcomponent

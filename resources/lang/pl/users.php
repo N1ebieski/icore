@@ -6,10 +6,10 @@ return [
         'store' => 'Użytkownik został dodany.',
         'destroy_global' => 'Pomyślnie usunięto :affected użytkowników.'
     ],
-    'page' => [
+    'route' => [
         'index' => 'Użytkownicy',
         'create' => 'Dodaj użytkownika',
-        'edit' => 'Edytuj użytkownika'        
+        'edit' => 'Edytuj użytkownika'
     ],
     'roles' => 'Typ konta'
 ];

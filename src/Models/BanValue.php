@@ -43,6 +43,17 @@ class BanValue extends Model
      */
     protected $table = 'bans_values';
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Scopes
 
     /**

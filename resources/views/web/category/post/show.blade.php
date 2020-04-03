@@ -1,13 +1,13 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::categories.page.show', ['category' => $category->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
-    'desc' => [trans('icore::categories.page.show', ['category' => $category->name])],
-    'keys' => [trans('icore::categories.page.show', ['category' => $category->name])]
+    'title' => [trans('icore::categories.route.show', ['category' => $category->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'desc' => [trans('icore::categories.route.show', ['category' => $category->name])],
+    'keys' => [trans('icore::categories.route.show', ['category' => $category->name])]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.page.index') }}</a></li>
-<li class="breadcrumb-item">{{ trans('icore::categories.page.index') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item">{{ trans('icore::categories.route.index') }}</li>
 @if ($category->ancestors->count() > 0)
 @foreach ($category->ancestors as $ancestor)
 <li class="breadcrumb-item">
@@ -28,7 +28,7 @@
                 @if (!empty($category->icon))
                     <i class="{{ $category->icon }}"></i>
                 @endif
-                <span> {{ trans('icore::categories.page.show', ['category' => $category->name]) }}</span>
+                <span>{{ trans('icore::categories.route.show', ['category' => $category->name]) }}</span>
             </h1>
             @if ($posts->isNotEmpty())
             <div id="infinite-scroll">

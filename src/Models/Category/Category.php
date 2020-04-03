@@ -72,6 +72,21 @@ class Category extends Entity implements CategoryInterface
     protected $searchable = ['name'];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'status' => 'integer',
+        'parent_id' => 'integer',
+        'position' => 'integer',
+        'real_depth' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
+    /**
      * Return the sluggable configuration array for this model.
      *
      * @return array
@@ -233,7 +248,7 @@ class Category extends Entity implements CategoryInterface
     public function scopeFilterParent(Builder $query, $parent = null)
     {
         if ($parent !== null) {
-            return $query->where('parent_id', $parent->id ?? null);
+            return $query->where("{$this->getTable()}.parent_id", $parent->id ?? null);
         }
     }
 
@@ -244,7 +259,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->where('status', static::ACTIVE);
+        return $query->where("{$this->getTable()}.status", static::ACTIVE);
     }
 
     /**
@@ -254,7 +269,7 @@ class Category extends Entity implements CategoryInterface
      */
     public function scopeRoot(Builder $query) : Builder
     {
-        return $query->where('parent_id', null);
+        return $query->where("{$this->getTable()}.parent_id", null);
     }
 
     // Accessors

@@ -19,7 +19,7 @@ return [
     'list_socialite' => 'Lista dostępnych kont',
     'symlink_confirmation' => 'Czy na pewno chcesz usunąć powiązanie?',
     'symlink' => 'Połącz',
-    'page' => [
+    'route' => [
         'index' => 'Profil',
         'edit' => 'Edycja profilu',
         'edit_socialite' => 'Połącz z SocialMedia'

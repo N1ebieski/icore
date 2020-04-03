@@ -45467,12 +45467,12 @@ $.ajaxSetup({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\js\vendor\vendor.js */"./packages/n1ebieski/icore/resources/js/vendor/vendor.js");
-__webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\sass\vendor\vendor.scss */"./packages/n1ebieski/icore/resources/sass/vendor/vendor.scss");
-__webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\sass\web\web.scss */"./packages/n1ebieski/icore/resources/sass/web/web.scss");
-__webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\sass\web\web-dark.scss */"./packages/n1ebieski/icore/resources/sass/web/web-dark.scss");
-__webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\sass\admin\admin.scss */"./packages/n1ebieski/icore/resources/sass/admin/admin.scss");
-module.exports = __webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\sass\admin\admin-dark.scss */"./packages/n1ebieski/icore/resources/sass/admin/admin-dark.scss");
+__webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\js\vendor\vendor.js */"./packages/n1ebieski/icore/resources/js/vendor/vendor.js");
+__webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\sass\vendor\vendor.scss */"./packages/n1ebieski/icore/resources/sass/vendor/vendor.scss");
+__webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\sass\web\web.scss */"./packages/n1ebieski/icore/resources/sass/web/web.scss");
+__webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\sass\web\web-dark.scss */"./packages/n1ebieski/icore/resources/sass/web/web-dark.scss");
+__webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\sass\admin\admin.scss */"./packages/n1ebieski/icore/resources/sass/admin/admin.scss");
+module.exports = __webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\sass\admin\admin-dark.scss */"./packages/n1ebieski/icore/resources/sass/admin/admin-dark.scss");
 
 
 /***/ })

@@ -91,6 +91,24 @@ class Comment extends Entity implements CommentInterface
         'censored' => self::UNCENSORED
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'model_id' => 'integer',
+        'parent_id' => 'integer',
+        'status' => 'integer',
+        'censored' => 'integer',
+        'position' => 'integer',
+        'real_depth' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Relations
 
     /**

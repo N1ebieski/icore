@@ -1,19 +1,21 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans('icore::mailings.page.create')],
-    'desc' => [trans('icore::mailings.page.create')],
-    'keys' => [trans('icore::mailings.page.create')]
+    'title' => [trans('icore::mailings.route.create')],
+    'desc' => [trans('icore::mailings.route.create')],
+    'keys' => [trans('icore::mailings.route.create')]
 ])
 
+@inject('mailing', 'N1ebieski\ICore\Models\Mailing')
+
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.mailing.index') }}">{{ trans('icore::mailings.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::mailings.page.create') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('admin.mailing.index') }}">{{ trans('icore::mailings.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::mailings.route.create') }}</li>
 @endsection
-{{ debug(session('errors')) }}
+
 @section('content')
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
-        <i class="far fa-plus-square"></i>&nbsp;{{ trans('icore::mailings.page.create') }}:
+        <i class="far fa-plus-square"></i>&nbsp;{{ trans('icore::mailings.route.create') }}:
     </h1>
     <form class="mb-3" method="post" action="{{ route('admin.mailing.store') }}" id="createMailing">
         @csrf
@@ -35,19 +37,25 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="status">{{ trans('icore::filter.status') }}</label>
+                    <label for="status">{{ trans('icore::filter.status.label') }}</label>
                     <select class="custom-select" id="status" name="status"
                     data-toggle="collapse" aria-expanded="false" aria-controls="collapseActivationAt">
-                        <option value="1" {{ (old('status') == 1) ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-                        <option value="0" {{ (!old('status') || old('status') == 0) ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
-                        <option value="2" {{ (old('status') == 2) ? 'selected' : '' }}>{{ trans('icore::filter.planned') }}</option>
+                        <option value="{{ $mailing::ACTIVE }}" {{ (old('status') == $mailing::ACTIVE) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.active') }}
+                        </option>
+                        <option value="{{ $mailing::INACTIVE }}" {{ (!old('status') || old('status') == $mailing::INACTIVE) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.inactive') }}
+                        </option>
+                        <option value="{{ $mailing::SCHEDULED }}" {{ (old('status') == $mailing::SCHEDULED) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.scheduled') }}
+                        </option>
                     </select>
                 </div>
                 <div class="form-group collapse {{ (old('status') && old('status') == 2) ? 'show' : '' }}"
                 id="collapseActivationAt">
                     <label for="activation_at">
-                        {{ trans('icore::mailings.activation_at') }} <i data-toggle="tooltip" data-placement="top"
-                        title="{{ trans('icore::mailings.activation_at_tooltip') }}" class="far fa-question-circle"></i>
+                        {{ trans('icore::mailings.activation_at.label') }} <i data-toggle="tooltip" data-placement="top"
+                        title="{{ trans('icore::mailings.activation_at.tooltip') }}" class="far fa-question-circle"></i>
                     </label>
                     <div id="activation_at">
                         <div class="form-group">

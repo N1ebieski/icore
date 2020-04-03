@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use N1ebieski\ICore\Http\Requests\Web\Comment\Post\StoreRequest;
@@ -52,7 +53,7 @@ class CommentController implements PostPolymorphic
 
         return Response::json([
             'success' => $comment->status === Comment::ACTIVE ?
-                null : trans('icore::comments.success.store_0'),
+                null : Lang::get('icore::comments.success.store.'.Comment::INACTIVE),
             'view' => $comment->status === Comment::ACTIVE ?
                 View::make('icore::web.comment.partials.comment', [
                     'comment' => $comment

@@ -6,7 +6,7 @@ return [
         'update' => 'Podstrona została zmieniona.',
         'destroy_global' => 'Pomyślnie usunięto :affected podstron wraz z podstronami podrzędnymi.'
     ],
-    'page' => [
+    'route' => [
         'index' => 'Podstrony',
         'edit' => 'Edycja podstrony',
         'edit_position' => 'Edycja pozycji',
@@ -21,10 +21,14 @@ return [
     'create' => 'Dodaj podstronę',
     'roots' => 'główne',
     'comment' => 'Komentarze włączone',
-    'seo_tooltip' => 'Używany w META oraz Open Graph',
-    'icon' => 'Klasa ikony',
-    'icon_tooltip' => 'Klasa ikony (np. z font-awesome). Ikona będzie wyświetlana obok tytułu.',
-    'icon_placeholder' => 'przykład font-awesome: fab fa-google',
+    'seo' => [
+        'tooltip' => 'Używany w META oraz Open Graph'
+    ],
+    'icon' => [
+        'label' => 'Klasa ikony',
+        'tooltip' => 'Klasa ikony (np. z font-awesome). Ikona będzie wyświetlana obok tytułu.',
+        'placeholder' => 'przykład font-awesome: fab fa-google',
+    ],
     'position' => 'Pozycja',
     'pages' => 'Podstrony',
     'map' => 'Zobacz również'

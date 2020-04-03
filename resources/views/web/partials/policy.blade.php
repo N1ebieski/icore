@@ -1,5 +1,5 @@
 @guest
-@if (!Cookie::get('policyAgree'))
+@if (!request()->cookie('policyAgree'))
 <div id="policy">
     <div class="policy-height"></div>
     <nav class="navbar policy fixed-bottom navbar-light bg-light border-top">

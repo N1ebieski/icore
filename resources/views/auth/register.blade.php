@@ -15,7 +15,7 @@
                             @csrf
 
                             <div class="form-group row">
-                                <label for="name" class="col-lg-4 col-form-label text-lg-right">{{ trans('icore::auth.name') }}</label>
+                                <label for="name" class="col-lg-4 col-form-label text-lg-right">{{ trans('icore::auth.name.label') }}</label>
 
                                 <div class="col-lg-6">
                                     <input id="name" type="text" class="form-control @isValid('name')" name="name" value="{{ old('name') }}" required autofocus>
@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label text-lg-right">{{ trans('icore::auth.address') }}</label>
+                                <label for="email" class="col-md-4 col-form-label text-lg-right">{{ trans('icore::auth.address.label') }}</label>
 
                                 <div class="col-lg-6">
                                     <input id="email" type="email" class="form-control @isValid('email')" name="email" value="{{ old('email') }}" required>

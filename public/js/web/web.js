@@ -130,7 +130,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Work\laravel-icore\packages\n1ebieski\icore\resources\js\web\web.js */"./packages/n1ebieski/icore/resources/js/web/web.js");
+module.exports = __webpack_require__(/*! D:\Work\icore\packages\n1ebieski\icore\resources\js\web\web.js */"./packages/n1ebieski/icore/resources/js/web/web.js");
 
 
 /***/ })

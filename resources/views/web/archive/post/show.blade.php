@@ -1,13 +1,13 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
-    'desc' => [trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year])],
-    'keys' => [trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year])]
+    'title' => [trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'desc' => [trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year])],
+    'keys' => [trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year])]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.page.index') }}</a></li>
-<li class="breadcrumb-item">{{ trans('icore::archives.page.index') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item">{{ trans('icore::archives.route.index') }}</li>
 <li class="breadcrumb-item active" aria-current="page">{{ $month_localized }} {{ $year }}</li>
 @endsection
 
@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <h1 class="h4 border-bottom pb-2 mb-4">
-                {{ trans('icore::archives.page.show', ['month' => $month_localized, 'year' => $year]) }}
+                {{ trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year]) }}
             </h1>
             @if ($posts->isNotEmpty())
             <div id="infinite-scroll">

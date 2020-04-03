@@ -74,7 +74,7 @@ abstract class Filter
      */
     protected function makeFilterName(string $value) : string
     {
-        return strtolower(str_replace('Has', '', basename($value)));
+        return strtolower(str_replace('Has', '', class_basename($value)));
     }
 
     /**

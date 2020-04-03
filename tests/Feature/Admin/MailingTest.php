@@ -565,10 +565,6 @@ class MailingTest extends TestCase
     //     $schedule = app()->make(MailingCron::class);
     //     $schedule();
     //
-    //     exec('php artisan queue:work --env=testing --daemon --stop-when-empty --tries=3');
-    //
-    //     sleep(30);
-    //
     //     $this->assertDatabaseHas('mailings_emails', [
     //         'id' => $email->id,
     //         'sent' => 2
@@ -600,9 +596,6 @@ class MailingTest extends TestCase
         // (np. odpala się co godzinę)
         $schedule = app()->make(MailingCron::class);
         $schedule();
-
-        // Artisan::call('schedule:run --env=testing');
-        exec('php artisan queue:work --env=testing --daemon --stop-when-empty --tries=3');
 
         Mail::assertSent(MailingMail::class, function ($mail) use ($email, $mailing) {
             $mail->build();

@@ -1,19 +1,20 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [$role->name, trans('icore::roles.page.edit')],
-    'desc' => [$role->name, trans('icore::roles.page.edit')],
-    'keys' => [$role->name, trans('icore::roles.page.edit')]
+    'title' => [$role->name, trans('icore::roles.route.edit')],
+    'desc' => [$role->name, trans('icore::roles.route.edit')],
+    'keys' => [$role->name, trans('icore::roles.route.edit')]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.role.index') }}">{{ trans('icore::roles.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::roles.page.edit') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('admin.role.index') }}">{{ trans('icore::roles.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::roles.route.edit') }}</li>
 @endsection
 
 @section('content')
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
-        <i class="fas fa-edit"></i>&nbsp;{{ trans('icore::roles.page.edit') }}:
+        <i class="fas fa-edit"></i>
+        <span>{{ trans('icore::roles.route.edit') }}:</span>
     </h1>
     <form class="mb-3" method="post" action="{{ route('admin.role.update', [$role->id]) }}" id="editRole">
         @csrf
@@ -52,8 +53,8 @@
 </div>
 @endsection
 
-{{-- @push('script')
+@push('script')
 @component('icore::admin.partials.jsvalidation')
 {!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest', '#editRole'); !!}
 @endcomponent
-@endpush --}}
+@endpush

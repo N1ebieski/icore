@@ -1015,7 +1015,7 @@ jQuery(document).on('click', 'button.clearReport', function(e) {
 jQuery(document).on('readyAndAjax', function() {
     $('[data-toggle=confirmation]').confirmation({
         rootSelector: '[data-toggle=confirmation]',
-        copyAttributes: 'data-route data-id',
+        copyAttributes: 'href data-route data-id',
         singleton: true,
         popout: true,      
         onConfirm: function() {

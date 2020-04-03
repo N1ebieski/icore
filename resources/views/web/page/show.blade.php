@@ -12,7 +12,7 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
 @if ($page->ancestors->isNotEmpty())
     @foreach ($page->ancestors as $ancestor)
         <li class="breadcrumb-item">
@@ -35,7 +35,8 @@
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
                 <h1 class="h4 border-bottom pb-2">
-                    @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>&nbsp;@endif{{ $page->title }}
+                    @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>@endif
+                    <span>{{ $page->title }}</span>
                 </h1>
                 <div>{!! $page->no_more_content_html !!}</div>
                 @if ((bool)$page->comment === true)
@@ -62,7 +63,7 @@
                     @component('icore::web.partials.modal')
                     @slot('modal_id', 'createReportModal')
                     @slot('modal_title')
-                    {{ trans('icore::reports.page.create') }}
+                    <span>{{ trans('icore::reports.route.create') }}</span>
                     @endslot
                     @endcomponent
                     @endif

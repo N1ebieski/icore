@@ -59,7 +59,7 @@ class ProfileController
 
         return Response::redirectToRoute('login')->with(
             'success',
-            Lang::get('icore::passwords.sent')
+            Lang::get('passwords.sent')
         );
     }
 

@@ -10,6 +10,12 @@ use Illuminate\Support\ServiceProvider;
 class ICoreServiceProvider extends ServiceProvider
 {
     /**
+     * [public description]
+     * @var string
+     */
+    public const VERSION = "0.9.0-alpha";
+
+    /**
      * Register services.
      *
      * @return void
@@ -28,6 +34,7 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app->register(MacroServiceProvider::class);
         $this->app->register(ViewServiceProvider::class);
         $this->app->register(ScheduleServiceProvider::class);
+        $this->app->register(CommandServiceProvider::class);
 
         $this->app['router']->middlewareGroup('icore.web', [
             // 'throttle:60,1',
@@ -59,16 +66,17 @@ class ICoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'icore');
+
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'icore');
+
+        if ($this->app->environment('local')) {
+            $this->app->make('Illuminate\Database\Eloquent\Factory')->load(base_path('database/factories') . '/vendor/icore');
+        }
+
         $this->publishes([
             __DIR__ . '/../../config/icore.php' => config_path('icore.php'),
-            // __DIR__ . '/../../config/jsvalidation.php' => config_path('jsvalidation.php'),
-            // __DIR__ . '/../../config/logic_captcha.php' => config_path('logic_captcha.php'),
-            // __DIR__ . '/../../config/permission.php' => config_path('permission.php'),
-            // __DIR__ . '/../../config/purifier.php' => config_path('purifier.php'),
-            // __DIR__ . '/../../config/sluggable.php' => config_path('sluggable.php'),
-            // __DIR__ . '/../../config/taggable.php' => config_path('taggable.php'),
-            // __DIR__ . '/../../config/view-components.php' => config_path('view-components.php'),
-        ]);
+        ], 'icore.config');
 
         $this->publishes([
             __DIR__.'/../../routes/web' => base_path('routes') . '/vendor/icore/web'
@@ -81,12 +89,6 @@ class ICoreServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../routes/auth.php' => base_path('routes') . '/vendor/icore/auth.php'
         ], 'icore.routes.auth');
-
-        // $this->publishes([
-        //     __DIR__.'/../../tests/Feature' => base_path('tests/Feature') . '/vendor/icore'
-        // ], 'icore.tests');
-
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'icore');
 
         $this->publishes([
             __DIR__ . '/../../resources/lang/en' => resource_path('lang/vendor/icore/en'),
@@ -102,11 +104,16 @@ class ICoreServiceProvider extends ServiceProvider
             __DIR__ . '/../../resources/sass' => resource_path('sass/vendor/icore'),
         ], 'icore.sass');
 
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'icore');
+        $this->publishes([
+            __DIR__ . '/../../resources/views/admin' => resource_path('views/vendor/icore/admin'),
+        ], 'icore.views.admin');
 
         $this->publishes([
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/icore'),
-        ], 'icore.views');
+            __DIR__ . '/../../resources/views/auth' => resource_path('views/vendor/icore/auth'),
+            __DIR__ . '/../../resources/views/mails' => resource_path('views/vendor/icore/mails'),
+            __DIR__ . '/../../resources/views/vendor' => resource_path('views/vendor/icore/vendor'),
+            __DIR__ . '/../../resources/views/web' => resource_path('views/vendor/icore/web')
+        ], 'icore.views.web');
 
         $this->publishes([
             __DIR__ . '/../../public/css' => public_path('css/vendor/icore'),
@@ -117,15 +124,9 @@ class ICoreServiceProvider extends ServiceProvider
             __DIR__ . '/../../public/mix-manifest.json' => public_path('mix-manifest.json')
         ], 'icore.public');
 
-        if ($this->app->environment('local')) {
-            $this->app->make('Illuminate\Database\Eloquent\Factory')->load(base_path('database/factories') . '/vendor/icore');
-        }
-
         $this->publishes([
             __DIR__ . '/../../database/factories' => base_path('database/factories') . '/vendor/icore',
         ], 'icore.factories');
-
-        // Migrations load by php artisan migrate:fresh --path="database/migrations/vendor/icore"
 
         $this->publishes([
             __DIR__ . '/../../database/migrations' => base_path('database/migrations') . '/vendor/icore',

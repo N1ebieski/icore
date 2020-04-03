@@ -1,12 +1,12 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::posts.page.index'), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
-    'desc' => [trans('icore::posts.page.index')],
-    'keys' => [trans('icore::posts.page.index')]
+    'title' => [trans('icore::posts.route.index'), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'desc' => [trans('icore::posts.route.index')],
+    'keys' => [trans('icore::posts.route.index')]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.page.index') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.route.index') }}</li>
 @endsection
 
 @section('content')

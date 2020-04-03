@@ -15,8 +15,8 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.page.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ $post->title }}</li>
 @endsection
 
@@ -33,7 +33,7 @@
                 <div class="post">{!! $post->no_more_content_html !!}</div>
                 <div class="d-flex mb-2">
                     @if ($post->categories->isNotEmpty())
-                    <small class="mr-auto">{{ trans('icore::categories.categories') }}:
+                    <small class="mr-auto">{{ trans('icore::categories.categories.label') }}:
                         @foreach ($post->categories as $category)
                         <a href="{{ route('web.category.post.show', [$category->slug]) }}">{{ $category->name }}</a>
                         {{ (!$loop->last) ? ', ' : '' }}
@@ -41,7 +41,7 @@
                     </small>
                     @endif
                     @if ($post->tags->isNotEmpty())
-                    <small class="ml-auto text-right">{{ trans('icore::posts.tags') }}:
+                    <small class="ml-auto text-right">{{ trans('icore::posts.tags.label') }}:
                         @foreach ($post->tags as $tag)
                         <a href="{{ route('web.tag.post.show', [$tag->normalized]) }}">{{ $tag->name }}</a>
                         {{ (!$loop->last) ? ', ' : '' }}
@@ -100,7 +100,7 @@
                 @slot('modal_id', 'createReportModal')
                 @slot('modal_title')
                 <i class="fas fa-exclamation-triangle"></i>
-                <span>{{ trans('icore::reports.page.create') }}</span>
+                <span>{{ trans('icore::reports.route.create') }}</span>
                 @endslot
                 @endcomponent
                 @endif

@@ -42,6 +42,17 @@ class Tag extends Taggable
         return 'normalized';
     }
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'tag_id' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Makers
 
     /**

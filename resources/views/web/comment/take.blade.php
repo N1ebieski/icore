@@ -6,7 +6,7 @@
 <div>
     <a href="#" data-route="{{ route('web.comment.take', [$parent->id]) }}"
     role="button" class="btn btn-outline-secondary text-nowrap depth-1 takeComment">
-        {{ trans('icore::comments.next_comments') }}
+        <span>{{ trans('icore::comments.next_comments') }}</span>
         <i class="fas fa-angle-down"></i>
     </a>
 </div>

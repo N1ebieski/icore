@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'hello' => 'Witaj',
     'login_with' => 'Zaloguj się przez',
     'register_with' => 'Zarejestruj się przez',
@@ -12,14 +11,16 @@ return [
     'success' => [
         'send_verify' => 'Nowy link weryfikacyjny twojego konta został wysłany na twój adres e-mail.'
     ],
-    'page' => [
+    'route' => [
         'login' => 'Zaloguj się',
         'logout' => 'Wyloguj się',
         'register' => 'Zarejestruj się'
     ],
     'login' => 'Zaloguj się',
-    'address' => 'Adres e-mail',
-    'enter_address' => 'Wpisz adres e-mail',
+    'address' => [
+        'label' => 'Adres e-mail',
+        'placeholder' => 'Wpisz adres e-mail'
+    ],
     'password' => 'Hasło',
     'remember' => 'Zapamiętaj mnie',
     'forgot' => 'Zapomniałeś hasła?',
@@ -27,8 +28,9 @@ return [
     'register' => 'Zarejestruj się',
     'reset' => 'Zresetuj hasło',
     'submit_reset' => 'Wyślij link do zmiany hasła',
-    'name' => 'Nazwa użytkownika',
-    'enter_name' => 'Wpisz nazwę użytkownika',
-    'password_confirm' => 'Potwierdź hasło',   
-
+    'name' => [
+        'label' => 'Nazwa użytkownika',
+        'placeholder' => 'Wpisz nazwę użytkownika'
+    ],
+    'password_confirm' => 'Potwierdź hasło',
 ];

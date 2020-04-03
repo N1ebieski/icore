@@ -31,6 +31,18 @@ class Socialite extends Model
      */
     protected $hidden = ['provider_id'];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Relations
 
     /**

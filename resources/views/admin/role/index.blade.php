@@ -1,24 +1,25 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans('icore::roles.page.index'), trans('icore::pagination.page', ['num' => $roles->currentPage()])],
-    'desc' => [trans('icore::roles.page.index')],
-    'keys' => [trans('icore::roles.page.index')]
+    'title' => [trans('icore::roles.route.index'), trans('icore::pagination.page', ['num' => $roles->currentPage()])],
+    'desc' => [trans('icore::roles.route.index')],
+    'keys' => [trans('icore::roles.route.index')]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::roles.page.index') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::roles.route.index') }}</li>
 @endsection
 
 @section('content')
 <h1 class="h5 border-bottom pb-2 d-flex">
     <div class="mr-auto my-auto">
-        <i class="fas fa-fw fa-unlock-alt"></i>&nbsp;{{ trans('icore::roles.page.index') }}
+        <i class="fas fa-fw fa-unlock-alt"></i>
+        <span>{{ trans('icore::roles.route.index') }}</span>
     </div>
     @role('super-admin')
     <div class="ml-auto text-right responsive-btn-group">
         <a href="{{ route('admin.role.create') }}" role="button" class="btn btn-primary text-nowrap">
             <i class="far fa-plus-square"></i>
-            <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.create') }}</span>
+            <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
         </a>
     </div>
     @endrole

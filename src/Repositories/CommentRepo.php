@@ -125,8 +125,7 @@ class CommentRepo
     {
         return $this->comment->active()
             ->uncensored()
-            ->poliType()
-            ->whereHasMorph('morph', '*', function ($query) {
+            ->whereHasMorph('morph', [$this->comment->model_type], function ($query) {
                 $query->active();
             })
             ->with(['morph', 'user'])

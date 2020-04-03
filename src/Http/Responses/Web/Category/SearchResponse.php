@@ -7,11 +7,12 @@ use Illuminate\Contracts\Routing\ResponseFactory as Response;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Translation\Translator;
+use N1ebieski\ICore\Http\Responses\JsonResponseFactory;
 
 /**
  * [SearchResponse description]
  */
-class SearchResponse
+class SearchResponse implements JsonResponseFactory
 {
     /**
      * [private description]

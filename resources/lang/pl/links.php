@@ -4,19 +4,19 @@ return [
     'success' => [
         'store' => 'Link został stworzony.'
     ],
-    'page' => [
+    'route' => [
         'index' => 'Linki',
         'create' => 'Dodaj link',
         'edit' => 'Edycja linku',
         'edit_position' => 'Edycja pozycji'
     ],
     'link' => [
-        'page' => [
+        'route' => [
             'index' => 'Linki'
         ],
     ],
     'backlink' => [
-        'page' => [
+        'route' => [
             'index' => 'Linki zwrotne'
         ]
     ],

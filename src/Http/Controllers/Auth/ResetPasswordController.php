@@ -49,7 +49,7 @@ class ResetPasswordController extends Controller
      */
     public function showResetForm(Request $request, string $token = null) : HttpResponse
     {
-        return Response::view('icore::auth.passwords.reset')->with([
+        return Response::view('icore::auth.passwords.reset', [
             'token' => $token,
             'email' => $request->email
         ]);

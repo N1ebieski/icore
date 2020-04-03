@@ -26,13 +26,13 @@
                     <li class="list-group-item">
                         <a href="{{ route('web.post.index') }}"
                         class="@isUrl(route('web.post.index'), 'font-weight-bold')">
-                            {{ trans('icore::posts.page.blog') }}
+                            {{ trans('icore::posts.route.blog') }}
                         </a>
                     </li>
                     <li class="list-group-item">
                         <a href="{{ route('web.contact.show') }}"
                         class="@isUrl(route('web.contact.show'), 'font-weight-bold')">
-                            {{ trans('icore::contact.page.show') }}
+                            {{ trans('icore::contact.route.show') }}
                         </a>
                     </li>
                 </ul>
@@ -42,7 +42,7 @@
         <div class="d-flex justify-content-center">
             <div class="footer-copyright text-center py-3 mr-3">
                 <small>
-                    2019 Copyright © <a href="">iCore</a> by Mariusz Wysokiński
+                    2019-{{ now()->year }} Copyright © <a href="">iCore v{{ config('idir.version') }}</a> by Mariusz Wysokiński
                 </small>
             </div>
             <div class="btn-group my-auto" id="themeToggle" role="group" aria-label="Zmień motyw">

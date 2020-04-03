@@ -2,7 +2,7 @@
 
 return [
     'popular' => 'Popularne tagi',
-    'page' => [
+    'route' => [
         'index' => 'Tagi',
         'show' => 'Tag: :tag'
     ]

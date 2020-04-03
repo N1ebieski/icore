@@ -151,6 +151,25 @@ class Page extends Entity implements PageInterface
         'icon' => null
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'seo_noindex' => 'integer',
+        'seo_nofollow' => 'integer',
+        'status' => 'integer',
+        'comment' => 'integer',
+        'parent_id' => 'integer',
+        'position' => 'integer',
+        'real_depth' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Relations
 
     /**

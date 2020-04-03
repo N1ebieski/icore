@@ -4,13 +4,13 @@
             <span class="badge badge-primary">{{ trans('icore::filter.items') }}: {{ $users->total() }}</span>&nbsp;
             @if ($filter['search'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[search]">
-                {{ trans('icore::filter.search') }}: {{ $filter['search'] }}
+                {{ trans('icore::filter.search.label') }}: {{ $filter['search'] }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif
             @if ($filter['status'] !== null)
             <a href="#" class="badge badge-primary filterOption" data-name="filter[status]">
-                {{ trans('icore::filter.status') }}: {{ trans('icore::filter.status_'.$filter['status']) }}
+                {{ trans('icore::filter.status.label') }}: {{ trans('icore::filter.status.'.$filter['status']) }}
                 <span aria-hidden="true">&times;</span>
             </a>&nbsp;
             @endif

@@ -22,7 +22,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
         parent::boot();
 
         $this->app['router']->bind('post_cache', function ($value) {

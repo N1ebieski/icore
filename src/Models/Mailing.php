@@ -71,6 +71,19 @@ class Mailing extends Model
         'status' => self::INACTIVE,
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'status' => 'integer',
+        'activation_at' => 'timestamp',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Relations
 
     /**

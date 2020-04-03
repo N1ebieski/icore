@@ -10,7 +10,7 @@ data-id="{{ $post->id }}">
                     <li><a href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}" target="_blank">{{ $post->title }}</a></li>
                     <li>{{ $post->shortContent }}...</li>
                     <li><small>{{ $post->tagList }}</small></li>
-                    <li><small>{{ trans('icore::posts.published_at') }}: {{ $post->published_at_diff }}</small></li>
+                    <li><small>{{ trans('icore::posts.published_at.label') }}: {{ $post->published_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $post->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $post->updated_at_diff }}</small></li>
                 </ul>
@@ -26,40 +26,40 @@ data-id="{{ $post->id }}">
                     data-route="{{ route('admin.post.edit', ['post' => $post->id]) }}"
                     type="button" class="btn btn-primary edit">
                         <i class="far fa-edit"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.edit') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                     </button>
                     <a class="btn btn-primary align-bottom" href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}"
                     role="button" target="_blank">
                         <i class="fas fa-edit"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.editFull') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.editFull') }}</span>
                     </a>
                 </div>
                 @endcan
                 @can('status posts')
-                <button data-status="1" type="button" class="btn btn-success status"
+                <button data-status="{{ $post::ACTIVE }}" type="button" class="btn btn-success status"
                 data-route="{{ route('admin.post.update_status', ['post' => $post->id]) }}"
-                {{ $post->status == 1 ? 'disabled' : '' }}>
+                {{ $post->status == $post::ACTIVE ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-on"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.active') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
-                <button data-status="0" type="button" class="btn btn-warning status"
+                <button data-status="{{ $post::INACTIVE }}" type="button" class="btn btn-warning status"
                 data-route="{{ route('admin.post.update_status', ['post' => $post->id]) }}"
-                {{ $post->status == 0 ? 'disabled' : '' }}>
+                {{ $post->status == $post::INACTIVE ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-off"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.inactive') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>
                 </button>
                 @endcan
                 @can('destroy posts')
                 <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                 data-route="{{ route('admin.post.destroy', ['post' => $post->id]) }}" data-id="{{ $post->id }}"
                 type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-                data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover destroy" 
+                data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy" 
                 data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                 data-btn-cancel-icon-class="fas fa-ban mr-1"
                 data-title="{{ trans('icore::default.confirm') }}">
                     <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                 </button>
                 @endcan
             </div>

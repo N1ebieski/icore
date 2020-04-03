@@ -1,18 +1,23 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans('icore::pages.page.create')],
-    'desc' => [trans('icore::pages.page.create')],
-    'keys' => [trans('icore::pages.page.create')]
+    'title' => [trans('icore::pages.route.create')],
+    'desc' => [trans('icore::pages.route.create')],
+    'keys' => [trans('icore::pages.route.create')]
 ])
 
+@inject('page', 'N1ebieski\ICore\Models\Page\Page')
+
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.page.index') }}">{{ trans('icore::pages.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::pages.page.create') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('admin.page.index') }}">{{ trans('icore::pages.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::pages.route.create') }}</li>
 @endsection
 
 @section('content')
 <div class="w-100">
-    <h1 class="h5 mb-4 border-bottom pb-2"><i class="far fa-plus-square"></i>&nbsp;{{ trans('icore::pages.page.create') }}:</h1>
+    <h1 class="h5 mb-4 border-bottom pb-2">
+        <i class="far fa-plus-square"></i>
+        <span>{{ trans('icore::pages.route.create') }}:</span>
+    </h1>
     <form class="mb-3" method="post" action="{{ route('admin.page.store') }}" id="createPage">
         @csrf
         <div class="row">
@@ -33,7 +38,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        SEO Title <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::pages.seo_tooltip') }}"
+                        SEO Title <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::pages.seo.tooltip') }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <input type="text" value="{{ old('seo_title') }}" name="seo_title" id="seo_title"
@@ -42,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        SEO Description <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::pages.seo_tooltip') }}"
+                        SEO Description <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::pages.seo.tooltip') }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <textarea name="seo_desc" class="form-control @isValid('seo_desc')" rows="3"
@@ -53,39 +58,43 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="icon">
-                        {{ trans('icore::pages.icon') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::pages.icon_tooltip') }}"
+                        {{ trans('icore::pages.icon.label') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::pages.icon.tooltip') }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <input type="text" value="{{ old('icon') }}" name="icon" id="icon"
-                    class="form-control @isValid('icon')" placeholder="{{ trans('icore::pages.icon_placeholder') }}">
+                    class="form-control @isValid('icon')" placeholder="{{ trans('icore::pages.icon.placeholder') }}">
                     @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="seo_noindex" name="seo_noindex"
-                        value="1" {{ (old('seo_noindex') == 1) ? 'checked' : '' }}>
+                        value="1" {{ (old('seo_noindex') == $page::SEO_NOINDEX) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="seo_noindex">SEO noindex?</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="seo_nofollow" name="seo_nofollow"
-                        value="1" {{ (old('seo_nofollow') == 1) ? 'checked' : '' }}>
+                        value="1" {{ (old('seo_nofollow') == $page::SEO_NOFOLLOW) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="seo_nofollow">SEO nofollow?</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="comment" name="comment"
-                        value="1" {{ (old('comment') == 1) ? 'checked' : '' }}>
+                        value="1" {{ (old('comment') == $page::WITH_COMMENT) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="comment">{{ trans('icore::pages.comment') }}?</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="status">{{ trans('icore::filter.status') }}</label>
+                    <label for="status">{{ trans('icore::filter.status.label') }}</label>
                     <select class="custom-select" id="status" name="status">
-                        <option value="1" {{ (old('status') == 1) ? 'selected' : '' }}>{{ trans('icore::filter.active') }}</option>
-                        <option value="0" {{ (old('status') == 0) ? 'selected' : '' }}>{{ trans('icore::filter.inactive') }}</option>
+                        <option value="{{ $page::ACTIVE }}" {{ (old('status') == $page::ACTIVE) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.active') }}
+                        </option>
+                        <option value="{{ $page::INACTIVE }}" {{ (old('status') == $page::INACTIVE) ? 'selected' : '' }}>
+                            {{ trans('icore::filter.inactive') }}
+                        </option>
                     </select>
                 </div>
                 @if ($parents->count() > 0)
@@ -96,12 +105,12 @@
                             {{ trans('icore::pages.null') }}
                         </option>
                         @foreach ($parents as $parent)
-                            @if ($parent->real_depth == 0)
-                                <optgroup label="----------"></optgroup>
-                            @endif
-                            <option value="{{ $parent->id }}" {{ (old('parent_id') == $parent->id) ? 'selected' : '' }}>
-                                {{ str_repeat('-', $parent->real_depth) }} {{ $parent->title }}
-                            </option>
+                        @if ($parent->real_depth == 0)
+                        <optgroup label="----------"></optgroup>
+                        @endif
+                        <option value="{{ $parent->id }}" {{ (old('parent_id') == $parent->id) ? 'selected' : '' }}>
+                            {{ str_repeat('-', $parent->real_depth) }} {{ $parent->title }}
+                        </option>
                         @endforeach
                     </select>
                 </div>

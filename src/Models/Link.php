@@ -31,6 +31,18 @@ class Link extends Model
         'type', 'url', 'name', 'img_url', 'position'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'position' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Overrides
 
     /**

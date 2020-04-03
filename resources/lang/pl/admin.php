@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'page' => [
+    'route' => [
         'index' => 'Panel administracyjny',
         'settings' => 'Pozostałe'
     ]

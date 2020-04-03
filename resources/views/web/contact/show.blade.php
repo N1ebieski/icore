@@ -1,12 +1,12 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::contact.page.show')],
-    'desc' => [trans('icore::contact.page.show')],
-    'keys' => [trans('icore::contact.page.show')]
+    'title' => [trans('icore::contact.route.show')],
+    'desc' => [trans('icore::contact.route.show')],
+    'keys' => [trans('icore::contact.route.show')]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="/">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::contact.page.show') }}</li>
+<li class="breadcrumb-item"><a href="/">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::contact.route.show') }}</li>
 @endsection
 
 @section('content')
@@ -17,18 +17,18 @@
             <form method="post" action="{{ url()->current() }}" id="contact">
                 @csrf
                 <div class="form-group">
-                    <label for="email">{{ trans('icore::contact.address') }}</label>
+                    <label for="email">{{ trans('icore::contact.address.label') }}</label>
                     <input type="email" name="email" id="email" 
                     value="{{ old('email', auth()->user()->email ?? null) }}"
                     class="form-control @isValid('email')"
-                    placeholder="{{ trans('icore::contact.enter_address') }}">
+                    placeholder="{{ trans('icore::contact.address.placeholder') }}">
                     @includeWhen($errors->has('email'), 'icore::web.partials.errors', ['name' => 'email'])
                 </div>
                 <div class="form-group">
-                    <label for="title">{{ trans('icore::contact.title') }}</label>
+                    <label for="title">{{ trans('icore::contact.title.label') }}</label>
                     <input type="text" name="title" id="title" value="{{ old('title') }}"
                     class="form-control @isValid('title')"
-                    placeholder="{{ trans('icore::contact.enter_title') }}">
+                    placeholder="{{ trans('icore::contact.title.placeholder') }}">
                     @includeWhen($errors->has('title'), 'icore::web.partials.errors', ['name' => 'title'])
                 </div>
                 <div class="form-group">

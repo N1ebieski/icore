@@ -60,9 +60,9 @@ class NewsletterController
 
         return Response::redirectToRoute('web.home.index')->with(
             'success',
-            $newsletter->status === true ?
-                Lang::get('icore::newsletter.success.update_status_1')
-                : Lang::get('icore::newsletter.success.update_status_0')
+            $newsletter->status === Newsletter::ACTIVE ?
+                Lang::get('icore::newsletter.success.update_status.'.Newsletter::ACTIVE)
+                : Lang::get('icore::newsletter.success.update_status.'.Newsletter::INACTIVE)
         );
     }
 }

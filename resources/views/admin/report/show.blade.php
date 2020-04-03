@@ -14,6 +14,6 @@
     data-route="{{ route('admin.report.'.$model->poli_self.'.clear', [$model->id]) }}"
     data-id="{{ $model->id }}">
         <i class="far fa-trash-alt"></i>
-        {{ trans('icore::default.clear') }}
+        <span>{{ trans('icore::default.clear') }}</span>
     </button>
 </div>

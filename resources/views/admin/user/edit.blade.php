@@ -1,12 +1,12 @@
 <form data-route="{{ route('admin.user.update', ['user' => $user->id]) }}"
 data-id="{{ $user->id }}" id="update">
     <div class="form-group">
-        <label for="name">{{ trans('icore::auth.name') }}</label>
+        <label for="name">{{ trans('icore::auth.name.label') }}</label>
         <input type="text" value="{{ $user->name }}" name="name"
         class="form-control" id="name">
     </div>
     <div class="form-group">
-        <label for="email">{{ trans('icore::auth.address') }}</label>
+        <label for="email">{{ trans('icore::auth.address.label') }}</label>
         <input type="email" value="{{ $user->email }}" name="email"
         class="form-control" id="email">
     </div>
@@ -24,11 +24,11 @@ data-id="{{ $user->id }}" id="update">
     </div>
     <button type="button" data-id="{{ $user->id }}" class="btn btn-primary update">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.save') }}
+        <span>{{ trans('icore::default.save') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
     @if (!$user->socialites->isEmpty())
         <hr>

@@ -7,11 +7,11 @@ data-id="{{ $category->id }}" id="update">
     </div>
     <div class="form-group">
         <label for="icon">
-            {{ trans('icore::categories.icon') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::categories.icon_tooltip') }}"
+            {{ trans('icore::categories.icon.label') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::categories.icon.tooltip') }}"
             class="far fa-question-circle"></i>
         </label>
         <input type="text" value="{{ old('icon', $category->icon) }}" name="icon" id="icon"
-        class="form-control @isValid('icon')" placeholder="{{ trans('icore::categories.icon_placeholder') }}">
+        class="form-control @isValid('icon')" placeholder="{{ trans('icore::categories.icon.placeholder') }}">
     </div>
     @if ($categories->count() > 0)
     <div class="form-group">
@@ -19,22 +19,22 @@ data-id="{{ $category->id }}" id="update">
         <select class="form-control" id="parent_id" name="parent_id">
             <option value="null" {{ ($category->isRoot()) ? 'selected' : '' }}>{{ trans('icore::categories.null') }}</option>
             @foreach ($categories as $cats)
-                @if ($cats->real_depth === 0)
-                    <optgroup label="----------"></optgroup>
-                @endif
-                <option value="{{ $cats->id }}" {{ ($category->parent_id === $cats->id) ? 'selected' : '' }}>
-                    {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
-                </option>
+            @if ($cats->real_depth === 0)
+            <optgroup label="----------"></optgroup>
+            @endif
+            <option value="{{ $cats->id }}" {{ ($category->parent_id === $cats->id) ? 'selected' : '' }}>
+                {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
+            </option>
             @endforeach
         </select>
     </div>
     @endif
     <button type="button" data-id="{{ $category->id }}" class="btn btn-primary update">
         <i class="fas fa-check"></i>
-        {{ trans('icore::default.save') }}
+        <span>{{ trans('icore::default.save') }}</span>
     </button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
-        {{ trans('icore::default.cancel') }}
+        <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </form>

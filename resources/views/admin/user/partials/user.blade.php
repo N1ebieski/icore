@@ -41,7 +41,7 @@ data-id="{{ $user->id }}">
                 data-route="{{ route('admin.user.edit', ['user' => $user->id]) }}"
                 type="button" class="btn btn-primary edit">
                     <i class="far fa-edit"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.edit') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </button>
                 @endcan
                 @can('actionSelf', $user)
@@ -49,13 +49,13 @@ data-id="{{ $user->id }}">
                 data-route="{{ route('admin.user.update_status', ['user' => $user->id]) }}"
                 {{ $user->status == 1 ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-on"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.active') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button data-status="0" type="button" class="btn btn-warning status"
                 data-route="{{ route('admin.user.update_status', ['user' => $user->id]) }}"
                 {{ $user->status == 0 ? 'disabled' : '' }}>
                     <i class="fas fa-toggle-off"></i>
-                    <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.inactive') }}</span>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>
                 </button>
                 @endcan
                 @can('actionSelf', $user)
@@ -64,19 +64,19 @@ data-id="{{ $user->id }}">
                     data-route="{{ route('admin.user.destroy', ['user' => $user->id]) }}" data-id="{{ $user->id }}"
                     type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1" 
                     data-id="{{ $user->id }}"
-                    data-btn-ok-class="btn h-100 d-flex align-items-center btn-primary btn-popover destroy" 
+                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy" 
                     data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex align-items-center btn-secondary btn-popover" 
+                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                     data-btn-cancel-icon-class="fas fa-ban mr-1"
                     data-title="{{ trans('icore::default.confirm') }}">
                         <i class="far fa-trash-alt"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.delete') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                     </button>
                     <button type="button" class="btn btn-dark create"
                     data-route="{{ route('admin.banmodel.user.create', ['user' => $user->id]) }}"
                     data-toggle="modal" data-target="#createBanUserModal">
                         <i class="fas fa-user-slash"></i>
-                        <span class="d-none d-sm-inline">&nbsp;{{ trans('icore::default.ban') }}</span>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.ban') }}</span>
                     </button>
                 </div>
                 @endcan

@@ -6,7 +6,7 @@ return [
         'update' => 'Rola została zmieniona.',
         'create' => 'Rola została dodana'
     ],
-    'page' => [
+    'route' => [
         'index' => 'Role i uprawnienia',
         'edit' => 'Edycja roli',
         'create' => 'Dodaj rolę',

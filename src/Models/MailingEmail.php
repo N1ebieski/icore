@@ -64,6 +64,20 @@ class MailingEmail extends Model
         'sent' => self::UNSENT,
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'mailing_id' => 'integer',
+        'model_id' => 'integer',
+        'sent' => 'integer',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
+    ];
+
     // Setters
 
     /**

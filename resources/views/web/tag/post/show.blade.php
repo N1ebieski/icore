@@ -1,13 +1,13 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::tags.page.show', ['tag' => $tag->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
-    'desc' => [trans('icore::tags.page.show', ['tag' => $tag->name])],
-    'keys' => [trans('icore::tags.page.show', ['tag' => $tag->name])]
+    'title' => [trans('icore::tags.route.show', ['tag' => $tag->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'desc' => [trans('icore::tags.route.show', ['tag' => $tag->name])],
+    'keys' => [trans('icore::tags.route.show', ['tag' => $tag->name])]
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.page.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.page.index') }}</a></li>
-<li class="breadcrumb-item">{{ trans('icore::tags.page.index') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item">{{ trans('icore::tags.route.index') }}</li>
 <li class="breadcrumb-item active" aria-current="page">{{ $tag->name }}</li>
 @endsection
 
@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <h1 class="h4 border-bottom pb-2 mb-4">
-                {{ trans('icore::tags.page.show', ['tag' => $tag->name]) }}
+                {{ trans('icore::tags.route.show', ['tag' => $tag->name]) }}
             </h1>
             @if ($posts->isNotEmpty())
             <div id="infinite-scroll">
