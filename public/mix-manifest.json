@@ -1,13 +1,13 @@
 {
     "/js/vendor/icore/admin/admin.js": "/js/vendor/icore/admin/admin.js?id=276757f0d42247c54f98",
-    "/js/vendor/icore/vendor/vendor.js": "/js/vendor/icore/vendor/vendor.js?id=14e1d8b10d186eabc577",
-    "/css/vendor/icore/vendor/vendor.css": "/css/vendor/icore/vendor/vendor.css?id=990add202e6ff1429c7b",
-    "/css/vendor/icore/web/web.css": "/css/vendor/icore/web/web.css?id=4ccc988babd32054d9b6",
-    "/css/vendor/icore/web/web-dark.css": "/css/vendor/icore/web/web-dark.css?id=a92f11d436f24eff2868",
-    "/css/vendor/icore/admin/admin.css": "/css/vendor/icore/admin/admin.css?id=eefab37f37935ea00dec",
-    "/css/vendor/icore/admin/admin-dark.css": "/css/vendor/icore/admin/admin-dark.css?id=524eac88727644c24306",
+    "/js/vendor/icore/vendor/vendor.js": "/js/vendor/icore/vendor/vendor.js?id=944316d301933ffce90f",
+    "/css/vendor/icore/vendor/vendor.css": "/css/vendor/icore/vendor/vendor.css?id=b26c0e46189b30332327",
+    "/css/vendor/icore/web/web.css": "/css/vendor/icore/web/web.css?id=d7628fa5fd86099c0ecd",
+    "/css/vendor/icore/web/web-dark.css": "/css/vendor/icore/web/web-dark.css?id=1cd5bde3988f9b5a5379",
+    "/css/vendor/icore/admin/admin.css": "/css/vendor/icore/admin/admin.css?id=71431aa83e7f2f54e211",
+    "/css/vendor/icore/admin/admin-dark.css": "/css/vendor/icore/admin/admin-dark.css?id=837f82aeb933046902cc",
     "/js/vendor/icore/web/web.js": "/js/vendor/icore/web/web.js?id=98f7c89cdf3e12c17ba5",
-    "/js/vendor/icore/web/scripts.js": "/js/vendor/icore/web/scripts.js?id=896ec1cda117d28e4673",
-    "/js/vendor/icore/admin/scripts.js": "/js/vendor/icore/admin/scripts.js?id=107d557e21c5c47d3df5",
-    "/js/vendor/icore/vendor/jsvalidation/jsvalidation.min.js": "/js/vendor/icore/vendor/jsvalidation/jsvalidation.min.js?id=0f47da99f9208337cdf3"
+    "/js/vendor/icore/web/scripts.js": "/js/vendor/icore/web/scripts.js?id=b63cb46d6965a5c5ed75",
+    "/js/vendor/icore/admin/scripts.js": "/js/vendor/icore/admin/scripts.js?id=b7b46f897a1605949f7e",
+    "/js/vendor/jsvalidation/jsvalidation.min.js": "/js/vendor/jsvalidation/jsvalidation.min.js?id=8aa1f9e650ff806cfbd7"
 }

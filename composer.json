@@ -15,7 +15,7 @@
         "nckg/laravel-minify-html": "dev-master",
         "nesbot/carbon": "^2.29",
         "predis/predis": "^1.1",
-        "proengsoft/laravel-jsvalidation": ">2.5.0",
+        "proengsoft/laravel-jsvalidation": "dev-master",
         "spatie/laravel-permission": "^3.2",
         "spatie/laravel-view-components": "^1.1",
         "unikent/tfilecache": "^2.0",

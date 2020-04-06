@@ -252,6 +252,8 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->call('vendor:publish', ['--provider' => 'N1ebieski\LogicCaptcha\Providers\LogicCaptchaServiceProvider', '--force' => true], $this->getOutput());
         $this->line("\n");
+        $this->call('vendor:publish', ['--provider' => 'Proengsoft\JsValidation\JsValidationServiceProvider', '--force' => true], $this->getOutput());
+        $this->line("\n");
         $bar->advance();
         $this->line("\n");
         $this->line($this->lang->get('icore::install.dump'));

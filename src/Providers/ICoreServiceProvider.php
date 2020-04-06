@@ -111,7 +111,6 @@ class ICoreServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../resources/views/auth' => resource_path('views/vendor/icore/auth'),
             __DIR__ . '/../../resources/views/mails' => resource_path('views/vendor/icore/mails'),
-            __DIR__ . '/../../resources/views/vendor' => resource_path('views/vendor/icore/vendor'),
             __DIR__ . '/../../resources/views/web' => resource_path('views/vendor/icore/web')
         ], 'icore.views.web');
 
