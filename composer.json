@@ -18,6 +18,7 @@
         "proengsoft/laravel-jsvalidation": "dev-master",
         "spatie/laravel-permission": "^3.2",
         "spatie/laravel-view-components": "^1.1",
+        "spatie/array-to-xml": "^2.0",
         "unikent/tfilecache": "^2.0",
         "laravel/helpers": "^1.0",
         "fico7489/laravel-pivot": "^3.0",

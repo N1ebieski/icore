@@ -47,6 +47,10 @@ class AppServiceProvider extends ServiceProvider
             return new \GuzzleHttp\Client(['timeout' => 10.0]);
         });
 
+        $this->app->bind(\Spatie\ArrayToXml\ArrayToXml::class, function ($app) {
+            return new \Spatie\ArrayToXml\ArrayToXml([]);
+        });
+
         $this->app->bindMethod(
             \N1ebieski\ICore\Jobs\Tag\Post\CachePopularTagsJob::class.'@handle',
             function ($job, $app) {

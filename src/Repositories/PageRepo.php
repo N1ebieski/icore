@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Closure;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
@@ -182,5 +183,20 @@ class PageRepo
             ->withAllRels($filter['orderby'])
             ->filterCommentsOrderBy($filter['orderby'])
             ->filterPaginate($this->paginate);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Closure $callback
+     * @return boolean
+     */
+    public function chunkActiveWithModelsCount(Closure $callback) : bool
+    {
+        return $this->page->active()
+            ->withCount(['comments AS models_count' => function ($query) {
+                $query->root()->active();
+            }])
+            ->chunk(1000, $callback);
     }
 }

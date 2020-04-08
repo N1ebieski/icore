@@ -40,6 +40,11 @@ class ScheduleServiceProvider extends ServiceProvider
                 ->everyThirtyMinutes()
                 ->runInBackground();
 
+            $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
+                ->name('SitemapCron')
+                ->daily()
+                ->runInBackground();
+
             // $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Tag\Post\PopularTagsCron::class))
             //     ->name('Post.PopularTagsCron')
             //     ->daily()

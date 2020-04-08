@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Closure;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -194,5 +195,21 @@ class CategoryRepo
         return $this->category->getSiblings(['id', 'position'])
             ->pluck('position', 'id')
             ->toArray();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Closure $callback
+     * @return boolean
+     */
+    public function chunkActiveWithModelsCount(Closure $callback) : bool
+    {
+        return $this->category->active()
+            ->poliType()
+            ->withCount(['morphs AS models_count' => function ($query) {
+                $query->active();
+            }])
+            ->chunk(1000, $callback);
     }
 }

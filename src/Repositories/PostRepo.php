@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Closure;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Comment\Comment;
@@ -56,10 +57,9 @@ class PostRepo
      */
     public function paginateCommentsByFilter(array $filter) : LengthAwarePaginator
     {
-        return $this->post->comments()->where([
-                ['comments.parent_id', null],
-                ['comments.status', Comment::ACTIVE]
-            ])
+        return $this->post->comments()
+            ->active()
+            ->root()
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
             ->filterCommentsOrderBy($filter['orderby'])
@@ -225,5 +225,20 @@ class PostRepo
             })
             ->scheduled()
             ->update(['status' => Post::ACTIVE]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Closure $callback
+     * @return boolean
+     */
+    public function chunkActiveWithModelsCount(Closure $callback) : bool
+    {
+        return $this->post->active()
+            ->withCount(['comments AS models_count' => function ($query) {
+                $query->root()->active();
+            }])
+            ->chunk(1000, $callback);
     }
 }
