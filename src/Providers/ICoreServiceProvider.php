@@ -116,12 +116,19 @@ class ICoreServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../../public/css' => public_path('css/vendor/icore'),
+            __DIR__ . '/../../public/mix-manifest.json' => public_path('mix-manifest.json')
+        ], 'icore.public.css');
+
+        $this->publishes([
             __DIR__ . '/../../public/images' => public_path('images/vendor/icore'),
-            __DIR__ . '/../../public/js' => public_path('js/vendor/icore'),
             __DIR__ . '/../../public/svg' => public_path('svg/vendor/icore'),
             __DIR__ . '/../../public/fonts/vendor' => public_path('fonts/vendor'),
+        ], 'icore.public.images');
+
+        $this->publishes([
+            __DIR__ . '/../../public/js' => public_path('js/vendor/icore'),
             __DIR__ . '/../../public/mix-manifest.json' => public_path('mix-manifest.json')
-        ], 'icore.public');
+        ], 'icore.public.js');
 
         $this->publishes([
             __DIR__ . '/../../database/factories' => base_path('database/factories') . '/vendor/icore',

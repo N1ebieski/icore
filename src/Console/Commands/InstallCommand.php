@@ -244,7 +244,11 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->line($this->lang->get('icore::install.publish.public'));
         $this->line("\n");
-        $this->call('vendor:publish', ['--tag' => 'icore.public', '--force' => true], $this->getOutput());
+        $this->call('vendor:publish', ['--tag' => 'icore.public.images', '--force' => true], $this->getOutput());
+        $this->line("\n");
+        $this->call('vendor:publish', ['--tag' => 'icore.public.css', '--force' => true], $this->getOutput());
+        $this->line("\n");
+        $this->call('vendor:publish', ['--tag' => 'icore.public.js', '--force' => true], $this->getOutput());
         $this->line("\n");
         $bar->advance();
         $this->line("\n");
