@@ -5,9 +5,8 @@
 <div class="jumbotron jumbotron-fluid m-0 background">
     <div class="container">
         <div class="w-md-75 mx-auto">
-            <h1 class="display-4 text-white text-center">Fluid jumbotron</h1>
-            <p class="lead text-white text-center">This is a modified jumbotron that occupies the
-            entire horizontal space of its parent.</p>
+            <h1 class="display-4 text-white text-center">{{ config('app.name') }}</h1>
+            <p class="lead text-white text-center">{{ config('app.desc') }}</p>
             <form id="searchForm" method="get" action="{{ route('web.search.index') }}"
             class="justify-content-center search">
                 <div class="input-group justify-content-center">
