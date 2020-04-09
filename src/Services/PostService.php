@@ -98,13 +98,11 @@ class PostService implements
                 $attributes['date_published_at'].$attributes['time_published_at'];
         }
 
-        $bool = $this->post->save();
-
         $this->post->retag($attributes['tags'] ?? []);
 
         $this->post->categories()->sync($attributes['categories']);
 
-        return $bool;
+        return $this->post->save();
     }
 
     /**

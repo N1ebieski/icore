@@ -15,6 +15,7 @@ use N1ebieski\ICore\Services\PostService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
 use N1ebieski\ICore\Models\Traits\Filterable;
+use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class Post extends Model
 {
-    use Sluggable, Taggable, FullTextSearchable, Filterable;
+    use Sluggable, Taggable, FullTextSearchable, Filterable, PivotEventTrait;
 
     // Configuration
 
@@ -80,6 +81,12 @@ class Post extends Model
      * @var int
      */
     public const SEO_FOLLOW = 0;
+
+    /**
+     * [private description]
+     * @var bool
+     */
+    private bool $pivotEvent = false;
 
     /**
      * The attributes that are mass assignable.
@@ -166,6 +173,25 @@ class Post extends Model
     }
 
     // Overrides
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::pivotAttached(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
+            if ($model->pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
+                $model->fireModelEvent('updated');
+                $model->pivotEvent = true;
+            }
+        });
+
+        static::pivotDetached(function ($model, $relationName, $pivotIds) {
+            if ($model->pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
+                $model->fireModelEvent('updated');
+                $model->pivotEvent = true;
+            }
+        });
+    }
 
     /**
      * Override relacji tags, bo ma hardcodowane nazwy pól
