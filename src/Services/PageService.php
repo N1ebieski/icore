@@ -38,7 +38,7 @@ class PageService implements
      * [protected description]
      * @var int
      */
-    protected int $paginate;
+    protected $paginate;
 
     /**
      * [private description]

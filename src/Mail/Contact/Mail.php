@@ -48,7 +48,7 @@ class Mail extends Mailable
      * [protected description]
      * @var string
      */
-    protected string $email;
+    protected $email;
 
     /**
      * Undocumented function

@@ -86,7 +86,7 @@ class Post extends Model
      * [private description]
      * @var bool
      */
-    private bool $pivotEvent = false;
+    private $pivotEvent = false;
 
     /**
      * The attributes that are mass assignable.

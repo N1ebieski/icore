@@ -46,14 +46,14 @@ class RecaptchaV2Rule implements Rule
      *
      * @var string
      */
-    protected string $secretKey;
+    protected $secretKey;
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+    protected $verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
      * Undocumented function

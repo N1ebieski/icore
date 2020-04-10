@@ -67,20 +67,20 @@ abstract class Builder
      *
      * @var int
      */
-    protected int $maxItems = 10000;
+    protected $maxItems = 10000;
 
     /**
      * [protected description]
      * @var string
      */
-    protected string $path = 'vendor/icore/sitemap';
+    protected $path = 'vendor/icore/sitemap';
 
     /**
      * Undocumented variable
      *
      * @var int
      */
-    protected int $iterator = 0;
+    protected $iterator = 0;
 
     /**
      * Undocumented variable

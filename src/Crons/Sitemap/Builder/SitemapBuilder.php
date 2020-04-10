@@ -17,21 +17,21 @@ class SitemapBuilder extends Builder
      * [protected description]
      * @var string
      */
-    protected string $path = 'vendor/icore/sitemap';
+    protected $path = 'vendor/icore/sitemap';
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $priority = '0.8';
+    protected $priority = '0.8';
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $changefreq = 'daily';
+    protected $changefreq = 'daily';
 
     /**
      * Undocumented function

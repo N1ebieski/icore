@@ -26,27 +26,27 @@ class PostBuilder extends Builder
      *
      * @var string
      */
-    protected string $route = 'web.post.show';
+    protected $route = 'web.post.show';
 
     /**
      * [protected description]
      * @var string
      */
-    protected string $path = 'vendor/icore/sitemap/posts';
+    protected $path = 'vendor/icore/sitemap/posts';
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $priority = '0.8';
+    protected $priority = '0.8';
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $changefreq = 'daily';
+    protected $changefreq = 'daily';
 
     /**
      * Undocumented function

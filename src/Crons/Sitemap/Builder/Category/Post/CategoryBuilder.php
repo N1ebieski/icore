@@ -27,27 +27,27 @@ class CategoryBuilder extends Builder
      *
      * @var string
      */
-    protected string $route = 'web.category.post.show';
+    protected $route = 'web.category.post.show';
 
     /**
      * [protected description]
      * @var string
      */
-    protected string $path = 'vendor/icore/sitemap/categories/posts';
+    protected $path = 'vendor/icore/sitemap/categories/posts';
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $priority = '0.8';
+    protected $priority = '0.8';
 
     /**
      * Undocumented variable
      *
      * @var string
      */
-    protected string $changefreq = 'weekly';
+    protected $changefreq = 'weekly';
 
     /**
      * Undocumented function

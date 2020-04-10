@@ -1,7 +1,7 @@
 <div class="row" id="is-pagination" data-title="{{ trans('icore::pagination.page', ['num' => $items->currentPage()]) }}">
     <div class="col text-left mt-3">
         @if ($items->currentPage() < $items->lastPage())
-        @if (($next ??= false) === true)
+        @if (($next ?? false) === true)
         <a href="{{ $items->appends(request()->input())->nextPageUrl() }}" rel="nofollow" id="is-next" role="button"
         class="btn btn-outline-secondary text-nowrap">
             <span>{{ trans('icore::pagination.next_page') }}</span>

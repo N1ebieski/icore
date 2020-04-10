@@ -14,13 +14,13 @@ abstract class Filter
      * [protected description]
      * @var Collect
      */
-    protected Collect $collect;
+    protected $collect;
 
     /**
      * [public description]
      * @var array
      */
-    public array $parameters;
+    public $parameters;
 
     /**
      * [__construct description]
@@ -104,7 +104,9 @@ abstract class Filter
     public function isNull() : bool
     {
         if ($this->parameters) {
-            if (!array_filter($this->parameters, fn($value) => $value === null)) {
+            if (!array_filter($this->parameters, function ($value) {
+                return $value === null;
+            })) {
                 return false;
             }
         }
