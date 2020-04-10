@@ -11498,7 +11498,7 @@ span.twitter-typeahead .sidebar .nav-item.tt-suggestion.tt-cursor .nav-link {
 }
 
 .content .background {
-  background: url("/img/vendor/icore/background.jpg") no-repeat center center;
+  background: url("/images/vendor/icore/background.jpg") no-repeat center center;
   min-height: 100vh;
   display: flex;
   align-items: center;
