@@ -30,8 +30,7 @@ class LoginRequest extends FormRequest
             'redirect' => [
                 'bail',
                 'nullable',
-                'string',
-                'regex:/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/'
+                'string'
             ]
         ];
     }
