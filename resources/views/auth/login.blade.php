@@ -69,6 +69,7 @@
                                 </div>
                             </div>
                             <hr>
+                            @if (Route::has('register'))
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
                                     {{ trans('icore::auth.no_profile') }} <a class="btn btn-outline-primary ml-2"
@@ -84,6 +85,7 @@
                                     </p>
                                 </div>
                             </div>
+                            @endif
                         </form>
                     </div>
                 </div>

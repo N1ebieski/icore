@@ -1,5 +1,5 @@
 <div class="modal fade" id="{{ $modal_id }}" tabindex="-1" role="dialog"
-aria-labelledby="{{ $modal_id }}Title" aria-hidden="true">
+aria-labelledby="{{ $modal_id }}Title" aria-hidden="true" data-focus="false">
     <div class="modal-dialog modal-dialog-centered {{ $modal_size ?? null }}" role="document">
         <div class="modal-content">
             <div class="modal-header">

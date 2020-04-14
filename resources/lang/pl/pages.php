@@ -1,5 +1,7 @@
 <?php
 
+use N1ebieski\ICore\Models\Page\Page;
+
 return [
     'success' => [
         'store' => 'Podstrona została dodana.',
@@ -28,6 +30,10 @@ return [
         'label' => 'Klasa ikony',
         'tooltip' => 'Klasa ikony (np. z font-awesome). Ikona będzie wyświetlana obok tytułu.',
         'placeholder' => 'przykład font-awesome: fab fa-google',
+    ],
+    'status' => [
+        Page::ACTIVE => 'aktywne',
+        Page::INACTIVE => 'nieaktywne'
     ],
     'position' => 'Pozycja',
     'pages' => 'Podstrony',

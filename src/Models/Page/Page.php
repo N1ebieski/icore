@@ -392,6 +392,16 @@ class Page extends Entity implements PageInterface
     // Checkers
 
     /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function isRedirect() : bool
+    {
+        return preg_match('/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/', $this->content);
+    }
+
+    /**
      * [isCommentable description]
      * @return bool [description]
      */

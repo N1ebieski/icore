@@ -37,7 +37,7 @@
         let $form = $('#filter');
         $form.href = $form.attr('data-route')+'?'+$form.serialize();
 
-        if (jQuery_2_1_3('#filter').valid()) ajaxFilter($form, $form.href);
+        if ($('#filter').valid()) ajaxFilter($form, $form.href);
     });
 
     jQuery(document).on('click', '.filterOption', function(e) {

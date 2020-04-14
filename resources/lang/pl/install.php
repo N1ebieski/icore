@@ -5,9 +5,9 @@ return [
     'confirm' => 'Czy chcesz kontynuować?',
     'validate' => [
         'url' => 'Sprawdzanie poprawności adresu URL...',
-        'license' => 'Sprawdzanie zgodności klucza licencji...',
         'connection_mail' => 'Sprawdzanie połączenia z serwerem poczty SMTP...',
-        'connection_database' => 'Sprawdzanie połączenia z serwerem bazy danych...'
+        'connection_database' => 'Sprawdzanie połączenia z serwerem bazy danych...',
+        'license' => 'Sprawdzanie poprawności klucza licencji...'
     ],
     'publish' => [
         'langs' => 'Kopiowanie plików lokalizacji językowej...',

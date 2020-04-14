@@ -2,6 +2,7 @@
     <div class="list-group-item d-flex justify-content-between align-items-center">
         @if (!empty($page->content))
         <a href="{{ route('web.page.show', $page->slug) }}"
+        {{ $page->isRedirect() ? 'target="_blank"' : null }}
         class="@isUrl(route('web.page.show', $page->slug), 'font-weight-bold')">
             {{ str_repeat('-', $page->real_depth) }} {{ $page->title }}
         </a>

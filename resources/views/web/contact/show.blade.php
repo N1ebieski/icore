@@ -54,7 +54,7 @@
             </p>
             <div>
                 @render('icore::map.mapComponent', [
-                    'address_marker' => ['Platynowa 15/22 80-041 Gdańsk']
+                    'address_marker' => ['Chmielna 27/33, 80-748 Gdańsk']
                 ])
             </div>
         </div>

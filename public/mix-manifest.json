@@ -1,13 +1,12 @@
 {
     "/js/vendor/icore/admin/admin.js": "/js/vendor/icore/admin/admin.js?id=276757f0d42247c54f98",
-    "/js/vendor/icore/vendor/vendor.js": "/js/vendor/icore/vendor/vendor.js?id=944316d301933ffce90f",
+    "/js/vendor/icore/vendor/vendor.js": "/js/vendor/icore/vendor/vendor.js?id=a3a6c8294406b376d200",
     "/css/vendor/icore/vendor/vendor.css": "/css/vendor/icore/vendor/vendor.css?id=b26c0e46189b30332327",
-    "/css/vendor/icore/web/web.css": "/css/vendor/icore/web/web.css?id=d7628fa5fd86099c0ecd",
-    "/css/vendor/icore/web/web-dark.css": "/css/vendor/icore/web/web-dark.css?id=1cd5bde3988f9b5a5379",
-    "/css/vendor/icore/admin/admin.css": "/css/vendor/icore/admin/admin.css?id=71431aa83e7f2f54e211",
-    "/css/vendor/icore/admin/admin-dark.css": "/css/vendor/icore/admin/admin-dark.css?id=837f82aeb933046902cc",
+    "/css/vendor/icore/web/web.css": "/css/vendor/icore/web/web.css?id=67b0d98377405cfee774",
+    "/css/vendor/icore/web/web-dark.css": "/css/vendor/icore/web/web-dark.css?id=53617e738954f7fb0b7c",
+    "/css/vendor/icore/admin/admin.css": "/css/vendor/icore/admin/admin.css?id=cd35bff7b544819b028a",
+    "/css/vendor/icore/admin/admin-dark.css": "/css/vendor/icore/admin/admin-dark.css?id=c3e9670d0d898dc2b035",
     "/js/vendor/icore/web/web.js": "/js/vendor/icore/web/web.js?id=98f7c89cdf3e12c17ba5",
     "/js/vendor/icore/web/scripts.js": "/js/vendor/icore/web/scripts.js?id=b63cb46d6965a5c5ed75",
-    "/js/vendor/icore/admin/scripts.js": "/js/vendor/icore/admin/scripts.js?id=b7b46f897a1605949f7e",
-    "/js/vendor/jsvalidation/jsvalidation.min.js": "/js/vendor/jsvalidation/jsvalidation.min.js?id=8aa1f9e650ff806cfbd7"
+    "/js/vendor/icore/admin/scripts.js": "/js/vendor/icore/admin/scripts.js?id=b7b46f897a1605949f7e"
 }

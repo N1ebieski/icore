@@ -10,6 +10,13 @@ use Illuminate\Foundation\Http\Middleware\TransformsRequest;
 class ClearWhitespacesInStrings extends TransformsRequest
 {
     /**
+     * Undocumented variable
+     *
+     * @var array
+     */
+    protected $except = ['content_html'];
+
+    /**
      * Transform the given value.
      *
      * @param  string  $key
@@ -18,7 +25,7 @@ class ClearWhitespacesInStrings extends TransformsRequest
      */
     protected function transform($key, $value)
     {
-        if (is_string($value)) {
+        if (!in_array($key, $this->except) && is_string($value)) {
             $value = str_replace("&nbsp;", " ", $value);
             $value = preg_replace('/[[:blank:]]+/', ' ', $value);
         }
