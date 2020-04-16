@@ -104,16 +104,17 @@ class PageCache
     }
 
     /**
-     * [rememberLoadRecursiveChildrens description]
+     * [rememberLoadSiblingsAndRecursiveChildrens description]
      * @return Page [description]
      */
-    public function rememberLoadRecursiveChildrens() : Page
+    public function rememberLoadSiblingsAndRecursiveChildrens() : Page
     {
         return $this->cache->tags(['page.'.$this->page->slug])->remember(
-            "page.loadRecursiveChildrens.{$this->page->slug}",
+            "page.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () {
-                return $this->page->loadRecursiveChildrens();
+                return $this->page->loadRecursiveChildrens()
+                    ->loadActiveSiblings();
             }
         );
     }

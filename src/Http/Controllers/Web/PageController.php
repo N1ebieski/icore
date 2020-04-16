@@ -37,8 +37,10 @@ class PageController
             );
         }
 
+        //dd($page->makeCache()->rememberLoadSiblingsAndRecursiveChildrens());
+
         return Response::view('icore::web.page.show', [
-            'page' => $page->makeCache()->rememberLoadRecursiveChildrens(),
+            'page' => $page->makeCache()->rememberLoadSiblingsAndRecursiveChildrens(),
             'comments' => (bool)$page->comment === true ?
                 $comment->setMorph($page)->makeCache()->rememberRootsByFilter(
                     $filter->all(),

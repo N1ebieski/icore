@@ -246,10 +246,26 @@ class Page extends Entity implements PageInterface
     public function loadRecursiveChildrens() : self
     {
         return $this->load([
-            'childrensRecursiveWithAllRels' => function ($query) {
-                $query->active()->orderBy('position', 'asc');
-            }
-        ]);
+                'childrensRecursiveWithAllRels' => function ($query) {
+                    $query->active()->orderBy('position', 'asc');
+                },
+            ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return self
+     */
+    public function loadActiveSiblings() : self
+    {
+        return $this->setRelation(
+            'siblings',
+            $this->where('parent_id', $this->parent_id)
+                ->active()
+                ->orderBy('position', 'asc')
+                ->get()
+        );
     }
 
     // Accessors
