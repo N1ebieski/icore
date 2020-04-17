@@ -1,4 +1,5 @@
 @foreach ($pages as $page)
+    @if ($page->real_depth <= $maxDepth)
     <div class="list-group-item">
         @if (!empty($page->content))
         <a href="{{ route('web.page.show', $page->slug) }}"
@@ -11,5 +12,6 @@
     </div>
     @if ($page->relationLoaded('childrensRecursiveWithAllRels'))
         @include('icore::web.components.page.footer.partials.pages', ['pages' => $page->childrensRecursiveWithAllRels])
+    @endif
     @endif
 @endforeach

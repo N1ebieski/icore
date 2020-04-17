@@ -46,6 +46,13 @@ class FooterComponent implements Htmlable
     protected $cols;
 
     /**
+     * Undocumented variable
+     *
+     * @var int|null
+     */
+    protected $maxDepth;
+
+    /**
      * [__construct description]
      * @param Page  $page [description]
      * @param Collect $collect [description]
@@ -57,7 +64,8 @@ class FooterComponent implements Htmlable
         Collect $collect,
         ViewFactory $view,
         array $pattern = null,
-        int $cols = 3
+        int $cols = 3,
+        int $maxDepth = null
     ) {
         $this->page = $page;
 
@@ -66,6 +74,7 @@ class FooterComponent implements Htmlable
 
         $this->pattern = $pattern;
         $this->cols = $cols;
+        $this->maxDepth = $maxDepth;
     }
 
     /**
@@ -83,7 +92,8 @@ class FooterComponent implements Htmlable
         return $this->view->make('icore::web.components.page.footer.index', [
             'pages' => $pages,
             'cols' => $this->pattern ?: (int)round($pages->count() / $this->cols, 0),
-            'pattern' => $this->pattern
+            'pattern' => $this->pattern,
+            'maxDepth' => $this->maxDepth
         ]);
     }
 }
