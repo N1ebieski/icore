@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Page;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
 
 class UpdateFullRequest extends FormRequest
@@ -17,11 +18,22 @@ class UpdateFullRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         if (!$this->has('parent_id') || $this->get('parent_id') == 0) {
             $this->merge([
                 'parent_id' => null
+            ]);
+        }
+
+        if ($this->has('tags')) {
+            $this->merge([
+                'tags' => explode(',', $this->get('tags'))
             ]);
         }
     }
@@ -35,6 +47,8 @@ class UpdateFullRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
+            'tags' => 'array|between:0,' . Config::get('icore.page.max_tags'),
+            'tags.*' => 'min:3|max:30|alpha_num_spaces|distinct',
             'seo_title' => 'max:255',
             'seo_desc' => 'max:255',
             'icon' => 'nullable|string|max:255',

@@ -32,6 +32,17 @@
                         @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="tags">
+                        <span>{{ trans('icore::pages.tags.label') }} </span>
+                        <i data-toggle="tooltip" data-placement="top" 
+                        title="{{ trans('icore::pages.tags.tooltip', ['max_tags' => config('icore.page.max_tags')]) }}" 
+                        class="far fa-question-circle"></i>
+                    </label>
+                    <input name="tags" id="tags" class="form-control tagsinput @isValid('tags')"
+                    value="{{ old('tags', $page->tagList) }}" placeholder="Dodaj tag" data-max="{{ config('icore.page.max_tags') }}">
+                    @includeWhen($errors->has('tags'), 'icore::admin.partials.errors', ['name' => 'tags'])
+                </div>                
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">

@@ -2,27 +2,30 @@
 
 namespace N1ebieski\ICore\Models\Page;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
+use Mews\Purifier\Facades\Purifier;
+use Illuminate\Support\Facades\Lang;
+use N1ebieski\ICore\Cache\PageCache;
+use Cviebrock\EloquentTaggable\Taggable;
 use Franzose\ClosureTable\Models\Entity;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Services\PageService;
 use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Repositories\PageRepo;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Page\PageInterface;
-use Mews\Purifier\Facades\Purifier;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
-use N1ebieski\ICore\Repositories\PageRepo;
-use N1ebieski\ICore\Services\PageService;
-use N1ebieski\ICore\Cache\PageCache;
+use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
 /**
  * [Page description]
  */
 class Page extends Entity implements PageInterface
 {
-    use Sluggable, FullTextSearchable, Filterable;
+    use Sluggable, Taggable, FullTextSearchable, Filterable, PivotEventTrait;
 
     // Configuration
 
@@ -73,6 +76,12 @@ class Page extends Entity implements PageInterface
      * @var int
      */
     public const SEO_FOLLOW = 0;
+
+    /**
+     * [private description]
+     * @var bool
+     */
+    private $pivotEvent = false;
 
     /**
      * Indicates if the model should be timestamped.
@@ -169,6 +178,40 @@ class Page extends Entity implements PageInterface
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp'
     ];
+
+    // Overrides
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::pivotAttached(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
+            if ($model->pivotEvent === false && in_array($relationName, ['tags'])) {
+                $model->fireModelEvent('updated');
+                $model->pivotEvent = true;
+            }
+        });
+
+        static::pivotDetached(function ($model, $relationName, $pivotIds) {
+            if ($model->pivotEvent === false && in_array($relationName, ['tags'])) {
+                $model->fireModelEvent('updated');
+                $model->pivotEvent = true;
+            }
+        });
+    }
+
+    /**
+     * Override relacji tags, bo ma hardcodowane nazwy pól
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags(): MorphToMany
+    {
+        $model = config('taggable.model');
+
+        return $this->morphToMany($model, 'model', 'tags_models', 'model_id', 'tag_id')
+            ->withTimestamps();
+    }
 
     // Relations
 

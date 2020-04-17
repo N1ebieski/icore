@@ -181,6 +181,8 @@ class PageService implements
 
         $this->page->save();
 
+        $this->page->tag($attributes['tags'] ?? []);
+
         return $this->page;
     }
 
@@ -211,7 +213,6 @@ class PageService implements
             $this->collect->make($attributes)->except('parent_id')->toArray()
         );
         $this->page->content = $this->page->content_html;
-        $bool = $this->page->save();
 
         if ($attributes['parent_id'] != $this->page->parent_id) {
             if ($attributes['parent_id'] === null) {
@@ -221,7 +222,9 @@ class PageService implements
             }
         }
 
-        return $bool;
+        $this->page->retag($attributes['tags'] ?? []);
+
+        return $this->page->save();
     }
 
     /**
@@ -291,6 +294,10 @@ class PageService implements
      */
     public function delete() : bool
     {
+        $this->page->comments()->delete();
+
+        $this->page->detag();
+
         $delete = $this->page->delete();
 
         if ($delete === true) {
@@ -326,8 +333,8 @@ class PageService implements
         // Antywzorzec, ale nie mialem wyboru, bo ClosureTable nie zmienia pozycji
         // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
         foreach ($ids as $id) {
-            if ($c = $this->page->find($id)) {
-                $c->makeService()->delete();
+            if ($p = $this->page->find($id)) {
+                $p->makeService()->delete();
 
                 $deleted += 1;
             }

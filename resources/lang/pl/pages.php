@@ -26,6 +26,10 @@ return [
     'seo' => [
         'tooltip' => 'Używany w META oraz Open Graph'
     ],
+    'tags' => [
+        'label' => 'Tagi',
+        'tooltip' => 'Min 3 znaki, max 30 znaków, max :max_tags tagów'
+    ],    
     'icon' => [
         'label' => 'Klasa ikony',
         'tooltip' => 'Klasa ikony (np. z font-awesome). Ikona będzie wyświetlana obok tytułu.',
