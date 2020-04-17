@@ -27,27 +27,27 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['blade.compiler']->directive('isValid', function (string $field) {
-            return "<?php echo app('Helpers\Valid')->isValid($field); ?>";
+            return "<?php echo app('icore.helpers.valid')->isValid($field); ?>";
         });
 
         $this->app['blade.compiler']->directive('isCookie', function ($input, string $output = 'active') {
-            return "<?php echo app('Helpers\Active')->isCookie($input, '$output'); ?>";
+            return "<?php echo app('icore.helpers.active')->isCookie($input, '$output'); ?>";
         });
 
         $this->app['blade.compiler']->directive('isUrl', function ($input, string $output = 'active') {
-            return "<?php echo app('Helpers\Active')->isUrl($input, '$output'); ?>";
+            return "<?php echo app('icore.helpers.active')->isUrl($input, '$output'); ?>";
         });
 
         $this->app['blade.compiler']->directive('isRouteContains', function ($input, string $output = 'active') {
-            return "<?php echo app('Helpers\Active')->isRouteContains($input, '$output'); ?>";
+            return "<?php echo app('icore.helpers.active')->isRouteContains($input, '$output'); ?>";
         });
 
         $this->app['blade.compiler']->directive('isUrlContains', function ($input, string $output = 'active') {
-            return "<?php echo app('Helpers\Active')->isUrlContains($input, '$output'); ?>";
+            return "<?php echo app('icore.helpers.active')->isUrlContains($input, '$output'); ?>";
         });
 
         $this->app['blade.compiler']->directive('isTheme', function ($input, string $output = 'active') {
-            return "<?php echo app('Helpers\Active')->isTheme($input, '$output'); ?>";
+            return "<?php echo app('icore.helpers.active')->isTheme($input, '$output'); ?>";
         });
 
         $this->app['blade.compiler']->directive('pushonce', function ($expression) {

@@ -118,7 +118,7 @@ class ActiveHelper
      */
     public function isTheme($input, string $output = "active") : ?string
     {
-        $theme = app()->make('Helpers\View')->getTheme();
+        $theme = app()->make('icore.helpers.view')->getTheme();
 
         foreach ((array)$input as $string) {
             if ($theme === $string) {

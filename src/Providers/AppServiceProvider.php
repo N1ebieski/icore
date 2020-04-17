@@ -31,15 +31,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Helpers\View', function ($app) {
+        $this->app->singleton('icore.helpers.view', function ($app) {
             return $this->app->make(\N1ebieski\ICore\Helpers\ViewHelper::class);
         });
 
-        $this->app->singleton('Helpers\Valid', function ($app) {
+        $this->app->singleton('icore.helpers.valid', function ($app) {
             return $this->app->make(\N1ebieski\ICore\Helpers\ValidHelper::class);
         });
 
-        $this->app->singleton('Helpers\Active', function ($app) {
+        $this->app->singleton('icore.helpers.active', function ($app) {
             return $this->app->make(\N1ebieski\ICore\Helpers\ActiveHelper::class);
         });
 
