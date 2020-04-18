@@ -7,19 +7,20 @@
 @endslot
 
 @slot('modal_body')
-    <div class="form-group">
-        <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
-        <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
-        name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
-    </div>
-    <button type="button" class="btn btn-primary btn-send" id="filterFilter">
-        <i class="fas fa-check"></i>
-        <span>{{ trans('icore::default.apply') }}</span>
-    </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-        <i class="fas fa-ban"></i>
-        <span>{{ trans('icore::default.cancel') }}</span>
-    </button>
+<div class="form-group">
+    <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
+    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
+    name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
+</div>
+<button type="button" class="btn btn-primary btn-send" id="filterFilter">
+    <i class="fas fa-check"></i>
+    <span>{{ trans('icore::default.apply') }}</span>
+</button>
+&nbsp;
+<button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <i class="fas fa-ban"></i>
+    <span>{{ trans('icore::default.cancel') }}</span>
+</button>
 @endslot
 @endcomponent
 

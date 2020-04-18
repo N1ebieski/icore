@@ -5,7 +5,7 @@
 
 @slot('modal_title')
 <i class="fas fa-sort-amount-up"></i> 
-<span>{{ trans('icore::filter.filter_title') }}</span>
+<span> {{ trans('icore::filter.filter_title') }}</span>
 @endslot
 
 @slot('modal_body')
@@ -50,6 +50,7 @@
     <i class="fas fa-check"></i>
     <span>{{ trans('icore::default.apply') }}</span>
 </button>
+&nbsp;
 <button type="button" class="btn btn-secondary" data-dismiss="modal">
     <i class="fas fa-ban"></i>
     <span>{{ trans('icore::default.cancel') }}</span>
