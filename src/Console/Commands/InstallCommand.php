@@ -195,7 +195,9 @@ class InstallCommand extends Command
         $bar->advance();
         $this->line("\n");
         $this->validateUrl();
-        $this->validateConnectionMail();
+        if ($this->config->get('mail.driver') === 'smtp') {
+            $this->validateConnectionMail();
+        }
         $this->validateConnectionDatabase();
         $this->line("\n");
         $bar->advance();
