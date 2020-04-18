@@ -131,6 +131,10 @@ class InstallCommand extends Command
      */
     protected function validateConnectionMail() : void
     {
+        if ($this->config->get('mail.driver') !== 'smtp') {
+            return;
+        }
+        
         $this->line($this->lang->get('icore::install.validate.connection_mail'));
 
         try {
@@ -195,9 +199,7 @@ class InstallCommand extends Command
         $bar->advance();
         $this->line("\n");
         $this->validateUrl();
-        if ($this->config->get('mail.driver') === 'smtp') {
-            $this->validateConnectionMail();
-        }
+        $this->validateConnectionMail();
         $this->validateConnectionDatabase();
         $this->line("\n");
         $bar->advance();
