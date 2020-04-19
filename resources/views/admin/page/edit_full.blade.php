@@ -12,7 +12,10 @@
 
 @section('content')
 <div class="w-100">
-    <h1 class="h5 mb-4 border-bottom pb-2"><i class="far fa-plus-square"></i>&nbsp;{{ trans('icore::pages.route.edit') }}:</h1>
+    <h1 class="h5 mb-4 border-bottom pb-2">
+        <i class="fas fa-edit"></i>
+        <span> {{ trans('icore::pages.route.edit') }}:<span>
+    </h1>
     <form class="mb-3" method="post" action="{{ route('admin.page.update_full', [$page->id]) }}" id="editPage">
         @csrf
         @method('put')

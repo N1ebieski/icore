@@ -36,7 +36,7 @@ class PageController
     public function index(Page $page, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         $pageService = $page->makeService();
-
+ 
         return Response::view('icore::admin.page.index', [
             'pages' => $pageService->paginateByFilter($filter->all() + [
                 'except' => $request->input('except')

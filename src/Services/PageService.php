@@ -115,7 +115,8 @@ class PageService implements
     {
         $this->pages = $this->getAsFlatTree();
 
-        return $this->pages->paginate($filter['paginate'] ?? $this->paginate);
+        return $this->pages->whereNotIn('id', $filter['except'])
+            ->paginate($filter['paginate'] ?? $this->paginate);
     }
 
     /**
