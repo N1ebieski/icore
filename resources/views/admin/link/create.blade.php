@@ -42,6 +42,7 @@
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
+    &nbsp;
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>

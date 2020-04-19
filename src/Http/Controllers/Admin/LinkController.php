@@ -51,7 +51,7 @@ class LinkController
     {
         return Response::json([
             'success' => '',
-            'view' => View::get('icore::admin.link.create', [
+            'view' => View::make('icore::admin.link.create', [
                 'type' => $type,
             ])->render()
         ]);

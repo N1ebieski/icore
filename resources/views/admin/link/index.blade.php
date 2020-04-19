@@ -1,20 +1,20 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans("icore::links.{$type}.page.index"), trans('icore::pagination.page', ['num' => $links->currentPage()])],
-    'desc' => [trans("icore::links.{$type}.page.index")],
-    'keys' => [trans("icore::links.{$type}.page.index")]
+    'title' => [trans("icore::links.{$type}.route.index"), trans('icore::pagination.page', ['num' => $links->currentPage()])],
+    'desc' => [trans("icore::links.{$type}.route.index")],
+    'keys' => [trans("icore::links.{$type}.route.index")]
 ])
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
 <li class="breadcrumb-item">{{ trans('icore::links.route.index') }}</li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans("icore::links.{$type}.page.index") }}</li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans("icore::links.{$type}.route.index") }}</li>
 @endsection
 
 @section('content')
 <h1 class="h5 border-bottom pb-2 d-flex">
     <div class="mr-auto my-auto">
         <i class="fas fa-link"></i>
-        <span>{{ trans("icore::links.{$type}.page.index") }}</span>
+        <span> {{ trans("icore::links.{$type}.route.index") }}</span>
     </div>
     @can('create links')
     <div class="ml-auto text-right">
