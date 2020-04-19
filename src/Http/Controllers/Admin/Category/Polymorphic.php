@@ -9,6 +9,8 @@ use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
+use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
 /**
  * [interface description]
@@ -72,4 +74,14 @@ interface Polymorphic
      * @return RedirectResponse               [description]
      */
     public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse;
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param SearchRequest $request
+     * @param SearchResponse $response
+     * @return JsonResponse
+     */
+    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse;
 }

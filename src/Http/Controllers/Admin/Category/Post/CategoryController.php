@@ -21,8 +21,25 @@ use N1ebieski\ICore\Http\Controllers\Admin\Category\CategoryController as BaseCa
 /**
  * [CategoryController description]
  */
-class CategoryController extends BaseCategoryController implements Polymorphic
+class CategoryController implements Polymorphic
 {
+    /**
+     * Undocumented variable
+     *
+     * @var BaseCategoryController
+     */
+    protected $controller;
+
+    /**
+     * Undocumented function
+     *
+     * @param BaseCategoryController $controller
+     */
+    public function __construct(BaseCategoryController $controller)
+    {
+        $this->controller = $controller;
+    }
+
     /**
      * Display a listing of the Category.
      *
@@ -105,8 +122,6 @@ class CategoryController extends BaseCategoryController implements Polymorphic
      */
     public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
     {
-        $categories = $category->makeRepo()->getBySearch($request->get('name'));
-
-        return $response->setCategories($categories)->makeResponse();
+        return $this->controller->search($category, $request, $response);
     }
 }
