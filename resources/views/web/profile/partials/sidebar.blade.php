@@ -7,6 +7,7 @@
             <span>{{ trans('icore::profile.route.edit') }}</span>
         </a>
     </li>
+    @if (app('router')->has('web.profile.edit_socialite'))
     <li class="nav-item @isUrl(route('web.profile.edit_socialite'))">
         <a class="nav-link @isUrl(route('web.profile.edit_socialite'))"
         href="{{ route('web.profile.edit_socialite') }}">
@@ -14,4 +15,5 @@
             <span>{{ trans('icore::profile.route.edit_socialite') }}</span>
         </a>
     </li>
+    @endif
 </ul>

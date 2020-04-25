@@ -60,6 +60,7 @@
                                     </button>
                                 </div>
                             </div>
+                            @if (app('router')->has('auth.socialite.redirect'))
                             <hr>
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
@@ -69,6 +70,7 @@
                                     </p>
                                 </div>
                             </div>
+                            @endif
                         </form>
                     </div>
                 </div>
