@@ -28,5 +28,6 @@ return [
         'routes' => 'Generowanie cache routów...',
         'config' => 'Generowanie cache konfiguracji...'
     ],
+    'storage_link' => 'Tworzenie symlinka do folderu storage...',
     'register_superadmin' => 'Rejestrowanie super admina...'
 ];
