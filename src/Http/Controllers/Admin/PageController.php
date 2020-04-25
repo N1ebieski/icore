@@ -147,7 +147,7 @@ class PageController
         return Response::json([
             'success' => '',
             'view' => View::make('icore::admin.page.partials.page', [
-                'page' => $page
+                'page' => $page->loadAncestorsExceptSelf()
             ])->render()
         ]);
     }
