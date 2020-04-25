@@ -1,10 +1,12 @@
 //$('ul.pagination').hide();
-jQuery(document).on('readyAndAjax', function() {
-    $('#infinite-scroll').jscroll({
+jQuery(document).on('readyAndAjax', function () {
+    let $is = $('#infinite-scroll');
+
+    $is.jscroll({
         debug: false,
-        autoTrigger: false,
-        data: function() {
-            let except = $(this).find('[id^=row]').map(function() {
+        autoTrigger: $is.data('autotrigger') == true ? true : false,
+        data: function () {
+            let except = $(this).find('[id^=row]').map(function () {
                 return $(this).attr('data-id');
             }).get();
 
@@ -15,14 +17,14 @@ jQuery(document).on('readyAndAjax', function() {
             }
         },
         loadingHtml: $.getLoader('spinner-border', 'loader'),
-        loadingFunction: function() {
+        loadingFunction: function () {
             $('#is-pagination').first().remove();
         },
         padding: 0,
         nextSelector: 'a#is-next:last',
         contentSelector: '#infinite-scroll',
         pagingSelector: '.pagination',
-        callback: function(nextHref) {
+        callback: function (nextHref) {
             let href = nextHref.split(' ')[0];
             let page = $.getUrlParameter(href, 'page');
             let title = $('#is-pagination:last').attr('data-title').replace(/(\d+)/, '').trim();
