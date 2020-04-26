@@ -18,12 +18,13 @@ data-id="{{ $page->id }}">
                     </small></li>
                 @endif
                 <li>
-                    {{ str_repeat('-', $page->real_depth) }}&nbsp;
+                    {{ str_repeat('-', $page->real_depth) }}
                     <a href="#" class="edit" data-route="{{ route('admin.page.edit_position', [$page->id]) }}"
                     data-toggle="modal" data-target="#editPositionModal" role="button">
                         <span id="position" class="badge badge-pill badge-primary">{{ $page->real_position }}</span>
                     </a>
-                    &nbsp;<a href="{{ route('admin.page.index', ['filter[parent]' => $page->id]) }}">{{ $page->title }}</a>
+                    <a href="{{ route('admin.page.index', ['filter[parent]' => $page->id]) }}">{{ $page->title }}</a>&nbsp;
+                    <span class="badge badge-success">ID {{ $page->id }}</span>
                 </li>
                 <li>{{ str_repeat('-', $page->real_depth) }} {{ $page->shortContent }}...</li>
                 <li>{{ str_repeat('-', $page->real_depth) }} <small>{{ trans('icore::filter.created_at') }}: {{ $page->created_at_diff }}</small></li>
