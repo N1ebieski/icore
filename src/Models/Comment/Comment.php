@@ -307,7 +307,7 @@ class Comment extends Entity implements CommentInterface
     public function scopeFilterCensored(Builder $query, $censored = null)
     {
         $query->when($censored !== null, function ($query) use ($censored) {
-            return $query->where('comments.censored', $censored);
+            return $query->where('censored', $censored);
         });
     }
 
@@ -380,7 +380,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeUncensored(Builder $query) : Builder
     {
-        return $query->where('comments.censored', static::UNCENSORED);
+        return $query->where('censored', static::UNCENSORED);
     }
 
     /**
@@ -390,7 +390,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeActive(Builder $query) : Builder
     {
-        return $query->where('comments.status', static::ACTIVE);
+        return $query->where('status', static::ACTIVE);
     }
 
     /**
@@ -400,7 +400,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeRoot(Builder $query) : Builder
     {
-        return $query->whereNull('comments.parent_id');
+        return $query->whereNull('parent_id');
     }
 
     /**
@@ -410,7 +410,7 @@ class Comment extends Entity implements CommentInterface
      */
     public function scopeInactive(Builder $query) : Builder
     {
-        return $query->where('comments.status', static::INACTIVE);
+        return $query->where('status', static::INACTIVE);
     }
 
     // Loads

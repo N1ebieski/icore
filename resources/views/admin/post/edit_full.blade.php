@@ -83,7 +83,7 @@
                     <div class="custom-control custom-checkbox">
                         <input type="hidden" name="comment" value="0">
                         <input type="checkbox" class="custom-control-input" id="comment" name="comment"
-                        value="1" {{ (old('comment', $post->comment) == $post::WITH_COMMENT) ? '' : 'checked' }}>
+                        value="1" {{ (old('comment', $post->comment) == $post::WITH_COMMENT) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="comment">{{ trans('icore::posts.comment') }}?</label>
                     </div>
                 </div>
