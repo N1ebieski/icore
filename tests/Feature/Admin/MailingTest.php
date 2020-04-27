@@ -152,7 +152,7 @@ class MailingTest extends TestCase
     {
         $user = factory(User::class)->states('admin')->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = factory(User::class)->states('marketing')->create();
 
         $mailing = factory(Mailing::class)->create();
 

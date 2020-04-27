@@ -33,6 +33,7 @@ class NewsletterTest extends TestCase
     {
         $response = $this->post(route('web.newsletter.store'), [
             'email' => Faker::create()->unique()->safeEmail,
+            'marketing_agreement' => true
         ]);
 
         $response->assertOk()->assertJson([
@@ -50,6 +51,7 @@ class NewsletterTest extends TestCase
 
         $response = $this->post(route('web.newsletter.store'), [
             'email' => $newsletter->email,
+            'marketing_agreement' => true
         ]);
 
         $response->assertOk()->assertJson([

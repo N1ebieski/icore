@@ -33,6 +33,12 @@ $factory->state(User::class, 'active', function (Faker $faker) {
     ];
 });
 
+$factory->state(User::class, 'marketing', function (Faker $faker) {
+    return [
+        'marketing' => true
+    ];
+});
+
 $factory->afterCreatingState(User::class, 'user', function ($user) {
     $user->assignRole('user');
 });
