@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'alpha_dash', 'max:255'],
+            'marketing_agreement' => 'bail|nullable|boolean'
         ];
     }
 }

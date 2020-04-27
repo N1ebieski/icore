@@ -90,23 +90,24 @@ class MailingEmailService
     {
         $attributes = [];
 
-        $this->user->chunk(1000, function ($items) use ($attributes) {
-            $items->each(function ($item) use ($attributes) {
-                // Create attributes manually, no within model because multiple
-                // models may be huge performance impact
-                $attributes[] = [
-                    'mailing_id' => $this->mailingEmail->getMailing()->id,
-                    'model_type' => get_class($item),
-                    'model_id' => $item->id,
-                    'email' => $item->email,
-                    'sent' => MailingEmail::UNSENT,
-                    'created_at' => $this->carbon->now(),
-                    'updated_at' => $this->carbon->now()
-                ];
+        $this->user->marketing()
+            ->chunk(1000, function ($items) use ($attributes) {
+                $items->each(function ($item) use ($attributes) {
+                    // Create attributes manually, no within model because multiple
+                    // models may be huge performance impact
+                    $attributes[] = [
+                        'mailing_id' => $this->mailingEmail->getMailing()->id,
+                        'model_type' => get_class($item),
+                        'model_id' => $item->id,
+                        'email' => $item->email,
+                        'sent' => MailingEmail::UNSENT,
+                        'created_at' => $this->carbon->now(),
+                        'updated_at' => $this->carbon->now()
+                    ];
 
-                $this->mailingEmail->insertIgnore($attributes);
+                    $this->mailingEmail->insertIgnore($attributes);
+                });
             });
-        });
     }
 
     /**

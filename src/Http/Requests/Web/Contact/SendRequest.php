@@ -44,7 +44,8 @@ class SendRequest extends FormRequest
         return array_merge([
             'email' => 'required|email',
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'contact_agreement' => 'bail|accepted'
         ], $this->captcha->toRules());
     }
 }

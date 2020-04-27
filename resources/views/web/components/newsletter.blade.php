@@ -8,5 +8,14 @@
                 <button class="btn btn-primary storeNewsletter" type="button">{{ trans('icore::default.save') }}</button>
             </div>
         </div>
+        <div class="form-group mt-2">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="marketing_agreement" 
+                name="marketing_agreement" value="1">
+                <label class="custom-control-label text-left" for="marketing_agreement">
+                    <small>{{ trans('icore::policy.agreement.marketing') }}</small>
+                </label>
+            </div>
+        </div>
     </form>
 </div>

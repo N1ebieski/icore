@@ -92,7 +92,10 @@ class ProfileController
      */
     public function update(UpdateRequest $request) : RedirectResponse
     {
-        Auth::user()->update($request->only(['name']));
+        Auth::user()->update([
+            'name' => $request->input('name'),
+            'marketing' => $request->input('marketing_agreement')
+        ]);
 
         return Response::redirectToRoute('web.profile.edit')->with(
             'success',

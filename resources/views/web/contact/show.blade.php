@@ -38,6 +38,17 @@
                     rows="3">{{ old('content') }}</textarea>
                     @includeWhen($errors->has('content'), 'icore::web.partials.errors', ['name' => 'content'])
                 </div>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input @isValid('contact_agreement')" 
+                        id="contact_agreement" name="contact_agreement" value="1"
+                        {{ old('contact_agreement') == true ? 'checked' : null }}>
+                        <label class="custom-control-label text-left" for="contact_agreement">
+                            <small>{{ trans('icore::policy.agreement.contact') }}</small>
+                        </label>
+                    </div>
+                    @includeWhen($errors->has('contact_agreement'), 'icore::web.partials.errors', ['name' => 'contact_agreement'])
+                </div>
                 @render('icore::captchaComponent')
                 <button type="submit" class="btn btn-primary btn-send">{{ trans('icore::default.submit') }}</button>
             </form>

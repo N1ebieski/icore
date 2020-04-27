@@ -27,6 +27,9 @@ class StoreRequest extends FormRequest
             'name' => ['required', 'alpha_dash', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'privacy_agreement' => 'bail|accepted',
+            'contact_agreement' => 'bail|accepted',
+            'marketing_agreement' => 'bail|nullable|boolean'
         ];
     }
 }

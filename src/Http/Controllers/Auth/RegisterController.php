@@ -95,7 +95,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'status' => User::ACTIVE
+            'status' => User::ACTIVE,
+            'marketing' => isset($data['marketing_agreement'])
         ]);
 
         $user->assignRole('user');

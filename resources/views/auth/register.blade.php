@@ -52,6 +52,55 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label class="col-lg-4 col-form-label text-lg-right d-none d-lg-block"></label>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input @isValid('privacy_agreement')" 
+                                            id="privacy_agreement" name="privacy_agreement" value="1"
+                                            {{ old('privacy_agreement') == true ? 'checked' : null }}>
+                                            <label class="custom-control-label text-left" for="privacy_agreement">
+                                                <small>{!! trans('icore::policy.agreement.privacy', [
+                                                    'privacy' => route('web.page.show', [Str::slug(trans('icore::policy.privacy'))])
+                                                ]) !!}</small>
+                                            </label>
+                                        </div>
+                                        @includeWhen($errors->has('privacy_agreement'), 'icore::web.partials.errors', ['name' => 'privacy_agreement'])
+                                    </div>
+                                </div>
+
+                                <label class="col-lg-4 col-form-label text-lg-right d-none d-lg-block"></label>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input @isValid('contact_agreement')" 
+                                            id="contact_agreement" name="contact_agreement" value="1"
+                                            {{ old('contact_agreement') == true ? 'checked' : null }}>
+                                            <label class="custom-control-label text-left" for="contact_agreement">
+                                                <small>{{ trans('icore::policy.agreement.register') }}</small>
+                                            </label>
+                                        </div>
+                                        @includeWhen($errors->has('contact_agreement'), 'icore::web.partials.errors', ['name' => 'contact_agreement'])
+                                    </div>
+                                </div>
+
+                                <label class="col-lg-4 col-form-label text-lg-right d-none d-lg-block"></label>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input @isValid('marketing_agreement')" 
+                                            id="marketing_agreement" name="marketing_agreement" value="1"
+                                            {{ old('marketing_agreement') == true ? 'checked' : null }}>
+                                            <label class="custom-control-label text-left" for="marketing_agreement">
+                                                <small>{{ trans('icore::policy.agreement.marketing') }}</small>
+                                            </label>
+                                        </div>
+                                        @includeWhen($errors->has('marketing_agreement'), 'icore::web.partials.errors', ['name' => 'marketing_agreement'])
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group row mb-0">
                                 <div class="col-lg-6 offset-lg-4">
                                     @render('icore::captchaComponent')

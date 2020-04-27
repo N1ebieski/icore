@@ -39,6 +39,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public const INACTIVE = 0;
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const WITHOUT_MARKETING = 0;
+
+    /**
+     * [public description]
+     * @var int
+     */
+    public const WITH_MARKETING = 1;
+
+    /**
      * [protected description]
      * @var string
      */
@@ -50,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'status', 'email_verified_at', 'ip'
+        'name', 'email', 'password', 'status', 'marketing', 'email_verified_at', 'ip'
     ];
 
     /**
@@ -80,6 +92,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $attributes = [
         'status' => self::ACTIVE,
+        'marketing' => 0
     ];
 
     /**
@@ -90,6 +103,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'id' => 'integer',
         'status' => 'integer',
+        'marketing' => 'integer',
         'email_verified_at' => 'timestamp',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp'
@@ -175,6 +189,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->when($role !== null, function ($query) use ($role) {
             $query->role($role->name);
         });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeMarketing(Builder $query) : Builder
+    {
+        return $query->where('marketing', static::WITH_MARKETING);
     }
 
     // Makers

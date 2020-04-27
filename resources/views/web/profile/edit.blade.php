@@ -27,6 +27,22 @@
         </div>
     </div>
     <div class="form-group row mb-0">
+        <label class="col-lg-3 col-form-label text-lg-left d-none d-lg-block"></label>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input @isValid('marketing_agreement')" 
+                    id="marketing_agreement" name="marketing_agreement" value="1"
+                    {{ old('marketing_agreement', $user->marketing) == true ? 'checked' : null }}>
+                    <label class="custom-control-label text-left" for="marketing_agreement">
+                        <small>{{ trans('icore::policy.agreement.marketing') }}</small>
+                    </label>
+                </div>
+                @includeWhen($errors->has('marketing_agreement'), 'icore::web.partials.errors', ['name' => 'marketing_agreement'])
+            </div>
+        </div>
+    </div>    
+    <div class="form-group row mb-0">
         <div class="col-lg-6 offset-lg-3">
             <button type="submit" class="btn btn-primary">
                 {{ trans('icore::default.submit') }}

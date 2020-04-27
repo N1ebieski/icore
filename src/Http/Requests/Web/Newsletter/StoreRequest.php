@@ -34,7 +34,8 @@ class StoreRequest extends FormRequest
                 Rule::unique('newsletters', 'email')->where(function ($query) {
                     $query->where('status', Newsletter::ACTIVE);
                 })
-            ]
+            ],
+            'marketing_agreement' => 'bail|accepted'
         ];
     }
 }
