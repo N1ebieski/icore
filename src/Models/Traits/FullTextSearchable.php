@@ -37,7 +37,7 @@ trait FullTextSearchable
      * Prepares words for matching search
      * @return void [description]
      */
-    private function exactWords() : void
+    protected function exactWords() : void
     {
         preg_match_all('/"(.*?)"/', $this->term, $words);
 
@@ -53,7 +53,7 @@ trait FullTextSearchable
      * Auxiliary method. Removing symbols used by MySQL
      * @return string [description]
      */
-    private function removeSymbols() : string
+    protected function removeSymbols() : string
     {
         $reservedSymbols = ['-', '+', '<', '>', '@', '*', '(', ')', '~'];
 
@@ -64,7 +64,7 @@ trait FullTextSearchable
      * Prepares words for a loose search
      * @return void
      */
-    private function words() : void
+    protected function words() : void
     {
         $term = $this->removeSymbols();
 
@@ -84,7 +84,7 @@ trait FullTextSearchable
      * Prepares fulltext search of term
      * @return string
      */
-    private function fullText() : string
+    public function fullText() : string
     {
         $this->exactWords();
         $this->words();
