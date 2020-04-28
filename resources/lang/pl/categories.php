@@ -5,8 +5,9 @@ return [
         'post' => 'Posty'
     ],
     'success' => [
-        'store' => 'Kategoria została dodana.',
-        'store_global' => 'Drzewo kategorii zostało dodane.',
+        'store' => 'Kategoria została dodana',
+        'store_global' => 'Drzewo kategorii zostało dodane',
+        'store_partial' => ' do kategorii nadrzędnej :parent',
         'destroy_global' => 'Pomyślnie usunięto :affected kategorii wraz z kategoriami podrzędnymi.'
     ],
     'error' => [

@@ -91,7 +91,16 @@ class CategoryController implements Polymorphic
     {
         $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
 
-        $request->session()->flash('success', Lang::get('icore::categories.success.store'));
+        $request->session()->flash(
+            'success',
+            Lang::get('icore::categories.success.store') . (
+                $request->input('parent_id') !== null ?
+                    Lang::get('icore::categories.success.store_partial', [
+                        'parent' => $category->find($request->input('parent_id'))->name
+                    ])
+                    : null
+            )
+        );
 
         return Response::json(['success' => '' ]);
     }
@@ -107,7 +116,16 @@ class CategoryController implements Polymorphic
     {
         $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
 
-        $request->session()->flash('success', Lang::get('icore::categories.success.store_global'));
+        $request->session()->flash(
+            'success',
+            Lang::get('icore::categories.success.store_global') . (
+                $request->input('parent_id') !== null ?
+                    Lang::get('icore::categories.success.store_partial', [
+                        'parent' => $category->find($request->input('parent_id'))->name
+                    ])
+                    : null
+            )
+        );
 
         return Response::json(['success' => '' ]);
     }

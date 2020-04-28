@@ -4,9 +4,10 @@ use N1ebieski\ICore\Models\Page\Page;
 
 return [
     'success' => [
-        'store' => 'Podstrona została dodana.',
-        'update' => 'Podstrona została zmieniona.',
-        'destroy_global' => 'Pomyślnie usunięto :affected podstron wraz z podstronami podrzędnymi.'
+        'store' => 'Podstrona została dodana',
+        'store_partial' => ' do podstrony nadrzędnej :parent',
+        'update' => 'Podstrona została zmieniona',
+        'destroy_global' => 'Pomyślnie usunięto :affected podstron wraz z podstronami podrzędnymi'
     ],
     'route' => [
         'index' => 'Podstrony',

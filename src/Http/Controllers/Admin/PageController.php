@@ -71,7 +71,13 @@ class PageController
 
         return Response::redirectToRoute('admin.page.index')->with(
             'success',
-            Lang::get('icore::pages.success.store')
+            Lang::get('icore::pages.success.store') . (
+                $request->input('parent_id') !== null ?
+                    Lang::get('icore::pages.success.store_partial', [
+                        'parent' => $page->find($request->input('parent_id'))->title
+                    ])
+                    : null
+            )
         );
     }
 
