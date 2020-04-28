@@ -10,34 +10,22 @@ use Illuminate\Database\Eloquent\Builder;
 trait FullTextSearchable
 {
     /**
-     * Search names
+     * Search term
      * @var string
      */
     protected $term;
 
     /**
      * Words prepared for searching in boolean mode fulltext
-     * @var [type]
+     * @var array|string
      */
-    protected $search = [];
-
-    /**
-     * Setter
-     * @param string $term [description]
-     * @return self
-     */
-    public function setTerm($term) : self
-    {
-        $this->term = $term;
-
-        return $this;
-    }
+    public $search = [];
 
     /**
      * Prepares words for matching search
      * @return void [description]
      */
-    protected function exactWords() : void
+    protected function splitExactWords() : void
     {
         preg_match_all('/"(.*?)"/', $this->term, $words);
 
@@ -64,7 +52,7 @@ trait FullTextSearchable
      * Prepares words for a loose search
      * @return void
      */
-    protected function words() : void
+    protected function splitWords() : void
     {
         $term = $this->removeSymbols();
 
@@ -81,15 +69,35 @@ trait FullTextSearchable
     }
 
     /**
-     * Prepares fulltext search of term
+     * Make fulltext search of term
      * @return string
      */
-    public function fullText() : string
+    protected function makeFullText() : string
     {
-        $this->exactWords();
-        $this->words();
+        $this->splitExactWords();
+        $this->splitWords();
 
-        return implode(' ', (array)$this->search);
+        return $this->prepareSearch();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    protected function prepareSearch() : string
+    {
+        return $this->search = implode(' ', (array)$this->search);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    protected function makeColumns() : string
+    {
+        return implode(',', $this->searchable);
     }
 
     /**
@@ -100,10 +108,10 @@ trait FullTextSearchable
      */
     public function scopeSearch(Builder $query, string $term) : Builder
     {
-        $columns = implode(',', $this->searchable);
+        $this->term = $term;
 
-        return $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", [
-            $this->setTerm($term)->fullText()
+        return $query->whereRaw("MATCH ({$this->makeColumns()}) AGAINST (? IN BOOLEAN MODE)", [
+            $this->makeFullText()
         ]);
     }
 }
