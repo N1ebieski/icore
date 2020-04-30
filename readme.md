@@ -1,4 +1,4 @@
-# icore
+# icore 2
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Travis](https://img.shields.io/travis/n1ebieski/icore.svg?style=flat-square)]()
