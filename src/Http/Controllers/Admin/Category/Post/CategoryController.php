@@ -95,7 +95,7 @@ class CategoryController implements Polymorphic
             'success',
             Lang::get('icore::categories.success.store') . (
                 $request->input('parent_id') !== null ?
-                    Lang::get('icore::categories.success.store_partial', [
+                    Lang::get('icore::categories.success.store_parent', [
                         'parent' => $category->find($request->input('parent_id'))->name
                     ])
                     : null
@@ -120,7 +120,7 @@ class CategoryController implements Polymorphic
             'success',
             Lang::get('icore::categories.success.store_global') . (
                 $request->input('parent_id') !== null ?
-                    Lang::get('icore::categories.success.store_partial', [
+                    Lang::get('icore::categories.success.store_parent', [
                         'parent' => $category->find($request->input('parent_id'))->name
                     ])
                     : null

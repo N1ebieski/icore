@@ -73,7 +73,7 @@ class PageController
             'success',
             Lang::get('icore::pages.success.store') . (
                 $request->input('parent_id') !== null ?
-                    Lang::get('icore::pages.success.store_partial', [
+                    Lang::get('icore::pages.success.store_parent', [
                         'parent' => $page->find($request->input('parent_id'))->title
                     ])
                     : null

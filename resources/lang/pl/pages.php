@@ -5,7 +5,7 @@ use N1ebieski\ICore\Models\Page\Page;
 return [
     'success' => [
         'store' => 'Podstrona została dodana',
-        'store_partial' => ' do podstrony nadrzędnej :parent',
+        'store_parent' => ' do podstrony nadrzędnej :parent',
         'update' => 'Podstrona została zmieniona',
         'destroy_global' => 'Pomyślnie usunięto :affected podstron wraz z podstronami podrzędnymi'
     ],
