@@ -400,7 +400,7 @@ class Page extends Entity implements PageInterface
      */
     public function getShortContentAttribute() : string
     {
-        return substr($this->replacement_content, 0, 500);
+        return substr(strip_tags($this->replacement_content), 0, 500);
     }
 
     /**
