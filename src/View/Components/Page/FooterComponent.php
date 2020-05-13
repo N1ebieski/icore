@@ -91,7 +91,7 @@ class FooterComponent implements Htmlable
 
         return $this->view->make('icore::web.components.page.footer.index', [
             'pages' => $pages,
-            'cols' => $this->pattern ?: (int)round($pages->count() / $this->cols, 0),
+            'cols' => $this->pattern ?: (int)ceil($pages->count() / $this->cols),
             'pattern' => $this->pattern,
             'maxDepth' => $this->maxDepth
         ]);
