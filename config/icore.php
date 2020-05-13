@@ -17,6 +17,10 @@ return [
         'max_tags' => (int)env('ICORE_PAGE_MAX_TAGS', 10),
     ],
 
+    'replacement' => [
+        //
+    ],
+
     'captcha' => [
         'driver' => env('ICORE_CAPTCHA_DRIVER'),
     ],

@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Cache\PostCache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\PostService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
@@ -316,12 +318,44 @@ class Post extends Model
     }
 
     /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getReplacementContentAttribute() : string
+    {
+        $replacement = Collect::make(Config::get('icore.replacement'));
+
+        return str_replace(
+            $replacement->keys()->toArray(),
+            $replacement->values()->toArray(),
+            $this->content
+        );
+    }
+
+    /**
      * Short content used in the listing
      * @return string [description]
      */
     public function getShortContentAttribute() : string
     {
-        return mb_substr($this->content, 0, 500);
+        return mb_substr($this->replacement_content, 0, 500);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getReplacementContentHtmlAttribute() : string
+    {
+        $replacement = Collect::make(Config::get('icore.replacement'));
+
+        return str_replace(
+            $replacement->keys()->toArray(),
+            $replacement->values()->toArray(),
+            Purifier::clean($this->content_html)
+        );
     }
 
     /**
@@ -330,7 +364,7 @@ class Post extends Model
      */
     public function getNoMoreContentHtmlAttribute() : string
     {
-        return str_replace('[more]', '', $this->content_html);
+        return str_replace('[more]', '', $this->replacement_content_html);
     }
 
     /**
@@ -339,12 +373,12 @@ class Post extends Model
      */
     public function getLessContentHtmlAttribute() : string
     {
-        $cut = explode('<p>[more]</p>', $this->content_html);
+        $cut = explode('<p>[more]</p>', $this->replacement_content_html);
 
         return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
                 'post' => $this->slug,
                 '#more'
-            ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->content_html;
+            ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->replacement_content_html;
     }
 
     /**
