@@ -118,12 +118,19 @@ class PageRepo
     public function getWithChildrensByComponent(array $component) : Collection
     {
         return $this->page->active()
-            ->root()
             ->with(['childrens' => function ($query) {
                 $query->active()->orderBy('position', 'asc');
             }])
-            ->limit($component['limit'])
-            ->orderBy('position', 'asc')
+            ->when($component['pattern'] !== null, function ($query) use ($component) {
+                $patternString = implode(', ', $component['pattern']);
+                
+                $query->whereIn('id', $component['pattern'])
+                    ->orderByRaw("FIELD(id, ?)", [$patternString]);
+            }, function ($query) use ($component) {
+                $query->root()
+                    ->limit($component['limit'])
+                    ->orderBy('position', 'asc');
+            })
             ->get()
             ->map(function ($item) {
                 if ($item->childrens->isNotEmpty()) {

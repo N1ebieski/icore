@@ -26,6 +26,12 @@ class MenuComponent implements Htmlable
     protected $view;
 
     /**
+     * Pattern by pages IDs example [18, 19, 32]
+     * @var array|null
+     */
+    protected $pattern;
+
+    /**
      * [private description]
      * @var string
      */
@@ -38,13 +44,19 @@ class MenuComponent implements Htmlable
      * @param ViewFactory $view
      * @param integer $limit
      */
-    public function __construct(Page $page, ViewFactory $view, int $limit = 5)
+    public function __construct(
+        Page $page,
+        ViewFactory $view,
+        int $limit = 5,
+        array $pattern = null
+    )
     {
         $this->page = $page;
 
         $this->view = $view;
 
         $this->limit = $limit;
+        $this->pattern = $pattern;
     }
 
     /**
@@ -55,7 +67,8 @@ class MenuComponent implements Htmlable
     {
         return $this->view->make('icore::web.components.page.menu', [
             'pages' => $this->page->makeCache()->rememberWithChildrensByComponent([
-                'limit' => $this->limit
+                'limit' => $this->limit,
+                'pattern' => $this->pattern
             ])
         ]);
     }
