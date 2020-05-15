@@ -13,7 +13,7 @@ class ShowRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return !empty($this->page_cache->content_html);
     }
 
     /**
