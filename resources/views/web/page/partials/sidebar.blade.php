@@ -3,12 +3,16 @@
     @if ($page->relationLoaded('ancestors'))
         @include('icore::web.page.partials.pages', ['pages' => $page->ancestors])
     @endif
-    @foreach ($page->siblings as $sibling)   
+    @foreach ($page->siblings as $sibling)
     <div class="list-group-item d-flex justify-content-between align-items-center">
+        @if (!empty($sibling->content))    
         <a href="{{ route('web.page.show', $sibling->slug) }}"
         class="@isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold')">
             {{ str_repeat('-', $sibling->real_depth) }} {{ $sibling->title }}
         </a>
+        @else
+            {{ str_repeat('-', $sibling->real_depth) }} {{ $sibling->title }}
+        @endif        
     </div>
     @if ($sibling->id === $page->id && $page->relationLoaded('childrensRecursiveWithAllRels'))
         @include('icore::web.page.partials.pages', ['pages' => $page->childrensRecursiveWithAllRels])
