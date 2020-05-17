@@ -12,7 +12,8 @@
             @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>&nbsp;@endif<span class="d-md-inline d-none">{{ $page->short_title }}</span><span class="d-md-none d-inline">{{ $page->title }}</span>
         </a>
         @if (empty($page->content_html) && $page->childrens->isNotEmpty())
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenu{{ $page->id }}">
+        <div class="dropdown-menu dropdown-menu-right {{ $loop->last ? 'mb-3' : null }}" 
+        aria-labelledby="navbarDropdownMenu{{ $page->id }}">
             @foreach ($page->childrens as $children)
             <a class="dropdown-item @isUrl(route('web.page.show', $children->slug))"
             href="{{ route('web.page.show', $children->slug) }}">
