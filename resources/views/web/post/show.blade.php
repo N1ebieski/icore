@@ -4,6 +4,7 @@
         (bool)$post->comment === true ? trans('icore::pagination.page', ['num' => $comments->currentPage()]) : null
     ],
     'desc' => [$post->meta_desc],
+    // TODO #18 @N1ebieski
     'keys' => [$post->tagList],
     'index' => (bool)$post->seo_noindex === true ? 'noindex' : 'index',
     'follow' => (bool)$post->seo_nofollow === true ? 'nofollow' : 'follow',
