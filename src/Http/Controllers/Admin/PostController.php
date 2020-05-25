@@ -11,16 +11,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Post\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\DestroyGlobalRequest;
+use N1ebieski\ICore\View\ViewModels\Admin\Post\CreateViewModel;
+use N1ebieski\ICore\View\ViewModels\Admin\Post\EditFullViewModel;
 
 /**
  * [PostController description]
@@ -49,17 +51,16 @@ class PostController
     }
 
     /**
-     * Show the form for creating a new Post.
+     * [create description]
      *
-     * @param  CreateRequest  $request  [description]
-     * @return HttpResponse             [description]
+     * @return  HttpResponse  [return description]
      */
-    public function create(CreateRequest $request) : HttpResponse
+    public function create() : HttpResponse
     {
-        return Response::view('icore::admin.post.create', [
-            'max_categories' => Config::get('icore.post.max_categories'),
-            'max_tags' => Config::get('icore.post.max_tags'),
-        ]);
+        return Response::view(
+            'icore::admin.post.create',
+            App::make(CreateViewModel::class)
+        );
     }
 
     /**
@@ -99,16 +100,17 @@ class PostController
      * Show the full-form for editing the specified Post.
      *
      * @param  Post     $post     [description]
-     * @param  EditFullRequest  $request  [description]
+     *
      * @return HttpResponse               [description]
      */
-    public function editFull(Post $post, EditFullRequest $request) : HttpResponse
+    public function editFull(Post $post) : HttpResponse
     {
-        return Response::view('icore::admin.post.edit_full', [
-            'post' => $post,
-            'max_categories' => Config::get('icore.post.max_categories'),
-            'max_tags' => Config::get('icore.post.max_tags'),
-        ]);
+        return Response::view(
+            'icore::admin.post.edit_full',
+            App::make(EditFullViewModel::class, [
+                'post' => $post
+            ])
+        );
     }
 
     /**

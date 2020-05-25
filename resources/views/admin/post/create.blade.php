@@ -37,11 +37,11 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        {{ trans('icore::posts.tags.label') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.tags.tooltip', ['max_tags' => $max_tags]) }}"
+                        {{ trans('icore::posts.tags.label') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.tags.tooltip', ['max_tags' => $maxTags]) }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <input name="tags" id="tags" class="form-control tagsinput @isValid('tags')"
-                    value="{{ old('tags') }}" placeholder="Dodaj tag" data-max="{{ $max_tags }}">
+                    value="{{ old('tags') }}" placeholder="Dodaj tag" data-max="{{ $maxTags }}">
                     @includeWhen($errors->has('tags'), 'icore::admin.partials.errors', ['name' => 'tags'])
                 </div>
                 <hr>
@@ -109,12 +109,12 @@
                     </label>
                     <div id="published_at">
                         <div class="form-group">
-                            <input type="text" data-value="{{ Carbon\Carbon::parse(old('date_published_at', Carbon\Carbon::now()))->format('Y/m/d') }}"
+                            <input type="text" data-value="{{ now()->parse(old('date_published_at', now()))->format('Y/m/d') }}"
                             value="" name="date_published_at" id="date_published_at" class="form-control datepicker">
                             @includeWhen($errors->has('date_published_at'), 'icore::admin.partials.errors', ['name' => 'date_published_at'])
                         </div>
                         <div class="form-group">
-                            <input type="text" data-value="{{ Carbon\Carbon::parse(old('time_published_at', Carbon\Carbon::now()))->format('H:i') }}"
+                            <input type="text" data-value="{{ now()->parse(old('time_published_at', now()))->format('H:i') }}"
                             value="" name="time_published_at" id="time_published_at" class="form-control timepicker">
                             @includeWhen($errors->has('time_published_at'), 'icore::admin.partials.errors', ['name' => 'time_published_at'])
                         </div>
@@ -123,17 +123,17 @@
                 <div class="form-group">
                     <label for="category">
                         {{ trans('icore::categories.categories.label') }} <i data-toggle="tooltip" data-placement="top"
-                        title="{{ trans('icore::categories.categories.tooltip', ['max_categories' => $max_categories]) }}"
+                        title="{{ trans('icore::categories.categories.tooltip', ['max_categories' => $maxCategories]) }}"
                         class="far fa-question-circle"></i>
                     </label>
                     <div id="category">
                         <div id="categoryOptions">
                             @include('icore::admin.category.partials.search', ['categories'
-                            => old('categories_collection', collect([])), 'checked' => true])
+                            =>  collect($categoriesSelection), 'checked' => true])
                         </div>
                         <div id="searchCategory"
-                        {{ (old('categories_collection', collect([]))->count() >= $max_categories) ? 'style=display:none' : '' }}
-                        data-route="{{ route('admin.category.post.search') }}" data-max="{{ $max_categories }}"
+                        {{ collect($categoriesSelection)->count() >= $maxCategories ? 'style=display:none' : '' }}
+                        data-route="{{ route('admin.category.post.search') }}" data-max="{{ $maxCategories }}"
                         class="position-relative">
                             <div class="input-group">
                                 <input type="text" class="form-control @isValid('category')"
