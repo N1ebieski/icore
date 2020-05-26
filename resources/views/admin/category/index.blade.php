@@ -6,7 +6,8 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::categories.route.index') }}</li>
+<li class="breadcrumb-item">{{ trans('icore::categories.route.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">{{ trans("icore::categories.{$model->poli}.{$model->poli}") }}</li>
 @endsection
 
 @section('content')
@@ -18,7 +19,7 @@
     @can('create categories')
     <div class="ml-auto text-right">
         <button type="button" class="btn btn-primary text-nowrap create" data-toggle="modal"
-        data-route="{{ route('admin.category.'.$model->poli.'.create') }}" data-target="#createModal">
+        data-route="{{ route("admin.category.{$model->poli}.create") }}" data-target="#createModal">
             <i class="far fa-plus-square"></i>
             <span class="d-none d-sm-inline">{{ trans('icore::categories.create') }}</span>
         </button>
