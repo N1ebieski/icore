@@ -98,19 +98,6 @@ trait FullTextSearchable
     }
 
     /**
-     * Make fulltext search of term
-     * @return string
-     */
-    protected function makeFullText() : string
-    {
-        $this->splitModelMatches();
-        $this->splitExactMatches();
-        $this->splitMatches();
-
-        return $this->makeSearch();
-    }
-
-    /**
      * Undocumented function
      *
      * @return string
@@ -140,8 +127,14 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
-        return $query->whereRaw("MATCH ({$this->makeColumns()}) AGAINST (? IN BOOLEAN MODE)", [
-            $this->makeFullText()
-        ]);
+        $this->splitModelMatches();
+        $this->splitExactMatches();
+        $this->splitMatches();
+
+        return $query->when(array_key_exists($this->makeClassName(), $this->search), function ($query) {
+            $query->whereRaw("MATCH ({$this->makeColumns()}) AGAINST (? IN BOOLEAN MODE)", [
+                $this->makeSearch()
+            ]);
+        });
     }
 }
