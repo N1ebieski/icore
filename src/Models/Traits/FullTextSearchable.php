@@ -17,21 +17,50 @@ trait FullTextSearchable
 
     /**
      * Words prepared for searching in boolean mode fulltext
-     * @var array|string
+     * @var array
      */
     public $search = [];
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    protected function makeClassName() : string
+    {
+        return class_basename(strtolower(static::class));
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    protected function splitModelMatches() : void
+    {
+        preg_match_all('/([a-z]+):\"(.*?)\"/', $this->term, $matches);
+
+        foreach ($matches[0] as $match) {
+            [$model, $word] = explode(':', $match);
+            $this->search[$model] = '+' . $word;
+
+            $this->term = str_replace($match, '', $this->term);
+        }
+
+        $this->term = trim($this->term);
+    }
 
     /**
      * Prepares words for matching search
      * @return void [description]
      */
-    protected function splitExactWords() : void
+    protected function splitExactMatches() : void
     {
-        preg_match_all('/"(.*?)"/', $this->term, $words);
+        preg_match_all('/"(.*?)"/', $this->term, $matches);
 
-        foreach ($words[0] as $word) {
-            $this->search[] = '+' . $word;
-            $this->term = str_replace($word, '', $this->term);
+        foreach ($matches[0] as $match) {
+            $this->search[$this->makeClassName()][] = '+' . $match;
+            $this->term = str_replace($match, '', $this->term);
         }
 
         $this->term = trim($this->term);
@@ -52,18 +81,18 @@ trait FullTextSearchable
      * Prepares words for a loose search
      * @return void
      */
-    protected function splitWords() : void
+    protected function splitMatches() : void
     {
         $term = $this->removeSymbols();
 
-        $words = explode(' ', $term);
+        $matches = explode(' ', $term);
 
-        foreach ($words as $word) {
-            if (strlen($word) >= 3) {
-                if ($word === end($words)) {
-                    $word .= '*';
+        foreach ($matches as $match) {
+            if (strlen($match) >= 3) {
+                if ($match === end($matches)) {
+                    $match .= '*';
                 }
-                $this->search[] = '+' . $word;
+                $this->search[$this->makeClassName()][] = '+' . $match;
             }
         }
     }
@@ -74,10 +103,11 @@ trait FullTextSearchable
      */
     protected function makeFullText() : string
     {
-        $this->splitExactWords();
-        $this->splitWords();
+        $this->splitModelMatches();
+        $this->splitExactMatches();
+        $this->splitMatches();
 
-        return $this->prepareSearch();
+        return $this->makeSearch();
     }
 
     /**
@@ -85,9 +115,9 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function prepareSearch() : string
+    protected function makeSearch() : string
     {
-        return $this->search = implode(' ', (array)$this->search);
+        return implode(' ', (array)$this->search[$this->makeClassName()]);
     }
 
     /**

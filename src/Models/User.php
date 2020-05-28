@@ -79,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $searchable = [
+    public $searchable = [
         'name',
         'email',
         'ip'
