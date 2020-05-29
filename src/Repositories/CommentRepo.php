@@ -38,7 +38,21 @@ class CommentRepo
             ->with(['morph', 'user'])
             ->withCount('reports')
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
+            ->when($filter['search'] !== null, function ($query) use ($filter) {
+                $query->filterSearch($filter['search'])
+                    ->when(array_key_exists('user', $this->comment->search), function ($query) {
+                        $user = $this->comment->user()->make();
+
+                        $columns = implode(',', $user->searchable);
+
+                        $query->leftJoin('users', function ($query) {
+                            $query->on('users.id', '=', 'comments.user_id');
+                        })
+                        ->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", [
+                            $this->comment->search['user']
+                        ]);
+                    });
+            })
             ->filterStatus($filter['status'])
             ->filterCensored($filter['censored'])
             ->filterReport($filter['report'])

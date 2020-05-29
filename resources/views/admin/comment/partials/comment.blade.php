@@ -27,7 +27,13 @@ data-id="{{ $comment->id }}">
                         @if ($comment->censored == true)</em>@endif
                     </li>
                     @if ($comment->user)
-                    <li><small>{{ trans('icore::comments.author') }}: <a href="{{ route('admin.comment.'.$comment->poli.'.index', ['filter[author]' => $comment->user->id]) }}">{{ $comment->user->name }}</a></small></li>
+                    <li>
+                        <small>
+                            <span>{{ trans('icore::comments.author') }}:</span>
+                            <span><a href="{{ route("admin.comment.{$comment->poli}.index", ['filter[author]' => $comment->user->id]) }}">{{ $comment->user->name }}</a></span>
+                            <span><a href="{{ route("admin.comment.{$comment->poli}.index", ['filter[search]' => "user:\"{$comment->user->ip}\""]) }}">{{ $comment->user->ip }}</a></span>
+                        </small>
+                    </li>
                     @endif
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $comment->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $comment->updated_at_diff }}</small></li>
