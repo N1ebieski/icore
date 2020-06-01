@@ -171,6 +171,7 @@ class PageRepo
     public function firstBySlug(string $slug) : ?Page
     {
         return $this->page->whereSlug($slug)
+            ->with('tags')
             ->active()
             ->withAncestorsExceptSelf()
             ->first();
