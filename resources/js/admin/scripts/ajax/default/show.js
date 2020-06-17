@@ -13,7 +13,7 @@ jQuery(document).on('click', 'a.show, button.show', function(e) {
         url: $element.attr('data-route'),
         method: 'get',
         beforeSend: function() {
-            $modal.body.append('<div class="loader-absolute"><div class="spinner-grow"><span class="sr-only">Loading...</span></div></div>');
+            $modal.body.append($.getLoader('spinner-grow'));
         },
         complete: function() {
             $modal.content.find('div.loader-absolute').remove();

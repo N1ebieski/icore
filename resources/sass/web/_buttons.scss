@@ -15,7 +15,7 @@
     .btn {
         width: 40px;
         height: 40px;
-        @include media-breakpoint-up(sm) {
+        @include media-breakpoint-up(md) {
             width: 120px;
             height: 40px;
         }

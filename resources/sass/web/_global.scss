@@ -65,3 +65,9 @@
         font-weight: 800;
     }
 }
+
+@include media-breakpoint-down(xs) {
+    select.filter {
+        max-width: 190px;
+    }
+}

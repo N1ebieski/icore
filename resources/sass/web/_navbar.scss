@@ -145,6 +145,16 @@
     @include sidebar-icons;
 
     .nav-item {
+        &.dropdown {
+            .dropdown-menu {
+                display: none;
+
+                &.show {
+                    display: block;
+                }            
+            }
+        }
+
         .nav-link {
             color: $gray-600;
 
@@ -230,14 +240,46 @@
     }
 }
 
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-only(xs) {
     @include sidebar;
 
     .sidebar {
         border-right: 0px !important;
+        
+        &:not(.toggled) {
+            .nav-item {
+                &.dropdown {
+                    &.active {
+                        .dropdown-toggle::after {
+                            content: '\f107';
+                        }
+                        .dropdown-menu {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }        
     }
 }
 
 @include media-breakpoint-up(lg) {
     @include sidebar;
+
+    .sidebar {
+        &:not(.toggled) {
+            .nav-item {
+                &.dropdown {
+                    &.active {
+                        .dropdown-toggle::after {
+                            content: '\f107';
+                        }
+                        .dropdown-menu {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -37,7 +37,7 @@
                 data-btn-cancel-class="btn-secondary btn-popover" data-btn-cancel-icon-class="fas fa-ban"
                 data-title="{{ trans('icore::profile.symlink_confirmation') }}">
                     <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
+                    <span class="d-none d-md-inline">{{ trans('icore::default.delete') }}</span>
                 </button>
             </form>
         </div>
@@ -62,7 +62,7 @@
                 <a href="{{ route('web.profile.socialite.redirect', ['provider' => $provider]) }}"
                 type="button" class="btn btn-primary">
                     <i class="fas fa-link"></i>
-                    <span class="d-none d-sm-inline">{{ trans('icore::profile.symlink') }}</span>
+                    <span class="d-none d-md-inline">{{ trans('icore::profile.symlink') }}</span>
                 </a>
             </div>
         </div>
