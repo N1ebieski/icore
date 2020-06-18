@@ -4,7 +4,7 @@
     @foreach ($archives as $archive)
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <a href="{{ route('web.archive.post.show', ['month' => $archive->month, 'year' => $archive->year]) }}"
-        class="@isUrl(route('web.archive.post.show', ['month' => $archive->month, 'year' => $archive->year]), 'font-weight-bold')">
+        class="{{ $isUrl(route('web.archive.post.show', ['month' => $archive->month, 'year' => $archive->year]), 'font-weight-bold') }}">
             {{ $archive->month_localized }} {{ $archive->year }}
         </a>
         <span class="badge badge-primary badge-pill">{{ $archive->posts_count }}</span>

@@ -1,15 +1,14 @@
 <?php
 
-namespace N1ebieski\ICore\Helpers;
+namespace N1ebieski\ICore\View\ViewModels;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Routing\UrlGenerator as Url;
+use Spatie\ViewModels\ViewModel;
+use Illuminate\Contracts\Container\Container as App;
 
-/**
- * [ActiveHelper description]
- */
-class ActiveHelper
+class ActiveViewModel extends ViewModel
 {
     /**
      * [private description]
@@ -30,15 +29,26 @@ class ActiveHelper
     protected $url;
 
     /**
-     * @param Request $request
-     * @param Str     $str
-     * @param Url     $url
+     * Undocumented variable
+     *
+     * @var App
      */
-    public function __construct(Request $request, Str $str, Url $url)
+    protected $app;
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param Str $str
+     * @param Url $url
+     * @param App $app
+     */
+    public function __construct(Request $request, Str $str, Url $url, App $app)
     {
         $this->request = $request;
         $this->str = $str;
         $this->url = $url;
+        $this->app = $app;
     }
 
 
@@ -118,7 +128,7 @@ class ActiveHelper
      */
     public function isTheme($input, string $output = "active") : ?string
     {
-        $theme = app()->make('icore.helpers.view')->getTheme();
+        $theme = $this->app->make(LayoutViewModel::class)->getTheme();
 
         foreach ((array)$input as $string) {
             if ($theme === $string) {

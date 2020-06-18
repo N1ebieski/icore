@@ -7,7 +7,7 @@ data-id="{{ $post->id }}" id="update">
     </div>
     <div class="form-group">
         <label for="content_html_trumbowyg">{{ trans('icore::posts.content') }}</label>
-        <div class="@isTheme('dark', 'trumbowyg-dark')">
+        <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
             <textarea contenteditable="true" spellcheck="true" name="content_html" id="content_html_trumbowyg" class="form-control"
             rows="10" id="content_html">{{ old('content_html', $post->content_html) }}</textarea>
         </div>

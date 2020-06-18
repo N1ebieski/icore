@@ -22,13 +22,13 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">{{ trans('icore::mailings.title') }}</label>
-                    <input type="text" value="{{ old('title', $mailing->title) }}" name="title" id="title" class="form-control @isValid('title')">
+                    <input type="text" value="{{ old('title', $mailing->title) }}" name="title" id="title" class="form-control {{ $isValid('title') }}">
                     @includeWhen($errors->has('title'), 'icore::admin.partials.errors', ['name' => 'title'])
                 </div>
                 <div class="form-group">
                     <label for="content_html_trumbowyg">{{ trans('icore::mailings.content') }}</label>
-                    <div class="@isTheme('dark', 'trumbowyg-dark')">
-                        <textarea name="content_html" id="content_html_trumbowyg" class="form-control @isValid('content_html')"
+                    <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
+                        <textarea name="content_html" id="content_html_trumbowyg" class="form-control {{ $isValid('content_html') }}"
                         rows="10" id="content_html">{{ old('content_html', $mailing->content_html) }}</textarea>
                     </div>
                     @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
@@ -97,7 +97,7 @@
                 id="collapseEmails_Json">
                     <div class="form-group">
                         <label for="emails_json">{{ trans('icore::mailings.emails_json') }}</label>
-                        <textarea name="emails_json" class="form-control @isValid('emails_json')"
+                        <textarea name="emails_json" class="form-control {{ $isValid('emails_json') }}"
                         rows="10" id="emails_json">{{ old('emails_json') }}</textarea>
                         @includeWhen($errors->has('emails_json'), 'icore::admin.partials.errors', ['name' => 'emails_json'])
                     </div>

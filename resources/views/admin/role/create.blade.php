@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="name">{{ trans('icore::roles.name') }}</label>
                     <input type="text" value="{{ old('name') }}" name="name"
-                    id="name" class="form-control @isValid('name')">
+                    id="name" class="form-control {{ $isValid('name') }}">
                     @includeWhen($errors->has('name'), 'icore::admin.partials.errors', ['name' => 'name'])
                 </div>
                 <hr>

@@ -20,27 +20,27 @@
                     <label for="email">{{ trans('icore::contact.address.label') }}</label>
                     <input type="email" name="email" id="email" 
                     value="{{ old('email', auth()->user()->email ?? null) }}"
-                    class="form-control @isValid('email')"
+                    class="form-control {{ $isValid('email') }}"
                     placeholder="{{ trans('icore::contact.address.placeholder') }}">
                     @includeWhen($errors->has('email'), 'icore::web.partials.errors', ['name' => 'email'])
                 </div>
                 <div class="form-group">
                     <label for="title">{{ trans('icore::contact.title.label') }}</label>
                     <input type="text" name="title" id="title" value="{{ old('title') }}"
-                    class="form-control @isValid('title')"
+                    class="form-control {{ $isValid('title') }}"
                     placeholder="{{ trans('icore::contact.title.placeholder') }}">
                     @includeWhen($errors->has('title'), 'icore::web.partials.errors', ['name' => 'title'])
                 </div>
                 <div class="form-group">
                     <label for="content">{{ trans('icore::contact.content') }}</label>
                     <textarea name="content" id="content"
-                    class="form-control @isValid('content')"
+                    class="form-control {{ $isValid('content') }}"
                     rows="3">{{ old('content') }}</textarea>
                     @includeWhen($errors->has('content'), 'icore::web.partials.errors', ['name' => 'content'])
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input @isValid('contact_agreement')" 
+                        <input type="checkbox" class="custom-control-input {{ $isValid('contact_agreement') }}" 
                         id="contact_agreement" name="contact_agreement" value="1"
                         {{ old('contact_agreement') == true ? 'checked' : null }}>
                         <label class="custom-control-label text-left" for="contact_agreement">

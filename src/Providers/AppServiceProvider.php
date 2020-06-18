@@ -31,18 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('icore.helpers.view', function ($app) {
-            return $this->app->make(\N1ebieski\ICore\Helpers\ViewHelper::class);
-        });
-
-        $this->app->singleton('icore.helpers.valid', function ($app) {
-            return $this->app->make(\N1ebieski\ICore\Helpers\ValidHelper::class);
-        });
-
-        $this->app->singleton('icore.helpers.active', function ($app) {
-            return $this->app->make(\N1ebieski\ICore\Helpers\ActiveHelper::class);
-        });
-
         $this->app->bind(\GuzzleHttp\Client::class, function ($app) {
             return new \GuzzleHttp\Client(['timeout' => 10.0]);
         });

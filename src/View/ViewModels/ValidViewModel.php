@@ -1,14 +1,12 @@
 <?php
 
-namespace N1ebieski\ICore\Helpers;
+namespace N1ebieski\ICore\View\ViewModels;
 
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Spatie\ViewModels\ViewModel;
 
-/**
- * [ThemeHelper description]
- */
-class ValidHelper
+class ValidViewModel extends ViewModel
 {
     /**
      * [private description]

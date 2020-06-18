@@ -21,7 +21,7 @@
     <div class="form-group row">
         <label for="name" class="col-lg-3 col-form-label text-lg-left">{{ trans('icore::auth.name.label') }}</label>
         <div class="col-lg-6">
-            <input id="name" type="text" class="form-control @isValid('name')" 
+            <input id="name" type="text" class="form-control {{ $isValid('name') }}" 
             name="name" value="{{ old('name', $user->name) }}" required autofocus>
             @includeWhen($errors->has('name'), 'icore::web.partials.errors', ['name' => 'name'])
         </div>
@@ -31,7 +31,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input @isValid('marketing_agreement')" 
+                    <input type="checkbox" class="custom-control-input {{ $isValid('marketing_agreement') }}" 
                     id="marketing_agreement" name="marketing_agreement" value="1"
                     {{ old('marketing_agreement', $user->marketing) == true ? 'checked' : null }}>
                     <label class="custom-control-label text-left" for="marketing_agreement">

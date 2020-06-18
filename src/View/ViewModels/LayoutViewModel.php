@@ -1,16 +1,14 @@
 <?php
 
-namespace N1ebieski\ICore\Helpers;
+namespace N1ebieski\ICore\View\ViewModels;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Routing\UrlGenerator as Url;
+use Spatie\ViewModels\ViewModel;
 
-/**
- * [ThemeHelper description]
- */
-class ViewHelper
+class LayoutViewModel extends ViewModel
 {
     /**
      * [private description]
@@ -92,8 +90,8 @@ class ViewHelper
             $path = '/' . $assets . '/admin/admin';
         }
 
-        if (file_exists(public_path() . $path . '-' . static::getTheme() . '.css')) {
-            return $path . '-' . static::getTheme() . '.css';
+        if (file_exists(public_path() . $path . '-' . $this->getTheme() . '.css')) {
+            return $path . '-' . $this->getTheme() . '.css';
         }
 
         return $path . '.css';

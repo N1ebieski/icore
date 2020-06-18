@@ -7,7 +7,7 @@
     <div class="list-group-item d-flex justify-content-between align-items-center">
         @if (!empty($sibling->content))    
         <a href="{{ route('web.page.show', $sibling->slug) }}"
-        class="@isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold')">
+        class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}">
             {{ str_repeat('-', $sibling->real_depth) }} {{ $sibling->title }}
         </a>
         @else

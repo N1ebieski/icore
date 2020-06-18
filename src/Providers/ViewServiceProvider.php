@@ -26,30 +26,6 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['blade.compiler']->directive('isValid', function (string $field) {
-            return "<?php echo app('icore.helpers.valid')->isValid($field); ?>";
-        });
-
-        $this->app['blade.compiler']->directive('isCookie', function ($input, string $output = 'active') {
-            return "<?php echo app('icore.helpers.active')->isCookie($input, '$output'); ?>";
-        });
-
-        $this->app['blade.compiler']->directive('isUrl', function ($input, string $output = 'active') {
-            return "<?php echo app('icore.helpers.active')->isUrl($input, '$output'); ?>";
-        });
-
-        $this->app['blade.compiler']->directive('isRouteContains', function ($input, string $output = 'active') {
-            return "<?php echo app('icore.helpers.active')->isRouteContains($input, '$output'); ?>";
-        });
-
-        $this->app['blade.compiler']->directive('isUrlContains', function ($input, string $output = 'active') {
-            return "<?php echo app('icore.helpers.active')->isUrlContains($input, '$output'); ?>";
-        });
-
-        $this->app['blade.compiler']->directive('isTheme', function ($input, string $output = 'active') {
-            return "<?php echo app('icore.helpers.active')->isTheme($input, '$output'); ?>";
-        });
-
         $this->app['blade.compiler']->directive('pushonce', function ($expression) {
             $domain = explode('.', trim(substr($expression, 1, -1)));
 
@@ -62,6 +38,18 @@ class ViewServiceProvider extends ServiceProvider
 
         $this->app['blade.compiler']->directive('endpushonce', function ($expression) {
             return '<?php $__env->stopPush(); endif; ?>';
+        });
+
+        $this->app['view']->composer([
+            $this->app['config']->get('icore.layout') . '::web.layouts.layout',
+            $this->app['config']->get('icore.layout') . '::admin.layouts.layout',
+        ], function ($view) {
+            $view->with($this->app->make(\N1ebieski\ICore\View\ViewModels\LayoutViewModel::class)->toArray());
+        });
+
+        $this->app['view']->composer('*', function ($view) {
+            $view->with($this->app->make(\N1ebieski\ICore\View\ViewModels\ActiveViewModel::class)->toArray());
+            $view->with($this->app->make(\N1ebieski\ICore\View\ViewModels\ValidViewModel::class)->toArray());
         });
 
         $this->app['view']->composer(

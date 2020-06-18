@@ -17,7 +17,7 @@
                     title="{{ trans('icore::categories.icon.tooltip') }}" class="far fa-question-circle"></i>
                 </label>
                 <input type="text" value="{{ old('icon') }}" name="icon" id="icon"
-                class="form-control @isValid('icon')" placeholder="{{ trans('icore::categories.icon.placeholder') }}">
+                class="form-control {{ $isValid('icon') }}" placeholder="{{ trans('icore::categories.icon.placeholder') }}">
             </div>
             @if ($categories->count() > 0)
             <div class="form-group">

@@ -23,14 +23,14 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">{{ trans('icore::posts.title') }}</label>
-                    <input type="text" value="{{ old('title', $post->title) }}" name="title" id="title" class="form-control @isValid('title')"
+                    <input type="text" value="{{ old('title', $post->title) }}" name="title" id="title" class="form-control {{ $isValid('title') }}"
                     placeholder="Wpisz tytuł posta">
                     @includeWhen($errors->has('title'), 'icore::admin.partials.errors', ['name' => 'title'])
                 </div>
                 <div class="form-group">
                     <label for="content_html_trumbowyg">{{ trans('icore::posts.content') }}</label>
-                    <div class="@isTheme('dark', 'trumbowyg-dark')">
-                        <textarea name="content_html" id="content_html_trumbowyg" class="form-control @isValid('content_html')"
+                    <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
+                        <textarea name="content_html" id="content_html_trumbowyg" class="form-control {{ $isValid('content_html') }}"
                         rows="10" id="content_html">{{ old('content_html', $post->content_html) }}</textarea>
                     </div>
                     @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
@@ -39,7 +39,7 @@
                     <label for="tags">
                         {{ trans('icore::posts.tags.label') }} <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.tags.tooltip', ['max_tags' => $maxTags]) }}" class="far fa-question-circle"></i>
                     </label>
-                    <input name="tags" id="tags" class="form-control tagsinput @isValid('tags')"
+                    <input name="tags" id="tags" class="form-control tagsinput {{ $isValid('tags') }}"
                     value="{{ old('tags', $post->tagList) }}" placeholder="Dodaj tag" data-max="{{ $maxTags }}">
                     @includeWhen($errors->has('tags'), 'icore::admin.partials.errors', ['name' => 'tags'])
                 </div>
@@ -49,7 +49,7 @@
                         SEO title <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.seo.tooltip') }}" class="far fa-question-circle"></i>
                     </label>
                     <input type="text" value="{{ old('seo_title', $post->seo_title) }}" name="seo_title" id="seo_title"
-                    class="form-control @isValid('seo_title')"
+                    class="form-control {{ $isValid('seo_title') }}"
                     placeholder="Wpisz SEO title">
                     @includeWhen($errors->has('seo_title'), 'icore::admin.partials.errors', ['name' => 'seo_title'])
                 </div>
@@ -57,7 +57,7 @@
                     <label for="seo_desc">
                         SEO description <i data-toggle="tooltip" data-placement="top" title="{{ trans('icore::posts.seo.tooltip') }}" class="far fa-question-circle"></i>
                     </label>
-                    <textarea name="seo_desc" class="form-control @isValid('seo_desc')"
+                    <textarea name="seo_desc" class="form-control {{ $isValid('seo_desc') }}"
                     rows="3" id="seo_desc">{{ old('seo_desc', $post->seo_desc) }}</textarea>
                     @includeWhen($errors->has('seo_desc'), 'icore::admin.partials.errors', ['name' => 'seo_desc'])
                 </div>
@@ -131,7 +131,7 @@
                         data-route="{{ route('admin.category.post.search') }}" data-max="{{ $maxCategories }}"
                         class="position-relative">
                             <div class="input-group">
-                                <input type="text" class="form-control @isValid('category')" placeholder="{{ trans('icore::categories.search_categories') }}">
+                                <input type="text" class="form-control {{ $isValid('category') }}" placeholder="{{ trans('icore::categories.search_categories') }}">
                                 <span class="input-group-append">
                                     <button class="btn btn-outline-secondary border border-left-0"
                                     type="button">

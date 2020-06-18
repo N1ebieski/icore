@@ -18,7 +18,7 @@
                                 <label for="name" class="col-lg-4 col-form-label text-lg-right">{{ trans('icore::auth.name.label') }}</label>
 
                                 <div class="col-lg-6">
-                                    <input id="name" type="text" class="form-control @isValid('name')" name="name" value="{{ old('name') }}" required autofocus>
+                                    <input id="name" type="text" class="form-control {{ $isValid('name') }}" name="name" value="{{ old('name') }}" required autofocus>
 
                                     @includeWhen($errors->has('name'), 'icore::web.partials.errors', ['name' => 'name'])
                                 </div>
@@ -28,7 +28,7 @@
                                 <label for="email" class="col-md-4 col-form-label text-lg-right">{{ trans('icore::auth.address.label') }}</label>
 
                                 <div class="col-lg-6">
-                                    <input id="email" type="email" class="form-control @isValid('email')" name="email" value="{{ old('email') }}" required>
+                                    <input id="email" type="email" class="form-control {{ $isValid('email') }}" name="email" value="{{ old('email') }}" required>
 
                                     @includeWhen($errors->has('email'), 'icore::web.partials.errors', ['name' => 'email'])
                                 </div>
@@ -38,7 +38,7 @@
                                 <label for="password" class="col-lg-4 col-form-label text-lg-right">{{ trans('icore::auth.password') }}</label>
 
                                 <div class="col-lg-6">
-                                    <input id="password" type="password" class="form-control @isValid('password')" name="password" required>
+                                    <input id="password" type="password" class="form-control {{ $isValid('password') }}" name="password" required>
 
                                     @includeWhen($errors->has('password'), 'icore::web.partials.errors', ['name' => 'password'])
                                 </div>
@@ -57,7 +57,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input @isValid('privacy_agreement')" 
+                                            <input type="checkbox" class="custom-control-input {{ $isValid('privacy_agreement') }}" 
                                             id="privacy_agreement" name="privacy_agreement" value="1"
                                             {{ old('privacy_agreement') == true ? 'checked' : null }}>
                                             <label class="custom-control-label text-left" for="privacy_agreement">
@@ -74,7 +74,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input @isValid('contact_agreement')" 
+                                            <input type="checkbox" class="custom-control-input {{ $isValid('contact_agreement') }}" 
                                             id="contact_agreement" name="contact_agreement" value="1"
                                             {{ old('contact_agreement') == true ? 'checked' : null }}>
                                             <label class="custom-control-label text-left" for="contact_agreement">
@@ -89,7 +89,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input @isValid('marketing_agreement')" 
+                                            <input type="checkbox" class="custom-control-input {{ $isValid('marketing_agreement') }}" 
                                             id="marketing_agreement" name="marketing_agreement" value="1"
                                             {{ old('marketing_agreement') == true ? 'checked' : null }}>
                                             <label class="custom-control-label text-left" for="marketing_agreement">
