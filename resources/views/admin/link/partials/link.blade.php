@@ -27,7 +27,7 @@ data-id="{{ $link->id }}">
                     <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </button>
                 @endcan
-                @can('delete links')
+                @can('admin.links.delete')
                 <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                 data-route="{{ route('admin.link.destroy', [$link->id]) }}" data-id="{{ $link->id }}"
                 type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"

@@ -1,7 +1,7 @@
 <div id="row{{ $ban->id }}" class="row border-bottom py-3 position-relative transition"
 data-id="{{ $ban->id }}">
     <div class="col my-auto d-flex justify-content-between">
-        @can('delete bans')
+        @can('admin.bans.delete')
         <div class="custom-control custom-checkbox">
             <input name="select[]" type="checkbox" class="custom-control-input select" id="select{{ $ban->id }}" value="{{ $ban->id }}">
             <label class="custom-control-label" for="select{{ $ban->id }}">
@@ -11,7 +11,7 @@ data-id="{{ $ban->id }}">
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $ban->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $ban->updated_at_diff }}</small></li>
                 </ul>
-        @can('delete bans')
+        @can('admin.bans.delete')
             </label>
         </div>
         @endcan
@@ -25,7 +25,7 @@ data-id="{{ $ban->id }}">
                     <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </button>
                 @endcan
-                @can('delete bans')
+                @can('admin.bans.delete')
                 <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                 data-route="{{ route('admin.banvalue.destroy', [$ban->id]) }}" data-id="{{ $ban->id }}"
                 type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
