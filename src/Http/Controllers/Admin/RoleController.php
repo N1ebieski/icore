@@ -47,7 +47,7 @@ class RoleController
 
         return Response::view('icore::admin.role.create', [
             'permissions' => $permissions,
-            'col_count' => (int)round($permissions->count() / 3, 0)
+            'col_count' => (int)ceil($permissions->count() / 3)
         ]);
     }
 
@@ -80,7 +80,7 @@ class RoleController
         return Response::view('icore::admin.role.edit', [
             'role' => $role,
             'permissions' => $permissions,
-            'col_count' => (int)round($permissions->count() / 3, 0)
+            'col_count' => (int)ceil($permissions->count() / 3)
         ]);
     }
 
