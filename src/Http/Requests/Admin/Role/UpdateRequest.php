@@ -44,9 +44,11 @@ class UpdateRequest extends FormRequest
                 'exists:permissions,name',
                 $this->role->name === 'user' ?
                     Rule::in([
-                        'create comments',
-                        'suggest comments',
-                        'edit comments'
+                        'web.*',
+                        'web.comments.*',
+                        'web.comments.create',
+                        'web.comments.suggest',
+                        'web.comments.edit'
                     ])
                     : null,
                 'no_js_validation'

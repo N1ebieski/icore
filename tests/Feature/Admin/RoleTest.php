@@ -228,7 +228,7 @@ class RoleTest extends TestCase
 
         $response = $this->put(route('admin.role.update', [$role->id]), [
             'name' => 'user',
-            'perm' => [3627 => 'access admin']
+            'perm' => [3627 => 'admin.access']
         ]);
 
         $response->assertSessionHasErrors(['perm.3627']);
@@ -265,8 +265,8 @@ class RoleTest extends TestCase
         $response = $this->put(route('admin.role.update', [$role->id]), [
             'name' => 'Bungo',
             'perm' => [
-                1 => 'access admin',
-                2 => 'index dashboard'
+                2 => 'admin.access',
+                4 => 'admin.home.view'
             ]
         ]);
 
@@ -279,7 +279,7 @@ class RoleTest extends TestCase
 
         $this->assertDatabaseHas('roles_permissions', [
             'role_id' => $role->id,
-            'permission_id' => 1
+            'permission_id' => 2
         ]);
 
         $this->assertTrue(Auth::check());
@@ -359,8 +359,8 @@ class RoleTest extends TestCase
         $response = $this->post(route('admin.role.store'), [
             'name' => 'Bungo',
             'perm' => [
-                1 => 'access admin',
-                2 => 'index dashboard'
+                2 => 'admin.access',
+                4 => 'admin.home.view'
             ]
         ]);
 
@@ -373,7 +373,7 @@ class RoleTest extends TestCase
 
         $this->assertDatabaseHas('roles_permissions', [
             'role_id' => $role->id,
-            'permission_id' => 1
+            'permission_id' => 2
         ]);
 
         $this->assertTrue(Auth::check());

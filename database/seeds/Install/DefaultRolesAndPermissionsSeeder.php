@@ -22,101 +22,80 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permdissions
-        Permission::create(['name' => 'access admin']);
+        Permission::firstOrCreate(['name' => 'admin.*']);
+        Permission::firstOrCreate(['name' => 'admin.access']);
 
-        Permission::create(['name' => 'index dashboard']);
+        Permission::firstOrCreate(['name' => 'admin.home.*']);
+        Permission::firstOrCreate(['name' => 'admin.home.view']);
 
-        Permission::create(['name' => 'index users']);
+        Permission::firstOrCreate(['name' => 'admin.users.*']);
+        Permission::firstOrCreate(['name' => 'admin.users.view']);
 
-        Permission::create(['name' => 'index posts']);
-        Permission::create(['name' => 'create posts']);
-        Permission::create(['name' => 'edit posts']);
-        Permission::create(['name' => 'destroy posts']);
-        Permission::create(['name' => 'status posts']);
+        Permission::firstOrCreate(['name' => 'admin.posts.*']);
+        Permission::firstOrCreate(['name' => 'admin.posts.view']);
+        Permission::firstOrCreate(['name' => 'admin.posts.create']);
+        Permission::firstOrCreate(['name' => 'admin.posts.edit']);
+        Permission::firstOrCreate(['name' => 'admin.posts.delete']);
+        Permission::firstOrCreate(['name' => 'admin.posts.status']);
 
-        Permission::create(['name' => 'index categories']);
-        Permission::create(['name' => 'create categories']);
-        Permission::create(['name' => 'edit categories']);
-        Permission::create(['name' => 'destroy categories']);
-        Permission::create(['name' => 'status categories']);
+        Permission::firstOrCreate(['name' => 'admin.categories.*']);
+        Permission::firstOrCreate(['name' => 'admin.categories.view']);
+        Permission::firstOrCreate(['name' => 'admin.categories.create']);
+        Permission::firstOrCreate(['name' => 'admin.categories.edit']);
+        Permission::firstOrCreate(['name' => 'admin.categories.delete']);
+        Permission::firstOrCreate(['name' => 'admin.categories.status']);
 
-        Permission::create(['name' => 'index comments']);
-        Permission::create(['name' => 'show comments']);
-        Permission::create(['name' => 'create comments']);
-        Permission::create(['name' => 'suggest comments']);
-        Permission::create(['name' => 'edit comments']);
-        Permission::create(['name' => 'destroy comments']);
-        Permission::create(['name' => 'status comments']);
+        Permission::firstOrCreate(['name' => 'admin.comments.*']);
+        Permission::firstOrCreate(['name' => 'admin.comments.view']);
+        Permission::firstOrCreate(['name' => 'admin.comments.create']);
+        Permission::firstOrCreate(['name' => 'admin.comments.suggest']);
+        Permission::firstOrCreate(['name' => 'admin.comments.edit']);
+        Permission::firstOrCreate(['name' => 'admin.comments.delete']);
+        Permission::firstOrCreate(['name' => 'admin.comments.status']);
 
-        Permission::create(['name' => 'index bans']);
-        Permission::create(['name' => 'create bans']);
-        Permission::create(['name' => 'edit bans']);
-        Permission::create(['name' => 'destroy bans']);
+        Permission::firstOrCreate(['name' => 'admin.bans.*']);
+        Permission::firstOrCreate(['name' => 'admin.bans.view']);
+        Permission::firstOrCreate(['name' => 'admin.bans.create']);
+        Permission::firstOrCreate(['name' => 'admin.bans.edit']);
+        Permission::firstOrCreate(['name' => 'admin.bans.delete']);
 
-        Permission::create(['name' => 'index mailings']);
-        Permission::create(['name' => 'create mailings']);
-        Permission::create(['name' => 'edit mailings']);
-        Permission::create(['name' => 'destroy mailings']);
-        Permission::create(['name' => 'status mailings']);
+        Permission::firstOrCreate(['name' => 'admin.mailings.*']);
+        Permission::firstOrCreate(['name' => 'admin.mailings.view']);
+        Permission::firstOrCreate(['name' => 'admin.mailings.create']);
+        Permission::firstOrCreate(['name' => 'admin.mailings.edit']);
+        Permission::firstOrCreate(['name' => 'admin.mailings.delete']);
+        Permission::firstOrCreate(['name' => 'admin.mailings.status']);
 
-        Permission::create(['name' => 'index pages']);
-        Permission::create(['name' => 'create pages']);
-        Permission::create(['name' => 'edit pages']);
-        Permission::create(['name' => 'destroy pages']);
-        Permission::create(['name' => 'status pages']);
+        Permission::firstOrCreate(['name' => 'admin.pages.*']);
+        Permission::firstOrCreate(['name' => 'admin.pages.view']);
+        Permission::firstOrCreate(['name' => 'admin.pages.create']);
+        Permission::firstOrCreate(['name' => 'admin.pages.edit']);
+        Permission::firstOrCreate(['name' => 'admin.pages.delete']);
+        Permission::firstOrCreate(['name' => 'admin.pages.status']);
 
-        Permission::create(['name' => 'index roles']);
+        Permission::firstOrCreate(['name' => 'admin.roles.*']);
+        Permission::firstOrCreate(['name' => 'admin.roles.view']);
 
-        Permission::create(['name' => 'index links']);
-        Permission::create(['name' => 'create links']);
-        Permission::create(['name' => 'edit links']);
-        Permission::create(['name' => 'destroy links']);
+        Permission::firstOrCreate(['name' => 'admin.links.*']);
+        Permission::firstOrCreate(['name' => 'admin.links.view']);
+        Permission::firstOrCreate(['name' => 'admin.links.create']);
+        Permission::firstOrCreate(['name' => 'admin.links.edit']);
+        Permission::firstOrCreate(['name' => 'admin.links.delete']);
+
+        Permission::firstOrCreate(['name' => 'web.*']);
+
+        Permission::firstOrCreate(['name' => 'web.comments.*']);
+        Permission::firstOrCreate(['name' => 'web.comments.create']);
+        Permission::firstOrCreate(['name' => 'web.comments.suggest']);
+        Permission::firstOrCreate(['name' => 'web.comments.edit']);
 
         // create roles and assign created permissions
-        $role = Role::create(['name' => 'super-admin']);
+        $role = Role::firstOrCreate(['name' => 'super-admin']);
 
-        $role = Role::create(['name' => 'admin'])
-            ->givePermissionTo([
-                'access admin',
-                'index dashboard',
-                'index users',
-                'index posts',
-                'create posts',
-                'edit posts',
-                'destroy posts',
-                'status posts',
-                'index categories',
-                'create categories',
-                'edit categories',
-                'destroy categories',
-                'status categories',
-                'index comments',
-                'show comments',
-                'create comments',
-                'edit comments',
-                'destroy comments',
-                'status comments',
-                'index bans',
-                'create bans',
-                'edit bans',
-                'destroy bans',
-                'index mailings',
-                'create mailings',
-                'edit mailings',
-                'destroy mailings',
-                'status mailings',
-                'index pages',
-                'create pages',
-                'edit pages',
-                'destroy pages',
-                'status pages',
-                'index roles'
-            ]);
+        $role = Role::firstOrCreate(['name' => 'admin'])
+            ->givePermissionTo(['admin.*', 'web.*']);
 
-        $role = Role::create(['name' => 'user'])
-            ->givePermissionTo([
-                'create comments',
-                'edit comments'
-            ]);
+        $role = Role::firstOrCreate(['name' => 'user'])
+            ->givePermissionTo('web.*');
     }
 }

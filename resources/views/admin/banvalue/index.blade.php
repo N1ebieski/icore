@@ -16,7 +16,7 @@
         <i class="fas fa-user-slash"></i>
         <span>{{ trans("icore::bans.value.{$type}.route.index") }}</span>
     </div>
-    @can('create bans')
+    @can('admin.bans.create')
     <div class="ml-auto text-right">
         <a href="#" data-route="{{ route('admin.banvalue.create', [$type]) }}" role="button"
         class="btn btn-primary text-nowrap create" data-toggle="modal" data-target="#createModal">

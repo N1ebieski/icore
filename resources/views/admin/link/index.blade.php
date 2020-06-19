@@ -16,7 +16,7 @@
         <i class="fas fa-link"></i>
         <span> {{ trans("icore::links.{$type}.route.index") }}</span>
     </div>
-    @can('create links')
+    @can('admin.links.create')
     <div class="ml-auto text-right">
         <div class="responsive-btn-group">
             <a href="#" data-route="{{ route('admin.link.create', [$type]) }}" role="button"

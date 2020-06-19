@@ -1,7 +1,7 @@
 <div id="row{{ $comment->id }}" class="row py-3 border-bottom position-relative transition"
 data-id="{{ $comment->id }}">
     <div class="col my-auto d-flex justify-content-between">
-        @can('destroy comments')
+        @can('admin.comments.delete')
         <div class="custom-control custom-checkbox">
             <input name="select[]" type="checkbox" class="custom-control-input select" id="select{{ $comment->id }}" value="{{ $comment->id }}">
             <label class="custom-control-label" for="select{{ $comment->id }}">
@@ -38,14 +38,14 @@ data-id="{{ $comment->id }}">
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $comment->created_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.updated_at') }}: {{ $comment->updated_at_diff }}</small></li>
                 </ul>
-        @can('destroy comments')
+        @can('admin.comments.delete')
             </label>
         </div>
         @endcan
         <div class="text-right ml-3">
             <div class="responsive-btn-group">
                 <div class="btn-group-vertical">
-                    @can('edit comments')
+                    @can('admin.comments.edit')
                     <button data-toggle="modal" data-target="#editCommentModal"
                     data-route="{{ route('admin.comment.edit', ['comment' => $comment->id]) }}"
                     type="button" class="btn btn-primary edit">
@@ -53,7 +53,7 @@ data-id="{{ $comment->id }}">
                         <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                     </button>
                     @endcan
-                    @can('create comments')
+                    @can('admin.comments.create')
                     <button data-toggle="modal" data-target="#createCommentModal"
                     data-route="{{ route('admin.comment.'.$comment->poli.'.create', [
                         $comment->model_id,
@@ -65,7 +65,7 @@ data-id="{{ $comment->id }}">
                     </button>
                     @endcan
                 </div>
-                @can('status comments')
+                @can('admin.comments.status')
                 <div class="btn-group-vertical">
                     <button data-status="1" type="button" class="btn btn-success statusComment"
                     data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
@@ -98,7 +98,7 @@ data-id="{{ $comment->id }}">
                 @if ($comment->user)
                 <div class="btn-group-vertical">
                 @endif
-                    @can('destroy comments')
+                    @can('admin.comments.delete')
                     <button class="btn btn-danger" data-status="delete" data-toggle="confirmation"
                     data-route="{{ route('admin.comment.destroy', ['comment' => $comment->id]) }}" data-id="{{ $comment->id }}"
                     type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
@@ -111,7 +111,7 @@ data-id="{{ $comment->id }}">
                         <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                     </button>
                     @endcan
-                    @can('create bans')
+                    @can('admin.bans.create')
                     @if ($comment->user)
                     <button type="button" class="btn btn-dark create"
                     data-route="{{ route('admin.banmodel.user.create', [$comment->user->id]) }}"

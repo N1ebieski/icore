@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::match(['get', 'post'], '/users/index', 'UserController@index')
     ->name('user.index')
-    ->middleware('permission:index users');
+    ->middleware('permission:admin.users.view');
 
 Route::patch('/users/{user}', 'UserController@updateStatus')
     ->middleware(['role:super-admin', 'can:actionSelf,user'])

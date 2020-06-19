@@ -43,44 +43,14 @@ class ViewServiceProvider extends ServiceProvider
         $this->app['view']->composer([
             $this->app['config']->get('icore.layout') . '::web.layouts.layout',
             $this->app['config']->get('icore.layout') . '::admin.layouts.layout',
-        ], function ($view) {
-            $view->with($this->app->make(\N1ebieski\ICore\View\ViewModels\LayoutViewModel::class)->toArray());
-        });
+        ], \N1ebieski\ICore\View\Composers\LayoutComposer::class);
 
-        $this->app['view']->composer('*', function ($view) {
-            $view->with($this->app->make(\N1ebieski\ICore\View\ViewModels\ActiveViewModel::class)->toArray());
-            $view->with($this->app->make(\N1ebieski\ICore\View\ViewModels\ValidViewModel::class)->toArray());
-        });
+        $this->app['view']->composer('*', \N1ebieski\ICore\View\Composers\ActiveComposer::class);
+        $this->app['view']->composer('*', \N1ebieski\ICore\View\Composers\ValidComposer::class);
 
         $this->app['view']->composer(
             $this->app['config']->get('icore.layout') . '::admin.partials.sidebar',
-            function ($view) {
-                $view->with([
-                    'comments_inactive_count' => $this->app->make(\N1ebieski\ICore\Repositories\CommentRepo::class)
-                        ->countInactiveByModelType(),
-                    'comments_reported_count' => $this->app->make(\N1ebieski\ICore\Repositories\CommentRepo::class)
-                        ->countReportedByModelType()
-                ]);
-            }
+            \N1ebieski\ICore\View\Composers\Admin\SidebarComposer::class
         );
-
-        $this->app['view']->composer([
-                $this->app['config']->get('icore.layout') . '::web.layouts.layout',
-                $this->app['config']->get('icore.layout') . '::admin.layouts.layout'
-            ], function ($view) {
-                $view->with(array_replace_recursive([
-                    'title' => array(),
-                    'desc' => array(),
-                    'keys' => array(),
-                    'index' => 'index',
-                    'follow' => 'follow',
-                    'og' => [
-                        'title' => null,
-                        'desc' => null,
-                        'image' => null,
-                        'type' => null
-                    ]
-                ], $view->getData()));
-            });
     }
 }

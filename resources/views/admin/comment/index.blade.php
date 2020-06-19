@@ -20,7 +20,7 @@
     <form action="{{ route('admin.comment.destroy_global') }}" method="post" id="selectForm">
     @csrf
     @method('delete')
-        @can('destroy comments')
+        @can('admin.comments.delete')
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
@@ -36,7 +36,7 @@
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $comments])
         </div>
-        @can('destroy comments')
+        @can('admin.comments.delete')
         <div class="select-action rounded">
             <button class="btn btn-danger submit" data-toggle="confirmation"
             type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"

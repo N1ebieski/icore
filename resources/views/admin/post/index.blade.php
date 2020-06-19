@@ -15,7 +15,7 @@
         <i class="fas fa-fw fa-blog"></i>
         <span>{{ trans('icore::posts.route.index') }}</span>
     </div>
-    @can('create posts')
+    @can('admin.posts.create')
     <div class="ml-auto text-right">
         <a href="{{ route('admin.post.create') }}" role="button" class="btn btn-primary text-nowrap">
             <i class="far fa-plus-square"></i>
@@ -46,7 +46,7 @@
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $posts])
         </div>
-        @can('destroy posts')
+        @can('admin.posts.delete')
         <div class="select-action rounded">
             <button class="btn btn-danger submit" data-toggle="confirmation"
             type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"

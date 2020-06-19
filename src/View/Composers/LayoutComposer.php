@@ -1,14 +1,15 @@
 <?php
 
-namespace N1ebieski\ICore\View\ViewModels;
+namespace N1ebieski\ICore\View\Composers;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Routing\UrlGenerator as Url;
-use Spatie\ViewModels\ViewModel;
+use Illuminate\View\View;
+use N1ebieski\ICore\View\Composers\Composer;
 
-class LayoutViewModel extends ViewModel
+class LayoutComposer extends Composer
 {
     /**
      * [private description]
@@ -47,6 +48,29 @@ class LayoutViewModel extends ViewModel
         $this->config = $config;
         $this->str = $str;
         $this->url = $url;
+    }
+
+    /**
+     * Bind data to the view.
+     *
+     * @param  View  $view
+     * @return void
+     */
+    public function compose(View $view)
+    {
+        $view->with(array_replace_recursive([
+            'title' => array(),
+            'desc' => array(),
+            'keys' => array(),
+            'index' => 'index',
+            'follow' => 'follow',
+            'og' => [
+                'title' => null,
+                'desc' => null,
+                'image' => null,
+                'type' => null
+            ]
+        ], $view->getData()) + parent::toArray());
     }
 
     /**

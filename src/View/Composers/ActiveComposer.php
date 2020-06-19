@@ -1,14 +1,14 @@
 <?php
 
-namespace N1ebieski\ICore\View\ViewModels;
+namespace N1ebieski\ICore\View\Composers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Routing\UrlGenerator as Url;
-use Spatie\ViewModels\ViewModel;
 use Illuminate\Contracts\Container\Container as App;
+use N1ebieski\ICore\View\Composers\Composer;
 
-class ActiveViewModel extends ViewModel
+class ActiveComposer extends Composer
 {
     /**
      * [private description]
@@ -50,7 +50,6 @@ class ActiveViewModel extends ViewModel
         $this->url = $url;
         $this->app = $app;
     }
-
 
     /**
      * [activeCookie description]
@@ -128,7 +127,7 @@ class ActiveViewModel extends ViewModel
      */
     public function isTheme($input, string $output = "active") : ?string
     {
-        $theme = $this->app->make(LayoutViewModel::class)->getTheme();
+        $theme = $this->app->make(LayoutComposer::class)->getTheme();
 
         foreach ((array)$input as $string) {
             if ($theme === $string) {

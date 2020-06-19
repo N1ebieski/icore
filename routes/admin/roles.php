@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::match(['get', 'post'], '/roles/index', 'RoleController@index')
     ->name('role.index')
-    ->middleware('permission:index roles');
+    ->middleware('permission:admin.roles.view');
 
 Route::delete('/roles/{role}', 'RoleController@destroy')
     ->middleware('role:super-admin')

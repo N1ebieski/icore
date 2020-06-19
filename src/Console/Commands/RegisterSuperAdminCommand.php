@@ -117,7 +117,7 @@ class RegisterSuperAdminCommand extends Command
         );
 
         foreach ($validator->errors()->getMessages() as $key => $value) {
-            $this->error($key . ": " . $value . "\n");
+            $this->error($key . ": " . $value[0] . "\n");
         }
 
         return !$validator->fails();

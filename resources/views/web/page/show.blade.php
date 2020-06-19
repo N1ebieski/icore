@@ -48,7 +48,9 @@
                     @endif
                     <div id="comment">
                         @auth
+                        @canany(['web.comments.create', 'web.comments.suggest'])
                         @include('icore::web.comment.create', ['model' => $page, 'parent_id' => 0])
+                        @endcanany
                         @else
                         <a href="{{ route('login') }}">{{ trans('icore::comments.log_to_comment') }}</a>
                         @endauth

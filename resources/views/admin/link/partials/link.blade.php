@@ -19,7 +19,7 @@ data-id="{{ $link->id }}">
         </ul>
         <div class="text-right ml-3">
             <div class="responsive-btn-group">
-                @can('edit links')
+                @can('admin.links.edit')
                 <button data-toggle="modal" data-target="#editModal"
                 data-route="{{ route('admin.link.edit', [$link->id]) }}"
                 type="button" class="btn btn-primary edit">

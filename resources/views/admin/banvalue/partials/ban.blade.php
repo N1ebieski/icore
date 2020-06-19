@@ -17,7 +17,7 @@ data-id="{{ $ban->id }}">
         @endcan
         <div class="text-right ml-3">
             <div class="responsive-btn-group">
-                @can('edit bans')
+                @can('admin.bans.edit')
                 <button data-toggle="modal" data-target="#editModal"
                 data-route="{{ route('admin.banvalue.edit', [$ban->id]) }}"
                 type="button" class="btn btn-primary edit">

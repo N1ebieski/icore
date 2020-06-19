@@ -35,7 +35,7 @@ class Activate
      */
     public function handle($event)
     {
-        if ($this->auth->user()->can('create comments')) {
+        if ($this->auth->user()->can('web.comments.create')) {
             $event->comment->update(['status' => Comment::ACTIVE]);
         }
     }

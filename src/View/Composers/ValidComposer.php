@@ -1,12 +1,12 @@
 <?php
 
-namespace N1ebieski\ICore\View\ViewModels;
+namespace N1ebieski\ICore\View\Composers;
 
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
-use Spatie\ViewModels\ViewModel;
+use N1ebieski\ICore\View\Composers\Composer;
 
-class ValidViewModel extends ViewModel
+class ValidComposer extends Composer
 {
     /**
      * [private description]
