@@ -11,6 +11,7 @@ return [
     'post' => [
         'max_categories' => (int)env('ICORE_POST_MAX_CATEGORIES', 5),
         'max_tags' => (int)env('ICORE_POST_MAX_TAGS', 10),
+        'short_content' => (int)env('ICORE_POST_SHORT_CONTENT', 500),
     ],
 
     'page' => [

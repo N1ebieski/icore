@@ -339,7 +339,11 @@ class Post extends Model
      */
     public function getShortContentAttribute() : string
     {
-        return mb_substr(strip_tags($this->replacement_content), 0, 500);
+        return mb_substr(
+            strip_tags($this->replacement_content),
+            0,
+            Config::get('icore.post.short_content')
+        );
     }
 
     /**
