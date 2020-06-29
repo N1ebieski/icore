@@ -1,10 +1,10 @@
 <nav class="mb-3">
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-single" 
-    role="tab" aria-controls="nav-single" aria-selected="true">{{ trans('icore::default.single') }}</a>
-    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-json" 
-    role="tab" aria-controls="nav-json" aria-selected="false">{{ trans('icore::default.global') }}</a>
-  </div>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-single" 
+        role="tab" aria-controls="nav-single" aria-selected="true">{{ trans('icore::default.single') }}</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-json" 
+        role="tab" aria-controls="nav-json" aria-selected="false">{{ trans('icore::default.global') }}</a>
+    </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-single" role="tabpanel" aria-labelledby="nav-single-tab">
