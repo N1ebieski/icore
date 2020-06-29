@@ -88,11 +88,11 @@ class MailingEmailService
      */
     public function createUserRecipients() : void
     {
-        $attributes = [];
-
         $this->user->marketing()
-            ->chunk(1000, function ($items) use ($attributes) {
-                $items->each(function ($item) use ($attributes) {
+            ->chunk(1000, function ($items) {
+                $attributes = [];
+
+                $items->each(function ($item) use (&$attributes) {
                     // Create attributes manually, no within model because multiple
                     // models may be huge performance impact
                     $attributes[] = [
@@ -104,9 +104,9 @@ class MailingEmailService
                         'created_at' => $this->carbon->now(),
                         'updated_at' => $this->carbon->now()
                     ];
-
-                    $this->mailingEmail->insertIgnore($attributes);
                 });
+
+                $this->mailingEmail->insertIgnore($attributes);
             });
     }
 
@@ -117,11 +117,11 @@ class MailingEmailService
      */
     public function createNewsletterRecipients() : void
     {
-        $attributes = [];
-
         $this->newsletter->active()
-            ->chunk(1000, function ($items) use ($attributes) {
-                $items->each(function ($item) use ($attributes) {
+            ->chunk(1000, function ($items) {
+                $attributes = [];
+
+                $items->each(function ($item) use (&$attributes) {
                     // Create attributes manually, no within model because multiple
                     // models may be huge performance impact
                     $attributes[] = [
@@ -133,9 +133,9 @@ class MailingEmailService
                         'created_at' => $this->carbon->now(),
                         'updated_at' => $this->carbon->now()
                     ];
-
-                    $this->mailingEmail->insertIgnore($attributes);
                 });
+
+                $this->mailingEmail->insertIgnore($attributes);
             });
     }
 
