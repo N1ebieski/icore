@@ -6,7 +6,7 @@
         <a href="#" class="nav-link" role="button" id="navbarDropdownMenu{{ $page->id }}"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @else
-        <a href="{{ route('web.page.show', $page->slug) }}"
+        <a href="{{ route('web.page.show', $page->slug) }}" title="{{ $page->title }}"
         class="nav-link {{ $isUrl(route('web.page.show', $page->slug)) }}">
         @endif
             @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>&nbsp;@endif<span class="d-md-inline d-none">{{ $page->short_title }}</span><span class="d-md-none d-inline">{{ $page->title }}</span>

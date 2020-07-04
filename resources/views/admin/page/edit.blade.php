@@ -6,7 +6,13 @@ data-id="{{ $page->id }}" id="update">
         class="form-control" id="title">
     </div>
     <div class="form-group">
-        <label for="content_html_trumbowyg">{{ trans('icore::pages.content') }}</label>
+        <label class="d-flex justify-content-between" for="content_html_trumbowyg">
+            <div>{{ trans('icore::posts.content') }}:</div>
+            @include('icore::admin.partials.counter', [
+                'string' => old('content_html', $page->content_html),
+                'name' => 'content_html'
+            ])
+        </label>
         <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
             <textarea name="content_html" id="content_html_trumbowyg" class="form-control"
             rows="10" id="content_html">{{ old('content_html', $page->content_html) }}</textarea>

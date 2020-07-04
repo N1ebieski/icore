@@ -2,7 +2,7 @@
     @if ($maxDepth === null || $page->real_depth <= $maxDepth)
     <div class="list-group-item">
         @if (!empty($page->content))
-        <a href="{{ route('web.page.show', $page->slug) }}"
+        <a href="{{ route('web.page.show', $page->slug) }}" title="{{ $page->title }}"
         class="{{ $isUrl(route('web.page.show', $page->slug), 'font-weight-bold') }}">
             {{ str_repeat('-', $page->real_depth) }} @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>&nbsp;@endif{{ $page->title }}
         </a>
