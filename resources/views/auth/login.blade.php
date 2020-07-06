@@ -61,7 +61,7 @@
                                         {{ trans('icore::auth.login') }}
                                     </button>
 
-                                    @if (Route::has('password.request'))
+                                    @if (app('router')->has('password.request'))
                                         <a class="btn btn-link" href="{{ route('password.request') }}">
                                             {{ trans('icore::auth.forgot') }}
                                         </a>
@@ -72,8 +72,11 @@
                             @if (app('router')->has('register'))
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
-                                    {{ trans('icore::auth.no_profile') }} <a class="btn btn-outline-primary ml-2"
-                                    href="{{ route('register') }}">{{ trans('icore::auth.register') }}</a>
+                                    <span>{{ trans('icore::auth.no_profile') }}<span>
+                                    <a class="btn btn-outline-primary ml-2" href="{{ route('register') }}"
+                                    title="{{ trans('icore::auth.register') }}">
+                                        {{ trans('icore::auth.register') }}
+                                    </a>
                                 </div>
                             </div>
                             @if (app('router')->has('auth.socialite.redirect'))
@@ -81,8 +84,16 @@
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
                                     <p>{{ trans('icore::auth.login_with') }}:
-                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'facebook']) }}" class="ml-2"><i class="fab fa-facebook"></i> Facebook</a>
-                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" class="ml-2"><i class="fab fa-twitter"></i> Twitter</a>
+                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'facebook']) }}" 
+                                        class="ml-2" title="Facebook">
+                                            <i class="fab fa-facebook"></i>
+                                            <span> Facebook</span>
+                                        </a>
+                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" 
+                                        class="ml-2" title="Twitter">
+                                            <i class="fab fa-twitter"></i> 
+                                            <span> Twitter</span>
+                                        </a>
                                     </p>
                                 </div>
                             </div>

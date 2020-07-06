@@ -5,8 +5,11 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.mailing.index') }}">{{ trans('icore::mailings.route.index') }}</a></li>
+<li class="breadcrumb-item">
+    <a href="{{ route('admin.mailing.index') }}" title="{{ trans('icore::mailings.route.index') }}">
+        {{ trans('icore::mailings.route.index') }}
+    </a>
+</li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans('icore::mailings.route.edit') }}</li>
 @endsection
 

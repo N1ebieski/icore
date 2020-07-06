@@ -19,7 +19,8 @@ data-id="{{ $mailing->id }}">
                         </div>
                     </li>
                     <li>
-                        <a href="{{ route('admin.mailing.edit', [$mailing->id]) }}" target="_blank">
+                        <a href="{{ route('admin.mailing.edit', [$mailing->id]) }}" 
+                        target="_blank" title="{{ $mailing->title }}">
                             {{ $mailing->title }}
                         </a>
                     </li>

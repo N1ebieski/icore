@@ -17,7 +17,9 @@
     <div id="comment{{ $comment->id }}" class="transition my-3 {{ ($comment->real_depth < 5) ? 'depth-' . $comment->real_depth : 'depth-5' }}">
         <div class="d-flex mb-2 font-weight-bold">
             <small class="mr-auto font-weight-bold">{{ trans('icore::comments.created_at_diff') }}: {{ $comment->created_at_diff }}</small>
+            @if (isset($comment->user))
             <small class="ml-auto font-weight-bold">{{ trans('icore::comments.author') }}: {{ optional($comment->user)->name }}</small>
+            @endif
         </div>
         <div class="font-weight-bold">
             @if ($comment->censored == true)<em>@endif

@@ -23,34 +23,41 @@ id="row{{ $comment->id }}" data-id="{{ $comment->id }}">
                     </span>
                     &nbsp;|&nbsp;
                     @auth
-                    <a class="rateComment" href="#" data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => 1]) }}">
+                    <a class="rateComment" href="#" title="{{ trans('icore::ratings.plus') }}"
+                    data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => 1]) }}">
                         <i class="fas fa-angle-up"></i>
                     </a>
                     &nbsp;
-                    <a class="rateComment" href="#" data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => -1]) }}">
+                    <a class="rateComment" href="#" title="{{ trans('icore::ratings.minus') }}"
+                    data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => -1]) }}">
                         <i class="fas fa-angle-down"></i>
                     </a>
                     @canany(['web.comments.create', 'web.comments.suggest'])
                     &nbsp;|&nbsp;
-                    <a class="createComment" href="#" data-route="{{ route('web.comment.'.$comment->poli.'.create', [$comment->model_id, 'parent_id' => $comment->id]) }}">
+                    <a class="createComment" href="#" title="{{ trans('icore::comments.answer') }}"
+                    data-route="{{ route("web.comment.{$comment->poli}.create", [$comment->model_id, 'parent_id' => $comment->id]) }}">
                         {{ trans('icore::comments.answer') }}
                     </a>
                     @endcanany
                     @can('web.comments.edit')
                     @can('update', $comment)
                     &nbsp;|&nbsp;
-                    <a class="editComment" href="#" data-route="{{ route('web.comment.edit', [$comment->id]) }}">
+                    <a class="editComment" href="#" title="{{ trans('icore::comments.edit') }}"
+                    data-route="{{ route('web.comment.edit', [$comment->id]) }}">
                         {{ trans('icore::comments.edit') }}
                     </a>
                     @endcan
                     @endcan
                     @else
-                    <a href="{{ route('login') }}">{{ trans('icore::comments.log_to_answer') }}</a>
+                    <a href="{{ route('login') }}" title="{{ trans('icore::comments.log_to_answer') }}">
+                        {{ trans('icore::comments.log_to_answer') }}
+                    </a>
                     @endauth
                 </small>
                 @auth
                 <small class="ml-auto">
-                    <a class="createReport" href="#" data-route="{{ route('web.report.comment.create', [$comment->id]) }}"
+                    <a class="createReport" href="#" title="{{ trans('icore::comments.report') }}"
+                    data-route="{{ route('web.report.comment.create', [$comment->id]) }}"
                     data-toggle="modal" data-target="#createReportModal">
                         {{ trans('icore::comments.report') }}
                     </a>
@@ -61,9 +68,10 @@ id="row{{ $comment->id }}" data-id="{{ $comment->id }}">
     </div>
     @if ($comment->childrens_count > 0)
     <div>
-        <a href="#" data-route="{{ route('web.comment.take', [$comment->id]) }}" role="button"
+        <a href="#" title="{{ trans('icore::comments.next_answers') }}"
+        data-route="{{ route('web.comment.take', [$comment->id]) }}" role="button"
         class="btn btn-outline-secondary text-nowrap depth-1 takeComment">
-            {{ trans('icore::comments.next_answers') }}
+            <span>{{ trans('icore::comments.next_answers') }} </span>
             <i class="fas fa-angle-down"></i>
         </a>
     </div>
@@ -74,9 +82,10 @@ id="row{{ $comment->id }}" data-id="{{ $comment->id }}">
         @endforeach
         @if ($comment->childrens->currentPage() < $comment->childrens->lastPage())
         <div class="mt-3">
-            <a href="#" data-route="{{ route('web.comment.take', [$comment->id]) }}" type="button"
+            <a href="#" title="{{ trans('icore::comments.next_comments') }}"
+            data-route="{{ route('web.comment.take', [$comment->id]) }}" type="button"
             class="btn btn-outline-secondary text-nowrap depth-1 takeComment">
-                {{ trans('icore::comments.next_comments') }}
+                <span>{{ trans('icore::comments.next_comments') }} </span>
                 <i class="fas fa-angle-down"></i>
             </a>
         </div>

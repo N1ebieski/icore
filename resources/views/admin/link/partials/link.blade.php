@@ -7,7 +7,11 @@ data-id="{{ $link->id }}">
                 data-toggle="modal" data-target="#editPositionModal" role="button">
                     <span id="position" class="badge badge-pill badge-primary">{{ $link->position + 1 }}</span>
                 </a>
-                <span><a href="{{ $link->url }}" target="_blank">{{ $link->name }}</a></span>
+                <span>
+                    <a href="{{ $link->url }}" target="_blank" title="{{ $link->name }}">
+                        {{ $link->name }}
+                    </a>
+                </span>
             </li>
             @if ($link->img_url !== null)
             <li class="my-1">

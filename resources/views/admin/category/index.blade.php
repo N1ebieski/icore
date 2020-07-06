@@ -5,7 +5,6 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
 <li class="breadcrumb-item">{{ trans('icore::categories.route.index') }}</li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans("icore::categories.{$model->poli}.{$model->poli}") }}</li>
 @endsection

@@ -1,7 +1,7 @@
 @foreach ($pages as $page)
     <div class="list-group-item d-flex justify-content-between align-items-center">
         @if (!empty($page->content))
-        <a href="{{ route('web.page.show', $page->slug) }}"
+        <a href="{{ route('web.page.show', $page->slug) }}" title="{{ $page->title }}"
         class="{{ $isUrl(route('web.page.show', $page->slug), 'font-weight-bold') }}">
             {{ str_repeat('-', $page->real_depth) }} {{ $page->title }}
         </a>

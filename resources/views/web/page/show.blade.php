@@ -13,12 +13,12 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
 @if ($page->ancestors->isNotEmpty())
     @foreach ($page->ancestors as $ancestor)
         <li class="breadcrumb-item">
             @if (!empty($ancestor->content))
-            <a href="{{ route('web.page.show', [$ancestor->slug]) }}">
+            <a href="{{ route('web.page.show', [$ancestor->slug]) }}"
+            title="{{ $ancestor->title }}">
                 {{ $ancestor->title }}
             </a>
             @else
@@ -52,7 +52,9 @@
                         @include('icore::web.comment.create', ['model' => $page, 'parent_id' => 0])
                         @endcanany
                         @else
-                        <a href="{{ route('login') }}">{{ trans('icore::comments.log_to_comment') }}</a>
+                        <a href="{{ route('login') }}" title="{{ trans('icore::comments.log_to_comment') }}">
+                            {{ trans('icore::comments.log_to_comment') }}
+                        </a>
                         @endauth
                     </div>
                     @if ($comments->isNotEmpty())

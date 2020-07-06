@@ -23,7 +23,10 @@ data-id="{{ $page->id }}">
                     data-toggle="modal" data-target="#editPositionModal" role="button">
                         <span id="position" class="badge badge-pill badge-primary">{{ $page->real_position }}</span>
                     </a>
-                    <a href="{{ route('admin.page.index', ['filter[parent]' => $page->id]) }}">{{ $page->title }}</a>&nbsp;
+                    <a href="{{ route('admin.page.index', ['filter[parent]' => $page->id]) }}"
+                    title=" {{ $page->title }}">
+                        {{ $page->title }}
+                    </a>&nbsp;
                     <span class="badge badge-success">ID {{ $page->id }}</span>
                 </li>
                 <li>{{ str_repeat('-', $page->real_depth) }} {{ $page->shortContent }}...</li>

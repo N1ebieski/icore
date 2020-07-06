@@ -5,7 +5,6 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="/">{{ trans('icore::home.route.index') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans('icore::contact.route.show') }}</li>
 @endsection
 

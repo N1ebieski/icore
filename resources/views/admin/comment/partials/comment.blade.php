@@ -8,8 +8,8 @@ data-id="{{ $comment->id }}">
         @endcan
                 <ul class="list-unstyled mb-0 pb-0">
                     <li>
-                        <a class="show" href="#" data-toggle="modal" 
-                        data-target="#showCommentModal" 
+                        <a class="show" href="#" data-toggle="modal" data-target="#showCommentModal" 
+                        title="{{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}"
                         data-route="{{ route('admin.comment.show', ['comment' => $comment->id]) }}">
                             {{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}
                         </a>
@@ -30,8 +30,18 @@ data-id="{{ $comment->id }}">
                     <li>
                         <small>
                             <span>{{ trans('icore::comments.author') }}:</span>
-                            <span><a href="{{ route("admin.comment.{$comment->poli}.index", ['filter[author]' => $comment->user->id]) }}">{{ $comment->user->name }}</a></span>
-                            <span><a href="{{ route("admin.comment.{$comment->poli}.index", ['filter[search]' => "user:\"{$comment->user->ip}\""]) }}">{{ $comment->user->ip }}</a></span>
+                            <span>
+                                <a href="{{ route("admin.comment.{$comment->poli}.index", ['filter[author]' => $comment->user->id]) }}"
+                                title="{{ $comment->user->name }}">
+                                    {{ $comment->user->name }}
+                                </a>
+                            </span>
+                            <span>
+                                <a href="{{ route("admin.comment.{$comment->poli}.index", ['filter[search]' => "user:\"{$comment->user->ip}\""]) }}"
+                                title="{{ $comment->user->ip }}">
+                                    {{ $comment->user->ip }}
+                                </a>
+                            </span>
                         </small>
                     </li>
                     @endif

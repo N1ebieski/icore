@@ -7,8 +7,11 @@
 @inject('page', 'N1ebieski\ICore\Models\Page\Page')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.page.index') }}">{{ trans('icore::pages.route.index') }}</a></li>
+<li class="breadcrumb-item">
+    <a href="{{ route('admin.page.index') }}" title="{{ trans('icore::pages.route.index') }}">
+        {{ trans('icore::pages.route.index') }}
+    </a>
+</li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans('icore::pages.route.create') }}</li>
 @endsection
 

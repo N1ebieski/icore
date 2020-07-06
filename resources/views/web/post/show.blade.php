@@ -4,7 +4,6 @@
         (bool)$post->comment === true ? trans('icore::pagination.page', ['num' => $comments->currentPage()]) : null
     ],
     'desc' => [$post->meta_desc],
-    // TODO #18 @N1ebieski
     'keys' => [$post->tagList],
     'index' => (bool)$post->seo_noindex === true ? 'noindex' : 'index',
     'follow' => (bool)$post->seo_nofollow === true ? 'nofollow' : 'follow',
@@ -16,8 +15,11 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item">
+    <a href="{{ route('web.post.index') }}" title="{{ trans('icore::posts.route.index') }}">
+        {{ trans('icore::posts.route.index') }}
+    </a>
+</li>
 <li class="breadcrumb-item active" aria-current="page">{{ $post->title }}</li>
 @endsection
 
@@ -36,28 +38,34 @@
                     @if ($post->categories->isNotEmpty())
                     <small class="mr-auto">{{ trans('icore::categories.categories.label') }}:
                         @foreach ($post->categories as $category)
-                        <a href="{{ route('web.category.post.show', [$category->slug]) }}">{{ $category->name }}</a>
-                        {{ (!$loop->last) ? ', ' : '' }}
+                        <a href="{{ route('web.category.post.show', [$category->slug]) }}"
+                        title="{{ $category->name }}">
+                            {{ $category->name }}
+                        </a>{{ (!$loop->last) ? ', ' : '' }}
                         @endforeach
                     </small>
                     @endif
                     @if ($post->tags->isNotEmpty())
                     <small class="ml-auto text-right">{{ trans('icore::posts.tags.label') }}:
                         @foreach ($post->tags as $tag)
-                        <a href="{{ route('web.tag.post.show', [$tag->normalized]) }}">{{ $tag->name }}</a>
-                        {{ (!$loop->last) ? ', ' : '' }}
+                        <a href="{{ route('web.tag.post.show', [$tag->normalized]) }}"
+                        title="{{ $tag->name }}">
+                            {{ $tag->name }}
+                        </a>{{ (!$loop->last) ? ', ' : '' }}
                         @endforeach
                     </small>
                     @endif
                 </div>
                 <div class="d-flex my-3">
                     @if (isset($previous))
-                    <a class="mr-auto" href="{{ route('web.post.show', [$previous->slug]) }}">
+                    <a class="mr-auto" href="{{ route('web.post.show', [$previous->slug]) }}"
+                    title="&laquo; {{ $previous->title }}">
                         &laquo; {{ $previous->title }}
                     </a>
                     @endif
                     @if (isset($next))
-                    <a class="ml-auto text-right" href="{{ route('web.post.show', [$next->slug]) }}">
+                    <a class="ml-auto text-right" href="{{ route('web.post.show', [$next->slug]) }}"
+                    title="{{ $next->title }} &raquo;">
                         {{ $next->title }} &raquo;
                     </a>
                     @endif
@@ -67,7 +75,10 @@
                 <ul class="list-group list-group-flush mb-3">
                     @foreach ($related as $rel)
                     <li class="list-group-item">
-                        <a href="{{ route('web.post.show', [$rel->slug]) }}">{{ $rel->title }}</a>
+                        <a href="{{ route('web.post.show', [$rel->slug]) }}"
+                        title="{{ $rel->title }}">
+                            {{ $rel->title }}
+                        </a>
                     </li>
                     @endforeach
                 </ul>
@@ -84,7 +95,9 @@
                         @include('icore::web.comment.create', ['model' => $post, 'parent_id' => 0])
                         @endcanany
                         @else
-                        <a href="{{ route('login') }}">{{ trans('icore::comments.log_to_comment') }}</a>
+                        <a href="{{ route('login') }}" title="{{ trans('icore::comments.log_to_comment') }}">
+                            {{ trans('icore::comments.log_to_comment') }}
+                        </a>
                         @endauth
                     </div>
                     @if ($comments->isNotEmpty())

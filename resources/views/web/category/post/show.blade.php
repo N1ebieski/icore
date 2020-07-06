@@ -5,13 +5,17 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item">
+    <a href="{{ route('web.post.index') }}" title="{{ trans('icore::posts.route.index') }}">
+        {{ trans('icore::posts.route.index') }}
+    </a>
+</li>
 <li class="breadcrumb-item">{{ trans('icore::categories.route.index') }}</li>
 @if ($category->ancestors->count() > 0)
 @foreach ($category->ancestors as $ancestor)
 <li class="breadcrumb-item">
-    <a href="{{ route('web.category.post.show', [$ancestor->slug]) }}">
+    <a href="{{ route('web.category.post.show', [$ancestor->slug]) }}"
+    title="{{ $ancestor->name }}">
         {{ $ancestor->name }}
     </a>
 </li>

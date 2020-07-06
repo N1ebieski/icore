@@ -114,8 +114,16 @@
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
                                     <p>{{ trans('icore::auth.register_with') }}:
-                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'facebook']) }}" class="ml-2"><i class="fab fa-facebook"></i> Facebook</a>
-                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" class="ml-2"><i class="fab fa-twitter"></i> Twitter</a>
+                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'facebook']) }}" 
+                                        class="ml-2" title="Facebook">
+                                            <i class="fab fa-facebook"></i>
+                                            <span> Facebook</span>
+                                        </a>
+                                        <a href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" 
+                                        class="ml-2" title="Twitter">
+                                            <i class="fab fa-twitter"></i> 
+                                            <span> Twitter</span>
+                                        </a>
                                     </p>
                                 </div>
                             </div>

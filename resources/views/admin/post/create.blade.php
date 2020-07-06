@@ -7,8 +7,11 @@
 @inject('post', 'N1ebieski\ICore\Models\Post')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('admin.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
+<li class="breadcrumb-item">
+    <a href="{{ route('admin.post.index') }}" title="{{ trans('icore::posts.route.index') }}">
+        {{ trans('icore::posts.route.index') }}
+    </a>
+</li>
 <li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.route.create') }}</li>
 @endsection
 

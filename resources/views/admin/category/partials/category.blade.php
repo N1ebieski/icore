@@ -22,8 +22,11 @@
                     <a href="#" class="edit" data-route="{{ route('admin.category.edit_position', [$category->id]) }}"
                     data-toggle="modal" data-target="#editPositionModal" role="button">
                         <span id="position" class="badge badge-pill badge-primary">{{ $category->real_position }}</span>
+                    </a>&nbsp;
+                    <a href="{{ route("admin.category.{$category->poli}.index", ['filter[parent]' => $category->id]) }}"
+                    title="{{ $category->name }}">
+                        {{ $category->name }}
                     </a>
-                    &nbsp;<a href="{{ route('admin.category.'.$category->poli.'.index', ['filter[parent]' => $category->id]) }}">{{ $category->name }}</a>
                 </li>
                 <li>{{ str_repeat('-', $category->real_depth) }} <small>{{ trans('icore::filter.created_at') }}: {{ $category->created_at_diff }}</small></li>
                 <li>{{ str_repeat('-', $category->real_depth) }} <small>{{ trans('icore::filter.updated_at') }}: {{ $category->updated_at_diff }}</small></li>

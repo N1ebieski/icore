@@ -5,8 +5,6 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('web.home.index') }}">{{ trans('icore::home.route.index') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('web.post.index') }}">{{ trans('icore::posts.route.index') }}</a></li>
 <li class="breadcrumb-item">{{ trans('icore::archives.route.index') }}</li>
 <li class="breadcrumb-item active" aria-current="page">{{ $month_localized }} {{ $year }}</li>
 @endsection
