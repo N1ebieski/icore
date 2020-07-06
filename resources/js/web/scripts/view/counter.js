@@ -31,11 +31,7 @@ jQuery(document).on('readyAndAjax', function () {
                         $counter.firstchild.addClass('text-success');
                         $counter.firstchild.removeClass('text-danger');
 
-                        if ($counter.min !== null && length < $counter.min) {
-                            $counter.firstchild.addClass('text-danger');
-                            $counter.firstchild.removeClass('text-success');
-                        }
-                        if ($counter.max !== null && length > $counter.max) {
+                        if (($counter.min !== null && length < $counter.min) || ($counter.max !== null && length > $counter.max)) {
                             $counter.firstchild.addClass('text-danger');
                             $counter.firstchild.removeClass('text-success');
                         }
@@ -45,9 +41,7 @@ jQuery(document).on('readyAndAjax', function () {
         };
 
         if ($('[name="' + $counter.name + '"]').attr('id').indexOf('trumbowyg') !== -1) {
-            $('#' + $('[name="' + $counter.name + '"]').attr('id')).on('tbwinit', function () {
-                counter();
-            });
+            $('#' + $('[name="' + $counter.name + '"]').attr('id')).on('tbwinit', () => counter());
         } else {
             counter();
         }
