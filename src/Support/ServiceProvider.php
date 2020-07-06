@@ -1,0 +1,78 @@
+<?php
+
+namespace N1ebieski\ICore\Support;
+
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Arr;
+
+abstract class ServiceProvider extends BaseServiceProvider
+{
+    /**
+     * Indicates if the configs should be merged recursivelyly.
+     *
+     * @var bool
+     */
+    protected $recursivelyMergeConfigs = true;
+
+    /**
+     * Undocumented function
+     *
+     * @param Application $app
+     */
+    public function __construct(Application  $app)
+    {
+        parent::__construct($app);
+    }
+
+    /**
+     * Override. Merge the given configuration with the existing configuration.
+     *
+     * @param  string  $path
+     * @param  string  $key
+     * @return void
+     */
+    protected function mergeConfigFrom($path, $key)
+    {
+        if (! $this->app->configurationIsCached()) {
+            $this->app['config']->set($key, $this->mergeConfigs(
+                require $path,
+                $this->app['config']->get($key, [])
+            ));
+        }
+    }
+
+    /**
+     * Merges the 2 given configs together, and if supplied, it will do it recursively.
+     *
+     * @param  array  $original
+     * @param  array  $merging
+     * @return array
+     */
+    protected function mergeConfigs($original, $merging)
+    {
+        $array = array_merge($original, $merging);
+
+        if (! $this->recursivelyMergeConfigs) {
+            return $array;
+        }
+
+        foreach ($original as $key => $value) {
+            if (! is_array($value)) {
+                continue;
+            }
+
+            if (! Arr::exists($merging, $key)) {
+                continue;
+            }
+
+            if (is_integer($key)) {
+                continue;
+            }
+
+            $array[$key] = $this->mergeConfigs($value, $merging[$key]);
+        }
+
+        return $array;
+    }
+}

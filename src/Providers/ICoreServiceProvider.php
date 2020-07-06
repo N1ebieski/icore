@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use N1ebieski\ICore\Support\ServiceProvider;
 
 /**
  * [ICoreServiceProvider description]
@@ -13,7 +13,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var string
      */
-    public const VERSION = "1.0.0-beta.16";
+    public const VERSION = "1.0.0-beta.17";
 
     /**
      * Register services.

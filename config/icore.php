@@ -25,5 +25,4 @@ return [
     'captcha' => [
         'driver' => env('ICORE_CAPTCHA_DRIVER'),
     ],
-
 ];
