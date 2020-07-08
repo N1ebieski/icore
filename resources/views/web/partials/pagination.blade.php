@@ -1,5 +1,5 @@
-<div class="row" id="is-pagination" data-title="{{ trans('icore::pagination.page', ['num' => $items->currentPage()]) }}">
-    <div class="col text-left mt-3">
+<div class="d-flex flex-wrap" id="is-pagination" data-title="{{ trans('icore::pagination.page', ['num' => $items->currentPage()]) }}">
+    <div class="text-left mr-auto mt-3">
         @if ($items->currentPage() < $items->lastPage())
         @if (($next ?? false) === true)
         <a href="{{ $items->appends(request()->input())->nextPageUrl() }}" 
@@ -19,7 +19,7 @@
         @endif
         @endif
     </div>
-    <div class="col-auto pagination-sm mt-3">
+    <div class="pagination-sm ml-auto mt-3">
         {{ $items->appends(request()->query())->fragment($fragment ?? '')->links() }}
     </div>
 </div>
