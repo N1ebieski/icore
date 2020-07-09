@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -33,7 +34,19 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:3|max:255',
+            'name' => [
+                'required',
+                'string',
+                'between:3,255',
+                Rule::unique('categories', 'name')
+                    ->where(function ($query) {
+                        if ($this->input('parent_id') === null) {
+                            $query->whereNull('parent_id');
+                        } else {
+                            $query->where('parent_id', $this->input('parent_id'));
+                        }
+                    })
+            ],
             'icon' => 'nullable|string|max:255',
             'parent_id' => 'nullable|integer|exists:categories,id'
         ];
