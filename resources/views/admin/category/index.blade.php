@@ -10,22 +10,23 @@
 @endsection
 
 @section('content')
-<h1 class="h5 border-bottom pb-2 d-flex">
-    <div class="mr-auto my-auto">
-        <i class="fas fa-fw fa-layer-group"></i>
-        <span>{{ trans('icore::categories.route.index') }}</span>
-    </div>
-    @can('admin.categories.create')
-    <div class="ml-auto text-right">
-        <button type="button" class="btn btn-primary text-nowrap create" data-toggle="modal"
-        data-route="{{ route("admin.category.{$model->poli}.create") }}" data-target="#createModal">
-            <i class="far fa-plus-square"></i>
-            <span class="d-none d-sm-inline">{{ trans('icore::categories.create') }}</span>
-        </button>
-    </div>
-    @endcan
-</h1>
 <div id="filterContent">
+    <h1 class="h5 border-bottom pb-2 d-flex">
+        <div class="mr-auto my-auto">
+            <i class="fas fa-fw fa-layer-group"></i>
+            <span>{{ trans('icore::categories.route.index') }}</span>
+        </div>
+        @can('admin.categories.create')
+        <div class="ml-auto text-right">
+            <button type="button" class="btn btn-primary text-nowrap create" data-toggle="modal"
+            data-route="{{ route("admin.category.{$model->poli}.create", ['parent_id' => $filter['parent'] ?? null]) }}"
+            data-target="#createModal">
+                <i class="far fa-plus-square"></i>
+                <span class="d-none d-sm-inline">{{ trans('icore::categories.create') }}</span>
+            </button>
+        </div>
+        @endcan
+    </h1>
     @include('icore::admin.category.partials.filter')
     @if ($categories->isNotEmpty())
     <form action="{{ route('admin.category.destroy_global') }}" method="post" id="selectForm">

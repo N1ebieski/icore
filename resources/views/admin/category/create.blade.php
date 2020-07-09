@@ -25,12 +25,14 @@
             <div class="form-group">
                 <label for="parent_id">{{ trans('icore::categories.parent_id') }}</label>
                 <select class="form-control" id="parent_id" name="parent_id">
-                    <option value="0">{{ trans('icore::categories.null') }}</option>
+                    <option value="0" {{ $parent_id === 0 ? 'selected' : '' }}>
+                        {{ trans('icore::categories.null') }}
+                    </option>
                     @foreach ($categories as $cats)
                         @if ($cats->real_depth == 0)
                             <optgroup label="----------"></optgroup>
                         @endif
-                    <option value="{{ $cats->id }}">
+                    <option value="{{ $cats->id }}" {{ $parent_id === $cats->id ? 'selected' : '' }}>
                         {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
                     </option>
                     @endforeach
@@ -65,12 +67,14 @@
                 <div class="form-group">
                     <label for="parent_id">{{ trans('icore::categories.parent_id') }}</label>
                     <select class="form-control" id="parent_id" name="parent_id">
-                        <option value="0">{{ trans('icore::categories.null') }}</option>
+                        <option value="0" {{ $parent_id === 0 ? 'selected' : '' }}>
+                            {{ trans('icore::categories.null') }}
+                        </option>
                         @foreach ($categories as $cats)
                         @if ($cats->real_depth == 0)
                         <optgroup label="----------"></optgroup>
                         @endif
-                        <option value="{{ $cats->id }}">
+                        <option value="{{ $cats->id }}" {{ $parent_id === $cats->id ? 'selected' : '' }}>
                             {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
                         </option>
                         @endforeach
