@@ -19,7 +19,7 @@ class Mail extends Mailable
 
     /**
      * [protected description]
-     * @var array
+     * @var Request
      */
     protected $request;
 
