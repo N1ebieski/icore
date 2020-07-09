@@ -9,8 +9,7 @@ use Illuminate\Support\Str;
 $factory->define(Newsletter::class, function (Faker $faker) {
     return [
         'email' => $faker->unique()->safeEmail,
-        'status' => rand(0, 1),
-        'token' => Str::random(10)
+        'status' => rand(0, 1)
     ];
 });
 

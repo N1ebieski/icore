@@ -18,6 +18,10 @@ return [
         'max_tags' => (int)env('ICORE_PAGE_MAX_TAGS', 10),
     ],
 
+    'tag' => [
+        'normalizer' => 'mb_strtolower'
+    ],
+
     'replacement' => [
         //
     ],

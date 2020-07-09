@@ -33,7 +33,12 @@ class UpdateFullRequest extends FormRequest
 
         if ($this->has('tags')) {
             $this->merge([
-                'tags' => explode(',', $this->get('tags'))
+                'tags' => explode(
+                    ',',
+                    Config::get('icore.tag.normalizer') !== null ?
+                        Config::get('icore.tag.normalizer')($this->input('tags'))
+                        : $this->input('tags')
+                )
             ]);
         }
     }
