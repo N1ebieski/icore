@@ -4,6 +4,8 @@ namespace N1ebieski\ICore\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use N1ebieski\ICore\Models\NewsletterToken;
 
 /**
  * [Newsletter description]
@@ -29,18 +31,14 @@ class Newsletter extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'email', 'token', 'status'
-    ];
+    protected $fillable = ['email', 'status'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'token', 'email'
-    ];
+    protected $hidden = ['email'];
 
     /**
      * The model's default values for attributes.
@@ -62,6 +60,18 @@ class Newsletter extends Model
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp'
     ];
+
+    // Relations
+
+    /**
+     * Undocumented function
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function token() : HasOne
+    {
+        return $this->hasOne(NewsletterToken::class, 'email', 'email');
+    }
 
     // Scopes
 

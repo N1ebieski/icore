@@ -6,7 +6,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
@@ -26,13 +25,6 @@ class ConfirmationMail extends Mailable
     /**
      * Undocumented variable
      *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
      * @var URL
      */
     protected $url;
@@ -45,20 +37,19 @@ class ConfirmationMail extends Mailable
     protected $lang;
 
     /**
-     * Create a new event instance.
+     * Undocumented function
      *
      * @param Newsletter $newsletter
-     * @return void
+     * @param URL $url
+     * @param Lang $lang
      */
     public function __construct(
         Newsletter $newsletter,
-        Config $config,
         URL $url,
         Lang $lang
     ) {
         $this->newsletter = $newsletter;
 
-        $this->config = $config;
         $this->url = $url;
         $this->lang = $lang;
     }
@@ -71,13 +62,12 @@ class ConfirmationMail extends Mailable
     public function build() : self
     {
         return $this->subject($this->lang->get('icore::newsletter.subscribe_confirm'))
-            ->from($this->config->get('mail.from.address'))
             ->to($this->newsletter->email)
             ->markdown('icore::mails.newsletter_confirmation')
             ->with([
                 'actionUrl' => $this->url->route('web.newsletter.update_status', [
                     $this->newsletter->id,
-                    'token' => $this->newsletter->token,
+                    'token' => $this->newsletter->token->token,
                     'status' => $this->newsletter::ACTIVE
                 ]),
                 'actionText' => $this->lang->get('icore::newsletter.subscribe_confirm')

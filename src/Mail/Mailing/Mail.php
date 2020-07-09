@@ -7,7 +7,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
 use N1ebieski\ICore\Models\MailingEmail;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
@@ -27,13 +26,6 @@ class Mail extends Mailable
     /**
      * Undocumented variable
      *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
      * @var URL
      */
     protected $url;
@@ -49,19 +41,16 @@ class Mail extends Mailable
      * Undocumented function
      *
      * @param MailingEmail $mailingEmail
-     * @param Config $config
      * @param URL $url
      * @param Lang $lang
      */
     public function __construct(
         MailingEmail $mailingEmail,
-        Config $config,
         URL $url,
         Lang $lang
     ) {
         $this->mailingEmail = $mailingEmail;
 
-        $this->config = $config;
         $this->url = $url;
         $this->lang = $lang;
     }
@@ -76,7 +65,6 @@ class Mail extends Mailable
         $this->mailingEmail->load('mailing');
 
         return $this->subject($this->mailingEmail->mailing->title)
-            ->from($this->config->get('mail.from.address'))
             ->to($this->mailingEmail->email)
             ->markdown('icore::mails.mailing')
             ->with(['subcopy' => $this->subcopy()]);
@@ -97,7 +85,7 @@ class Mail extends Mailable
                 return $this->lang->get('icore::newsletter.subcopy.subscribe', [
                     'cancel' => $this->url->route('web.newsletter.update_status', [
                         $this->mailingEmail->morph->id,
-                        'token' => $this->mailingEmail->morph->token,
+                        'token' => $this->mailingEmail->morph->token->token,
                         'status' => Newsletter::INACTIVE
                     ]),
                 ]);

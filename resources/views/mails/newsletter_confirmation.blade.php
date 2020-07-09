@@ -10,11 +10,13 @@
 @endif
 @endif
 
-{{ trans('icore::newsletter.subscribe_confirm_info') }}
+{{ trans('icore::newsletter.mail.subscribe_confirm.info') }}
 
 @component('mail::button', ['url' => $actionUrl, 'color' => 'primary'])
 {{ $actionText }}
 @endcomponent
+
+{{ trans('icore::newsletter.mail.subscribe_confirm.token') }}
 
 {{-- Subcopy --}}
 @isset($actionText)

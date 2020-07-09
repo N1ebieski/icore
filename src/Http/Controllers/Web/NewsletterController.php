@@ -4,20 +4,16 @@ namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Event;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
 use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
+use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
 
-/**
- * [NewsletterController description]
- */
 class NewsletterController
 {
     /**
@@ -30,8 +26,13 @@ class NewsletterController
     public function store(Newsletter $newsletter, StoreRequest $request) : JsonResponse
     {
         $newsletter = $newsletter->firstOrCreate(
-            ['email' => $request->get('email')],
-            ['token' => Str::random(30), 'status' => Newsletter::ACTIVE]
+            ['email' => $request->input('email')],
+            ['status' => Newsletter::INACTIVE]
+        );
+
+        $newsletter->token()->updateOrCreate(
+            ['email' => $request->input('email')],
+            ['token' => Str::random(30)]
         );
 
         Event::dispatch(App::make(NewsletterStoreEvent::class, ['newsletter' => $newsletter]));
@@ -42,21 +43,17 @@ class NewsletterController
     }
 
     /**
-     * Update Status attribute the specified Subscribe in storage.
+     * Undocumented function
      *
-     * @param  Newsletter          $newsletter [description]
-     * @param  UpdateStatusRequest $request    [description]
-     * @return RedirectResponse                [description]
+     * @param Newsletter $newsletter
+     * @param UpdateStatusRequest $request
+     * @return RedirectResponse
      */
     public function updateStatus(Newsletter $newsletter, UpdateStatusRequest $request) : RedirectResponse
     {
-        if ($newsletter->token !== $request->get('token')) {
-            abort(HttpResponse::HTTP_FORBIDDEN, 'The token is invalid.');
-        }
+        $newsletter->update(['status' => $request->input('status')]);
 
-        $newsletter->status = (bool)$request->get('status');
-        $newsletter->token = Str::random(30);
-        $newsletter->save();
+        $newsletter->token()->update(['token' => Str::random(30)]);
 
         return Response::redirectToRoute('web.home.index')->with(
             'success',
