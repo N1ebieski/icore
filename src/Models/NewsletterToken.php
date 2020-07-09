@@ -20,7 +20,7 @@ class NewsletterToken extends Model
      *
      * @var array
      */
-    protected $fillable = ['email', 'token'];
+    protected $fillable = ['email', 'token', 'updated_at'];
 
     /**
      * The attributes that should be hidden for arrays.

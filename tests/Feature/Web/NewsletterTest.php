@@ -2,12 +2,14 @@
 
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Mail;
 use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 
 class NewsletterTest extends TestCase
 {
@@ -63,7 +65,7 @@ class NewsletterTest extends TestCase
 
             $this->assertEquals(route('web.newsletter.update_status', [
                 $newsletter->id,
-                'token' => $newsletter->token,
+                'token' => $newsletter->token->token,
                 'status' => 1
             ]), $mail->viewData['actionUrl']);
 
@@ -74,6 +76,7 @@ class NewsletterTest extends TestCase
     public function test_newsletter_updateStatus_with_invalid_token()
     {
         $newsletter = factory(Newsletter::class)->states('inactive')->create();
+        $newsletter->token()->create(['token' => Str::random(30)]);
 
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
@@ -85,13 +88,32 @@ class NewsletterTest extends TestCase
         $response->assertSeeText('token is invalid');
     }
 
-    public function test_newsletter_updateStatus1()
+    public function test_newsletter_updateStatus_with_expired_token()
     {
         $newsletter = factory(Newsletter::class)->states('inactive')->create();
+        $newsletter->token()->create([
+            'token' => Str::random(30),
+            'updated_at' => Carbon::now()->subMinutes(61)
+        ]);
 
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
-            'token' => $newsletter->token,
+            'token' => $newsletter->token->token,
+            'status' => 1
+        ]));
+
+        $response->assertStatus(403);
+        $response->assertSeeText('token period has expired');
+    }
+
+    public function test_newsletter_updateStatus1()
+    {
+        $newsletter = factory(Newsletter::class)->states('inactive')->create();
+        $newsletter->token()->create(['token' => Str::random(30)]);
+
+        $response = $this->get(route('web.newsletter.update_status', [
+            $newsletter->id,
+            'token' => $newsletter->token->token,
             'status' => 1
         ]));
 
@@ -107,10 +129,11 @@ class NewsletterTest extends TestCase
     public function test_newsletter_updateStatus0()
     {
         $newsletter = factory(Newsletter::class)->states('active')->create();
+        $newsletter->token()->create(['token' => Str::random(30)]);
 
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
-            'token' => $newsletter->token,
+            'token' => $newsletter->token->token,
             'status' => 0
         ]));
 
