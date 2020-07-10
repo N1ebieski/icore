@@ -23,7 +23,7 @@
             {{ trans('icore::filter.status.'.$comment::ACTIVE) }}
         </option>
         <option value="{{ $comment::INACTIVE }}" {{ ($filter['status'] === $comment::INACTIVE) ? 'selected' : '' }}>
-            {{ trans('icore::filter.status..'.$comment::INACTIVE) }}
+            {{ trans('icore::filter.status.'.$comment::INACTIVE) }}
         </option>
     </select>
 </div>
