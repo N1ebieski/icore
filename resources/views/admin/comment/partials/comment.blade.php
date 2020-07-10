@@ -7,6 +7,7 @@ data-id="{{ $comment->id }}">
             <label class="custom-control-label" for="select{{ $comment->id }}">
         @endcan
                 <ul class="list-unstyled mb-0 pb-0">
+                    @if (isset($comment->morph))
                     <li>
                         <a class="show" href="#" data-toggle="modal" data-target="#showCommentModal" 
                         title="{{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}"
@@ -21,6 +22,7 @@ data-id="{{ $comment->id }}">
                         </a>
                         @endif
                     </li>
+                    @endif
                     <li>
                         @if ($comment->censored == true)<em>@endif
                         {!! $comment->content_as_html !!}
