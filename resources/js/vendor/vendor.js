@@ -26,6 +26,9 @@ try {
 
     require('bootstrap-confirmation2/dist/bootstrap-confirmation.js');
 
+    require('bootstrap-select/dist/js/bootstrap-select.min.js');
+    require('bootstrap-select/dist/js/i18n/defaults-pl_PL.min.js');
+
     require('pickadate/lib/picker.js');
     require('pickadate/lib/picker.date.js');
     require('pickadate/lib/picker.time.js');
