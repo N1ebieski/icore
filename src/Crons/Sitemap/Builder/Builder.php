@@ -120,10 +120,10 @@ abstract class Builder
     /**
      * Undocumented function
      *
-     * @param Collection $collection
+     * @param Collect $collection
      * @return void
      */
-    public function setCollection(Collection $collection)
+    public function setCollection(Collect $collection)
     {
         $this->collection = $collection;
 
