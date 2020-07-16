@@ -37,7 +37,7 @@
     };
 
     $.getAlert = function(response, type) {
-        return $.sanitize('<div class="alert alert-'+type+'" role="alert">'+response+'</div>');
+        return $.sanitize('<div class="alert alert-'+type+' alert-time" role="alert">'+response+'</div>');
     };
 
     $.getError = function(key, value) {
