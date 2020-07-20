@@ -24,7 +24,15 @@ class ShowRequest extends FormRequest
     public function rules()
     {
         return [
-            'orderby' => ['in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc']
+            'page' => 'filled|integer',
+            'except' => 'filled|array',
+            'except.*' => 'integer',
+            'filter' => 'array|no_js_validation',
+            'filter.orderby' => [
+                'bail',
+                'nullable',
+                'in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc'
+            ]
         ];
     }
 }

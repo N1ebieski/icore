@@ -41,7 +41,7 @@ class PageController
             'page' => $page->makeCache()->rememberLoadSiblingsAndRecursiveChildrens(),
             'comments' => (bool)$page->comment === true ?
                 $comment->setMorph($page)->makeCache()->rememberRootsByFilter(
-                    $filter->all(),
+                    $filter->all() + ['except' => $request->input('except')],
                     $request->get('page') ?? 1
                 )
                 : null,
