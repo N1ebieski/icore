@@ -26,14 +26,16 @@ jQuery(document).on('readyAndAjax', function () {
         pagingSelector: '.pagination',
         callback: function (nextHref) {
             let href = nextHref.split(' ')[0];
-            let page = $.getUrlParameter(href, 'page');
-            let title = $('#is-pagination:last').attr('data-title').replace(/(\d+)/, '').trim();
+            history.replaceState(null, null, href);
 
-            if ($.isNumeric(page) && title.length) {
-                let regex = new RegExp(title+"\\s(\\d+)");
-                document.title = document.title.replace(regex, title + ' ' + page);
-                history.replaceState(null, null, href);
-            }
+            // let page = $.getUrlParameter(href, 'page');
+            // let title = $('#is-pagination:last').attr('data-title').replace(/(\d+)/, '').trim();
+
+            // if ($.isNumeric(page) && title.length) {
+            //     let regex = new RegExp(title+"\\s(\\d+)");
+            //     document.title = document.title.replace(regex, title + ' ' + page);
+            //     history.replaceState(null, null, href);
+            // }
         }
     });
 });

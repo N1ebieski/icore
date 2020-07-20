@@ -1,4 +1,4 @@
-<div class="d-flex flex-wrap" id="is-pagination" data-title="{{ trans('icore::pagination.page', ['num' => $items->currentPage()]) }}">
+<div class="d-flex flex-wrap" id="is-pagination">
     <div class="text-left mr-auto mt-3">
         @if ($items->currentPage() < $items->lastPage())
         @if (($next ?? false) === true)

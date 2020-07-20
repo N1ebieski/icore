@@ -1,7 +1,13 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [
         $post->meta_title,
-        (bool)$post->comment === true ? trans('icore::pagination.page', ['num' => $comments->currentPage()]) : null
+        (bool)$post->comment === true ? 
+            (
+                $comments->currentPage() > 1 ?
+                    trans('icore::pagination.page', ['num' => $comments->currentPage()])
+                    : null
+            )
+            : null
     ],
     'desc' => [$post->meta_desc],
     'keys' => [$post->tagList],

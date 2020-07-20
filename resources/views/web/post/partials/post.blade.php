@@ -1,4 +1,4 @@
-<div class="mb-5">
+<div class="mb-5" id="row{{ $post->id }}">
     <h2 class="h5 border-bottom pb-2">
         <a href="{{ route('web.post.show', [$post->slug]) }}" title="{{ $post->title }}">
             {{ $post->title }}

@@ -1,5 +1,10 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans('icore::mailings.route.index'), trans('icore::pagination.page', ['num' => $mailings->currentPage()])],
+    'title' => [
+        trans('icore::mailings.route.index'),
+        $mailings->currentPage() > 1 ?
+            trans('icore::pagination.page', ['num' => $mailings->currentPage()])
+            : null
+    ],
     'desc' => [trans('icore::mailings.route.index')],
     'keys' => [trans('icore::mailings.route.index')]
 ])

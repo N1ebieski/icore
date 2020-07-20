@@ -1,5 +1,10 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::categories.route.show', ['category' => $category->name]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'title' => [
+        trans('icore::categories.route.show', ['category' => $category->name]),
+        $posts->currentPage() > 1 ?
+            trans('icore::pagination.page', ['num' => $posts->currentPage()])
+            : null
+    ],
     'desc' => [trans('icore::categories.route.show', ['category' => $category->name])],
     'keys' => [trans('icore::categories.route.show', ['category' => $category->name])]
 ])

@@ -1,5 +1,10 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year]), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'title' => [
+        trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year]),
+        $posts->currentPage() > 1 ?
+            trans('icore::pagination.page', ['num' => $posts->currentPage()])
+            : null
+    ],
     'desc' => [trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year])],
     'keys' => [trans('icore::archives.route.show', ['month' => $month_localized, 'year' => $year])]
 ])

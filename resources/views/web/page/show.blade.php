@@ -1,7 +1,15 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [$page->meta_title, (bool)$page->comment === true ? trans('icore::pagination.page', ['num' => $comments->currentPage()]) : null],
+    'title' => [
+        $page->meta_title,
+        (bool)$page->comment === true ?
+            (
+                $comments->currentPage() > 1 ?
+                    trans('icore::pagination.page', ['num' => $comments->currentPage()])
+                    : null
+            )
+            : null
+    ],
     'desc' => [$page->meta_desc],
-    // TODO #18 @N1ebieski
     'keys' => [$page->tagList],
     'index' => (bool)$page->seo_noindex === true ? 'noindex' : 'index',
     'follow' => (bool)$page->seo_nofollow === true ? 'nofollow' : 'follow',

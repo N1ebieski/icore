@@ -1,5 +1,10 @@
 @extends(config('icore.layout') . '::admin.layouts.layout', [
-    'title' => [trans('icore::comments.route.index'), trans('icore::pagination.page', ['num' => $comments->currentPage()])],
+    'title' => [
+        trans('icore::comments.route.index'),
+        $comments->currentPage() > 1 ?
+            trans('icore::pagination.page', ['num' => $comments->currentPage()])
+            : null
+    ],
     'desc' => [trans('icore::comments.route.index')],
     'keys' => [trans('icore::comments.route.index')]
 ])

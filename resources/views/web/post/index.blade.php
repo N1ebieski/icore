@@ -1,5 +1,10 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
-    'title' => [trans('icore::posts.route.index'), trans('icore::pagination.page', ['num' => $posts->currentPage()])],
+    'title' => [
+        trans('icore::posts.route.index'),
+        $posts->currentPage() > 1 ?
+            trans('icore::pagination.page', ['num' => $posts->currentPage()])
+            : null
+    ],
     'desc' => [trans('icore::posts.route.index')],
     'keys' => [trans('icore::posts.route.index')]
 ])
