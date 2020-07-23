@@ -20,7 +20,7 @@ data-id="{{ $mailing->id }}">
                     </li>
                     <li>
                         <a href="{{ route('admin.mailing.edit', [$mailing->id]) }}" 
-                        target="_blank" title="{{ $mailing->title }}">
+                        target="_blank" title="{{ $mailing->title }}" rel="noreferrer noopener">
                             {{ $mailing->title }}
                         </a>
                     </li>
@@ -39,7 +39,8 @@ data-id="{{ $mailing->id }}">
             <div class="responsive-btn-group">
                 @can('admin.mailings.edit')
                 <a class="btn btn-primary align-bottom {{ $mailing->status == 1 ? 'disabled' : '' }}"
-                href="{{ route('admin.mailing.edit', [$mailing->id]) }}" role="button" target="_blank">
+                href="{{ route('admin.mailing.edit', [$mailing->id]) }}" role="button" target="_blank"
+                rel="noreferrer noopener">
                     <i class="far fa-edit"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </a>

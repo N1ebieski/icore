@@ -29,8 +29,9 @@ return [
     ],
     'tags' => [
         'label' => 'Tagi',
-        'tooltip' => 'Min 3 znaki, max 30 znaków, max :max_tags tagów'
-    ],    
+        'tooltip' => 'Min 3 znaki, max 30 znaków, max :max_tags tagów',
+        'placeholder' => 'Dodaj tagi'
+    ],
     'icon' => [
         'label' => 'Klasa ikony',
         'tooltip' => 'Klasa ikony (np. z font-awesome). Ikona będzie wyświetlana obok tytułu.',

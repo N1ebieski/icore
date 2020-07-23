@@ -1,15 +1,17 @@
-jQuery(document).on('readyAndAjax', function() {
+jQuery(document).on('readyAndAjax', function () {
     if (!$('.trumbowyg-box').length) {
-        $('#content_html_trumbowyg').trumbowyg({
-            lang: 'pl',
+        let $trumbowyg = $('#content_html_trumbowyg');
+
+        $trumbowyg.trumbowyg({
+            lang: $trumbowyg.data('lang'),
             svgPath: false,
             hideButtonTexts: true,
             tagsToRemove: ['script'],
             autogrow: true,
             btnsDef: {
                 more: {
-                    fn: function() {
-                        $('#content_html_trumbowyg').trumbowyg('execCmd', {
+                    fn: function () {
+                        $trumbowyg.trumbowyg('execCmd', {
                         	cmd: 'insertHtml',
                         	param: '<p>[more]</p>',
                         	forceCss: false,

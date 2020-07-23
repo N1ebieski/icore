@@ -14,7 +14,8 @@ data-id="{{ $post->id }}" id="update">
             ])
         </label>
         <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
-            <textarea contenteditable="true" spellcheck="true" name="content_html" id="content_html_trumbowyg" class="form-control"
+            <textarea contenteditable="true" spellcheck="true" name="content_html" 
+            id="content_html_trumbowyg" class="form-control" data-lang="{{ config('app.locale') }}"
             rows="10" id="content_html">{{ old('content_html', $post->content_html) }}</textarea>
         </div>
     </div>

@@ -11,7 +11,7 @@ data-id="{{ $role->id }}">
                 @role('super-admin')
                 @if ($role->isEditNotDefault())
                 <a class="btn btn-primary align-bottom" href="{{ route('admin.role.edit', [$role->id]) }}"
-                role="button" target="_blank">
+                role="button" target="_blank" rel="noreferrer noopener">
                     <i class="fas fa-edit"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </a>

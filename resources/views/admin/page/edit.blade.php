@@ -7,7 +7,7 @@ data-id="{{ $page->id }}" id="update">
     </div>
     <div class="form-group">
         <label class="d-flex justify-content-between" for="content_html_trumbowyg">
-            <div>{{ trans('icore::posts.content') }}:</div>
+            <div>{{ trans('icore::pages.content') }}:</div>
             @include('icore::admin.partials.counter', [
                 'string' => old('content_html', $page->content_html),
                 'name' => 'content_html'
@@ -15,6 +15,7 @@ data-id="{{ $page->id }}" id="update">
         </label>
         <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
             <textarea name="content_html" id="content_html_trumbowyg" class="form-control"
+            data-lang="{{ config('app.locale') }}"
             rows="10" id="content_html">{{ old('content_html', $page->content_html) }}</textarea>
         </div>
     </div>

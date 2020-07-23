@@ -435,15 +435,15 @@ class CommentTest extends TestCase
         Auth::login($user, true);
 
         $response = $this->put(route('web.comment.update', [$comment->id]), [
-            'content' => '<b>Komentarz</b> zostal edytowany. <script>dsadad</script>'
+            'content' => '<b>Komentarz</b> został zaktualizowany. <script>dsadad</script>'
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Komentarz zostal edytowany. dsadad', $response->getData()->view);
+        $this->assertContains('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
-            'content' => 'Komentarz zostal edytowany. dsadad'
+            'content' => 'Komentarz został zaktualizowany. dsadad'
         ]);
 
         $this->assertTrue(Auth::check());

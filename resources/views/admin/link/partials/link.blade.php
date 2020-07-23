@@ -8,7 +8,8 @@ data-id="{{ $link->id }}">
                     <span id="position" class="badge badge-pill badge-primary">{{ $link->position + 1 }}</span>
                 </a>
                 <span>
-                    <a href="{{ $link->url }}" target="_blank" title="{{ $link->name }}">
+                    <a href="{{ $link->url }}" target="_blank" title="{{ $link->name }}"
+                    rel="noreferrer noopener">
                         {{ $link->name }}
                     </a>
                 </span>

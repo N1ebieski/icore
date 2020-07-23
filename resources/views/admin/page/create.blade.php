@@ -40,7 +40,7 @@
                     </label>                    
                     <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
                         <textarea name="content_html" id="content_html_trumbowyg" class="form-control {{ $isValid('content_html') }}"
-                        rows="10" id="content_html">{{ old('content_html') }}</textarea>
+                        rows="10" id="content_html" data-lang="{{ config('app.locale') }}">{{ old('content_html') }}</textarea>
                         @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
                     </div>
                 </div>
@@ -52,7 +52,8 @@
                         class="far fa-question-circle"></i>
                     </label>
                     <input name="tags" id="tags" class="form-control tagsinput {{ $isValid('tags') }}"
-                    value="{{ old('tags') }}" placeholder="Dodaj tag" data-max="{{ config('icore.page.max_tags') }}">
+                    value="{{ old('tags') }}" placeholder="{{ trans('icore::pages.tags.placeholder') }}" 
+                    data-max="{{ config('icore.page.max_tags') }}">
                     @includeWhen($errors->has('tags'), 'icore::admin.partials.errors', ['name' => 'tags'])
                 </div>
                 <hr>

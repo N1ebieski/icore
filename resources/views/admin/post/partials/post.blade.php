@@ -9,7 +9,7 @@ data-id="{{ $post->id }}">
                 <ul class="list-unstyled mb-0 pb-0">
                     <li>
                         <a href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}" 
-                        target="_blank" title="{{ $post->title }}">
+                        target="_blank" title="{{ $post->title }}" rel="noreferrer noopener">
                             {{ $post->title }}
                         </a>
                     </li>
@@ -34,7 +34,7 @@ data-id="{{ $post->id }}">
                         <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                     </button>
                     <a class="btn btn-primary align-bottom" href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}"
-                    role="button" target="_blank">
+                    role="button" target="_blank" rel="noreferrer noopener">
                         <i class="fas fa-edit"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.editFull') }}</span>
                     </a>

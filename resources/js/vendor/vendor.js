@@ -34,7 +34,7 @@ try {
     require('pickadate/lib/picker.js');
     require('pickadate/lib/picker.date.js');
     require('pickadate/lib/picker.time.js');
-    require('pickadate/lib/compressed/translations/pl_PL.js');
+    //require('pickadate/lib/compressed/translations/pl_PL.js');
 
     require('jquery-googlemap/jquery.googlemap.js');
 

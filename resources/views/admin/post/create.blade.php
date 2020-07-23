@@ -40,7 +40,7 @@
                         ])
                     </label>
                     <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
-                        <textarea name="content_html" id="content_html_trumbowyg"
+                        <textarea name="content_html" id="content_html_trumbowyg" data-lang="{{ config('app.locale') }}"
                         class="form-control {{ $isValid('content_html') }}" rows="10">{{ old('content_html') }}</textarea>
                         @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
                     </div>
@@ -51,7 +51,8 @@
                         class="far fa-question-circle"></i>
                     </label>
                     <input name="tags" id="tags" class="form-control tagsinput {{ $isValid('tags') }}"
-                    value="{{ old('tags') }}" placeholder="Dodaj tag" data-max="{{ $maxTags }}">
+                    value="{{ old('tags') }}" placeholder="{{ trans('icore::posts.tags.placeholder') }}" 
+                    data-max="{{ $maxTags }}">
                     @includeWhen($errors->has('tags'), 'icore::admin.partials.errors', ['name' => 'tags'])
                 </div>
                 <hr>
@@ -120,12 +121,14 @@
                     <div id="published_at">
                         <div class="form-group">
                             <input type="text" data-value="{{ now()->parse(old('date_published_at', now()))->format('Y/m/d') }}"
-                            value="" name="date_published_at" id="date_published_at" class="form-control datepicker">
+                            value="" name="date_published_at" id="date_published_at" class="form-control datepicker"
+                            data-lang="{{ config('app.locale') }}">
                             @includeWhen($errors->has('date_published_at'), 'icore::admin.partials.errors', ['name' => 'date_published_at'])
                         </div>
                         <div class="form-group">
                             <input type="text" data-value="{{ now()->parse(old('time_published_at', now()))->format('H:i') }}"
-                            value="" name="time_published_at" id="time_published_at" class="form-control timepicker">
+                            value="" name="time_published_at" id="time_published_at" class="form-control timepicker"
+                            data-lang="{{ config('app.locale') }}">
                             @includeWhen($errors->has('time_published_at'), 'icore::admin.partials.errors', ['name' => 'time_published_at'])
                         </div>
                     </div>

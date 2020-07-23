@@ -39,7 +39,7 @@
                     </label>                    
                     <div class="{{ $isTheme('dark', 'trumbowyg-dark') }}">
                         <textarea name="content_html" id="content_html_trumbowyg" class="form-control {{ $isValid('content_html') }}"
-                        rows="10" id="content_html">{{ old('content_html') }}</textarea>
+                        rows="10" id="content_html" data-lang="{{ config('app.locale') }}">{{ old('content_html') }}</textarea>
                     </div>
                     @includeWhen($errors->has('content_html'), 'icore::admin.partials.errors', ['name' => 'content_html'])
                 </div>
@@ -69,12 +69,14 @@
                     <div id="activation_at">
                         <div class="form-group">
                             <input type="text" data-value="{{ Carbon\Carbon::parse(old('date_activation_at', Carbon\Carbon::now()))->format('Y/m/d') }}"
-                            value="" name="date_activation_at" id="date_activation_at" class="form-control datepicker">
+                            value="" name="date_activation_at" id="date_activation_at" class="form-control datepicker"
+                            data-lang="{{ config('app.locale') }}">
                             @includeWhen($errors->has('date_activation_at'), 'icore::admin.partials.errors', ['name' => 'date_activation_at'])
                         </div>
                         <div class="form-group">
                             <input type="text" data-value="{{ Carbon\Carbon::parse(old('time_activation_at', Carbon\Carbon::now()))->format('H:i') }}"
-                            value="" name="time_activation_at" id="time_activation_at" class="form-control timepicker">
+                            value="" name="time_activation_at" id="time_activation_at" class="form-control timepicker"
+                            data-lang="{{ config('app.locale') }}">
                             @includeWhen($errors->has('time_activation_at'), 'icore::admin.partials.errors', ['name' => 'time_activation_at'])
                         </div>
                     </div>
