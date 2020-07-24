@@ -16,7 +16,7 @@ data-id="{{ $link->id }}">
             </li>
             @if ($link->img_url !== null)
             <li class="my-1">
-                <a href="{{ $link->url }}" target="_blank"><img class="img-fluid" src="{{ Storage::url($link->img_url) }}"></a>
+                <a href="{{ $link->url }}" target="_blank"><img class="img-fluid" src="{{ app('filesystem')->url($link->img_url) }}"></a>
             </li>
             @endif
             <li><small>{{ trans('icore::filter.created_at') }}: {{ $link->created_at_diff }}</small></li>
