@@ -1,4 +1,8 @@
-@extends(config('icore.layout') . '::web.layouts.layout')
+@extends(config('icore.layout') . '::web.layouts.layout', [
+    'title' => [trans('icore::auth.reset')],
+    'desc' => [trans('icore::auth.reset')],
+    'keys' => [trans('icore::auth.reset')]
+])
 
 @section('content')
 <div class="jumbotron jumbotron-fluid m-0 background">

@@ -1,4 +1,8 @@
-@extends(config('icore.layout') . '::web.layouts.layout')
+@extends(config('icore.layout') . '::web.layouts.layout', [
+    'title' => [__('Verify Email Address')],
+    'desc' => [__('Verify Email Address')],
+    'keys' => [__('Verify Email Address')]
+])
 
 @section('content')
 <div class="jumbotron jumbotron-fluid m-0 background">
