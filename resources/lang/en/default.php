@@ -14,7 +14,7 @@ return [
     'ban' => 'Ban',
     'delete' => 'Delete',
     'delete_global' => 'Delete selected',
-    'confirm' => 'Are you sure you want to remove it?',
+    'confirm' => 'Are you sure you want to delete it?',
     'yes' => 'Yes',
     'cancel' => 'Cancel',
     'apply' => 'Apply',
