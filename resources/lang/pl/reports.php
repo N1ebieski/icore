@@ -10,5 +10,6 @@ return [
     ],
     'success' => [
         'store' => 'Raport został zgłoszony moderacji. Dziękujemy.'
-    ]
+    ],
+    'log_to_report' => 'Zaloguj się, by zaraportować'
 ];

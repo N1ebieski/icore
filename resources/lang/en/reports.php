@@ -10,5 +10,6 @@ return [
     ],
     'success' => [
         'store' => 'The report was sent to moderators. Thank you.'
-    ]
+    ],
+    'log_to_report' => 'Log in to report'
 ];
