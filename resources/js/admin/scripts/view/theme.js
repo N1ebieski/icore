@@ -1,12 +1,12 @@
-jQuery(document).on('click', 'div#themeToggle button', function(e) {
+jQuery(document).on('click', 'div#themeToggle button', function (e) {
     e.preventDefault();
 
     let $element = $(this);
 
     if ($element.hasClass('btn-light')) {
-        $('link[href*="admin-dark.css"]').attr('href', function() {
-            return $(this).attr('href').replace('admin-dark.css', 'admin.css');
-        });
+        // $('link[href*="admin-dark.css"]').attr('href', function() {
+        //     return $(this).attr('href').replace('admin-dark.css', 'admin.css');
+        // });
         $.cookie("themeToggle", 'light', { 
             path: '/',
             expires: 365
@@ -14,15 +14,16 @@ jQuery(document).on('click', 'div#themeToggle button', function(e) {
     }
 
     if ($element.hasClass('btn-dark')) {
-        $('link[href*="admin.css"]').attr('href', function() {
-            return $(this).attr('href').replace('admin.css', 'admin-dark.css');
-        });
+        // $('link[href*="admin.css"]').attr('href', function() {
+        //     return $(this).attr('href').replace('admin.css', 'admin-dark.css');
+        // });
         $.cookie("themeToggle", 'dark', { 
             path: '/',
             expires: 365
         });
     }
 
-    $element.prop('disabled', true);
-    $element.siblings('button').prop('disabled', false);
+    window.location.reload();
+    // $element.prop('disabled', true);
+    // $element.siblings('button').prop('disabled', false);
 });
