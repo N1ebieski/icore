@@ -13,12 +13,12 @@
     <h1 class="h4 border-bottom pb-2">{{ trans('icore::friends.friends') }}</h1>
     <ul>
         <li>
-            <a href="https://intelekt.net.pl/icore" target="_blank" rel="noreferrer noopener">
+            <a href="https://intelekt.net.pl/icore" target="_blank" rel="noopener">
                 iCore - mini platforma blogowa
             </a>
         </li>
         <li>
-            <a href="https://www.iconpacks.net" target="_blank" rel="noreferrer noopener">
+            <a href="https://www.iconpacks.net" target="_blank" rel="noopener">
                 Iconpacks - completely free icons
             </a>
         </li>

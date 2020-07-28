@@ -9,7 +9,7 @@ data-id="{{ $link->id }}">
                 </a>
                 <span>
                     <a href="{{ $link->url }}" target="_blank" title="{{ $link->name }}"
-                    rel="noreferrer noopener">
+                    rel="noopener">
                         {{ $link->name }}
                     </a>
                 </span>
