@@ -17,6 +17,16 @@ use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
 class NewsletterController
 {
     /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function redirectRoute() : array
+    {
+        return (array)'web.home.index';
+    }
+
+    /**
      * Store a newly created Subscribe for newsletter in storage.
      *
      * @param  Newsletter   $newsletter [description]
@@ -55,7 +65,7 @@ class NewsletterController
 
         $newsletter->token()->update(['token' => Str::random(30)]);
 
-        return Response::redirectToRoute('web.home.index')->with(
+        return Response::redirectToRoute(...$this->redirectRoute())->with(
             'success',
             $newsletter->status === Newsletter::ACTIVE ?
                 Lang::get('icore::newsletter.success.update_status.'.Newsletter::ACTIVE)
