@@ -21,7 +21,7 @@ class NewsletterController
      *
      * @return array
      */
-    protected function redirectRoute() : array
+    protected function redirectParams() : array
     {
         return (array)'web.home.index';
     }
@@ -65,7 +65,7 @@ class NewsletterController
 
         $newsletter->token()->update(['token' => Str::random(30)]);
 
-        return Response::redirectToRoute(...$this->redirectRoute())->with(
+        return Response::redirectToRoute(...$this->redirectParams())->with(
             'success',
             $newsletter->status === Newsletter::ACTIVE ?
                 Lang::get('icore::newsletter.success.update_status.'.Newsletter::ACTIVE)
