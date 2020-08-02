@@ -125,7 +125,7 @@ class PageRepo
                 $patternString = implode(', ', $component['pattern']);
                 
                 $query->whereIn('id', $component['pattern'])
-                    ->orderByRaw("FIELD(id, ?) DESC", [$patternString]);
+                    ->orderByRaw("FIELD(id, {$patternString}) ASC");
             }, function ($query) use ($component) {
                 $query->root()
                     ->limit($component['limit'])
