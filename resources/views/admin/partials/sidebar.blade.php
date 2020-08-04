@@ -7,7 +7,7 @@
             </a>
         </li>
         @can('admin.home.view')
-        <li class="nav-item">
+        <li class="nav-item {{ $isUrl(route('admin.home.index')) }}">
             <a class="nav-link" href="{{ route('admin.home.index') }}" title="Dashboard">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span> Dashboard</span>
