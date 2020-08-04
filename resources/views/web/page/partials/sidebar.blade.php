@@ -8,11 +8,15 @@
         @if (!empty($sibling->content))    
         <a href="{{ route('web.page.show', $sibling->slug) }}" title="{{ $sibling->title }}"
         class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}">
-            {{ str_repeat('-', $sibling->real_depth) }} {{ $sibling->title }}
+        @endif
+            <span>{{ str_repeat('-', $sibling->real_depth) }}</span>
+            @if (!empty($sibling->icon))
+            <i class="{{ $sibling->icon }} text-center" style="width:1.5rem"></i>
+            @endif
+            <span>{{ $sibling->title }}</span>
+        @if (!empty($sibling->content)) 
         </a>
-        @else
-            {{ str_repeat('-', $sibling->real_depth) }} {{ $sibling->title }}
-        @endif        
+        @endif    
     </div>
     @if ($sibling->id === $page->id && $page->relationLoaded('childrensRecursiveWithAllRels'))
         @include('icore::web.page.partials.pages', ['pages' => $page->childrensRecursiveWithAllRels])

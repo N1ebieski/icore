@@ -3,10 +3,14 @@
         @if (!empty($page->content))
         <a href="{{ route('web.page.show', $page->slug) }}" title="{{ $page->title }}"
         class="{{ $isUrl(route('web.page.show', $page->slug), 'font-weight-bold') }}">
-            {{ str_repeat('-', $page->real_depth) }} {{ $page->title }}
+        @endif
+            <span>{{ str_repeat('-', $page->real_depth) }}</span>
+            @if (!empty($page->icon))
+            <i class="{{ $page->icon }} text-center" style="width:1.5rem"></i>
+            @endif
+            <span>{{ $page->title }}</span>
+        @if (!empty($page->content)) 
         </a>
-        @else
-            {{ str_repeat('-', $page->real_depth) }} {{ $page->title }}
         @endif
     </div>
     @if ($page->relationLoaded('childrensRecursiveWithAllRels'))
