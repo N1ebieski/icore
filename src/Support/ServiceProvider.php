@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Support;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection as Collect;
 
 abstract class ServiceProvider extends BaseServiceProvider
 {
@@ -66,6 +67,10 @@ abstract class ServiceProvider extends BaseServiceProvider
                 continue;
             }
 
+            if ($this->isContainsStringKey($value) === false) {
+                continue;
+            }
+
             if (is_integer($key)) {
                 continue;
             }
@@ -74,5 +79,19 @@ abstract class ServiceProvider extends BaseServiceProvider
         }
 
         return $array;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $array
+     * @return boolean
+     */
+    protected function isContainsStringKey(array $array) : bool
+    {
+        return Collect::make($array)
+            ->contains(function ($value, $key) {
+                return is_string($key);
+            });
     }
 }
