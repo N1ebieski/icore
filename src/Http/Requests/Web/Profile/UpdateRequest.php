@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * [UpdateRequest description]
@@ -27,7 +28,12 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'alpha_dash', 'max:255'],
+            'name' => [
+                'required',
+                'alpha_dash',
+                'max:255',
+                'unique:users,name, ' . Auth::user()->id
+            ],
             'marketing_agreement' => 'bail|nullable|boolean'
         ];
     }
