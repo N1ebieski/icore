@@ -7,7 +7,7 @@ return [
     'edit' => 'Edycja',
     'editFull' => 'P.Edycja',
     'active' => 'Akt.',
-    'inactive' => 'Deakt.',
+    'inactive' => 'Dezakt.',
     'answer' => 'Odp.',
     'uncensored' => 'Odcenz.',
     'censored' => 'Cenzura',
