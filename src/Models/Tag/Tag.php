@@ -30,7 +30,7 @@ class Tag extends Taggable
      *
      * @var array
      */
-    protected $searchable = ['name'];
+    public $searchable = ['name'];
 
     /**
      * Get the route key for the model.

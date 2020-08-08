@@ -204,8 +204,16 @@ class PostRepo
      */
     public function paginateBySearch(string $name) : LengthAwarePaginator
     {
-        return $this->post->search($name)
-            ->active()
+        $posts = $this->post->active()
+            ->search($name)
+            ->get('id')
+            ->merge(
+                $this->post->active()
+                    ->withAllTags($name)
+                    ->get('id')
+            );
+
+        return $this->post->whereIn('id', $posts->pluck('id')->toArray())
             ->with('user:id,name')
             ->orderBy('published_at', 'desc')
             ->paginate($this->paginate);
