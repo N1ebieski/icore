@@ -436,10 +436,10 @@ class Page extends Entity implements PageInterface
     {
         $cut = explode('<p>[more]</p>', $this->replacement_content_html);
 
-        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
-                'post' => $this->slug,
-                '#more'
-            ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->replacement_content_html;
+        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.page.show', [
+                'page' => $this->slug,
+                '#more's
+            ]) . '">' . Lang::get('icore::pages.more') . '</a>' : $this->replacement_content_html;
     }
 
     /**
