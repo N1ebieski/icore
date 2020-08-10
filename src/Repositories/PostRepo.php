@@ -210,7 +210,6 @@ class PostRepo
                     ->when($tag = $this->post->tags()->make()->findByName($name), function ($query) use ($tag) {
                         $query->unionAll(
                             $this->post->selectRaw('`posts`.*')
-                                ->active()
                                 ->join('tags_models', function ($query) use ($tag) {
                                     $query->on('posts.id', '=', 'tags_models.model_id')
                                         ->where('tags_models.model_type', $this->post->getMorphClass())
@@ -218,11 +217,11 @@ class PostRepo
                                 })
                                 ->groupBy('posts.id')
                         );
-                    })
-                    ->active()
-                    ->groupBy('posts.id'),
+                    }),
                 'posts'
             )
+            ->groupBy('posts.id')
+            ->active()
             ->orderBy('published_at', 'desc')
             ->paginate($this->paginate);
     }
