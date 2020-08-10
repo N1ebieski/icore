@@ -43,5 +43,6 @@ return [
     ],
     'position' => 'Position',
     'pages' => 'Pages',
-    'map' => 'See also'
+    'map' => 'See also',
+    'more' => 'more &raquo'    
 ];

@@ -43,5 +43,6 @@ return [
     ],
     'position' => 'Pozycja',
     'pages' => 'Podstrony',
-    'map' => 'Zobacz również'
+    'map' => 'Zobacz również',
+    'more' => 'pokaż więcej &raquo',    
 ];
