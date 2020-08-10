@@ -30,7 +30,10 @@
                 @foreach ($posts as $item)
                     @include('icore::web.post.partials.post', ['post' => $item])
                 @endforeach
-                @include('icore::web.partials.pagination', ['items' => $posts])
+                @include('icore::web.partials.pagination', [
+                    'items' => $posts,
+                    'next' => true
+                ])
             </div>
             @else
             <p>{{ trans('icore::default.empty') }}</p>
