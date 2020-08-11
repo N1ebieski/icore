@@ -57,8 +57,14 @@ class TagRepo
      */
     public function getPopularByComponent(array $component) : Collection
     {
+        $morph = $this->tag->morphs()->make();
+
         return $this->tag->selectRaw('`tags`.*, COUNT(`tags`.`tag_id`) AS taggable_count')
             ->join('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
+            ->join("{$morph->getTable()}", function ($query) use ($morph) {
+                $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
+                    ->where("{$morph->getTable()}.status", $morph::ACTIVE);
+            })
             ->where('tags_models.model_type', $this->tag->model_type)
             ->when($component['cats'] !== null, function ($query) use ($component) {
                 $query->join('categories_models', function ($query) use ($component) {
