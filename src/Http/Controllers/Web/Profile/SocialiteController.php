@@ -44,7 +44,7 @@ class SocialiteController
         try {
             return Socialite::driver($provider)->redirect();
         } catch (\Exception $e) {
-            return Response::redirectToRroute('web.profile.edit_socialite');
+            return Response::redirectToRoute('web.profile.edit_socialite');
         }
     }
 
