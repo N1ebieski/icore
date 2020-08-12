@@ -425,7 +425,11 @@ class Page extends Entity implements PageInterface
      */
     public function getNoMoreContentHtmlAttribute() : string
     {
-        return str_replace('[more]', '', $this->replacement_content_html);
+        return str_replace(
+            '[more]',
+            '<span id="more" class="hashtag"></span>',
+            $this->replacement_content_html
+        );
     }
 
     /**
