@@ -369,7 +369,7 @@ class Post extends Model
     public function getNoMoreContentHtmlAttribute() : string
     {
         return str_replace(
-            '[more]',
+            '<p>[more]</p>',
             '<span id="more" class="hashtag"></span>',
             $this->replacement_content_html
         );
