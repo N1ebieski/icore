@@ -25,7 +25,8 @@ return [
     ],
     'tags' => [
         'label' => 'Tagi',
-        'tooltip' => 'Min 3 znaki, max 30 znaków, max :max_tags tagów'
+        'tooltip' => 'Min 3 znaki, max 30 znaków, max :max_tags tagów',
+        'placeholder' => 'Dodaj tagi'
     ],
     'seo' => [
         'tooltip' => 'Używany w META oraz Open Graph',
