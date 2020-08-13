@@ -384,7 +384,7 @@ class Post extends Model
         $cut = explode('<p>[more]</p>', $this->replacement_content_html);
 
         return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
-                'post' => $this->slug,
+                $this->slug,
                 '#more'
             ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->replacement_content_html;
     }
