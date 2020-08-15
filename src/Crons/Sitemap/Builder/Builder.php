@@ -78,6 +78,20 @@ abstract class Builder
     /**
      * Undocumented variable
      *
+     * @var string
+     */
+    protected $rootElementName = 'urlset';
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    protected $childElementName = 'url';
+
+    /**
+     * Undocumented variable
+     *
      * @var int
      */
     protected $iterator = 0;
@@ -196,10 +210,10 @@ abstract class Builder
     {
         return $this->sitemap = $this->arrayToXml->convert(
             [
-                'url' => $this->sitemap->toArray()
+                $this->childElementName => $this->sitemap->toArray()
             ],
             [
-                'rootElementName' => 'urlset',
+                'rootElementName' => $this->rootElementName,
                 '_attributes' => [
                     'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9'
                 ],

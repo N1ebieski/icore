@@ -24,6 +24,20 @@ class SitemapBuilder extends Builder
      *
      * @var string
      */
+    protected $rootElementName = 'sitemapindex';
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    protected $childElementName = 'sitemap';
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
     protected $priority = '0.8';
 
     /**
