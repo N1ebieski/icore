@@ -10,6 +10,7 @@ use N1ebieski\ICore\Crons\Sitemap\Builder\Builder;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use Illuminate\Support\Str;
 
 class SitemapBuilder extends Builder
 {
@@ -48,6 +49,13 @@ class SitemapBuilder extends Builder
     protected $changefreq = 'daily';
 
     /**
+     * Undocumented variable
+     *
+     * @var Str
+     */
+    protected $str;
+
+    /**
      * Undocumented function
      *
      * @param ArrayToXml $arrayToXml
@@ -56,6 +64,7 @@ class SitemapBuilder extends Builder
      * @param Storage $storage
      * @param Config $config
      * @param Collect $collect
+     * @param Str $str
      */
     public function __construct(
         ArrayToXml $arrayToXml,
@@ -63,9 +72,12 @@ class SitemapBuilder extends Builder
         Carbon $carbon,
         Storage $storage,
         Config $config,
-        Collect $collect
+        Collect $collect,
+        Str $str
     ) {
         parent::__construct($arrayToXml, $url, $carbon, $storage, $config, $collect);
+
+        $this->str = $str;
     }
 
     /**
@@ -92,8 +104,6 @@ class SitemapBuilder extends Builder
             $this->sitemap->push([
                 'loc' => $this->storage->disk('public')->url($item->slug),
                 'lastmod' => $this->carbon->createFromTimestamp($item->updated_at)->format('Y-m-d'),
-                'changefreq' => $this->changefreq,
-                'priority' => $this->priority
             ]);
         });
     }
@@ -113,6 +123,9 @@ class SitemapBuilder extends Builder
                         'slug' => $item,
                         'updated_at' => $this->storage->disk('public')->lastModified($item)
                     ];
+                })
+                ->filter(function ($item) {
+                    return !$this->str->contains($item->slug, 'sitemap/sitemap.xml');
                 })
         );
 
