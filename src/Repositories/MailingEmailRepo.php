@@ -57,4 +57,14 @@ class MailingEmailRepo
             ->orderBy('mailing_id', 'asc')
             ->chunk(1000, $callback);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return MailingEmail|null
+     */
+    public function firstLatestId() : ?MailingEmail
+    {
+        return $this->mailingEmail->latest('id')->first();
+    }
 }

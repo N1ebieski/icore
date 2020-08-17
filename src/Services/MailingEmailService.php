@@ -90,7 +90,7 @@ class MailingEmailService
     {
         $this->user->marketing()
             ->chunk(1000, function ($items) {
-                $id = $this->mailingEmail->latest()->first()->id;
+                $id = $this->makeLastId();
 
                 $attributes = [];
 
@@ -122,7 +122,7 @@ class MailingEmailService
     {
         $this->newsletter->active()
             ->chunk(1000, function ($items) {
-                $id = $this->mailingEmail->latest()->first()->id;
+                $id = $this->makeLastId();
 
                 $attributes = [];
 
@@ -153,7 +153,7 @@ class MailingEmailService
      */
     public function createEmailRecipients(array $items) : void
     {
-        $id = $this->mailingEmail->latest()->first()->id;
+        $id = $this->makeLastId();
 
         foreach ($items as $item) {
             // Create attributes manually, no within model because multiple
@@ -171,6 +171,16 @@ class MailingEmailService
 
             $this->mailingEmail->insertIgnore($attributes);
         }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return integer
+     */
+    protected function makeLastId() : int
+    {
+        return optional($this->mailingEmail->makeRepo()->firstLatestId())->id ?? 1;
     }
 
     /**
