@@ -2,15 +2,17 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Models\Traits\Filterable;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
 use Mews\Purifier\Facades\Purifier;
-use N1ebieski\ICore\Repositories\MailingRepo;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\MailingService;
+use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Repositories\MailingRepo;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
 /**
  * [Mailing description]
@@ -156,12 +158,44 @@ class Mailing extends Model
     }
 
     /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getReplacementContentHtmlAttribute() : string
+    {
+        $replacement = Collect::make(Config::get('icore.replacement'));
+
+        return str_replace(
+            $replacement->keys()->toArray(),
+            $replacement->values()->toArray(),
+            Purifier::clean($this->content_html)
+        );
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getReplacementContentAttribute() : string
+    {
+        $replacement = Collect::make(Config::get('icore.replacement'));
+
+        return str_replace(
+            $replacement->keys()->toArray(),
+            $replacement->values()->toArray(),
+            $this->content
+        );
+    }
+
+    /**
      * [getShortContentAttribute description]
      * @return string [description]
      */
     public function getShortContentAttribute() : string
     {
-        return mb_substr($this->content, 0, 300);
+        return mb_substr(strip_tags($this->replacement_content), 0, 300);
     }
 
     // Scopes

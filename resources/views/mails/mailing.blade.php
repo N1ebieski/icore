@@ -10,7 +10,7 @@
 @endif
 @endif
 
-{!! $mailingEmail->mailing->content_html !!}
+{!! $mailingEmail->mailing->replacement_content_html !!}
 
 {{-- Subcopy --}}
 @isset($subcopy)
