@@ -90,12 +90,15 @@ class MailingEmailService
     {
         $this->user->marketing()
             ->chunk(1000, function ($items) {
+                $id = $this->mailingEmail->latest()->first()->id;
+
                 $attributes = [];
 
-                $items->each(function ($item) use (&$attributes) {
+                $items->each(function ($item) use (&$attributes, &$id) {
                     // Create attributes manually, no within model because multiple
                     // models may be huge performance impact
                     $attributes[] = [
+                        'id' => $id++,
                         'mailing_id' => $this->mailingEmail->getMailing()->id,
                         'model_type' => get_class($item),
                         'model_id' => $item->id,
@@ -119,12 +122,15 @@ class MailingEmailService
     {
         $this->newsletter->active()
             ->chunk(1000, function ($items) {
+                $id = $this->mailingEmail->latest()->first()->id;
+
                 $attributes = [];
 
-                $items->each(function ($item) use (&$attributes) {
+                $items->each(function ($item) use (&$attributes, &$id) {
                     // Create attributes manually, no within model because multiple
                     // models may be huge performance impact
                     $attributes[] = [
+                        'id' => $id++,
                         'mailing_id' => $this->mailingEmail->getMailing()->id,
                         'model_type' => get_class($item),
                         'model_id' => $item->id,
@@ -147,10 +153,13 @@ class MailingEmailService
      */
     public function createEmailRecipients(array $items) : void
     {
+        $id = $this->mailingEmail->latest()->first()->id;
+
         foreach ($items as $item) {
             // Create attributes manually, no within model because multiple
             // models may be huge performance impact
             $attributes[] = [
+                'id' => $id++,
                 'mailing_id' => $this->mailingEmail->getMailing()->id,
                 'model_type' => null,
                 'model_id' => null,
