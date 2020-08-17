@@ -180,7 +180,7 @@ class MailingEmailService
      */
     protected function makeLastId() : int
     {
-        return optional($this->mailingEmail->makeRepo()->firstLatestId())->id ?? 1;
+        return optional($this->mailingEmail->makeRepo()->firstByLatestId())->id ?? 1;
     }
 
     /**

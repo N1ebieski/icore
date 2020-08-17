@@ -63,7 +63,7 @@ class MailingEmailRepo
      *
      * @return MailingEmail|null
      */
-    public function firstLatestId() : ?MailingEmail
+    public function firstByLatestId() : ?MailingEmail
     {
         return $this->mailingEmail->latest('id')->first();
     }
