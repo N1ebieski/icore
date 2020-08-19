@@ -244,7 +244,9 @@ class Mailing extends Model
      */
     public function setContentAttribute($value) : void
     {
-        $this->attributes['content'] = strip_tags(str_replace('[more]', '', $value));
+        $this->attributes['content'] = !empty($value) ?
+            strip_tags(str_replace('[more]', '', $value))
+            : null;
     }
 
     // Makers

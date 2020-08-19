@@ -422,7 +422,9 @@ class Post extends Model
      */
     public function setContentAttribute(string $value) : void
     {
-        $this->attributes['content'] = strip_tags(str_replace('[more]', '', $value));
+        $this->attributes['content'] = !empty($value) ?
+            strip_tags(str_replace('[more]', '', $value))
+            : null;
     }
 
     // Checkers
