@@ -202,6 +202,7 @@ class PageRepo
     public function chunkActiveWithModelsCount(Closure $callback) : bool
     {
         return $this->page->active()
+            ->whereNotNull('content_html')
             ->withCount(['comments AS models_count' => function ($query) {
                 $query->root()->active();
             }])
