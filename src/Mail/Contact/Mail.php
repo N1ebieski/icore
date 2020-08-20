@@ -75,7 +75,7 @@ class Mail extends Mailable
     public function build()
     {
         return $this->subject($this->request->input('title'))
-            ->from($this->request->input('email'))
+            ->replyTo($this->request->input('email'))
             ->to($this->email)
             ->markdown('icore::mails.contact')
             ->with([
