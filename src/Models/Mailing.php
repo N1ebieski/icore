@@ -81,9 +81,9 @@ class Mailing extends Model
     protected $casts = [
         'id' => 'integer',
         'status' => 'integer',
-        'activation_at' => 'timestamp',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'activation_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Relations

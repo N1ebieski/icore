@@ -49,8 +49,8 @@ class Tag extends Taggable
      */
     protected $casts = [
         'tag_id' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Makers

@@ -177,8 +177,8 @@ class Page extends Entity implements PageInterface
         'parent_id' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Overrides

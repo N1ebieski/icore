@@ -74,8 +74,8 @@ class MailingEmail extends Model
         'mailing_id' => 'integer',
         'model_id' => 'integer',
         'sent' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Setters

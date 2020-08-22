@@ -153,9 +153,9 @@ class Post extends Model
         'seo_nofollow' => 'integer',
         'status' => 'integer',
         'comment' => 'integer',
-        'published_at' => 'timestamp',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'published_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     /**

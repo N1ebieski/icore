@@ -105,8 +105,8 @@ class Comment extends Entity implements CommentInterface
         'censored' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Relations

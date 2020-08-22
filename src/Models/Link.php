@@ -39,8 +39,8 @@ class Link extends Model
     protected $casts = [
         'id' => 'integer',
         'position' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Overrides

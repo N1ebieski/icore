@@ -38,8 +38,8 @@ class Rating extends Model
         'user_id' => 'integer',
         'model_id' => 'integer',
         'rating' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Relations

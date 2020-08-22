@@ -42,8 +42,8 @@ class BanModel extends Model
     protected $casts = [
         'id' => 'integer',
         'model_id' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     // Relations

@@ -82,8 +82,8 @@ class Category extends Entity implements CategoryInterface
         'parent_id' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     /**
