@@ -26,7 +26,7 @@ class TagController implements Polymorphic
     {
         return Response::view('icore::web.tag.post.show', [
             'tag' => $tag,
-            'posts' => $post->makeCache()->rememberByTag($tag, $request->get('page') ?? 1),
+            'posts' => $post->makeRepo()->paginateByTag($tag),
         ]);
     }
 }
