@@ -47,8 +47,7 @@ class ScheduleServiceProvider extends ServiceProvider
 
         $this->schedule->command('cache:clear')
             ->name('ClearCache')
-            ->cron($cron)
-            ->runInBackground();
+            ->cron($cron);
     }
 
     /**
