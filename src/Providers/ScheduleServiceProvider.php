@@ -38,11 +38,11 @@ class ScheduleServiceProvider extends ServiceProvider
         }
 
         if ($hours < 24) {
-            $cron = "0 */{$hours} * * *";
+            $cron = "1 */{$hours} * * *";
         } else {
             $days = ceil($hours/24);
 
-            $cron = "0 0 */{$days} * *";
+            $cron = "1 0 */{$days} * *";
         }
 
         $this->schedule->command('cache:clear')
