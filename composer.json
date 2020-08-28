@@ -23,8 +23,7 @@
         "laravel/helpers": "^1.0",
         "fico7489/laravel-pivot": "^3.0",
         "guidocella/eloquent-insert-on-duplicate-key": "^2.0",
-        "spatie/laravel-view-models": "^1.3",
-        "tintnaingwin/email-checker": "^2.0"        
+        "spatie/laravel-view-models": "^1.3"     
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
