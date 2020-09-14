@@ -13,7 +13,7 @@ data-id="{{ $post->id }}">
                             {{ $post->title }}
                         </a>
                     </li>
-                    <li>{{ $post->shortContent }}...</li>
+                    <li>{!! $post->shortContent !!}...</li>
                     <li><small>{{ $post->tagList }}</small></li>
                     <li><small>{{ trans('icore::posts.published_at.label') }}: {{ $post->published_at_diff }}</small></li>
                     <li><small>{{ trans('icore::filter.created_at') }}: {{ $post->created_at_diff }}</small></li>

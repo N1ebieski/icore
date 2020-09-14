@@ -296,7 +296,7 @@ class Post extends Model
      */
     public function getContentHtmlAttribute() : string
     {
-         return Purifier::clean($this->attributes['content_html']);
+        return Purifier::clean($this->attributes['content_html']);
     }
 
     /**
@@ -305,7 +305,7 @@ class Post extends Model
      */
     public function getMetaTitleAttribute() : string
     {
-         return (!empty($this->attributes['seo_title'])) ? $this->attributes['seo_title'] : $this->title;
+        return (!empty($this->attributes['seo_title'])) ? $this->attributes['seo_title'] : $this->title;
     }
 
     /**
@@ -314,7 +314,7 @@ class Post extends Model
      */
     public function getMetaDescAttribute() : string
     {
-         return (!empty($this->attributes['seo_desc'])) ? $this->attributes['seo_desc'] : $this->shortContent;
+        return (!empty($this->attributes['seo_desc'])) ? $this->attributes['seo_desc'] : $this->shortContent;
     }
 
     /**
@@ -340,7 +340,7 @@ class Post extends Model
     public function getShortContentAttribute() : string
     {
         return mb_substr(
-            strip_tags($this->replacement_content),
+            e(strip_tags($this->replacement_content), false),
             0,
             Config::get('icore.post.short_content')
         );

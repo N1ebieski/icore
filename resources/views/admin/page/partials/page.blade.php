@@ -29,7 +29,7 @@ data-id="{{ $page->id }}">
                     </a>&nbsp;
                     <span class="badge badge-success">ID {{ $page->id }}</span>
                 </li>
-                <li>{{ str_repeat('-', $page->real_depth) }} {{ $page->shortContent }}...</li>
+                <li>{{ str_repeat('-', $page->real_depth) }} {!! $page->shortContent !!}...</li>
                 <li>{{ str_repeat('-', $page->real_depth) }} <small>{{ trans('icore::filter.created_at') }}: {{ $page->created_at_diff }}</small></li>
                 <li>{{ str_repeat('-', $page->real_depth) }} <small>{{ trans('icore::filter.updated_at') }}: {{ $page->updated_at_diff }}</small></li>
             </ul>
