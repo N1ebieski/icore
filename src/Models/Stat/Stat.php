@@ -1,0 +1,62 @@
+<?php
+
+namespace N1ebieski\ICore\Models\Stat;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Cache\StatCache;
+use N1ebieski\ICore\Repositories\StatRepo;
+
+class Stat extends Model
+{
+    use Polymorphic, Carbonable;
+
+    // Configuration
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'stats';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['type'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
+    // Makers
+
+    /**
+     * [makeRepo description]
+     * @return StatRepo [description]
+     */
+    public function makeRepo()
+    {
+        return App::make(StatRepo::class, ['stat' => $this]);
+    }
+
+    /**
+     * [makeCache description]
+     * @return StatCache [description]
+     */
+    public function makeCache()
+    {
+        return App::make(StatCache::class, ['stat' => $this]);
+    }
+}
