@@ -57,6 +57,7 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('icore.ban.ip', \N1ebieski\ICore\Http\Middleware\BanIp::class);
         $this->app['router']->aliasMiddleware('icore.force.verified', \N1ebieski\ICore\Http\Middleware\VerifyEmail::class);
         $this->app['router']->aliasMiddleware('icore.guest', \N1ebieski\ICore\Http\Middleware\RedirectIfAuthenticated::class);
+        $this->app['router']->aliasMiddleware('icore.migration', \N1ebieski\ICore\Http\Middleware\CheckMigration::class);
     }
 
     /**
