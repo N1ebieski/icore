@@ -17,6 +17,18 @@ class Stat extends Model
     // Configuration
 
     /**
+     * [public description]
+     * @var string
+     */
+    public const CLICK = 'click';
+
+    /**
+     * [public description]
+     * @var string
+     */
+    public const VIEW = 'view';
+
+    /**
      * The table associated with the model.
      *
      * @var string
