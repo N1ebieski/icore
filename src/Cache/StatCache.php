@@ -60,7 +60,7 @@ class StatCache
     public function rememberBySlug(string $slug)
     {
         return $this->cache->remember(
-            "stat.firstBySlug.{$slug}",
+            "stat.{$this->stat->poli}.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($slug) {
                 return $this->stat->makeRepo()->firstBySlug($slug);

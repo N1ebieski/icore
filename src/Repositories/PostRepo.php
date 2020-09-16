@@ -5,9 +5,10 @@ namespace N1ebieski\ICore\Repositories;
 use Closure;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 
 /**
@@ -29,6 +30,13 @@ class PostRepo
     protected $carbon;
 
     /**
+     * Undocumented variable
+     *
+     * @var App
+     */
+    protected $app;
+
+    /**
      * Config
      * @var int
      */
@@ -40,12 +48,14 @@ class PostRepo
      * @param Post $post
      * @param Config $config
      * @param Carbon $carbon
+     * @param App $app
      */
-    public function __construct(Post $post, Config $config, Carbon $carbon)
+    public function __construct(Post $post, Config $config, Carbon $carbon, App $app)
     {
         $this->post = $post;
 
         $this->carbon = $carbon;
+        $this->app = $app;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -97,7 +107,14 @@ class PostRepo
                 },
                 'user:id,name',
                 'tags'
-            ])->first();
+            ])
+            ->when(
+                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                function ($query) {
+                    $query->with('stats');
+                }
+            )
+            ->first();
     }
 
     /**

@@ -271,6 +271,22 @@ class Page extends Entity implements PageInterface
         return $this->childrens()->withRecursiveAllRels();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return MorphToMany
+     */
+    public function stats() : MorphToMany
+    {
+        return $this->morphToMany(
+            \N1ebieski\ICore\Models\Stat\Page\Stat::class,
+            'model',
+            'stats_values',
+            'model_id',
+            'stat_id'
+        )->withPivot('value');
+    }
+
     // Loads
 
     /**

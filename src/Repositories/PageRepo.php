@@ -8,6 +8,8 @@ use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Container\Container as App;
+use N1ebieski\ICore\Utils\MigrationUtil;
 
 /**
  * [PageRepo description]
@@ -27,13 +29,24 @@ class PageRepo
     protected $paginate;
 
     /**
-     * [__construct description]
-     * @param Page   $page   [description]
-     * @param Config $config [description]
+     * Undocumented variable
+     *
+     * @var App
      */
-    public function __construct(Page $page, Config $config)
+    protected $app;
+
+    /**
+     * Undocumented function
+     *
+     * @param Page $page
+     * @param Config $config
+     * @param App $app
+     */
+    public function __construct(Page $page, Config $config, App $app)
     {
         $this->page = $page;
+
+        $this->app = $app;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -172,6 +185,12 @@ class PageRepo
     {
         return $this->page->whereSlug($slug)
             ->with('tags')
+            ->when(
+                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                function ($query) {
+                    $query->with('stats');
+                }
+            )
             ->active()
             ->withAncestorsExceptSelf()
             ->first();

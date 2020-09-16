@@ -243,6 +243,22 @@ class Post extends Model
         return $this->morphMany('N1ebieski\ICore\Models\Comment\Comment', 'model');
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return MorphToMany
+     */
+    public function stats() : MorphToMany
+    {
+        return $this->morphToMany(
+            \N1ebieski\ICore\Models\Stat\Post\Stat::class,
+            'model',
+            'stats_values',
+            'model_id',
+            'stat_id'
+        )->withPivot('value');
+    }
+
     // Accessors
 
     /**
