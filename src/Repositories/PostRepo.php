@@ -273,4 +273,32 @@ class PostRepo
             }])
             ->chunk(1000, $callback);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function countByStatus() : Collection
+    {
+        return $this->post->selectRaw("`status`, COUNT(`id`) AS `count_rows`")
+            ->whereIn('status', [$this->post::ACTIVE, $this->post::SCHEDULED])
+            ->groupBy('status')
+            ->get();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getLastActivity() : string
+    {
+        return optional(
+            $this->post->active()
+            ->orderBy('published_at', 'desc')
+            ->first('published_at')
+        )
+        ->published_at;
+    }
 }

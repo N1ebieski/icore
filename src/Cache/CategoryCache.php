@@ -103,4 +103,20 @@ class CategoryCache
             }
         );
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function rememberCountByStatus() : Collection
+    {
+        return $this->cache->tags(['categories'])->remember(
+            "category.{$this->category->poli}.countByStatus",
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
+                return $this->category->makeRepo()->countByStatus();
+            }
+        );
+    }
 }

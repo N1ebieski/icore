@@ -198,4 +198,36 @@ class PostCache
             }
         );
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function rememberCountByStatus() : Collection
+    {
+        return $this->cache->tags(['posts'])->remember(
+            "post.countByStatus",
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
+                return $this->post->makeRepo()->countByStatus();
+            }
+        );
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function rememberLastActivity() : string
+    {
+        return $this->cache->tags(['posts'])->remember(
+            "post.lastActivity",
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
+                return $this->post->makeRepo()->getLastActivity();
+            }
+        );
+    }
 }

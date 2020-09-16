@@ -40,7 +40,7 @@ class Stat extends Model
      *
      * @var array
      */
-    protected $fillable = ['type'];
+    protected $fillable = ['slug'];
 
     /**
      * The attributes that should be cast to native types.

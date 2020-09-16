@@ -212,4 +212,17 @@ class CategoryRepo
             }])
             ->chunk(1000, $callback);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function countByStatus() : Collection
+    {
+        return $this->category->poliType()
+            ->selectRaw("`status`, COUNT(`id`) AS `count_rows`")
+            ->groupBy('status')
+            ->get();
+    }
 }

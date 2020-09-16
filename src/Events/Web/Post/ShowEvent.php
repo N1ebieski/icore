@@ -18,13 +18,6 @@ class ShowEvent
     public $post;
 
     /**
-     * Undocumented variable
-     *
-     * @var Post
-     */
-    public $morph;
-
-    /**
      * Create a new event instance.
      *
      * @param Post         $post    [description]
@@ -33,7 +26,5 @@ class ShowEvent
     public function __construct(Post $post)
     {
         $this->post = $post;
-
-        $this->morph = $post;
     }
 }
