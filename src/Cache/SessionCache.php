@@ -62,6 +62,11 @@ class SessionCache
             function () {
                 return $this->db->table('sessions')
                     ->selectRaw("IF(`user_id` IS NULL, 'guest', 'user') AS `type`, COUNT(`id`) AS `count`")
+                    ->where(
+                        'last_activity',
+                        '>=',
+                        $this->carbon->now()->subMinutes($this->minutes)->timestamp
+                    )
                     ->groupBy('user_id')
                     ->get();
             }
