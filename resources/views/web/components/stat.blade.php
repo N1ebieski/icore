@@ -1,27 +1,37 @@
-<h5 class="mb-2">
+<h5 class="mt-4 mt-sm-0 mb-2">
     {{ trans('icore::stats.stats') }}:
 </h5>
 <div class="list-group list-group-flush text-left">
-    @if ($countCategories->firstWhere('status', $category::ACTIVE))
+    @if ($countCategories)
     <div class="list-group-item d-flex justify-content-between">
         <div>
             {{ trans('icore::categories.route.index') }}:
         </div>
         <div class="text-right">
-            {{ $countCategories->firstWhere('status', $category::ACTIVE)->count_rows }}
+            {{ $countCategories->count }}
         </div>
     </div>
     @endif
-    @if ($countPosts->firstWhere('status', $post::ACTIVE))
+    @if ($countPosts)
     <div class="list-group-item d-flex justify-content-between">
         <div>
             {{ trans('icore::posts.route.index') }}:
         </div>
         <div class="text-right">
-            {{ $countPosts->firstWhere('status', $post::ACTIVE)->count_rows }}
+            {{ $countPosts->count }}
         </div>
     </div>
     @endif
+    @if ($countComments)
+    <div class="list-group-item d-flex justify-content-between">
+        <div>
+            {{ trans('icore::comments.route.index') }}:
+        </div>
+        <div class="text-right">
+            {{ $countComments }}
+        </div>
+    </div>
+    @endif    
     @if ($lastActivity)
     <div class="list-group-item d-flex justify-content-between">
         <div>
@@ -40,10 +50,10 @@
         @foreach ($countUsers as $count)
         <div class="d-flex justify-content-between">
             <div>
-                - {{ trans("icore::stats.user.{$count->type}.label") }}:
+                - {{ trans("icore::stats.user.type.{$count->type}") }}:
             </div>
             <div class="text-right">
-                {{ $count->count_rows }}
+                {{ $count->count }}
             </div>
         </div>
         @endforeach

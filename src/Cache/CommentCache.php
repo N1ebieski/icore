@@ -139,4 +139,20 @@ class CommentCache
             }
         );
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function rememberCountByModelTypeAndStatus() : Collection
+    {
+        return $this->cache->tags(['comments'])->remember(
+            "comment.countByModelTypeAndStatus",
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
+                return $this->comment->makeRepo()->countByModelTypeAndStatus();
+            }
+        );
+    }
 }

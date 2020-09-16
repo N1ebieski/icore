@@ -221,7 +221,7 @@ class CategoryRepo
     public function countByStatus() : Collection
     {
         return $this->category->poliType()
-            ->selectRaw("`status`, COUNT(`id`) AS `count_rows`")
+            ->selectRaw("`status`, COUNT(`id`) AS `count`")
             ->groupBy('status')
             ->get();
     }

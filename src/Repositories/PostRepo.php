@@ -281,8 +281,7 @@ class PostRepo
      */
     public function countByStatus() : Collection
     {
-        return $this->post->selectRaw("`status`, COUNT(`id`) AS `count_rows`")
-            ->whereIn('status', [$this->post::ACTIVE, $this->post::SCHEDULED])
+        return $this->post->selectRaw("`status`, COUNT(`id`) AS `count`")
             ->groupBy('status')
             ->get();
     }

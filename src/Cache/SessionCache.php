@@ -61,7 +61,7 @@ class SessionCache
             $this->carbon->now()->addMinutes($this->minutes),
             function () {
                 return $this->db->table('sessions')
-                    ->selectRaw("IF(`user_id` IS NULL, 'guest', 'user') AS `type`, COUNT(`id`) AS `count_rows`")
+                    ->selectRaw("IF(`user_id` IS NULL, 'guest', 'user') AS `type`, COUNT(`id`) AS `count`")
                     ->groupBy('user_id')
                     ->get();
             }

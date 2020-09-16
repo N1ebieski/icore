@@ -10,10 +10,10 @@ return [
     'user' => [
         'label' => 'Users online',
         'user' => [
-            'label' => 'Logged'
+            'label' => 'logged'
         ],
         'guest' => [
-            'label' => 'Guests'
+            'label' => 'guests'
         ]
     ]
 ];

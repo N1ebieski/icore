@@ -9,11 +9,9 @@ return [
     'last_activity' => 'Ostatnia aktywność',
     'user' => [
         'label' => 'Użytkownicy online',
-        'user' => [
-            'label' => 'Zalogowani'
-        ],
-        'guest' => [
-            'label' => 'Goście'
+        'type' => [
+            'user' => 'zalogowani',
+            'guest' => 'goście'
         ]
     ]
 ];

@@ -18,7 +18,7 @@ class CommentObserver
      */
     public function created(Comment $comment)
     {
-        Cache::tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
+        Cache::tags(['comments', 'comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
@@ -29,7 +29,7 @@ class CommentObserver
      */
     public function updated(Comment $comment)
     {
-        Cache::tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
+        Cache::tags(['comments', 'comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
@@ -40,7 +40,7 @@ class CommentObserver
      */
     public function deleted(Comment $comment)
     {
-        Cache::tags(['comment.'.$comment->poli.'.'.$comment->model_id])->flush();
+        Cache::tags(['comments', 'comment.'.$comment->poli.'.'.$comment->model_id])->flush();
     }
 
     /**
