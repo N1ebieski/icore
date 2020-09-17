@@ -5,9 +5,10 @@ namespace N1ebieski\ICore\Repositories;
 use Closure;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 
 /**
@@ -29,6 +30,13 @@ class PostRepo
     protected $carbon;
 
     /**
+     * Undocumented variable
+     *
+     * @var App
+     */
+    protected $app;
+
+    /**
      * Config
      * @var int
      */
@@ -40,12 +48,14 @@ class PostRepo
      * @param Post $post
      * @param Config $config
      * @param Carbon $carbon
+     * @param App $app
      */
-    public function __construct(Post $post, Config $config, Carbon $carbon)
+    public function __construct(Post $post, Config $config, Carbon $carbon, App $app)
     {
         $this->post = $post;
 
         $this->carbon = $carbon;
+        $this->app = $app;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -73,7 +83,8 @@ class PostRepo
      */
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
-        return $this->post->with('tags')
+        return $this->post->selectRaw('`posts`.*')
+            ->with('tags')
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
@@ -97,7 +108,14 @@ class PostRepo
                 },
                 'user:id,name',
                 'tags'
-            ])->first();
+            ])
+            ->when(
+                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                function ($query) {
+                    $query->with('stats');
+                }
+            )
+            ->first();
     }
 
     /**
@@ -255,5 +273,32 @@ class PostRepo
                 $query->root()->active();
             }])
             ->chunk(1000, $callback);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function countByStatus() : Collection
+    {
+        return $this->post->selectRaw("`status`, COUNT(`id`) AS `count`")
+            ->groupBy('status')
+            ->get();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getLastActivity() : string
+    {
+        return optional(
+            $this->post->active()
+            ->orderBy('published_at', 'desc')
+            ->first('published_at')
+        )
+        ->published_at;
     }
 }

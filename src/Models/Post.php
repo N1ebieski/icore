@@ -17,6 +17,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -26,7 +27,10 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class Post extends Model
 {
-    use Sluggable, Taggable, FullTextSearchable, Filterable, PivotEventTrait;
+    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait;
+    use Filterable, StatFilterable {
+        StatFilterable::scopeFilterOrderBy insteadof Filterable;
+    }
 
     // Configuration
 
@@ -241,6 +245,22 @@ class Post extends Model
     public function comments()
     {
         return $this->morphMany('N1ebieski\ICore\Models\Comment\Comment', 'model');
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return MorphToMany
+     */
+    public function stats() : MorphToMany
+    {
+        return $this->morphToMany(
+            \N1ebieski\ICore\Models\Stat\Post\Stat::class,
+            'model',
+            'stats_values',
+            'model_id',
+            'stat_id'
+        )->withPivot('value');
     }
 
     // Accessors

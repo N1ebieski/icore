@@ -3,6 +3,8 @@
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Filters\Web\Post\ShowFilter;
@@ -10,6 +12,7 @@ use N1ebieski\ICore\Models\Comment\Post\Comment;
 use N1ebieski\ICore\Http\Requests\Web\Post\ShowRequest;
 use N1ebieski\ICore\Http\Requests\Web\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Web\Post\SearchRequest;
+use N1ebieski\ICore\Events\Web\Post\ShowEvent as PostShowEvent;
 
 /**
  * [PostController description]
@@ -41,6 +44,8 @@ class PostController
     public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter) : HttpResponse
     {
         $postCache = $post->makeCache();
+
+        Event::dispatch(App::make(PostShowEvent::class, ['post' => $post]));
 
         return Response::view('icore::web.post.show', [
             'post' => $post,

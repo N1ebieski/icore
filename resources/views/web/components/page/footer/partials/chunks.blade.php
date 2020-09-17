@@ -1,7 +1,7 @@
 @if ($pages->isNotEmpty())
 @if ($pattern)
     @foreach ($pattern as $chunk)
-    <div class="col-md-3 col-sm-6">
+    <div class="col-lg-3 col-sm-6">
         <div class="list-group list-group-flush mb-3">
             @include('icore::web.components.page.footer.partials.pages', [
                 'pages' => $pages->whereIn('id', $chunk)
@@ -14,7 +14,7 @@
     @endforeach
 @else
     @foreach ($pages->chunk($cols) as $chunk)
-    <div class="col-md-3 col-sm-6">
+    <div class="col-lg-3 col-sm-6">
         <div class="list-group list-group-flush mb-3">
             @include('icore::web.components.page.footer.partials.pages', ['pages' => $chunk])
         </div>

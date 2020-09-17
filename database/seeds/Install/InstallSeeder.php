@@ -14,5 +14,6 @@ class InstallSeeder extends Seeder
     public function run()
     {
         $this->call(DefaultRolesAndPermissionsSeeder::class);
+        $this->call(DefaultStatsSeeder::class);
     }
 }

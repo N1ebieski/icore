@@ -38,7 +38,7 @@ class IndexRequest extends FormRequest
             'filter.orderby' => [
                 'bail',
                 'nullable',
-                'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,title|asc,title|desc',
+                'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,title|asc,title|desc,view|desc,view|asc',
                 'no_js_validation'
             ],
             'filter.paginate' => Rule::in([$paginate, ($paginate*2), ($paginate*4)]) . '|integer|no_js_validation'

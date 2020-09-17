@@ -8,26 +8,30 @@ use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Cache\PageCache;
+use Illuminate\Support\Facades\Config;
 use Cviebrock\EloquentTaggable\Taggable;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\PageService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PageRepo;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Page\PageInterface;
-use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * [Page description]
  */
 class Page extends Entity implements PageInterface
 {
-    use Sluggable, Taggable, FullTextSearchable, Filterable, PivotEventTrait;
+    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait;
+    use Filterable, StatFilterable {
+        StatFilterable::scopeFilterOrderBy insteadof Filterable;
+    }
 
     // Configuration
 
@@ -269,6 +273,22 @@ class Page extends Entity implements PageInterface
     public function childrensRecursiveWithAllRels()
     {
         return $this->childrens()->withRecursiveAllRels();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return MorphToMany
+     */
+    public function stats() : MorphToMany
+    {
+        return $this->morphToMany(
+            \N1ebieski\ICore\Models\Stat\Page\Stat::class,
+            'model',
+            'stats_values',
+            'model_id',
+            'stat_id'
+        )->withPivot('value');
     }
 
     // Loads

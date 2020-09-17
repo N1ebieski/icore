@@ -106,14 +106,14 @@ class CommentRepo
     }
 
     /**
-     * [countInactiveByModelType description]
+     * [countByModelType description]
      * @return Collection [description]
      */
-    public function countInactiveByModelType() : Collection
+    public function countByModelTypeAndStatus() : Collection
     {
-        return $this->comment->inactive()
-            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, COUNT(*) AS `count`')
-            ->groupBy('model_type')
+        return $this->comment
+            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, `status`, COUNT(*) AS `count`')
+            ->groupBy('model_type', 'status')
             ->get();
     }
 

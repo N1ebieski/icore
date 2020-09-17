@@ -25,8 +25,10 @@
     @foreach ($page->ancestors as $ancestor)
         <li class="breadcrumb-item">
             @if (!empty($ancestor->content))
-            <a href="{{ route('web.page.show', [$ancestor->slug]) }}"
-            title="{{ $ancestor->title }}">
+            <a 
+                href="{{ route('web.page.show', [$ancestor->slug]) }}"
+                title="{{ $ancestor->title }}"
+            >
                 {{ $ancestor->title }}
             </a>
             @else
@@ -35,7 +37,9 @@
         </li>
     @endforeach
 @endif
-<li class="breadcrumb-item active" aria-current="page">{{ $page->title }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ $page->title }}
+</li>
 @endsection
 
 @section('content')
@@ -44,12 +48,18 @@
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
                 <h1 class="h4 border-bottom pb-2">
-                    @if (!empty($page->icon))<i class="{{ $page->icon }}"></i>@endif
+                    @if (!empty($page->icon))
+                    <i class="{{ $page->icon }}"></i>
+                    @endif
                     <span>{{ $page->title }}</span>
                 </h1>
-                <div>{!! $page->no_more_content_html !!}</div>
+                <div>
+                    {!! $page->no_more_content_html !!}
+                </div>
                 @if ((bool)$page->comment === true)
-                <h3 class="h5 border-bottom pb-2" id="comments">{{ trans('icore::comments.comments') }}</h3>
+                <h3 class="h5 border-bottom pb-2" id="comments">
+                    {{ trans('icore::comments.comments') }}
+                </h3>
                 <div id="filterContent">
                     @if ($comments->isNotEmpty())
                         @include('icore::web.comment.partials.filter')
@@ -57,10 +67,16 @@
                     <div id="comment">
                         @auth
                         @canany(['web.comments.create', 'web.comments.suggest'])
-                        @include('icore::web.comment.create', ['model' => $page, 'parent_id' => 0])
+                        @include('icore::web.comment.create', [
+                            'model' => $page,
+                            'parent_id' => 0
+                        ])
                         @endcanany
                         @else
-                        <a href="{{ route('login') }}" title="{{ trans('icore::comments.log_to_comment') }}">
+                        <a 
+                            href="{{ route('login') }}" 
+                            title="{{ trans('icore::comments.log_to_comment') }}"
+                        >
                             {{ trans('icore::comments.log_to_comment') }}
                         </a>
                         @endauth
@@ -68,10 +84,14 @@
                     @if ($comments->isNotEmpty())
                     <div id="infinite-scroll">
                         @foreach ($comments as $comment)
-                            @include('icore::web.comment.partials.comment', ['comment' => $comment])
+                            @include('icore::web.comment.partials.comment', [
+                                'comment' => $comment
+                            ])
                         @endforeach
-                        @include('icore::web.partials.pagination', ['items' => $comments, 'fragment'
-                        => 'comments'])
+                        @include('icore::web.partials.pagination', [
+                            'items' => $comments, 
+                            'fragment' => 'comments'
+                        ])
                     </div>
                     @component('icore::web.partials.modal')
                     @slot('modal_id', 'createReportModal')
@@ -85,6 +105,20 @@
             </div>
         </div>
         <div class="col-md-4 order-sm-2 order-md-1">
+            @if ($page->relationLoaded('stats'))
+            <div class="list-group list-group-flush mb-3">
+                @foreach ($page->stats as $stat)
+                <div class="list-group-item">
+                    <div class="float-left mr-2">
+                        {{ trans("icore::stats.{$stat->slug}") }}:
+                    </div>
+                    <div class="float-right">
+                        {{ $stat->pivot->value }}
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @endif
             @include('icore::web.page.partials.sidebar', ['page' => $page])
         </div>
     </div>
