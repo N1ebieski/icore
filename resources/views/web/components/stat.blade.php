@@ -36,6 +36,7 @@
         </div>
     </div>
     @endif
+    @if ($countUsers)
     <div class="list-group-item">
         <div>
             {{ trans('icore::stats.user.label') }}:
@@ -57,4 +58,5 @@
             </div>
         </div>        
     </div>
+    @endif
 </div>
