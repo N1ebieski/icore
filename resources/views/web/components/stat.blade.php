@@ -2,36 +2,30 @@
     {{ trans('icore::stats.stats') }}:
 </h5>
 <div class="list-group list-group-flush text-left">
-    @if ($countCategories)
     <div class="list-group-item d-flex justify-content-between">
         <div>
             {{ trans('icore::categories.route.index') }}:
         </div>
         <div class="text-right">
-            {{ $countCategories->count }}
+            {{ $countCategories->count ?? 0 }}
         </div>
     </div>
-    @endif
-    @if ($countPosts)
     <div class="list-group-item d-flex justify-content-between">
         <div>
             {{ trans('icore::posts.route.index') }}:
         </div>
         <div class="text-right">
-            {{ $countPosts->count }}
+            {{ $countPosts->count ?? 0 }}
         </div>
     </div>
-    @endif
-    @if ($countComments)
     <div class="list-group-item d-flex justify-content-between">
         <div>
             {{ trans('icore::comments.route.index') }}:
         </div>
         <div class="text-right">
-            {{ $countComments }}
+            {{ $countComments->sum('count') ?? 0 }}
         </div>
     </div>
-    @endif    
     @if ($lastActivity)
     <div class="list-group-item d-flex justify-content-between">
         <div>
@@ -42,21 +36,25 @@
         </div>
     </div>
     @endif
-    @if ($countUsers)
     <div class="list-group-item">
         <div>
             {{ trans('icore::stats.user.label') }}:
         </div>
-        @foreach ($countUsers as $count)
         <div class="d-flex justify-content-between">
             <div>
-                - {{ trans("icore::stats.user.type.{$count->type}") }}:
+                - {{ trans("icore::stats.user.type.user") }}:
             </div>
             <div class="text-right">
-                {{ $count->count }}
+                {{ $countUsers->firstWhere('type', 'user')->count ?? 0 }}
             </div>
         </div>
-        @endforeach
+        <div class="d-flex justify-content-between">
+            <div>
+                - {{ trans("icore::stats.user.type.guest") }}:
+            </div>
+            <div class="text-right">
+                {{ $countUsers->firstWhere('type', 'guest')->count ?? 0 }}
+            </div>
+        </div>        
     </div>
-    @endif     
 </div>

@@ -23,7 +23,7 @@ class CreateStatsTable extends Migration
             $table->bigInteger('stat_id')->unsigned();
             $table->bigInteger('model_id')->unsigned();
             $table->string('model_type');
-            $table->text('value');
+            $table->bigInteger('value')->index();
 
             $table->index(['model_type', 'model_id']);
 

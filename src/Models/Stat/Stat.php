@@ -29,6 +29,12 @@ class Stat extends Model
     public const VIEW = 'view';
 
     /**
+     * [public description]
+     * @var array
+     */
+    public const AVAILABLE = [self::CLICK, self::VIEW];
+
+    /**
      * The table associated with the model.
      *
      * @var string

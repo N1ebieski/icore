@@ -44,5 +44,7 @@ return [
     'title' => 'Title',
     'position' => 'Position',
     'type' => 'Type',
-    'author' => 'Author'
+    'author' => 'Author',
+    'clicks' => 'clicks',
+    'views' => 'views'
 ];

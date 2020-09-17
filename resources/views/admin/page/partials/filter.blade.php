@@ -60,6 +60,12 @@
                         <option value="position|asc"
                         {{ ($filter['orderby'] == 'position|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.position')) }}
                             {{ trans('icore::filter.asc') }}</option>
+                        <option value="view|desc"
+                        {{ ($filter['orderby'] == 'view|desc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.views')) }}
+                            {{ trans('icore::filter.desc') }}</option>
+                        <option value="view|asc"
+                        {{ ($filter['orderby'] == 'view|asc') ? 'selected' : '' }}>{{ mb_strtolower(trans('icore::filter.views')) }}
+                            {{ trans('icore::filter.asc') }}</option>                            
                     </select>
                 </div>
                 <div class="form-group col-xs-4">

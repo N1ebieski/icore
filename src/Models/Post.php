@@ -17,6 +17,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -26,7 +27,10 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class Post extends Model
 {
-    use Sluggable, Taggable, FullTextSearchable, Filterable, PivotEventTrait;
+    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait;
+    use Filterable, StatFilterable {
+        StatFilterable::scopeFilterOrderBy insteadof Filterable;
+    }
 
     // Configuration
 
