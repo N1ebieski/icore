@@ -11,22 +11,31 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item">
-    <a href="{{ route('web.post.index') }}" title="{{ trans('icore::posts.route.index') }}">
+    <a 
+        href="{{ route('web.post.index') }}"
+        title="{{ trans('icore::posts.route.index') }}"
+    >
         {{ trans('icore::posts.route.index') }}
     </a>
 </li>
-<li class="breadcrumb-item">{{ trans('icore::categories.route.index') }}</li>
+<li class="breadcrumb-item">
+    {{ trans('icore::categories.route.index') }}
+</li>
 @if ($category->ancestors->count() > 0)
 @foreach ($category->ancestors as $ancestor)
 <li class="breadcrumb-item">
-    <a href="{{ route('web.category.post.show', [$ancestor->slug]) }}"
-    title="{{ $ancestor->name }}">
+    <a 
+        href="{{ route('web.category.post.show', [$ancestor->slug]) }}"
+        title="{{ $ancestor->name }}"
+    >
         {{ $ancestor->name }}
     </a>
 </li>
 @endforeach
 @endif
-<li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ $category->name }}
+</li>
 @endsection
 
 @section('content')
@@ -44,7 +53,10 @@
                 @foreach ($posts as $post)
                     @include('icore::web.post.partials.post', [$post])
                 @endforeach
-                @include('icore::web.partials.pagination', ['items' => $posts, 'next' => true])
+                @include('icore::web.partials.pagination', [
+                    'items' => $posts,
+                    'next' => true
+                ])
             </div>
             @else
             <p>{{ trans('icore::default.empty') }}</p>

@@ -1,8 +1,12 @@
 @section('logo')
 <div id="navbarLogo" class="flex-grow-1 mr-2">
     <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
-        <img src="{{ asset('svg/vendor/icore/logo.svg') }}" class="pb-1 logo" 
-        alt="{{ config('app.name_short') }}" title="{{ config('app.name') }}">
+        <img 
+            src="{{ asset('svg/vendor/icore/logo.svg') }}" 
+            class="pb-1 logo" 
+            alt="{{ config('app.name_short') }}" 
+            title="{{ config('app.name') }}"
+        >
         <span class="pl-1 d-none d-lg-inline">
             {{ config('app.name_short') }}
         </span>
@@ -27,17 +31,32 @@
         @if (!$isUrl(route('web.home.index')))
         <div class="d-flex flex-grow-1 navbar-search pr-3 pr-md-0">
             @yield('logo')
-            <form id="searchForm" method="GET" action="{{ route('web.search.index') }}" class="my-auto w-100 hide search">
+            <form 
+                id="searchForm" 
+                method="GET" 
+                action="{{ route('web.search.index') }}" 
+                class="my-auto w-100 hide search"
+            >
                 <div class="input-group">
-                    <input id="typeahead" data-route="{{ route('web.search.autocomplete') }}" type="text" name="search"
-                    class="form-control border-right-0" placeholder="{{ trans('icore::search.search') }}"
-                    value="{{ $search ?? null }}">
+                    <input 
+                        id="typeahead" 
+                        data-route="{{ route('web.search.autocomplete') }}" 
+                        type="text" 
+                        name="search"
+                        class="form-control border-right-0" 
+                        placeholder="{{ trans('icore::search.search') }}"
+                        value="{{ $search ?? null }}"
+                    >
                     <select class="custom-select" name="source">
-                        <option value="post" {{ $isRouteContains('post', 'selected') }}>{{ trans('icore::search.post.post') }}</option>
+                        <option value="post" {{ $isRouteContains('post', 'selected') }}>
+                            {{ trans('icore::search.post.post') }}
+                        </option>
                     </select>
                     <span class="input-group-append">
-                        <button class="btn btn-outline-secondary border border-left-0"
-                        type="submit" {{ isset($search) ?: 'disabled' }}>
+                        <button 
+                            class="btn btn-outline-secondary border border-left-0"
+                            type="submit" {{ isset($search) ?: 'disabled' }}
+                        >
                             <i class="fa fa-search"></i>
                         </button>
                     </span>
@@ -68,32 +87,57 @@
                 @endif
                 <li class="nav-item dropdown {{ $isRouteContains('profile') }}">
                     @auth
-                    <a class="nav-link text-nowrap" href="#" role="button" id="navbarDropdownMenuProfile"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a 
+                        class="nav-link text-nowrap" 
+                        href="#" 
+                        role="button" 
+                        id="navbarDropdownMenuProfile"
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false"
+                    >
                         <i class="fas fa-fw fa-lg fa-users-cog"></i>
-                        <span class="d-md-none d-lg-inline">&nbsp;{{ auth()->user()->short_name }}</span>
+                        <span class="d-md-none d-lg-inline">{{ auth()->user()->short_name }}</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuProfile">
-                        <h6 class="dropdown-header">{{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}</h6>
-                        <a class="dropdown-item {{ $isUrl(route('web.profile.edit')) }}" 
-                        href="{{ route('web.profile.edit') }}" title="{{ trans('icore::profile.route.edit') }}">
+                    <div 
+                        class="dropdown-menu dropdown-menu-right" 
+                        aria-labelledby="navbarDropdownMenuProfile"
+                    >
+                        <h6 class="dropdown-header">
+                            {{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}
+                        </h6>
+                        <a 
+                            class="dropdown-item {{ $isUrl(route('web.profile.edit')) }}" 
+                            href="{{ route('web.profile.edit') }}" 
+                            title="{{ trans('icore::profile.route.edit') }}"
+                        >
                             {{ trans('icore::profile.route.index') }}
                         </a>
                         @can('admin.home.view')
-                        <a class="dropdown-item" href="{{ route('admin.home.index') }}" 
-                        title="{{ trans('icore::admin.route.index') }}">
+                        <a 
+                            class="dropdown-item" 
+                            href="{{ route('admin.home.index') }}" 
+                            title="{{ trans('icore::admin.route.index') }}"
+                        >
                             {{ trans('icore::admin.route.index') }}
                         </a>
                         @endcan
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('logout') }}" 
-                        title="{{ trans('icore::auth.route.logout') }}">
+                        <a 
+                            class="dropdown-item" 
+                            href="{{ route('logout') }}" 
+                            title="{{ trans('icore::auth.route.logout') }}"
+                        >
                             {{ trans('icore::auth.route.logout') }}
                         </a>
                     </div>
                     @else
-                    <a class="nav-link btn btn-sm btn-primary text-white text-nowrap text-center" 
-                    href="{{ route('login') }}" role="button" title="{{ trans('icore::auth.route.login') }}">
+                    <a 
+                        class="nav-link btn btn-sm btn-primary text-white text-nowrap text-center" 
+                        href="{{ route('login') }}" 
+                        role="button" 
+                        title="{{ trans('icore::auth.route.login') }}"
+                    >
                         {{ trans('icore::auth.route.login') }}
                     </a>
                     @endauth

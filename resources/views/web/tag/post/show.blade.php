@@ -12,12 +12,19 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item">
-    <a href="{{ route('web.post.index') }}" title="{{ trans('icore::posts.route.index') }}">
+    <a 
+        href="{{ route('web.post.index') }}" 
+        title="{{ trans('icore::posts.route.index') }}"
+    >
         {{ trans('icore::posts.route.index') }}
     </a>
 </li>
-<li class="breadcrumb-item">{{ trans('icore::tags.route.index') }}</li>
-<li class="breadcrumb-item active" aria-current="page">{{ $tag->name }}</li>
+<li class="breadcrumb-item">
+    {{ trans('icore::tags.route.index') }}
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ $tag->name }}
+</li>
 @endsection
 
 @section('content')

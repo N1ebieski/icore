@@ -5,12 +5,16 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::friends.route.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::friends.route.index') }}
+</li>
 @endsection
 
 @section('content')
 <div class="container">
-    <h1 class="h4 border-bottom pb-2">{{ trans('icore::friends.friends') }}</h1>
+    <h1 class="h4 border-bottom pb-2">
+        {{ trans('icore::friends.friends') }}
+    </h1>
     <ul>
         <li>
             <a href="https://intelekt.net.pl/icore" target="_blank" rel="noopener">

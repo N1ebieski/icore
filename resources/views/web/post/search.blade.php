@@ -11,11 +11,16 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item">
-    <a href="{{ route('web.post.index') }}" title="{{ trans('icore::posts.route.index') }}">
+    <a 
+        href="{{ route('web.post.index') }}" 
+        title="{{ trans('icore::posts.route.index') }}"
+    >
         {{ trans('icore::posts.route.index') }}
     </a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.route.search', ['search' => $search]) }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::posts.route.search', ['search' => $search]) }}
+</li>
 @endsection
 
 @section('content')

@@ -4,10 +4,13 @@
         <input type="hidden" value="{{ $id }}" name="captcha_id">
         <div class="input-group">
             <div class="input-group-prepend">
-              <button class="btn border reload_captcha_base64" type="button"
-              data-route="{{ route('captcha.base64', ['default']) }}">
-                  <i class="fas fa-sync-alt"></i>
-              </button>
+                <button 
+                    class="btn border reload_captcha_base64" 
+                    type="button"
+                    data-route="{{ route('captcha.base64', ['default']) }}"
+                >
+                    <i class="fas fa-sync-alt"></i>
+                </button>
             </div>
             <input class="form-control" type="text" name="captcha">
         </div>

@@ -63,7 +63,8 @@
                             title="{{ $category->name }}"
                         >
                             {{ $category->name }}
-                        </a>{{ (!$loop->last) ? ', ' : '' }}
+                        </a>
+                        <span>{{ (!$loop->last) ? ', ' : '' }}</span>
                         @endforeach
                     </small>
                     @endif
@@ -76,7 +77,8 @@
                             title="{{ $tag->name }}"
                         >
                             {{ $tag->name }}
-                        </a>{{ (!$loop->last) ? ', ' : '' }}
+                        </a>
+                        <span>{{ (!$loop->last) ? ', ' : '' }}</span>
                         @endforeach
                     </small>
                     @endif

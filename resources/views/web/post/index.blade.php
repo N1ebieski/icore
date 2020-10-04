@@ -10,7 +10,9 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::posts.route.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::posts.route.index') }}
+</li>
 @endsection
 
 @section('content')

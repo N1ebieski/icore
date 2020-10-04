@@ -1,7 +1,13 @@
-<form method="post" id="createReport" data-id="{{ $model->id }}"
-data-route="{{ route("web.report.{$model->poli_self}.store", [$model->id]) }}">
+<form 
+    method="post" 
+    id="createReport" 
+    data-id="{{ $model->id }}"
+    data-route="{{ route("web.report.{$model->poli_self}.store", [$model->id]) }}"
+>
     <div class="form-group">
-        <label for="content">{{ trans('icore::reports.reason') }}</label>
+        <label for="content">
+            {{ trans('icore::reports.reason') }}
+        </label>
         <input type="text" value="" name="content" class="form-control" id="content">
     </div>
     <button type="button" class="btn btn-primary storeReport">

@@ -10,8 +10,12 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item">{{ trans('icore::archives.route.index') }}</li>
-<li class="breadcrumb-item active" aria-current="page">{{ $month_localized }} {{ $year }}</li>
+<li class="breadcrumb-item">
+    {{ trans('icore::archives.route.index') }}
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ $month_localized }} {{ $year }}
+</li>
 @endsection
 
 @section('content')

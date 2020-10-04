@@ -1,4 +1,6 @@
-<h3 class="h5">{{ trans('icore::pages.pages') }}</h3>
+<h3 class="h5">
+    {{ trans('icore::pages.pages') }}
+</h3>
 <div class="list-group list-group-flush mb-3">
     @if ($page->relationLoaded('ancestors'))
         @include('icore::web.page.partials.pages', ['pages' => $page->ancestors])
@@ -6,8 +8,11 @@
     @foreach ($page->siblings as $sibling)
     <div class="list-group-item d-flex justify-content-between align-items-center">
         @if (!empty($sibling->content))    
-        <a href="{{ route('web.page.show', $sibling->slug) }}" title="{{ $sibling->title }}"
-        class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}">
+        <a 
+            href="{{ route('web.page.show', $sibling->slug) }}" 
+            title="{{ $sibling->title }}"
+            class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}"
+        >
         @endif
             <span>{{ str_repeat('-', $sibling->real_depth) }}</span>
             @if (!empty($sibling->icon))
@@ -19,7 +24,9 @@
         @endif    
     </div>
     @if ($sibling->id === $page->id && $page->relationLoaded('childrensRecursiveWithAllRels'))
-        @include('icore::web.page.partials.pages', ['pages' => $page->childrensRecursiveWithAllRels])
+        @include('icore::web.page.partials.pages', [
+            'pages' => $page->childrensRecursiveWithAllRels
+        ])
     @endif
     @endforeach
 </div>

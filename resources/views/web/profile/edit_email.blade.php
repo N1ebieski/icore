@@ -6,17 +6,37 @@
 @endslot
 
 @slot('modal_body')
-<form method="post" action="{{ route('web.profile.update_email') }}" id="updateEmailProfile">
+<form 
+    method="post" 
+    action="{{ route('web.profile.update_email') }}" 
+    id="updateEmailProfile"
+>
     @csrf
     @method('patch')
     <div class="form-group">
-        <label for="email">{{ trans('icore::auth.address.label') }}</label>
-        <input type="email" value="{{ $user->email }}" name="email"
-        class="form-control" id="email" placeholder="{{ trans('icore::auth.address.placeholder') }}">
+        <label for="email">
+            {{ trans('icore::auth.address.label') }}
+        </label>
+        <input 
+            type="email" 
+            value="{{ $user->email }}" 
+            name="email"
+            class="form-control" 
+            id="email" 
+            placeholder="{{ trans('icore::auth.address.placeholder') }}"
+        >
     </div>
     <div class="form-group">
-        <label for="password">{{ trans('icore::auth.password_confirm') }}</label>
-        <input id="password_confirmation" class="form-control" name="password_confirmation" oninput="this.setAttribute('type', 'password');" required>
+        <label for="password">
+            {{ trans('icore::auth.password_confirm') }}
+        </label>
+        <input 
+            id="password_confirmation" 
+            class="form-control" 
+            name="password_confirmation" 
+            oninput="this.setAttribute('type', 'password');" 
+            required
+        >
     </div>
     <button type="submit" class="btn btn-primary">
         <i class="fas fa-check"></i>
