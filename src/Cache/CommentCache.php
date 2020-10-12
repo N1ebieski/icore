@@ -125,17 +125,18 @@ class CommentCache
     }
 
     /**
-     * [rememberLatestByComponent description]
-     * @param  array $component [description]
-     * @return Collection [description]
+     * Undocumented function
+     *
+     * @param array $component
+     * @return Collection
      */
-    public function rememberLatestByComponent(array $component) : Collection
+    public function rememberByComponent(array $component) : Collection
     {
         return $this->cache->remember(
-            "comment.{$this->comment->poli}.getLatestByComponent",
+            "comment.{$this->comment->poli}.getByComponent.{$component['orderby']}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
-                return $this->comment->makeRepo()->getLatestByComponent($component);
+                return $this->comment->makeRepo()->getByComponent($component);
             }
         );
     }

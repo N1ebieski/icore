@@ -135,7 +135,7 @@ class CommentRepo
      * @param array $component
      * @return Collection
      */
-    public function getLatestByComponent(array $component) : Collection
+    public function getByComponent(array $component) : Collection
     {
         return $this->comment->active()
             ->uncensored()
@@ -143,7 +143,11 @@ class CommentRepo
                 $query->active();
             })
             ->with(['morph', 'user'])
-            ->latest()
+            ->when($component['orderby'] === 'rand', function ($query) {
+                $query->inRandomOrder();
+            }, function ($query) use ($component) {
+                $query->filterOrderBy($component['orderby']);
+            })
             ->limit($component['limit'])
             ->get();
     }
