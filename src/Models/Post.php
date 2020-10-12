@@ -21,13 +21,14 @@ use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 
 /**
  * [Post description]
  */
 class Post extends Model
 {
-    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait;
+    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait, Carbonable;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }
@@ -136,7 +137,7 @@ class Post extends Model
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable() : array
     {
         return [
             'slug' => [
@@ -284,30 +285,14 @@ class Post extends Model
     }
 
     /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
-    }
-
-    /**
      * [getPublishedAtDiffAttribute description]
      * @return string [description]
      */
     public function getPublishedAtDiffAttribute() : string
     {
-        return ($this->published_at != null) ? Carbon::parse($this->published_at)->diffForHumans() : '';
+        return ($this->published_at != null) ?
+            Carbon::parse($this->published_at)->diffForHumans(['parts' => 2])
+            : '';
     }
 
     /**

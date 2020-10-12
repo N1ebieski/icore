@@ -10,13 +10,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\Cache\BanValueCache;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 
 /**
  * [BanValue description]
  */
 class BanValue extends Model
 {
-    use Filterable, FullTextSearchable;
+    use Filterable, FullTextSearchable, Carbonable;
 
     // Configuration
 
@@ -67,26 +68,6 @@ class BanValue extends Model
         return $query->when($type !== null, function ($query) use ($type) {
             $query->where('type', $type);
         });
-    }
-
-    // Accessors
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
     // Makers

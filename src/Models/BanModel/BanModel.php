@@ -8,13 +8,14 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 
 /**
  * [BanModel description]
  */
 class BanModel extends Model
 {
-    use Filterable, FullTextSearchable, Polymorphic;
+    use Filterable, FullTextSearchable, Polymorphic, Carbonable;
 
     // Configuration
 
@@ -75,25 +76,5 @@ class BanModel extends Model
         }
 
         return $query->latest('bans_models.created_at');
-    }
-
-    // Accessors
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 }

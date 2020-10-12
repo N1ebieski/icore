@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Models\Traits;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 
 /**
  * [trait description]
@@ -17,7 +18,7 @@ trait Carbonable
      */
     public function getCreatedAtDiffAttribute() : string
     {
-        return Carbon::parse($this->created_at)->diffForHumans();
+        return Carbon::parse($this->created_at)->diffForHumans(['parts' => 2]);
     }
 
     /**
@@ -26,6 +27,6 @@ trait Carbonable
      */
     public function getUpdatedAtDiffAttribute() : string
     {
-        return Carbon::parse($this->updated_at)->diffForHumans();
+        return Carbon::parse($this->updated_at)->diffForHumans(['parts' => 2]);
     }
 }

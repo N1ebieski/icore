@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Models;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\App;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Config;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\MailingService;
 use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\MailingRepo;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
@@ -19,7 +21,7 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
  */
 class Mailing extends Model
 {
-    use FullTextSearchable, Filterable;
+    use FullTextSearchable, Filterable, Carbonable;
 
     // Configuration
 
@@ -122,30 +124,14 @@ class Mailing extends Model
     }
 
     /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
-    }
-
-    /**
      * [getActivationAtDiffAttribute description]
      * @return string [description]
      */
     public function getActivationAtDiffAttribute() : string
     {
-        return ($this->activation_at != null) ? Carbon::parse($this->activation_at)->diffForHumans() : '';
+        return ($this->activation_at != null) ?
+            Carbon::parse($this->activation_at)->diffForHumans(['parts' => 2])
+            : '';
     }
 
     /**

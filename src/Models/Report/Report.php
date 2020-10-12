@@ -2,20 +2,20 @@
 
 namespace N1ebieski\ICore\Models\Report;
 
-use N1ebieski\ICore\Services\ReportService;
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
+use N1ebieski\ICore\Services\ReportService;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
 
 /**
  * [Report description]
  */
 class Report extends Model
 {
-    use Polymorphic;
+    use Polymorphic, Carbonable;
 
     // Configuration
 
@@ -62,26 +62,6 @@ class Report extends Model
     public function morph() : MorphTo
     {
         return $this->morphTo('morph', 'model_type', 'model_id');
-    }
-
-    // Accessors
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
     // Makers

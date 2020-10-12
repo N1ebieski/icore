@@ -2,7 +2,6 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Carbon\Carbon;
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\App;
 use Spatie\Permission\Traits\HasRoles;
@@ -16,13 +15,14 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 
 /**
  * [User description]
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasRoles, FullTextSearchable, Filterable;
+    use Notifiable, HasRoles, FullTextSearchable, Filterable, Carbonable;
 
     // Configuration
 
@@ -156,24 +156,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getShortNameAttribute() : string
     {
         return (strlen($this->name) > 20) ? substr($this->name, 0, 20).'...' : $this->name;
-    }
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
     // Scopes

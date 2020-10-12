@@ -2,23 +2,23 @@
 
 namespace N1ebieski\ICore\Models\Comment;
 
-use Franzose\ClosureTable\Models\Entity;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
-use Illuminate\Database\Eloquent\Builder;
-use Carbon\Carbon;
-use N1ebieski\ICore\Models\Comment\CommentClosure;
-use Franzose\ClosureTable\Extensions\QueryBuilder;
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Repositories\CommentRepo;
-use N1ebieski\ICore\Cache\CommentCache;
-use N1ebieski\ICore\Services\CommentService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Cache\CommentCache;
+use Franzose\ClosureTable\Models\Entity;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Services\CommentService;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Repositories\CommentRepo;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
+use Franzose\ClosureTable\Extensions\QueryBuilder;
+use N1ebieski\ICore\Models\Comment\CommentClosure;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
 class Comment extends Entity implements CommentInterface
 {
-    use FullTextSearchable, Filterable, Polymorphic;
+    use FullTextSearchable, Filterable, Polymorphic, Carbonable;
 
     // Configuration
 
@@ -217,24 +217,6 @@ class Comment extends Entity implements CommentInterface
     public function getContentAsHtmlAttribute() : string
     {
         return nl2br(e($this->content_html, false));
-    }
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
     /**

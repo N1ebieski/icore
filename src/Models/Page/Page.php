@@ -2,7 +2,6 @@
 
 namespace N1ebieski\ICore\Models\Page;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
@@ -16,6 +15,7 @@ use N1ebieski\ICore\Services\PageService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PageRepo;
 use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Page\PageInterface;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class Page extends Entity implements PageInterface
 {
-    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait;
+    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait, Carbonable;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }
@@ -351,24 +351,6 @@ class Page extends Entity implements PageInterface
     public function getPoliSelfAttribute() : string
     {
         return 'page';
-    }
-
-    /**
-     * [getCreatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getCreatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    /**
-     * [getUpdatedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getUpdatedAtDiffAttribute() : string
-    {
-        return Carbon::parse($this->updated_at)->diffForHumans();
     }
 
     /**
