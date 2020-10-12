@@ -10,7 +10,9 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <h5 class="card-header">{{ __('Verify Email Address') }}</h5>
+                    <h5 class="card-header">
+                        {{ __('Verify Email Address') }}
+                    </h5>
 
                     <div class="card-body">
                         @if (session('resent'))
@@ -22,7 +24,11 @@
                         {{ __('Before proceeding, please check your email for a verification link.') }}
                         {{ __('If you did not receive the email') }},
 
-                        <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                        <form 
+                            class="d-inline" 
+                            method="POST" 
+                            action="{{ route('verification.resend') }}"
+                        >
                             @csrf
 
                             <button type="submit" class="btn btn-link p-0 m-0 align-baseline">

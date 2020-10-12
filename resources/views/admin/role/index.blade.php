@@ -10,7 +10,9 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::roles.route.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::roles.route.index') }}
+</li>
 @endsection
 
 @section('content')
@@ -21,7 +23,11 @@
     </div>
     @role('super-admin')
     <div class="ml-auto text-right responsive-btn-group">
-        <a href="{{ route('admin.role.create') }}" role="button" class="btn btn-primary text-nowrap">
+        <a 
+            href="{{ route('admin.role.create') }}" 
+            role="button" 
+            class="btn btn-primary text-nowrap"
+        >
             <i class="far fa-plus-square"></i>
             <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
         </a>

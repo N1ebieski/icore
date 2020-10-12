@@ -8,9 +8,17 @@
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
-    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
-    name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
+    <label for="FormSearch">
+        {{ trans('icore::filter.search.label') }}
+    </label>
+    <input 
+        type="text" 
+        class="form-control" 
+        id="FormSearch" 
+        placeholder="{{ trans('icore::filter.search.placeholder') }}"
+        name="filter[search]" 
+        value="{{ isset($filter['search']) ? $filter['search'] : '' }}"
+    >
 </div>
 <div class="d-inline">
     <button type="button" class="btn btn-primary btn-send" id="filterFilter">

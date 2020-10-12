@@ -10,26 +10,41 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item">{{ trans('icore::comments.route.index') }}</li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans("icore::comments.{$model->poli}.{$model->poli}") }}</li>
+<li class="breadcrumb-item">
+    {{ trans('icore::comments.route.index') }}
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans("icore::comments.{$model->poli}.{$model->poli}") }}
+</li>
 @endsection
 
 @section('content')
 <h1 class="h5 border-bottom pb-2">
-    <i class="fas fa-fw fa-comments"></i>&nbsp;{{ trans('icore::comments.route.index') }}
+    <i class="fas fa-fw fa-comments"></i>
+    <span>{{ trans('icore::comments.route.index') }}</span>
 </h1>
 <div id="filterContent">
     @include('icore::admin.comment.partials.filter')
     @if ($comments->isNotEmpty())
-    <form action="{{ route('admin.comment.destroy_global') }}" method="post" id="selectForm">
-    @csrf
-    @method('delete')
+    <form 
+        action="{{ route('admin.comment.destroy_global') }}" 
+        method="post" 
+        id="selectForm"
+    >
+        @csrf
+        @method('delete')
         @can('admin.comments.delete')
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
-                    <input type="checkbox" class="custom-control-input" id="selectAll">
-                    <label class="custom-control-label" for="selectAll">{{ trans('icore::default.select_all') }}</label>
+                    <input 
+                        type="checkbox" 
+                        class="custom-control-input" 
+                        id="selectAll"
+                    >
+                    <label class="custom-control-label" for="selectAll">
+                        {{ trans('icore::default.select_all') }}
+                    </label>
                 </div>
             </div>
         </div>
@@ -42,13 +57,18 @@
         </div>
         @can('admin.comments.delete')
         <div class="select-action rounded">
-            <button class="btn btn-danger submit" data-toggle="confirmation"
-            type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-            data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
-            data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-            data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-            data-btn-cancel-icon-class="fas fa-ban mr-1"
-            data-title="{{ trans('icore::comments.confirm') }}">
+            <button 
+                type="button"            
+                class="btn btn-danger submit" 
+                data-toggle="confirmation"
+                data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                data-btn-ok-icon-class="fas fa-check mr-1"
+                data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
+                data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                data-btn-cancel-icon-class="fas fa-ban mr-1"
+                data-title="{{ trans('icore::comments.confirm') }}"
+            >
                 <i class="far fa-trash-alt"></i>
                 <span>{{ trans('icore::default.delete_global') }}</span>
             </button>

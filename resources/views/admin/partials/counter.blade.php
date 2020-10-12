@@ -1,5 +1,8 @@
-<small class="counter" data-min="{{ $min ?? null }}" 
-data-max="{{ $max ?? null }}" data-name="{{ $name }}">
+<small 
+    class="counter" data-min="{{ $min ?? null }}" 
+    data-max="{{ $max ?? null }}" 
+    data-name="{{ $name }}"
+>
     [
         @if (($length = mb_strlen(strip_tags($string))) === 0)
         <span>

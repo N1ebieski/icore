@@ -1,11 +1,19 @@
-<form data-route="{{ route('admin.category.update_position', [$category->id]) }}"
-data-id="{{ $category->id }}" id="update">
+<form 
+    data-route="{{ route('admin.category.update_position', [$category->id]) }}"
+    data-id="{{ $category->id }}" 
+    id="update"
+>
     @if ((int)$category->siblings_count > 0)
     <div class="form-group">
-        <label for="position">{{ trans('icore::categories.position') }}</label>
+        <label for="position">
+            {{ trans('icore::categories.position') }}
+        </label>
         <select class="form-control" id="position" name="position">
         @for ($i=0; $i<$category->siblings_count; $i++)
-            <option value="{{ $i }}" {{ (old('position', $category->position) == $i) ? 'selected' : '' }}>
+            <option 
+                value="{{ $i }}" 
+                {{ (old('position', $category->position) == $i) ? 'selected' : '' }}
+            >
                 {{ $i+1 }}
             </option>
         @endfor

@@ -11,11 +11,16 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item">
-    <a href="{{ route('admin.home.index') }}" title="{{ trans('icore::home.route.index') }}">
+    <a 
+        href="{{ route('admin.home.index') }}" 
+        title="{{ trans('icore::home.route.index') }}"
+    >
         {{ trans('icore::home.route.index') }}
     </a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::mailings.route.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::mailings.route.index') }}
+</li>
 @endsection
 
 @section('content')
@@ -26,7 +31,11 @@
     </div>
     @can('admin.mailings.create')
     <div class="ml-auto text-right">
-        <a href="{{ route('admin.mailing.create') }}" role="button" class="btn btn-primary text-nowrap">
+        <a 
+            href="{{ route('admin.mailing.create') }}" 
+            role="button" 
+            class="btn btn-primary text-nowrap"
+        >
             <i class="far fa-plus-square"></i>
             <span class="d-none d-sm-inline">{{ trans('icore::mailings.create') }}</span>
         </a>
@@ -36,15 +45,25 @@
 <div id="filterContent">
     @include('icore::admin.mailing.partials.filter')
     @if ($mailings->isNotEmpty())
-    <form action="{{ route('admin.mailing.destroy_global') }}" method="post" id="selectForm">
-    @csrf
-    @method('delete')
+    <form 
+        action="{{ route('admin.mailing.destroy_global') }}" 
+        method="post" 
+        id="selectForm"
+    >
+        @csrf
+        @method('delete')
         @can('admin.mailings.delete')
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
-                    <input type="checkbox" class="custom-control-input" id="selectAll">
-                    <label class="custom-control-label" for="selectAll">{{ trans('icore::default.select_all') }}</label>
+                    <input 
+                        type="checkbox" 
+                        class="custom-control-input" 
+                        id="selectAll"
+                    >
+                    <label class="custom-control-label" for="selectAll">
+                        {{ trans('icore::default.select_all') }}
+                        </label>
                 </div>
             </div>
         </div>
@@ -57,14 +76,18 @@
         </div>
         @can('admin.mailings.delete')
         <div class="select-action rounded">
-            <button class="btn btn-danger submit" data-toggle="confirmation"
-            type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
-            data-btn-ok-icon-class="fas fa-check mr-1"
-            data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
-            data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-            data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-            data-btn-cancel-icon-class="fas fa-ban mr-1"
-            data-title="{{ trans('icore::default.confirm') }}">
+            <button 
+                type="button"             
+                class="btn btn-danger submit" 
+                data-toggle="confirmation"
+                data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                data-btn-ok-icon-class="fas fa-check mr-1"
+                data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
+                data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                data-btn-cancel-icon-class="fas fa-ban mr-1"
+                data-title="{{ trans('icore::default.confirm') }}"
+            >
                 <i class="far fa-trash-alt"></i>
                 <span>{{ trans('icore::default.delete_global') }}</span>
             </button>

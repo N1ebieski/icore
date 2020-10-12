@@ -10,8 +10,12 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item">{{ trans('icore::links.route.index') }}</li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans("icore::links.{$type}.route.index") }}</li>
+<li class="breadcrumb-item">
+    {{ trans('icore::links.route.index') }}
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans("icore::links.{$type}.route.index") }}
+</li>
 @endsection
 
 @section('content')
@@ -23,8 +27,14 @@
     @can('admin.links.create')
     <div class="ml-auto text-right">
         <div class="responsive-btn-group">
-            <a href="#" data-route="{{ route('admin.link.create', [$type]) }}" role="button"
-            class="btn btn-primary text-nowrap create" data-toggle="modal" data-target="#createModal">
+            <a 
+                href="#" 
+                data-route="{{ route('admin.link.create', [$type]) }}" 
+                role="button"
+                class="btn btn-primary text-nowrap create" 
+                data-toggle="modal" 
+                data-target="#createModal"
+            >
                 <i class="far fa-plus-square"></i>
                 <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
             </a>

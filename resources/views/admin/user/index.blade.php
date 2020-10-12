@@ -10,7 +10,9 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::users.route.index') }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::users.route.index') }}
+</li>
 @endsection
 
 @section('content')
@@ -21,9 +23,13 @@
     </div>
     @role('super-admin')
     <div class="ml-auto text-right">
-        <button type="button" class="btn btn-primary text-nowrap create"
-        data-route="{{ route('admin.user.create') }}"
-        data-toggle="modal" data-target="#createModal">
+        <button 
+            type="button" 
+            class="btn btn-primary text-nowrap create"
+            data-route="{{ route('admin.user.create') }}"
+            data-toggle="modal" 
+            data-target="#createModal"
+        >
             <i class="far fa-plus-square"></i>
             <span class="d-none d-sm-inline">{{ trans('icore::users.route.create') }}</span>
         </button>
@@ -33,15 +39,25 @@
 <div id="filterContent">
     @include('icore::admin.user.partials.filter')
     @if ($users->isNotEmpty())
-    <form action="{{ route('admin.user.destroy_global') }}" method="post" id="selectForm">
-    @csrf
-    @method('delete')
+    <form 
+        action="{{ route('admin.user.destroy_global') }}" 
+        method="post" 
+        id="selectForm"
+    >
+        @csrf
+        @method('delete')
         @role('super-admin')
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
-                    <input type="checkbox" class="custom-control-input" id="selectAll">
-                    <label class="custom-control-label" for="selectAll">{{ trans('icore::default.select_all') }}</label>
+                    <input 
+                        type="checkbox" 
+                        class="custom-control-input" 
+                        id="selectAll"
+                    >
+                    <label class="custom-control-label" for="selectAll">
+                        {{ trans('icore::default.select_all') }}
+                    </label>
                 </div>
             </div>
         </div>
@@ -54,13 +70,18 @@
         </div>
         @role('super-admin')
         <div class="select-action rounded">
-            <button class="btn btn-danger submit" data-toggle="confirmation"
-            type="button" data-btn-ok-label=" {{ trans('icore::default.yes') }}" data-btn-ok-icon-class="fas fa-check mr-1"
-            data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
-            data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-            data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-            data-btn-cancel-icon-class="fas fa-ban mr-1"
-            data-title="{{ trans('icore::default.confirm') }}">
+            <button 
+                type="button"             
+                class="btn btn-danger submit" 
+                data-toggle="confirmation"
+                data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                data-btn-ok-icon-class="fas fa-check mr-1"
+                data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
+                data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                data-btn-cancel-icon-class="fas fa-ban mr-1"
+                data-title="{{ trans('icore::default.confirm') }}"
+            >
                 <i class="far fa-trash-alt"></i>
                 <span>{{ trans('icore::default.delete_global') }}</span>
             </button>

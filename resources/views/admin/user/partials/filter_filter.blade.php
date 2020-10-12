@@ -10,28 +10,63 @@
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
-    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
-    name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
+    <label for="FormSearch">
+        {{ trans('icore::filter.search.label') }}
+    </label>
+    <input 
+        type="text" 
+        class="form-control" 
+        id="FormSearch" 
+        placeholder="{{ trans('icore::filter.search.placeholder') }}"
+        name="filter[search]" 
+        value="{{ isset($filter['search']) ? $filter['search'] : '' }}"
+    >
 </div>
 <div class="form-group">
-    <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"</label>
-    <select class="form-control custom-select" id="FormStatus" name="filter[status]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="{{ $user::ACTIVE }}" {{ ($filter['status'] === $user::ACTIVE) ? 'selected' : '' }}>
+    <label for="FormStatus">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="FormStatus" 
+        name="filter[status]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
+        <option 
+            value="{{ $user::ACTIVE }}" 
+            {{ ($filter['status'] === $user::ACTIVE) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.active') }}
         </option>
-        <option value="{{ $user::INACTIVE }}" {{ ($filter['status'] === $user::INACTIVE) ? 'selected' : '' }}>
+        <option 
+            value="{{ $user::INACTIVE }}" 
+            {{ ($filter['status'] === $user::INACTIVE) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.inactive') }}
         </option>
     </select>
 </div>
 <div class="form-group">
-    <label for="FormRole">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.role') }}"</label>
-    <select class="form-control custom-select" id="FormRole" name="filter[role]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
+    <label for="FormRole">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.role') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="FormRole" 
+        name="filter[role]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
         @foreach ($roles as $role)
-        <option value="{{ $role->id }}" {{ ($filter['role'] !== null && $filter['role']->id == $role->id) ? 'selected' : '' }}>{{ $role->name }}</option>
+        <option 
+            value="{{ $role->id }}" 
+            {{ ($filter['role'] !== null && $filter['role']->id == $role->id) ? 'selected' : '' }}
+        >
+            {{ $role->name }}
+        </option>
         @endforeach
     </select>
 </div>

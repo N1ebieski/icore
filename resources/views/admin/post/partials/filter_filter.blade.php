@@ -10,35 +10,71 @@
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
-    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
-    name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
+    <label for="FormSearch">
+        {{ trans('icore::filter.search.label') }}
+    </label>
+    <input 
+        type="text" 
+        class="form-control" 
+        id="FormSearch" 
+        placeholder="{{ trans('icore::filter.search.placeholder') }}"
+        name="filter[search]" 
+        value="{{ isset($filter['search']) ? $filter['search'] : '' }}"
+    >
 </div>
 <div class="form-group">
-    <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"</label>
-    <select class="form-control custom-select" id="FormStatus" name="filter[status]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="{{ $post::ACTIVE }}" {{ ($filter['status'] === $post::ACTIVE) ? 'selected' : '' }}>
+    <label for="FormStatus">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="FormStatus" 
+        name="filter[status]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
+        <option 
+            value="{{ $post::ACTIVE }}" 
+            {{ ($filter['status'] === $post::ACTIVE) ? 'selected' : '' }}
+        >
             {{ trans('icore::posts.status.'.$post::ACTIVE) }}
         </option>
-        <option value="{{ $post::INACTIVE }}" {{ ($filter['status'] === $post::INACTIVE) ? 'selected' : '' }}>
+        <option 
+            value="{{ $post::INACTIVE }}" 
+            {{ ($filter['status'] === $post::INACTIVE) ? 'selected' : '' }}
+        >
             {{ trans('icore::posts.status.'.$post::INACTIVE) }}
         </option>
-        <option value="{{ $post::SCHEDULED }}" {{ ($filter['status'] === $post::SCHEDULED) ? 'selected' : '' }}>
+        <option 
+            value="{{ $post::SCHEDULED }}" 
+            {{ ($filter['status'] === $post::SCHEDULED) ? 'selected' : '' }}
+        >
             {{ trans('icore::posts.status.'.$post::SCHEDULED) }}
         </option>
     </select>
 </div>
 @if ($categories->count() > 0)
 <div class="form-group">
-    <label for="category">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.category') }}"</label>
-    <select class="form-control custom-select" id="category" name="filter[category]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
+    <label for="category">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.category') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="category" 
+        name="filter[category]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
         @foreach ($categories as $cats)
-            @if ($cats->real_depth == 0)
-                <optgroup label="----------"></optgroup>
-            @endif
-        <option value="{{ $cats->id }}" {{ ($filter['category'] !== null && $filter['category']->id == $cats->id) ? 'selected' : '' }}>
+        @if ($cats->real_depth == 0)
+            <optgroup label="----------"></optgroup>
+        @endif
+        <option 
+            value="{{ $cats->id }}" 
+            {{ ($filter['category'] !== null && $filter['category']->id == $cats->id) ? 'selected' : '' }}
+        >
             {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
         </option>
         @endforeach

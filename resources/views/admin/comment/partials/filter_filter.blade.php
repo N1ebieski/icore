@@ -11,42 +11,92 @@
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">{{ trans('icore::filter.search.label') }}</label>
-    <input type="text" class="form-control" id="FormSearch" placeholder="{{ trans('icore::filter.search.placeholder') }}"
-    name="filter[search]" value="{{ isset($filter['search']) ? $filter['search'] : '' }}">
+    <label for="FormSearch">
+        {{ trans('icore::filter.search.label') }}
+    </label>
+    <input 
+        type="text" 
+        class="form-control" 
+        id="FormSearch" 
+        placeholder="{{ trans('icore::filter.search.placeholder') }}"
+        name="filter[search]" 
+        value="{{ isset($filter['search']) ? $filter['search'] : '' }}"
+    >
 </div>
 <div class="form-group">
-    <label for="FormStatus">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"</label>
-    <select class="form-control custom-select" id="FormStatus" name="filter[status]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="{{ $comment::ACTIVE }}" {{ ($filter['status'] === $comment::ACTIVE) ? 'selected' : '' }}>
+    <label for="FormStatus">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="FormStatus" 
+        name="filter[status]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
+        <option 
+            value="{{ $comment::ACTIVE }}" 
+            {{ ($filter['status'] === $comment::ACTIVE) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.status.'.$comment::ACTIVE) }}
         </option>
-        <option value="{{ $comment::INACTIVE }}" {{ ($filter['status'] === $comment::INACTIVE) ? 'selected' : '' }}>
+        <option 
+            value="{{ $comment::INACTIVE }}" 
+            {{ ($filter['status'] === $comment::INACTIVE) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.status.'.$comment::INACTIVE) }}
         </option>
     </select>
 </div>
 <div class="form-group">
-    <label for="FormCensored">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.censored.label') }}"</label>
-    <select class="form-control custom-select" id="FormCensored" name="filter[censored]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="{{ $comment::CENSORED }}" {{ ($filter['censored'] === $comment::CENSORED) ? 'selected' : '' }}>
+    <label for="FormCensored">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.censored.label') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="FormCensored" 
+        name="filter[censored]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
+        <option 
+            value="{{ $comment::CENSORED }}" 
+            {{ ($filter['censored'] === $comment::CENSORED) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.censored.'.$comment::CENSORED) }}
         </option>
-        <option value="{{ $comment::UNCENSORED }}" {{ ($filter['censored'] === $comment::UNCENSORED) ? 'selected' : '' }}>
+        <option 
+            value="{{ $comment::UNCENSORED }}" 
+            {{ ($filter['censored'] === $comment::UNCENSORED) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.censored.'.$comment::UNCENSORED) }}
         </option>
     </select>
 </div>
 <div class="form-group">
-    <label for="FormReport">{{ trans('icore::filter.filter') }} "{{ trans('icore::filter.report.label') }}"</label>
-    <select class="form-control custom-select" id="FormReport" name="filter[report]">
-        <option value="">{{ trans('icore::filter.default') }}</option>
-        <option value="{{ $report::REPORTED }}" {{ ($filter['report'] === $report::REPORTED) ? 'selected' : '' }}>
+    <label for="FormReport">
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.report.label') }}"
+    </label>
+    <select 
+        class="form-control custom-select" 
+        id="FormReport" 
+        name="filter[report]"
+    >
+        <option value="">
+            {{ trans('icore::filter.default') }}
+        </option>
+        <option 
+            value="{{ $report::REPORTED }}" 
+            {{ ($filter['report'] === $report::REPORTED) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.report.'.$report::REPORTED) }}
         </option>
-        <option value="{{ $report::UNREPORTED }}" {{ ($filter['report'] === $report::UNREPORTED) ? 'selected' : '' }}>
+        <option 
+            value="{{ $report::UNREPORTED }}" 
+            {{ ($filter['report'] === $report::UNREPORTED) ? 'selected' : '' }}
+        >
             {{ trans('icore::filter.report.'.$report::UNREPORTED) }}
         </option>
     </select>

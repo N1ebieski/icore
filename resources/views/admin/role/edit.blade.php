@@ -6,11 +6,16 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item">
-    <a href="{{ route('admin.role.index') }}" title="{{ trans('icore::roles.route.index') }}">
+    <a 
+        href="{{ route('admin.role.index') }}" 
+        title="{{ trans('icore::roles.route.index') }}"
+    >
         {{ trans('icore::roles.route.index') }}
     </a>
 </li>
-<li class="breadcrumb-item active" aria-current="page">{{ trans('icore::roles.route.edit') }}</li>
+<li class="breadcrumb-item active" aria-current="page">
+    {{ trans('icore::roles.route.edit') }}
+</li>
 @endsection
 
 @section('content')
@@ -19,7 +24,12 @@
         <i class="fas fa-edit"></i>
         <span>{{ trans('icore::roles.route.edit') }}:</span>
     </h1>
-    <form class="mb-3" method="post" action="{{ route('admin.role.update', [$role->id]) }}" id="editRole">
+    <form 
+        class="mb-3" 
+        method="post" 
+        action="{{ route('admin.role.update', [$role->id]) }}" 
+        id="editRole"
+    >
         @csrf
         @method('put')
         <div class="row">
@@ -28,10 +38,19 @@
                 @foreach ($chunk as $permission)
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="perm[{{ $permission->id }}]" value="">
-                        <input type="checkbox" class="custom-control-input" id="perm{{ $permission->id }}"
-                        {{ old("perm.{$permission->id}", optional($permission->roles->first())->id) !== null ? 'checked' : '' }}
-                        name="perm[{{ $permission->id }}]" value="{{ $permission->name }}">
+                        <input 
+                            type="hidden" 
+                            name="perm[{{ $permission->id }}]" 
+                            value=""
+                        >
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="perm{{ $permission->id }}"
+                            name="perm[{{ $permission->id }}]" 
+                            value="{{ $permission->name }}"
+                            {{ old("perm.{$permission->id}", optional($permission->roles->first())->id) !== null ? 'checked' : '' }}
+                        >
                         <label class="custom-control-label" for="perm{{ $permission->id }}">
                             {{ $permission->name }}
                         </label>
@@ -42,14 +61,23 @@
             @endforeach
             <div class="col-lg-3 col-sm-6">
                 <div class="form-group">
-                    <label for="name">{{ trans('icore::roles.name') }}</label>
-                    <input type="text" value="{{ old('name', $role->name) }}" name="name"
-                    id="name" class="form-control {{ $isValid('name') }}"
-                    {{ $role->name === 'user' ? 'disabled' : null }}>
+                    <label for="name">
+                        {{ trans('icore::roles.name') }}
+                    </label>
+                    <input 
+                        type="text" 
+                        value="{{ old('name', $role->name) }}" 
+                        name="name"
+                        id="name" 
+                        class="form-control {{ $isValid('name') }}"
+                        {{ $role->name === 'user' ? 'disabled' : null }}
+                    >
                     @includeWhen($errors->has('name'), 'icore::admin.partials.errors', ['name' => 'name'])
                 </div>
                 <hr>
-                <button type="submit" class="btn btn-primary">{{ trans('icore::default.save') }}</button>
+                <button type="submit" class="btn btn-primary">
+                    {{ trans('icore::default.save') }}
+                </button>
             </div>
         </div>
     </form>
