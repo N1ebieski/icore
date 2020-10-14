@@ -132,7 +132,7 @@ class CommentCache
      */
     public function rememberByComponent(array $component) : Collection
     {
-        return $this->cache->remember(
+        return $this->cache->tags(['comments'])->remember(
             "comment.{$this->comment->poli}.getByComponent.{$component['orderby']}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
