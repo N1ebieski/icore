@@ -290,9 +290,9 @@ class PostRepo
     /**
      * Undocumented function
      *
-     * @return string
+     * @return string|null
      */
-    public function getLastActivity() : string
+    public function getLastActivity() : ?string
     {
         return optional(
             $this->post->active()
