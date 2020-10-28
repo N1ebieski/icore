@@ -92,6 +92,15 @@
     padding-top: 18px;
 }
 
+.search {
+    select {
+        @include media-breakpoint-down(xs) {
+            max-width: 100px;
+        }
+        max-width: 200px;
+    }
+}
+
 .sidebar {
     z-index: 999;
     min-width: $sidebar-collapsed-width !important;
