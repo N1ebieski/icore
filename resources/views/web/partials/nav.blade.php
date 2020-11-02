@@ -133,7 +133,7 @@
                     </div>
                     @else
                     <a 
-                        class="nav-link btn btn-sm btn-primary text-white text-nowrap text-center" 
+                        class="nav-link btn btn-sm btn-outline-primary text-nowrap text-center text-primary" 
                         href="{{ route('login') }}" 
                         role="button" 
                         title="{{ trans('icore::auth.route.login') }}"
