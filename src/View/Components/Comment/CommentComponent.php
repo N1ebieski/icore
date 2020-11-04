@@ -32,6 +32,13 @@ class CommentComponent implements Htmlable
     /**
      * Undocumented variable
      *
+     * @var int
+     */
+    protected $max_content;
+
+    /**
+     * Undocumented variable
+     *
      * @var string
      */
     protected $orderby;
@@ -42,12 +49,14 @@ class CommentComponent implements Htmlable
      * @param Comment $comment
      * @param ViewFactory $view
      * @param integer $limit
-     * @param string $order
+     * @param integer $max_content
+     * @param string $orderby
      */
     public function __construct(
         Comment $comment,
         ViewFactory $view,
         int $limit = 5,
+        int $max_content = null,
         string $orderby = 'created_at|desc'
     ) {
         $this->comment = $comment;
@@ -55,6 +64,7 @@ class CommentComponent implements Htmlable
         $this->view = $view;
 
         $this->limit = $limit;
+        $this->max_content = $max_content;
         $this->orderby = $orderby;
     }
 
@@ -67,6 +77,7 @@ class CommentComponent implements Htmlable
         return $this->view->make('icore::web.components.comment.comment', [
             'comments' => $this->comment->makeCache()->rememberByComponent([
                 'limit' => $this->limit,
+                'max_content' => $this->max_content,
                 'orderby' => $this->orderby
             ])
         ]);

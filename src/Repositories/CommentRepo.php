@@ -149,6 +149,13 @@ class CommentRepo
                 $query->filterOrderBy($component['orderby']);
             })
             ->limit($component['limit'])
-            ->get();
+            ->get()
+            ->map(function ($item) use ($component) {
+                if ($component['max_content'] !== null) {
+                    $item->content = mb_substr($item->content, 0, $component['max_content']) . '...';
+                }
+
+                return $item;
+            });
     }
 }
