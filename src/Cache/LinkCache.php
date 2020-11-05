@@ -63,10 +63,10 @@ class LinkCache
      */
     public function rememberLinksByComponent(array $component) : Collection
     {
-        $cats = $component['cats'] !== null ? implode('.', $component['cats']) : null;
+        $json = json_encode($component);
 
         return $this->cache->tags(['links'])->remember(
-            "link.getLinksByComponent.{$cats}",
+            "link.getLinksByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->link->makeRepo()->getLinksByComponent($component);

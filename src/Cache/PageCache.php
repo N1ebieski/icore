@@ -62,8 +62,10 @@ class PageCache
      */
     public function rememberWithChildrensByComponent(array $component) : Collection
     {
+        $json = json_encode($component);
+
         return $this->cache->tags(['pages'])->remember(
-            'page.getWithChildrensByComponent',
+            "page.getWithChildrensByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithChildrensByComponent($component);
@@ -78,8 +80,10 @@ class PageCache
      */
     public function rememberWithRecursiveChildrensByComponent(array $component) : Collection
     {
+        $json = json_encode($component);
+
         return $this->cache->tags(['pages'])->remember(
-            'page.getWithRecursiveChildrensByComponent',
+            "page.getWithRecursiveChildrensByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithRecursiveChildrensByComponent($component);

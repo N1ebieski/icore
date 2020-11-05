@@ -79,10 +79,10 @@ class TagCache
      */
     public function rememberPopularByComponent(array $component) : Collection
     {
-        $cats = $component['cats'] !== null ? implode('.', $component['cats']) : null;
+        $json = json_encode($component);
 
         return $this->cache->remember(
-            "tag.{$this->tag->poli}.getPopularByComponent.{$cats}",
+            "tag.{$this->tag->poli}.getPopularByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->tag->makeRepo()->getPopularByComponent($component);
@@ -99,10 +99,10 @@ class TagCache
      */
     public function putPopularByComponent(Collection $tags, array $component) : bool
     {
-        $cats = $component['cats'] !== null ? implode('.', $component['cats']) : null;
+        $json = json_encode($component);
 
         return $this->cache->put(
-            "tag.{$this->tag->poli}.getPopularByComponent.{$cats}",
+            "tag.{$this->tag->poli}.getPopularByComponent.{$json}",
             $tags,
             $this->carbon->now()->addMinutes($this->minutes)
         );

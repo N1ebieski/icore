@@ -132,8 +132,10 @@ class CommentCache
      */
     public function rememberByComponent(array $component) : Collection
     {
+        $json = json_encode($component);
+
         return $this->cache->tags(['comments'])->remember(
-            "comment.{$this->comment->poli}.getByComponent.{$component['orderby']}",
+            "comment.{$this->comment->poli}.getByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($component) {
                 return $this->comment->makeRepo()->getByComponent($component);
