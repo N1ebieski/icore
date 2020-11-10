@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services;
 
+use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -31,17 +32,28 @@ class PostService implements
     protected $post;
 
     /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * [protected description]
      * @var Collection|LengthAwarePaginator
      */
     protected $posts;
 
     /**
-     * [__construct description]
-     * @param Post    $post    [description]
+     * Undocumented function
+     *
+     * @param Post $post
+     * @param Carbon $carbon
      */
-    public function __construct(Post $post)
+    public function __construct(Post $post, Carbon $carbon)
     {
+        $this->carbon = $carbon;
+
         $this->post = $post;
     }
 
@@ -79,7 +91,13 @@ class PostService implements
      */
     public function updateStatus(array $attributes) : bool
     {
-        return $this->post->update(['status' => $attributes['status']]);
+        $this->post->status = $attributes['status'];
+
+        if ($this->post->published_at === null) {
+            $this->post->published_at = $this->carbon->now();
+        }
+
+        return $this->post->save();
     }
 
     /**
