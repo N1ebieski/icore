@@ -34,5 +34,7 @@ return [
     'updated_at' => 'Updated at',
     'created_at_diff' => 'Created at',
     'single' => 'Single',
-    'global' => 'Multi'
+    'global' => 'Multi',
+    'open' => 'Open',
+    'close' => 'Close'
 ];
