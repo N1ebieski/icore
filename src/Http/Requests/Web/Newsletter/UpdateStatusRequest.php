@@ -18,7 +18,7 @@ class UpdateStatusRequest extends FormRequest
     public function authorize()
     {
         if ($this->newsletter->token->token !== $this->input('token')) {
-            abort(HttpResponse::HTTP_FORBIDDEN, 'The token is invalid.');
+            App::abort(HttpResponse::HTTP_FORBIDDEN, 'The token is invalid.');
         }
                 
         if ((int)$this->input('status') === Newsletter::ACTIVE

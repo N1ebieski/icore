@@ -34,5 +34,7 @@ return [
     'updated_at' => 'Data aktualizacji',
     'created_at_diff' => 'Dodano',
     'single' => 'Pojedynczo',
-    'global' => 'Masowo'
+    'global' => 'Masowo',
+    'open' => 'Otwórz',
+    'close' => 'Zamknij'
 ];
