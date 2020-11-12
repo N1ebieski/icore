@@ -149,6 +149,8 @@ class PostService implements
 
         $this->post->comments()->delete();
 
+        $this->post->stats()->detach();
+
         $this->post->detag();
 
         return $this->post->delete();
@@ -169,6 +171,10 @@ class PostService implements
         $this->post->tags()->newPivotStatement()
             ->whereIn('model_id', $ids)
             ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+
+        $this->post->stats()->newPivotStatement()
+            ->whereIn('model_id', $ids)
+            ->where('model_type', $this->post->getMorphClass())->delete();
 
         $this->post->comments()->make()->whereIn('model_id', $ids)
             ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();

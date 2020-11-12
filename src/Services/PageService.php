@@ -299,6 +299,8 @@ class PageService implements
 
         $this->page->detag();
 
+        $this->page->stats()->detach();
+
         $delete = $this->page->delete();
 
         if ($delete === true) {
