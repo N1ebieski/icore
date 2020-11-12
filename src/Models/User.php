@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\App;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Services\UserService;
 use N1ebieski\ICore\Repositories\UserRepo;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use N1ebieski\ICore\Models\Traits\Carbonable;
 
 /**
  * [User description]
@@ -193,5 +194,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function makeRepo()
     {
         return App::make(UserRepo::class, ['user' => $this]);
+    }
+
+    /**
+     * [makeService description]
+     * @return UserService [description]
+     */
+    public function makeService()
+    {
+        return App::make(UserService::class, ['user' => $this]);
     }
 }

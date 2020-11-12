@@ -2,29 +2,24 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
-use N1ebieski\ICore\Filters\Admin\User\IndexFilter;
-use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\BanModel\BanModel;
 use N1ebieski\ICore\Models\Role;
-use N1ebieski\ICore\Http\Requests\Admin\User\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\User\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\User\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\User\IndexRequest;
-use N1ebieski\ICore\Http\Requests\Admin\User\DestroyGlobalRequest;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Hash;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Admin\User\IndexFilter;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use N1ebieski\ICore\Http\Requests\Admin\User\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\User\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\User\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\User\UpdateStatusRequest;
+use N1ebieski\ICore\Http\Requests\Admin\User\DestroyGlobalRequest;
 
-/**
- * [UserController description]
- */
 class UserController
 {
     use AuthorizesRequests;
@@ -59,7 +54,7 @@ class UserController
      */
     public function updateStatus(User $user, UpdateStatusRequest $request) : JsonResponse
     {
-        $user->update($request->only('status'));
+        $user->makeService()->updateStatus($request->validated());
 
         return Response::json([
             'success' => '',
@@ -78,9 +73,7 @@ class UserController
      */
     public function destroy(User $user) : JsonResponse
     {
-        $user->ban()->delete();
-
-        $user->delete();
+        $user->makeService()->delete();
 
         return Response::json(['success' => '']);
     }
@@ -89,18 +82,14 @@ class UserController
      * Remove the collection of Users from storage.
      *
      * @param  User                 $user    [description]
-     * @param  BanModel             $banModel [description]
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(User $user, BanModel $banModel, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(User $user, DestroyGlobalRequest $request) : RedirectResponse
     {
         $this->authorize('deleteGlobalSelf', [User::class, $request->input('select')]);
 
-        $banModel->whereIn('model_id', $request->get('select'))
-            ->where('model_type', 'N1ebieski\ICore\Models\User')->delete();
-
-        $deleted = $user->whereIn('id', $request->get('select'))->delete();
+        $deleted = $user->makeService()->deleteGlobal($request->get('select'));
 
         return Response::redirectTo(URL::previous())->with(
             'success',
@@ -134,9 +123,7 @@ class UserController
      */
     public function update(User $user, UpdateRequest $request) : JsonResponse
     {
-        $user->update($request->only(['name', 'email']));
-
-        $user->syncRoles(array_merge($request->get('roles'), ['user']));
+        $user->makeService()->update($request->validated());
 
         return Response::json([
             'success' => '',
@@ -173,13 +160,7 @@ class UserController
      */
     public function store(User $user, StoreRequest $request) : JsonResponse
     {
-        $user = $user->create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password'))
-        ]);
-
-        $user->assignRole(array_merge($request->get('roles'), ['user']));
+        $user->makeService()->create($request->validated());
 
         $request->session()->flash('success', Lang::get('icore::users.success.store'));
 
