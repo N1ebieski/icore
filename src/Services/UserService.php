@@ -53,7 +53,7 @@ class UserService implements
      */
     public function create(array $attributes) : Model
     {
-        $this->user->create([
+        $user = $this->user->create([
             'name' => $attributes['name'],
             'email' => $attributes['email'],
             'password' => isset($attributes['password']) ?
@@ -61,9 +61,9 @@ class UserService implements
                 : null
         ]);
 
-        $this->user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
+        $user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
 
-        return $this->user;
+        return $user;
     }
 
     /**
