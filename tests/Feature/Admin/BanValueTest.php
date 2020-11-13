@@ -50,7 +50,7 @@ class BanValueTest extends TestCase
         $response = $this->get(route('admin.banvalue.create', ['ip']));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('admin.banvalue.store', ['ip']), $response->getData()->view);
+        $this->assertStringContainsString(route('admin.banvalue.store', ['ip']), $response->getData()->view);
     }
 
     public function test_banvalue_store_as_guest()
@@ -316,8 +316,8 @@ class BanValueTest extends TestCase
         $response = $this->get(route('admin.banvalue.edit', [$banvalue->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('admin.banvalue.update', [$banvalue->id]), $response->getData()->view);
-        $this->assertContains($banvalue->value, $response->getData()->view);
+        $this->assertStringContainsString(route('admin.banvalue.update', [$banvalue->id]), $response->getData()->view);
+        $this->assertStringContainsString($banvalue->value, $response->getData()->view);
 
         $this->assertTrue(Auth::check());
     }
@@ -388,7 +388,7 @@ class BanValueTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($new_ip, $response->getData()->view);
+        $this->assertStringContainsString($new_ip, $response->getData()->view);
 
         $this->assertDatabaseHas('bans_values', [
             'id' => $banvalue->id,

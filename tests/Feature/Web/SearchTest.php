@@ -36,7 +36,7 @@ class SearchTest extends TestCase
         ]));
 
         $response->assertOk();
-        $this->assertContains($tag->name, $response->getData()[0]->name);
+        $this->assertStringContainsString($tag->name, $response->getData()[0]->name);
 
         DB::statement('DELETE FROM `tags` WHERE `tag_id` > 0');
     }

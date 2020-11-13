@@ -54,8 +54,8 @@ class BanModelTest extends TestCase
         $response = $this->get(route('admin.banmodel.user.create', [$user2->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($user2->name, $response->getData()->view);
-        $this->assertContains(route('admin.banmodel.user.store', [$user2->id]), $response->getData()->view);
+        $this->assertStringContainsString($user2->name, $response->getData()->view);
+        $this->assertStringContainsString(route('admin.banmodel.user.store', [$user2->id]), $response->getData()->view);
     }
 
     public function test_banmodel_user_store_as_guest()

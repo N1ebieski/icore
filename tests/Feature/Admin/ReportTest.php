@@ -70,7 +70,7 @@ class ReportTest extends TestCase
         $response = $this->get(route('admin.report.comment.show', [$comment->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($report[6]->content, $response->getData()->view);
+        $this->assertStringContainsString($report[6]->content, $response->getData()->view);
 
     }
 

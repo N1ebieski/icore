@@ -326,8 +326,8 @@ class UserTest extends TestCase
         $response = $this->get(route('admin.user.edit', [$us->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($us->name, $response->getData()->view);
-        $this->assertContains(route('admin.user.update', [$us->id]), $response->getData()->view);
+        $this->assertStringContainsString($us->name, $response->getData()->view);
+        $this->assertStringContainsString(route('admin.user.update', [$us->id]), $response->getData()->view);
 
     }
 
@@ -406,7 +406,7 @@ class UserTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('email@bungoslawa.pl', $response->getData()->view);
+        $this->assertStringContainsString('email@bungoslawa.pl', $response->getData()->view);
 
         $this->assertDatabaseHas('users', [
             'id' => $us->id,
@@ -444,7 +444,7 @@ class UserTest extends TestCase
         $response = $this->get(route('admin.user.create'));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('admin.user.store'), $response->getData()->view);
+        $this->assertStringContainsString(route('admin.user.store'), $response->getData()->view);
 
     }
 

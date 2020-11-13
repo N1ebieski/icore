@@ -93,8 +93,8 @@ class PostTest extends TestCase
         $response = $this->get(route('admin.post.edit', [$post->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($post->content, $response->getData()->view);
-        $this->assertContains(route('admin.post.update', [$post->id]), $response->getData()->view);
+        $this->assertStringContainsString($post->content, $response->getData()->view);
+        $this->assertStringContainsString(route('admin.post.update', [$post->id]), $response->getData()->view);
 
     }
 
@@ -161,7 +161,7 @@ class PostTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Ten post został zaktualizowany.', $response->getData()->view);
+        $this->assertStringContainsString('Ten post został zaktualizowany.', $response->getData()->view);
 
         $this->assertDatabaseHas('posts', [
             'content' => 'Ten post został zaktualizowany.',
