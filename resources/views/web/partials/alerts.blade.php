@@ -28,7 +28,7 @@
 
 @if (session()->has('danger'))
 <div class="alert alert-danger alert-time" role="alert">
-    {{ session()->get('danger') }}dsadasdas
+    {{ session()->get('danger') }}
     <button 
         type="button" 
         class="text-dark close" 
