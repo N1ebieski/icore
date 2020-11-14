@@ -61,7 +61,7 @@ class CategoryTest extends TestCase
         ]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($category->name, $response->getData()->view);
+        $this->assertStringContainsString($category->name, $response->getData()->view);
 
         DB::statement('DELETE FROM `categories` WHERE `id` > 0');
     }
@@ -216,8 +216,8 @@ class CategoryTest extends TestCase
         $response = $this->get(route('admin.category.edit', [$category->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('admin.category.update', [$category->id]), $response->getData()->view);
-        $this->assertContains($category->name, $response->getData()->view);
+        $this->assertStringContainsString(route('admin.category.update', [$category->id]), $response->getData()->view);
+        $this->assertStringContainsString($category->name, $response->getData()->view);
 
         $this->assertTrue(Auth::check());
     }
@@ -285,7 +285,7 @@ class CategoryTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Kategoria Testowa', $response->getData()->view);
+        $this->assertStringContainsString('Kategoria Testowa', $response->getData()->view);
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -312,7 +312,7 @@ class CategoryTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Kategoria Testowa', $response->getData()->view);
+        $this->assertStringContainsString('Kategoria Testowa', $response->getData()->view);
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -356,7 +356,7 @@ class CategoryTest extends TestCase
         $response = $this->get(route('admin.category.post.create'));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('admin.category.post.store'), $response->getData()->view);
+        $this->assertStringContainsString(route('admin.category.post.store'), $response->getData()->view);
 
         $this->assertTrue(Auth::check());
     }
@@ -668,8 +668,8 @@ class CategoryTest extends TestCase
         $response = $this->get(route('admin.category.edit_position', [$category->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('value="'.$category->position.'"', $response->getData()->view);
-        $this->assertContains(route('admin.category.update_position', [$category->id]), $response->getData()->view);
+        $this->assertStringContainsString('value="'.$category->position.'"', $response->getData()->view);
+        $this->assertStringContainsString(route('admin.category.update_position', [$category->id]), $response->getData()->view);
 
     }
 

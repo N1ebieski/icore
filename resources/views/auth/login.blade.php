@@ -94,7 +94,7 @@
                                     <input 
                                         type="hidden" 
                                         name="redirect" 
-                                        value="{{ url()->previous() ?? null }}"
+                                        value="{{ old('redirect', url()->previous() ?? null) }}"
                                     >
 
                                     <button type="submit" class="btn btn-primary">

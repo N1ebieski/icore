@@ -21,7 +21,7 @@ class BanUser
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->ban) {
+        if (Auth::check() && Auth::user()->ban) {
             return App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
                 'You cannot perform this action because you are banned.'

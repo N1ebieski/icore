@@ -43,8 +43,8 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('web.comment.take', [$parent->id]), $response->getData()->view);
-        $this->assertContains($comment[9]->content, $response->getData()->view);
+        $this->assertStringContainsString(route('web.comment.take', [$parent->id]), $response->getData()->view);
+        $this->assertStringContainsString($comment[9]->content, $response->getData()->view);
     }
 
     public function test_comment_post_create_as_guest()
@@ -133,7 +133,7 @@ class CommentTest extends TestCase
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('web.comment.post.store', [$post->id]), $response->getData()->view);
+        $this->assertStringContainsString(route('web.comment.post.store', [$post->id]), $response->getData()->view);
 
         $this->assertTrue(Auth::check());
     }
@@ -182,7 +182,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('content');
-        $this->assertContains('DUPA', session('errors')->get('content')[0]);
+        $this->assertStringContainsString('DUPA', session('errors')->get('content')[0]);
 
         $this->assertTrue(Auth::check());
     }
@@ -228,7 +228,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Komentarz zostal dodany. dsdasd', $response->getData()->view);
+        $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
             'content' => 'Komentarz zostal dodany. dsdasd',
@@ -282,7 +282,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Komentarz zostal dodany. dsdasd', $response->getData()->view);
+        $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
             'content' => 'Komentarz zostal dodany. dsdasd',
@@ -350,8 +350,8 @@ class CommentTest extends TestCase
         $response = $this->get(route('web.comment.edit', [$comment->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('web.comment.update', [$comment->id]), $response->getData()->view);
-        $this->assertContains($comment->content, $response->getData()->view);
+        $this->assertStringContainsString(route('web.comment.update', [$comment->id]), $response->getData()->view);
+        $this->assertStringContainsString($comment->content, $response->getData()->view);
 
         $this->assertTrue(Auth::check());
     }
@@ -439,7 +439,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
+        $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,

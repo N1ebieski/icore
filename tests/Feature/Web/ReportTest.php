@@ -60,7 +60,7 @@ class ReportTest extends TestCase
         $response = $this->get(route('web.report.comment.create', [$comment->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains(route('web.report.comment.store', [$comment->id]), $response->getData()->view);
+        $this->assertStringContainsString(route('web.report.comment.store', [$comment->id]), $response->getData()->view);
 
         $this->assertTrue(Auth::check());
     }

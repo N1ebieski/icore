@@ -59,7 +59,7 @@ class SocialiteTest extends TestCase
 
             $redirectLocation = $loginResponse->headers->get('Location');
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $this->socialLoginRedirects[$provider],
                 $redirectLocation,
                 sprintf(
@@ -201,7 +201,7 @@ class SocialiteTest extends TestCase
     //
     //     $redirectLocation = $loginResponse->headers->get('Location');
     //
-    //     $this->assertContains(
+    //     $this->assertStringContainsString(
     //         $this->socialLoginRedirects['facebook'],
     //         $redirectLocation,
     //         sprintf(

@@ -24,7 +24,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
 
     /**
      * Kolekcja zawierająca komentarze przeznaczone do wyświelenia na froncie
-     * @var Collection
+     * @var LengthAwarePaginator
      */
     protected $comments;
 

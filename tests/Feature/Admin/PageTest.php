@@ -87,8 +87,8 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.edit', [$page->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains($page->content, $response->getData()->view);
-        $this->assertContains(route('admin.page.update', [$page->id]), $response->getData()->view);
+        $this->assertStringContainsString($page->content, $response->getData()->view);
+        $this->assertStringContainsString(route('admin.page.update', [$page->id]), $response->getData()->view);
 
     }
 
@@ -155,7 +155,7 @@ class PageTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('Ten page został zaktualizowany.', $response->getData()->view);
+        $this->assertStringContainsString('Ten page został zaktualizowany.', $response->getData()->view);
 
         $this->assertDatabaseHas('pages', [
             'content' => 'Ten page został zaktualizowany.',
@@ -676,8 +676,8 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertContains('value="'.$page->position.'"', $response->getData()->view);
-        $this->assertContains(route('admin.page.update_position', [$page->id]), $response->getData()->view);
+        $this->assertStringContainsString('value="'.$page->position.'"', $response->getData()->view);
+        $this->assertStringContainsString(route('admin.page.update_position', [$page->id]), $response->getData()->view);
 
     }
 
