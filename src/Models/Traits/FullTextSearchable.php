@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 /**
  * [trait description]
@@ -26,7 +27,7 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function makeClassName() : string
+    protected function className() : string
     {
         return class_basename(strtolower(static::class));
     }
@@ -59,7 +60,8 @@ trait FullTextSearchable
         preg_match_all('/"(.*?)"/', $this->term, $matches);
 
         foreach ($matches[0] as $match) {
-            $this->search[$this->makeClassName()][] = '+' . $match;
+            $this->search[$this->className()][] = '+' . $match;
+
             $this->term = str_replace($match, '', $this->term);
         }
 
@@ -67,14 +69,25 @@ trait FullTextSearchable
     }
 
     /**
-     * Auxiliary method. Removing symbols used by MySQL
-     * @return string [description]
+     * Undocumented function
+     *
+     * @param string $term
+     * @return boolean
      */
-    protected function removeSymbols() : string
+    protected function isContainsSymbol(string $match) : bool
     {
-        $reservedSymbols = ['-', '+', '<', '>', '@', '*', '(', ')', '~'];
+        return Str::contains($match, ['.', '-', '+', '<', '>', '@', '*', '(', ')', '~']);
+    }
 
-        return str_replace($reservedSymbols, '', $this->term);
+    /**
+     * Undocumented function
+     *
+     * @param string $match
+     * @return string
+     */
+    protected function createExactMatch(string $match) : string
+    {
+        return '"' . $match . '"';
     }
 
     /**
@@ -83,16 +96,19 @@ trait FullTextSearchable
      */
     protected function splitMatches() : void
     {
-        $term = $this->removeSymbols();
-
-        $matches = explode(' ', $term);
+        $matches = explode(' ', $this->term);
 
         foreach ($matches as $match) {
             if (strlen($match) >= 3) {
+                $match = $this->isContainsSymbol($match) ?
+                    $this->createExactMatch($match)
+                    : $match;
+
                 if ($match === end($matches)) {
                     $match .= '*';
                 }
-                $this->search[$this->makeClassName()][] = '+' . $match;
+                
+                $this->search[$this->className()][] = '+' . $match;
             }
         }
     }
@@ -102,9 +118,9 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function makeSearch() : string
+    protected function search() : string
     {
-        return implode(' ', (array)$this->search[$this->makeClassName()]);
+        return implode(' ', (array)$this->search[$this->className()]);
     }
 
     /**
@@ -112,7 +128,7 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function makeColumns() : string
+    protected function columns() : string
     {
         return implode(',', $this->searchable);
     }
@@ -131,9 +147,9 @@ trait FullTextSearchable
         $this->splitExactMatches();
         $this->splitMatches();
 
-        return $query->when(array_key_exists($this->makeClassName(), $this->search), function ($query) {
-            $query->whereRaw("MATCH ({$this->makeColumns()}) AGAINST (? IN BOOLEAN MODE)", [
-                $this->makeSearch()
+        return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
+            $query->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [
+                $this->search()
             ]);
         });
     }
