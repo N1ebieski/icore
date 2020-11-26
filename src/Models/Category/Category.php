@@ -91,7 +91,7 @@ class Category extends Entity implements CategoryInterface
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable() : array
     {
         return [
             'slug' => [

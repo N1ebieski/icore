@@ -144,7 +144,7 @@ class Page extends Entity implements PageInterface
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable() : array
     {
         return [
             'slug' => [

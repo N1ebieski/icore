@@ -25,7 +25,7 @@ class XSSProtection
     {
         $input = $request->all();
 
-        array_walk_recursive($input, function (&$value, &$key) {
+        array_walk_recursive($input, function (&$value, $key) {
             if (in_array($key, $this->except, true)) {
                 $value = Purifier::clean($value);
             } else {
