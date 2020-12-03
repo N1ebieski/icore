@@ -76,7 +76,7 @@ class MailingRepo
      */
     public function deactivateCompleted() : bool
     {
-        return $this->mailing->active()
+        return $this->mailing->progress()
             ->whereDoesntHave('emails', function ($query) {
                 $query->where('sent', MailingEmail::UNSENT);
             })
@@ -84,5 +84,19 @@ class MailingRepo
                 'status' => Mailing::INACTIVE,
                 'activation_at' => null
             ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function progressActivated() : bool
+    {
+        return $this->mailing->active()
+            ->whereHas('emails', function ($query) {
+                $query->unsent();
+            })
+            ->update(['status' => Mailing::INPROGRESS]);
     }
 }

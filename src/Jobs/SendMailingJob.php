@@ -69,7 +69,7 @@ class SendMailingJob implements ShouldQueue
         $this->mailer = $mailer;
 
         if ($this->mailingEmail->sent === MailingEmail::UNSENT) {
-            if ($this->mailingEmail->mailing->status === Mailing::ACTIVE) {
+            if ($this->mailingEmail->mailing->status === Mailing::INPROGRESS) {
                 $this->mailer->send(
                     $this->app->make(MailingMail::class, ['mailingEmail' => $this->mailingEmail])
                 );

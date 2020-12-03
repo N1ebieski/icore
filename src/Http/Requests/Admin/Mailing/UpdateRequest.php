@@ -14,7 +14,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->mailing->status !== Mailing::ACTIVE;
+        return !in_array($this->mailing->status, [Mailing::ACTIVE, Mailing::INPROGRESS]);
     }
 
     /**

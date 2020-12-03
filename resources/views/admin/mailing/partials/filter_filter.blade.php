@@ -52,6 +52,12 @@
         >
             {{ trans('icore::mailings.status.'.$mailing::SCHEDULED) }}
         </option>
+        <option 
+            value="{{ $mailing::INPROGRESS }}" 
+            {{ ($filter['status'] === $mailing::INPROGRESS) ? 'selected' : '' }}
+        >
+            {{ trans('icore::mailings.status.'.$mailing::INPROGRESS) }}
+        </option>        
     </select>
 </div>
 <div class="d-inline">

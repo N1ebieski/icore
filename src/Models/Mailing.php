@@ -44,6 +44,12 @@ class Mailing extends Model
     public const SCHEDULED = 2;
 
     /**
+     * [public description]
+     * @var int
+     */
+    public const INPROGRESS = 3;
+
+    /**
     * The attributes that are mass assignable.
     *
     * @var array
@@ -195,6 +201,17 @@ class Mailing extends Model
     public function scopeActive(Builder $query) : Builder
     {
         return $query->where('status', static::ACTIVE);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeProgress(Builder $query) : Builder
+    {
+        return $query->where('status', static::INPROGRESS);
     }
 
     /**

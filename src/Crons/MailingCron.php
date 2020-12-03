@@ -2,12 +2,11 @@
 
 namespace N1ebieski\ICore\Crons;
 
+use Carbon\Carbon;
 use N1ebieski\ICore\Models\MailingEmail;
 use N1ebieski\ICore\Jobs\SendMailingJob;
+use Illuminate\Contracts\Config\Repository as Config;
 
-/**
- * [MailingCron description]
- */
 class MailingCron
 {
     /**
@@ -17,21 +16,67 @@ class MailingCron
     protected $mailingEmail;
 
     /**
+     * Undocumented variable
+     *
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Carbon
+     */
+    protected $carbon;
+
+    /**
      * [private description]
      * @var SendMailingJob
      */
     protected $sendMailingJob;
 
     /**
-     * [__construct description]
-     * @param MailingEmail     $mailingEmail     [description]
-     * @param SendMailingJob   $sendMailingJob   [description]
+     * Undocumented variable
+     *
+     * @var Carbon
      */
-    public function __construct(MailingEmail $mailingEmail, SendMailingJob $sendMailingJob)
-    {
+    protected $delay;
+
+    /**
+     * Undocumented function
+     *
+     * @param MailingEmail $mailingEmail
+     * @param Config $config
+     * @param Carbon $carbon
+     * @param SendMailingJob $sendMailingJob
+     */
+    public function __construct(
+        MailingEmail $mailingEmail,
+        Config $config,
+        Carbon $carbon,
+        SendMailingJob $sendMailingJob
+    ) {
         $this->mailingEmail = $mailingEmail;
 
+        $this->carbon = $carbon;
+        $this->config = $config;
+
+        $this->setDelay($this->carbon->now());
+
         $this->sendMailingJob = $sendMailingJob;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Carbon $delay
+     * @return self
+     */
+    protected function setDelay(Carbon $delay) : self
+    {
+        $this->delay = $delay;
+
+        return $this;
     }
 
     /**
@@ -41,11 +86,18 @@ class MailingCron
     {
         $this->activateScheduled();
 
-        $this->mailingEmail->makeRepo()->chunkUnsentHasActiveMailing(
+        $this->progressActivated();
+
+        $this->mailingEmail->makeRepo()->chunkUnsentHasProgressMailing(
+            $this->config->get('icore.mailing.limit'),
             function ($items) {
                 $items->each(function ($item) {
-                    $this->sendMailingJob->dispatch($item);
+                    $this->addToQueue($item);
                 });
+
+                $this->setDelay(
+                    $this->delay->addMinutes($this->config->get('icore.mailing.delay'))
+                );
             }
         );
 
@@ -59,7 +111,7 @@ class MailingCron
      */
     protected function addToQueue(MailingEmail $mailingEmail) : void
     {
-        $this->sendMailingJob->dispatch($mailingEmail);
+        $this->sendMailingJob->dispatch($mailingEmail)->delay($this->delay);
     }
 
     /**
@@ -70,6 +122,16 @@ class MailingCron
     protected function activateScheduled() : void
     {
         $this->mailingEmail->mailing()->make()->makeRepo()->activateScheduled();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    protected function progressActivated() : void
+    {
+        $this->mailingEmail->mailing()->make()->makeRepo()->progressActivated();
     }
 
     /**

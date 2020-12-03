@@ -25,7 +25,8 @@ return [
     'status' => [
         Mailing::ACTIVE => 'active',
         Mailing::INACTIVE => 'inactive',
-        Mailing::SCHEDULED => 'scheduled'
+        Mailing::SCHEDULED => 'scheduled',
+        Mailing::INPROGRESS => 'in progress'
     ],
     'route' => [
         'index' => 'Mailing',
