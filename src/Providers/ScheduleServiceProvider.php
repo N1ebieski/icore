@@ -45,12 +45,6 @@ class ScheduleServiceProvider extends ServiceProvider
             $cron = "0 0 */{$days} * *";
         }
 
-        if ($this->app['config']->get('cache.default') === 'tfile') {
-            $this->schedule->exec('cd storage/framework/cache && rm -r data')
-                ->name('ClearCacheTfile')
-                ->cron($cron);
-        }
-
         $this->schedule->command('cache:clear')
             ->name('ClearCache')
             ->cron($cron);
