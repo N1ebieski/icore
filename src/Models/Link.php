@@ -132,7 +132,7 @@ class Link extends Model
         $output = '<a href="' . e($this->url) . '" title="' . e($this->name) . '">';
 
         if ($this->img_url !== null) {
-            $output .= '<img src="' . e($this->img_url_from_storage) . '" alt="' . e($this->name) . '">';
+            $output .= '<img src="' . e($this->img_url_from_storage) . '" alt="' . e($this->name) . '" class="img-fluid">';
         } else {
             $output .= e($this->name);
         }
