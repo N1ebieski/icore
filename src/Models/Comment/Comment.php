@@ -257,6 +257,7 @@ class Comment extends Entity implements CommentInterface
     public function isCommentable() : bool
     {
         return $this->isActive()
+            && $this->getRelation('morph') !== null
             && $this->getRelation('morph')->isActive()
             && $this->getRelation('morph')->isCommentable();
     }
