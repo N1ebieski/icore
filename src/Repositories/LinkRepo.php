@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Link;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Utils\MigrationUtil;
 
 /**
  * [LinkRepo description]
@@ -25,13 +26,24 @@ class LinkRepo
     protected $paginate;
 
     /**
-     * [__construct description]
-     * @param Link   $link   [description]
-     * @param Config $config [description]
+     * Undocumented variable
+     *
+     * @var MigrationUtil
      */
-    public function __construct(Link $link, Config $config)
+    protected $migrationUtil;
+
+    /**
+     * Undocumented function
+     *
+     * @param Link $link
+     * @param Config $config
+     * @param MigrationUtil $migrationUtil
+     */
+    public function __construct(Link $link, Config $config, MigrationUtil $migrationUtil)
     {
         $this->link = $link;
+
+        $this->migrationUtil = $migrationUtil;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -86,7 +98,19 @@ class LinkRepo
     public function getLinksByComponent(array $component) : Collection
     {
         return $this->link->where('type', 'link')
-            ->whereDoesntHave('categories')
+            ->when($component['home'] === true, function ($query) {
+                $query->whereDoesntHave('categories')
+                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {
+                        $query->orWhere('home', true);
+                    });
+            }, function ($query) {
+                $query->where(function ($query) {
+                    $query->whereDoesntHave('categories')
+                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {
+                            $query->where('home', false);
+                        });
+                });
+            })
             ->when($component['cats'] !== null, function ($query) use ($component) {
                 $query->orWhereHas('categories', function ($query) use ($component) {
                     $query->whereIn('id', $component['cats']);

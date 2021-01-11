@@ -35,9 +35,25 @@
             </label>
         </div>
     </div>
+    @if ($type === 'link')
+    <div class="form-group">
+        <div class="custom-control custom-checkbox">
+            <input 
+                type="checkbox" 
+                class="custom-control-input" 
+                id="home" 
+                name="home"
+                value="1"
+            >
+            <label class="custom-control-label" for="home">
+                {{ trans('icore::links.only.home') }}
+            </label>
+        </div>
+    </div>
+    @endif
     <div class="form-group">
         <label for="category">
-            {{ trans('icore::categories.categories.label') }}:
+            {{ trans('icore::links.only.categories') }}:
         </label>
         <div id="category">
             <div id="categoryOptions"></div>

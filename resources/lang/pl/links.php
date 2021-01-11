@@ -23,5 +23,9 @@ return [
     'name' => 'Nazwa',
     'url' => 'Adres',
     'img' => 'Baner',
-    'delete_img' => 'Usunąć baner?'
+    'delete_img' => 'Usunąć baner?',
+    'only' => [
+        'home' => 'Tylko strona główna',
+        'categories' => 'Tylko kategorie'
+    ]
 ];

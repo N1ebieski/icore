@@ -55,6 +55,7 @@ class StoreRequest extends FormRequest
                 'regex:/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/'
             ],
             'img' => 'bail|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:max_width=720,max_height=480',
+            'home' => 'bail|nullable|boolean',
             'categories' => [
                 'bail',
                 'nullable',

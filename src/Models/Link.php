@@ -28,7 +28,12 @@ class Link extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'url', 'name', 'img_url', 'position'
+        'type',
+        'url',
+        'name',
+        'img_url',
+        'home',
+        'position'
     ];
 
     /**
@@ -38,6 +43,7 @@ class Link extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'home' => 'boolean',
         'position' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'

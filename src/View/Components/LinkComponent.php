@@ -2,11 +2,12 @@
 
 namespace N1ebieski\ICore\View\Components;
 
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use N1ebieski\ICore\Models\Link;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Models\Link;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\View\View;
 
 /**
  * [CategoryComponent description]
@@ -33,6 +34,13 @@ class LinkComponent implements Htmlable
     protected $collect;
 
     /**
+     * Undocumented variable
+     *
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * Number of columns
      * @var int
      */
@@ -50,6 +58,7 @@ class LinkComponent implements Htmlable
      * @param Link $link
      * @param ViewFactory $view
      * @param Collect $collect
+     * @param Request $request
      * @param integer $limit
      * @param array $cats
      */
@@ -57,6 +66,7 @@ class LinkComponent implements Htmlable
         Link $link,
         ViewFactory $view,
         Collect $collect,
+        Request $request,
         int $limit = 5,
         array $cats = null
     ) {
@@ -64,6 +74,7 @@ class LinkComponent implements Htmlable
 
         $this->view = $view;
         $this->collect = $collect;
+        $this->request = $request;
 
         $this->limit = $limit;
         $this->cats = $cats;
@@ -77,6 +88,7 @@ class LinkComponent implements Htmlable
     {
         return $this->view->make('icore::web.components.link', [
             'links' => $this->link->makeCache()->rememberLinksByComponent([
+                'home' => $this->request->is('/'),
                 'cats' => $this->collect->make($this->cats)->flatten()->toArray(),
                 'limit' => $this->limit
             ])

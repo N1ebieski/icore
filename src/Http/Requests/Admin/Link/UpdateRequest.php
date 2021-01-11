@@ -55,6 +55,7 @@ class UpdateRequest extends FormRequest
             ],
             'img' => 'bail|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:max_width=720,max_height=480',
             'delete_img' => 'nullable',
+            'home' => 'bail|nullable|boolean',
             'categories' => [
                 'bail',
                 'nullable',

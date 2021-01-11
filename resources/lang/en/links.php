@@ -23,5 +23,9 @@ return [
     'name' => 'Name',
     'url' => 'URL',
     'img' => 'Banner',
-    'delete_img' => 'Remove the banner?'
+    'delete_img' => 'Remove the banner?',
+    'only' => [
+        'home' => 'Only homepage',
+        'categories' => 'Only categories'
+    ]
 ];
