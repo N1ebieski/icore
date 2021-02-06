@@ -50,8 +50,8 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <script src="{{ mix('js/vendor/icore/admin/scripts.js') }}" defer></script>
     @stack('script')
+    <script src="{{ mix('js/vendor/icore/admin/scripts.js') }}" defer></script>
     <script src="{{ asset('js/custom/admin/scripts.js') }}" defer></script>
 </body>
 </html>
