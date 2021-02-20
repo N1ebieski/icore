@@ -52,6 +52,27 @@ class MacroServiceProvider extends ServiceProvider
             );
         });
 
+        Collection::macro('flattenRelation', function (string $relation) {
+            $result = $this->make([]);
+
+            $closure = function ($collection) use (&$closure, &$result, $relation) {
+                $collection->each(function ($item) use (&$closure, &$result, $relation) {
+                    $value = clone $item;
+                    unset($value->{$relation});
+        
+                    $result->push($value);
+        
+                    if ($item->relationLoaded($relation)) {
+                        $closure($item->{$relation});
+                    }
+                });
+            };
+    
+            $closure($this);
+    
+            return $result->filter();
+        });
+
         Collection::macro('isEmptyItems', function () {
             return $this->every(function ($value, $key) {
                 return strlen($value) === 0;

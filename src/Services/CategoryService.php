@@ -72,9 +72,7 @@ class CategoryService implements
     {
         $this->categories = $this->category->makeRepo()->getAsTree();
 
-        $this->categories = $this->flatten();
-
-        return $this->categories;
+        return $this->categories->flattenRelation('children');
     }
 
     /**
@@ -112,22 +110,7 @@ class CategoryService implements
     {
         $this->categories = $this->category->makeRepo()->getAsTreeExceptSelf();
 
-        $this->categories = $this->flatten();
-
-        return $this->categories;
-    }
-
-    /**
-     * Flatten service
-     * @return Collection [description]
-     */
-    protected function flatten() : Collection
-    {
-        $categories = $this->categories->toArray();
-
-        $categories = $this->flattenChildren($categories);
-
-        return $this->category->hydrate($categories);
+        return $this->categories->flattenRelation('children');
     }
 
     /**
@@ -309,32 +292,5 @@ class CategoryService implements
 
             $this->category->moveTo(0, $parent_id);
         }
-    }
-
-    /**
-     * Metoda pomocnicza. Spłaszcza rekursywnie tablicę children
-     *
-     * @param  array  $array
-     * @return array
-     */
-    protected function flattenChildren(array $array) : array
-    {
-        $result = [];
-
-        foreach ($array as $value) {
-            if (is_array($value)) {
-                $result[] = array_filter($value, function ($k) {
-                    if ($k != 'children') {
-                        return true;
-                    }
-                }, ARRAY_FILTER_USE_KEY);
-
-                if (array_key_exists('children', $value)) {
-                    $result = array_merge($result, $this->flattenChildren($value['children']));
-                }
-            }
-        }
-
-        return array_filter($result);
     }
 }

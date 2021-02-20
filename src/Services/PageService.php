@@ -74,9 +74,7 @@ class PageService implements
     {
         $this->pages = $this->page->makeRepo()->getAsTree();
 
-        $this->pages = $this->flatten();
-
-        return $this->pages;
+        return $this->pages->flattenRelation('children');
     }
 
     /**
@@ -87,9 +85,7 @@ class PageService implements
     {
         $this->pages = $this->page->makeRepo()->getAsTreeExceptSelf();
 
-        $this->pages = $this->flatten();
-
-        return $this->pages;
+        return $this->pages->flattenRelation('children');
     }
 
     /**
@@ -117,48 +113,6 @@ class PageService implements
 
         return $this->pages->whereNotIn('id', $filter['except'])
             ->paginate($filter['paginate'] ?? $this->paginate);
-    }
-
-    /**
-     * [flatten description]
-     * @return Collection [description]
-     */
-    protected function flatten() : Collection
-    {
-        $pages = $this->pages->toArray();
-
-        $pages = $this->flattenChildren($pages);
-
-        $this->pages = $this->page->hydrate($pages);
-
-        return $this->pages;
-    }
-
-    /**
-     * Metoda pomocnicza. Spłaszcza rekursywnie tablicę children
-     *
-     * @param  array  $array
-     * @return array
-     */
-    protected function flattenChildren(array $array) : array
-    {
-        $result = [];
-
-        foreach ($array as $value) {
-            if (is_array($value)) {
-                $result[] = array_filter($value, function ($k) {
-                    if ($k != 'children') {
-                        return true;
-                    }
-                }, ARRAY_FILTER_USE_KEY);
-
-                if (array_key_exists('children', $value)) {
-                    $result = array_merge($result, $this->flattenChildren($value['children']));
-                }
-            }
-        }
-
-        return array_filter($result);
     }
 
     /**
