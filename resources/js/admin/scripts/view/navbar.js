@@ -1,6 +1,11 @@
 (function($) {
-    let c, currentScrollTop = 0;
+    let c = $(window).scrollTop();
+    let currentScrollTop = 0;
     let $navbar = $('.navbar');
+
+    if ($navbar.data('autohide') === false) {
+        return;
+    }
 
     $(window).scroll(function () {
         if (!$('body').hasClass('modal-open')) {        
