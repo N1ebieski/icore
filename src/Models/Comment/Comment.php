@@ -332,15 +332,17 @@ class Comment extends Entity implements CommentInterface
         return $query->withSumRating()
             ->with([
                 'user:id,name',
+                'morph',
                 'ratings',
                 'childrens' => function ($query) use ($orderby) {
                     $query->withSumRating()
                         ->with([
                             'user:id,name',
+                            'morph',
                             'ratings',
                             'childrens' => function ($query) use ($orderby) {
                                 $query->withSumRating()
-                                    ->with(['user:id,name', 'ratings'])
+                                    ->with(['user:id,name', 'ratings', 'morph'])
                                     ->withCount([
                                         'childrens' => function ($query) {
                                             $query->active();
