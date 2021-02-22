@@ -1,6 +1,11 @@
 jQuery(document).ready(function() {
-    let c, currentScrollTop = 0;
+    let c = $(window).scrollTop();
+    let currentScrollTop = 0;
     let $navbar = $('.menu.navbar');
+
+    if ($navbar.data('autohide') === false) {
+        return;
+    }
 
     $(window).scroll(function () {
         if (!$('body').hasClass('modal-open')) {
@@ -17,6 +22,19 @@ jQuery(document).ready(function() {
             c = currentScrollTop;
         }
     });
+});
+
+jQuery(document).ready(function() {
+    let hash = window.location.hash;
+    let $navbar = $('.menu.navbar');
+
+    if ($navbar.data('autohide') === false) {
+        return;
+    }
+
+    if (hash.length) {
+        $navbar.fadeOut();
+    }
 });
 
 jQuery(document).on('click', ".modal-backdrop, #navbarToggle", function(e) {

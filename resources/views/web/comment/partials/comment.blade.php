@@ -6,6 +6,11 @@
     <div id="comment{{ $comment->id }}" class="transition my-3">
         <div>
             <div class="d-flex mb-2">
+                <small class="mr-2">
+                    <a href="{{ route("web.{$comment->poli}.show", [$comment->morph->slug]) . "#comment{$comment->id}" }}">
+                        #
+                    </a>
+                </small>
                 <small class="mr-auto">
                     {{ trans('icore::comments.created_at_diff') }}: {{ $comment->created_at_diff }}
                 </small>
