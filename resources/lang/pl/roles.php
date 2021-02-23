@@ -4,7 +4,7 @@ return [
     'success' => [
         'destroy' => 'Pomyślnie usunięto rolę.',
         'update' => 'Rola została zmieniona.',
-        'create' => 'Rola została dodana'
+        'store' => 'Rola została dodana'
     ],
     'route' => [
         'index' => 'Role i uprawnienia',
