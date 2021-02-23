@@ -43,6 +43,7 @@ class ViewServiceProvider extends ServiceProvider
         $this->app['view']->composer([
             $this->app['config']->get('icore.layout') . '::web.layouts.layout',
             $this->app['config']->get('icore.layout') . '::admin.layouts.layout',
+            'file-manager::fmButton',
         ], \N1ebieski\ICore\View\Composers\LayoutComposer::class);
 
         $this->app['view']->composer('*', \N1ebieski\ICore\View\Composers\ActiveComposer::class);

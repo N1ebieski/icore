@@ -39,5 +39,34 @@ jQuery(document).on('readyAndAjax', function () {
                 ['fullscreen']
             ]
         });
+
+        $trumbowyg.on('tbwmodalopen', function () {
+            let $modal = $('div.trumbowyg-modal-box');
+            $modal.input = $modal.find('input[name=url]');
+
+            if (!$modal.input.length) {
+                return;
+            }
+
+            if ($modal.find('input[name=alt]').length) {
+                $modal.input.css({'position': 'relative', 'width': 'unset', 'flex': '1 1 auto'});
+                $modal.input.wrap('<div style="position:absolute;top:0;right:0;width:70%;max-width:330px;"><div class="input-group">');
+                $modal.input.after('<div class="input-group-append"><button class="btn btn-primary px-2 py-0" type="button" id="filemanager" style="height:27px;"><i class="far fa-image"></i></button></div>');
+            }
+        });
+
+        $(document).on('click', 'button#filemanager', function (e) {
+            e.preventDefault();
+
+            window.open(
+                '/admin/file-manager/fm-button',
+                'fm',
+                'resizable=yes,status=no,scrollbars=yes,toolbar=no,menubar=no,width=1366,height=768'
+            );
+        });
     }
 });
+
+function fmSetLink($url) {
+    $('div.trumbowyg-modal-box').find('input[name=url]').val($url);
+}

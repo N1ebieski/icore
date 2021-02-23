@@ -99,3 +99,55 @@ button[class^='trumbowyg-'] {
     color: $black;
     background: fade-out($gray-100, .5);
 }
+
+// Dark file manager
+.fm {
+    background-color: $background !important;
+}
+
+.fm-table thead th {
+    background-color: $background !important;
+
+    &:hover {
+        background-color: $gray-400 !important;
+        color: $black !important;        
+    }
+}
+
+.fm-table tr:hover {
+    background-color: $gray-400 !important;
+    color: $black !important;    
+}
+
+.fm-tree .fm-tree-disk {
+    background-color: $background !important;    
+}
+
+.fm-tree-branch li > p.selected, .fm-tree-branch li > p:hover {
+    background-color: $gray-400 !important;
+    color: $black !important;      
+}
+
+.fm-grid .fm-grid-item {
+    &:not(.active):hover {
+        background-color: $gray-400 !important;
+        color: $black !important;      
+    }
+
+    &.active {
+        color: $black !important;
+    }
+}
+
+.fm-context-menu {
+    background-color: $gray-800 !important;
+
+    ul > li:hover {
+        background-color: $gray-400 !important;
+        color: $black !important;             
+    }
+}
+
+.fm-breadcrumb .breadcrumb-item {
+    color: #6c757d !important;
+}

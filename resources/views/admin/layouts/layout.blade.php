@@ -15,6 +15,7 @@
 
     <link rel="icon" href="{{ asset('svg/vendor/icore/logo.svg') }}" type="image/svg+xml">
     <link href="{{ mix('css/vendor/icore/vendor/vendor.css') }}" rel="stylesheet">
+    @stack('style')
     <link href="{{ mix($getStylesheet()) }}" rel="stylesheet">
     <link href="{{ asset($getStylesheet('css/custom')) }}" rel="stylesheet">
 
