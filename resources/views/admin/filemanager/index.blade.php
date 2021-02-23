@@ -17,7 +17,7 @@
         <span>{{ trans('icore::filemanager.route.index') }}</span>
     </div>
 </h1>
-<div style="height: 600px;">
+<div style="height: 700px;">
     <div id="fm"></div>
 </div>
 

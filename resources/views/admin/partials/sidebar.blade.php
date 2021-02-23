@@ -210,7 +210,7 @@
             </div>
         </li>
         @endcanany
-        @can('admin.filemanager.view')
+        @can('admin.filemanager.read')
         <li class="nav-item {{ $isUrl(route('admin.filemanager.index')) }}">
             <a 
                 class="nav-link" 
