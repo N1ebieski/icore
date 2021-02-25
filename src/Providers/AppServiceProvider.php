@@ -31,6 +31,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(\N1ebieski\ICore\Utils\Conversions\Replacement::class, function ($app) {
+            return new \N1ebieski\ICore\Utils\Conversions\Replacement(
+                new \Illuminate\Support\Collection,
+                $app['config']->get('icore.replacement')
+            );
+        });
+
         $this->app->bind(\GuzzleHttp\Client::class, function ($app) {
             return new \GuzzleHttp\Client([
                 'headers' => [

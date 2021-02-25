@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Models;
 
 use Carbon\Carbon;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
@@ -15,13 +16,12 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\PostService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
-use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use N1ebieski\ICore\Models\Traits\Carbonable;
 
 /**
  * [Post description]
@@ -329,13 +329,10 @@ class Post extends Model
      */
     public function getReplacementContentAttribute() : string
     {
-        $replacement = Collect::make(Config::get('icore.replacement'));
-
-        return str_replace(
-            $replacement->keys()->toArray(),
-            $replacement->values()->toArray(),
-            $this->content
-        );
+        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
+            ->handle($this->content, function ($value) {
+                return $value;
+            });
     }
 
     /**
@@ -358,13 +355,13 @@ class Post extends Model
      */
     public function getReplacementContentHtmlAttribute() : string
     {
-        $replacement = Collect::make(Config::get('icore.replacement'));
-
-        return str_replace(
-            $replacement->keys()->toArray(),
-            $replacement->values()->toArray(),
-            Purifier::clean($this->content_html)
-        );
+        return App::make(Pipeline::class)
+            ->send($this->content_html)
+            ->through([
+                \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
+                \N1ebieski\ICore\Utils\Conversions\Replacement::class
+            ])
+            ->thenReturn();
     }
 
     /**

@@ -3,14 +3,11 @@
 namespace N1ebieski\ICore\Models;
 
 use Carbon\Carbon;
-use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\App;
 use Mews\Purifier\Facades\Purifier;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\MailingService;
-use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\MailingRepo;
@@ -156,13 +153,10 @@ class Mailing extends Model
      */
     public function getReplacementContentHtmlAttribute() : string
     {
-        $replacement = Collect::make(Config::get('icore.replacement'));
-
-        return str_replace(
-            $replacement->keys()->toArray(),
-            $replacement->values()->toArray(),
-            Purifier::clean($this->content_html)
-        );
+        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
+            ->handle($this->content_html, function ($value) {
+                return $value;
+            });
     }
 
     /**
@@ -172,13 +166,10 @@ class Mailing extends Model
      */
     public function getReplacementContentAttribute() : string
     {
-        $replacement = Collect::make(Config::get('icore.replacement'));
-
-        return str_replace(
-            $replacement->keys()->toArray(),
-            $replacement->values()->toArray(),
-            $this->content
-        );
+        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
+            ->handle($this->content, function ($value) {
+                return $value;
+            });
     }
 
     /**
