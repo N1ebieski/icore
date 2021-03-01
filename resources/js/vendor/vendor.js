@@ -36,6 +36,8 @@ try {
     require('pickadate/lib/picker.time.js');
     //require('pickadate/lib/compressed/translations/pl_PL.js');
 
+    require('magnific-popup/dist/jquery.magnific-popup.js');
+
     require('jquery-googlemap/jquery.googlemap.js');
 
     require('corejs-typeahead/dist/typeahead.jquery.js');

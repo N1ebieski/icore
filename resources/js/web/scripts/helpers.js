@@ -1,4 +1,29 @@
 (function($) {
+    $.fn.autoHeight = function (options) {
+        let options_ = {
+            autogrow: typeof options.autogrow === "boolean" ? options.autogrow : true
+        };
+
+        function autoHeight_(element) {
+            if (element.offsetHeight < element.scrollHeight) {
+                return $(element).css({ 'height': 'auto' })
+                    .height(element.scrollHeight);
+            }
+
+            return $(element);
+        }
+
+        if (options_.autogrow === false) {
+            return;
+        }
+
+        return this.each(function () {
+            autoHeight_(this).on('input', function () {
+                autoHeight_(this);
+            });
+        });
+    };
+
     $.fn.removeClassStartingWith = function(begin) {
         this.removeClass(function(index, className) {
             return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');

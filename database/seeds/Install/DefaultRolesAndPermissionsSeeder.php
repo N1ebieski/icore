@@ -82,6 +82,10 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'admin.links.edit']);
         Permission::firstOrCreate(['name' => 'admin.links.delete']);
 
+        Permission::firstOrCreate(['name' => 'admin.filemanager.*']);
+        Permission::firstOrCreate(['name' => 'admin.filemanager.read']);
+        Permission::firstOrCreate(['name' => 'admin.filemanager.write']);
+
         Permission::firstOrCreate(['name' => 'web.*']);
 
         Permission::firstOrCreate(['name' => 'web.comments.*']);
