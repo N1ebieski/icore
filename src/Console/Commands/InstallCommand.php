@@ -260,6 +260,8 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->call('vendor:publish', ['--provider' => 'N1ebieski\LogicCaptcha\Providers\LogicCaptchaServiceProvider', '--force' => true], $this->getOutput());
         $this->line("\n");
+        $this->call('vendor:publish', ['--provider' => 'Proengsoft\JsValidation\JsValidationServiceProvider', '--force' => true], $this->getOutput());
+        $this->line("\n");
         $this->call('vendor:publish', ['--tag' => 'fm-css', '--force' => true], $this->getOutput());
         $this->line("\n");
         $this->call('vendor:publish', ['--tag' => 'fm-js', '--force' => true], $this->getOutput());
