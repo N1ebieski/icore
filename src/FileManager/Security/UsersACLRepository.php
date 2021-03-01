@@ -51,11 +51,20 @@ class UsersACLRepository implements ACLRepository
             ['disk' => 'views', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
             ['disk' => 'views', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
 
+            ['disk' => 'lang', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+            ['disk' => 'lang', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+
             ['disk' => 'css', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
             ['disk' => 'css', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
 
-            ['disk' => 'lang', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
-            ['disk' => 'lang', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0]
+            ['disk' => 'js', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+            ['disk' => 'js', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+
+            ['disk' => 'images', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+            ['disk' => 'images', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+            
+            ['disk' => 'svg', 'path' => '/', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0],
+            ['disk' => 'svg', 'path' => '*', 'access' => $this->auth->user()->hasRole('super-admin') ? 2 : 0]
         ];
     }
 
