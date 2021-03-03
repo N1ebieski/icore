@@ -33,7 +33,12 @@ jQuery(document).ready(function() {
     }
 
     if (hash.length) {
-        $navbar.fadeOut();
+        let a = $(window).scrollTop();
+        let b = $navbar.height() + 10;
+
+        if (a > b) {
+            $navbar.fadeOut();
+        }
     }
 });
 
