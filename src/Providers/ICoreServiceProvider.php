@@ -13,7 +13,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var string
      */
-    public const VERSION = "2.0.2";
+    public const VERSION = "2.1.2";
 
     /**
      * Register services.
@@ -27,6 +27,7 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app->register(\Unikent\Cache\TaggableFileCacheServiceProvider::class);
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
 
+        $this->app->register(LicenseServiceProvider::class);
         $this->app->register(AppServiceProvider::class);
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);

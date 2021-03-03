@@ -4,6 +4,8 @@ return [
 
     'version' => \N1ebieski\ICore\Providers\ICoreServiceProvider::VERSION,
 
+    'license_key' => env('ICORE_LICENSE_KEY'),
+
     'theme' => env('ICORE_THEME'),
 
     'layout' => env('ICORE_LAYOUT', 'icore'),
