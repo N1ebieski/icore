@@ -7,7 +7,8 @@ jQuery(document).ready(function() {
         if (typeof $map.data.addressMarker !== 'undefined' && $map.data.addressMarker.length) {
             $map.googleMap({
                 zoom: parseInt($map.data.zoom),
-                scrollwheel: true,              
+                coords: $map.data.coords,                
+                scrollwheel: true,
                 type: "ROADMAP"
             })
             .addClass($map.data.containerClass);
