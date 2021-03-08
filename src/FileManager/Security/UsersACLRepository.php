@@ -8,6 +8,21 @@ use Alexusmai\LaravelFileManager\Services\ACLService\ACLRepository;
 class UsersACLRepository implements ACLRepository
 {
     /**
+     * @var int
+     */
+    private const ACCESS_DENIED = 0;
+
+    /**
+     * @var int
+     */
+    private const ACCESS_READ = 1;
+
+    /**
+     * @var int
+     */
+    private const ACCESS_READ_WRITE = 2;
+
+    /**
      * Undocumented variable
      *
      * @var Auth
@@ -42,11 +57,35 @@ class UsersACLRepository implements ACLRepository
     public function getRules() : array
     {
         return [
-            ['disk' => 'public', 'path' => '.gitignore', 'access' => 0],
-            ['disk' => 'public', 'path' => 'vendor', 'access' => $this->hasPermission() !== 0 ? 1 : 0],
-            ['disk' => 'public', 'path' => 'vendor/*', 'access' => $this->hasPermission() !== 0 ? 1 : 0],
-            ['disk' => 'public', 'path' => '/', 'access' => $this->hasPermission()],
-            ['disk' => 'public', 'path' => '*', 'access' => $this->hasPermission()],
+            [
+                'disk' => 'public',
+                'path' => '.gitignore',
+                'access' => self::ACCESS_DENIED
+            ],
+            [
+                'disk' => 'public',
+                'path' => 'vendor',
+                'access' => $this->hasPermission() !== self::ACCESS_DENIED ?
+                    self::ACCESS_READ
+                    : self::ACCESS_DENIED
+            ],
+            [
+                'disk' => 'public',
+                'path' => 'vendor/*',
+                'access' => $this->hasPermission() !== self::ACCESS_DENIED ?
+                    self::ACCESS_READ
+                    : self::ACCESS_DENIED
+            ],
+            [
+                'disk' => 'public',
+                'path' => '/',
+                'access' => $this->hasPermission()
+            ],
+            [
+                'disk' => 'public',
+                'path' => '*',
+                'access' => $this->hasPermission()
+            ],
         ];
     }
 
@@ -59,13 +98,13 @@ class UsersACLRepository implements ACLRepository
     {
         if ($this->auth->user()->can('admin.filemanager.read')
         && $this->auth->user()->can('admin.filemanager.write')) {
-            return 2;
+            return self::ACCESS_READ_WRITE;
         }
 
         if ($this->auth->user()->can('admin.filemanager.read')) {
-            return 1;
+            return self::ACCESS_READ;
         }
 
-        return 0;
+        return self::ACCESS_DENIED;
     }
 }
