@@ -2,15 +2,14 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Repositories\BanValueRepo;
+use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Cache\BanValueCache;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Repositories\BanValueRepo;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
 /**
  * [BanValue description]

@@ -58,7 +58,7 @@ class MailingService implements
 
         // Dodanie grup odbiorców mailingu
         $this->mailing->emails()->make()
-            ->setMailing($this->mailing)
+            ->setRelations(['mailing' => $this->mailing])
             ->makeService()
             ->createGlobal($attributes);
 
@@ -85,7 +85,7 @@ class MailingService implements
 
         if ($this->mailing->emails->count() === 0) {
             $this->mailing->emails()->make()
-                ->setMailing($this->mailing)
+                ->setRelations(['mailing' => $this->mailing])
                 ->makeService()
                 ->createGlobal($attributes);
         }
@@ -110,7 +110,7 @@ class MailingService implements
     public function reset() : void
     {
         $this->mailing->emails()->make()
-            ->setMailing($this->mailing)
+            ->setRelations(['mailing' => $this->mailing])
             ->makeService()
             ->clear();
     }

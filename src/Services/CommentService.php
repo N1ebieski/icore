@@ -2,18 +2,16 @@
 
 namespace N1ebieski\ICore\Services;
 
-use N1ebieski\ICore\Models\Comment\Comment;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Contracts\Auth\Guard as Auth;
+use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
 use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-/**
- * [CommentService description]
- */
 class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
 {
     /**
@@ -21,6 +19,12 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @var Comment
      */
     protected $comment;
+
+    /**
+     * [private description]
+     * @var Auth
+     */
+    protected $auth;
 
     /**
      * Kolekcja zawierająca komentarze przeznaczone do wyświelenia na froncie
@@ -32,9 +36,11 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * [__construct description]
      * @param Comment      $comment      [description]
      */
-    public function __construct(Comment $comment)
+    public function __construct(Comment $comment, Auth $auth)
     {
         $this->comment = $comment;
+
+        $this->auth = $auth;
     }
 
     /**
@@ -45,7 +51,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function getRootsByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->comments = $this->comment->getMorph()->makeRepo()->paginateCommentsByFilter($filter);
+        $this->comments = $this->comment->morph->makeRepo()->paginateCommentsByFilter($filter);
 
         $this->comments = $this->paginateChildrens();
 
@@ -97,8 +103,8 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
         $this->comment->content_html = $attributes['content'];
         $this->comment->content = $this->comment->content_html;
 
-        $this->comment->user()->associate(auth()->user()->id);
-        $this->comment->morph()->associate($this->comment->getMorph());
+        $this->comment->user()->associate($this->auth->user());
+        $this->comment->morph()->associate($this->comment->morph);
 
         $this->comment->parent_id = $attributes['parent_id'] ?? null;
 

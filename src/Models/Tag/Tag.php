@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\Models\Tag;
 
-use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Cache\TagCache;
+use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 
 /**
  * [Tag description]

@@ -46,8 +46,8 @@ class ReportService implements Creatable
      */
     public function create(array $attributes) : Model
     {
-        $this->report->user()->associate($this->auth->user()->id);
-        $this->report->morph()->associate($this->report->getMorph());
+        $this->report->user()->associate($this->auth->user());
+        $this->report->morph()->associate($this->report->morph);
 
         $this->report->content = $attributes['content'];
 

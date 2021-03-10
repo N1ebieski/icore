@@ -2,16 +2,16 @@
 
 namespace N1ebieski\ICore\Models;
 
-use N1ebieski\ICore\Models\Traits\Filterable;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Cache\LinkCache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\LinkService;
 use N1ebieski\ICore\Repositories\LinkRepo;
-use N1ebieski\ICore\Cache\LinkCache;
-use N1ebieski\ICore\Models\Traits\Positionable;
 use N1ebieski\ICore\Models\Traits\Carbonable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\Positionable;
 
 /**
  * [Link description]

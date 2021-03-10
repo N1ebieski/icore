@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Models\Comment\Post;
 
 use N1ebieski\ICore\Models\Comment\Comment as CommentBaseModel;
-use N1ebieski\ICore\Models\Post;
 
 /**
  * [Comment description]
@@ -11,12 +10,6 @@ use N1ebieski\ICore\Models\Post;
 class Comment extends CommentBaseModel
 {
     // Configuration
-
-    /**
-     * [protected description]
-     * @var Post
-     */
-    protected $morph;
 
     // Accessors
 
@@ -46,30 +39,5 @@ class Comment extends CommentBaseModel
     public function getMorphClass()
     {
         return 'N1ebieski\\ICore\\Models\\Comment\\Comment';
-    }
-
-    // Setters
-
-    /**
-     * [setMorph description]
-     * @param Post $post [description]
-     * @return $this
-     */
-    public function setMorph(Post $post)
-    {
-        $this->morph = $post;
-
-        return $this;
-    }
-
-    // Makers
-
-    /**
-     * [getMorph description]
-     * @return Post [description]
-     */
-    public function getMorph()
-    {
-        return $this->morph;
     }
 }

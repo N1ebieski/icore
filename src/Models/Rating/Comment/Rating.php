@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Models\Rating\Comment;
 
 use N1ebieski\ICore\Models\Rating\Rating as RatingBaseModel;
-use N1ebieski\ICore\Models\Comment\Comment;
 
 /**
  * [Comment description]
@@ -11,12 +10,6 @@ use N1ebieski\ICore\Models\Comment\Comment;
 class Rating extends RatingBaseModel
 {
     // Configuration
-
-    /**
-     * [protected description]
-     * @var Rating
-     */
-    protected $morph;
 
     // Accessors
 
@@ -27,30 +20,5 @@ class Rating extends RatingBaseModel
     public function getPoliAttribute() : string
     {
         return 'comment';
-    }
-
-    // Setters
-
-    /**
-     * [setMorph description]
-     * @param Comment $comment [description]
-     * @return $this
-     */
-    public function setMorph(Comment $comment)
-    {
-        $this->morph = $comment;
-
-        return $this;
-    }
-
-    // Makers
-
-    /**
-     * [getMorph description]
-     * @return Comment [description]
-     */
-    public function getMorph()
-    {
-        return $this->morph;
     }
 }

@@ -45,10 +45,12 @@ class PageController
         return Response::view('icore::web.page.show', [
             'page' => $page->makeCache()->rememberLoadSiblingsAndRecursiveChildrens(),
             'comments' => (bool)$page->comment === true ?
-                $comment->setMorph($page)->makeCache()->rememberRootsByFilter(
-                    $filter->all() + ['except' => $request->input('except')],
-                    $request->get('page') ?? 1
-                )
+                $comment->setRelations(['morph' => $page])
+                    ->makeCache()
+                    ->rememberRootsByFilter(
+                        $filter->all() + ['except' => $request->input('except')],
+                        $request->get('page') ?? 1
+                    )
                 : null,
             'filter' => $filter->all()
         ]);

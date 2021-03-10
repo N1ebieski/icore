@@ -2,19 +2,14 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Models\Mailing;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\MailingEmailService;
 use N1ebieski\ICore\Repositories\MailingEmailRepo;
 
-/**
- * [MailingEmail description]
- */
 class MailingEmail extends Model
 {
-
     // Configuration
 
     /**
@@ -34,12 +29,6 @@ class MailingEmail extends Model
      * @var int
      */
     public const ERROR = 2;
-
-    /**
-     * [private description]
-     * @var Mailing
-     */
-    protected $mailing;
 
     /**
     * The attributes that are mass assignable.
@@ -77,27 +66,6 @@ class MailingEmail extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
-
-    // Setters
-
-    /**
-     * @param Mailing $mailing
-     *
-     * @return static
-     */
-    public function setMailing(Mailing $mailing)
-    {
-        $this->mailing = $mailing;
-
-        return $this;
-    }
-
-    // Getters
-
-    public function getMailing() : Mailing
-    {
-        return $this->mailing;
-    }
 
     // Relations
 

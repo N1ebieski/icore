@@ -53,10 +53,12 @@ class PostController
             'next' => $postCache->rememberNext(),
             'related' => $postCache->rememberRelated(),
             'comments' => (bool)$post->comment === true ?
-                $comment->setMorph($post)->makeCache()->rememberRootsByFilter(
-                    $filter->all() + ['except' => $request->input('except')],
-                    $request->input('page') ?? 1
-                )
+                $comment->setRelations(['morph' => $post])
+                    ->makeCache()
+                    ->rememberRootsByFilter(
+                        $filter->all() + ['except' => $request->input('except')],
+                        $request->input('page') ?? 1
+                    )
                 : null,
             'filter' => $filter->all(),
             'catsAsArray' => [

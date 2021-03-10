@@ -69,7 +69,7 @@ class RatingService implements Creatable, Updatable, Deletable
      */
     public function findByUser() : ?Rating
     {
-        $rating = $this->rating->getMorph()->makeRepo()
+        $rating = $this->rating->morph->makeRepo()
             ->firstRatingByUser($this->auth->user()->id);
 
         return $rating instanceof Rating ? $this->rating = $rating : null;
@@ -84,7 +84,7 @@ class RatingService implements Creatable, Updatable, Deletable
     public function create(array $attributes) : Model
     {
         $this->rating->user()->associate($this->auth->user());
-        $this->rating->morph()->associate($this->rating->getMorph());
+        $this->rating->morph()->associate($this->rating->morph);
         $this->rating->rating = $attributes['rating'];
 
         $this->rating->save();

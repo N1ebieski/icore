@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Models\Comment\Page;
 
 use N1ebieski\ICore\Models\Comment\Comment as CommentBaseModel;
-use N1ebieski\ICore\Models\Page\Page;
 
 /**
  * [Comment description]
@@ -11,12 +10,6 @@ use N1ebieski\ICore\Models\Page\Page;
 class Comment extends CommentBaseModel
 {
     // Configuration
-
-    /**
-     * [protected description]
-     * @var Page
-     */
-    protected $morph;
 
     /**
      * [getModelTypeAttribute description]
@@ -46,30 +39,5 @@ class Comment extends CommentBaseModel
     public function getPoliAttribute() : string
     {
         return 'page';
-    }
-
-    // Setters
-
-    /**
-     * [setMorph description]
-     * @param Page $page [description]
-     * @return $this
-     */
-    public function setMorph(Page $page)
-    {
-        $this->morph = $page;
-
-        return $this;
-    }
-
-    // Makers
-
-    /**
-     * [getMorph description]
-     * @return Page [description]
-     */
-    public function getMorph()
-    {
-        return $this->morph;
     }
 }
