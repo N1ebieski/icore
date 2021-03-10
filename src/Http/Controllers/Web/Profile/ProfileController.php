@@ -6,15 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateEmailRequest;
 
-/**
- * [ProfileController description]
- */
 class ProfileController
 {
     use SendsPasswordResetEmails;
@@ -26,6 +24,8 @@ class ProfileController
      */
     public function edit() : HttpResponse
     {
+        Config::set('jsvalidation.focus_on_error', false);
+
         return Response::view('icore::web.profile.edit', [
             'user' => Auth::user()
         ]);
