@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 

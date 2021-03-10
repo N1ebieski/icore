@@ -99,7 +99,7 @@ class MailingEmailService
                     // models may be huge performance impact
                     $attributes[] = [
                         'id' => $id++,
-                        'mailing_id' => $this->mailingEmail->getMailing()->id,
+                        'mailing_id' => $this->mailingEmail->mailing->id,
                         'model_type' => get_class($item),
                         'model_id' => $item->id,
                         'email' => $item->email,
@@ -131,7 +131,7 @@ class MailingEmailService
                     // models may be huge performance impact
                     $attributes[] = [
                         'id' => $id++,
-                        'mailing_id' => $this->mailingEmail->getMailing()->id,
+                        'mailing_id' => $this->mailingEmail->mailing->id,
                         'model_type' => get_class($item),
                         'model_id' => $item->id,
                         'email' => $item->email,
@@ -160,7 +160,7 @@ class MailingEmailService
             // models may be huge performance impact
             $attributes[] = [
                 'id' => $id++,
-                'mailing_id' => $this->mailingEmail->getMailing()->id,
+                'mailing_id' => $this->mailingEmail->mailing->id,
                 'model_type' => null,
                 'model_id' => null,
                 'email' => $item->email,
@@ -190,7 +190,7 @@ class MailingEmailService
     public function clear() : int
     {
         return $this->mailingEmail
-            ->where('mailing_id', $this->mailingEmail->getMailing()->id)
+            ->where('mailing_id', $this->mailingEmail->mailing->id)
             ->delete();
     }
 }

@@ -3,16 +3,9 @@
 namespace N1ebieski\ICore\Models\Stat\Page;
 
 use N1ebieski\ICore\Models\Stat\Stat as BaseStatModel;
-use N1ebieski\ICore\Models\Page\Page;
 
 class Stat extends BaseStatModel
 {
-    /**
-     * [protected description]
-     * @var Page
-     */
-    protected $morph;
-
     // Accessors
 
     /**
@@ -52,30 +45,5 @@ class Stat extends BaseStatModel
     public function morphs()
     {
         return $this->morphedByMany(\N1ebieski\IPage\Models\Page\Page::class, 'model', 'stats_values');
-    }
-
-    // Setters
-
-    /**
-     * [setMorph description]
-     * @param Page $page [description]
-     * @return $this
-     */
-    public function setMorph(Page $page)
-    {
-        $this->morph = $page;
-
-        return $this;
-    }
-
-    // Getters
-
-    /**
-     * [getMorph description]
-     * @return Page [description]
-     */
-    public function getMorph()
-    {
-        return $this->morph;
     }
 }

@@ -40,7 +40,7 @@ class StatService
      */
     public function increment() : bool
     {
-        $this->stat->getMorph()
+        $this->stat->morph
             ->stats()
             ->syncWithoutDetaching([
                 $this->stat->id => ['value' => $this->db->raw("`value` + 1")]
