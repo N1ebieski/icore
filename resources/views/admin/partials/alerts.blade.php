@@ -1,6 +1,5 @@
 @if (session()->has('success'))
 <div class="alert alert-success alert-time" role="alert">
-    {{ session()->get('success') }}
     <button 
         type="button" 
         class="text-dark close" 
@@ -8,13 +7,13 @@
         aria-label="{{ trans('icore::default.close') }}"
     >
         <span aria-hidden="true">&times;</span>
-    </button>    
+    </button>
+    {{ session()->get('success') }}
 </div>
 @endif
 
 @if (session()->has('warning'))
 <div class="alert alert-warning alert-time" role="alert">
-    {{ session()->get('warning') }}
     <button 
         type="button" 
         class="text-dark close" 
@@ -22,13 +21,13 @@
         aria-label="{{ trans('icore::default.close') }}"
     >
         <span aria-hidden="true">&times;</span>
-    </button>    
+    </button>
+    {{ session()->get('warning') }}    
 </div>
 @endif
 
 @if (session()->has('danger'))
 <div class="alert alert-danger alert-time" role="alert">
-    {{ session()->get('danger') }}
     <button 
         type="button" 
         class="text-dark close" 
@@ -36,7 +35,8 @@
         aria-label="{{ trans('icore::default.close') }}"
     >
         <span aria-hidden="true">&times;</span>
-    </button>    
+    </button>
+    {{ session()->get('danger') }}
 </div>
 @endif
 

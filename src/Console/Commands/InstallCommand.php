@@ -212,7 +212,7 @@ class InstallCommand extends Command
 
         $this->line("iCore installer");
         $this->line("Author: Mariusz Wysokiński");
-        $this->line("Version: {$this->config->get('idir.version')}");
+        $this->line("Version: {$this->config->get('icore.version')}");
         $this->line("\n");
         $this->confirmation();
         $this->line("\n");
