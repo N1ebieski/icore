@@ -6,13 +6,12 @@ use N1ebieski\ICore\Models\Post;
 use Carbon\Carbon;
 
 $factory->define(Post::class, function (Faker $faker) {
-
     $content = $faker->text(2000);
 
     return [
         'title' => $faker->sentence(5),
         'content_html' => $content,
-        'content' => $content,
+        'content' => strip_tags($content),
         'seo_title' => $faker->randomElement([$faker->sentence(5), null]),
         'seo_desc' => $faker->text(),
         'seo_noindex' => rand(0, 1),
@@ -23,6 +22,31 @@ $factory->define(Post::class, function (Faker $faker) {
             $faker->dateTimeThisYear()->format('Y-m-d H:i:s'),
             null
         ]),
+    ];
+});
+
+$factory->state(Post::class, 'image', function (Faker $faker) {
+    $content = $faker->text(2000);
+
+    $faker->addProvider(new \Mmo\Faker\PicsumProvider($faker));
+    $split = explode('. ', $content);
+    $rands = array_rand(array_slice($split, 0, array_key_last($split) - 5), rand(1, 3));
+
+    $split = array_map(function ($item) use ($split) {
+        return $item . ($item !== end($split) ? '.' : null);
+    }, $split);
+
+    foreach ($rands as $rand) {
+        $image = ['</p><p><img src="' . $faker->picsumUrl(1920, 1080) .'"></p><p>'];
+
+        array_splice($split, $rand, 0, $image);
+    }
+
+    $content = '<p>' . implode(' ', $split) . '</p>';
+
+    return [
+        'content_html' => $content,
+        'content' => strip_tags($content),
     ];
 });
 
