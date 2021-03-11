@@ -37,7 +37,7 @@ $factory->state(Post::class, 'image', function (Faker $faker) {
     }, $split);
 
     foreach ($rands as $rand) {
-        $image = ['</p><p><img src="' . $faker->picsumUrl(1920, 1080) .'"></p><p>'];
+        $image = ['</p><p><img src="' . $faker->picsumUrl(1920, 1080) .'" alt=""></p><p>'];
 
         array_splice($split, $rand, 0, $image);
     }
