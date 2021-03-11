@@ -30,7 +30,7 @@ $factory->state(Post::class, 'image', function (Faker $faker) {
 
     $faker->addProvider(new \Mmo\Faker\PicsumProvider($faker));
     $split = explode('. ', $content);
-    $rands = array_rand(array_slice($split, 0, array_key_last($split) - 5), rand(1, 3));
+    $rands = (array)array_rand(array_slice($split, 0, array_key_last($split) - 5), rand(1, 3));
 
     $split = array_map(function ($item) use ($split) {
         return $item . ($item !== end($split) ? '.' : null);
