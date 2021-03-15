@@ -2,12 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
-use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Models\Post;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 
-/**
- * [HomeController description]
- */
 class HomeController
 {
     /**
@@ -15,8 +13,10 @@ class HomeController
      *
      * @return HttpResponse
      */
-    public function index() : HttpResponse
+    public function index(Post $post) : HttpResponse
     {
-        return Response::view('icore::web.home.index');
+        return Response::view('icore::web.home.index', [
+            'posts' => $post->makeCache()->rememberLatestForHome()
+        ]);
     }
 }

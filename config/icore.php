@@ -36,4 +36,8 @@ return [
     'captcha' => [
         'driver' => env('ICORE_CAPTCHA_DRIVER'),
     ],
+
+    'home' => [
+        'max' => (int)env('ICORE_HOME_MAX', 10)
+    ]
 ];

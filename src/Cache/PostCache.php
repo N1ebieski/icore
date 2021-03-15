@@ -230,4 +230,19 @@ class PostCache
             }
         );
     }
+
+    /**
+     * [rememberLatestForHome description]
+     * @return Collection [description]
+     */
+    public function rememberLatestForHome() : Collection
+    {
+        return $this->cache->tags(["posts"])->remember(
+            "post.getLatestForHome",
+            $this->carbon->now()->addMinutes($this->minutes),
+            function () {
+                return $this->post->makeRepo()->getLatestForHome();
+            }
+        );
+    }
 }

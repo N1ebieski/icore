@@ -38,7 +38,30 @@
                     </span>
                 </div>
             </form>
+            <div class="text-white d-block mt-5">
+                @render('icore::tag.post.tagComponent', [
+                    'limit' => 25,
+                    'colors' => ['text-white']
+                ])
+            </div>
         </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row mt-3">
+        @if ($posts->isNotEmpty())
+        <div class="col-md-8 order-sm-1 order-md-2">
+            <div>
+                @foreach ($posts as $post)
+                    @include('icore::web.post.partials.post')
+                @endforeach
+            </div>
+        </div>
+        <div class="col-md-4 order-sm-2 order-md-1">
+            @render('icore::category.post.categoryComponent')
+            @render('icore::comment.post.commentComponent')
+        </div>
+        @endif
     </div>
 </div>
 @include('icore::web.partials.toasts')

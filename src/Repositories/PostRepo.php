@@ -25,6 +25,13 @@ class PostRepo
     /**
      * Undocumented variable
      *
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * Undocumented variable
+     *
      * @var Carbon
      */
     protected $carbon;
@@ -54,6 +61,7 @@ class PostRepo
     {
         $this->post = $post;
 
+        $this->config = $config;
         $this->carbon = $carbon;
         $this->app = $app;
 
@@ -300,5 +308,20 @@ class PostRepo
             ->first('published_at')
         )
         ->published_at;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public function getLatestForHome() : Collection
+    {
+        return $this->post->active()
+            ->latest()
+            ->with(['user', 'categories', 'tags'])
+            ->orderBy('published_at', 'desc')
+            ->limit($this->config->get('icore.home.max'))
+            ->get();
     }
 }
