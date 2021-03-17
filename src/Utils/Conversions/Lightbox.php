@@ -53,7 +53,7 @@ class Lightbox implements Handler
 
             $img->setAttribute('data-src', $imgSrc);
             $img->setAttribute('class', 'img-fluid lazy');
-            $img->removeAttribute('src');
+            $img->setAttribute('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
 
             $a = $this->dom->createElement('a');
 
