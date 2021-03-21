@@ -110,7 +110,7 @@ class LayoutComposer extends Composer
     {
         $path = '/' . $assets . '/web/web';
 
-        if ($this->str->contains($this->url->current(), '/admin')) {
+        if ($this->str->startsWith(parse_url($this->url->current(), PHP_URL_PATH), '/admin')) {
             $path = '/' . $assets . '/admin/admin';
         }
 
