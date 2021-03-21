@@ -5,7 +5,7 @@
             method: 'get',
             dataType: 'html',
             beforeSend: function() {
-                $('#filterContent').find('.btn').prop('disabled', true);
+                $('#filterContent, #filter-content').find('.btn').prop('disabled', true);
                 $('#filterOrderBy').prop('disabled', true);
                 $('#filterPaginate').prop('disabled', true);
                 $form.children('div').append($.getLoader('spinner-border'));
@@ -15,7 +15,7 @@
                 $form.find('div.loader-absolute').remove();
             },
             success: function(response) {
-                $('#filterContent').html($.sanitize($(response).find('#filterContent').html()));
+                $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
                 document.title = document.title.replace(/:\s(\d+)/, ': 1');
                 history.replaceState(null, null, href);
             },
