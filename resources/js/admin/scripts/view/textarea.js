@@ -1,7 +1,7 @@
 jQuery(document).on('readyAndAjax', function () {
-    $textarea = $('textarea');
-
-    $textarea.autoHeight({
-        autogrow: $textarea.data('autogrow')
+    $('textarea').each(function () {
+        $(this).autoHeight({
+            autogrow: $(this).data('autogrow')
+        });
     });
 });
