@@ -195,11 +195,13 @@
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
                                     <p>
-                                        <span>{{ trans('icore::auth.register_with') }}:</span>
+                                        <span class="mr-2">
+                                            {{ trans('icore::auth.register_with') }}:
+                                        </span>
                                         <span>
                                             <a 
                                                 href="{{ route('auth.socialite.redirect', ['provider' => 'facebook']) }}" 
-                                                class="ml-2" 
+                                                class="mr-2" 
                                                 title="Facebook"
                                             >
                                                 <i class="fab fa-facebook"></i>
@@ -207,7 +209,7 @@
                                             </a>
                                             <a 
                                                 href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" 
-                                                class="ml-2" 
+                                                class="mr-2" 
                                                 title="Twitter"
                                             >
                                                 <i class="fab fa-twitter"></i> 
