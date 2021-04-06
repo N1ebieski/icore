@@ -55,6 +55,12 @@ jQuery(document).on('readyAndAjax', function () {
             }
         });
 
+        $trumbowyg.on('tbwopenfullscreen', function () {
+            $('.trumbowyg-fullscreen .trumbowyg-editor').css({
+                'cssText': `height: calc(100% - ${$('.trumbowyg-button-pane').height()}px) !important`
+            });
+        });
+
         $(document).on('click', 'button#filemanager', function (e) {
             e.preventDefault();
 
