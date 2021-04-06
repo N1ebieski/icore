@@ -88,12 +88,6 @@ body {
     padding: 5px;
 }
 
-@include media-breakpoint-down(xs) {
-    select.filter {
-        max-width: 190px;
-    }
-}
-
 .popover.thumbnail {
     max-width: initial;
 
