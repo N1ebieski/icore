@@ -78,7 +78,7 @@
             <div class="text-right ml-3">
                 <a 
                     href="{{ route('web.profile.socialite.redirect', ['provider' => $provider]) }}"
-                    type="button" 
+                    role="button" 
                     class="btn btn-primary"
                 >
                     <i class="fas fa-link"></i>

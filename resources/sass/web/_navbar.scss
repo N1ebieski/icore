@@ -23,6 +23,10 @@
 }
 
 .navbar-collapse {
+    &.show {
+        padding-bottom: #{$navbar-bottom-padding};
+    }
+
     @include media-breakpoint-down(sm) {
         &.scroll {
             overflow-y: auto;

@@ -32,7 +32,7 @@
                     @endforeach
                     @endif
                 </li>
-                <li>
+                <li class="text-break" style="word-break:break-word">
                     {{ $user->email }}
                 </li>
                 @if (!is_null($user->ip))

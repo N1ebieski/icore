@@ -190,6 +190,7 @@
         }
 
         &.show {
+            padding-bottom: #{$navbar-bottom-padding};
             display: block;
         }
 

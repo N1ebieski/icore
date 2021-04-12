@@ -80,7 +80,7 @@
             href="{{ route('web.profile.redirect_password') }}" 
             class="btn btn-outline-primary"  
             data-toggle="confirmation"
-            type="button" 
+            role="button" 
             data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
             data-btn-ok-icon-class="fas fa-check mr-1"
             data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
