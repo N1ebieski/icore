@@ -80,7 +80,7 @@
         @endif
         <div class="navbar-collapse scroll collapse flex-grow-0 justify-content-end">
             @render('icore::page.menuComponent', ['limit' => 5])
-            <ul class="navbar-nav pr-3 pr-md-0 pb-5 p-sm-0">
+            <ul class="navbar-nav pr-3 pr-md-0 pb-5 p-md-0">
                 @if (!$isUrl(route('web.home.index')))
                 <li class="nav-item d-none d-md-inline mr-1">
                     @yield('search-toggler')
