@@ -4,19 +4,22 @@
 // Bootstrap Select
 @import '~bootstrap-select/dist/css/bootstrap-select.min.css';
 
-//Trumbowyg
+// Trumbowyg
 @import '~trumbowyg/dist/ui/trumbowyg.min.css';
 @import '~trumbowyg/dist/plugins/colors/ui/trumbowyg.colors.css';
 @import 'trumbowyg/trumbowyg-fontawesome-icons.scss';
 
-//Tagsinput
+// Tagsinput
 @import '~jquery.tagsinput-revisited/dist/jquery.tagsinput-revisited.min.css';
 
-//Pickadate
+// Pickadate
 @import '~pickadate/lib/themes/default.css';
 @import '~pickadate/lib/themes/default.date.css';
 @import '~pickadate/lib/themes/default.time.css';
 
-//Magnific-popup
+// Magnific-popup
 @import '~magnific-popup/dist/magnific-popup.css';
 @import 'magnific-popup/magnific-popup.scss';
+
+// File Manager
+@import 'file-manager/file-manager.scss';

@@ -55,7 +55,7 @@
                     </span>
                     <span class="badge badge-success">ID {{ $page->id }}</span>
                 </li>
-                <li>
+                <li class="text-break" style="word-break:break-word">
                     {{ str_repeat('-', $page->real_depth) }} {!! $page->shortContent !!}...
                 </li>
                 <li>

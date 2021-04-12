@@ -26,7 +26,7 @@
                             {{ $post->title }}
                         </a>
                     </li>
-                    <li>
+                    <li class="text-break" style="word-break:break-word">
                         {!! $post->shortContent !!}...
                     </li>
                     <li>
