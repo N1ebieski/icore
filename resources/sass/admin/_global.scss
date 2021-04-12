@@ -87,11 +87,3 @@ body {
     background: fade-out($gray-800, .5);
     padding: 5px;
 }
-
-.popover.thumbnail {
-    max-width: initial;
-
-    .popover-body img {
-        width: 480px;
-    }
-}
