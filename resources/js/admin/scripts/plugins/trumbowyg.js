@@ -49,9 +49,9 @@ jQuery(document).on('readyAndAjax', function () {
             }
 
             if ($modal.find('input[name=alt]').length) {
-                $modal.input.css({'position': 'relative', 'width': 'unset', 'flex': '1 1 auto'});
-                $modal.input.wrap('<div style="position:absolute;top:0;right:0;width:70%;max-width:330px;"><div class="input-group">');
-                $modal.input.after('<div class="input-group-append"><button class="btn btn-primary px-2 py-0" type="button" id="filemanager" style="height:27px;"><i class="far fa-image"></i></button></div>');
+                $modal.input.css({'position': 'initial', 'width': '50px', 'flex': 'auto', 'order': '1'});
+                $modal.input.wrap('<div style="position:absolute;top:0;right:0;width:70%;max-width:330px;"><div class="input-group" style="display:flex;">');
+                $modal.input.after('<div class="input-group-append" style="order:2;"><button class="btn btn-primary px-2 py-0" type="button" id="filemanager" style="height:27px;"><i class="far fa-image"></i></button></div>');
             }
         });
 
