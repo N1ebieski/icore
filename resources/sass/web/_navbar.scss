@@ -26,7 +26,7 @@
     @include media-breakpoint-down(sm) {
         &.scroll {
             overflow-y: auto;
-            max-height: calc(100vh - #{$navbar-base-height});
+            max-height: calc(85vh - #{$navbar-base-height});
         }
     }
 }
