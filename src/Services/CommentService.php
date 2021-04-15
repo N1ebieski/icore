@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Services;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\Auth\Guard as Auth;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
@@ -27,20 +27,25 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
     protected $auth;
 
     /**
-     * Kolekcja zawierająca komentarze przeznaczone do wyświelenia na froncie
-     * @var LengthAwarePaginator
+     * Undocumented variable
+     *
+     * @var DB
      */
-    protected $comments;
+    protected $db;
 
     /**
-     * [__construct description]
-     * @param Comment      $comment      [description]
+     * Undocumented function
+     *
+     * @param Comment $comment
+     * @param Auth $auth
+     * @param DB $db
      */
-    public function __construct(Comment $comment, Auth $auth)
+    public function __construct(Comment $comment, Auth $auth, DB $db)
     {
         $this->comment = $comment;
 
         $this->auth = $auth;
+        $this->db = $db;
     }
 
     /**
@@ -51,11 +56,10 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function getRootsByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->comments = $this->comment->morph->makeRepo()->paginateCommentsByFilter($filter);
-
-        $this->comments = $this->paginateChildrens();
-
-        return $this->comments;
+        return $this->paginateChildrens(
+            $this->comment->morph->makeRepo()
+                ->paginateCommentsByFilter($filter)
+        );
     }
 
     /**
@@ -66,30 +70,10 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function paginateChildrensByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->comments = $this->comment->makeRepo()->paginateChildrensByFilter($filter);
-
-        $this->comments = $this->paginateChildrens();
-
-        return $this->comments;
-    }
-
-    /**
-     * Metoda pomocnicza do tworzenia paginacji relacji childrens
-     *
-     * @return LengthAwarePaginator
-     */
-    protected function paginateChildrens() : LengthAwarePaginator
-    {
-        $this->comments->map(function ($item) {
-            $item->setRelation('childrens', $item->childrens
-                ->paginate(5, null, null, 'page_childrens'));
-            $item->childrens->map(function ($i) {
-                $i->setRelation('childrens', $i->childrens
-                    ->paginate(5, null, null, 'page_childrens'));
-            });
-        });
-
-        return $this->comments;
+        return $this->paginateChildrens(
+            $this->comment->makeRepo()
+                ->paginateChildrensByFilter($filter)
+        );
     }
 
     /**
@@ -100,17 +84,19 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function create(array $attributes) : Model
     {
-        $this->comment->content_html = $attributes['content'];
-        $this->comment->content = $this->comment->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->comment->content_html = $attributes['content'];
+            $this->comment->content = $this->comment->content_html;
 
-        $this->comment->user()->associate($this->auth->user());
-        $this->comment->morph()->associate($this->comment->morph);
+            $this->comment->user()->associate($this->auth->user());
+            $this->comment->morph()->associate($this->comment->morph);
 
-        $this->comment->parent_id = $attributes['parent_id'] ?? null;
+            $this->comment->parent_id = $attributes['parent_id'] ?? null;
 
-        $this->comment->save();
+            $this->comment->save();
 
-        return $this->comment;
+            return $this->comment;
+        });
     }
 
     /**
@@ -121,10 +107,12 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function update(array $attributes) : bool
     {
-        $this->comment->content_html = $attributes['content'];
-        $this->comment->content = $this->comment->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->comment->content_html = $attributes['content'];
+            $this->comment->content = $this->comment->content_html;
 
-        return $this->comment->save();
+            return $this->comment->save();
+        });
     }
 
     /**
@@ -135,21 +123,23 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function updateStatus(array $attributes) : bool
     {
-        $updateStatus = $this->comment->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($attributes) {
+            $update = $this->comment->update(['status' => $attributes['status']]);
 
-        if ($updateStatus === true) {
-            // Deaktywacja komentarza nadrzędnego, deaktywuje wszystkich potomków
-            if ((int)$attributes['status'] === Comment::INACTIVE) {
-                $this->comment->descendants()->update(['status' => $attributes['status']]);
+            if ($update === true) {
+                // Deactivates parent comment, deactivates all descendants
+                if ((int)$attributes['status'] === Comment::INACTIVE) {
+                    $this->comment->descendants()->update(['status' => $attributes['status']]);
+                }
+
+                // Activating child comment, activates all ancestors
+                if ((int)$attributes['status'] === Comment::ACTIVE) {
+                    $this->comment->ancestors()->update(['status' => $attributes['status']]);
+                }
             }
 
-            // Aktywacja komentarza podrzędnego, aktywuje wszystkich przodków
-            if ((int)$attributes['status'] === Comment::ACTIVE) {
-                $this->comment->ancestors()->update(['status' => $attributes['status']]);
-            }
-        }
-
-        return $updateStatus;
+            return $update;
+        });
     }
 
     /**
@@ -159,18 +149,58 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function delete() : bool
     {
-        $delete = $this->comment->delete();
-        // $this->category->deleteSubtree(true, true);
+        return $this->db->transaction(function () {
+            $delete = $this->comment->delete();
 
-        if ($delete === true) {
-            // Zmniejszamy pozycje rodzeństwa o jeden bo ClosureTable nie robi tego
-            // z automatu podczas usuwania (nie wiem czemu?)
-            $this->comment->where([
+            if ($delete === true) {
+                // Decrement position of siblings by 1. ClosureTable has a bug and doesn't
+                // do it automatically
+                $this->decrement();
+            }
+
+            return $delete;
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param LengthAwarePaginator $collection
+     * @return LengthAwarePaginator
+     */
+    protected static function paginateChildrens(LengthAwarePaginator $collection) : LengthAwarePaginator
+    {
+        $collection->map(function ($item) {
+            $item->setRelation(
+                'childrens',
+                $item->childrens->paginate(5, null, null, 'page_childrens')
+            );
+
+            $item->childrens->map(function ($item) {
+                $item->setRelation(
+                    'childrens',
+                    $item->childrens->paginate(5, null, null, 'page_childrens')
+                );
+            });
+
+            return $item;
+        });
+
+        return $collection;
+    }
+
+    /**
+     * Decrement position of siblings by 1. ClosureTable has a bug and doesn't
+     * do it automatically
+     * @return bool [description]
+     */
+    private function decrement() : bool
+    {
+        return $this->db->transaction(function () {
+            return $this->comment->where([
                 ['parent_id', $this->comment->parent_id],
                 ['position', '>', $this->comment->position]
             ])->decrement('position');
-        }
-
-        return $delete;
+        });
     }
 }
