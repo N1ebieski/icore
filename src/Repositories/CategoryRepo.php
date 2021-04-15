@@ -3,14 +3,11 @@
 namespace N1ebieski\ICore\Repositories;
 
 use Closure;
+use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Config\Repository as Config;
 
-/**
- * [CommentRepo description]
- */
 class CategoryRepo
 {
     /**
@@ -200,17 +197,17 @@ class CategoryRepo
     /**
      * Undocumented function
      *
-     * @param Closure $callback
+     * @param Closure $closure
      * @return boolean
      */
-    public function chunkActiveWithModelsCount(Closure $callback) : bool
+    public function chunkActiveWithModelsCount(Closure $closure) : bool
     {
         return $this->category->active()
             ->poliType()
             ->withCount(['morphs AS models_count' => function ($query) {
                 $query->active();
             }])
-            ->chunk(1000, $callback);
+            ->chunk(1000, $closure);
     }
 
     /**
