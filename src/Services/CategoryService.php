@@ -2,22 +2,20 @@
 
 namespace N1ebieski\ICore\Services;
 
-use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Category\Category;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
 
-/**
- * [CategoryService description]
- */
 class CategoryService implements
     Creatable,
     Updatable,
@@ -39,27 +37,35 @@ class CategoryService implements
     protected $collect;
 
     /**
+     * Undocumented variable
+     *
+     * @var DB
+     */
+    protected $db;
+
+    /**
      * Config
      * @var int
      */
     protected $paginate;
 
     /**
-     * Collection of categories
-     * @var Collection|LengthAwarePaginator
-     */
-    protected $categories;
-
-    /**
-     * [__construct description]
-     * @param Category     $category     [description]
-     * @param Config       $config       [description]
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param Config $config
      * @param Collect $collect
+     * @param DB $db
      */
-    public function __construct(Category $category, Config $config, Collect $collect)
-    {
+    public function __construct(
+        Category $category,
+        Config $config,
+        Collect $collect,
+        DB $db
+    ) {
         $this->category = $category;
         $this->collect = $collect;
+        $this->db = $db;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -70,9 +76,9 @@ class CategoryService implements
      */
     public function getAsFlatTree() : Collection
     {
-        $this->categories = $this->category->makeRepo()->getAsTree();
-
-        return $this->categories->flattenRelation('children');
+        return $this->category->makeRepo()
+            ->getAsTree()
+            ->flattenRelation('children');
     }
 
     /**
@@ -96,9 +102,8 @@ class CategoryService implements
      */
     public function getAsFlatTreeByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->categories = $this->getAsFlatTree();
-
-        return $this->categories->whereNotIn('id', $filter['except'])
+        return $this->getAsFlatTree()
+            ->whereNotIn('id', $filter['except'])
             ->paginate($filter['paginate'] ?? $this->paginate);
     }
 
@@ -108,9 +113,9 @@ class CategoryService implements
      */
     public function getAsFlatTreeExceptSelf() : Collection
     {
-        $this->categories = $this->category->makeRepo()->getAsTreeExceptSelf();
-
-        return $this->categories->flattenRelation('children');
+        return $this->category->makeRepo()
+            ->getAsTreeExceptSelf()
+            ->flattenRelation('children');
     }
 
     /**
@@ -120,18 +125,21 @@ class CategoryService implements
      */
     public function create(array $attributes) : Model
     {
-        $this->category->name = $attributes['name'];
-        $this->category->icon = $attributes['icon'] ?? null;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->category->name = $attributes['name'];
+            $this->category->icon = $attributes['icon'] ?? null;
 
-        if ($attributes['parent_id'] !== null) {
-            $parent = $this->category->findOrFail($attributes['parent_id']);
-            $this->category->status = $parent->status;
-            $this->category->parent_id = $attributes['parent_id'];
-        }
+            if ($attributes['parent_id'] !== null) {
+                $parent = $this->category->findOrFail($attributes['parent_id']);
 
-        $this->category->save();
+                $this->category->status = $parent->status;
+                $this->category->parent_id = $attributes['parent_id'];
+            }
 
-        return $this->category;
+            $this->category->save();
+
+            return $this->category;
+        });
     }
 
     /**
@@ -141,21 +149,23 @@ class CategoryService implements
      */
     public function createGlobal(array $attributes) : Collection
     {
-        if ($attributes['parent_id'] !== null) {
-            $parent_id = $this->category->find($attributes['parent_id']);
-        }
-
-        if (isset($attributes['clear'])) {
-            if ((bool)$attributes['clear'] === true) {
-                $this->category->newQuery()->delete();
-                $parent_id = null;
+        return $this->db->transaction(function () use ($attributes) {
+            if ($attributes['parent_id'] !== null) {
+                $parent_id = $this->category->find($attributes['parent_id']);
             }
-        }
 
-        return $this->category->createFromArray(
-            json_decode($attributes['names'], true),
-            $parent_id ?? null
-        );
+            if (isset($attributes['clear'])) {
+                if ((bool)$attributes['clear'] === true) {
+                    $this->category->newQuery()->delete();
+                    $parent_id = null;
+                }
+            }
+
+            return $this->category->createFromArray(
+                json_decode($attributes['names'], true),
+                $parent_id ?? null
+            );
+        });
     }
 
     /**
@@ -164,16 +174,17 @@ class CategoryService implements
      */
     public function delete() : bool
     {
-        $delete = $this->category->delete();
-        // $this->category->deleteSubtree(true, true);
+        return $this->db->transaction(function () {
+            $delete = $this->category->delete();
 
-        if ($delete === true) {
-            // Zmniejszamy pozycje rodzeństwa o jeden bo ClosureTable nie robi tego
-            // z automatu podczas usuwania (nie wiem czemu?)
-            $this->decrement();
-        }
+            if ($delete === true) {
+                // Decrement position of siblings by 1. ClosureTable has a bug and doesn't
+                // do it automatically
+                $this->decrement();
+            }
 
-        return $delete;
+            return $delete;
+        });
     }
 
     /**
@@ -183,10 +194,12 @@ class CategoryService implements
      */
     private function decrement() : bool
     {
-        return $this->category->where([
-            ['parent_id', $this->category->parent_id],
-            ['position', '>', $this->category->position]
-        ])->decrement('position');
+        return $this->db->transaction(function () {
+            return $this->category->where([
+                ['parent_id', $this->category->parent_id],
+                ['position', '>', $this->category->position]
+            ])->decrement('position');
+        });
     }
 
     /**
@@ -196,18 +209,19 @@ class CategoryService implements
      */
     public function deleteGlobal(array $ids) : int
     {
-        $deleted = 0;
-        // Antywzorzec, ale nie mialem wyboru, bo ClosureTable nie zmienia pozycji
-        // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
-        foreach ($ids as $id) {
-            if ($c = $this->category->find($id)) {
-                $c->makeService()->delete();
+        return $this->db->transaction(function () use ($ids) {
+            $deleted = 0;
 
-                $deleted += 1;
+            foreach ($ids as $id) {
+                if ($c = $this->category->find($id)) {
+                    $c->makeService()->delete();
+
+                    $deleted += 1;
+                }
             }
-        }
 
-        return $deleted;
+            return $deleted;
+        });
     }
 
     /**
@@ -217,21 +231,23 @@ class CategoryService implements
      */
     public function updateStatus(array $attributes) : bool
     {
-        $updateStatus = $this->category->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($attributes) {
+            $update = $this->category->update(['status' => $attributes['status']]);
 
-        if ($updateStatus === true) {
-            // Deaktywacja kategorii nadrzędnej, deaktywuje wszystkich potomków
-            if ($attributes['status'] == Category::INACTIVE) {
-                $this->category->descendants()->update(['status' => $attributes['status']]);
+            if ($update === true) {
+                // Deactivates parent category, deactivates all descendants
+                if ($attributes['status'] == Category::INACTIVE) {
+                    $this->category->descendants()->update(['status' => $attributes['status']]);
+                }
+
+                // Activating child category, activates all ancestors
+                if ($attributes['status'] == Category::ACTIVE) {
+                    $this->category->ancestors()->update(['status' => $attributes['status']]);
+                }
             }
 
-            // Aktywacja kategorii podrzędnej, aktywuje wszystkich przodków
-            if ($attributes['status'] == Category::ACTIVE) {
-                $this->category->ancestors()->update(['status' => $attributes['status']]);
-            }
-        }
-
-        return $updateStatus;
+            return $update;
+        });
     }
 
     /**
@@ -241,7 +257,9 @@ class CategoryService implements
      */
     public function updatePosition(array $attributes) : bool
     {
-        return $this->category->update(['position' => $attributes['position']]);
+        return $this->db->transaction(function () use ($attributes) {
+            return $this->category->update(['position' => $attributes['position']]);
+        });
     }
 
     /**
@@ -251,20 +269,22 @@ class CategoryService implements
      */
     public function update(array $attributes) : bool
     {
-        $update = $this->category->update([
-            'name' => $attributes['name'],
-            'icon' => $attributes['icon'] ?? null
-        ]);
+        return $this->db->transaction(function () use ($attributes) {
+            $update = $this->category->update([
+                'name' => $attributes['name'],
+                'icon' => $attributes['icon'] ?? null
+            ]);
 
-        if ($attributes['parent_id'] != $this->category->parent_id) {
-            if ($attributes['parent_id'] === null) {
-                $this->moveToRoot();
-            } else {
-                $this->moveToParent($attributes['parent_id']);
+            if ($attributes['parent_id'] !== $this->category->parent_id) {
+                if ($attributes['parent_id'] === null) {
+                    $this->moveToRoot();
+                } else {
+                    $this->moveToParent($attributes['parent_id']);
+                }
             }
-        }
 
-        return $update;
+            return $update;
+        });
     }
 
     /**
@@ -273,7 +293,9 @@ class CategoryService implements
      */
     public function moveToRoot() : void
     {
-        $this->category->makeRoot(0);
+        $this->db->transaction(function () {
+            $this->category->makeRoot(0);
+        });
     }
 
     /**
@@ -283,14 +305,17 @@ class CategoryService implements
      */
     public function moveToParent(int $parent_id) : void
     {
-        if ($parent = $this->category->findOrFail($parent_id)) {
-            // W przypadku zmiany rodzica musimy profilaktycznie zmienic status kategorii
-            // (i potomków) na taki jaki ma rodzic by uniknąć sytuacji gdy kategoria podrzędna
-            // będzie aktywna a nadrzędne nie.
-            $this->category->update(['status' => $parent->status]);
-            $this->category->descendants()->update(['status' => $parent->status]);
+        $this->db->transaction(function () use ($parent_id) {
+            if ($parent = $this->category->findOrFail($parent_id)) {
+                // In the case of changing the parent, we must prophylactically
+                // change the status of the category (and descendants) to the same
+                // as the parent to avoid the situation where the subcategory
+                // is active and the parent is not.
+                $this->category->update(['status' => $parent->status]);
+                $this->category->descendants()->update(['status' => $parent->status]);
 
-            $this->category->moveTo(0, $parent_id);
-        }
+                $this->category->moveTo(0, $parent_id);
+            }
+        });
     }
 }

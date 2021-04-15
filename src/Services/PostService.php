@@ -5,18 +5,15 @@ namespace N1ebieski\ICore\Services;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Auth\Guard as Auth;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
 use N1ebieski\ICore\Services\Interfaces\FullUpdatable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
 
-/**
- * [PostService description]
- */
 class PostService implements
     Creatable,
     Updatable,
@@ -39,20 +36,36 @@ class PostService implements
     protected $carbon;
 
     /**
-     * [protected description]
-     * @var Collection|LengthAwarePaginator
+     * Undocumented variable
+     *
+     * @var Auth
      */
-    protected $posts;
+    protected $auth;
+
+    /**
+     * Undocumented variable
+     *
+     * @var DB
+     */
+    protected $db;
 
     /**
      * Undocumented function
      *
      * @param Post $post
      * @param Carbon $carbon
+     * @param Auth $auth
+     * @param DB $db
      */
-    public function __construct(Post $post, Carbon $carbon)
-    {
+    public function __construct(
+        Post $post,
+        Carbon $carbon,
+        Auth $auth,
+        DB $db
+    ) {
         $this->carbon = $carbon;
+        $this->auth = $auth;
+        $this->db = $db;
 
         $this->post = $post;
     }
@@ -65,22 +78,24 @@ class PostService implements
      */
     public function create(array $attributes) : Model
     {
-        $this->post->fill($attributes);
-        $this->post->content = $this->post->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->post->fill($attributes);
+            $this->post->content = $this->post->content_html;
 
-        if ($this->post->status !== Post::INACTIVE) {
-            $this->post->published_at =
-                $attributes['date_published_at'].$attributes['time_published_at'];
-        }
+            if ($this->post->status !== Post::INACTIVE) {
+                $this->post->published_at =
+                    $attributes['date_published_at'].$attributes['time_published_at'];
+            }
 
-        $this->post->user()->associate(auth()->user());
-        $this->post->save();
+            $this->post->user()->associate($this->auth->user());
+            $this->post->save();
 
-        $this->post->tag($attributes['tags'] ?? []);
+            $this->post->tag($attributes['tags'] ?? []);
 
-        $this->post->categories()->attach($attributes['categories']);
+            $this->post->categories()->attach($attributes['categories']);
 
-        return $this->post;
+            return $this->post;
+        });
     }
 
     /**
@@ -91,13 +106,15 @@ class PostService implements
      */
     public function updateStatus(array $attributes) : bool
     {
-        $this->post->status = $attributes['status'];
+        return $this->db->transaction(function () use ($attributes) {
+            $this->post->status = $attributes['status'];
 
-        if ($this->post->published_at === null) {
-            $this->post->published_at = $this->carbon->now();
-        }
+            if ($this->post->published_at === null) {
+                $this->post->published_at = $this->carbon->now();
+            }
 
-        return $this->post->save();
+            return $this->post->save();
+        });
     }
 
     /**
@@ -108,19 +125,21 @@ class PostService implements
      */
     public function updateFull(array $attributes) : bool
     {
-        $this->post->fill($attributes);
-        $this->post->content = $this->post->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->post->fill($attributes);
+            $this->post->content = $this->post->content_html;
 
-        if ($this->post->status !== Post::INACTIVE) {
-            $this->post->published_at =
-                $attributes['date_published_at'].$attributes['time_published_at'];
-        }
+            if ($this->post->status !== Post::INACTIVE) {
+                $this->post->published_at =
+                    $attributes['date_published_at'].$attributes['time_published_at'];
+            }
 
-        $this->post->retag($attributes['tags'] ?? []);
+            $this->post->retag($attributes['tags'] ?? []);
 
-        $this->post->categories()->sync($attributes['categories']);
+            $this->post->categories()->sync($attributes['categories']);
 
-        return $this->post->save();
+            return $this->post->save();
+        });
     }
 
     /**
@@ -131,11 +150,13 @@ class PostService implements
      */
     public function update(array $attributes) : bool
     {
-        $this->post->title = $attributes['title'];
-        $this->post->content_html = $attributes['content_html'];
-        $this->post->content = $this->post->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->post->title = $attributes['title'];
+            $this->post->content_html = $attributes['content_html'];
+            $this->post->content = $this->post->content_html;
 
-        return $this->post->save();
+            return $this->post->save();
+        });
     }
 
     /**
@@ -145,15 +166,17 @@ class PostService implements
      */
     public function delete() : bool
     {
-        $this->post->categories()->detach();
+        return $this->db->transaction(function () {
+            $this->post->categories()->detach();
 
-        $this->post->comments()->delete();
+            $this->post->comments()->delete();
 
-        $this->post->stats()->detach();
+            $this->post->stats()->detach();
 
-        $this->post->detag();
+            $this->post->detag();
 
-        return $this->post->delete();
+            return $this->post->delete();
+        });
     }
 
     /**
@@ -164,21 +187,23 @@ class PostService implements
      */
     public function deleteGlobal(array $ids) : int
     {
-        $this->post->categories()->newPivotStatement()
-            ->whereIn('model_id', $ids)
-            ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+        return $this->db->transaction(function () use ($ids) {
+            $this->post->categories()->newPivotStatement()
+                ->whereIn('model_id', $ids)
+                ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
 
-        $this->post->tags()->newPivotStatement()
-            ->whereIn('model_id', $ids)
-            ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+            $this->post->tags()->newPivotStatement()
+                ->whereIn('model_id', $ids)
+                ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
 
-        $this->post->stats()->newPivotStatement()
-            ->whereIn('model_id', $ids)
-            ->where('model_type', $this->post->getMorphClass())->delete();
+            $this->post->stats()->newPivotStatement()
+                ->whereIn('model_id', $ids)
+                ->where('model_type', $this->post->getMorphClass())->delete();
 
-        $this->post->comments()->make()->whereIn('model_id', $ids)
-            ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+            $this->post->comments()->make()->whereIn('model_id', $ids)
+                ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
 
-        return $this->post->whereIn('id', $ids)->delete();
+            return $this->post->whereIn('id', $ids)->delete();
+        });
     }
 }
