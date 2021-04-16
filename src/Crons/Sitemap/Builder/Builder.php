@@ -233,5 +233,5 @@ abstract class Builder
         return $this->sitemap->count() >= $this->maxItems || $this->collection->count() < 1000;
     }
 
-    abstract public function chunkCollection(Closure $callback) : bool;
+    abstract public function chunkCollection(Closure $closure) : bool;
 }

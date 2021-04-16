@@ -76,11 +76,11 @@ class PageBuilder extends Builder
     /**
      * Undocumented function
      *
-     * @param Closure $callback
+     * @param Closure $closure
      * @return void
      */
-    public function chunkCollection(Closure $callback) : bool
+    public function chunkCollection(Closure $closure) : bool
     {
-        return $this->page->makeRepo()->chunkActiveWithModelsCount($callback);
+        return $this->page->makeRepo()->chunkActiveWithModelsCount($closure);
     }
 }

@@ -111,12 +111,12 @@ class SitemapBuilder extends Builder
     /**
      * Undocumented function
      *
-     * @param Closure $callback
+     * @param Closure $closure
      * @return void
      */
-    public function chunkCollection(Closure $callback) : bool
+    public function chunkCollection(Closure $closure) : bool
     {
-        $callback(
+        $closure(
             $this->collect->make($this->storage->disk('public')->allFiles($this->path))
                 ->map(function ($item) {
                     return (object)[
