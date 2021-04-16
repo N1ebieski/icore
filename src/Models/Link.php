@@ -13,9 +13,6 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Positionable;
 
-/**
- * [Link description]
- */
 class Link extends Model
 {
     use Positionable, Carbonable, Filterable;
@@ -48,6 +45,13 @@ class Link extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    public $path = 'vendor/icore/links';
 
     // Overrides
 
