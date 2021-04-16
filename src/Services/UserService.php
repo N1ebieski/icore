@@ -5,11 +5,12 @@ namespace N1ebieski\ICore\Services;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
 use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
 
 class UserService implements
     Creatable,
@@ -33,16 +34,25 @@ class UserService implements
     protected $hasher;
 
     /**
+     * Undocumented variable
+     *
+     * @var DB
+     */
+    protected $db;
+
+    /**
      * Undocumented function
      *
      * @param User $user
      * @param Hasher $hasher
+     * @param DB $db
      */
-    public function __construct(User $user, Hasher $hasher)
+    public function __construct(User $user, Hasher $hasher, DB $db)
     {
         $this->user = $user;
 
         $this->hasher = $hasher;
+        $this->db = $db;
     }
 
     /**
@@ -53,17 +63,19 @@ class UserService implements
      */
     public function create(array $attributes) : Model
     {
-        $user = $this->user->create([
-            'name' => $attributes['name'],
-            'email' => $attributes['email'],
-            'password' => isset($attributes['password']) ?
-                $this->hasher->make($attributes['password'])
-                : null
-        ]);
+        return $this->db->transaction(function () use ($attributes) {
+            $user = $this->user->create([
+                'name' => $attributes['name'],
+                'email' => $attributes['email'],
+                'password' => isset($attributes['password']) ?
+                    $this->hasher->make($attributes['password'])
+                    : null
+            ]);
 
-        $user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
+            $user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
 
-        return $user;
+            return $user;
+        });
     }
 
     /**
@@ -74,12 +86,14 @@ class UserService implements
      */
     public function update(array $attributes) : bool
     {
-        $this->user->syncRoles(array_merge($attributes['roles'] ?? [], ['user']));
+        return $this->db->transaction(function () use ($attributes) {
+            $this->user->syncRoles(array_merge($attributes['roles'] ?? [], ['user']));
 
-        return $this->user->update([
-            'name' => $attributes['name'],
-            'email' => $attributes['email']
-        ]);
+            return $this->user->update([
+                'name' => $attributes['name'],
+                'email' => $attributes['email']
+            ]);
+        });
     }
 
     /**
@@ -90,9 +104,11 @@ class UserService implements
      */
     public function updateStatus(array $attributes) : bool
     {
-        return $this->user->update([
-            'status' => $attributes['status']
-        ]);
+        return $this->db->transaction(function () use ($attributes) {
+            return $this->user->update([
+                'status' => $attributes['status']
+            ]);
+        });
     }
 
     /**
@@ -102,11 +118,13 @@ class UserService implements
      */
     public function delete() : bool
     {
-        $this->user->ban()->delete();
+        return $this->db->transaction(function () {
+            $this->user->ban()->delete();
 
-        $this->user->emails()->delete();
+            $this->user->emails()->delete();
 
-        return $this->user->delete();
+            return $this->user->delete();
+        });
     }
 
     /**
@@ -117,12 +135,14 @@ class UserService implements
      */
     public function deleteGlobal(array $ids) : int
     {
-        $this->user->ban()->make()->whereIn('model_id', $ids)
-            ->where('model_type', $this->user->getMorphClass())->delete();
+        return $this->db->transaction(function () use ($ids) {        
+            $this->user->ban()->make()->whereIn('model_id', $ids)
+                ->where('model_type', $this->user->getMorphClass())->delete();
 
-        $this->user->emails()->make()->whereIn('model_id', $ids)
-            ->where('model_type', $this->user->getMorphClass())->delete();
+            $this->user->emails()->make()->whereIn('model_id', $ids)
+                ->where('model_type', $this->user->getMorphClass())->delete();
 
-        return $this->user->whereIn('id', $ids)->delete();
+            return $this->user->whereIn('id', $ids)->delete();
+        });
     }
 }

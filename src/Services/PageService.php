@@ -4,21 +4,20 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Collection as Collect;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\FullUpdatable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
+use N1ebieski\ICore\Services\Interfaces\Updatable;
+use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Services\Interfaces\FullUpdatable;
 use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
 
-/**
- * [PageService description]
- */
 class PageService implements
     Creatable,
     Updatable,
@@ -47,21 +46,40 @@ class PageService implements
     protected $collect;
 
     /**
-     * [protected description]
-     * @var Collection|null
+     * Undocumented variable
+     *
+     * @var Auth
      */
-    protected $pages;
+    protected $auth;
 
     /**
-     * [__construct description]
-     * @param Page   $page   [description]
-     * @param Config $config [description]
-     * @param Collect $collect
+     * Undocumented variable
+     *
+     * @var DB
      */
-    public function __construct(Page $page, Config $config, Collect $collect)
-    {
+    protected $db;
+
+    /**
+     * Undocumented function
+     *
+     * @param Page $page
+     * @param Config $config
+     * @param Collect $collect
+     * @param Auth $auth
+     * @param DB $db
+     */
+    public function __construct(
+        Page $page,
+        Config $config,
+        Collect $collect,
+        Auth $auth,
+        DB $db
+    ) {
         $this->page = $page;
+
         $this->collect = $collect;
+        $this->auth = $auth;
+        $this->db = $db;
 
         $this->paginate = (int)$config->get('database.paginate');
     }
@@ -72,9 +90,9 @@ class PageService implements
      */
     public function getAsFlatTree() : Collection
     {
-        $this->pages = $this->page->makeRepo()->getAsTree();
-
-        return $this->pages->flattenRelation('children');
+        return $this->page->makeRepo()
+            ->getAsTree()
+            ->flattenRelation('children');
     }
 
     /**
@@ -83,9 +101,9 @@ class PageService implements
      */
     public function getAsFlatTreeExceptSelf() : Collection
     {
-        $this->pages = $this->page->makeRepo()->getAsTreeExceptSelf();
-
-        return $this->pages->flattenRelation('children');
+        return $this->page->makeRepo()
+            ->getAsTreeExceptSelf()
+            ->flattenRelation('children');
     }
 
     /**
@@ -109,9 +127,8 @@ class PageService implements
      */
     public function getAsFlatTreeByFilter(array $filter) : LengthAwarePaginator
     {
-        $this->pages = $this->getAsFlatTree();
-
-        return $this->pages->whereNotIn('id', $filter['except'])
+        return $this->getAsFlatTree()
+            ->whereNotIn('id', $filter['except'])
             ->paginate($filter['paginate'] ?? $this->paginate);
     }
 
@@ -122,23 +139,25 @@ class PageService implements
      */
     public function create(array $attributes) : Model
     {
-        $this->page->fill($attributes);
-        $this->page->content = $this->page->content_html;
-        $this->page->user()->associate(auth()->user());
+        return $this->db->transaction(function () use ($attributes) {
+            $this->page->fill($attributes);
+            $this->page->content = $this->page->content_html;
+            $this->page->user()->associate($this->auth->user());
 
-        if ($attributes['parent_id'] !== null) {
-            $parent = $this->page->findOrFail($attributes['parent_id']);
-            // Jeśli rodzic jest nieaktywny, dziecko musi dziedziczyć ten stan
-            $this->page->status = $parent->status === Page::INACTIVE ?
-                Page::INACTIVE : $attributes['status'];
-            $this->page->parent_id = $attributes['parent_id'];
-        }
+            if ($attributes['parent_id'] !== null) {
+                $parent = $this->page->findOrFail($attributes['parent_id']);
+                // If the parent is inactive, the child must inherit this state
+                $this->page->status = $parent->status === Page::INACTIVE ?
+                    Page::INACTIVE : $attributes['status'];
+                $this->page->parent_id = $attributes['parent_id'];
+            }
 
-        $this->page->save();
+            $this->page->save();
 
-        $this->page->tag($attributes['tags'] ?? []);
+            $this->page->tag($attributes['tags'] ?? []);
 
-        return $this->page;
+            return $this->page;
+        });
     }
 
     /**
@@ -149,11 +168,13 @@ class PageService implements
      */
     public function update(array $attributes) : bool
     {
-        $this->page->title = $attributes['title'];
-        $this->page->content_html = $attributes['content_html'];
-        $this->page->content = $this->page->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->page->title = $attributes['title'];
+            $this->page->content_html = $attributes['content_html'];
+            $this->page->content = $this->page->content_html;
 
-        return $this->page->save();
+            return $this->page->save();
+        });
     }
 
     /**
@@ -164,22 +185,24 @@ class PageService implements
      */
     public function updateFull(array $attributes) : bool
     {
-        $this->page->fill(
-            $this->collect->make($attributes)->except('parent_id')->toArray()
-        );
-        $this->page->content = $this->page->content_html;
+        return $this->db->transaction(function () use ($attributes) {
+            $this->page->fill(
+                $this->collect->make($attributes)->except('parent_id')->toArray()
+            );
+            $this->page->content = $this->page->content_html;
 
-        if ($attributes['parent_id'] != $this->page->parent_id) {
-            if ($attributes['parent_id'] === null) {
-                $this->moveToRoot();
-            } else {
-                $this->moveToParent($attributes['parent_id']);
+            if ($attributes['parent_id'] != $this->page->parent_id) {
+                if ($attributes['parent_id'] === null) {
+                    $this->moveToRoot();
+                } else {
+                    $this->moveToParent($attributes['parent_id']);
+                }
             }
-        }
 
-        $this->page->retag($attributes['tags'] ?? []);
+            $this->page->retag($attributes['tags'] ?? []);
 
-        return $this->page->save();
+            return $this->page->save();
+        });
     }
 
     /**
@@ -188,7 +211,9 @@ class PageService implements
      */
     public function moveToRoot() : void
     {
-        $this->page->makeRoot(0);
+        $this->db->transaction(function () {
+            $this->page->makeRoot(0);
+        });
     }
 
     /**
@@ -198,15 +223,18 @@ class PageService implements
      */
     public function moveToParent(int $parent_id) : void
     {
-        if ($parent = $this->page->findOrFail($parent_id)) {
-            // W przypadku zmiany rodzica musimy profilaktycznie zmienic status kategorii
-            // (i potomków) na taki jaki ma rodzic by uniknąć sytuacji gdy dziecko będzie akywne,
-            // a rodzic nie.
-            $this->page->update(['status' => $parent->status]);
-            $this->page->descendants()->update(['status' => $parent->status]);
+        $this->db->transaction(function () use ($parent_id) {
+            if ($parent = $this->page->findOrFail($parent_id)) {
+                // In the case of changing the parent, we must prophylactically
+                // change the status of the category (and descendants) to the same
+                // as the parent to avoid the situation where the subcategory
+                // is active and the parent is not.
+                $this->page->update(['status' => $parent->status]);
+                $this->page->descendants()->update(['status' => $parent->status]);
 
-            $this->page->moveTo(0, $parent_id);
-        }
+                $this->page->moveTo(0, $parent_id);
+            }
+        });
     }
 
     /**
@@ -216,21 +244,23 @@ class PageService implements
      */
     public function updateStatus(array $attributes) : bool
     {
-        $updateStatus = $this->page->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($attributes) {
+            $update = $this->page->update(['status' => $attributes['status']]);
 
-        if ($updateStatus === true) {
-            // Deaktywacja kategorii nadrzędnej, deaktywuje wszystkich potomków
-            if ((int)$attributes['status'] === Page::INACTIVE) {
-                $this->page->descendants()->update(['status' => $attributes['status']]);
+            if ($update === true) {
+                // Deactivates parent page, deactivates all descendants
+                if ((int)$attributes['status'] === Page::INACTIVE) {
+                    $this->page->descendants()->update(['status' => $attributes['status']]);
+                }
+
+                // Activating child page, activates all ancestors
+                if ((int)$attributes['status'] === Page::ACTIVE) {
+                    $this->page->ancestors()->update(['status' => $attributes['status']]);
+                }
             }
 
-            // Aktywacja kategorii podrzędnej, aktywuje wszystkich przodków
-            if ((int)$attributes['status'] === Page::ACTIVE) {
-                $this->page->ancestors()->update(['status' => $attributes['status']]);
-            }
-        }
-
-        return $updateStatus;
+            return $update;
+        });
     }
 
     /**
@@ -240,7 +270,9 @@ class PageService implements
      */
     public function updatePosition(array $attributes) : bool
     {
-        return $this->page->update(['position' => $attributes['position']]);
+        return $this->db->transaction(function () use ($attributes) {
+            return $this->page->update(['position' => $attributes['position']]);
+        });
     }
 
     /**
@@ -249,34 +281,23 @@ class PageService implements
      */
     public function delete() : bool
     {
-        $this->page->comments()->delete();
+        return $this->db->transaction(function () {
+            $this->page->comments()->delete();
 
-        $this->page->detag();
+            $this->page->detag();
 
-        $this->page->stats()->detach();
+            $this->page->stats()->detach();
 
-        $delete = $this->page->delete();
+            $delete = $this->page->delete();
 
-        if ($delete === true) {
-            // Zmniejszamy pozycje rodzeństwa o jeden bo ClosureTable nie robi tego
-            // z automatu podczas usuwania (nie wiem czemu?)
-            $this->decrement();
-        }
+            if ($delete === true) {
+                // Decrement position of siblings by 1. ClosureTable has a bug and doesn't
+                // do it automatically
+                $this->decrement();
+            }
 
-        return $delete;
-    }
-
-    /**
-     * Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-     * do it automatically
-     * @return bool [description]
-     */
-    private function decrement() : bool
-    {
-        return $this->page->where([
-            ['parent_id', $this->page->parent_id],
-            ['position', '>', $this->page->position]
-        ])->decrement('position');
+            return $delete;
+        });
     }
 
     /**
@@ -286,17 +307,33 @@ class PageService implements
      */
     public function deleteGlobal(array $ids) : int
     {
-        $deleted = 0;
-        // Antywzorzec, ale nie mialem wyboru, bo ClosureTable nie zmienia pozycji
-        // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
-        foreach ($ids as $id) {
-            if ($p = $this->page->find($id)) {
-                $p->makeService()->delete();
+        return $this->db->transaction(function () use ($ids) {
+            $deleted = 0;
 
-                $deleted += 1;
+            foreach ($ids as $id) {
+                if ($p = $this->page->find($id)) {
+                    $p->makeService()->delete();
+
+                    $deleted += 1;
+                }
             }
-        }
 
-        return $deleted;
+            return $deleted;
+        });
+    }
+
+    /**
+     * Decrement position of siblings by 1. ClosureTable has a bug and doesn't
+     * do it automatically
+     * @return bool [description]
+     */
+    private function decrement() : bool
+    {
+        return $this->db->transaction(function () {
+            return $this->page->where([
+                ['parent_id', $this->page->parent_id],
+                ['position', '>', $this->page->position]
+            ])->decrement('position');
+        });
     }
 }

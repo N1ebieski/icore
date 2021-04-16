@@ -40,12 +40,14 @@ class StatService
      */
     public function increment() : bool
     {
-        $this->stat->morph
-            ->stats()
-            ->syncWithoutDetaching([
-                $this->stat->id => ['value' => $this->db->raw("`value` + 1")]
-            ]);
+        return $this->db->transaction(function () {
+            $this->stat->morph
+                ->stats()
+                ->syncWithoutDetaching([
+                    $this->stat->id => ['value' => $this->db->raw("`value` + 1")]
+                ]);
 
-        return true;
+            return true;
+        });
     }
 }

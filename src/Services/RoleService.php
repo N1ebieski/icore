@@ -5,12 +5,10 @@ namespace N1ebieski\ICore\Services;
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
 
-/**
- * [RoleService description]
- */
 class RoleService implements Creatable, Updatable
 {
     /**
@@ -20,12 +18,23 @@ class RoleService implements Creatable, Updatable
     protected $role;
 
     /**
-     * [__construct description]
-     * @param Role $role     [description]
+     * Undocumented variable
+     *
+     * @var DB
      */
-    public function __construct(Role $role)
+    protected $db;
+
+    /**
+     * Undocumented function
+     *
+     * @param Role $role
+     * @param DB $db
+     */
+    public function __construct(Role $role, DB $db)
     {
         $this->role = $role;
+
+        $this->db = $db;
     }
 
     /**
@@ -50,11 +59,13 @@ class RoleService implements Creatable, Updatable
      */
     public function create(array $attributes) : Model
     {
-        $role = $this->role->create(['name' => $attributes['name']]);
+        return $this->db->transaction(function () use ($attributes) {
+            $role = $this->role->create(['name' => $attributes['name']]);
 
-        $role->givePermissionTo(array_filter($attributes['perm']) ?? []);
+            $role->givePermissionTo(array_filter($attributes['perm']) ?? []);
 
-        return $role;
+            return $role;
+        });
     }
 
     /**
@@ -64,8 +75,10 @@ class RoleService implements Creatable, Updatable
      */
     public function update(array $attributes) : bool
     {
-        $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
+        return $this->db->transaction(function () use ($attributes) {
+            $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
 
-        return $this->role->update(['name' => $attributes['name']]);
+            return $this->role->update(['name' => $attributes['name']]);
+        });
     }
 }

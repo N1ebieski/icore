@@ -5,13 +5,11 @@ namespace N1ebieski\ICore\Services;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Models\Socialite as Social;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
-/**
- * [SocialiteService description]
- */
 class SocialiteService implements Creatable
 {
     /**
@@ -19,6 +17,13 @@ class SocialiteService implements Creatable
      * @var Social
      */
     protected $socialite;
+
+    /**
+     * Undocumented variable
+     *
+     * @var DB
+     */
+    protected $db;
 
     /**
      * Zwraca dane usera z Socialite
@@ -39,12 +44,16 @@ class SocialiteService implements Creatable
     protected $socialiteUser;
 
     /**
-     * [__construct description]
-     * @param Social $socialite [description]
+     * Undocumented function
+     *
+     * @param Social $socialite
+     * @param DB $db
      */
-    public function __construct(Social $socialite)
+    public function __construct(Social $socialite, DB $db)
     {
         $this->socialite = $socialite;
+
+        $this->db = $db;
     }
 
     /**
@@ -65,11 +74,13 @@ class SocialiteService implements Creatable
      */
     public function findOrCreateUser(ProviderUser $providerUser, string $provider) : User
     {
-        if (is_null($this->findUser($providerUser, $provider))) {
-            $this->socialiteUser = $this->createUser();
-        }
+        return $this->db->transaction(function () use ($providerUser, $provider) {
+            if (is_null($this->findUser($providerUser, $provider))) {
+                $this->socialiteUser = $this->createUser();
+            }
 
-        return $this->socialiteUser;
+            return $this->socialiteUser;
+        });
     }
 
     /**
@@ -118,18 +129,20 @@ class SocialiteService implements Creatable
         }
 
         // Jesli nie, tworzymy go
-        $this->socialiteUser = $this->socialite->user()->create([
-            'name' => str_replace(' ', '_', $this->providerUser->getName()),
-            'email' => $this->providerUser->getEmail(),
-        ]);
+        return $this->db->transaction(function () {
+            $this->socialiteUser = $this->socialite->user()->create([
+                'name' => str_replace(' ', '_', $this->providerUser->getName()),
+                'email' => $this->providerUser->getEmail(),
+            ]);
 
-        $this->socialiteUser->assignRole('user');
-        $this->socialiteUser->sendEmailVerificationNotification();
+            $this->socialiteUser->assignRole('user');
+            $this->socialiteUser->sendEmailVerificationNotification();
 
-        // Tworzymy mu jeszcze powiazanie z Socialite
-        $this->create([]);
+            // Tworzymy mu jeszcze powiazanie z Socialite
+            $this->create([]);
 
-        return $this->socialiteUser;
+            return $this->socialiteUser;
+        });
     }
 
     /**
@@ -139,9 +152,11 @@ class SocialiteService implements Creatable
      */
     public function create(array $attributes) : Model
     {
-        return $this->socialiteUser->socialites()->create([
-            'provider_id'   => $this->providerUser->getId(),
-            'provider_name' => $this->provider,
-        ]);
+        return $this->db->transaction(function () use ($attributes) {
+            return $this->socialiteUser->socialites()->create([
+                'provider_id'   => $this->providerUser->getId(),
+                'provider_name' => $this->provider,
+            ]);
+        });
     }
 }

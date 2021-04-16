@@ -4,15 +4,13 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
 use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
 use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
 
-/**
- * [MailingService description]
- */
 class MailingService implements
     Creatable,
     Updatable,
@@ -27,12 +25,23 @@ class MailingService implements
     protected $mailing;
 
     /**
-     * [__construct description]
-     * @param Mailing      $mailing    [description]
+     * Undocumented variable
+     *
+     * @var DB
      */
-    public function __construct(Mailing $mailing)
+    protected $db;
+
+    /**
+     * Undocumented function
+     *
+     * @param Mailing $mailing
+     * @param DB $db
+     */
+    public function __construct(Mailing $mailing, DB $db)
     {
         $this->mailing = $mailing;
+
+        $this->db = $db;
     }
 
     /**
@@ -43,26 +52,26 @@ class MailingService implements
      */
     public function create(array $attributes) : Model
     {
-        // Dodanie modelu mailingu do bazy, potrzebne by uzyskać ID
-        $this->mailing->content_html = $attributes['content_html'];
-        $this->mailing->content = $this->mailing->content_html;
-        $this->mailing->title = $attributes['title'];
-        $this->mailing->status = (int)$attributes['status'];
+        return $this->db->transaction(function () use ($attributes) {
+            $this->mailing->content_html = $attributes['content_html'];
+            $this->mailing->content = $this->mailing->content_html;
+            $this->mailing->title = $attributes['title'];
+            $this->mailing->status = (int)$attributes['status'];
 
-        if ($this->mailing->status === Mailing::SCHEDULED) {
-            $this->mailing->activation_at =
-                $attributes['date_activation_at'].$attributes['time_activation_at'];
-        }
+            if ($this->mailing->status === Mailing::SCHEDULED) {
+                $this->mailing->activation_at =
+                    $attributes['date_activation_at'].$attributes['time_activation_at'];
+            }
 
-        $this->mailing->save();
+            $this->mailing->save();
 
-        // Dodanie grup odbiorców mailingu
-        $this->mailing->emails()->make()
-            ->setRelations(['mailing' => $this->mailing])
-            ->makeService()
-            ->createGlobal($attributes);
+            $this->mailing->emails()->make()
+                ->setRelations(['mailing' => $this->mailing])
+                ->makeService()
+                ->createGlobal($attributes);
 
-        return $this->mailing;
+            return $this->mailing;
+        });
     }
 
     /**
@@ -73,24 +82,26 @@ class MailingService implements
      */
     public function update(array $attributes) : bool
     {
-        $this->mailing->content_html = $attributes['content_html'];
-        $this->mailing->content = $this->mailing->content_html;
-        $this->mailing->title = $attributes['title'];
-        $this->mailing->status = (int)$attributes['status'];
+        return $this->db->transaction(function () use ($attributes) {
+            $this->mailing->content_html = $attributes['content_html'];
+            $this->mailing->content = $this->mailing->content_html;
+            $this->mailing->title = $attributes['title'];
+            $this->mailing->status = (int)$attributes['status'];
 
-        if ($this->mailing->status === Mailing::SCHEDULED) {
-            $this->mailing->activation_at =
-                $attributes['date_activation_at'].$attributes['time_activation_at'];
-        }
+            if ($this->mailing->status === Mailing::SCHEDULED) {
+                $this->mailing->activation_at =
+                    $attributes['date_activation_at'].$attributes['time_activation_at'];
+            }
 
-        if ($this->mailing->emails->count() === 0) {
-            $this->mailing->emails()->make()
-                ->setRelations(['mailing' => $this->mailing])
-                ->makeService()
-                ->createGlobal($attributes);
-        }
+            if ($this->mailing->emails->count() === 0) {
+                $this->mailing->emails()->make()
+                    ->setRelations(['mailing' => $this->mailing])
+                    ->makeService()
+                    ->createGlobal($attributes);
+            }
 
-        return $this->mailing->save();
+            return $this->mailing->save();
+        });
     }
 
     /**
@@ -101,7 +112,9 @@ class MailingService implements
      */
     public function updateStatus(array $attributes) : bool
     {
-        return $this->mailing->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($attributes) {
+            return $this->mailing->update(['status' => $attributes['status']]);
+        });
     }
 
     /**
@@ -109,10 +122,12 @@ class MailingService implements
      */
     public function reset() : void
     {
-        $this->mailing->emails()->make()
-            ->setRelations(['mailing' => $this->mailing])
-            ->makeService()
-            ->clear();
+        $this->db->transaction(function () {
+            $this->mailing->emails()->make()
+                ->setRelations(['mailing' => $this->mailing])
+                ->makeService()
+                ->clear();
+        });
     }
 
     /**
@@ -122,7 +137,9 @@ class MailingService implements
      */
     public function delete() : bool
     {
-        return $this->mailing->delete();
+        return $this->db->transaction(function () {
+            return $this->mailing->delete();
+        });
     }
 
     /**
@@ -133,6 +150,8 @@ class MailingService implements
      */
     public function deleteGlobal(array $ids) : int
     {
-        return $this->mailing->whereIn('id', $ids)->delete();
+        return $this->db->transaction(function () use ($ids) {
+            return $this->mailing->whereIn('id', $ids)->delete();
+        });
     }
 }

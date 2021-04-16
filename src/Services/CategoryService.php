@@ -275,7 +275,7 @@ class CategoryService implements
                 'icon' => $attributes['icon'] ?? null
             ]);
 
-            if ($attributes['parent_id'] !== $this->category->parent_id) {
+            if ($attributes['parent_id'] != $this->category->parent_id) {
                 if ($attributes['parent_id'] === null) {
                     $this->moveToRoot();
                 } else {
