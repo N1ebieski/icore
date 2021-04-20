@@ -96,6 +96,9 @@ class PostRepo
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'])
             ->filterCategory($filter['category'])
             ->filterPaginate($filter['paginate']);
@@ -235,7 +238,7 @@ class PostRepo
                 $this->post->search($name)
                     ->when($tag = $this->post->tags()->make()->findByName($name), function ($query) use ($tag) {
                         $query->unionAll(
-                            $this->post->selectRaw('`posts`.*')
+                            $this->post->selectRaw('`posts`.*, 0 AS `title_relevance`, 0 AS `content_relevance`')
                                 ->join('tags_models', function ($query) use ($tag) {
                                     $query->on('posts.id', '=', 'tags_models.model_id')
                                         ->where('tags_models.model_type', $this->post->getMorphClass())
@@ -248,6 +251,7 @@ class PostRepo
             )
             ->groupBy('posts.id')
             ->active()
+            ->orderBySearch($name)
             ->orderBy('published_at', 'desc')
             ->paginate($this->paginate);
     }

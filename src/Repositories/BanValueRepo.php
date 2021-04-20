@@ -35,6 +35,9 @@ class BanValueRepo
         return $this->banValue->filterType($filter['type'])
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);
     }

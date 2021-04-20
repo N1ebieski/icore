@@ -36,6 +36,9 @@ class UserRepo
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->filterRole($filter['role'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'])
             ->with(['roles', 'socialites'])
             ->filterPaginate($filter['paginate']);

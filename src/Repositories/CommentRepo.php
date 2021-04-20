@@ -35,8 +35,6 @@ class CommentRepo
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
         return $this->comment->poliType()
-            ->with(['morph', 'user'])
-            ->withCount('reports')
             ->filterExcept($filter['except'])
             ->when($filter['search'] !== null, function ($query) use ($filter) {
                 $query->filterSearch($filter['search'])
@@ -57,7 +55,12 @@ class CommentRepo
             ->filterCensored($filter['censored'])
             ->filterReport($filter['report'])
             ->filterAuthor($filter['author'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'])
+            ->with(['morph', 'user'])
+            ->withCount('reports')
             ->filterPaginate($filter['paginate']);
     }
 

@@ -48,6 +48,9 @@ class MailingRepo
         return $this->mailing->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'])
             ->with('emails')
             ->filterPaginate($filter['paginate']);

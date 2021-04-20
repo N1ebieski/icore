@@ -58,6 +58,9 @@ class CategoryRepo
             ->filterStatus($filter['status'])
             ->poliType()
             ->filterParent($filter['parent'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->when($filter['parent'] === null, function ($query) {
                 return $query->withAncestorsExceptSelf();

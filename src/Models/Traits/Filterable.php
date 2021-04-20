@@ -51,6 +51,21 @@ trait Filterable
     }
 
     /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @param string $search
+     * @param string $orderby
+     * @return Builder
+     */
+    public function scopeFilterOrderBySearch(Builder $query, string $search = null) : Builder
+    {
+        return $query->when($search !== null, function ($query) use ($search) {
+            return $query->orderBySearch($search);
+        });
+    }
+
+    /**
      * [scopeFilterOrderBy description]
      * @param  Builder $query   [description]
      * @param  string|null  $orderby [description]

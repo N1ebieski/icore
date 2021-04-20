@@ -2,12 +2,11 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
 
-/**
- * [trait description]
- */
 trait FullTextSearchable
 {
     /**
@@ -148,9 +147,38 @@ trait FullTextSearchable
         $this->splitMatches();
 
         return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [
-                $this->search()
-            ]);
+            $query->selectRaw("`{$this->getTable()}`.*")
+                ->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [$this->search()]);
+
+            $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
+                foreach ($this->searchable as $column) {
+                    $query->selectRaw("MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`", [$this->search()]);
+                }
+            });
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @param string $term
+     * @return Builder
+     */
+    public function scopeOrderBySearch(Builder $query, string $term) : Builder
+    {
+        $this->term = $term;
+
+        $this->splitModelMatches();
+        $this->splitExactMatches();
+        $this->splitMatches();
+
+        return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
+            $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
+                foreach ($this->searchable as $column) {
+                    $query->orderBy("{$column}_relevance", 'desc');
+                }
+            });
         });
     }
 }

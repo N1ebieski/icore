@@ -58,10 +58,12 @@ class PageRepo
      */
     public function paginateByFilter(array $filter) : LengthAwarePaginator
     {
-        return $this->page->selectRaw('`pages`.*')
-            ->filterSearch($filter['search'])
+        return $this->page->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->filterParent($filter['parent'])
             ->when($filter['parent'] === null, function ($query) {
