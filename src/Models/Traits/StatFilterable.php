@@ -46,8 +46,7 @@ trait StatFilterable
                     $query->withCountStats($order[0]);
                 }
             )
-            ->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc')
-                ->orderBy('id', 'asc');
+            ->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc');
         }
 
         return $query->latest();

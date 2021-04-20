@@ -76,8 +76,7 @@ trait Filterable
         $order = explode('|', $orderby);
 
         if (count($order) == 2) {
-            return $query->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc')
-                ->orderBy('id', 'asc');
+            return $query->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc');
         }
 
         return $query->latest();
