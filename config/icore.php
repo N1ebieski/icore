@@ -21,7 +21,8 @@ return [
     ],
 
     'tag' => [
-        'normalizer' => 'mb_strtolower'
+        'normalizer' => 'mb_strtolower',
+        'max_chars' => (int)env('ICORE_TAG_MAX_CHARS', 30)
     ],
 
     'replacement' => [

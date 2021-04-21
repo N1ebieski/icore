@@ -78,7 +78,7 @@
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
-                            title="{{ trans('icore::pages.tags.tooltip', ['max_tags' => config('icore.page.max_tags')]) }}" 
+                            title="{{ trans('icore::pages.tags.tooltip', ['max_tags' => config('icore.page.max_tags'), 'max_chars' => config('icore.tag.max_chars')]) }}" 
                             class="far fa-question-circle"
                         ></i>
                     </label>
@@ -89,6 +89,7 @@
                         value="{{ old('tags', $page->tagList) }}" 
                         placeholder="{{ trans('icore::pages.tags.placeholder') }}" 
                         data-max="{{ config('icore.page.max_tags') }}"
+                        data-max-chars="{{ config('icore.tag.max_chars') }}"
                     >
                     @includeWhen($errors->has('tags'), 'icore::admin.partials.errors', ['name' => 'tags'])
                 </div>                

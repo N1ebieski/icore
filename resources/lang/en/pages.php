@@ -29,7 +29,7 @@ return [
     ],
     'tags' => [
         'label' => 'Tags',
-        'tooltip' => 'Min 3 chars, max 30 chars, max :max_tags tags',
+        'tooltip' => 'Min 3 chars, max :max_chars chars, max :max_tags tags',
         'placeholder' => 'Add tags'
     ],
     'icon' => [
