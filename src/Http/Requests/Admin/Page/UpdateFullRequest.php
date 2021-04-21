@@ -53,7 +53,13 @@ class UpdateFullRequest extends FormRequest
         return [
             'title' => 'required|min:3|max:255',
             'tags' => 'array|between:0,' . Config::get('icore.page.max_tags'),
-            'tags.*' => 'min:3|max:30|alpha_num_spaces|distinct',
+            'tags.*' => [
+                'bail',
+                'min:3',
+                'distinct',
+                'max:' . Config::get('icore.tag.max_chars'),
+                'alpha_num_spaces'
+            ],
             'seo_title' => 'max:255',
             'seo_desc' => 'max:255',
             'icon' => 'nullable|string|max:255',
