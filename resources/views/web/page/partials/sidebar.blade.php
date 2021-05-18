@@ -14,7 +14,9 @@
             class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}"
         >
         @endif
+            @if ($page->real_depth > 0)
             <span>{{ str_repeat('-', $sibling->real_depth) }}</span>
+            @endif
             @if (!empty($sibling->icon))
             <i class="{{ $sibling->icon }} text-center" style="width:1.5rem"></i>
             @endif

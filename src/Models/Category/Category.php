@@ -62,7 +62,15 @@ class Category extends Entity implements CategoryInterface
      *
      * @var array
      */
-    protected $fillable = ['name', 'icon', 'status'];
+    protected $fillable = [
+        'id',
+        'name',
+        'icon',
+        'status',
+        'parent_id',
+        'created_at',
+        'updated_at'
+    ];
 
     /**
      * The columns of the full text index

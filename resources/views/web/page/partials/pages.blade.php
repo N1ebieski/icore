@@ -7,7 +7,9 @@
             class="{{ $isUrl(route('web.page.show', $page->slug), 'font-weight-bold') }}"
         >
         @endif
+            @if ($page->real_depth > 0)
             <span>{{ str_repeat('-', $page->real_depth) }}</span>
+            @endif
             @if (!empty($page->icon))
             <i class="{{ $page->icon }} text-center" style="width:1.5rem"></i>
             @endif

@@ -8,9 +8,6 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 
-/**
- * [BanValueCache description]
- */
 class BanValueCache
 {
     /**
