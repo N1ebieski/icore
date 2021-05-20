@@ -4,7 +4,7 @@
     "keywords": ["iCore"],
     "type": "package",
     "require": {
-        "php": "^7.3",
+        "php": "^7.2",
         "cviebrock/eloquent-sluggable": "^6.0",
         "cviebrock/eloquent-taggable": "^6.0",
         "franzose/closure-table": "^5.1",
