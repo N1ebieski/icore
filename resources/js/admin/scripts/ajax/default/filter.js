@@ -6,10 +6,10 @@
             dataType: 'html',
             beforeSend: function() {
                 $('#filterContent, #filter-content').find('.btn').prop('disabled', true);
-                $('#filterOrderBy').prop('disabled', true);
-                $('#filterPaginate').prop('disabled', true);
+                $('#filterOrderBy, #filter-orderby').prop('disabled', true);
+                $('#filterPaginate, #filter-paginate').prop('disabled', true);
                 $form.children('div').append($.getLoader('spinner-border'));
-                $('#filterModal').modal('hide');
+                $('#filterModal, #filter-modal').modal('hide');
             },
             complete: function() {
                 $form.find('div.loader-absolute').remove();
@@ -22,7 +22,7 @@
         });
     }
 
-    jQuery(document).on('change', '#filterOrderBy', function(e) {
+    jQuery(document).on('change', '#filterOrderBy, #filter-orderby', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');
@@ -31,7 +31,7 @@
         ajaxFilter($form, $form.href);
     });
 
-    jQuery(document).on('click', '#filterFilter', function(e) {
+    jQuery(document).on('click', '#filterFilter, #filter-filter', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');
@@ -40,7 +40,7 @@
         if ($('#filter').valid()) ajaxFilter($form, $form.href);
     });
 
-    jQuery(document).on('click', '.filterOption', function(e) {
+    jQuery(document).on('click', '.filterOption, .filter-option', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');
@@ -49,7 +49,7 @@
         ajaxFilter($form, $form.href);
     });
 
-    jQuery(document).on('change', '#filterPaginate', function(e) {
+    jQuery(document).on('change', '#filterPaginate, #filter-paginate', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');

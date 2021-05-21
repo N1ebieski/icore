@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Repositories;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,26 @@ class TagRepo
     public function firstBySlug(string $slug) : ?Tag
     {
         return $this->tag->whereNormalized($slug)->first();
+    }
+
+    /**
+     * [paginateByFilter description]
+     * @param  array                $filter [description]
+     * @return LengthAwarePaginator         [description]
+     */
+    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    {
+        return $this->tag->selectRaw('`tags`.*')
+            ->filterExcept($filter['except'])
+            ->filterSearch($filter['search'])
+            ->when(strpos($filter['orderby'], 'sum') !== false, function ($query) {
+                $query->withSum();
+            })
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
+            ->filterOrderBy($filter['orderby'])
+            ->filterPaginate($filter['paginate']);
     }
 
     /**

@@ -5,16 +5,17 @@ namespace N1ebieski\ICore\Models\Tag;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Cache\TagCache;
 use N1ebieski\ICore\Repositories\TagRepo;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Config;
 
-/**
- * [Tag description]
- */
 class Tag extends Taggable
 {
-    use FullTextSearchable, Polymorphic;
+    use FullTextSearchable, Polymorphic, Filterable, Carbonable;
 
     // Configuration
 
@@ -32,15 +33,15 @@ class Tag extends Taggable
      */
     public $searchable = ['name'];
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'normalized';
-    }
+    // /**
+    //  * Get the route key for the model.
+    //  *
+    //  * @return string
+    //  */
+    // public function getRouteKeyName()
+    // {
+    //     return 'normalized';
+    // }
 
     /**
      * The attributes that should be cast to native types.
@@ -52,6 +53,20 @@ class Tag extends Taggable
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    // Scopes
+
+    /**
+     * [scopeWithSum description]
+     * @param  Builder $query [description]
+     * @return Builder        [description]
+     */
+    public function scopeWithSum(Builder $query) : Builder
+    {
+        return $query->selectRaw('COUNT(`tags`.`tag_id`) AS `sum`')
+            ->leftJoin('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
+            ->groupBy('tags.tag_id');
+    }
 
     // Makers
 

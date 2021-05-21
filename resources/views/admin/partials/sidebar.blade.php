@@ -222,10 +222,11 @@
             </a>
         </li>
         @endcan
-        @canany(['admin.bans.view', 'admin.links.view'])
+        @canany(['admin.bans.view', 'admin.links.view', 'admin.tags.view'])
         <li class="nav-item dropdown {{ $isUrl([
             route('admin.banvalue.index', ['word']),
-            route('admin.link.index', ['link'])
+            route('admin.link.index', ['link']),
+            route('admin.tag.index')
         ]) }}">
             <a 
                 class="nav-link dropdown-toggle"
@@ -258,6 +259,15 @@
                     {{ trans('icore::links.link.route.index') }}
                 </a>
             @endcan
+            @can('admin.tags.view')
+                <a 
+                    class="dropdown-item {{ $isUrl(route('admin.tag.index')) }}"
+                    href="{{ route('admin.tag.index') }}"
+                    title="{{ trans('icore::tags.route.index') }}"
+                >
+                    {{ trans('icore::tags.route.index') }}
+                </a>
+            @endcan            
             </div>
         </li>
         @endcanany
