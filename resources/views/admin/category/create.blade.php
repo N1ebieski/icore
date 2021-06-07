@@ -112,6 +112,7 @@
                     class="form-control" 
                     rows="10" 
                     id="names"
+                    data-autogrow="false"
                 ></textarea>
             </div>
             <div class="form-group">
