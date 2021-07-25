@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Utils;
+namespace N1ebieski\ICore\Utils\Traits;
 
 trait Decorator
 {
