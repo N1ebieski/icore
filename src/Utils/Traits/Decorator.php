@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Utils;
 
-abstract class Decorator
+trait Decorator
 {
     /**
      * Undocumented variable
