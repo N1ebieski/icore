@@ -52,6 +52,14 @@ class ICoreServiceProvider extends ServiceProvider
             \Nckg\Minify\Middleware\MinifyResponse::class
         ]);
 
+        $this->app['router']->middlewareGroup('icore.api', [
+            'throttle:60,1',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
+            \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
+            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class
+        ]);
+
         $this->app['router']->aliasMiddleware('permission', \Spatie\Permission\Middlewares\PermissionMiddleware::class);
         $this->app['router']->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
         $this->app['router']->aliasMiddleware('icore.ban.user', \N1ebieski\ICore\Http\Middleware\BanUser::class);
