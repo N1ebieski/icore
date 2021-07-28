@@ -191,6 +191,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->where('marketing', static::WITH_MARKETING);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive(Builder $query) : Builder
+    {
+        return $query->where('status', static::ACTIVE);
+    }
+
     // Makers
 
     /**
