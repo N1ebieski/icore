@@ -97,6 +97,7 @@ class MailingEmailService
     {
         $this->db->transaction(function () {
             $this->user->marketing()
+                ->active()
                 ->chunk(1000, function ($items) {
                     $id = $this->makeLastId();
 
