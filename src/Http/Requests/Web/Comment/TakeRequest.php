@@ -25,9 +25,10 @@ class TakeRequest extends FormRequest
     public function rules()
     {
         return [
-            'orderby' => ['nullable', 'in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc'],
-            'except' => 'filled|array',
-            'except.*' => 'filled|integer'
+            'filter' => 'bail|array',
+            'filter.orderby' => ['nullable', 'in:created_at|asc,created_at|desc,sum_rating|asc,sum_rating|desc'],
+            'filter.except' => 'bail|filled|array',
+            'filter.except.*' => 'bail|filled|integer'
         ];
     }
 }

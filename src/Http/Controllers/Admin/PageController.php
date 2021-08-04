@@ -38,9 +38,7 @@ class PageController
         $pageService = $page->makeService();
  
         return Response::view('icore::admin.page.index', [
-            'pages' => $pageService->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'pages' => $pageService->paginateByFilter($filter->all()),
             'parents' => $pageService->getAsFlatTree(),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')

@@ -36,10 +36,7 @@ class BanValueController
     {
         return Response::view('icore::admin.banvalue.index', [
             'type' => $type,
-            'bans' => $banValue->makeRepo()->paginateByFilter($filter->all() + [
-                'type' => $type,
-                'except' => $request->input('except')
-            ]),
+            'bans' => $banValue->makeRepo()->paginateByFilter($filter->all()),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);

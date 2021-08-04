@@ -61,6 +61,7 @@ class UpdateFullRequest extends FormRequest
                     ]);
                 }),
             ],
+            'user' => 'bail|required|integer|exists:users,id',
             'seo_title' => 'max:255',
             'seo_desc' => 'max:255',
             'seo_noindex' => 'boolean',

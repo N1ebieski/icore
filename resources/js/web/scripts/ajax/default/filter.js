@@ -40,7 +40,7 @@
         if ($('#filter').valid()) ajaxFilter($form, $form.href);
     });
 
-    jQuery(document).on('click', '.filterOption', function(e) {
+    jQuery(document).on('click', 'a.filterOption', function(e) {
         e.preventDefault();
 
         let $form = $('#filter');

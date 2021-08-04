@@ -179,7 +179,7 @@
                             {{ trans('icore::posts.comment') }}?
                         </label>
                     </div>
-                </div>
+                </div>              
                 <div class="form-group">
                     <label for="status">
                         {{ trans('icore::filter.status.label') }}
@@ -252,6 +252,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="user">
+                        {{ trans('icore::posts.author') }}:
+                    </label>
+                    <select 
+                        class="selectpicker" 
+                        data-live-search="true"
+                        data-abs="true"
+                        data-abs-max-options-length="10"
+                        data-abs-text-attr="name"
+                        data-abs-ajax-url="{{ route('api.user.index') }}"
+                        data-style="border"
+                        data-width="100%"
+                        name="user"
+                        id="user"
+                    >
+                        @if ($userSelection !== null)
+                        <optgroup label="{{ trans('icore::default.current_option') }}">
+                            <option value="{{ $userSelection->id }}" selected>
+                                {{ $userSelection->name }}
+                            </option>
+                        </optgroup>
+                        @endif
+                    </select>
+                    @includeWhen($errors->has('user'), 'icore::admin.partials.errors', ['name' => 'user'])
+                </div>                  
                 <div class="form-group">
                     <label for="category">
                         <span>{{ trans('icore::categories.categories.label') }}</span>

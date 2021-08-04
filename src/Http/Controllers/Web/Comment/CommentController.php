@@ -6,14 +6,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Filters\Web\Comment\TakeFilter;
 use N1ebieski\ICore\Http\Requests\Web\Comment\EditRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\TakeRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Comment\Polymorphic;
 
-/**
- * [CommentController description]
- */
 class CommentController implements Polymorphic
 {
     /**
@@ -54,21 +52,20 @@ class CommentController implements Polymorphic
     }
 
     /**
-     * Gets the next few Comments-childrens without pagination
+     * Undocumented function
      *
-     * @param  Comment        $comment        [description]
-     * @param  TakeRequest    $request        [description]
-     * @return JsonResponse                   [description]
+     * @param Comment $comment
+     * @param TakeRequest $request
+     * @param TakeFilter $filer
+     * @return JsonResponse
      */
-    public function take(Comment $comment, TakeRequest $request) : JsonResponse
+    public function take(Comment $comment, TakeRequest $request, TakeFilter $filter) : JsonResponse
     {
         return Response::json([
             'success' => '',
             'view' => View::make('icore::web.comment.take', [
-                'comments' => $comment->makeService()->paginateChildrensByFilter([
-                    'except' => $request->get('except'),
-                    'orderby' => $request->get('orderby')
-                ]),
+                'comments' => $comment->makeService()
+                    ->paginateChildrensByFilter($filter->all()),
                 'parent' => $comment
             ])->render()
         ]);

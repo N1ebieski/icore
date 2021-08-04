@@ -19,9 +19,6 @@ use N1ebieski\ICore\Http\Controllers\Admin\Comment\Page\Polymorphic;
 use N1ebieski\ICore\Events\Admin\Comment\StoreEvent as CommentStoreEvent;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as CommentBaseController;
 
-/**
- * [CommentController description]
- */
 class CommentController extends CommentBaseController implements Polymorphic
 {
     /**
@@ -36,9 +33,7 @@ class CommentController extends CommentBaseController implements Polymorphic
     {
         return Response::view('icore::admin.comment.index', [
             'model' => $comment,
-            'comments' => $comment->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'comments' => $comment->makeRepo()->paginateByFilter($filter->all()),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);

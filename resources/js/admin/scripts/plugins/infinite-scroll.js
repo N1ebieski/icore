@@ -12,7 +12,9 @@ jQuery(document).on('readyAndAjax', function () {
 
             if (except.length) {
                 return {
-                    except: except
+                    filter: {
+                        except: except
+                    }
                 };
             }
         },

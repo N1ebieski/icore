@@ -41,9 +41,7 @@ class PostController
     public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.post.index', [
-            'posts' => $post->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'posts' => $post->makeRepo()->paginateByFilter($filter->all()),
             'categories' => $category->makeService()->getAsFlatTree(),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')

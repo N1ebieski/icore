@@ -7,6 +7,7 @@ use N1ebieski\ICore\Http\Requests\Web\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\TakeRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\EditRequest;
 use Illuminate\Http\JsonResponse;
+use N1ebieski\ICore\Filters\Web\Comment\TakeFilter;
 
 /**
  * [interface description]
@@ -32,11 +33,12 @@ interface Polymorphic
     public function update(Comment $comment, UpdateRequest $request) : JsonResponse;
 
     /**
-     * Gets the next few Comments-childrens without pagination
+     * Undocumented function
      *
-     * @param  Comment        $comment        [description]
-     * @param  TakeRequest    $request        [description]
-     * @return JsonResponse                   [description]
+     * @param Comment $comment
+     * @param TakeRequest $request
+     * @param TakeFilter $filter
+     * @return JsonResponse
      */
-    public function take(Comment $comment, TakeRequest $request) : JsonResponse;
+    public function take(Comment $comment, TakeRequest $request, TakeFilter $filter) : JsonResponse;
 }

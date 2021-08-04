@@ -48,7 +48,7 @@ abstract class Filter
             if (method_exists($this, $methodName)) {
                 $this->$methodName(
                     array_key_exists($filterName, $attributes) ?
-                    (strlen($attributes[$filterName]) ? $attributes[$filterName] : null)
+                    (isset($attributes[$filterName]) ? $attributes[$filterName] : null)
                     : null
                 );
             }

@@ -28,11 +28,11 @@ class IndexRequest extends FormRequest
         $paginate = Config::get('database.paginate');
 
         return [
-            'type' => 'required|string|in:ip,word',
             'page' => 'integer',
-            'except' => 'filled|array',
-            'except.*' => 'integer',
             'filter' => 'array|no_js_validation',
+            'filter.except' => 'bail|filled|array',
+            'filter.except.*' => 'bail|integer',
+            'filter.type' => 'required|string|in:ip,word',
             'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [
                 'nullable',
@@ -52,7 +52,7 @@ class IndexRequest extends FormRequest
     public function all($keys = null)
     {
         $data = parent::all($keys);
-        $data['type'] = $this->route('type');
+        $data['filter']['type'] = $this->route('type');
 
         return $data;
     }

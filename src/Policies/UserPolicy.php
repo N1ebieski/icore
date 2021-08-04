@@ -16,6 +16,18 @@ class UserPolicy
      * @param User $user
      * @return void
      */
+    public function view(User $current_user, User $user)
+    {
+        return $current_user->id === $user->id;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param User $current_user
+     * @param User $user
+     * @return void
+     */
     public function actionSelf(User $current_user, User $user)
     {
         return $current_user->id !== $user->id;

@@ -48,9 +48,7 @@ class TagController
     public function index(Tag $tag, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.tag.index', [
-            'tags' => $tag->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'tags' => $tag->makeRepo()->paginateByFilter($filter->all()),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);

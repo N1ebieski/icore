@@ -48,7 +48,7 @@ class PageController
                 $comment->setRelations(['morph' => $page])
                     ->makeCache()
                     ->rememberRootsByFilter(
-                        $filter->all() + ['except' => $request->input('except')],
+                        $filter->all(),
                         $request->get('page') ?? 1
                     )
                 : null,

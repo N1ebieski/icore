@@ -32,9 +32,7 @@ class BanModelController implements UserPolymorphic
     public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.banmodel.user.index', [
-            'bans' => $banModel->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'bans' => $banModel->paginateByFilter($filter->all()),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);

@@ -136,6 +136,8 @@ class PostService implements
 
             $this->post->retag($attributes['tags'] ?? []);
 
+            $this->post->user()->associate($attributes['user']);
+
             $this->post->categories()->sync($attributes['categories']);
 
             return $this->post->save();

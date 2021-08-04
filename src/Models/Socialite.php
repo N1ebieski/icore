@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\SocialiteService;
 use N1ebieski\ICore\Repositories\SocialiteRepo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 
-/**
- * [Socialite description]
- */
 class Socialite extends Model
 {
+    use Carbonable;
+
     // Configuration
 
     /**

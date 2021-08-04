@@ -38,8 +38,10 @@ class CommentTest extends TestCase
             });
 
         $response = $this->post(route('web.comment.take', [$parent->id]), [
-            'except' => collect($comment)->pluck('id')->take(5)->toArray(),
-            'orderby' => 'created_at|asc'
+            'filter' => [
+                'except' => collect($comment)->pluck('id')->take(5)->toArray(),
+                'orderby' => 'created_at|asc'
+            ]
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);

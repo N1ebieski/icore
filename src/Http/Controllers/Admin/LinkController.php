@@ -9,33 +9,29 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Admin\Link\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Link\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Link\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Link\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Link\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Link\UpdatePositionRequest;
 
-/**
- * [LinkController description]
- */
 class LinkController
 {
     /**
-     * Display a listing of the Link.
+     * Undocumented function
      *
-     * @param  string       $type     [description]
-     * @param  Link     $link [description]
-     * @param  IndexRequest $request  [description]
-     * @return HttpResponse                   [description]
+     * @param string $type
+     * @param Link $link
+     * @param IndexRequest $request
+     * @param IndexFilter $filter
+     * @return HttpResponse
      */
-    public function index(string $type, Link $link, IndexRequest $request) : HttpResponse
+    public function index(string $type, Link $link, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.link.index', [
             'type' => $type,
-            'links' => $link->makeRepo()->paginateByFilter([
-                'type' => $type,
-                'except' => $request->input('except')
-            ]),
+            'links' => $link->makeRepo()->paginateByFilter($filter->all()),
             'paginate' => Config::get('database.paginate')
         ]);
     }

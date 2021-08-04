@@ -14,10 +14,14 @@ jQuery(document).on('click', 'a.takeComment', function(e) {
         data: {
             // Pobieramy IDki wcześniejszych komentarzy i podajemy je do backendu,
             // żeby wykluczył je z paginacji
-            except: $row.children('[id^=row]').map(function(){
-                return $(this).attr('data-id');
-            }).get(),
-            orderby: $element.closest('#filterContent').find('#filterCommentOrderBy').val()
+            filter: {
+                except: $row.children('[id^=row]')
+                    .map(function(){
+                        return $(this).attr('data-id');
+                    })
+                    .get(),
+                orderby: $element.closest('#filterContent').find('#filterCommentOrderBy').val()
+            },
         },
         beforeSend: function() {
             $element.hide();

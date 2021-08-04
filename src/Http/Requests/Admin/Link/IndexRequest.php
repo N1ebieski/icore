@@ -24,10 +24,10 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'bail|required|string|in:link,backlink',
             'page' => 'integer',
-            'except' => 'filled|array',
-            'except.*' => 'integer'
+            'filter.type' => 'bail|required|string|in:link,backlink',            
+            'filter.except' => 'bail|filled|array',
+            'filter.except.*' => 'bail|integer'
         ];
     }
     
@@ -40,7 +40,7 @@ class IndexRequest extends FormRequest
     public function all($keys = null)
     {
         $data = parent::all($keys);
-        $data['type'] = $this->route('type');
+        $data['filter']['type'] = $this->route('type');
 
         return $data;
     }
