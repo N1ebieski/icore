@@ -67,6 +67,7 @@ class UpdateFullRequest extends FormRequest
             'seo_nofollow' => 'boolean',
             'comment' => 'boolean',
             'status' => 'required|in:0,1',
+            'user' => 'bail|required|integer|exists:users,id',
             'parent_id' => [
                 'nullable',
                 'integer',
