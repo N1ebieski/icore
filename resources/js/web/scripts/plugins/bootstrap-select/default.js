@@ -1,13 +1,15 @@
 jQuery(document).on('readyAndAjax', function() {
     $('.selectpicker').each(function () {
-        if ($(this).data('loaded') === true) {
+        let $sp = $(this);
+
+        if ($sp.data('loaded') === true) {
             return;
         }
 
-        $(this).selectpicker();
+        $sp.selectpicker();
 
-        if ($(this).data('abs') === true) {
-            $(this).ajaxSelectPicker({
+        if ($sp.data('abs') === true) {
+            $sp.ajaxSelectPicker({
                 ajax: {
                     data: function () {
                         return {
@@ -19,7 +21,7 @@ jQuery(document).on('readyAndAjax', function() {
                 },
                 preprocessData: function(data) {
                     let array = [];
-                    let length = $(this).data('abs-max-options-length') || data.data.length;
+                    let length = $sp.data('abs-max-options-length') || data.data.length;
 
                     $.each(data.data, function (key, value) {
                         if (key >= length) {
@@ -27,20 +29,20 @@ jQuery(document).on('readyAndAjax', function() {
                         }
 
                         array.push({
-                            value: $(this).data('abs-value-attr') ? value[$(this).data('abs-value-attr')] : value.id,
-                            text: $(this).data('abs-text-attr') ? value[$(this).data('abs-text-attr')] : value.name,
+                            value: $sp.data('abs-value-attr') ? value[$sp.data('abs-value-attr')] : value.id,
+                            text: $sp.data('abs-text-attr') ? value[$sp.data('abs-text-attr')] : value.name,
                         });
                     });
         
                     return array;
                 },
                 minLength: 3,
-                preserveSelected: typeof $(this).data('abs-preserve-selected') === "boolean" ? $(this).data('abs-preserve-selected') : true,
-                preserveSelectedPosition: $(this).data('abs-preserve-selected-position') || 'before',
-                langCode: $(this).data('abs-lang-code') || null
+                preserveSelected: typeof $sp.data('abs-preserve-selected') === "boolean" ? $sp.data('abs-preserve-selected') : true,
+                preserveSelectedPosition: $sp.data('abs-preserve-selected-position') || 'before',
+                langCode: $sp.data('abs-lang-code') || null
             });
         }
 
-        $(this).attr('data-loaded', true);
+        $sp.attr('data-loaded', true);
     });
 });
