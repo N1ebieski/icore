@@ -20,7 +20,7 @@
             id="content"
         ></textarea>
     </div>
-    <button type="button" class="btn btn-primary storeComment">
+    <button type="button" class="btn btn-primary store-comment">
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>

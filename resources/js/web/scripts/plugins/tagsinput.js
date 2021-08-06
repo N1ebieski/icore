@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     $('.tagsinput').each(function () {
         $(this).tagsInput({
             placeholder: $(this).attr('placeholder'),

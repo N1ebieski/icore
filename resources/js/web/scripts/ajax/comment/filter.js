@@ -1,33 +1,34 @@
-(function($) {
-    let ajaxFilterComment = function($form, href) {
+(function ($) {
+    let ajaxFilterComment = function ($form, href) {
         $.ajax({
             url: href,
             method: 'get',
             dataType: 'html',
-            beforeSend: function() {
-                $('#filterContent').find('.btn').prop('disabled', true);
-                $('#filterOrderBy').prop('disabled', true);
-                $('#filterPaginate').prop('disabled', true);
+            beforeSend: function () {
+                $('#filterContent, #filter-content').find('.btn').prop('disabled', true);
+                $('#filterOrderBy, #filter-orderby').prop('disabled', true);
+                $('#filterPaginate, #filter-paginate').prop('disabled', true);
                 $form.children('div').append($.getLoader('spinner-border'));
-                $('#filterModal').modal('hide');
+                $('#filterModal, #filter-modal').modal('hide');
             },
-            complete: function() {
-                $form.find('div.loader-absolute').remove();
+            complete: function () {
+                $form.find('.loader-absolute').remove();
                 $('div#comment').find('.captcha').recaptcha();
             },
-            success: function(response) {
-                $('#filterContent').html($.sanitize($(response).find('#filterContent').html()));
+            success: function (response) {
+                $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
+
                 document.title = document.title.replace(/:\s(\d+)/, ': 1');
                 history.replaceState(null, null, href);
             },
         });
     };
 
-    jQuery(document).on('change', '#filterCommentOrderBy', function(e) {
+    jQuery(document).on('change', '#filterCommentOrderBy, #filter-orderby-comment', function (e) {
         e.preventDefault();
 
         let $form = $('#filter');
-        $form.href = $form.attr('data-route')+'?'+$form.serialize();
+        $form.href = $form.data('route') + '?' + $form.serialize();
 
         ajaxFilterComment($form, $form.href);
     });

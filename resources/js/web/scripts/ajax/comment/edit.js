@@ -1,26 +1,28 @@
-jQuery(document).on('click', 'a.editComment', function(e) {
+jQuery(document).on('click', 'a.editComment, a.edit-comment', function (e) {
     e.preventDefault();
 
     let $element = $(this);
+
     let $comment = $element.closest('[id^=comment]');
 
     $.ajax({
-        url: $element.attr('data-route'),
+        url: $element.data('route'),
         method: 'get',
-        beforeSend: function() {
+        beforeSend: function () {
             $comment.children('div').hide();
             $comment.append($.getLoader('spinner-border', 'loader'));
         },
-        complete: function() {
-            $comment.find('div.loader').remove();
+        complete: function () {
+            $comment.find('.loader').remove();
         },
-        success: function(response) {
+        success: function (response) {
             $comment.append($.sanitize(response.view));
         },
-        error: function(response) {
+        error: function (response) {
             $comment.children('div').show();
+
             if (response.responseJSON.message) {
-                $comment.children('div').prepend($.getAlert(response.responseJSON.message, 'danger'));
+                $comment.children('div').prepend($.getAlert('danger', response.responseJSON.message));
             }
         }
     });

@@ -1,4 +1,4 @@
-jQuery(document).on('click', 'div#themeToggle button', function (e) {
+jQuery(document).on('click', 'div#themeToggle button, div#theme-toggle button', function (e) {
     e.preventDefault();
 
     let $element = $(this);

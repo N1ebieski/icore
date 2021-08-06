@@ -1,34 +1,29 @@
-jQuery(document).on('click', 'button.storeComment', function(e) {
+jQuery(document).on('click', '.storeComment, .store-comment', function (e) {
     e.preventDefault();
 
-    let $form = $(this).closest('form');
+    let $element = $(this);
+
+    let $form = $element.closest('form');
     $form.btn = $form.find('.btn');
     $form.input = $form.find('.form-control');
-    let $modal = {};
-    $modal.body = $form.closest('.modal-body');
 
     jQuery.ajax({
-        url: $form.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $form.data('route'),
         method: 'post',
         data: $form.serialize(),
         dataType: 'json',
-        beforeSend: function() {
-            $form.btn.prop('disabled', true);
-            $modal.body.append($.getLoader('spinner-border'));
+        beforeSend: function () {
+            $element.getLoader('show');
             $('.invalid-feedback').remove();
             $form.input.removeClass('is-valid');
             $form.input.removeClass('is-invalid');
         },
-        complete: function() {
-            $form.btn.prop('disabled', false);
-            $modal.body.find('div.loader-absolute').remove();
+        complete: function () {
+            $element.getLoader('hide');
             $form.input.addClass('is-valid');
         },
-        success: function(response) {
-            let $row = $('#row'+$form.attr('data-id'));
+        success: function (response) {
+            let $row = $('#row' + $form.data('id'));
             $row.after($.sanitize(response.view));
 
             let $rowNext = $row.next();
@@ -36,14 +31,13 @@ jQuery(document).on('click', 'button.storeComment', function(e) {
             setTimeout(function() {
                 $rowNext.removeClassStartingWith('alert-');
             }, 5000);
+
             $('.modal').modal('hide');
         },
         error: function(response) {
-            var errors = response.responseJSON;
-
-            $.each(errors.errors, function( key, value ) {
-                $form.find('#'+key).addClass('is-invalid');
-                $form.find('#'+key).after($.getError(key, value));
+            $.each(response.responseJSON.errors, function (key, value) {
+                $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
+                $form.find('#' + $.escapeSelector(key)).after($.getError(key, value));
             });
         }
     });

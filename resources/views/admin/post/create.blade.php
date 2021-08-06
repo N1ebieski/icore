@@ -30,7 +30,7 @@
         class="mb-3" 
         method="post" 
         action="{{ route('admin.post.store') }}" 
-        id="createPost"
+        id="create-post"
     >
         @csrf
         <div class="row">
@@ -187,7 +187,7 @@
                         class="custom-select" 
                         data-toggle="collapse" 
                         aria-expanded="false"
-                        aria-controls="collapsePublishedAt" 
+                        aria-controls="collapse-published-at" 
                         id="status" 
                         name="status"
                     >
@@ -213,7 +213,7 @@
                 </div>
                 <div 
                     class="form-group collapse {{ (old('status') && old('status') != $post::INACTIVE) ? 'show' : '' }}"
-                    id="collapsePublishedAt"
+                    id="collapse-published-at"
                 >
                     <label for="published_at">
                         <span>{{ trans('icore::posts.published_at.label') }}</span>

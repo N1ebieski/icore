@@ -1,33 +1,27 @@
-jQuery(document).on('click', 'button.clearReport', function(e) {
+jQuery(document).on('click', '.clearReport, .clear-report', function (e) {
     e.preventDefault();
 
     let $element = $(this);
-    let $modal = {
-        body: $element.closest('.modal').find('.modal-body'),
-        content: $element.closest('.modal').find('.modal-content')
-    };
 
     $.ajax({
-        url: $element.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $element.data('route'),
         method: 'delete',
-        beforeSend: function() {
-            $modal.body.find('.btn').prop('disabled', true);
-            $modal.body.append($.getLoader('spinner-border'));
+        beforeSend: function () {
+            $element.getLoader('show');
         },
-        complete: function() {
-            $modal.content.find('div.loader-absolute').remove();
+        complete: function () {
+            $element.getLoader('hide');
         },
-        success: function(response) {
-            let $row = $('#row'+$element.attr('data-id'));
+        success: function (response) {
+            let $row = $('#row' + $element.attr('data-id'));
 
             $row.html($.sanitize($(response.view).html()));
+
             $row.addClass('alert-primary');
-            setTimeout(function() {
+            setTimeout(function () {
                 $row.removeClassStartingWith('alert-');
             }, 5000);
+
             $('.modal').modal('hide');
         }
     });

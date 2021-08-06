@@ -1,15 +1,13 @@
-jQuery(document).on('click', 'a.takeComment', function(e) {
+jQuery(document).on('click', 'a.takeComment, a.take-comment', function (e) {
     e.preventDefault();
 
     let $element = $(this);
+
     let $row = $element.closest('[id^=row]');
     let $div = $element.closest('div');
 
     $.ajax({
-        url: $element.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $element.data('route'),
         method: 'post',
         data: {
             // Pobieramy IDki wcześniejszych komentarzy i podajemy je do backendu,
@@ -23,14 +21,14 @@ jQuery(document).on('click', 'a.takeComment', function(e) {
                 orderby: $element.closest('#filterContent').find('#filterCommentOrderBy').val()
             },
         },
-        beforeSend: function() {
+        beforeSend: function () {
             $element.hide();
             $div.append($.getLoader('spinner-border', 'loader'));
         },
-        complete: function() {
-            $div.find('div.loader').remove();
+        complete: function () {
+            $div.find('.loader').remove();
         },
-        success: function(response) {
+        success: function (response) {
             $row.append($.sanitize(response.view));
         }
     });

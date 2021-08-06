@@ -1,4 +1,3 @@
-//$('ul.pagination').hide();
 jQuery(document).on('readyAndAjax', function () {
     let $is = $('#infinite-scroll');
 

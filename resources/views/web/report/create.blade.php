@@ -1,6 +1,6 @@
 <form 
     method="post" 
-    id="createReport" 
+    id="create-report" 
     data-id="{{ $model->id }}"
     data-route="{{ route("web.report.{$model->poli_self}.store", [$model->id]) }}"
 >
@@ -10,7 +10,7 @@
         </label>
         <input type="text" value="" name="content" class="form-control" id="content">
     </div>
-    <button type="button" class="btn btn-primary storeReport">
+    <button type="button" class="btn btn-primary store-report">
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.submit') }}</span>
     </button>

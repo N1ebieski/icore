@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function() {
+jQuery(document).on('readyAndAjax', function () {
     $('.tagsinput').each(function () {    
         if (!$(this).parent().find('[id$="_tagsinput"]').length) {    
             $(this).tagsInput({

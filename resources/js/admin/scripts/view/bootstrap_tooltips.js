@@ -1,3 +1,3 @@
-jQuery(document).on('readyAndAjax', function() {
+jQuery(document).on('readyAndAjax', function () {
   $('[data-toggle="tooltip"]').tooltip();
 });

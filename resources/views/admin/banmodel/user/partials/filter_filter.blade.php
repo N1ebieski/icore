@@ -1,5 +1,5 @@
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'filterModal')
+@slot('modal_id', 'filter-modal')
 
 @slot('modal_title')
 <i class="fas fa-sort-amount-up"></i>
@@ -8,20 +8,20 @@
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">
+    <label for="filter-search">
         {{ trans('icore::filter.search.label') }}
     </label>
     <input 
         type="text" 
         class="form-control" 
-        id="FormSearch" 
+        id="filter-search" 
         placeholder="{{ trans('icore::filter.search.placeholder') }}"
         name="filter[search]" 
         value="{{ isset($filter['search']) ? $filter['search'] : '' }}"
     >
 </div>
 <div class="d-inline">
-    <button type="button" class="btn btn-primary btn-send" id="filterFilter">
+    <button type="button" class="btn btn-primary btn-send" id="filter-filter">
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.apply') }}</span>
     </button>

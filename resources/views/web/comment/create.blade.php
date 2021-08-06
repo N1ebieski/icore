@@ -1,5 +1,5 @@
 <form 
-    id="createComment" 
+    id="create-comment" 
     class="position-relative"
     data-route="{{ route("web.comment.{$model->poli_self}.store", [$model->id]) }}" 
     method="post"
@@ -19,7 +19,7 @@
         ></textarea>
     </div>
     @render('icore::captchaComponent', ['id' => $parent_id])
-    <button type="button" class="btn btn-primary storeComment">
+    <button type="button" class="btn btn-primary store-comment">
         {{ trans('icore::default.submit') }}
     </button>
 </form>

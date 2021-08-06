@@ -1,27 +1,24 @@
-jQuery(document).on('click', 'a.resetMailing', function(e) {
+jQuery(document).on('click', 'a.resetMailing, a.reset-mailing', function (e) {
     e.preventDefault();
 
     var $element = $(this);
-    var $row = $('#row'+$element.attr('data-id'));
+    var $row = $('#row' + $element.data('id'));
 
     $.ajax({
-        url: $element.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $element.data('route'),
         method: 'delete',
-        beforeSend: function() {
-            $row.find('.btn').prop('disabled', true);
-            $row.append($.getLoader('spinner-border'));
+        beforeSend: function () {
+            $row.find('.responsive-btn-group').addClass('disabled');
+            $row.find('[data-btn-ok-class*="resetMailing"], [data-btn-ok-class*="reset-mailing"]').getLoader('show');
         },
-        complete: function() {
-            $row.find('div.loader-absolute').remove();
+        complete: function () {
+            $row.find('[data-btn-ok-class*="resetMailing"], [data-btn-ok-class*="reset-mailing"]').getLoader('hide');
         },
-        success: function(response) {
+        success: function (response) {
             $row.html($.sanitize($(response.view).html()));
 
             $row.addClass('alert-danger');
-            setTimeout(function() {
+            setTimeout(function () {
                 $row.removeClassStartingWith('alert-');
             }, 5000);
         }

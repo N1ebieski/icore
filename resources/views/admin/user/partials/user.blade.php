@@ -59,7 +59,7 @@
                 @can('actionSelf', $user)
                 <button 
                     data-toggle="modal" 
-                    data-target="#editModal"
+                    data-target="#edit-modal"
                     data-route="{{ route('admin.user.edit', ['user' => $user->id]) }}"
                     type="button" 
                     class="btn btn-primary edit"
@@ -116,7 +116,7 @@
                         class="btn btn-dark create"
                         data-route="{{ route('admin.banmodel.user.create', ['user' => $user->id]) }}"
                         data-toggle="modal" 
-                        data-target="#createBanUserModal"
+                        data-target="#create-ban-user-modal"
                     >
                         <i class="fas fa-user-slash"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.ban') }}</span>

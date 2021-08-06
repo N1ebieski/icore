@@ -18,17 +18,19 @@ jQuery(document).ready(function () {
         });
     }
 
-    $('form#createPost .datepicker, form#editFullPost .datepicker').pickadate({
+    $('form#createPost .datepicker, form#editFullPost .datepicker, form#create-post .datepicker, form#editfull-post .datepicker').pickadate({
         clear: '',
         formatSubmit: 'yyyy-m-dd',
         hiddenName: true
     });
-    $('form#createMailing .datepicker, form#editMailing .datepicker').pickadate({
+
+    $('form#createMailing .datepicker, form#editMailing .datepicker, form#create-mailing .datepicker, form#edit-mailing .datepicker').pickadate({
         clear: '',
         formatSubmit: 'yyyy-m-dd',
         hiddenName: true,
         min: new Date(),
     });
+
     $('.timepicker').pickatime({
         clear: '',
         format: 'H:i',

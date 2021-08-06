@@ -37,6 +37,7 @@ return [
         'tooltip' => 'Icon class (for eaxample from font-awesome). The icon will be displayed next to the title.',
         'placeholder' => 'example font-awesome: fab fa-google',
     ],
+    'author' => 'Author',
     'status' => [
         Page::ACTIVE => 'active',
         Page::INACTIVE => 'inactive'
@@ -44,5 +45,5 @@ return [
     'position' => 'Position',
     'pages' => 'Pages',
     'map' => 'See also',
-    'more' => 'more &raquo'    
+    'more' => 'more &raquo'
 ];

@@ -7,7 +7,7 @@
                 href="#" 
                 class="navbar-toggler" 
                 role="button" 
-                id="sidebarToggle"
+                id="sidebar-toggle"
             >
                 <span class="navbar-toggler-icon"></span>
             </a>
@@ -56,7 +56,7 @@
             <a 
                 class="nav-link dropdown-toggle" 
                 href="#" 
-                id="commentDropdown" 
+                id="comment-dropdown" 
                 role="button"
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
@@ -71,7 +71,7 @@
                 <span class="badge badge-danger">{{ $comments_reported_count->sum('count') }}</span>
                 @endif
             </a>
-            <div class="dropdown-menu" aria-labelledby="commentDropdown">
+            <div class="dropdown-menu" aria-labelledby="comment-dropdown">
                 <h6 class="dropdown-header">
                     {{ trans('icore::default.type') }}:
                 </h6>
@@ -112,7 +112,7 @@
             <a 
                 class="nav-link dropdown-toggle"
                 href="#" 
-                id="pagesDropdown" 
+                id="pages-dropdown" 
                 role="button"
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
@@ -121,7 +121,7 @@
                 <i class="fas fa-fw fa-layer-group"></i>
                 <span> {{ trans('icore::categories.route.index') }}</span>
             </a>
-            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <div class="dropdown-menu" aria-labelledby="pages-dropdown">
                 <h6 class="dropdown-header">
                     {{ trans('icore::default.type') }}:
                 </h6>
@@ -160,7 +160,7 @@
             <a 
                 class="nav-link dropdown-toggle"
                 href="#" 
-                id="userDropdown" 
+                id="user-dropdown" 
                 role="button"
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
@@ -169,7 +169,7 @@
                 <i class="fas fa-fw fa-users"></i>
                 <span> {{ trans('icore::users.route.index') }}</span>
             </a>
-            <div class="dropdown-menu" aria-labelledby="userDropdown">
+            <div class="dropdown-menu" aria-labelledby="user-dropdown">
                 @can('admin.users.view')
                 <a 
                     class="dropdown-item {{ $isUrl(route('admin.user.index')) }}"
@@ -231,7 +231,7 @@
             <a 
                 class="nav-link dropdown-toggle"
                 href="#" 
-                id="pagesDropdown" 
+                id="other-dropdown" 
                 role="button"
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
@@ -240,8 +240,8 @@
                 <i class="fas fa-fw fa-tools"></i>
                 <span> {{ trans('icore::admin.route.settings') }}</span>
             </a>
-            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            @can('admin.bans.view')
+            <div class="dropdown-menu" aria-labelledby="other-dropdown">
+                @can('admin.bans.view')
                 <a 
                     class="dropdown-item {{ $isUrl(route('admin.banvalue.index', ['word'])) }}"
                     href="{{ route('admin.banvalue.index', ['word']) }}"
@@ -249,8 +249,8 @@
                 >
                     {{ trans('icore::bans.value.word.route.index') }}
                 </a>
-            @endcan
-            @can('admin.links.view')
+                @endcan
+                @can('admin.links.view')
                 <a 
                     class="dropdown-item {{ $isUrl(route('admin.link.index', ['link'])) }}"
                     href="{{ route('admin.link.index', ['link']) }}"
@@ -258,8 +258,8 @@
                 >
                     {{ trans('icore::links.link.route.index') }}
                 </a>
-            @endcan
-            @can('admin.tags.view')
+                @endcan
+                @can('admin.tags.view')
                 <a 
                     class="dropdown-item {{ $isUrl(route('admin.tag.index')) }}"
                     href="{{ route('admin.tag.index') }}"
@@ -267,7 +267,7 @@
                 >
                     {{ trans('icore::tags.route.index') }}
                 </a>
-            @endcan            
+                @endcan            
             </div>
         </li>
         @endcanany

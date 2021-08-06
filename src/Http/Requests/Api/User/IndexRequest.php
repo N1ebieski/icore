@@ -46,12 +46,15 @@ class IndexRequest extends FormRequest
             'filter.orderby' => [
                 'bail',
                 'nullable',
-                'in:created_at|asc,created_at|desc' . optional($this->user())->can('admin.users.view') ? ',updated_at|asc,updated_at|desc' : null
+                'in:created_at|asc,created_at|desc'
+                . optional($this->user())->can('admin.users.view') ?
+                    ',updated_at|asc,updated_at|desc'
+                    : null
             ],
             'filter.paginate' => [
                 'bail',
                 'integer',
-                Rule::in([$paginate, ($paginate*2), ($paginate*4)]),
+                Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]),
             ]
         ];
     }

@@ -1,23 +1,21 @@
-jQuery(document).on('click', '.destroy', function(e) {
+jQuery(document).on('click', '.destroy', function (e) {
     e.preventDefault();
 
     let $element = $(this);
-    let $row = $('#row'+$element.attr('data-id'));
+
+    let $row = $('#row' + $element.attr('data-id'));
 
     jQuery.ajax({
         url: $element.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
         method: 'delete',
-        beforeSend: function() {
+        beforeSend: function () {
             $row.find('.responsive-btn-group').addClass('disabled');
-            $row.append($.getLoader('spinner-border'));
+            $element.getLoader('show');
         },
-        complete: function() {
-            $row.find('div.loader-absolute').remove();
+        complete: function () {
+            $element.getLoader('hide');
         },
-        success: function(response) {
+        success: function (response) {
             $row.fadeOut('slow');
         }
     });

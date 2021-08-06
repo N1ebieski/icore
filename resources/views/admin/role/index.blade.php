@@ -29,12 +29,14 @@
             class="btn btn-primary text-nowrap"
         >
             <i class="far fa-plus-square"></i>
-            <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
+            <span class="d-none d-sm-inline">
+                {{ trans('icore::default.create') }}
+            </span>
         </a>
     </div>
     @endrole
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @if ($roles->isNotEmpty())
     <div id="infinite-scroll">
         @foreach ($roles as $role)

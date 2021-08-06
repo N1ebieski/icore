@@ -18,7 +18,7 @@
     @endif
     <button 
         type="button" 
-        class="btn btn-danger clearReport"
+        class="btn btn-danger clear-report"
         data-route="{{ route("admin.report.{$model->poli_self}.clear", [$model->id]) }}"
         data-id="{{ $model->id }}"
     >

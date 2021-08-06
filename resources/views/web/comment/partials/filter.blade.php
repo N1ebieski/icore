@@ -1,13 +1,13 @@
 <form data-route="{{ url()->current() }}" id="filter">
     <div class="d-flex position-relative">
         <div class="form-group ml-auto">
-            <label class="sr-only" for="filterCommentOrderBy">
+            <label class="sr-only" for="filter-orderby-comment">
                 {{ trans('icore::filter.order') }}
             </label>
             <select 
                 class="form-control custom-select filter" 
                 name="filter[orderby]" 
-                id="filterCommentOrderBy"
+                id="filter-orderby-comment"
             >
                 <option value="">
                     {{ trans('icore::filter.order') }} {{ trans('icore::filter.default') }}

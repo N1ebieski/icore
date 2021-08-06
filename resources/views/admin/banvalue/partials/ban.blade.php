@@ -34,7 +34,7 @@
                 <button 
                     type="button"                 
                     data-toggle="modal" 
-                    data-target="#editModal"
+                    data-target="#edit-modal"
                     data-route="{{ route('admin.banvalue.edit', [$ban->id]) }}"
                     class="btn btn-primary edit"
                 >

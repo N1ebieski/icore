@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     let $map = $("#map");
 
     if ($map.length) {
@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
             })
             .addClass($map.data.containerClass);
     
-            $.each($map.data.addressMarker, function(key, value) {
+            $.each($map.data.addressMarker, function (key, value) {
                 $map.addMarker({
                     address: value
                 });

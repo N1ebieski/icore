@@ -1,33 +1,30 @@
-jQuery(document).on('click', 'button.storeComment', function(e) {
+jQuery(document).on('click', '.storeComment, .store-comment', function (e) {
     e.preventDefault();
 
-    let $form = $(this).closest('form');
+    let $element = $(this);
+
+    let $form = $element.closest('form');
     $form.btn = $form.find('.btn');
     $form.input = $form.find('.form-control');
 
     jQuery.ajax({
-        url: $form.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $form.data('route'),
         method: 'post',
         data: $form.serialize(),
         dataType: 'json',
-        beforeSend: function() {
-            $form.btn.prop('disabled', true);
-            $form.append($.getLoader('spinner-border'));
+        beforeSend: function () {
+            $element.getLoader('show');
             $('.invalid-feedback').remove();
             $form.input.removeClass('is-valid');
             $form.input.removeClass('is-invalid');
         },
-        complete: function() {
-            $form.btn.prop('disabled', false);
-            $form.find('div.loader-absolute').remove();
+        complete: function () {
+            $element.getLoader('hide');
             $form.input.addClass('is-valid');
             $form.find('.captcha').recaptcha();
             $form.find('.captcha').captcha();
         },
-        success: function(response) {
+        success: function (response) {
             if (response.view) {
                 $form.closest('[id^=comment]').after($.sanitize(response.view));
 
@@ -40,7 +37,7 @@ jQuery(document).on('click', 'button.storeComment', function(e) {
             }
 
             if (response.success) {
-                $form.before($.getAlert(response.success, 'success'));
+                $form.before($.getAlert('success', response.success));
             }
 
             if ($form.find('#parent_id').val() != 0) {
@@ -50,17 +47,17 @@ jQuery(document).on('click', 'button.storeComment', function(e) {
             }
         },
         error: function(response) {
-
             if (response.responseJSON.errors) {
                 $.each(response.responseJSON.errors, function(key, value) {
-                    $form.find('[name="'+key+'"]').addClass('is-invalid');
-                    $form.find('[name="'+key+'"]').closest('.form-group').append($.getError(key, value));
+                    $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
+                    $form.find('#' + $.escapeSelector(key)).closest('.form-group').append($.getError(key, value));
                 });
+
                 return;
             }
 
             if (response.responseJSON.message) {
-                $form.prepend($.getAlert(response.responseJSON.message, 'danger'));
+                $form.prepend($.getAlert('danger', response.responseJSON.message));
             }
         }
     });

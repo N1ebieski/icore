@@ -12,7 +12,7 @@
                         class="edit" 
                         data-route="{{ route('admin.link.edit_position', [$link->id]) }}"
                         data-toggle="modal" 
-                        data-target="#editPositionModal" 
+                        data-target="#edit-position-modal" 
                         role="button"
                     >
                         <span id="position" class="badge badge-pill badge-primary">{{ $link->position + 1 }}</span>
@@ -51,7 +51,7 @@
                 @can('admin.links.edit')
                 <button 
                     data-toggle="modal" 
-                    data-target="#editModal"
+                    data-target="#edit-modal"
                     data-route="{{ route('admin.link.edit', [$link->id]) }}"
                     type="button" 
                     class="btn btn-primary edit"

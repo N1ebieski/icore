@@ -1,7 +1,8 @@
-jQuery(document).on('click', 'a.createReport', function(e) {
+jQuery(document).on('click', 'a.createReport, a.create-report', function(e) {
     e.preventDefault();
 
     let $element = $(this);
+
     let $modal = {
         body: $($element.attr('data-target')).find('.modal-body'),
         content: $($element.attr('data-target')).find('.modal-content')
@@ -10,15 +11,15 @@ jQuery(document).on('click', 'a.createReport', function(e) {
     $modal.body.empty();
 
     jQuery.ajax({
-        url: $element.attr('data-route'),
+        url: $element.data('route'),
         method: 'get',
-        beforeSend: function() {
+        beforeSend: function () {
             $modal.body.html($.getLoader('spinner-grow'));
         },
-        complete: function() {
-            $modal.content.find('div.loader-absolute').remove();
+        complete: function () {
+            $modal.content.find('.loader-absolute').remove();
         },
-        success: function(response) {
+        success: function (response) {
             $modal.body.html($.sanitize(response.view));
         }
     });

@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     let c = $(window).scrollTop();
     let currentScrollTop = 0;
     let $navbar = $('.navbar');

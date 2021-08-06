@@ -37,7 +37,7 @@
                             class="edit" 
                             data-route="{{ route('admin.page.edit_position', [$page->id]) }}"
                             data-toggle="modal" 
-                            data-target="#editPositionModal" 
+                            data-target="#edit-position-modal" 
                             role="button"
                         >
                             <span id="position" class="badge badge-pill badge-primary">
@@ -77,7 +77,7 @@
                 <div class="btn-group-vertical">
                     <button 
                         data-toggle="modal" 
-                        data-target="#editModal"
+                        data-target="#edit-modal"
                         data-route="{{ route('admin.page.edit', ['page' => $page->id]) }}"
                         type="button" 
                         class="btn btn-primary edit"
@@ -101,7 +101,7 @@
                 <button 
                     data-status="1" 
                     type="button" 
-                    class="btn btn-success statusPage"
+                    class="btn btn-success status-page"
                     data-route="{{ route('admin.page.update_status', ['page' => $page->id]) }}"
                     {{ $page->status == $page::ACTIVE ? 'disabled' : '' }}
                 >
@@ -111,7 +111,7 @@
                 <button 
                     data-status="0" 
                     type="button" 
-                    class="btn btn-warning statusPage"
+                    class="btn btn-warning status-page"
                     data-route="{{ route('admin.page.update_status', ['page' => $page->id]) }}"
                     {{ $page->status == $page::INACTIVE ? 'disabled' : '' }}
                 >
@@ -129,7 +129,7 @@
                     data-id="{{ $page->id }}" 
                     data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
                     data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroyPage" 
+                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-page" 
                     data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
                     data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                     data-btn-cancel-icon-class="fas fa-ban mr-1"

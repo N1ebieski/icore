@@ -92,7 +92,9 @@
                     data-title="{{ trans('icore::default.confirm') }}"
                 >
                     <i class="far fa-trash-alt"></i>
-                    <span>{{ trans('icore::default.delete_global') }}</span>
+                    <span class="d-none d-sm-inline">
+                        {{ trans('icore::default.delete_global') }}
+                    </span>
                 </button>
             </div>
             @endcan

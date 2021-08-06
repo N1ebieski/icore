@@ -52,7 +52,7 @@
                 <div class="btn-group-vertical">
                     <button 
                         data-toggle="modal" 
-                        data-target="#editModal"
+                        data-target="#edit-modal"
                         data-route="{{ route('admin.post.edit', ['post' => $post->id]) }}"
                         type="button" 
                         class="btn btn-primary edit"

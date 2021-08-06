@@ -60,7 +60,7 @@
                 <h3 class="h5 border-bottom pb-2" id="comments">
                     {{ trans('icore::comments.comments') }}
                 </h3>
-                <div id="filterContent">
+                <div id="filter-content">
                     @if ($comments->isNotEmpty())
                         @include('icore::web.comment.partials.filter')
                     @endif
@@ -94,7 +94,7 @@
                         ])
                     </div>
                     @component('icore::web.partials.modal')
-                    @slot('modal_id', 'createReportModal')
+                    @slot('modal_id', 'create-report-modal')
                     @slot('modal_title')
                     <span>{{ trans('icore::reports.route.create') }}</span>
                     @endslot

@@ -24,8 +24,8 @@
         });
     };
 
-    $.fn.removeClassStartingWith = function(begin) {
-        this.removeClass(function(index, className) {
+    $.fn.removeClassStartingWith = function (begin) {
+        this.removeClass(function (index, className) {
             return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');
         });
     };
@@ -47,14 +47,14 @@
         return $output.html();
     };
 
-    $.getUrlParameter = function(url, name) {
+    $.getUrlParameter = function (url, name) {
         return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
     };
 
     /**
      * Plugin refreshujący recaptche v2. Potrzebne w przypadku pobrania formularza przez ajax
      */
-    $.fn.recaptcha = function() {
+    $.fn.recaptcha = function () {
         if (this.hasClass('g-recaptcha')) {
             var widgetId;
             // Przypadek, gdy nowy token generowany jest w momencie pobrania formularza
@@ -79,26 +79,40 @@
         }
     };
 
-    $.fn.captcha = function() {
+    $.fn.captcha = function () {
         if (this.hasClass('logic_captcha')) {
             this.find('input[name="captcha"]').val('');
             this.find('.reload_captcha_base64').trigger('click');
         }
     };
 
-    $.getLoader = function(type, loader = 'loader-absolute') {
-        return '<div class="'+loader+'"><div class="'+type+'"><span class="sr-only">Loading...</span></div></div>';
+    $.fn.getLoader = function (action, type = 'spinner-border') {
+        if (action == 'show') {
+            $(this).parent().find('button').prop('disabled', true);
+            $(this).find('i').hide();
+            $(this).prepend($.sanitize('<span class="' + type + ' ' + type + '-sm text-light" role="status" aria-hidden="true"></span>'));
+        }
+
+        if (action == 'hide') {
+            $(this).parent().find('button').prop('disabled', false);
+            $(this).find('i').show();
+            $(this).find('[role="status"]').remove();
+        }
     };
 
-    $.getAlert = function(response, type) {
-        return $.sanitize('<div class="alert alert-'+type+' alert-time" role="alert">'+response+'</div>');
+    $.getLoader = function (type = 'spinner-border', loader = 'loader-absolute') {
+        return $.sanitize('<div class="' + loader + '"><div class="' + type + '"><span class="sr-only">Loading...</span></div></div>');
     };
 
-    $.getError = function(key, value) {
-        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-'+ key+'">'+value+'</span>');
+    $.getAlert = function (type, text) {
+        return $.sanitize('<div class="alert alert-' + type + ' alert-time" role="alert">' + text + '</div>');
     };
 
-    $.getMessage = function(response) {
-        return $.sanitize('<span class="valid-feedback d-block font-weight-bold">'+response+'</span>');
+    $.getError = function (id, text) {
+        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-' + id + '">' + text + '</span>');
+    };
+
+    $.getMessage = function(text) {
+        return $.sanitize('<span class="valid-feedback d-block font-weight-bold">' + text + '</span>');
     };
 })(jQuery);

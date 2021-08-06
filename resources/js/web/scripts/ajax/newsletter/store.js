@@ -1,30 +1,27 @@
-jQuery(document).on('click', '.storeNewsletter', function (e) {
+jQuery(document).on('click', '.storeNewsletter, .store-newsletter', function (e) {
     e.preventDefault();
 
-    let $form = $(this).parents('form');
+    let $element = $(this);
+
+    let $form = $element.parents('form');
     $form.btn = $form.find('.btn');
     $form.group = $form.find('.form-group');
     $form.input = $form.find('.form-control, .custom-control-input');
 
     jQuery.ajax({
-        url: $form.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $form.data('route'),
         method: 'post',
         data: $form.serialize(),
         dataType: 'json',
         beforeSend: function () {
-            $form.btn.prop('disabled', true);
-            $form.append($.getLoader('spinner-border'));
+            $element.getLoader('show');
             $('.invalid-feedback').remove();
             $('.valid-feedback').remove();
             $form.input.removeClass('is-valid');
             $form.input.removeClass('is-invalid');
         },
         complete: function () {
-            $form.btn.prop('disabled', false);
-            $form.find('div.loader-absolute').remove();
+            $element.getLoader('hide');
             $form.input.addClass('is-valid');
         },
         success: function (response) {
@@ -36,8 +33,8 @@ jQuery(document).on('click', '.storeNewsletter', function (e) {
         error: function (response) {
             if (response.responseJSON.errors) {
                 $.each(response.responseJSON.errors, function (key, value) {
-                    $form.find('[name="'+key+'"]').addClass('is-invalid');
-                    $form.find('[name="'+key+'"]').closest('.form-group').append($.getError(key, value));
+                    $form.find('[name="' + key + '"]').addClass('is-invalid');
+                    $form.find('[name="' + key + '"]').closest('.form-group').append($.getError(key, value));
                 });
             }
         }

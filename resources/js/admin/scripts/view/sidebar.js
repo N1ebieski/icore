@@ -1,4 +1,4 @@
-$(document).on('click', ".modal-backdrop, #sidebarToggle", function(e) {
+$(document).on('click', ".modal-backdrop, #sidebarToggle", function (e) {
     e.preventDefault();
 
     // For larger resolutions, the sidebar is always visible (toggled or not)
@@ -14,7 +14,7 @@ $(document).on('click', ".modal-backdrop, #sidebarToggle", function(e) {
     else {
         $(".sidebar").removeClass("toggled");
         if ($('.modal-backdrop').length) {
-            $('.modal-backdrop').fadeOut('slow', function() {
+            $('.modal-backdrop').fadeOut('slow', function () {
                 $(this).remove();
             });
             $(".sidebar").removeClass("show");

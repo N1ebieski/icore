@@ -23,7 +23,7 @@ class UserController
         User $user,
         IndexRequest $request,
         IndexFilter $filter
-    ) : JsonResponse {
+    ): JsonResponse {
         return App::make(UserResource::class)
             ->collection(
                 $user->makeCache()->rememberByFilter(

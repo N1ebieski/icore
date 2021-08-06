@@ -12,7 +12,7 @@
                 aria-label="{{ trans('icore::newsletter.email.placeholder') }}"
             >
             <div class="input-group-append">
-                <button class="btn btn-primary storeNewsletter" type="button">
+                <button class="btn btn-primary store-newsletter" type="button">
                     {{ trans('icore::default.save') }}
                 </button>
             </div>

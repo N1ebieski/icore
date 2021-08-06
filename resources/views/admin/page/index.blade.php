@@ -22,25 +22,27 @@
         <span>{{ trans('icore::pages.route.index') }}</span>
     </div>
     @can('admin.pages.create')
-    <div class="ml-auto text-right">
+    <div class="ml-auto text-right responsive-btn-group">
         <a 
             href="{{ route('admin.page.create') }}" 
             role="button" 
             class="btn btn-primary text-nowrap"
         >
             <i class="far fa-plus-square"></i>
-            <span class="d-none d-sm-inline">{{ trans('icore::pages.create') }}</span>
+            <span class="d-none d-sm-inline">
+                {{ trans('icore::default.create') }}
+            </span>
         </a>
     </div>
     @endcan
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @include('icore::admin.page.partials.filter')
     @if ($pages->isNotEmpty())
     <form 
         action="{{ route('admin.page.destroy_global') }}" 
         method="post" 
-        id="selectForm"
+        id="select-form"
     >
         @csrf
         @method('delete')
@@ -51,9 +53,9 @@
                     <input 
                         type="checkbox" 
                         class="custom-control-input" 
-                        id="selectAll"
+                        id="select-all"
                     >
-                    <label class="custom-control-label" for="selectAll">
+                    <label class="custom-control-label" for="select-all">
                         {{ trans('icore::default.select_all') }}
                     </label>
                 </div>
@@ -81,7 +83,9 @@
                 data-title="{{ trans('icore::pages.confirm') }}"
             >
                 <i class="far fa-trash-alt"></i>
-                <span>{{ trans('icore::default.delete_global') }}</span>
+                <span class="d-none d-sm-inline">
+                    {{ trans('icore::default.delete_global') }}
+                </span>
             </button>
         </div>
         @endcan
@@ -92,7 +96,7 @@
 </div>
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'editModal')
+@slot('modal_id', 'edit-modal')
 @slot('modal_size', 'modal-lg')
 @slot('modal_title')
 <i class="far fa-edit"></i>
@@ -101,7 +105,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'editPositionModal')
+@slot('modal_id', 'edit-position-modal')
 @slot('modal_title')
 <i class="fas fa-sort-amount-up"></i>
 <span> {{ trans('icore::pages.route.edit_position') }}</span>
