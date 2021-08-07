@@ -38,7 +38,7 @@
         <label for="parent_id">
             {{ trans('icore::categories.parent_id') }}
         </label>
-        <select class="form-control" id="parent_id" name="parent_id">
+        <select class="form-control custom-select" id="parent_id" name="parent_id">
             <option value="null" {{ ($category->isRoot()) ? 'selected' : '' }}>
                 {{ trans('icore::categories.null') }}
             </option>
