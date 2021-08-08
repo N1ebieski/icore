@@ -46,15 +46,10 @@ class UserResource extends JsonResource
                     return $this->email;
                 }
             ),
-            'status' => $this->when(
-                optional($request->user())->can('admin.users.view'),
-                function () {
-                    return [
-                        'value' => $this->status,
-                        'label' => Lang::get("icore::users.status.{$this->status}")
-                    ];
-                }
-            ),
+            'status' => [
+                'value' => $this->status,
+                'label' => Lang::get("icore::users.status.{$this->status}")
+            ],
             'marketing' => $this->when(
                 optional($request->user())->can('admin.users.view'),
                 function () {
@@ -66,18 +61,8 @@ class UserResource extends JsonResource
             ),
             'created_at' => $this->created_at,
             'created_at_diff' => $this->created_at_diff,
-            'updated_at' => $this->when(
-                optional($request->user())->can('admin.users.view'),
-                function () {
-                    return $this->updated_at;
-                }
-            ),
-            'updated_at_diff' => $this->when(
-                optional($request->user())->can('admin.users.view'),
-                function () {
-                    return $this->updated_at_diff;
-                }
-            ),
+            'updated_at' => $this->updated_at,
+            'updated_at_diff' => $this->updated_at_diff,
             'roles' => App::make(RoleResource::class)->collection($this->whenLoaded('roles')),
             'socialites' => $this->when(
                 optional($request->user())->can('admin.users.view')

@@ -14,7 +14,8 @@ jQuery(document).on('readyAndAjax', function() {
                     data: function () {
                         return {
                             filter: {
-                                search: '{{{q}}}'
+                                search: '{{{q}}}',
+                                status: 1
                             }
                         };
                     }
@@ -42,6 +43,12 @@ jQuery(document).on('readyAndAjax', function() {
                 langCode: $sp.data('abs-lang-code') || null
             });
         }
+
+        // Fix Cannot unselect option element when preserveSelected is true #85
+        $sp.trigger('change').data('AjaxBootstrapSelect').list.cache = {};
+
+        // Fix temporary for jsvalidation errors placement
+        $sp.parent().addClass('input-group');
 
         $sp.attr('data-loaded', true);
     });

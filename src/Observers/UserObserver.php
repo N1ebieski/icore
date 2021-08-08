@@ -26,7 +26,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        Cache::tags(['user.'.$user->slug, 'users'])->flush();
+        Cache::tags(['user.' . $user->slug, 'users'])->flush();
     }
 
     /**
@@ -37,7 +37,7 @@ class UserObserver
      */
     public function deleted(User $user)
     {
-        Cache::tags(['user.'.$user->slug, 'users'])->flush();
+        Cache::tags(['user.' . $user->slug, 'users'])->flush();
     }
 
     /**

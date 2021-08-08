@@ -59,13 +59,13 @@
 
     $.fn.getLoader = function (action, type = 'spinner-border') {
         if (action == 'show') {
-            $(this).prop('disabled', true);
+            $(this).parent().find('button').prop('disabled', true);
             $(this).find('i').hide();
             $(this).prepend($.sanitize('<span class="' + type + ' ' + type + '-sm text-light" role="status" aria-hidden="true"></span>'));
         }
 
         if (action == 'hide') {
-            $(this).prop('disabled', false);
+            $(this).parent().find('button').prop('disabled', true);
             $(this).find('i').show();
             $(this).find('[role="status"]').remove();
         }

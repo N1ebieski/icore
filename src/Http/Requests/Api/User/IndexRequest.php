@@ -3,8 +3,6 @@
 namespace N1ebieski\ICore\Http\Requests\Api\User;
 
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Rules\NotPresent;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -35,9 +33,14 @@ class IndexRequest extends FormRequest
             'filter.except' => 'bail|nullable|array',
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
-            'filter.status' => optional($this->user())->can('admin.users.view') ?
-                'bail|nullable|integer|in:0,1'
-                : App::make(NotPresent::class),
+            'filter.status' => [
+                'bail',
+                'nullable',
+                'integer',
+                'in:1' . (
+                    optional($this->user())->can('admin.users.view') ? ',0' : null
+                )
+            ],
             'filter.role' => [
                 'bail',
                 'nullable',
@@ -46,10 +49,7 @@ class IndexRequest extends FormRequest
             'filter.orderby' => [
                 'bail',
                 'nullable',
-                'in:created_at|asc,created_at|desc'
-                . optional($this->user())->can('admin.users.view') ?
-                    ',updated_at|asc,updated_at|desc'
-                    : null
+                'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc'
             ],
             'filter.paginate' => [
                 'bail',

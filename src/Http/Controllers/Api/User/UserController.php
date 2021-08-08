@@ -19,11 +19,8 @@ class UserController
      * @param IndexFilter $filter
      * @return JsonResponse
      */
-    public function index(
-        User $user,
-        IndexRequest $request,
-        IndexFilter $filter
-    ): JsonResponse {
+    public function index(User $user, IndexRequest $request, IndexFilter $filter): JsonResponse
+    {
         return App::make(UserResource::class)
             ->collection(
                 $user->makeCache()->rememberByFilter(
@@ -31,6 +28,9 @@ class UserController
                     $request->input('page') ?? 1
                 )
             )
+            ->additional(['meta' => [
+                'filter' => $filter->all()
+            ]])
             ->response();
     }
 }

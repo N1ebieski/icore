@@ -199,7 +199,9 @@ class PageService implements
                 }
             }
 
-            $this->page->user()->associate($attributes['user']);
+            if (isset($attributes['user'])) {
+                $this->page->user()->associate($attributes['user']);
+            }
 
             $this->page->retag($attributes['tags'] ?? []);
 

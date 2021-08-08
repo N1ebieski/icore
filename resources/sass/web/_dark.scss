@@ -61,6 +61,8 @@
 
 .dropdown-menu {
     background-color: $gray-400;
+    color: $black !important;
+    
     .dropdown-header {
         color: $black;
     }

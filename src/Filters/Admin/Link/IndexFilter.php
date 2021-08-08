@@ -8,5 +8,6 @@ use N1ebieski\ICore\Filters\Traits\HasExcept;
 
 class IndexFilter extends Filter
 {
-    use HasType, HasExcept;
+    use HasType;
+    use HasExcept;
 }

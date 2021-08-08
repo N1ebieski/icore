@@ -37,13 +37,8 @@ class PermissionRepo
                     $query->where('id', $id);
                 }
             ])
-            ->whereIn('name', [
-                'web.*',
-                'web.comments.*',
-                'web.comments.create',
-                'web.comments.suggest',
-                'web.comments.edit'
-            ])
+            ->where('name', 'like', 'web.%')
+            ->orWhere('name', 'like', 'api.%')
             ->orderBy('name', 'asc')
             ->get();
     }

@@ -2,9 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\BanValue;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request as BaseRequest;
 
 class IndexRequest extends FormRequest
 {
@@ -16,6 +18,26 @@ class IndexRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->route('type')) {
+            $filter = [
+                'filter' => $this->input('filter', []) + [
+                    'type' => $this->route('type')
+                ]
+            ];
+
+            App::make(BaseRequest::class)->merge($filter);
+
+            $this->merge($filter);
+        }
     }
 
     /**
@@ -39,21 +61,7 @@ class IndexRequest extends FormRequest
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,value|asc,value|desc',
                 'no_js_validation',
             ],
-            'filter.paginate' => Rule::in([$paginate, ($paginate*2), ($paginate*4)]) . '|integer|no_js_validation'
+            'filter.paginate' => Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]) . '|integer|no_js_validation'
         ];
-    }
-
-    /**
-     * Get all of the input and files for the request.
-     *
-     * @param  array|mixed|null  $keys
-     * @return array
-     */
-    public function all($keys = null)
-    {
-        $data = parent::all($keys);
-        $data['filter']['type'] = $this->route('type');
-
-        return $data;
     }
 }

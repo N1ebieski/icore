@@ -4,8 +4,8 @@ namespace N1ebieski\ICore\Cache;
 
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Support\Collection as Collect;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -84,16 +84,16 @@ class UserCache
      * @param integer $page
      * @return LengthAwarePaginator
      */
-    public function rememberByFilter(array $filter, int $page) : LengthAwarePaginator
+    public function rememberByFilter(array $filter, int $page): LengthAwarePaginator
     {
-        if ($this->collect->make($filter)->isNullItems() && !$this->auth->check()) {
+        if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
             $users = $this->getByFilter($page);
         }
 
         if (!isset($users) || !$users) {
             $users = $this->user->makeRepo()->paginateByFilter($filter);
 
-            if ($this->collect->make($filter)->isNullItems() && !$this->auth->check()) {
+            if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
                 $this->putByFilter($users, $page);
             }
         }
@@ -106,7 +106,7 @@ class UserCache
      * @param  int                  $page [description]
      * @return LengthAwarePaginator|null       [description]
      */
-    public function getByFilter(int $page) : ?LengthAwarePaginator
+    public function getByFilter(int $page): ?LengthAwarePaginator
     {
         return $this->cache->tags(["users"])
             ->get(
@@ -120,7 +120,7 @@ class UserCache
      * @param  int                  $page     [description]
      * @return bool                           [description]
      */
-    public function putByFilter(LengthAwarePaginator $users, int $page) : bool
+    public function putByFilter(LengthAwarePaginator $users, int $page): bool
     {
         return $this->cache->tags(["users"])
         ->put(

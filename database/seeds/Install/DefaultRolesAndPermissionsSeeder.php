@@ -99,13 +99,21 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'web.comments.suggest']);
         Permission::firstOrCreate(['name' => 'web.comments.edit']);
 
+        Permission::firstOrCreate(['name' => 'api.*']);
+
+        Permission::firstOrCreate(['name' => 'api.users.*']);
+        Permission::firstOrCreate(['name' => 'api.users.view']);
+
+        Permission::firstOrCreate(['name' => 'api.categories.*']);
+        Permission::firstOrCreate(['name' => 'api.categories.view']);
+
         // create roles and assign created permissions
         $role = Role::firstOrCreate(['name' => 'super-admin']);
 
         $role = Role::firstOrCreate(['name' => 'admin'])
-            ->givePermissionTo(['admin.*', 'web.*']);
+            ->givePermissionTo(['admin.*', 'web.*', 'api.*']);
 
         $role = Role::firstOrCreate(['name' => 'user'])
-            ->givePermissionTo('web.*');
+            ->givePermissionTo(['web.*', 'api.*']);
     }
 }
