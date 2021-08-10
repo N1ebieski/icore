@@ -14,7 +14,13 @@ use N1ebieski\ICore\Filters\Traits\HasPaginate;
 
 class IndexFilter extends Filter
 {
-    use HasExcept, HasSearch, HasStatus, HasParent, HasCategory, HasOrderBy, HasPaginate;
+    use HasExcept;
+    use HasSearch;
+    use HasStatus;
+    use HasParent;
+    use HasCategory;
+    use HasOrderBy;
+    use HasPaginate;
 
     /**
      * [setParent description]
@@ -32,8 +38,20 @@ class IndexFilter extends Filter
      * @param  int|null   $id [description]
      * @return Category     [description]
      */
-    public function findParent(int $id = null) : Category
+    public function findParent(int $id = null): Category
     {
         return $this->findCategory($id);
+    }
+
+    /**
+     * [findCategory description]
+     * @param  int|null   $id [description]
+     * @return Category     [description]
+     */
+    public function findCategory(int $id = null): Category
+    {
+        return Category::withAncestorsExceptSelf()
+            ->where('id', $id)
+            ->first(['id', 'name']);
     }
 }

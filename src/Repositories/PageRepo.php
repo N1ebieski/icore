@@ -78,7 +78,9 @@ class PageRepo
      */
     public function getAsTree() : Collection
     {
-        return $this->page->getTree();
+        return $this->page->getTreeByQuery(
+            $this->page->withAncestorsExceptSelf()
+        );
     }
 
     /**
@@ -96,6 +98,7 @@ class PageRepo
                     ->pluck('id')
                     ->toArray()
             )
+            ->withAncestorsExceptSelf()
         );
     }
 

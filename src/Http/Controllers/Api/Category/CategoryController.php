@@ -31,7 +31,7 @@ class CategoryController implements Polymorphic
             )
             ->additional(['meta' => [
                 'filter' => $filter->all()
-            ]])            
+            ]])
             ->response();
     }
 }

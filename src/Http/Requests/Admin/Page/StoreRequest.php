@@ -66,7 +66,7 @@ class StoreRequest extends FormRequest
             'seo_nofollow' => 'boolean',
             'comment' => 'boolean',
             'status' => 'required|in:0,1',
-            'parent_id' => 'nullable|integer|exists:pages,id'
+            'parent_id' => 'nullable|integer|exists:pages,id|no_js_validation'
         ];
     }
 }

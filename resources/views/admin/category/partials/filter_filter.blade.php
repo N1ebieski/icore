@@ -48,40 +48,47 @@
         </option>
     </select>
 </div>
-@if ($parents->count() > 0)
 <div class="form-group">
     <label for="filter-parent">
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}"
     </label>
     <select 
-        class="form-control custom-select" 
-        id="filter-parent" 
+        class="selectpicker select-picker-category" 
+        data-live-search="true"
+        data-abs="true"
+        data-abs-max-options-length="10"
+        data-abs-text-attr="name"
+        data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
+        data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::filter.default')], ['value' => 0, 'text' => trans('icore::categories.roots')]]) }}"
+        data-style="border"
+        data-width="100%"
         name="filter[parent]"
+        id="filter-parent"
     >
-        <option value="">
-            {{ trans('icore::filter.default') }}
-        </option>
-        <optgroup label="----------"></optgroup>
-        <option 
-            value="0" 
-            {{ ($filter['parent'] !== null && $filter['parent'] === 0) ? 'selected' : '' }}
-        >
-            {{ trans('icore::categories.roots') }}
-        </option>
-        @foreach ($parents as $parent)
-            @if ($parent->real_depth == 0)
-                <optgroup label="----------"></optgroup>
-            @endif
-            <option 
-                value="{{ $parent->id }}" 
-                {{ (optional($filter['parent'])->id == $parent->id) ? 'selected' : '' }}
-            >
-                {{ str_repeat('-', $parent->real_depth) }} {{ $parent->name }}
+        <optgroup label="{{ trans('icore::default.current_option') }}">
+            <option value="">
+                {{ trans('icore::filter.default') }}
             </option>
-        @endforeach
+            <option 
+                value="0" 
+                {{ ($filter['parent'] !== null && $filter['parent'] === 0) ? 'selected' : '' }}
+            >
+                {{ trans('icore::categories.roots') }}
+            </option>
+            @if ($filter['parent'] !== null && $filter['parent'] !== 0)
+            <option 
+                @if ($filter['parent']->ancestors->isNotEmpty())
+                data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $filter['parent']->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $filter['parent']->name }}'
+                @endif
+                value="{{ $filter['parent']->id }}" 
+                selected
+            >
+                {{ $filter['parent']->name }}
+            </option>
+            @endif
+        </optgroup>
     </select>
 </div>
-@endif
 <div class="d-inline">
     <button type="button" class="btn btn-primary btn-send" id="filter-filter">
         <i class="fas fa-check"></i>

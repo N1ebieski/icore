@@ -65,7 +65,7 @@
         }
 
         if (action == 'hide') {
-            $(this).parent().find('button').prop('disabled', true);
+            $(this).parent().find('button').prop('disabled', false);
             $(this).find('i').show();
             $(this).find('[role="status"]').remove();
         }

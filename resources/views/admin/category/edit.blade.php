@@ -33,29 +33,42 @@
             placeholder="{{ trans('icore::categories.icon.placeholder') }}"
         >
     </div>
-    @if ($categories->count() > 0)
     <div class="form-group">
         <label for="parent_id">
             {{ trans('icore::categories.parent_id') }}
         </label>
-        <select class="form-control custom-select" id="parent_id" name="parent_id">
-            <option value="null" {{ ($category->isRoot()) ? 'selected' : '' }}>
-                {{ trans('icore::categories.null') }}
-            </option>
-            @foreach ($categories as $cats)
-            @if ($cats->real_depth === 0)
-            <optgroup label="----------"></optgroup>
-            @endif
-            <option 
-                value="{{ $cats->id }}" 
-                {{ ($category->parent_id === $cats->id) ? 'selected' : '' }}
-            >
-                {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
-            </option>
-            @endforeach
+        <select 
+            class="selectpicker select-picker-category" 
+            data-live-search="true"
+            data-abs="true"
+            data-abs-max-options-length="10"
+            data-abs-text-attr="name"
+            data-abs-ajax-url="{{ route("api.category.{$category->poli}.index") }}"
+            data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
+            data-abs-filter-except="{{ json_encode($category->descendants->pluck('id')->toArray()) }}"
+            data-style="border"
+            data-width="100%"
+            name="parent_id"
+            id="parent_id"
+        >
+            <optgroup label="{{ trans('icore::default.current_option') }}">
+                <option value="" {{ ($category->isRoot()) ? 'selected' : '' }}>
+                    {{ trans('icore::categories.null') }}
+                </option>
+                @if ($category->parent !== null)
+                <option 
+                    @if ($category->parent->ancestors->isNotEmpty())
+                    data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->parent->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $category->parent->name }}'
+                    @endif
+                    value="{{ $category->parent->id }}" 
+                    selected
+                >
+                    {{ $category->parent->name }}
+                </option>
+                @endif
+            </optgroup>
         </select>
     </div>
-    @endif
     <button type="button" data-id="{{ $category->id }}" class="btn btn-primary update">
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>

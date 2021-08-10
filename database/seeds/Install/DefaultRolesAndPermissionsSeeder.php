@@ -114,6 +114,6 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo(['admin.*', 'web.*', 'api.*']);
 
         $role = Role::firstOrCreate(['name' => 'user'])
-            ->givePermissionTo(['web.*', 'api.*']);
+            ->givePermissionTo(['web.*']);
     }
 }

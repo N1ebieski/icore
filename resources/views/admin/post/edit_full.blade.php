@@ -257,7 +257,7 @@
                         {{ trans('icore::posts.author') }}:
                     </label>
                     <select 
-                        class="selectpicker" 
+                        class="selectpicker select-picker" 
                         data-live-search="true"
                         data-abs="true"
                         data-abs-max-options-length="10"
@@ -279,8 +279,14 @@
                     @includeWhen($errors->has('user'), 'icore::admin.partials.errors', ['name' => 'user'])
                 </div>
                 <div class="form-group">
-                    <label for="categories">
-                        {{ trans('icore::categories.categories.label') }}:
+                    <label for="category">
+                        <span>{{ trans('icore::categories.categories.label') }}</span>
+                        <i 
+                            data-toggle="tooltip" 
+                            data-placement="top"
+                            title="{{ trans('icore::categories.categories.tooltip', ['max_categories' => $maxCategories]) }}"
+                            class="far fa-question-circle"
+                        ></i>
                     </label>
                     <select 
                         class="selectpicker selectpicker-category" 
@@ -296,7 +302,7 @@
                         name="categories[]"
                         id="categories"
                     >
-                        @if ($categoriesSelection->isNotEmpty())
+                        @if (collect($categoriesSelection)->isNotEmpty())
                         <optgroup label="{{ trans('icore::default.current_option') }}">
                             @foreach ($categoriesSelection as $category)
                             <option
@@ -323,3 +329,9 @@
     </form>
 </div>
 @endsection
+
+@push('script')
+@component('icore::admin.partials.jsvalidation')
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest', '#editfull-post'); !!}
+@endcomponent
+@endpush

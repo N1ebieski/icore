@@ -5,25 +5,24 @@ namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
+use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
+use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
-     * Show the form for editing the specified Category.
+     * Undocumented function
      *
-     * @param  Category $category
+     * @param Category $category
+     * @param EditLoad $load
      * @return JsonResponse
      */
-    public function edit(Category $category) : JsonResponse;
+    public function edit(Category $category, EditLoad $load): JsonResponse;
 
     /**
      * Update the specified Category in storage.
@@ -32,14 +31,14 @@ interface Polymorphic
      * @param  UpdateRequest $request  [description]
      * @return JsonResponse                [description]
      */
-    public function update(Category $category, UpdateRequest $request) : JsonResponse;
+    public function update(Category $category, UpdateRequest $request): JsonResponse;
 
     /**
      * [editPosition description]
      * @param  Category     $category [description]
      * @return JsonResponse           [description]
      */
-    public function editPosition(Category $category) : JsonResponse;
+    public function editPosition(Category $category): JsonResponse;
 
     /**
      * [updatePosition description]
@@ -47,7 +46,7 @@ interface Polymorphic
      * @param  UpdatePositionRequest $request  [description]
      * @return JsonResponse                    [description]
      */
-    public function updatePosition(Category $category, UpdatePositionRequest $request) : JsonResponse;
+    public function updatePosition(Category $category, UpdatePositionRequest $request): JsonResponse;
 
     /**
      * Update Status attribute the specified Comment in storage.
@@ -56,7 +55,7 @@ interface Polymorphic
      * @param  UpdateStatusRequest $request  [description]
      * @return JsonResponse                        [description]
      */
-    public function updateStatus(Category $category, UpdateStatusRequest $request) : JsonResponse;
+    public function updateStatus(Category $category, UpdateStatusRequest $request): JsonResponse;
 
     /**
      * Remove the specified Category from storage.
@@ -64,7 +63,7 @@ interface Polymorphic
      * @param  Category $category
      * @return JsonResponse
      */
-    public function destroy(Category $category) : JsonResponse;
+    public function destroy(Category $category): JsonResponse;
 
     /**
      * Remove the collection of Categories from storage.
@@ -73,7 +72,7 @@ interface Polymorphic
      * @param  DestroyGlobalRequest $request  [description]
      * @return RedirectResponse               [description]
      */
-    public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse;
+    public function destroyGlobal(Category $category, DestroyGlobalRequest $request): RedirectResponse;
 
     /**
      * Undocumented function
@@ -83,5 +82,5 @@ interface Polymorphic
      * @param SearchResponse $response
      * @return JsonResponse
      */
-    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse;
+    public function search(Category $category, SearchRequest $request, SearchResponse $response): JsonResponse;
 }

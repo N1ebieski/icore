@@ -1,12 +1,16 @@
 jQuery(document).on('readyAndAjax', function() {
-    $('.selectpicker-category').each(function () {
+    $('.select-picker-category').each(function () {
         let $sp = $(this);
 
         if ($sp.data('loaded') === true) {
             return;
         }
 
-        $sp.selectpicker();
+        $sp.selectpicker().on('changed.bs.select', function () {
+            $sp.next('button').find('.filter-option-inner-inner > small').remove();
+        }).on('shown.bs.select', function () {
+            $sp.parent().find('.dropdown-menu').find('input[type="search"]').attr('name', 'search');
+        }).trigger('change');
 
         if ($sp.data('abs') === true) {
             $sp.ajaxSelectPicker({
@@ -16,6 +20,7 @@ jQuery(document).on('readyAndAjax', function() {
                             filter: {
                                 search: '{{{q}}}',
                                 orderby: 'real_depth|desc',
+                                except: $sp.data('abs-filter-except') || null,
                                 status: 1
                             }
                         };
@@ -24,6 +29,15 @@ jQuery(document).on('readyAndAjax', function() {
                 preprocessData: function(data) {
                     let array = [];
                     let length = $sp.data('abs-max-options-length') || data.data.length;
+
+                    let defaultOptions = $sp.data('abs-default-options') || [];
+
+                    $.each(defaultOptions, function (key, value) {
+                        array.push({
+                            value: value.value,
+                            text: value.text
+                        });
+                    });
 
                     $.each(data.data, function (key, value) {
                         if (key >= length) {
@@ -48,13 +62,10 @@ jQuery(document).on('readyAndAjax', function() {
                 preserveSelectedPosition: $sp.data('abs-preserve-selected-position') || 'before',
                 langCode: $sp.data('abs-lang-code') || null
             });
+
+            // Fix Cannot unselect option element when preserveSelected is true #85
+            $sp.trigger('change').data('AjaxBootstrapSelect').list.cache = {};
         }
-
-        // Fix Remove data content from select form
-        //$sp.next('button').find('.filter-option-inner-inner > small').remove();
-
-        // Fix Cannot unselect option element when preserveSelected is true #85
-        $sp.trigger('change').data('AjaxBootstrapSelect').list.cache = {};
 
         // Fix temporary for jsvalidation errors placement
         $sp.parent().addClass('input-group');

@@ -54,14 +54,16 @@
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}"
     </label>
     <select 
-        class="form-control custom-select" 
-        id="filter-parent" 
+        class="selectpicker select-picker" 
+        data-live-search="true"
+        data-style="border"
+        data-width="100%"
         name="filter[parent]"
+        id="filter-parent"
     >
         <option value="">
             {{ trans('icore::filter.default') }}
         </option>
-        <optgroup label="----------"></optgroup>
         <option 
             value="0" 
             {{ ($filter['parent'] !== null && $filter['parent'] === 0) ? 'selected' : '' }}
@@ -69,14 +71,14 @@
             {{ trans('icore::pages.roots') }}
         </option>
         @foreach ($parents as $parent)
-        @if ($parent->real_depth == 0)
-        <optgroup label="----------"></optgroup>
-        @endif
         <option 
+            @if ($parent->ancestors->isNotEmpty())
+            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->toArray()) }} &raquo; </small>{{ $parent->title }}'
+            @endif                        
             value="{{ $parent->id }}" 
             {{ (optional($filter['parent'])->id == $parent->id) ? 'selected' : '' }}
         >
-            {{ str_repeat('-', $parent->real_depth) }} {{ $parent->title }}
+            {{ $parent->title }}
         </option>
         @endforeach
     </select>

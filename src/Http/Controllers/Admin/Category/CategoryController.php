@@ -9,32 +9,30 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
+use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
+use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
-/**
- * Base Category Controller
- */
 class CategoryController implements Polymorphic
 {
     /**
-     * Show the form for editing the specified Category.
+     * Undocumented function
      *
-     * @param  Category $category
+     * @param Category $category
+     * @param EditLoad $load
      * @return JsonResponse
      */
-    public function edit(Category $category) : JsonResponse
+    public function edit(Category $category, EditLoad $load): JsonResponse
     {
         return Response::json([
             'success' => '',
             'view' => View::make('icore::admin.category.edit', [
-                'category' => $category,
-                'categories' => $category->makeService()->getAsFlatTreeExceptSelf()
+                'category' => $category
             ])->render()
         ]);
     }
@@ -46,7 +44,7 @@ class CategoryController implements Polymorphic
      * @param  UpdateRequest $request  [description]
      * @return JsonResponse                [description]
      */
-    public function update(Category $category, UpdateRequest $request) : JsonResponse
+    public function update(Category $category, UpdateRequest $request): JsonResponse
     {
         $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
 
@@ -65,7 +63,7 @@ class CategoryController implements Polymorphic
      * @param  Category     $category [description]
      * @return JsonResponse           [description]
      */
-    public function editPosition(Category $category) : JsonResponse
+    public function editPosition(Category $category): JsonResponse
     {
         $category->siblings_count = $category->countSiblings() + 1;
 
@@ -83,13 +81,13 @@ class CategoryController implements Polymorphic
      * @param  UpdatePositionRequest $request  [description]
      * @return JsonResponse                    [description]
      */
-    public function updatePosition(Category $category, UpdatePositionRequest $request) : JsonResponse
+    public function updatePosition(Category $category, UpdatePositionRequest $request): JsonResponse
     {
         $category->makeService()->updatePosition($request->only('position'));
 
         return Response::json([
             'success' => '',
-            'siblings' => $category->makeRepo()->getSiblingsAsArray()+[$category->id => $category->position],
+            'siblings' => $category->makeRepo()->getSiblingsAsArray() + [$category->id => $category->position],
         ]);
     }
 
@@ -100,7 +98,7 @@ class CategoryController implements Polymorphic
      * @param  UpdateStatusRequest $request  [description]
      * @return JsonResponse                        [description]
      */
-    public function updateStatus(Category $category, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(Category $category, UpdateStatusRequest $request): JsonResponse
     {
         $category->makeService()->updateStatus($request->only('status'));
 
@@ -122,7 +120,7 @@ class CategoryController implements Polymorphic
      * @param  Category $category
      * @return JsonResponse
      */
-    public function destroy(Category $category) : JsonResponse
+    public function destroy(Category $category): JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
         $descendants = $category->makeRepo()->getDescendantsAsArray();
@@ -142,7 +140,7 @@ class CategoryController implements Polymorphic
      * @param  DestroyGlobalRequest $request  [description]
      * @return RedirectResponse               [description]
      */
-    public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Category $category, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $category->makeService()->deleteGlobal($request->get('select'));
 
@@ -162,7 +160,7 @@ class CategoryController implements Polymorphic
      * @param  SearchResponse $response [description]
      * @return JsonResponse                [description]
      */
-    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
+    public function search(Category $category, SearchRequest $request, SearchResponse $response): JsonResponse
     {
         $categories = $category->makeRepo()->getBySearch($request->get('name'));
 
