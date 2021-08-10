@@ -154,7 +154,9 @@ class PageService implements
 
             $this->page->save();
 
-            $this->page->tag($attributes['tags'] ?? []);
+            if (array_key_exists('tags', $attributes)) {
+                $this->page->tag($attributes['tags'] ?? []);
+            }
 
             return $this->page;
         });
@@ -199,11 +201,13 @@ class PageService implements
                 }
             }
 
-            if (isset($attributes['user'])) {
+            if (array_key_exists('user', $attributes)) {
                 $this->page->user()->associate($attributes['user']);
             }
 
-            $this->page->retag($attributes['tags'] ?? []);
+            if (array_key_exists('tags', $attributes)) {
+                $this->page->retag($attributes['tags'] ?? []);
+            }
 
             return $this->page->save();
         });

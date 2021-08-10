@@ -30,7 +30,7 @@
         <span>{{ trans('icore::mailings.route.index') }}</span>
     </div>
     @can('admin.mailings.create')
-    <div class="ml-auto text-right">
+    <div class="ml-auto text-right responsive-btn-group">
         <a 
             href="{{ route('admin.mailing.create') }}" 
             role="button" 
@@ -38,7 +38,7 @@
         >
             <i class="far fa-plus-square"></i>
             <span class="d-none d-sm-inline">
-                {{ trans('icore::mailings.create') }}
+                {{ trans('icore::default.create') }}
             </span>
         </a>
     </div>

@@ -70,7 +70,9 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
 
             $this->link->save();
 
-            $this->link->categories()->attach($attributes['categories'] ?? []);
+            if (array_key_exists('categories', $attributes)) {
+                $this->link->categories()->attach($attributes['categories'] ?? []);
+            }
 
             return $this->link;
         });
@@ -98,7 +100,9 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
 
             $link = $this->link->save();
 
-            $this->link->categories()->sync($attributes['categories'] ?? []);
+            if (array_key_exists('categories', $attributes)) {
+                $this->link->categories()->sync($attributes['categories'] ?? []);
+            }
 
             return $link;
         });

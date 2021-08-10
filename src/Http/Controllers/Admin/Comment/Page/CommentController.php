@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Event;
 use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
@@ -17,26 +16,38 @@ use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\CreateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Page\Polymorphic;
 use N1ebieski\ICore\Events\Admin\Comment\StoreEvent as CommentStoreEvent;
-use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as CommentBaseController;
+use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as BaseCommentController;
 
-class CommentController extends CommentBaseController implements Polymorphic
+class CommentController implements Polymorphic
 {
+    /**
+     * Undocumented variable
+     *
+     * @var BaseCommentController
+     */
+    protected $decorated;
+
+    /**
+     * Undocumented function
+     *
+     * @param BaseCommentController $decorated
+     */
+    public function __construct(BaseCommentController $decorated)
+    {
+        $this->decorated = $decorated;
+    }
+
     /**
      * Display a listing of Comments.
      *
      * @param  Comment       $comment       [description]
      * @param  IndexRequest  $request       [description]
      * @param  IndexFilter   $filter        [description]
-     * @return HttpResponse                 [description]
+     * @return HttpResponse                         [description]
      */
-    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
-        return Response::view('icore::admin.comment.index', [
-            'model' => $comment,
-            'comments' => $comment->makeRepo()->paginateByFilter($filter->all()),
-            'filter' => $filter->all(),
-            'paginate' => Config::get('database.paginate')
-        ]);
+        return $this->decorated->index($comment, $request, $filter);
     }
 
     /**
@@ -46,7 +57,7 @@ class CommentController extends CommentBaseController implements Polymorphic
      * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function create(Page $page, CreateRequest $request) : JsonResponse
+    public function create(Page $page, CreateRequest $request): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -64,7 +75,7 @@ class CommentController extends CommentBaseController implements Polymorphic
      * @param  StoreRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function store(Page $page, Comment $comment, StoreRequest $request) : JsonResponse
+    public function store(Page $page, Comment $comment, StoreRequest $request): JsonResponse
     {
         $comment = $comment->setRelations(['morph' => $page])
             ->makeService()

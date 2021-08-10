@@ -42,16 +42,4 @@ class IndexFilter extends Filter
     {
         return $this->findCategory($id);
     }
-
-    /**
-     * [findCategory description]
-     * @param  int|null   $id [description]
-     * @return Category     [description]
-     */
-    public function findCategory(int $id = null): Category
-    {
-        return Category::withAncestorsExceptSelf()
-            ->where('id', $id)
-            ->first(['id', 'name']);
-    }
 }

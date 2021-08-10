@@ -45,8 +45,10 @@ trait HasCategory
      * @param  int|null   $id [description]
      * @return Category     [description]
      */
-    public function findCategory(int $id = null) : Category
+    public function findCategory(int $id = null): Category
     {
-        return Category::find($id, ['id', 'name']);
+        return Category::withAncestorsExceptSelf()
+            ->where('id', $id)
+            ->first(['id', 'name']);
     }
 }

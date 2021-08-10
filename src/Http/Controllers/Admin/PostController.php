@@ -17,7 +17,6 @@ use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateFullRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Post\CreateViewModel;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateStatusRequest;
@@ -35,11 +34,10 @@ class PostController
      * @param  IndexFilter     $filter          [description]
      * @return HttpResponse                     [description]
      */
-    public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter): HttpResponse
+    public function index(Post $post, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.post.index', [
             'posts' => $post->makeRepo()->paginateByFilter($filter->all()),
-            'categories' => $category->makeService()->getAsFlatTree(),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);
