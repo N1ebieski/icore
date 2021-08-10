@@ -2,12 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Resources\Category;
 
-use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
-use N1ebieski\ICore\Http\Resources\Role\RoleResource;
-use N1ebieski\ICore\Http\Resources\Socialite\SocialiteResource;
 
 class CategoryResource extends JsonResource
 {

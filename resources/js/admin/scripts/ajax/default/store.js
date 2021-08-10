@@ -39,7 +39,7 @@ jQuery(document).on('click', '.store', function (e) {
                     $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
                     $form.find('#' + $.escapeSelector(key)).closest('.form-group').append($.getError(key, value));
 
-                    if (i === 0) {
+                    if (i === 0 && $('#' + $.escapeSelector(key)).length) {
                         $('.modal').animate({
                             scrollTop: $('#' + $.escapeSelector(key)).position().top + 50
                         }, 1000);

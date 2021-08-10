@@ -4,17 +4,58 @@ namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
+use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Category\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
 
 interface Polymorphic
 {
+    /**
+     * Display a listing of the Category.
+     *
+     * @param  Category      $category      [description]
+     * @param  IndexRequest  $request       [description]
+     * @param  IndexFilter   $filter        [description]
+     * @return HttpResponse                 [description]
+     */
+    public function index(Category $category, IndexRequest $request, IndexFilter $filter): HttpResponse;
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param CreateRequest $request
+     * @return JsonResponse
+     */
+    public function create(Category $category, CreateRequest $request): JsonResponse;
+
+    /**
+     * Store a newly created Category in storage.
+     *
+     * @param  Category      $category      [description]
+     * @param  StoreRequest  $request
+     * @return JsonResponse
+     */
+    public function store(Category $category, StoreRequest $request): JsonResponse;
+    
+    /**
+     * Store collection of Categories with childrens in storage.
+     *
+     * @param  Category      $category      [description]
+     * @param  StoreGlobalRequest  $request
+     * @return JsonResponse
+     */
+    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse;    
+
     /**
      * Undocumented function
      *
@@ -73,14 +114,4 @@ interface Polymorphic
      * @return RedirectResponse               [description]
      */
     public function destroyGlobal(Category $category, DestroyGlobalRequest $request): RedirectResponse;
-
-    /**
-     * Undocumented function
-     *
-     * @param Category $category
-     * @param SearchRequest $request
-     * @param SearchResponse $response
-     * @return JsonResponse
-     */
-    public function search(Category $category, SearchRequest $request, SearchResponse $response): JsonResponse;
 }

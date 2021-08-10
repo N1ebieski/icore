@@ -7,15 +7,10 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 use N1ebieski\ICore\Http\Requests\Admin\Category\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\Post\StoreGlobalRequest;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
@@ -54,14 +49,4 @@ interface Polymorphic
      * @return JsonResponse
      */
     public function storeGlobal(Category $category, StoreGlobalRequest $request) : JsonResponse;
-
-    /**
-     * Search Categories for specified name.
-     *
-     * @param  Category      $category [description]
-     * @param  SearchRequest $request  [description]
-     * @param  SearchResponse $response [description]
-     * @return JsonResponse                [description]
-     */
-    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse;
 }
