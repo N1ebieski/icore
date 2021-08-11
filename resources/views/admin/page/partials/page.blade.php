@@ -16,7 +16,8 @@
             <label class="custom-control-label" for="select{{ $page->id }}">
         @endcan
             <ul class="list-unstyled mb-0 pb-0">
-                @if ($page->relationLoaded('ancestors') && $page->ancestors->isNotEmpty())
+                @if (!collect($filter)->except(['paginate', 'except'])->isEmptyItems()
+                && $page->relationLoaded('ancestors') && $page->ancestors->isNotEmpty())
                 <li>
                     <small>
                         <span>{{ trans('icore::pages.ancestors') }}:</span>
