@@ -34,7 +34,9 @@ jQuery(document).on('click', '.store', function (e) {
                 let i = 0;
 
                 $.each(response.responseJSON.errors, function (key, value) {
-                    key = key.match(/([a-z_\-\.]+)(?:\.([\d]+)|)$/)[1];
+                    if (!$form.find('#' + $.escapeSelector(key)).length) {
+                        key = key.match(/([a-z_\-\.]+)(?:\.([\d]+)|)$/)[1];
+                    }
 
                     $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
                     $form.find('#' + $.escapeSelector(key)).closest('.form-group').append($.getError(key, value));

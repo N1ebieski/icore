@@ -16,7 +16,7 @@
             <label class="custom-control-label" for="select{{ $page->id }}">
         @endcan
             <ul class="list-unstyled mb-0 pb-0">
-                @if (!collect($filter)->except(['paginate', 'except'])->isEmptyItems()
+                @if ((!isset($filter) || !collect($filter)->except(['paginate', 'except'])->isEmptyItems())
                 && $page->relationLoaded('ancestors') && $page->ancestors->isNotEmpty())
                 <li>
                     <small>

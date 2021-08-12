@@ -88,7 +88,7 @@ class PageService implements
      * Gets pages in flat collection with hierarchy order
      * @return Collection [description]
      */
-    public function getAsFlatTree() : Collection
+    public function getAsFlatTree(): Collection
     {
         return $this->page->makeRepo()
             ->getAsTree()
@@ -99,7 +99,7 @@ class PageService implements
      * Gets pages except self in flat collection with hierarchy order
      * @return Collection [description]
      */
-    public function getAsFlatTreeExceptSelf() : Collection
+    public function getAsFlatTreeExceptSelf(): Collection
     {
         return $this->page->makeRepo()
             ->getAsTreeExceptSelf()
@@ -111,7 +111,7 @@ class PageService implements
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->except(['paginate', 'except'])->isEmptyItems()) {
             return $this->getAsFlatTreeByFilter($filter);
@@ -125,7 +125,7 @@ class PageService implements
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function getAsFlatTreeByFilter(array $filter) : LengthAwarePaginator
+    public function getAsFlatTreeByFilter(array $filter): LengthAwarePaginator
     {
         return $this->getAsFlatTree()
             ->whereNotIn('id', $filter['except'])
@@ -137,7 +137,7 @@ class PageService implements
      * @param  array $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill($attributes);
@@ -168,7 +168,7 @@ class PageService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->title = $attributes['title'];
@@ -185,7 +185,7 @@ class PageService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateFull(array $attributes) : bool
+    public function updateFull(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill(
@@ -217,7 +217,7 @@ class PageService implements
      * [moveToRoot description]
      * @return void [description]
      */
-    public function moveToRoot() : void
+    public function moveToRoot(): void
     {
         $this->db->transaction(function () {
             $this->page->makeRoot(0);
@@ -229,7 +229,7 @@ class PageService implements
      * @param  int    $parent_id [description]
      * @return void            [description]
      */
-    public function moveToParent(int $parent_id) : void
+    public function moveToParent(int $parent_id): void
     {
         $this->db->transaction(function () use ($parent_id) {
             if ($parent = $this->page->findOrFail($parent_id)) {
@@ -250,7 +250,7 @@ class PageService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateStatus(array $attributes) : bool
+    public function updateStatus(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $update = $this->page->update(['status' => $attributes['status']]);
@@ -276,7 +276,7 @@ class PageService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updatePosition(array $attributes) : bool
+    public function updatePosition(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->page->update(['position' => $attributes['position']]);
@@ -287,7 +287,7 @@ class PageService implements
      * [delete description]
      * @return bool [description]
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             $this->page->comments()->delete();
@@ -313,7 +313,7 @@ class PageService implements
      * @param  array $ids [description]
      * @return int        [description]
      */
-    public function deleteGlobal(array $ids) : int
+    public function deleteGlobal(array $ids): int
     {
         return $this->db->transaction(function () use ($ids) {
             $deleted = 0;
@@ -335,7 +335,7 @@ class PageService implements
      * do it automatically
      * @return bool [description]
      */
-    private function decrement() : bool
+    private function decrement(): bool
     {
         return $this->db->transaction(function () {
             return $this->page->where([

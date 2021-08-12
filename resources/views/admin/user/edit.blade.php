@@ -31,6 +31,7 @@
         <label for="roles">
             {{ trans('icore::users.roles') }}
         </label>
+        <input type="hidden" name="roles" value="">
         <select multiple class="form-control custom-select" id="roles" name="roles[]">
             @foreach ($roles as $role)
             <option 

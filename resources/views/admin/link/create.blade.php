@@ -55,6 +55,7 @@
         <label for="category">
             {{ trans('icore::links.only.categories') }}:
         </label>
+        <input type="hidden" name="categories" value="">
         <select 
             class="selectpicker select-picker-category" 
             data-live-search="true"

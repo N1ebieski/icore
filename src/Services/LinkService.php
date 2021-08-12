@@ -3,13 +3,12 @@
 namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Link;
-use Illuminate\Http\UploadedFile;
+use N1ebieski\ICore\Utils\FileUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
-use Illuminate\Contracts\Filesystem\Factory as Storage;
 use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
 
 class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
@@ -21,10 +20,11 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
     protected $link;
 
     /**
-     * [private description]
-     * @var Storage
+     * Undocumented variable
+     *
+     * @var FileUtil
      */
-    protected $storage;
+    protected $fileUtil;
 
     /**
      * Undocumented variable
@@ -34,23 +34,17 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
     protected $db;
 
     /**
-     * [protected description]
-     * @var string
-     */
-    protected $img_dir = 'vendor/icore/links';
-
-    /**
      * Undocumented function
      *
      * @param Link $link
-     * @param Storage $storage
      * @param DB $db
      */
-    public function __construct(Link $link, Storage $storage, DB $db)
+    public function __construct(Link $link, FileUtil $fileUtil, DB $db)
     {
         $this->link = $link;
-        
-        $this->storage = $storage;
+
+        $this->fileUtil = $fileUtil;
+
         $this->db = $db;
     }
 
@@ -59,13 +53,16 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
      * @param  array $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->link->fill($attributes);
 
-            if (isset($attributes['img']) && $attributes['img'] instanceof UploadedFile) {
-                $this->link->img_url = $this->uploadImage($attributes['img']);
+            if (isset($attributes['img'])) {
+                $this->link->img_url = $this->fileUtil->make([
+                    'file' => $attributes['img'],
+                    'path' => $this->link->path
+                ])->upload();
             }
 
             $this->link->save();
@@ -83,19 +80,24 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->link->fill($attributes);
 
             if (isset($attributes['delete_img'])) {
-                $this->deleteImage();
+                if ($this->link->img_url !== null) {
+                    $this->fileUtil->make(['path' => $this->link->img_url])->delete();
+                }
 
                 $this->link->img_url = null;
             }
 
-            if (isset($attributes['img']) && $attributes['img'] instanceof UploadedFile) {
-                $this->link->img_url = $this->uploadImage($attributes['img']);
+            if (isset($attributes['img'])) {
+                $this->link->img_url = $this->fileUtil->make([
+                    'file' => $attributes['img'],
+                    'path' => $this->link->path
+                ])->upload();
             }
 
             $link = $this->link->save();
@@ -113,7 +115,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updatePosition(array $attributes) : bool
+    public function updatePosition(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->link->update(['position' => (int)$attributes['position']]);
@@ -124,39 +126,16 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
      * [delete description]
      * @return bool [description]
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
-            $this->deleteImage();
+            if ($this->link->img_url !== null) {
+                $this->fileUtil->make(['path' => $this->link->img_url])->delete();
+            }
 
             $this->link->categories()->detach();
 
             return $this->link->delete();
         });
-    }
-
-    /**
-     * [uploadImage description]
-     * @param  UploadedFile   $img [description]
-     * @return string              [description]
-     */
-    protected function uploadImage(UploadedFile $img) : string
-    {
-        return $this->storage->disk('public')->putFile($this->link->path, $img);
-    }
-
-    /**
-     * [deleteImage description]
-     * @return bool [description]
-     */
-    protected function deleteImage() : bool
-    {
-        if ($this->link->img_url !== null) {
-            if ($this->storage->disk('public')->exists($this->link->img_url)) {
-                return $this->storage->disk('public')->delete($this->link->img_url);
-            }
-        }
-
-        return false;
     }
 }

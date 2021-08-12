@@ -33,14 +33,18 @@
             {{ trans('icore::links.img') }}:
         </label>
         <div class="custom-file" id="image">
-            <input type="file" class="custom-file-input" id="img" name="img">
+            <input 
+                type="file" 
+                class="custom-file-input" 
+                id="img" 
+                name="img"
+                {{ $link->img_url !== null ? 'disabled' : null }}
+            >
             <label class="custom-file-label" for="img">
                 {{ trans('icore::default.choose_file') }}
             </label>
         </div>
-    </div>
-    @if ($link->img_url !== null)
-    <div class="form-group">
+        @if ($link->img_url !== null)
         <div class="custom-control custom-checkbox">
             <input 
                 type="checkbox" 
@@ -52,8 +56,8 @@
                 {{ trans('icore::links.delete_img') }}
             </label>
         </div>
+        @endif
     </div>
-    @endif
     @if ($link->type === 'link')
     <div class="form-group">
         <div class="custom-control custom-checkbox">
@@ -76,6 +80,7 @@
         <label for="category">
             {{ trans('icore::links.only.categories') }}:
         </label>
+        <input type="hidden" name="categories" value="">
         <select 
             class="selectpicker select-picker-category" 
             data-live-search="true"
