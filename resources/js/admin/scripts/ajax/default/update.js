@@ -63,7 +63,7 @@ jQuery(document).on('click', '.update', function (e) {
             }
 
             if (response.responseJSON.message) {
-                $form.prepend($.getAlert(response.responseJSON.message, 'danger'));
+                $form.prepend($.getAlert('danger', response.responseJSON.message));
             }            
         }
     });

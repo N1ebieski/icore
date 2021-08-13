@@ -54,7 +54,7 @@ jQuery(document).on('click', '.store', function (e) {
             }
             
             if (response.responseJSON.message) {
-                $form.prepend($.getAlert(response.responseJSON.message, 'danger'));
+                $form.prepend($.getAlert('danger', response.responseJSON.message));
             }
         }
     });

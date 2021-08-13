@@ -3,17 +3,17 @@ jQuery(document).on('click', '.destroy', function (e) {
 
     let $element = $(this);
 
-    let $row = $('#row' + $element.attr('data-id'));
+    let $row = $('#row' + $element.data('id'));
 
     jQuery.ajax({
-        url: $element.attr('data-route'),
+        url: $element.data('route'),
         method: 'delete',
         beforeSend: function () {
             $row.find('.responsive-btn-group').addClass('disabled');
-            $element.getLoader('show');
+            $row.find('[data-btn-ok-class*="destroy"]').getLoader('show');
         },
         complete: function () {
-            $element.getLoader('hide');
+            $row.find('[data-btn-ok-class*="destroy"]').getLoader('hide');
         },
         success: function (response) {
             $row.fadeOut('slow');
