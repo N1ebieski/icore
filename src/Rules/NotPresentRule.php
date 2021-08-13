@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
-class NotPresent implements Rule
+class NotPresentRule implements Rule
 {
     /**
      * Undocumented variable

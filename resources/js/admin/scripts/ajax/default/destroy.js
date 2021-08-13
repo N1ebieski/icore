@@ -2,6 +2,7 @@ jQuery(document).on('click', '.destroy', function (e) {
     e.preventDefault();
 
     let $element = $(this);
+    
     let $row = $('#row' + $element.data('id'));
 
     jQuery.ajax({
