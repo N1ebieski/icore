@@ -56,6 +56,15 @@ class FileUtil
     {
         $this->storage = $storage;
 
+        if ($file === null && is_string($path)) {
+            if ($this->storage->disk('public')->exists($path)) {
+                $storagePath = public_path('storage/') . $path;
+
+                $file = new UploadedFile($storagePath, basename($storagePath), mime_content_type($storagePath), null, true);
+                $path = dirname($path);
+            }
+        }
+
         $this->file = $file;
         $this->path = $path;
 
@@ -70,7 +79,7 @@ class FileUtil
      */
     public function getFilePath(): string
     {
-        return $this->file_path ?? $this->path;
+        return $this->file_path;
     }
 
     /**
@@ -160,7 +169,7 @@ class FileUtil
         if ($this->storage->disk('public')->exists($this->getFilePath())) {
             return $this->storage->disk('public')->delete($this->getFilePath());
         }
-        
+
         return false;
     }
 }
