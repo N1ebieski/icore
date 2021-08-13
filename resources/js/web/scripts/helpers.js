@@ -90,7 +90,11 @@
         if (action == 'show') {
             $(this).parent().find('button').prop('disabled', true);
             $(this).find('i').hide();
-            $(this).prepend($.sanitize('<span class="' + type + ' ' + type + '-sm text-light" role="status" aria-hidden="true"></span>'));
+
+            let color = $(this).is('[class*="btn-outline-"]') && (typeof $.cookie('themeToggle') === 'undefined' || $.cookie('themeToggle') === 'light') ?
+                'text-dark' : 'text-light';
+
+            $(this).prepend($.sanitize('<span class="' + type + ' ' + type + '-sm ' + color + '" role="status" aria-hidden="true"></span>'));
         }
 
         if (action == 'hide') {
