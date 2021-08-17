@@ -49,7 +49,7 @@ class UserService implements
      */
     public function __construct(User $user, Hasher $hasher, DB $db)
     {
-        $this->user = $user;
+        $this->setUser($user);
 
         $this->hasher = $hasher;
         $this->db = $db;
@@ -58,10 +58,23 @@ class UserService implements
     /**
      * Undocumented function
      *
+     * @param User $user
+     * @return static
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
      * @param array $attributes
      * @return Model
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $user = $this->user->create([
@@ -72,7 +85,9 @@ class UserService implements
                     : null
             ]);
 
-            $user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
+            if (array_key_exists('roles', $attributes)) {
+                $user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
+            }
 
             return $user;
         });
@@ -84,10 +99,12 @@ class UserService implements
      * @param array $attributes
      * @return boolean
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->user->syncRoles(array_merge($attributes['roles'] ?? [], ['user']));
+            if (array_key_exists('roles', $attributes)) {
+                $this->user->syncRoles(array_merge($attributes['roles'] ?? [], ['user']));
+            }
 
             return $this->user->update([
                 'name' => $attributes['name'],
@@ -102,7 +119,7 @@ class UserService implements
      * @param array $attributes
      * @return boolean
      */
-    public function updateStatus(array $attributes) : bool
+    public function updateStatus(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->user->update([
@@ -116,7 +133,7 @@ class UserService implements
      *
      * @return boolean
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             $this->user->ban()->delete();
@@ -133,9 +150,9 @@ class UserService implements
      * @param array $ids
      * @return integer
      */
-    public function deleteGlobal(array $ids) : int
+    public function deleteGlobal(array $ids): int
     {
-        return $this->db->transaction(function () use ($ids) {        
+        return $this->db->transaction(function () use ($ids) {
             $this->user->ban()->make()->whereIn('model_id', $ids)
                 ->where('model_type', $this->user->getMorphClass())->delete();
 

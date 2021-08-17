@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Filters\Admin\Tag;
+namespace N1ebieski\ICore\Filters\Api\Tag;
 
 use N1ebieski\ICore\Filters\Filter;
 use N1ebieski\ICore\Filters\Traits\HasExcept;

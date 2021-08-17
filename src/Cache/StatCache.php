@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\Cache;
 
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Stat\Stat;
+use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Contracts\Config\Repository as Config;
 
 class StatCache
 {

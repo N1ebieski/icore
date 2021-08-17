@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Newsletter;
 use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Database\DatabaseManager as DB;
+
 class MailingEmailService
 {
     /**
@@ -57,7 +58,8 @@ class MailingEmailService
         Carbon $carbon,
         DB $db
     ) {
-        $this->mailingEmail = $mailingEmail;
+        $this->setMailingEmail($mailingEmail);
+
         $this->user = $user;
         $this->newsletter = $newsletter;
 
@@ -68,10 +70,23 @@ class MailingEmailService
     /**
      * Undocumented function
      *
+     * @param MailingEmail $mailingEmail
+     * @return static
+     */
+    public function setMailingEmail(MailingEmail $mailingEmail)
+    {
+        $this->mailingEmail = $mailingEmail;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
      * @param array $attributes
      * @return void
      */
-    public function createGlobal(array $attributes) : void
+    public function createGlobal(array $attributes): void
     {
         $this->db->transaction(function () use ($attributes) {
             if (isset($attributes['users']) && (bool)$attributes['users'] === true) {
@@ -93,7 +108,7 @@ class MailingEmailService
      *
      * @return void
      */
-    public function createUserRecipients() : void
+    public function createUserRecipients(): void
     {
         $this->db->transaction(function () {
             $this->user->marketing()
@@ -128,7 +143,7 @@ class MailingEmailService
      *
      * @return void
      */
-    public function createNewsletterRecipients() : void
+    public function createNewsletterRecipients(): void
     {
         $this->db->transaction(function () {
             $this->newsletter->active()
@@ -163,7 +178,7 @@ class MailingEmailService
      * @param array $emails_json
      * @return void
      */
-    public function createEmailRecipients(array $items) : void
+    public function createEmailRecipients(array $items): void
     {
         $this->db->transaction(function () use ($items) {
             $id = $this->makeLastId();
@@ -191,7 +206,7 @@ class MailingEmailService
      * [clear description]
      * @return int [description]
      */
-    public function clear() : int
+    public function clear(): int
     {
         return $this->db->transaction(function () {
             return $this->mailingEmail
@@ -205,7 +220,7 @@ class MailingEmailService
      *
      * @return integer
      */
-    protected function makeLastId() : int
+    protected function makeLastId(): int
     {
         return optional($this->mailingEmail->makeRepo()->firstByLatestId())->id ?? 1;
     }

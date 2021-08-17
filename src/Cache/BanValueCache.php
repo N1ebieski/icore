@@ -2,11 +2,11 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
 
 class BanValueCache
 {
@@ -68,7 +68,7 @@ class BanValueCache
      * [rememberAllIpsAsString description]
      * @return string|null [description]
      */
-    public function rememberAllIpsAsString() : ?string
+    public function rememberAllIpsAsString(): ?string
     {
         return $this->cache->tags('bans.ip')->remember(
             "banValue.getAllIpsAsString",
@@ -85,7 +85,7 @@ class BanValueCache
      * [rememberAllWordsAsString description]
      * @return string|null [description]
      */
-    public function rememberAllWordsAsString() : ?string
+    public function rememberAllWordsAsString(): ?string
     {
         return $this->cache->tags('bans.word')->remember(
             "banValue.getAllWordsAsString",

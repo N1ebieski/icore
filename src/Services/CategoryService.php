@@ -63,7 +63,8 @@ class CategoryService implements
         Collect $collect,
         DB $db
     ) {
-        $this->category = $category;
+        $this->setCategory($category);
+        
         $this->collect = $collect;
         $this->db = $db;
 
@@ -71,10 +72,23 @@ class CategoryService implements
     }
 
     /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @return static
+     */
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
      * Gets categories in flat collection with hierarchy order
      * @return Collection [description]
      */
-    public function getAsFlatTree() : Collection
+    public function getAsFlatTree(): Collection
     {
         return $this->category->makeRepo()
             ->getAsTree()
@@ -86,7 +100,7 @@ class CategoryService implements
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->except(['paginate', 'except'])->isEmptyItems()) {
             return $this->getAsFlatTreeByFilter($filter);
@@ -100,7 +114,7 @@ class CategoryService implements
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function getAsFlatTreeByFilter(array $filter) : LengthAwarePaginator
+    public function getAsFlatTreeByFilter(array $filter): LengthAwarePaginator
     {
         return $this->getAsFlatTree()
             ->whereNotIn('id', $filter['except'])
@@ -111,7 +125,7 @@ class CategoryService implements
      * Gets categories except self in flat collection with hierarchy order
      * @return Collection [description]
      */
-    public function getAsFlatTreeExceptSelf() : Collection
+    public function getAsFlatTreeExceptSelf(): Collection
     {
         return $this->category->makeRepo()
             ->getAsTreeExceptSelf()
@@ -123,7 +137,7 @@ class CategoryService implements
      * @param  array $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->category->name = $attributes['name'];
@@ -147,7 +161,7 @@ class CategoryService implements
      * @param  array      $attributes [description]
      * @return Collection             [description]
      */
-    public function createGlobal(array $attributes) : Collection
+    public function createGlobal(array $attributes): Collection
     {
         return $this->db->transaction(function () use ($attributes) {
             if ($attributes['parent_id'] !== null) {
@@ -172,7 +186,7 @@ class CategoryService implements
      * [delete description]
      * @return bool [description]
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             $delete = $this->category->delete();
@@ -192,7 +206,7 @@ class CategoryService implements
      * do it automatically
      * @return bool [description]
      */
-    private function decrement() : bool
+    private function decrement(): bool
     {
         return $this->db->transaction(function () {
             return $this->category->where([
@@ -207,7 +221,7 @@ class CategoryService implements
      * @param  array $ids [description]
      * @return int        [description]
      */
-    public function deleteGlobal(array $ids) : int
+    public function deleteGlobal(array $ids): int
     {
         return $this->db->transaction(function () use ($ids) {
             $deleted = 0;
@@ -229,7 +243,7 @@ class CategoryService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateStatus(array $attributes) : bool
+    public function updateStatus(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $update = $this->category->update(['status' => $attributes['status']]);
@@ -255,7 +269,7 @@ class CategoryService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updatePosition(array $attributes) : bool
+    public function updatePosition(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->category->update(['position' => $attributes['position']]);
@@ -267,7 +281,7 @@ class CategoryService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $update = $this->category->update([
@@ -291,7 +305,7 @@ class CategoryService implements
      * [moveToRoot description]
      * @return void [description]
      */
-    public function moveToRoot() : void
+    public function moveToRoot(): void
     {
         $this->db->transaction(function () {
             $this->category->makeRoot(0);
@@ -303,7 +317,7 @@ class CategoryService implements
      * @param  int    $parent_id [description]
      * @return void            [description]
      */
-    public function moveToParent(int $parent_id) : void
+    public function moveToParent(int $parent_id): void
     {
         $this->db->transaction(function () use ($parent_id) {
             if ($parent = $this->category->findOrFail($parent_id)) {

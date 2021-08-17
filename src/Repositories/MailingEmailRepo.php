@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Repositories;
 
-use N1ebieski\ICore\Models\MailingEmail;
 use Closure;
+use N1ebieski\ICore\Models\MailingEmail;
 
 class MailingEmailRepo
 {
@@ -27,7 +27,7 @@ class MailingEmailRepo
      *
      * @return boolean
      */
-    public function markAsSent() : bool
+    public function markAsSent(): bool
     {
         return $this->mailingEmail->update(['sent' => MailingEmail::SENT]);
     }
@@ -37,7 +37,7 @@ class MailingEmailRepo
      *
      * @return boolean
      */
-    public function markAsError() : bool
+    public function markAsError(): bool
     {
         return $this->mailingEmail->update(['sent' => MailingEmail::ERROR]);
     }
@@ -49,7 +49,7 @@ class MailingEmailRepo
      * @param Closure $callback
      * @return boolean
      */
-    public function chunkUnsentHasProgressMailing(int $chunk, Closure $callback) : bool
+    public function chunkUnsentHasProgressMailing(int $chunk, Closure $callback): bool
     {
         return $this->mailingEmail->unsent()
             ->whereHas('mailing', function ($query) {
@@ -64,7 +64,7 @@ class MailingEmailRepo
      *
      * @return MailingEmail|null
      */
-    public function firstByLatestId() : ?MailingEmail
+    public function firstByLatestId(): ?MailingEmail
     {
         return $this->mailingEmail->latest('id')->first();
     }

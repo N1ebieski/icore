@@ -4,18 +4,20 @@ namespace N1ebieski\ICore\Models\Tag;
 
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Cache\TagCache;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Config;
 
 class Tag extends Taggable
 {
-    use FullTextSearchable, Polymorphic, Filterable, Carbonable;
+    use FullTextSearchable;
+    use Polymorphic;
+    use Filterable;
+    use Carbonable;
 
     // Configuration
 
@@ -57,11 +59,26 @@ class Tag extends Taggable
     // Scopes
 
     /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @param string $search
+     * @param string $orderby
+     * @return Builder
+     */
+    public function scopeFilterOrderBySearch(Builder $query, string $search = null) : Builder
+    {
+        return $query->when($search !== null, function ($query) use ($search) {
+            return $query->orderByRaw('LENGTH(name) ASC');
+        });
+    }
+
+    /**
      * [scopeWithSum description]
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeWithSum(Builder $query) : Builder
+    public function scopeWithSum(Builder $query): Builder
     {
         return $query->selectRaw('COUNT(`tags`.`tag_id`) AS `sum`')
             ->leftJoin('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')

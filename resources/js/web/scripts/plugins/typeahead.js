@@ -6,10 +6,13 @@
 
         let engine = new Bloodhound({
             remote: {
-                url: $input.data('route') + '?search=%QUERY%',
+                url: $input.data('route') + '?filter[search]=%QUERY%',
+                filter: function (list) {
+                    return $.map(list.data, function(item) { return { name: item.name }; });
+                },                               
                 wildcard: '%QUERY%'
             },
-            datumTokenizer: Bloodhound.tokenizers.whitespace('search'),
+            datumTokenizer: Bloodhound.tokenizers.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace
         });
 
@@ -18,6 +21,7 @@
             highlight: true,
             minLength: 3
         }, {
+            limit: 5,            
             source: engine.ttAdapter(),
             display: function (data) {
                 return $($.parseHTML(data.name)).text();

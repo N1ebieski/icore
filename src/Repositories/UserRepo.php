@@ -6,9 +6,6 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-/**
- * [UserRepo description]
- */
 class UserRepo
 {
     /**

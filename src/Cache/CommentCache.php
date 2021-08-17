@@ -2,17 +2,14 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as Collect;
-use Illuminate\Support\Carbon;
 
-/**
- * [CategoryCache description]
- */
 class CommentCache
 {
     /**
@@ -75,7 +72,7 @@ class CommentCache
      * @param  int                  $page   [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function rememberRootsByFilter(array $filter, int $page) : LengthAwarePaginator
+    public function rememberRootsByFilter(array $filter, int $page): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems()) {
             $comments = $this->getRootsByFilter($page);
@@ -97,7 +94,7 @@ class CommentCache
      * @param  int                  $page [description]
      * @return LengthAwarePaginator|null       [description]
      */
-    public function getRootsByFilter(int $page) : ?LengthAwarePaginator
+    public function getRootsByFilter(int $page): ?LengthAwarePaginator
     {
         return $this->cache->tags([
             "comment.{$this->comment->poli}.{$this->comment->morph->id}"
@@ -112,7 +109,7 @@ class CommentCache
      * @param  int                  $page     [description]
      * @return bool                           [description]
      */
-    public function putRootsByFilter(LengthAwarePaginator $comments, int $page) : bool
+    public function putRootsByFilter(LengthAwarePaginator $comments, int $page): bool
     {
         return $this->cache->tags([
             "comment.{$this->comment->poli}.{$this->comment->morph->id}"
@@ -130,7 +127,7 @@ class CommentCache
      * @param array $component
      * @return Collection
      */
-    public function rememberByComponent(array $component) : Collection
+    public function rememberByComponent(array $component): Collection
     {
         $json = json_encode($component);
 
@@ -148,7 +145,7 @@ class CommentCache
      *
      * @return Collection
      */
-    public function rememberCountByModelTypeAndStatus() : Collection
+    public function rememberCountByModelTypeAndStatus(): Collection
     {
         return $this->cache->tags(['comments'])->remember(
             "comment.countByModelTypeAndStatus",

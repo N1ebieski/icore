@@ -41,11 +41,24 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
      */
     public function __construct(Link $link, FileUtil $fileUtil, DB $db)
     {
-        $this->link = $link;
+        $this->setLink($link);
 
         $this->fileUtil = $fileUtil;
 
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Link $link
+     * @return static
+     */
+    public function setLink(Link $link)
+    {
+        $this->link = $link;
+
+        return $this;
     }
 
     /**
@@ -84,7 +97,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
 
             if (isset($attributes['delete_img'])) {
                 if ($this->link->img_url !== null) {
-                    $this->fileUtil->make(null, $this->link->img_url)->delete();
+                    $this->fileUtil->make($this->link->img_url)->delete();
                 }
 
                 $this->link->img_url = null;

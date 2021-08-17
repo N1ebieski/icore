@@ -107,6 +107,9 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'api.categories.*']);
         Permission::firstOrCreate(['name' => 'api.categories.view']);
 
+        Permission::firstOrCreate(['name' => 'api.tags.*']);
+        Permission::firstOrCreate(['name' => 'api.tags.view']);
+
         // create roles and assign created permissions
         $role = Role::firstOrCreate(['name' => 'super-admin']);
 

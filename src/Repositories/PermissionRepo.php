@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Repositories;
 use N1ebieski\ICore\Models\Permission;
 use Illuminate\Database\Eloquent\Collection;
 
-/**
- * [PermissionRepo description]
- */
 class PermissionRepo
 {
     /**
@@ -30,7 +27,7 @@ class PermissionRepo
      * @param  int        $id [description]
      * @return Collection     [description]
      */
-    public function getUserWithRole(int $id) : Collection
+    public function getUserWithRole(int $id): Collection
     {
         return $this->permission->with([
                 'roles' => function ($query) use ($id) {
@@ -48,7 +45,7 @@ class PermissionRepo
      * @param  int        $id [description]
      * @return Collection     [description]
      */
-    public function getWithRole(int $id) : Collection
+    public function getWithRole(int $id): Collection
     {
         return $this->permission->with([
                 'roles' => function ($query) use ($id) {

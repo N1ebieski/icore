@@ -51,9 +51,22 @@ class SocialiteService implements Creatable
      */
     public function __construct(Social $socialite, DB $db)
     {
-        $this->socialite = $socialite;
+        $this->setSocialite($socialite);
 
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Social $socialite
+     * @return static
+     */
+    public function setSocialite(Social $socialite)
+    {
+        $this->socialite = $socialite;
+
+        return $this;
     }
 
     /**
@@ -72,7 +85,7 @@ class SocialiteService implements Creatable
      * @param  string $provider
      * @return User
      */
-    public function findOrCreateUser(ProviderUser $providerUser, string $provider) : User
+    public function findOrCreateUser(ProviderUser $providerUser, string $provider): User
     {
         return $this->db->transaction(function () use ($providerUser, $provider) {
             if (is_null($this->findUser($providerUser, $provider))) {
@@ -88,7 +101,7 @@ class SocialiteService implements Creatable
      * @param  string $provider
      * @return User|null
      */
-    public function findUser(ProviderUser $providerUser, string $provider) : ?User
+    public function findUser(ProviderUser $providerUser, string $provider): ?User
     {
         $this->providerUser = $providerUser;
         $this->provider = $provider;
@@ -106,7 +119,7 @@ class SocialiteService implements Creatable
     /**
      * @return User
      */
-    public function createUser() : User
+    public function createUser(): User
     {
         // Sprawdzenie czy provider zwraca adres e-mail
         if (empty($this->providerUser->getEmail())) {
@@ -150,7 +163,7 @@ class SocialiteService implements Creatable
      * @param  array  $attributes
      * @return Model
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->socialiteUser->socialites()->create([

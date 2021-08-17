@@ -63,11 +63,24 @@ class PostService implements
         Auth $auth,
         DB $db
     ) {
+        $this->setPost($post);
+
         $this->carbon = $carbon;
         $this->auth = $auth;
         $this->db = $db;
+    }
 
+    /**
+     * Undocumented function
+     *
+     * @param Post $post
+     * @return static
+     */
+    public function setPost(Post $post)
+    {
         $this->post = $post;
+
+        return $this;
     }
 
     /**
@@ -76,7 +89,7 @@ class PostService implements
      * @param  array $attributes [description]
      * @return Model              [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
@@ -84,15 +97,20 @@ class PostService implements
 
             if ($this->post->status !== Post::INACTIVE) {
                 $this->post->published_at =
-                    $attributes['date_published_at'].$attributes['time_published_at'];
+                    $attributes['date_published_at'] . $attributes['time_published_at'];
             }
 
             $this->post->user()->associate($this->auth->user());
+
             $this->post->save();
 
-            $this->post->tag($attributes['tags'] ?? []);
+            if (array_key_exists('tags', $attributes)) {
+                $this->post->tag($attributes['tags'] ?? []);
+            }
 
-            $this->post->categories()->attach($attributes['categories']);
+            if (array_key_exists('categories', $attributes)) {
+                $this->post->categories()->attach($attributes['categories'] ?? []);
+            }
 
             return $this->post;
         });
@@ -104,7 +122,7 @@ class PostService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateStatus(array $attributes) : bool
+    public function updateStatus(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->status = $attributes['status'];
@@ -123,7 +141,7 @@ class PostService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateFull(array $attributes) : bool
+    public function updateFull(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
@@ -131,16 +149,20 @@ class PostService implements
 
             if ($this->post->status !== Post::INACTIVE) {
                 $this->post->published_at =
-                    $attributes['date_published_at'].$attributes['time_published_at'];
+                    $attributes['date_published_at'] . $attributes['time_published_at'];
             }
 
-            $this->post->retag($attributes['tags'] ?? []);
+            if (array_key_exists('tags', $attributes)) {
+                $this->post->retag($attributes['tags'] ?? []);
+            }
 
-            if (isset($attributes['user'])) {
+            if (array_key_exists('user', $attributes)) {
                 $this->post->user()->associate($attributes['user']);
             }
 
-            $this->post->categories()->sync($attributes['categories']);
+            if (array_key_exists('categories', $attributes)) {
+                $this->post->categories()->sync($attributes['categories'] ?? []);
+            }
 
             return $this->post->save();
         });
@@ -152,7 +174,7 @@ class PostService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->title = $attributes['title'];
@@ -168,7 +190,7 @@ class PostService implements
      *
      * @return bool [description]
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             $this->post->categories()->detach();
@@ -189,7 +211,7 @@ class PostService implements
      * @param  array $ids [description]
      * @return int        [description]
      */
-    public function deleteGlobal(array $ids) : int
+    public function deleteGlobal(array $ids): int
     {
         return $this->db->transaction(function () use ($ids) {
             $this->post->categories()->newPivotStatement()

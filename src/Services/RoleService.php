@@ -32,16 +32,29 @@ class RoleService implements Creatable, Updatable
      */
     public function __construct(Role $role, DB $db)
     {
-        $this->role = $role;
+        $this->setRole($role);
 
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Role $role
+     * @return static
+     */
+    public function setRole(Role $role)
+    {
+        $this->role = $role;
+
+        return $this;
     }
 
     /**
      * [getPermissionsByRole description]
      * @return Collection [description]
      */
-    public function getPermissionsByRole() : Collection
+    public function getPermissionsByRole(): Collection
     {
         if ($this->role->name === 'user') {
             return $this->role->permissions()->make()->makeRepo()
@@ -57,12 +70,14 @@ class RoleService implements Creatable, Updatable
      * @param  array $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $role = $this->role->create(['name' => $attributes['name']]);
 
-            $role->givePermissionTo(array_filter($attributes['perm']) ?? []);
+            if (array_key_exists('perm', $attributes)) {
+                $role->givePermissionTo(array_filter($attributes['perm']) ?? []);
+            }
 
             return $role;
         });
@@ -73,10 +88,12 @@ class RoleService implements Creatable, Updatable
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
+            if (array_key_exists('perm', $attributes)) {
+                $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
+            }
 
             return $this->role->update(['name' => $attributes['name']]);
         });
