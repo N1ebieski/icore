@@ -72,7 +72,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
             $this->link->fill($attributes);
 
             if (isset($attributes['img'])) {
-                $this->link->img_url = $this->fileUtil->make($attributes['img'], $this->link->path)->upload();
+                $this->link->img_url = $this->fileUtil->make($this->link->path, $attributes['img'])->upload();
             }
 
             $this->link->save();
@@ -104,7 +104,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
             }
 
             if (isset($attributes['img'])) {
-                $this->link->img_url = $this->fileUtil->make($attributes['img'], $this->link->path)->upload();
+                $this->link->img_url = $this->fileUtil->make($this->link->path, $attributes['img'])->upload();
             }
 
             $link = $this->link->save();
@@ -137,7 +137,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
     {
         return $this->db->transaction(function () {
             if ($this->link->img_url !== null) {
-                $this->fileUtil->make(null, $this->link->img_url)->delete();
+                $this->fileUtil->make($this->link->img_url)->delete();
             }
 
             $this->link->categories()->detach();

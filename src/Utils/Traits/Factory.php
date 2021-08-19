@@ -20,17 +20,19 @@ trait Factory
         $oldParameters = $class->getConstructor()->getParameters();
         $methodArray = false;
 
-        $y = count($oldParameters) - count($parameters);
+        $y = 0;
 
         for ($i = 0; $i < count($oldParameters); $i++) {
             if (isset($parameters[0]) && is_array($parameters[0]) && isset($parameters[0][$oldParameters[$i]->name])) {
                 $newParameters[] = $parameters[0][$oldParameters[$i]->name];
 
                 $methodArray = true;
-            } elseif (array_key_exists($i - $y, $parameters) && $methodArray === false) {
-                $newParameters[] = $parameters[$i - $y];
-            } elseif (isset($this->{$oldParameters[$i]->name})) {
+            } elseif (!empty($this->{$oldParameters[$i]->name}) && ($y === 0 || !array_key_exists($y, $parameters))) {
                 $newParameters[] = $this->{$oldParameters[$i]->name};
+            } elseif (array_key_exists($y, $parameters) && $methodArray === false) {
+                $newParameters[] = $parameters[$y];
+
+                $y++;
             } else {
                 $newParameters[] = null;
             }

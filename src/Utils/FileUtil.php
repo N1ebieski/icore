@@ -57,23 +57,23 @@ class FileUtil
      * Undocumented function
      *
      * @param Storage $storage
-     * @param string $disk
-     * @param UploadedFile $file
      * @param string $path
+     * @param UploadedFile $file
+     * @param string $disk
      */
     public function __construct(
         Storage $storage,
-        string $disk = 'public',
+        string $path,
         UploadedFile $file = null,
-        string $path = null
+        string $disk = 'public'
     ) {
         $this->storage = $storage;
 
-        $this->disk = $disk;
-        $this->file = $file;
         $this->path = $path;
+        $this->file = $file;
+        $this->disk = $disk;
 
-        if ($this->file === null && is_string($this->path)) {
+        if ($this->file === null && !empty($this->path)) {
             $this->setFileFromPath($this->path);
         }
 
