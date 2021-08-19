@@ -7,7 +7,7 @@
             href="#" 
             class="nav-link" 
             role="button" 
-            id="navbarDropdownMenu{{ $page->id }}"
+            id="navbar-dropdown-menu{{ $page->id }}"
             data-toggle="dropdown" 
             aria-haspopup="true" 
             aria-expanded="false"
@@ -28,7 +28,7 @@
         @if (empty($page->content_html) && $page->childrens->isNotEmpty())
         <div 
             class="dropdown-menu dropdown-menu-right {{ $loop->last ? 'mb-3' : null }}" 
-            aria-labelledby="navbarDropdownMenu{{ $page->id }}"
+            aria-labelledby="navbar-dropdown-menu{{ $page->id }}"
         >
             @foreach ($page->childrens as $children)
             <a 
