@@ -11,6 +11,7 @@ use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Filters\Admin\Page\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Page\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\StoreRequest;
@@ -19,6 +20,7 @@ use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdatePositionRequest;
+use N1ebieski\ICore\View\ViewModels\Admin\Page\EditFullViewModel;
 
 /**
  * [PageController description]
@@ -33,14 +35,12 @@ class PageController
      * @param  IndexFilter     $filter          [description]
      * @return HttpResponse                             [description]
      */
-    public function index(Page $page, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Page $page, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         $pageService = $page->makeService();
- 
+
         return Response::view('icore::admin.page.index', [
-            'pages' => $pageService->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'pages' => $pageService->paginateByFilter($filter->all()),
             'parents' => $pageService->getAsFlatTree(),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
@@ -52,7 +52,7 @@ class PageController
      * @param Page $page
      * @return HttpResponse [description]
      */
-    public function create(Page $page) : HttpResponse
+    public function create(Page $page): HttpResponse
     {
         return Response::view('icore::admin.page.create', [
             'parents' => $page->makeService()->getAsFlatTree()
@@ -65,7 +65,7 @@ class PageController
      * @param  StoreRequest $request [description]
      * @return RedirectResponse      [description]
      */
-    public function store(Page $page, StoreRequest $request) : RedirectResponse
+    public function store(Page $page, StoreRequest $request): RedirectResponse
     {
         $page->makeService()->create($request->all());
 
@@ -86,7 +86,7 @@ class PageController
      * @param  Page         $page [description]
      * @return JsonResponse       [description]
      */
-    public function editPosition(Page $page) : JsonResponse
+    public function editPosition(Page $page): JsonResponse
     {
         $page->siblings_count = $page->countSiblings() + 1;
 
@@ -104,13 +104,13 @@ class PageController
      * @param  UpdatePositionRequest $request [description]
      * @return JsonResponse                   [description]
      */
-    public function updatePosition(Page $page, UpdatePositionRequest $request) : JsonResponse
+    public function updatePosition(Page $page, UpdatePositionRequest $request): JsonResponse
     {
         $page->makeService()->updatePosition($request->only('position'));
 
         return Response::json([
             'success' => '',
-            'siblings' => $page->makeRepo()->getSiblingsAsArray()+[$page->id => $page->position]
+            'siblings' => $page->makeRepo()->getSiblingsAsArray() + [$page->id => $page->position]
         ]);
     }
 
@@ -119,7 +119,7 @@ class PageController
      * @param  Page   $page [description]
      * @return JsonResponse       [description]
      */
-    public function edit(Page $page) : JsonResponse
+    public function edit(Page $page): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -132,12 +132,14 @@ class PageController
      * @param  Page $page [description]
      * @return HttpResponse       [description]
      */
-    public function editFull(Page $page) : HttpResponse
+    public function editFull(Page $page): HttpResponse
     {
-        return Response::view('icore::admin.page.edit_full', [
-            'page' => $page,
-            'parents' => $page->makeService()->getAsFlatTreeExceptSelf()
-        ]);
+        return Response::view(
+            'icore::admin.page.edit_full',
+            App::make(EditFullViewModel::class, [
+                'page' => $page
+            ])
+        );
     }
 
     /**
@@ -146,7 +148,7 @@ class PageController
      * @param  UpdateRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function update(Page $page, UpdateRequest $request) : JsonResponse
+    public function update(Page $page, UpdateRequest $request): JsonResponse
     {
         $page->makeService()->update($request->only(['title', 'content_html']));
 
@@ -164,7 +166,7 @@ class PageController
      * @param  UpdateFullRequest $request [description]
      * @return RedirectResponse           [description]
      */
-    public function updateFull(Page $page, UpdateFullRequest $request) : RedirectResponse
+    public function updateFull(Page $page, UpdateFullRequest $request): RedirectResponse
     {
         $page->makeService()->updateFull($request->all());
 
@@ -178,7 +180,7 @@ class PageController
      * @param  UpdateStatusRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function updateStatus(Page $page, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(Page $page, UpdateStatusRequest $request): JsonResponse
     {
         $page->makeService()->updateStatus($request->only('status'));
 
@@ -199,7 +201,7 @@ class PageController
      * @param  Page         $page [description]
      * @return JsonResponse       [description]
      */
-    public function destroy(Page $page) : JsonResponse
+    public function destroy(Page $page): JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
         $descendants = $page->makeRepo()->getDescendantsAsArray();
@@ -219,7 +221,7 @@ class PageController
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(Page $page, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Page $page, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $page->makeService()->deleteGlobal($request->get('select'));
 

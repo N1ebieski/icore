@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Repositories;
 
-use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Link;
+use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Utils\MigrationUtil;
 
-/**
- * [LinkRepo description]
- */
 class LinkRepo
 {
     /**
@@ -53,7 +50,7 @@ class LinkRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->link->where('type', $filter['type'])
             ->filterExcept($filter['except'])
@@ -66,7 +63,7 @@ class LinkRepo
      * @param  array      $ids [description]
      * @return Collection      [description]
      */
-    public function getAvailableBacklinksByCats(array $ids) : Collection
+    public function getAvailableBacklinksByCats(array $ids): Collection
     {
         return $this->link->where('type', 'backlink')
             ->where(function ($query) use ($ids) {
@@ -82,7 +79,7 @@ class LinkRepo
      * [getSiblingsAsArray description]
      * @return array [description]
      */
-    public function getSiblingsAsArray() : array
+    public function getSiblingsAsArray(): array
     {
         return $this->link->siblings()
             ->get(['id', 'position'])
@@ -95,7 +92,7 @@ class LinkRepo
      * @param  array      $component [description]
      * @return Collection            [description]
      */
-    public function getLinksByComponent(array $component) : Collection
+    public function getLinksByComponent(array $component): Collection
     {
         return $this->link->where('type', 'link')
             ->when($component['home'] === true, function ($query) {

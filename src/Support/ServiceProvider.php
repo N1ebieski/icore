@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\Support;
 
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as Collect;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 abstract class ServiceProvider extends BaseServiceProvider
 {
@@ -21,7 +21,7 @@ abstract class ServiceProvider extends BaseServiceProvider
      *
      * @param Application $app
      */
-    public function __construct(Application  $app)
+    public function __construct(Application $app)
     {
         parent::__construct($app);
     }
@@ -35,7 +35,7 @@ abstract class ServiceProvider extends BaseServiceProvider
      */
     protected function mergeConfigFrom($path, $key)
     {
-        if (! $this->app->configurationIsCached()) {
+        if (!$this->app->configurationIsCached()) {
             $this->app['config']->set($key, $this->mergeConfigs(
                 require $path,
                 $this->app['config']->get($key, [])
@@ -54,16 +54,16 @@ abstract class ServiceProvider extends BaseServiceProvider
     {
         $array = array_merge($original, $merging);
 
-        if (! $this->recursivelyMergeConfigs) {
+        if (!$this->recursivelyMergeConfigs) {
             return $array;
         }
 
         foreach ($original as $key => $value) {
-            if (! is_array($value)) {
+            if (!is_array($value)) {
                 continue;
             }
 
-            if (! Arr::exists($merging, $key)) {
+            if (!Arr::exists($merging, $key)) {
                 continue;
             }
 
@@ -87,7 +87,7 @@ abstract class ServiceProvider extends BaseServiceProvider
      * @param array $array
      * @return boolean
      */
-    protected function isContainsStringKey(array $array) : bool
+    protected function isContainsStringKey(array $array): bool
     {
         return Collect::make($array)
             ->contains(function ($value, $key) {

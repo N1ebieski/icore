@@ -1,5 +1,5 @@
 @if ($pages->isNotEmpty())
-<ul id="pagesToggle" class="navbar-nav pr-3 pr-md-1">
+<ul id="pages-toggle" class="navbar-nav pr-3 pr-md-1">
     @foreach ($pages as $page)
     <li class="nav-item dropdown {{ $isUrlContains($page->urls ?? null) }}">
         @if (empty($page->content_html))

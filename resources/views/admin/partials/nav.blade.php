@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand navbar-light bg-light fixed-top border-bottom">
-    <a href="#" class="navbar-toggler" role="button" id="sidebarToggle">
+    <a href="#" class="navbar-toggler" role="button" id="sidebar-toggle">
         <span class="navbar-toggler-icon"></span>
     </a>
     <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
@@ -17,7 +17,7 @@
                 class="nav-link text-nowrap" 
                 href="#" 
                 role="button" 
-                id="navbarDropdownMenuLink"
+                id="navbar-dropdown-menu-link"
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
                 aria-expanded="false"
@@ -27,7 +27,7 @@
             </a>
             <div 
                 class="dropdown-menu dropdown-menu-right" 
-                aria-labelledby="navbarDropdownMenuLink"
+                aria-labelledby="navbar-dropdown-menu-link"
             >
                 <h6 class="dropdown-header">
                     {{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}

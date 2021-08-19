@@ -2,7 +2,7 @@
 @inject('report', 'N1ebieski\ICore\Models\Report\Comment\Report')
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'filterModal')
+@slot('modal_id', 'filter-modal')
 
 @slot('modal_title')
 <i class="fas fa-sort-amount-up"></i>
@@ -11,25 +11,25 @@
 
 @slot('modal_body')
 <div class="form-group">
-    <label for="FormSearch">
+    <label for="filter-search">
         {{ trans('icore::filter.search.label') }}
     </label>
     <input 
         type="text" 
         class="form-control" 
-        id="FormSearch" 
+        id="filter-search" 
         placeholder="{{ trans('icore::filter.search.placeholder') }}"
         name="filter[search]" 
         value="{{ isset($filter['search']) ? $filter['search'] : '' }}"
     >
 </div>
 <div class="form-group">
-    <label for="FormStatus">
+    <label for="filter-status">
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
     </label>
     <select 
         class="form-control custom-select" 
-        id="FormStatus" 
+        id="filter-status" 
         name="filter[status]"
     >
         <option value="">
@@ -50,12 +50,12 @@
     </select>
 </div>
 <div class="form-group">
-    <label for="FormCensored">
+    <label for="filter-censored">
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.censored.label') }}"
     </label>
     <select 
         class="form-control custom-select" 
-        id="FormCensored" 
+        id="filter-censored" 
         name="filter[censored]"
     >
         <option value="">
@@ -76,12 +76,12 @@
     </select>
 </div>
 <div class="form-group">
-    <label for="FormReport">
+    <label for="filter-report">
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.report.label') }}"
     </label>
     <select 
         class="form-control custom-select" 
-        id="FormReport" 
+        id="filter-report" 
         name="filter[report]"
     >
         <option value="">
@@ -102,7 +102,7 @@
     </select>
 </div>
 <div class="d-inline">
-    <button type="button" class="btn btn-primary btn-send" id="filterFilter">
+    <button type="button" class="btn btn-primary btn-send" id="filter-filter">
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.apply') }}</span>
     </button>

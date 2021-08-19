@@ -1,10 +1,11 @@
-jQuery(document).ready(function() {
-    $('[aria-controls="collapsePublishedAt"]').change(function() {
-        if ($(this).val() == 0) $('#collapsePublishedAt').collapse('hide');
-        else $('#collapsePublishedAt').collapse('show');
+jQuery(document).ready(function () {
+    $('[aria-controls="collapse-published-at"]').change(function () {
+        if ($(this).val() == 0) $('#collapse-published-at').collapse('hide');
+        else $('#collapse-published-at').collapse('show');
     });
-    $('[aria-controls="collapseActivationAt"]').change(function() {
-        if ($(this).val() == 2) $('#collapseActivationAt').collapse('show');
-        else $('#collapseActivationAt').collapse('hide');
+    
+    $('[aria-controls="collapse-activation-at"]').change(function () {
+        if ($(this).val() == 2) $('#collapse-activation-at').collapse('show');
+        else $('#collapse-activation-at').collapse('hide');
     });
 });

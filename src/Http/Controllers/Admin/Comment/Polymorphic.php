@@ -5,16 +5,26 @@ namespace N1ebieski\ICore\Http\Controllers\Admin\Comment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
+    /**
+     * Display a listing of Comments.
+     *
+     * @param  Comment       $comment       [description]
+     * @param  IndexRequest  $request       [description]
+     * @param  IndexFilter   $filter        [description]
+     * @return HttpResponse                         [description]
+     */
+    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : HttpResponse;
+
     /**
      * Display the specified Comment.
      *

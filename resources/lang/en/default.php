@@ -36,5 +36,6 @@ return [
     'single' => 'Single',
     'global' => 'Multi',
     'open' => 'Open',
-    'close' => 'Close'
+    'close' => 'Close',
+    'current_option' => 'Currently Selected'
 ];

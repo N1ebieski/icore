@@ -30,7 +30,7 @@
         class="mb-3" 
         method="post" 
         action="{{ route('admin.mailing.store') }}" 
-        id="createMailing"
+        id="create-mailing"
     >
         @csrf
         <div class="row">
@@ -85,7 +85,7 @@
                         name="status"
                         data-toggle="collapse" 
                         aria-expanded="false" 
-                        aria-controls="collapseActivationAt"
+                        aria-controls="collapse-activation-at"
                     >
                         <option 
                             value="{{ $mailing::ACTIVE }}" 
@@ -109,7 +109,7 @@
                 </div>
                 <div 
                     class="form-group collapse {{ (old('status') && old('status') == 2) ? 'show' : '' }}"
-                    id="collapseActivationAt"
+                    id="collapse-activation-at"
                 >
                     <label for="activation_at">
                         <span>{{ trans('icore::mailings.activation_at.label') }}</span>
@@ -227,6 +227,6 @@
 
 @push('script')
 @component('icore::admin.partials.jsvalidation')
-{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Mailing\StoreRequest', '#createMailing'); !!}
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Mailing\StoreRequest', '#create-mailing'); !!}
 @endcomponent
 @endpush

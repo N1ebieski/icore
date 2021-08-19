@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Link;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
-/**
- * [LinkCache description]
- */
 class LinkCache
 {
     /**
@@ -61,7 +58,7 @@ class LinkCache
      * @param  array      $component [description]
      * @return Collection            [description]
      */
-    public function rememberLinksByComponent(array $component) : Collection
+    public function rememberLinksByComponent(array $component): Collection
     {
         $json = json_encode($component);
 

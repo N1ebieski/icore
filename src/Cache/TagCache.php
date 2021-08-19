@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
-/**
- * [TagCache description]
- */
 class TagCache
 {
     /**
@@ -61,7 +58,7 @@ class TagCache
      * @param  string $slug [description]
      * @return Tag|null       [description]
      */
-    public function rememberBySlug(string $slug) : ?Tag
+    public function rememberBySlug(string $slug): ?Tag
     {
         return $this->cache->remember(
             "tag.firstBySlug.{$slug}",
@@ -77,7 +74,7 @@ class TagCache
      * @param  array $component [description]
      * @return Collection [description]
      */
-    public function rememberPopularByComponent(array $component) : Collection
+    public function rememberPopularByComponent(array $component): Collection
     {
         $json = json_encode($component);
 
@@ -89,7 +86,7 @@ class TagCache
             }
         );
     }
-    
+
     /**
      * Undocumented function
      *
@@ -97,7 +94,7 @@ class TagCache
      * @param array $component
      * @return bool
      */
-    public function putPopularByComponent(Collection $tags, array $component) : bool
+    public function putPopularByComponent(Collection $tags, array $component): bool
     {
         $json = json_encode($component);
 

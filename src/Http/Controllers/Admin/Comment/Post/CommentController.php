@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
@@ -17,13 +16,27 @@ use N1ebieski\ICore\Http\Requests\Admin\Comment\Post\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\Post\CreateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Post\Polymorphic;
 use N1ebieski\ICore\Events\Admin\Comment\StoreEvent as CommentStoreEvent;
-use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as CommentBaseController;
+use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as BaseCommentController;
 
-/**
- * [CommentController description]
- */
-class CommentController extends CommentBaseController implements Polymorphic
+class CommentController implements Polymorphic
 {
+    /**
+     * Undocumented variable
+     *
+     * @var BaseCommentController
+     */
+    protected $decorated;
+
+    /**
+     * Undocumented function
+     *
+     * @param BaseCommentController $decorated
+     */
+    public function __construct(BaseCommentController $decorated)
+    {
+        $this->decorated = $decorated;
+    }
+
     /**
      * Display a listing of Comments.
      *
@@ -34,14 +47,7 @@ class CommentController extends CommentBaseController implements Polymorphic
      */
     public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
-        return Response::view('icore::admin.comment.index', [
-            'model' => $comment,
-            'comments' => $comment->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
-            'filter' => $filter->all(),
-            'paginate' => Config::get('database.paginate')
-        ]);
+        return $this->decorated->index($comment, $request, $filter);
     }
 
     /**

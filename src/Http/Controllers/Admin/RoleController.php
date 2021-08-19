@@ -8,15 +8,13 @@ use Illuminate\Http\RedirectResponse;
 use N1ebieski\ICore\Models\Permission;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Admin\Role\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Role\EditRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\DestroyRequest;
 
-/**
- * [RoleController description]
- */
 class RoleController
 {
     /**
@@ -26,12 +24,10 @@ class RoleController
      * @param IndexRequest $request [description]
      * @return HttpResponse         [description]
      */
-    public function index(Role $role, IndexRequest $request) : HttpResponse
+    public function index(Role $role, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.role.index', [
-            'roles' => $role->makeRepo()->paginateByFilter([
-                'except' => $request->input('except')
-            ]),
+            'roles' => $role->makeRepo()->paginateByFilter($filter->all()),
         ]);
     }
 

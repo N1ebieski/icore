@@ -38,7 +38,7 @@
                     &nbsp;|&nbsp;
                     @auth
                     <a 
-                        class="rateComment" 
+                        class="rate-comment" 
                         href="#" 
                         title="{{ trans('icore::ratings.plus') }}"
                         data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => 1]) }}"
@@ -47,7 +47,7 @@
                     </a>
                     &nbsp;
                     <a 
-                        class="rateComment" 
+                        class="rate-comment" 
                         href="#" 
                         title="{{ trans('icore::ratings.minus') }}"
                         data-route="{{ route('web.rating.comment.rate', [$comment->id, 'rating' => -1]) }}"
@@ -57,7 +57,7 @@
                     @canany(['web.comments.create', 'web.comments.suggest'])
                     &nbsp;|&nbsp;
                     <a 
-                        class="createComment" 
+                        class="create-comment" 
                         href="#" 
                         title="{{ trans('icore::comments.answer') }}"
                         data-route="{{ route("web.comment.{$comment->poli}.create", [$comment->model_id, 'parent_id' => $comment->id]) }}"
@@ -69,7 +69,7 @@
                     @can('update', $comment)
                     &nbsp;|&nbsp;
                     <a 
-                        class="editComment" 
+                        class="edit-comment" 
                         href="#" 
                         title="{{ trans('icore::comments.edit') }}"
                         data-route="{{ route('web.comment.edit', [$comment->id]) }}"
@@ -90,12 +90,12 @@
                 @auth
                 <small class="ml-auto">
                     <a 
-                        class="createReport" 
+                        class="create-report" 
                         href="#" 
                         title="{{ trans('icore::comments.report') }}"
                         data-route="{{ route('web.report.comment.create', [$comment->id]) }}"
                         data-toggle="modal" 
-                        data-target="#createReportModal"
+                        data-target="#create-report-modal"
                     >
                         {{ trans('icore::comments.report') }}
                     </a>
@@ -111,7 +111,7 @@
             title="{{ trans('icore::comments.next_answers') }}"
             data-route="{{ route('web.comment.take', [$comment->id]) }}" 
             role="button"
-            class="btn btn-outline-secondary text-nowrap depth-1 takeComment"
+            class="btn btn-outline-secondary text-nowrap depth-1 take-comment"
         >
             <span>{{ trans('icore::comments.next_answers') }} </span>
             <i class="fas fa-angle-down"></i>
@@ -129,7 +129,7 @@
                 title="{{ trans('icore::comments.next_comments') }}"
                 data-route="{{ route('web.comment.take', [$comment->id]) }}" 
                 role="button"
-                class="btn btn-outline-secondary text-nowrap depth-1 takeComment"
+                class="btn btn-outline-secondary text-nowrap depth-1 take-comment"
             >
                 <span>{{ trans('icore::comments.next_comments') }} </span>
                 <i class="fas fa-angle-down"></i>

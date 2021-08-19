@@ -2,16 +2,15 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
-/**
- * [CategoryCache description]
- */
 class CategoryCache
 {
     /**
@@ -34,6 +33,20 @@ class CategoryCache
     protected $carbon;
 
     /**
+     * Undocumented variable
+     *
+     * @var Collect
+     */
+    protected $collect;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Auth
+     */
+    protected $auth;
+
+    /**
      * Config
      * @var int
      */
@@ -46,13 +59,23 @@ class CategoryCache
      * @param Cache $cache
      * @param Config $config
      * @param Carbon $carbon
+     * @param Collect $collect
+     * @param Auth $auth
      */
-    public function __construct(Category $category, Cache $cache, Config $config, Carbon $carbon)
-    {
+    public function __construct(
+        Category $category,
+        Cache $cache,
+        Config $config,
+        Carbon $carbon,
+        Collect $collect,
+        Auth $auth
+    ) {
         $this->category = $category;
 
         $this->cache = $cache;
         $this->carbon = $carbon;
+        $this->collect = $collect;
+        $this->auth = $auth;
 
         $this->minutes = $config->get('cache.minutes');
     }
@@ -78,7 +101,7 @@ class CategoryCache
      * @param  int                  $page [description]
      * @return LengthAwarePaginator       [description]
      */
-    public function rememberPosts(int $page) : LengthAwarePaginator
+    public function rememberPosts(int $page): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
             "category.{$this->category->id}.paginatePosts.{$page}",
@@ -93,7 +116,7 @@ class CategoryCache
      * [rememberWithRecursiveChildrens description]
      * @return Collection [description]
      */
-    public function rememberWithRecursiveChildrens() : Collection
+    public function rememberWithRecursiveChildrens(): Collection
     {
         return $this->cache->tags(['categories'])->remember(
             "category.{$this->category->poli}.getWithRecursiveChildrens",
@@ -109,7 +132,7 @@ class CategoryCache
      *
      * @return Collection
      */
-    public function rememberCountByStatus() : Collection
+    public function rememberCountByStatus(): Collection
     {
         return $this->cache->tags(['categories'])->remember(
             "category.{$this->category->poli}.countByStatus",
@@ -118,5 +141,58 @@ class CategoryCache
                 return $this->category->makeRepo()->countByStatus();
             }
         );
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $filter
+     * @param integer $page
+     * @return LengthAwarePaginator
+     */
+    public function rememberByFilter(array $filter, int $page): LengthAwarePaginator
+    {
+        if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
+            $categories = $this->getByFilter($page);
+        }
+
+        if (!isset($categories) || !$categories) {
+            $categories = $this->category->makeRepo()->paginateByFilter($filter);
+
+            if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
+                $this->putByFilter($categories, $page);
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
+     * [getByFilter description]
+     * @param  int                  $page [description]
+     * @return LengthAwarePaginator|null       [description]
+     */
+    public function getByFilter(int $page): ?LengthAwarePaginator
+    {
+        return $this->cache->tags(["categories"])
+            ->get(
+                "category.{$this->category->poli}.getByFilter.{$page}"
+            );
+    }
+
+    /**
+     * [putByFilter description]
+     * @param  LengthAwarePaginator $categories [description]
+     * @param  int                  $page     [description]
+     * @return bool                           [description]
+     */
+    public function putByFilter(LengthAwarePaginator $categories, int $page): bool
+    {
+        return $this->cache->tags(["categories"])
+            ->put(
+                "category.{$this->category->poli}.getByFilter.{$page}",
+                $categories,
+                $this->carbon->now()->addMinutes($this->minutes)
+            );
     }
 }

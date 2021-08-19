@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
-/**
- * [PostCache description]
- */
 class PageCache
 {
     /**
@@ -60,7 +57,7 @@ class PageCache
      * @param  array     $component [description]
      * @return Collection            [description]
      */
-    public function rememberWithChildrensByComponent(array $component) : Collection
+    public function rememberWithChildrensByComponent(array $component): Collection
     {
         $json = json_encode($component);
 
@@ -78,7 +75,7 @@ class PageCache
      * @param  array     $component [description]
      * @return Collection            [description]
      */
-    public function rememberWithRecursiveChildrensByComponent(array $component) : Collection
+    public function rememberWithRecursiveChildrensByComponent(array $component): Collection
     {
         $json = json_encode($component);
 
@@ -96,9 +93,9 @@ class PageCache
      * @param  string $slug [description]
      * @return Page|null       [description]
      */
-    public function rememberBySlug(string $slug) : ?Page
+    public function rememberBySlug(string $slug): ?Page
     {
-        return $this->cache->tags(['page.'.$slug])->remember(
+        return $this->cache->tags(['page.' . $slug])->remember(
             "page.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($slug) {
@@ -111,9 +108,9 @@ class PageCache
      * [rememberLoadSiblingsAndRecursiveChildrens description]
      * @return Page [description]
      */
-    public function rememberLoadSiblingsAndRecursiveChildrens() : Page
+    public function rememberLoadSiblingsAndRecursiveChildrens(): Page
     {
-        return $this->cache->tags(['page.'.$this->page->slug])->remember(
+        return $this->cache->tags(['page.' . $this->page->slug])->remember(
             "page.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () {

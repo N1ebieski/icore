@@ -15,12 +15,13 @@ use N1ebieski\ICore\Repositories\CategoryRepo;
 use N1ebieski\ICore\Cache\CategoryCache;
 use N1ebieski\ICore\Services\CategoryService;
 
-/**
- * [Category description]
- */
 class Category extends Entity implements CategoryInterface
 {
-    use Sluggable, Filterable, FullTextSearchable, Polymorphic, Carbonable;
+    use Sluggable;
+    use Filterable;
+    use FullTextSearchable;
+    use Polymorphic;
+    use Carbonable;
 
     // Configuration
 
@@ -91,7 +92,7 @@ class Category extends Entity implements CategoryInterface
      *
      * @return array
      */
-    public function sluggable() : array
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -128,8 +129,6 @@ class Category extends Entity implements CategoryInterface
     {
         return $this->belongsToMany(static::class, 'categories_closure', 'ancestor', 'descendant');
     }
-
-    // Relations
 
     /**
      * [childrens description]
@@ -212,7 +211,7 @@ class Category extends Entity implements CategoryInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeWithAncestorsExceptSelf(Builder $query) : Builder
+    public function scopeWithAncestorsExceptSelf(Builder $query): Builder
     {
         return $query->with(['ancestors' => function ($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
@@ -224,7 +223,7 @@ class Category extends Entity implements CategoryInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeWithRecursiveAllRels(Builder $query) : Builder
+    public function scopeWithRecursiveAllRels(Builder $query): Builder
     {
         return $query->with([
             'childrensRecursiveWithAllRels' => function ($query) {
@@ -257,7 +256,7 @@ class Category extends Entity implements CategoryInterface
      * @param  Builder $query [description]
      * @return Builder         [description]
      */
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where("{$this->getTable()}.status", static::ACTIVE);
     }
@@ -267,7 +266,7 @@ class Category extends Entity implements CategoryInterface
      * @param  Builder $query [description]
      * @return Builder         [description]
      */
-    public function scopeRoot(Builder $query) : Builder
+    public function scopeRoot(Builder $query): Builder
     {
         return $query->where("{$this->getTable()}.parent_id", null);
     }
@@ -278,7 +277,7 @@ class Category extends Entity implements CategoryInterface
      * [getRealPositionAttribute description]
      * @return string [description]
      */
-    public function getRealPositionAttribute() : string
+    public function getRealPositionAttribute(): string
     {
         return $this->position + 1;
     }
@@ -289,7 +288,7 @@ class Category extends Entity implements CategoryInterface
      * [loadAncestorsExceptSelf description]
      * @return self [description]
      */
-    public function loadAncestorsExceptSelf() : self
+    public function loadAncestorsExceptSelf(): self
     {
         return $this->load(['ancestors' => function ($q) {
             $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');

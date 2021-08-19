@@ -33,7 +33,7 @@ class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
      */
     public function __construct(Tag $tag, DB $db)
     {
-        $this->tag = $tag;
+        $this->setTag($tag);
 
         $this->db = $db;
     }
@@ -56,7 +56,7 @@ class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
      * @param  array $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->tag->create($attributes);
@@ -69,7 +69,7 @@ class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
      * @param array $attributes
      * @return boolean
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->tag->update($attributes);
@@ -80,7 +80,7 @@ class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
      * [delete description]
      * @return bool [description]
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             return $this->tag->delete();
@@ -92,7 +92,7 @@ class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
      * @param  array $ids [description]
      * @return int        [description]
      */
-    public function deleteGlobal(array $ids) : int
+    public function deleteGlobal(array $ids): int
     {
         return $this->db->transaction(function () use ($ids) {
             return $this->tag->whereIn($this->tag->GetKeyName(), $ids)->delete();

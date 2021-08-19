@@ -2,17 +2,13 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 
-/**
- * [PostCache description]
- */
 class PostCache
 {
     /**
@@ -51,7 +47,7 @@ class PostCache
     public function __construct(Post $post, Cache $cache, Config $config, Carbon $carbon)
     {
         $this->post = $post;
-        
+
         $this->cache = $cache;
         $this->carbon = $carbon;
 
@@ -63,7 +59,7 @@ class PostCache
      * @param  int    $page [description]
      * @return LengthAwarePaginator       [description]
      */
-    public function rememberLatest(int $page) : LengthAwarePaginator
+    public function rememberLatest(int $page): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
             "post.paginateLatest.{$page}",
@@ -80,7 +76,7 @@ class PostCache
      */
     public function rememberPrevious()
     {
-        return $this->cache->tags(['post.'.$this->post->slug])->remember(
+        return $this->cache->tags(['post.' . $this->post->slug])->remember(
             "post.firstPrevious.{$this->post->id}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () {
@@ -95,7 +91,7 @@ class PostCache
      */
     public function rememberNext()
     {
-        return $this->cache->tags(['post.'.$this->post->slug])->remember(
+        return $this->cache->tags(['post.' . $this->post->slug])->remember(
             "post.firstNext.{$this->post->id}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () {
@@ -108,9 +104,9 @@ class PostCache
      * [rememberRelated description]
      * @return Collection [description]
      */
-    public function rememberRelated() : Collection
+    public function rememberRelated(): Collection
     {
-        return $this->cache->tags(['post.'.$this->post->slug])->remember(
+        return $this->cache->tags(['post.' . $this->post->slug])->remember(
             "post.getRelated.{$this->post->id}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () {
@@ -126,7 +122,7 @@ class PostCache
      */
     public function rememberBySlug(string $slug)
     {
-        return $this->cache->tags(['post.'.$slug])->remember(
+        return $this->cache->tags(['post.' . $slug])->remember(
             "post.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->minutes),
             function () use ($slug) {
@@ -163,7 +159,7 @@ class PostCache
      * @param  int                  $page  [description]
      * @return LengthAwarePaginator        [description]
      */
-    public function rememeberArchiveByDate(int $month, int $year, int $page) : LengthAwarePaginator
+    public function rememeberArchiveByDate(int $month, int $year, int $page): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
             "post.paginateArchiveByDate.{$month}.{$year}.{$page}",
@@ -181,7 +177,7 @@ class PostCache
      * [rememberArchives description]
      * @return Collection [description]
      */
-    public function rememberArchives() : Collection
+    public function rememberArchives(): Collection
     {
         return $this->cache->tags(['posts'])->remember(
             'post.getArchives',
@@ -204,7 +200,7 @@ class PostCache
      *
      * @return Collection
      */
-    public function rememberCountByStatus() : Collection
+    public function rememberCountByStatus(): Collection
     {
         return $this->cache->tags(['posts'])->remember(
             "post.countByStatus",
@@ -220,7 +216,7 @@ class PostCache
      *
      * @return string|null
      */
-    public function rememberLastActivity() : ?string
+    public function rememberLastActivity(): ?string
     {
         return $this->cache->tags(['posts'])->remember(
             "post.lastActivity",
@@ -235,7 +231,7 @@ class PostCache
      * [rememberLatestForHome description]
      * @return Collection [description]
      */
-    public function rememberLatestForHome() : Collection
+    public function rememberLatestForHome(): Collection
     {
         return $this->cache->tags(["posts"])->remember(
             "post.getLatestForHome",

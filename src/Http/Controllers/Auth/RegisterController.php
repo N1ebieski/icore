@@ -72,8 +72,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        //Antywzorzec, ale konieczny ze wzgledu na jsvalidation, ktory wymaga reguly w FormRequest
-        $register = new StoreRequest;
+        $register = new StoreRequest();
 
         return Validator::make(
             $data,

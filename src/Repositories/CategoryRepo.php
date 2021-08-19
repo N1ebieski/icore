@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Repositories;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Category\Category;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
 
@@ -17,19 +18,30 @@ class CategoryRepo
     protected $category;
 
     /**
+     * Undocumented variable
+     *
+     * @var Auth
+     */
+    protected $auth;
+
+    /**
      * Config
      * @var int
      */
     protected $paginate;
 
     /**
-     * [__construct description]
-     * @param Category $category [description]
-     * @param Config   $config   [description]
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param Config $config
+     * @param Auth $auth
      */
-    public function __construct(Category $category, Config $config)
+    public function __construct(Category $category, Config $config, Auth $auth)
     {
         $this->category = $category;
+
+        $this->auth = $auth;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -39,7 +51,7 @@ class CategoryRepo
      * @param  array      $ids [description]
      * @return Collection      [description]
      */
-    public function getByIds(array $ids) : Collection
+    public function getByIds(array $ids): Collection
     {
         return $this->category->withAncestorsExceptSelf()
             ->whereIn('id', $ids)
@@ -51,20 +63,26 @@ class CategoryRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->category->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
-            ->filterStatus($filter['status'])
+            ->when(
+                $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),
+                function ($query) {
+                    $query->active();
+                },
+                function ($query) use ($filter) {
+                    $query->filterStatus($filter['status']);
+                }
+            )
             ->poliType()
             ->filterParent($filter['parent'])
             ->when($filter['orderby'] === null, function ($query) use ($filter) {
                 $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
-            ->when($filter['parent'] === null, function ($query) {
-                return $query->withAncestorsExceptSelf();
-            })
+            ->withAncestorsExceptSelf()
             ->filterPaginate($filter['paginate']);
     }
 
@@ -72,7 +90,7 @@ class CategoryRepo
      * [getAsTree description]
      * @return Collection [description]
      */
-    public function getAsTree() : Collection
+    public function getAsTree(): Collection
     {
         return $this->category->getTreeByQuery(
             $this->category->poliType()
@@ -84,7 +102,7 @@ class CategoryRepo
      * [getAsTreeExceptSelf description]
      * @return Collection [description]
      */
-    public function getAsTreeExceptSelf() : Collection
+    public function getAsTreeExceptSelf(): Collection
     {
         return $this->category->getTreeByQuery(
             $this->category->whereNotIn(
@@ -120,7 +138,7 @@ class CategoryRepo
      * [getAncestorsAsArray description]
      * @return array [description]
      */
-    public function getAncestorsAsArray() : array
+    public function getAncestorsAsArray(): array
     {
         return $this->category->ancestors()
             ->get(['id'])
@@ -132,7 +150,7 @@ class CategoryRepo
      * [getDescendantsAsArray description]
      * @return array [description]
      */
-    public function getDescendantsAsArray() : array
+    public function getDescendantsAsArray(): array
     {
         return $this->category->descendants()
             ->get(['id'])
@@ -144,7 +162,7 @@ class CategoryRepo
      * [getPosts description]
      * @return LengthAwarePaginator [description]
      */
-    public function paginatePosts() : LengthAwarePaginator
+    public function paginatePosts(): LengthAwarePaginator
     {
         return $this->category->morphs()
             ->active()
@@ -157,7 +175,7 @@ class CategoryRepo
      * [getWithRecursiveChildrens description]
      * @return Collection [description]
      */
-    public function getWithRecursiveChildrens() : Collection
+    public function getWithRecursiveChildrens(): Collection
     {
         return $this->category->withRecursiveAllRels()
             ->withCount([
@@ -190,7 +208,7 @@ class CategoryRepo
      * [getSiblingsAsArray description]
      * @return array [description]
      */
-    public function getSiblingsAsArray() : array
+    public function getSiblingsAsArray(): array
     {
         return $this->category->getSiblings(['id', 'position'])
             ->pluck('position', 'id')
@@ -203,7 +221,7 @@ class CategoryRepo
      * @param Closure $closure
      * @return boolean
      */
-    public function chunkActiveWithModelsCount(Closure $closure) : bool
+    public function chunkActiveWithModelsCount(Closure $closure): bool
     {
         return $this->category->active()
             ->poliType()
@@ -218,7 +236,7 @@ class CategoryRepo
      *
      * @return Collection
      */
-    public function countByStatus() : Collection
+    public function countByStatus(): Collection
     {
         return $this->category->poliType()
             ->selectRaw("`status`, COUNT(`id`) AS `count`")

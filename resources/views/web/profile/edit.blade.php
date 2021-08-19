@@ -22,7 +22,7 @@
     class="mb-3" 
     method="post" 
     action="{{ route('web.profile.update') }}" 
-    id="updateProfile"
+    id="update-profile"
 >
     @csrf
     @method('put')
@@ -101,7 +101,7 @@
         <button 
             type="button" 
             data-toggle="modal" 
-            data-target="#editProfileEmailModal"
+            data-target="#edit-profile-email-modal"
             class="btn btn-outline-primary"
         >
             {{ trans('icore::profile.email_button') }}
@@ -115,7 +115,7 @@
 
 @push('script')
 @component('icore::web.partials.jsvalidation')
-{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Web\Profile\UpdateRequest', '#updateProfile'); !!}
-{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Web\Profile\UpdateEmailRequest', '#updateEmailProfile'); !!}
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Web\Profile\UpdateRequest', '#update-profile'); !!}
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Web\Profile\UpdateEmailRequest', '#update-email-profile'); !!}
 @endcomponent
 @endpush

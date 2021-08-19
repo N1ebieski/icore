@@ -1,26 +1,25 @@
-jQuery(document).on('click', 'a.destroyComment', function(e) {
+jQuery(document).on('click', '.destroyComment, .destroy-comment', function (e) {
     e.preventDefault();
 
     let $element = $(this);
-    let $row = $('#row'+$element.attr('data-id'));
+    let $row = $('#row' + $element.data('id'));
 
     jQuery.ajax({
-        url: $element.attr('data-route'),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url: $element.data('route'),
         method: 'delete',
-        beforeSend: function() {
+        beforeSend: function () {
             $row.find('.responsive-btn-group').addClass('disabled');
-            $row.append($.getLoader('spinner-border'));
+            $row.find('[data-btn-ok-class*="destroyComment"], [data-btn-ok-class*="destroy-comment"]').getLoader('show');
         },
-        complete: function() {
-            $row.find('div.loader-absolute').remove();
+        complete: function () {
+            $row.find('[data-btn-ok-class*="destroyComment"], [data-btn-ok-class*="destroy-comment"]').getLoader('hide');
         },
-        success: function(response) {
+        success: function (response) {
             $row.fadeOut('slow');
-            $.each(response.descendants, function(key, value) {
-                let $rowDescendant = $('#row'+value);
+
+            $.each(response.descendants, function (key, value) {
+                let $rowDescendant = $('#row' + value);
+
                 if ($rowDescendant.length) {
                     $rowDescendant.fadeOut('slow');
                 }

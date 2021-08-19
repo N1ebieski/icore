@@ -28,7 +28,7 @@
         class="mb-3" 
         method="post" 
         action="{{ route('admin.post.update_full', ['post' => $post->id]) }}" 
-        id="editFullPost"
+        id="editfull-post"
     >
         @csrf
         @method('put')
@@ -179,7 +179,7 @@
                             {{ trans('icore::posts.comment') }}?
                         </label>
                     </div>
-                </div>
+                </div>              
                 <div class="form-group">
                     <label for="status">
                         {{ trans('icore::filter.status.label') }}
@@ -188,7 +188,7 @@
                         class="custom-select" 
                         data-toggle="collapse" 
                         aria-expanded="false" 
-                        aria-controls="collapsePublishedAt" 
+                        aria-controls="collapse-published-at" 
                         id="status" 
                         name="status"
                     >
@@ -214,7 +214,7 @@
                 </div>
                 <div 
                     class="form-group collapse {{ (old('status', $post->status) != $post::INACTIVE) ? 'show' : '' }}" 
-                    id="collapsePublishedAt"
+                    id="collapse-published-at"
                 >
                     <label for="published_at">
                         <span>{{ trans('icore::posts.published_at.label') }}</span>
@@ -253,46 +253,72 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="user">
+                        {{ trans('icore::posts.author') }}:
+                    </label>
+                    <select 
+                        class="selectpicker select-picker" 
+                        data-live-search="true"
+                        data-abs="true"
+                        data-abs-max-options-length="10"
+                        data-abs-text-attr="name"
+                        data-abs-ajax-url="{{ route('api.user.index') }}"
+                        data-style="border"
+                        data-width="100%"
+                        name="user"
+                        id="user"
+                    >
+                        @if ($userSelection !== null)
+                        <optgroup label="{{ trans('icore::default.current_option') }}">
+                            <option value="{{ $userSelection->id }}" selected>
+                                {{ $userSelection->name }}
+                            </option>
+                        </optgroup>
+                        @endif
+                    </select>
+                    @includeWhen($errors->has('user'), 'icore::admin.partials.errors', ['name' => 'user'])
+                </div>
+                <div class="form-group">
                     <label for="category">
                         <span>{{ trans('icore::categories.categories.label') }}</span>
                         <i 
                             data-toggle="tooltip" 
-                            data-placement="top" 
-                            title="{{ trans('icore::categories.categories.tooltip', ['max_categories' => $maxCategories]) }}" 
+                            data-placement="top"
+                            title="{{ trans('icore::categories.categories.tooltip', ['max_categories' => $maxCategories]) }}"
                             class="far fa-question-circle"
                         ></i>
                     </label>
-                    <div id="category">
-                        <div id="categoryOptions">
-                            @include('icore::admin.category.partials.search', [
-                                'categories' => $categoriesSelection, 
-                                'checked' => true
-                            ])
-                        </div>
-                        <div 
-                            id="searchCategory" {{ $categoriesSelection->count() >= $maxCategories ? 'style=display:none' : '' }}
-                            data-route="{{ route('admin.category.post.search') }}" 
-                            data-max="{{ $maxCategories }}"
-                            class="position-relative"
-                        >
-                            <div class="input-group">
-                                <input 
-                                    type="text" 
-                                    class="form-control {{ $isValid('category') }}" 
-                                    placeholder="{{ trans('icore::categories.search_categories') }}"
-                                >
-                                <span class="input-group-append">
-                                    <button 
-                                        class="btn btn-outline-secondary border border-left-0"
-                                        type="button"
-                                    >
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <div id="searchCategoryOptions" class="my-3"></div>
-                        </div>
-                    </div>
+                    <input type="hidden" name="categories" value="">
+                    <select 
+                        class="selectpicker selectpicker-category" 
+                        data-live-search="true"
+                        data-abs="true"
+                        data-abs-max-options-length="10"
+                        data-abs-text-attr="name"
+                        data-abs-ajax-url="{{ route('api.category.post.index') }}"
+                        data-style="border"
+                        data-width="100%"
+                        data-max-options="{{ $maxCategories }}"
+                        multiple
+                        name="categories[]"
+                        id="categories"
+                    >
+                        @if (collect($categoriesSelection)->isNotEmpty())
+                        <optgroup label="{{ trans('icore::default.current_option') }}">
+                            @foreach ($categoriesSelection as $category)
+                            <option
+                                @if ($category->ancestors->isNotEmpty())
+                                data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $category->name }}'
+                                @endif
+                                value="{{ $category->id }}"
+                                selected
+                            >
+                                {{ $category->name }}
+                            </option>
+                            @endforeach
+                        </optgroup>
+                        @endif
+                    </select>
                     @includeWhen($errors->has('categories'), 'icore::admin.partials.errors', ['name' => 'categories'])
                 </div>
                 <hr>
@@ -304,3 +330,9 @@
     </form>
 </div>
 @endsection
+
+@push('script')
+@component('icore::admin.partials.jsvalidation')
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest', '#editfull-post'); !!}
+@endcomponent
+@endpush

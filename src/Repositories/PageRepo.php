@@ -4,16 +4,13 @@ namespace N1ebieski\ICore\Repositories;
 
 use Closure;
 use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Utils\MigrationUtil;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Container\Container as App;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Contracts\Config\Repository as Config;
 
-/**
- * [PageRepo description]
- */
 class PageRepo
 {
     /**
@@ -56,7 +53,7 @@ class PageRepo
      * @param  array  $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->page->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
@@ -76,16 +73,18 @@ class PageRepo
      * [getAsTree description]
      * @return Collection [description]
      */
-    public function getAsTree() : Collection
+    public function getAsTree(): Collection
     {
-        return $this->page->getTree();
+        return $this->page->getTreeByQuery(
+            $this->page->withAncestorsExceptSelf()
+        );
     }
 
     /**
      * [getAsTreeExceptSelf description]
      * @return Collection [description]
      */
-    public function getAsTreeExceptSelf() : Collection
+    public function getAsTreeExceptSelf(): Collection
     {
         return $this->page->getTreeByQuery(
             $this->page->whereNotIn(
@@ -96,6 +95,7 @@ class PageRepo
                     ->pluck('id')
                     ->toArray()
             )
+            ->withAncestorsExceptSelf()
         );
     }
 
@@ -103,7 +103,7 @@ class PageRepo
      * [getAncestorsAsArray description]
      * @return array [description]
      */
-    public function getAncestorsAsArray() : array
+    public function getAncestorsAsArray(): array
     {
         return $this->page->ancestors()->get(['id'])->pluck('id')->toArray();
     }
@@ -112,7 +112,7 @@ class PageRepo
      * [getDescendantsAsArray description]
      * @return array [description]
      */
-    public function getDescendantsAsArray() : array
+    public function getDescendantsAsArray(): array
     {
         return $this->page->descendants()->get(['id'])->pluck('id')->toArray();
     }
@@ -121,7 +121,7 @@ class PageRepo
      * [getSiblingsAsArray description]
      * @return array [description]
      */
-    public function getSiblingsAsArray() : array
+    public function getSiblingsAsArray(): array
     {
         return $this->page->getSiblings(['id', 'position'])
             ->pluck('position', 'id')->toArray();
@@ -132,7 +132,7 @@ class PageRepo
      * @param  array      $component [description]
      * @return Collection            [description]
      */
-    public function getWithChildrensByComponent(array $component) : Collection
+    public function getWithChildrensByComponent(array $component): Collection
     {
         return $this->page->active()
             ->with(['childrens' => function ($query) {
@@ -140,7 +140,7 @@ class PageRepo
             }])
             ->when($component['pattern'] !== null, function ($query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
-                
+
                 $query->whereIn('id', $component['pattern'])
                     ->orderByRaw("FIELD(id, {$patternString}) ASC");
             }, function ($query) use ($component) {
@@ -165,12 +165,12 @@ class PageRepo
      * @param  array      $component [description]
      * @return Collection            [description]
      */
-    public function getWithRecursiveChildrensByComponent(array $component) : Collection
+    public function getWithRecursiveChildrensByComponent(array $component): Collection
     {
         return $this->page->withRecursiveAllRels()
             ->when($component['pattern'] !== null, function ($query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
-                
+
                 $query->whereIn('id', $component['pattern'])
                     ->orderByRaw("FIELD(id, ?) DESC", [$patternString]);
             }, function ($query) {
@@ -185,7 +185,7 @@ class PageRepo
      * @param  string $slug [description]
      * @return Page|null       [description]
      */
-    public function firstBySlug(string $slug) : ?Page
+    public function firstBySlug(string $slug): ?Page
     {
         return $this->page->whereSlug($slug)
             ->with('tags')
@@ -205,7 +205,7 @@ class PageRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateCommentsByFilter(array $filter) : LengthAwarePaginator
+    public function paginateCommentsByFilter(array $filter): LengthAwarePaginator
     {
         return $this->page->comments()->where([
                 ['comments.parent_id', null],
@@ -222,7 +222,7 @@ class PageRepo
      * @param Closure $callback
      * @return boolean
      */
-    public function chunkActiveWithModelsCount(Closure $callback) : bool
+    public function chunkActiveWithModelsCount(Closure $callback): bool
     {
         return $this->page->active()
             ->whereNotNull('content_html')

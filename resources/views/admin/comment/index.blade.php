@@ -23,13 +23,13 @@
     <i class="fas fa-fw fa-comments"></i>
     <span>{{ trans('icore::comments.route.index') }}</span>
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @include('icore::admin.comment.partials.filter')
     @if ($comments->isNotEmpty())
     <form 
         action="{{ route('admin.comment.destroy_global') }}" 
         method="post" 
-        id="selectForm"
+        id="select-form"
     >
         @csrf
         @method('delete')
@@ -40,9 +40,9 @@
                     <input 
                         type="checkbox" 
                         class="custom-control-input" 
-                        id="selectAll"
+                        id="select-all"
                     >
-                    <label class="custom-control-label" for="selectAll">
+                    <label class="custom-control-label" for="select-all">
                         {{ trans('icore::default.select_all') }}
                     </label>
                 </div>
@@ -70,7 +70,9 @@
                 data-title="{{ trans('icore::comments.confirm') }}"
             >
                 <i class="far fa-trash-alt"></i>
-                <span>{{ trans('icore::default.delete_global') }}</span>
+                <span class="d-none d-sm-inline">
+                    {{ trans('icore::default.delete_global') }}
+                </span>
             </button>
         </div>
         @endcan
@@ -81,7 +83,7 @@
 </div>
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'showCommentModal')
+@slot('modal_id', 'show-comment-modal')
 @slot('modal_size', 'modal-lg')
 @slot('modal_title')
 <i class="far fa-comments"></i>
@@ -90,7 +92,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'editCommentModal')
+@slot('modal_id', 'edit-comment-modal')
 @slot('modal_size', 'modal-lg')
 @slot('modal_title')
 <i class="far fa-edit"></i>
@@ -99,7 +101,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'createCommentModal')
+@slot('modal_id', 'create-comment-modal')
 @slot('modal_size', 'modal-lg')
 @slot('modal_title')
 <i class="far fa-comment"></i>
@@ -108,14 +110,14 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'showReportCommentModal')
+@slot('modal_id', 'show-report-comment-modal')
 @slot('modal_title')
 <span>{{ trans('icore::reports.route.show') }}</span>
 @endslot
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'createBanUserModal')
+@slot('modal_id', 'create-banuser-modal')
 @slot('modal_title')
 <i class="fas fa-user-slash"></i>
 <span> {{ trans('icore::bans.route.create') }}</span>

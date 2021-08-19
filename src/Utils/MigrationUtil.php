@@ -40,7 +40,7 @@ class MigrationUtil
      * @param string $migration
      * @return boolean
      */
-    public function contains(string $migration) : bool
+    public function contains(string $migration): bool
     {
         return $this->migrationCache->rememberAll()
             ->contains(function ($item) use ($migration) {

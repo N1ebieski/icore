@@ -30,25 +30,27 @@
         <span>{{ trans('icore::mailings.route.index') }}</span>
     </div>
     @can('admin.mailings.create')
-    <div class="ml-auto text-right">
+    <div class="ml-auto text-right responsive-btn-group">
         <a 
             href="{{ route('admin.mailing.create') }}" 
             role="button" 
             class="btn btn-primary text-nowrap"
         >
             <i class="far fa-plus-square"></i>
-            <span class="d-none d-sm-inline">{{ trans('icore::mailings.create') }}</span>
+            <span class="d-none d-sm-inline">
+                {{ trans('icore::default.create') }}
+            </span>
         </a>
     </div>
     @endcan
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @include('icore::admin.mailing.partials.filter')
     @if ($mailings->isNotEmpty())
     <form 
         action="{{ route('admin.mailing.destroy_global') }}" 
         method="post" 
-        id="selectForm"
+        id="select-form"
     >
         @csrf
         @method('delete')
@@ -59,9 +61,9 @@
                     <input 
                         type="checkbox" 
                         class="custom-control-input" 
-                        id="selectAll"
+                        id="select-all"
                     >
-                    <label class="custom-control-label" for="selectAll">
+                    <label class="custom-control-label" for="select-all">
                         {{ trans('icore::default.select_all') }}
                         </label>
                 </div>
@@ -89,7 +91,9 @@
                 data-title="{{ trans('icore::default.confirm') }}"
             >
                 <i class="far fa-trash-alt"></i>
-                <span>{{ trans('icore::default.delete_global') }}</span>
+                <span class="d-none d-sm-inline">
+                    {{ trans('icore::default.delete_global') }}
+                </span>
             </button>
         </div>
         @endcan

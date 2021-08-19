@@ -13,7 +13,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var string
      */
-    public const VERSION = "2.4.5";
+    public const VERSION = "3.0.0";
 
     /**
      * Register services.
@@ -50,6 +50,14 @@ class ICoreServiceProvider extends ServiceProvider
             \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
             \Nckg\Minify\Middleware\MinifyResponse::class
+        ]);
+
+        $this->app['router']->middlewareGroup('icore.api', [
+            'throttle:60,1',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
+            \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
+            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class
         ]);
 
         $this->app['router']->aliasMiddleware('permission', \Spatie\Permission\Middlewares\PermissionMiddleware::class);

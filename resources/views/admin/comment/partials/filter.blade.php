@@ -11,7 +11,7 @@
             <span>
                 <a 
                     href="#" 
-                    class="badge badge-primary filterOption" 
+                    class="badge badge-primary filter-option" 
                     data-name="filter[search]"
                 >
                     <span>{{ trans('icore::filter.search.label') }}: {{ $filter['search'] }}</span>
@@ -23,7 +23,7 @@
             <span>
                 <a 
                     href="#" 
-                    class="badge badge-primary filterOption" 
+                    class="badge badge-primary filter-option" 
                     data-name="filter[status]"
                 >
                     <span>{{ trans('icore::filter.status.label') }}: {{ trans("icore::filter.status.{$filter['status']}") }}</span>
@@ -35,7 +35,7 @@
             <span>
                 <a 
                     href="#" 
-                    class="badge badge-primary filterOption" 
+                    class="badge badge-primary filter-option" 
                     data-name="filter[censored]"
                 >
                     <span>{{ trans('icore::filter.censored.label') }}: {{ trans("icore::filter.censored.{$filter['censored']}") }}</span>
@@ -47,7 +47,7 @@
             <span>
                 <a 
                     href="#" 
-                    class="badge badge-primary filterOption" 
+                    class="badge badge-primary filter-option" 
                     data-name="filter[report"
                 >
                     <span>{{ trans('icore::filter.report.label') }}: {{ trans("icore::filter.report.{$filter['report']}") }}</span>
@@ -59,7 +59,7 @@
             <span>
                 <a 
                     href="#" 
-                    class="badge badge-primary filterOption" 
+                    class="badge badge-primary filter-option" 
                     data-name="filter[author]"
                 >
                     <span>{{ trans('icore::filter.author') }}: {{ $filter['author']->name }}</span>
@@ -90,19 +90,19 @@
                         href="#" 
                         type="button" 
                         data-toggle="modal"
-                        data-target="#filterModal"
+                        data-target="#filter-modal"
                     >
                         <i class="fas fa-sort-amount-up"></i>
                     </button>
                 </div>
                 <div class="form-group col-xs-4 mr-2">
-                    <label class="sr-only" for="filterOrderBy">
+                    <label class="sr-only" for="filter-orderby">
                         {{ trans('icore::filter.order') }}
                     </label>
                     <select 
                         class="form-control custom-select filter" 
                         name="filter[orderby]" 
-                        id="filterOrderBy"
+                        id="filter-orderby"
                     >
                         <option value="">
                             {{ trans('icore::filter.order') }} {{ trans('icore::filter.default') }}
@@ -134,13 +134,13 @@
                     </select>
                 </div>
                 <div class="form-group col-xs-4">
-                    <label class="sr-only" for="filterPaginate">
+                    <label class="sr-only" for="filter-paginate">
                         {{ trans('icore::filter.paginate') }}
                     </label>
                     <select 
                         class="form-control custom-select filter" 
                         name="filter[paginate]" 
-                        id="filterPaginate"
+                        id="filter-paginate"
                     >
                         <option 
                             value="{{ $paginate }}" 

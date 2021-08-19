@@ -42,10 +42,23 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function __construct(Comment $comment, Auth $auth, DB $db)
     {
-        $this->comment = $comment;
+        $this->setComment($comment);
 
         $this->auth = $auth;
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Comment $comment
+     * @return static
+     */
+    public function setComment(Comment $comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
     /**
@@ -54,7 +67,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param array  $filter Tablica zawierająca parametry filtrowania wyników
      * @return LengthAwarePaginator
      */
-    public function getRootsByFilter(array $filter) : LengthAwarePaginator
+    public function getRootsByFilter(array $filter): LengthAwarePaginator
     {
         return $this->paginateChildrens(
             $this->comment->morph->makeRepo()
@@ -68,7 +81,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param array  $filter Tablica zawierająca parametry filtrowania wyników
      * @return LengthAwarePaginator
      */
-    public function paginateChildrensByFilter(array $filter) : LengthAwarePaginator
+    public function paginateChildrensByFilter(array $filter): LengthAwarePaginator
     {
         return $this->paginateChildrens(
             $this->comment->makeRepo()
@@ -82,7 +95,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param  array $attributes
      * @return Model
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->comment->content_html = $attributes['content'];
@@ -105,7 +118,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param  array $attributes
      * @return bool
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->comment->content_html = $attributes['content'];
@@ -121,7 +134,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param  array $attributes
      * @return bool
      */
-    public function updateStatus(array $attributes) : bool
+    public function updateStatus(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $update = $this->comment->update(['status' => $attributes['status']]);
@@ -147,7 +160,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      *
      * @return bool
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             $delete = $this->comment->delete();
@@ -168,7 +181,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param LengthAwarePaginator $collection
      * @return LengthAwarePaginator
      */
-    protected static function paginateChildrens(LengthAwarePaginator $collection) : LengthAwarePaginator
+    protected static function paginateChildrens(LengthAwarePaginator $collection): LengthAwarePaginator
     {
         $collection->map(function ($item) {
             $item->setRelation(
@@ -194,7 +207,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * do it automatically
      * @return bool [description]
      */
-    private function decrement() : bool
+    private function decrement(): bool
     {
         return $this->db->transaction(function () {
             return $this->comment->where([

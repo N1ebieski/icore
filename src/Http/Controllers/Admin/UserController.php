@@ -36,9 +36,7 @@ class UserController
     public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.user.index', [
-            'users' => $user->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'users' => $user->makeRepo()->paginateByFilter($filter->all()),
             'roles' => $role->all(),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')

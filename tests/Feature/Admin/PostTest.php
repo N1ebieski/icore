@@ -279,6 +279,7 @@ class PostTest extends TestCase
 
         $response = $this->put(route('admin.post.update_full', [$post->id]), [
             'categories' => [$category->id],
+            'user' => $user->id,
             'title' => 'Post zaktualizowany.',
             'content_html' => 'Ten post został zaktualizowany.',
             'tags' => 'test1, test2, test3',

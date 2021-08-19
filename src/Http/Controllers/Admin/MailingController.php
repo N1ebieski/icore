@@ -19,9 +19,6 @@ use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\DestroyGlobalRequest;
 
-/**
- * [MailingController description]
- */
 class MailingController
 {
     /**
@@ -35,9 +32,7 @@ class MailingController
     public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter) : HttpResponse
     {
         return Response::view('icore::admin.mailing.index', [
-            'mailings' => $mailing->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
+            'mailings' => $mailing->makeRepo()->paginateByFilter($filter->all()),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);

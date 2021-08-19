@@ -32,7 +32,7 @@
             role="button"
             class="btn btn-primary text-nowrap create" 
             data-toggle="modal" 
-            data-target="#createModal"
+            data-target="#create-modal"
         >
             <i class="far fa-plus-square"></i>
             <span class="d-none d-sm-inline">{{ trans('icore::bans.value.create') }}</span>
@@ -40,14 +40,14 @@
     </div>
     @endcan
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @include('icore::admin.banvalue.partials.filter')
 
     @if ($bans->isNotEmpty())
     <form 
         action="{{ route('admin.banvalue.destroy_global') }}" 
         method="post" 
-        id="selectForm"
+        id="select-form"
     >
         @csrf
         @method('delete')
@@ -58,9 +58,9 @@
                     <input 
                         type="checkbox" 
                         class="custom-control-input" 
-                        id="selectAll"
+                        id="select-all"
                     >
-                    <label class="custom-control-label" for="selectAll">
+                    <label class="custom-control-label" for="select-all">
                         {{ trans('icore::default.select_all') }}
                     </label>
                 </div>
@@ -88,7 +88,9 @@
                 data-title="{{ trans('icore::default.confirm') }}"
             >
                 <i class="far fa-trash-alt"></i>
-                <span>{{ trans('icore::default.delete_global') }}</span>
+                <span class="d-none d-sm-inline">
+                    {{ trans('icore::default.delete_global') }}
+                </span>
             </button>
         </div>
         @endcan
@@ -99,7 +101,7 @@
 </div>
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'editModal')
+@slot('modal_id', 'edit-modal')
 @slot('modal_title')
 <i class="far fa-edit"></i>
 <span> {{ trans('icore::bans.route.edit') }}</span>
@@ -107,7 +109,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'createModal')
+@slot('modal_id', 'create-modal')
 @slot('modal_title')
 <i class="far fa-plus-square"></i>
 <span> {{ trans('icore::bans.route.create') }}</span>

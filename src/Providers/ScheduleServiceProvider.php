@@ -29,9 +29,9 @@ class ScheduleServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function prepareClearCacheSchedule() : void
+    protected function prepareClearCacheSchedule(): void
     {
-        $hours = ceil($this->app['config']->get('cache.minutes')/60);
+        $hours = ceil($this->app['config']->get('cache.minutes') / 60);
 
         if ($hours <= 0 || $hours > 672) {
             return;
@@ -40,7 +40,7 @@ class ScheduleServiceProvider extends ServiceProvider
         if ($hours < 24) {
             $cron = "0 */{$hours} * * *";
         } else {
-            $days = ceil($hours/24);
+            $days = ceil($hours / 24);
 
             $cron = "0 0 */{$days} * *";
         }
@@ -81,6 +81,11 @@ class ScheduleServiceProvider extends ServiceProvider
             $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
                 ->name('SitemapCron')
                 ->daily()
+                ->runInBackground();
+
+            $this->schedule->command('clean:directories')
+                ->name('CleanDirectories')
+                ->hourly()
                 ->runInBackground();
 
             // $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\Tag\Post\PopularTagsCron::class))

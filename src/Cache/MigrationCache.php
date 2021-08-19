@@ -58,7 +58,7 @@ class MigrationCache
      *
      * @return Collection
      */
-    public function rememberAll() : Collection
+    public function rememberAll(): Collection
     {
         return $this->cache->tags(['migrations'])->remember(
             "migration.getAll",

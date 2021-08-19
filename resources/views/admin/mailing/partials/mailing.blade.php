@@ -123,13 +123,13 @@
                     @if ($mailing->emails->count() !== 0)
                     <button 
                         type="button"                     
-                        class="btn btn-danger" 
+                        class="btn btn-danger"
                         data-toggle="confirmation"
                         data-route="{{ route('admin.mailing.reset', [$mailing->id]) }}" 
                         data-id="{{ $mailing->id }}"
                         data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
                         data-btn-ok-icon-class="fas fa-check mr-1"
-                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover resetMailing" 
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover reset-mailing" 
                         data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
                         data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                         data-btn-cancel-icon-class="fas fa-ban mr-1"

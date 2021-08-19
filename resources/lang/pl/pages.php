@@ -37,6 +37,7 @@ return [
         'tooltip' => 'Klasa ikony (np. z font-awesome). Ikona będzie wyświetlana obok tytułu.',
         'placeholder' => 'przykład font-awesome: fab fa-google',
     ],
+    'author' => 'Autor',
     'status' => [
         Page::ACTIVE => 'aktywne',
         Page::INACTIVE => 'nieaktywne'
@@ -44,5 +45,5 @@ return [
     'position' => 'Pozycja',
     'pages' => 'Podstrony',
     'map' => 'Zobacz również',
-    'more' => 'pokaż więcej &raquo',    
+    'more' => 'pokaż więcej &raquo',
 ];

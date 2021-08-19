@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\Controllers\Admin;
 
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
@@ -11,22 +12,17 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Post\EditFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateFullRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Post\DestroyGlobalRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Post\CreateViewModel;
+use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateStatusRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Post\EditFullViewModel;
+use N1ebieski\ICore\Http\Requests\Admin\Post\DestroyGlobalRequest;
 
-/**
- * [PostController description]
- */
 class PostController
 {
     /**
@@ -38,13 +34,10 @@ class PostController
      * @param  IndexFilter     $filter          [description]
      * @return HttpResponse                     [description]
      */
-    public function index(Post $post, Category $category, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Post $post, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.post.index', [
-            'posts' => $post->makeRepo()->paginateByFilter($filter->all() + [
-                'except' => $request->input('except')
-            ]),
-            'categories' => $category->makeService()->getAsFlatTree(),
+            'posts' => $post->makeRepo()->paginateByFilter($filter->all()),
             'filter' => $filter->all(),
             'paginate' => Config::get('database.paginate')
         ]);
@@ -55,7 +48,7 @@ class PostController
      *
      * @return  HttpResponse  [return description]
      */
-    public function create() : HttpResponse
+    public function create(): HttpResponse
     {
         return Response::view(
             'icore::admin.post.create',
@@ -70,7 +63,7 @@ class PostController
      * @param  StoreRequest     $request [description]
      * @return RedirectResponse          [description]
      */
-    public function store(Post $post, StoreRequest $request) : RedirectResponse
+    public function store(Post $post, StoreRequest $request): RedirectResponse
     {
         $post->makeService()->create($request->all());
 
@@ -86,7 +79,7 @@ class PostController
      * @param  Post $post
      * @return JsonResponse
      */
-    public function edit(Post $post) : JsonResponse
+    public function edit(Post $post): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -103,7 +96,7 @@ class PostController
      *
      * @return HttpResponse               [description]
      */
-    public function editFull(Post $post) : HttpResponse
+    public function editFull(Post $post): HttpResponse
     {
         return Response::view(
             'icore::admin.post.edit_full',
@@ -120,7 +113,7 @@ class PostController
      * @param  UpdateStatusRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function updateStatus(Post $post, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(Post $post, UpdateStatusRequest $request): JsonResponse
     {
         $post->makeService()->updateStatus($request->only('status'));
 
@@ -140,7 +133,7 @@ class PostController
      * @param  UpdateFullRequest $request [description]
      * @return RedirectResponse           [description]
      */
-    public function updateFull(Post $post, UpdateFullRequest $request) : RedirectResponse
+    public function updateFull(Post $post, UpdateFullRequest $request): RedirectResponse
     {
         $post->makeService()->updateFull($request->all());
 
@@ -155,7 +148,7 @@ class PostController
      * @param  UpdateRequest $request [description]
      * @return JsonResponse           [description]
      */
-    public function update(Post $post, UpdateRequest $request) : JsonResponse
+    public function update(Post $post, UpdateRequest $request): JsonResponse
     {
         $post->makeService()->update($request->only(['title', 'content_html']));
 
@@ -173,7 +166,7 @@ class PostController
      * @param  Post         $post [description]
      * @return JsonResponse       [description]
      */
-    public function destroy(Post $post) : JsonResponse
+    public function destroy(Post $post): JsonResponse
     {
         $post->makeService()->delete();
 
@@ -187,7 +180,7 @@ class PostController
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(Post $post, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Post $post, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $post->makeService()->deleteGlobal($request->get('select'));
 

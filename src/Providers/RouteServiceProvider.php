@@ -55,13 +55,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapAuthRoutes();
 
-        // $this->mapApiRoutes();
+        $this->mapApiRoutes();
 
         $this->mapWebRoutes();
 
         $this->mapAdminRoutes();
-
-        //
     }
 
     /**
@@ -114,14 +112,21 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        $this->app['router']->prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
+        $this->app['router']->middleware([
+                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+                'icore.api',
+                'icore.force.verified'
+            ])
+            ->prefix('api')
+            ->as('api.')
+            ->namespace($this->namespace . '\Api')
             ->group(function ($router) {
-                if (file_exists($override = base_path('routes') . '/vendor/icore/api.php')) {
-                    require($override);
-                } else {
-                    require(__DIR__ . '/../../routes/api.php');
+                foreach (glob(__DIR__ . '/../../routes/api/*.php') as $filename) {
+                    if (file_exists($override = base_path('routes') . '/vendor/icore/api/' . basename($filename))) {
+                        require($override);
+                    } else {
+                        require($filename);
+                    }
                 }
             });
     }

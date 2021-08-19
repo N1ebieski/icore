@@ -33,14 +33,18 @@
             {{ trans('icore::links.img') }}:
         </label>
         <div class="custom-file" id="image">
-            <input type="file" class="custom-file-input" id="img" name="img">
+            <input 
+                type="file" 
+                class="custom-file-input" 
+                id="img" 
+                name="img"
+                {{ $link->img_url !== null ? 'disabled' : null }}
+            >
             <label class="custom-file-label" for="img">
                 {{ trans('icore::default.choose_file') }}
             </label>
         </div>
-    </div>
-    @if ($link->img_url !== null)
-    <div class="form-group">
+        @if ($link->img_url !== null)
         <div class="custom-control custom-checkbox">
             <input 
                 type="checkbox" 
@@ -52,8 +56,8 @@
                 {{ trans('icore::links.delete_img') }}
             </label>
         </div>
+        @endif
     </div>
-    @endif
     @if ($link->type === 'link')
     <div class="form-group">
         <div class="custom-control custom-checkbox">
@@ -76,38 +80,37 @@
         <label for="category">
             {{ trans('icore::links.only.categories') }}:
         </label>
-        <div id="category">
-            <div id="categoryOptions">
-                @include('icore::web.category.partials.search', [
-                    'categories' => $link->categories, 
-                    'checked' => true
-                ])
-            </div>
-            <div 
-                id="searchCategory" 
-                data-route="{{ route("admin.category.{$link->type}.search") }}" 
-                data-max=""
-                class="position-relative"
-            >
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="categories"
-                        placeholder="{{ trans('icore::categories.search_categories') }}"
-                    >
-                    <span class="input-group-append">
-                        <button 
-                            class="btn btn-outline-secondary border border-left-0"
-                            type="button"
-                        >
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
-                </div>
-                <div id="searchCategoryOptions" class="my-3"></div>
-            </div>
-        </div>
+        <input type="hidden" name="categories" value="">
+        <select 
+            class="selectpicker select-picker-category" 
+            data-live-search="true"
+            data-abs="true"
+            data-abs-max-options-length="10"
+            data-abs-text-attr="name"
+            data-abs-ajax-url="{{ route('api.category.index') }}"
+            data-style="border"
+            data-width="100%"
+            multiple
+            name="categories[]"
+            id="categories"
+        >
+            @if ($link->categories->isNotEmpty())
+            <optgroup label="{{ trans('icore::default.current_option') }}">
+                @foreach ($link->categories as $category)
+                <option
+                    @if ($category->ancestors->isNotEmpty())
+                    data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $category->name }}'
+                    @endif
+                    value="{{ $category->id }}"
+                    selected
+                >
+                    {{ $category->name }}
+                </option>
+                @endforeach
+            </optgroup>
+            @endif
+        </select>
+        @includeWhen($errors->has('categories'), 'icore::admin.partials.errors', ['name' => 'categories'])
     </div>
     <button type="button" class="btn btn-primary update">
         <i class="fas fa-check"></i>

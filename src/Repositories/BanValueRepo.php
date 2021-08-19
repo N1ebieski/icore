@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Repositories;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-/**
- * [BanValueRepo description]
- */
 class BanValueRepo
 {
     /**
@@ -30,7 +27,7 @@ class BanValueRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->banValue->filterType($filter['type'])
             ->filterExcept($filter['except'])

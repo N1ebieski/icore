@@ -2,14 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('categories/link/search', 'Category\CategoryController@search')
-    ->middleware('permission:admin.categories.view')
-    ->name('category.link.search');
-
-Route::get('categories/post/search', 'Category\Post\CategoryController@search')
-    ->middleware(['permission:admin.posts.create|admin.posts.edit'])
-    ->name('category.post.search');
-
 Route::match(['get', 'post'], 'categories/post/index', 'Category\Post\CategoryController@index')
     ->name('category.post.index')
     ->middleware('permission:admin.categories.view');

@@ -2,14 +2,11 @@
 
 namespace N1ebieski\ICore\Repositories;
 
-use Illuminate\Database\Eloquent\Collection;
-use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Rating\Rating;
+use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-/**
- * [CommentRepo description]
- */
 class CommentRepo
 {
     /**
@@ -32,7 +29,7 @@ class CommentRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->comment->poliType()
             ->filterExcept($filter['except'])
@@ -68,7 +65,7 @@ class CommentRepo
      * [getAncestorsAsArray description]
      * @return array [description]
      */
-    public function getAncestorsAsArray() : array
+    public function getAncestorsAsArray(): array
     {
         return $this->comment->ancestors()->get(['id'])->pluck('id')->toArray();
     }
@@ -77,7 +74,7 @@ class CommentRepo
      * [getDescendantsAsArray description]
      * @return array [description]
      */
-    public function getDescendantsAsArray() : array
+    public function getDescendantsAsArray(): array
     {
         return $this->comment->descendants()->get(['id'])->pluck('id')->toArray();
     }
@@ -87,7 +84,7 @@ class CommentRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateChildrensByFilter(array $filter) : LengthAwarePaginator
+    public function paginateChildrensByFilter(array $filter): LengthAwarePaginator
     {
         return $this->comment->childrens()
             ->active()
@@ -103,7 +100,7 @@ class CommentRepo
      * @param  int    $id [description]
      * @return Rating|null     [description]
      */
-    public function firstRatingByUser(int $id) : ?Rating
+    public function firstRatingByUser(int $id): ?Rating
     {
         return $this->comment->ratings()->where('user_id', $id)->first();
     }
@@ -112,7 +109,7 @@ class CommentRepo
      * [countByModelType description]
      * @return Collection [description]
      */
-    public function countByModelTypeAndStatus() : Collection
+    public function countByModelTypeAndStatus(): Collection
     {
         return $this->comment
             ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, `status`, COUNT(*) AS `count`')
@@ -124,7 +121,7 @@ class CommentRepo
      * [countReportedByModelType description]
      * @return Collection [description]
      */
-    public function countReportedByModelType() : Collection
+    public function countReportedByModelType(): Collection
     {
         return $this->comment->whereHas('reports')
             ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, COUNT(*) AS `count`')
@@ -138,7 +135,7 @@ class CommentRepo
      * @param array $component
      * @return Collection
      */
-    public function getByComponent(array $component) : Collection
+    public function getByComponent(array $component): Collection
     {
         return $this->comment->active()
             ->uncensored()

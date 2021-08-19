@@ -30,7 +30,7 @@
         class="mb-3" 
         method="post" 
         action="{{ route('admin.page.store') }}" 
-        id="createPage"
+        id="create-page"
     >
         @csrf
         <div class="row">
@@ -222,9 +222,12 @@
                         {{ trans('icore::filter.parent') }}
                     </label>
                     <select 
-                        class="form-control custom-select" 
-                        id="parent_id" 
+                        class="selectpicker select-picker" 
+                        data-live-search="true"
+                        data-style="border"
+                        data-width="100%"
                         name="parent_id"
+                        id="parent_id"
                     >
                         <option 
                             value="0" 
@@ -233,17 +236,18 @@
                             {{ trans('icore::pages.null') }}
                         </option>
                         @foreach ($parents as $parent)
-                        @if ($parent->real_depth == 0)
-                        <optgroup label="----------"></optgroup>
-                        @endif
                         <option 
+                            @if ($parent->ancestors->isNotEmpty())
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->toArray()) }} &raquo; </small>{{ $parent->title }}'
+                            @endif                        
                             value="{{ $parent->id }}" 
                             {{ (old('parent_id') == $parent->id) ? 'selected' : '' }}
                         >
-                            {{ str_repeat('-', $parent->real_depth) }} {{ $parent->title }}
+                            {{ $parent->title }}
                         </option>
                         @endforeach
                     </select>
+                    @includeWhen($errors->has('parent_id'), 'icore::admin.partials.errors', ['name' => 'parent_id'])
                 </div>
                 @endif
                 <hr>
@@ -255,3 +259,9 @@
     </form>
 </div>
 @endsection
+
+@push('script')
+@component('icore::admin.partials.jsvalidation')
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Page\StoreRequest', '#create-page'); !!}
+@endcomponent
+@endpush

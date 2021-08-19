@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models;
 
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Cache\UserCache;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,18 +13,16 @@ use N1ebieski\ICore\Repositories\UserRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-/**
- * [User description]
- */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasRoles, FullTextSearchable, Filterable, Carbonable;
+    use Notifiable, HasRoles, FullTextSearchable, Filterable, Carbonable, PivotEventTrait;
 
     // Configuration
 
@@ -50,6 +49,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var int
      */
     public const WITH_MARKETING = 1;
+
+    /**
+     * [private description]
+     * @var bool
+     */
+    private $pivotEvent = false;
 
     /**
      * [protected description]
@@ -115,6 +120,27 @@ class User extends Authenticatable implements MustVerifyEmail
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    // Overrides
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::pivotAttached(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
+            if ($model->pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
+                $model->fireModelEvent('updated');
+                $model->pivotEvent = true;
+            }
+        });
+
+        static::pivotDetached(function ($model, $relationName, $pivotIds) {
+            if ($model->pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
+                $model->fireModelEvent('updated');
+                $model->pivotEvent = true;
+            }
+        });
+    }
 
     // Relations
 
@@ -220,5 +246,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function makeService()
     {
         return App::make(UserService::class, ['user' => $this]);
+    }
+
+    /**
+     * [makeCache description]
+     * @return UserCache [description]
+     */
+    public function makeCache()
+    {
+        return App::make(UserCache::class, ['user' => $this]);
     }
 }

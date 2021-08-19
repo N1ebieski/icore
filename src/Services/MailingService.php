@@ -39,9 +39,22 @@ class MailingService implements
      */
     public function __construct(Mailing $mailing, DB $db)
     {
-        $this->mailing = $mailing;
+        $this->setMailing($mailing);
 
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Mailing $mailing
+     * @return static
+     */
+    public function setMailing(Mailing $mailing)
+    {
+        $this->mailing = $mailing;
+
+        return $this;
     }
 
     /**
@@ -50,7 +63,7 @@ class MailingService implements
      * @param  array  $attributes [description]
      * @return Mailing             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->mailing->content_html = $attributes['content_html'];
@@ -60,7 +73,7 @@ class MailingService implements
 
             if ($this->mailing->status === Mailing::SCHEDULED) {
                 $this->mailing->activation_at =
-                    $attributes['date_activation_at'].$attributes['time_activation_at'];
+                    $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }
 
             $this->mailing->save();
@@ -80,7 +93,7 @@ class MailingService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->mailing->content_html = $attributes['content_html'];
@@ -90,7 +103,7 @@ class MailingService implements
 
             if ($this->mailing->status === Mailing::SCHEDULED) {
                 $this->mailing->activation_at =
-                    $attributes['date_activation_at'].$attributes['time_activation_at'];
+                    $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }
 
             if ($this->mailing->emails->count() === 0) {
@@ -110,7 +123,7 @@ class MailingService implements
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateStatus(array $attributes) : bool
+    public function updateStatus(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->mailing->update(['status' => $attributes['status']]);
@@ -120,7 +133,7 @@ class MailingService implements
     /**
      * Reset all Recipients of Mailing in storage.
      */
-    public function reset() : void
+    public function reset(): void
     {
         $this->db->transaction(function () {
             $this->mailing->emails()->make()
@@ -135,7 +148,7 @@ class MailingService implements
      *
      * @return bool [description]
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             return $this->mailing->delete();
@@ -148,7 +161,7 @@ class MailingService implements
      * @param  array $ids [description]
      * @return int        [description]
      */
-    public function deleteGlobal(array $ids) : int
+    public function deleteGlobal(array $ids): int
     {
         return $this->db->transaction(function () use ($ids) {
             return $this->mailing->whereIn('id', $ids)->delete();

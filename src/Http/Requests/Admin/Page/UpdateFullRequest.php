@@ -67,11 +67,13 @@ class UpdateFullRequest extends FormRequest
             'seo_nofollow' => 'boolean',
             'comment' => 'boolean',
             'status' => 'required|in:0,1',
+            'user' => 'bail|required|integer|exists:users,id|no_js_validation',
             'parent_id' => [
                 'nullable',
                 'integer',
                 'exists:pages,id',
                 Rule::notIn($this->page->makeRepo()->getDescendantsAsArray()),
+                'no_js_validation'
             ]
         ];
     }

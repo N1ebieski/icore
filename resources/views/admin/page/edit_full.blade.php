@@ -28,7 +28,7 @@
         class="mb-3" 
         method="post" 
         action="{{ route('admin.page.update_full', [$page->id]) }}" 
-        id="editPage"
+        id="editfull-page"
     >
         @csrf
         @method('put')
@@ -221,33 +221,64 @@
                         </option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="user">
+                        {{ trans('icore::pages.author') }}:
+                    </label>
+                    <select 
+                        class="selectpicker select-picker" 
+                        data-live-search="true"
+                        data-abs="true"
+                        data-abs-max-options-length="10"
+                        data-abs-text-attr="name"
+                        data-abs-ajax-url="{{ route('api.user.index') }}"
+                        data-style="border"
+                        data-width="100%"
+                        name="user"
+                        id="user"
+                    >
+                        @if ($userSelection !== null)
+                        <optgroup label="{{ trans('icore::default.current_option') }}">
+                            <option value="{{ $userSelection->id }}" selected>
+                                {{ $userSelection->name }}
+                            </option>
+                        </optgroup>
+                        @endif
+                    </select>
+                    @includeWhen($errors->has('user'), 'icore::admin.partials.errors', ['name' => 'user'])
+                </div>
                 @if ($parents->count() > 0)
                 <div class="form-group">
                     <label for="parent_id">
                         {{ trans('icore::filter.parent') }}
                     </label>
                     <select 
-                        class="form-control custom-select" 
-                        id="parent_id" 
+                        class="selectpicker select-picker" 
+                        data-live-search="true"
+                        data-style="border"
+                        data-width="100%"
                         name="parent_id"
+                        id="parent_id"
                     >
                         <option 
-                            value="null" {{ (old('parent_id', $page->parent_id) == null) ? 'selected' : '' }}
+                            value="0" 
+                            {{ (old('parent_id') == null) ? 'selected' : '' }}
                         >
                             {{ trans('icore::pages.null') }}
                         </option>
                         @foreach ($parents as $parent)
-                        @if ($parent->real_depth == 0)
-                        <optgroup label="----------"></optgroup>
-                        @endif
                         <option 
+                            @if ($parent->ancestors->isNotEmpty())
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->toArray()) }} &raquo; </small>{{ $parent->title }}'
+                            @endif                        
                             value="{{ $parent->id }}" 
                             {{ (old('parent_id', $page->parent_id) == $parent->id) ? 'selected' : '' }}
                         >
-                            {{ str_repeat('-', $parent->real_depth) }} {{ $parent->title }}
+                            {{ $parent->title }}
                         </option>
                         @endforeach
                     </select>
+                    @includeWhen($errors->has('parent_id'), 'icore::admin.partials.errors', ['name' => 'parent_id'])
                 </div>
                 @endif
                 <hr>
@@ -259,3 +290,9 @@
     </form>
 </div>
 @endsection
+
+@push('script')
+@component('icore::admin.partials.jsvalidation')
+{!! JsValidator::formRequest('N1ebieski\ICore\Http\Requests\Admin\Page\UpdateRequest', '#editfull-page'); !!}
+@endcomponent
+@endpush

@@ -60,29 +60,30 @@
                     placeholder="{{ trans('icore::categories.icon.placeholder') }}"
                 >
             </div>
-            @if ($categories->count() > 0)
             <div class="form-group">
                 <label for="parent_id">
                     {{ trans('icore::categories.parent_id') }}
                 </label>
-                <select class="form-control" id="parent_id" name="parent_id">
-                    <option value="0" {{ $parent_id === 0 ? 'selected' : '' }}>
-                        {{ trans('icore::categories.null') }}
-                    </option>
-                    @foreach ($categories as $cats)
-                        @if ($cats->real_depth == 0)
-                            <optgroup label="----------"></optgroup>
-                        @endif
-                    <option 
-                        value="{{ $cats->id }}" 
-                        {{ $parent_id === $cats->id ? 'selected' : '' }}
-                    >
-                        {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
-                    </option>
-                    @endforeach
+                <select 
+                    class="selectpicker select-picker-category" 
+                    data-live-search="true"
+                    data-abs="true"
+                    data-abs-max-options-length="10"
+                    data-abs-text-attr="name"
+                    data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
+                    data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
+                    data-style="border"
+                    data-width="100%"
+                    name="parent_id"
+                    id="parent_id"
+                >
+                    <optgroup label="{{ trans('icore::default.current_option') }}">
+                        <option value="">
+                            {{ trans('icore::categories.null') }}
+                        </option>
+                    </optgroup>
                 </select>
             </div>
-            @endif
             <button type="button" class="btn btn-primary store">
                 <i class="fas fa-check"></i>
                 <span>{{ trans('icore::default.submit') }}</span>
@@ -123,7 +124,7 @@
                         id="clear" 
                         name="clear" 
                         value="1"
-                        data-target="#collapseParentId" 
+                        data-target="#collapse-parent-id" 
                         data-toggle="collapse"
                     >
                     <label class="custom-control-label" for="clear">
@@ -131,30 +132,29 @@
                     </label>
                 </div>
             </div>
-            <div class="collapse show" id="collapseParentId">
-                @if ($categories->count() > 0)
+            <div class="collapse show" id="collapse-parent-id">
                 <div class="form-group">
                     <label for="parent_id">
                         {{ trans('icore::categories.parent_id') }}
                     </label>
-                    <select class="form-control" id="parent_id" name="parent_id">
-                        <option value="0" {{ $parent_id === 0 ? 'selected' : '' }}>
+                    <select 
+                        class="selectpicker select-picker-category" 
+                        data-live-search="true"
+                        data-abs="true"
+                        data-abs-max-options-length="10"
+                        data-abs-text-attr="name"
+                        data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
+                        data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
+                        data-style="border"
+                        data-width="100%"
+                        name="parent_id"
+                        id="parent_id"
+                    >
+                        <option value="">
                             {{ trans('icore::categories.null') }}
                         </option>
-                        @foreach ($categories as $cats)
-                        @if ($cats->real_depth == 0)
-                        <optgroup label="----------"></optgroup>
-                        @endif
-                        <option 
-                            value="{{ $cats->id }}" 
-                            {{ $parent_id === $cats->id ? 'selected' : '' }}
-                        >
-                            {{ str_repeat('-', $cats->real_depth) }} {{ $cats->name }}
-                        </option>
-                        @endforeach
                     </select>
                 </div>
-                @endif
             </div>
             <button type="button" class="btn btn-primary store">
                 <i class="fas fa-check"></i>

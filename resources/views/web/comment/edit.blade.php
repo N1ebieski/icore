@@ -12,10 +12,10 @@
             name="content"
         >{{ $comment->content_html }}</textarea>
     </div>
-    <button type="button" class="btn btn-primary updateComment">
+    <button type="button" class="btn btn-primary update-comment">
         {{ trans('icore::default.submit') }}
     </button>
-    <button type="button" class="btn btn-secondary editCommentCancel">
+    <button type="button" class="btn btn-secondary edit-comment-cancel">
         {{ trans('icore::default.cancel') }}
     </button>
 </form>

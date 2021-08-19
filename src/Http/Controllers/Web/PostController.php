@@ -55,10 +55,7 @@ class PostController
             'comments' => (bool)$post->comment === true ?
                 $comment->setRelations(['morph' => $post])
                     ->makeCache()
-                    ->rememberRootsByFilter(
-                        $filter->all() + ['except' => $request->input('except')],
-                        $request->input('page') ?? 1
-                    )
+                    ->rememberRootsByFilter($filter->all(), $request->input('page') ?? 1)
                 : null,
             'filter' => $filter->all(),
             'catsAsArray' => [

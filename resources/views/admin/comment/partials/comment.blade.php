@@ -22,7 +22,7 @@
                             <a 
                                 class="show" 
                                 href="#" 
-                                data-toggle="modal" data-target="#showCommentModal" 
+                                data-toggle="modal" data-target="#show-comment-modal" 
                                 title="{{ trans('icore::comments.disqus', ['name' => $comment->morph->title]) }}"
                                 data-route="{{ route('admin.comment.show', ['comment' => $comment->id]) }}"
                             >
@@ -36,7 +36,7 @@
                                 class="badge badge-danger show" 
                                 data-toggle="modal"
                                 data-route="{{ route('admin.report.comment.show', ['comment' => $comment->id]) }}"
-                                data-target="#showReportCommentModal"
+                                data-target="#show-report-comment-modal"
                             >
                                 {{ trans('icore::comments.reports') }}: {{ $comment->reports_count }}
                             </a>
@@ -93,7 +93,7 @@
                     @can('admin.comments.edit')
                     <button 
                         data-toggle="modal" 
-                        data-target="#editCommentModal"
+                        data-target="#edit-comment-modal"
                         data-route="{{ route('admin.comment.edit', ['comment' => $comment->id]) }}"
                         type="button" 
                         class="btn btn-primary edit"
@@ -105,7 +105,7 @@
                     @can('admin.comments.create')
                     <button 
                         data-toggle="modal" 
-                        data-target="#createCommentModal"
+                        data-target="#create-comment-modal"
                         data-route="{{ route("admin.comment.{$comment->poli}.create", [$comment->model_id, 'parent_id' => $comment->id]) }}" 
                         type="button" 
                         class="btn btn-primary answer create"
@@ -121,7 +121,7 @@
                     <button 
                         data-status="1" 
                         type="button" 
-                        class="btn btn-success statusComment"
+                        class="btn btn-success status-comment"
                         data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
                         {{ $comment->status == 1 ? 'disabled' : '' }}
                     >
@@ -131,7 +131,7 @@
                     <button 
                         data-censored="0" 
                         type="button" 
-                        class="btn btn-success censoreComment"
+                        class="btn btn-success censore-comment"
                         data-route="{{ route('admin.comment.update_censored', ['comment' => $comment->id]) }}"
                         {{ $comment->censored == 0 ? 'disabled' : '' }}
                     >
@@ -143,7 +143,7 @@
                     <button 
                         data-status="0" 
                         type="button" 
-                        class="btn btn-warning statusComment"
+                        class="btn btn-warning status-comment"
                         data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
                         {{ $comment->status == 0 ? 'disabled' : '' }}
                     >
@@ -153,7 +153,7 @@
                     <button 
                         data-censored="1" 
                         type="button" 
-                        class="btn btn-warning censoreComment"
+                        class="btn btn-warning censore-comment"
                         data-route="{{ route('admin.comment.update_censored', ['comment' => $comment->id]) }}"
                         {{ $comment->censored == 1 ? 'disabled' : '' }}
                     >
@@ -170,11 +170,12 @@
                         class="btn btn-danger" 
                         data-status="delete" 
                         data-toggle="confirmation"
-                        data-route="{{ route('admin.comment.destroy', ['comment' => $comment->id]) }}" data-id="{{ $comment->id }}"
+                        data-route="{{ route('admin.comment.destroy', ['comment' => $comment->id]) }}"
+                        data-id="{{ $comment->id }}"
                         type="button" 
                         data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
                         data-btn-ok-icon-class="fas fa-check mr-1"
-                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroyComment" 
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-comment" 
                         data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
                         data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                         data-btn-cancel-icon-class="fas fa-ban mr-1"
@@ -191,7 +192,7 @@
                         class="btn btn-dark create"
                         data-route="{{ route('admin.banmodel.user.create', [$comment->user->id]) }}"
                         data-toggle="modal" 
-                        data-target="#createBanUserModal"
+                        data-target="#create-banuser-modal"
                     >
                         <i class="fas fa-user-slash"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.ban') }}</span>

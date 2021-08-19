@@ -1,5 +1,7 @@
 <?php
 
+use N1ebieski\ICore\Models\User;
+
 return [
     'symlink' => 'powiązane',
     'success' => [
@@ -10,6 +12,10 @@ return [
         'index' => 'Użytkownicy',
         'create' => 'Dodaj użytkownika',
         'edit' => 'Edytuj użytkownika'
+    ],
+    'status' => [
+        User::ACTIVE => 'aktywne',
+        User::INACTIVE => 'nieaktywne'
     ],
     'roles' => 'Typ konta'
 ];

@@ -7,9 +7,6 @@ use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-/**
- * [MailingRepo description]
- */
 class MailingRepo
 {
     /**
@@ -43,7 +40,7 @@ class MailingRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->mailing->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
@@ -60,7 +57,7 @@ class MailingRepo
      * [activateScheduled description]
      * @return bool              [description]
      */
-    public function activateScheduled() : bool
+    public function activateScheduled(): bool
     {
         return $this->mailing
             ->whereDate('activation_at', '<', $this->carbon->now()->format('Y-m-d'))
@@ -77,7 +74,7 @@ class MailingRepo
      *
      * @return boolean
      */
-    public function deactivateCompleted() : bool
+    public function deactivateCompleted(): bool
     {
         return $this->mailing->progress()
             ->whereDoesntHave('emails', function ($query) {
@@ -94,7 +91,7 @@ class MailingRepo
      *
      * @return boolean
      */
-    public function progressActivated() : bool
+    public function progressActivated(): bool
     {
         return $this->mailing->active()
             ->whereHas('emails', function ($query) {

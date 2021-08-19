@@ -37,7 +37,7 @@
                             class="edit" 
                             data-route="{{ route('admin.category.edit_position', [$category->id]) }}"
                             data-toggle="modal" 
-                            data-target="#editPositionModal" 
+                            data-target="#edit-position-modal" 
                             role="button"
                         >
                             <span id="position" class="badge badge-pill badge-primary">
@@ -73,7 +73,7 @@
                 <div class="btn-group-vertical">
                     <button 
                         data-toggle="modal" 
-                        data-target="#editModal"
+                        data-target="#edit-modal"
                         data-route="{{ route('admin.category.edit', ['category' => $category->id]) }}"
                         type="button" 
                         class="btn btn-primary edit"
@@ -87,7 +87,7 @@
                 <button 
                     data-status="1" 
                     type="button" 
-                    class="btn btn-success statusCategory"
+                    class="btn btn-success status-category"
                     data-route="{{ route('admin.category.update_status', ['category' => $category->id]) }}"
                     {{ $category->status == 1 ? 'disabled' : '' }}
                 >
@@ -97,7 +97,7 @@
                 <button 
                     data-status="0" 
                     type="button" 
-                    class="btn btn-warning statusCategory"
+                    class="btn btn-warning status-category"
                     data-route="{{ route('admin.category.update_status', ['category' => $category->id]) }}"
                     {{ $category->status == 0 ? 'disabled' : '' }}
                 >
@@ -115,7 +115,7 @@
                     data-id="{{ $category->id }}"
                     data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
                     data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroyCategory" 
+                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-category" 
                     data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
                     data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
                     data-btn-cancel-icon-class="fas fa-ban mr-1"

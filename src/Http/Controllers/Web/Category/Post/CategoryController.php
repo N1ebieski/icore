@@ -8,9 +8,6 @@ use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Category\Post\Polymorphic;
 
-/**
- * [CategoryController description]
- */
 class CategoryController implements Polymorphic
 {
     /**
@@ -20,7 +17,7 @@ class CategoryController implements Polymorphic
      * @param ShowRequest $request
      * @return HttpResponse [description]
      */
-    public function show(Category $category, ShowRequest $request) : HttpResponse
+    public function show(Category $category, ShowRequest $request): HttpResponse
     {
         return Response::view('icore::web.category.post.show', [
             'posts' => $category->makeCache()->rememberPosts($request->get('page') ?? 1),

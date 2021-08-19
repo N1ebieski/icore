@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
 
-/**
- * [RoleRepo description]
- */
 class RoleRepo
 {
     /**
@@ -32,7 +29,7 @@ class RoleRepo
     public function __construct(Role $role, Config $config)
     {
         $this->role = $role;
-        
+
         $this->paginate = $config->get('database.paginate');
     }
 
@@ -41,7 +38,7 @@ class RoleRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->role->orderBy('id', 'asc')
             ->filterExcept($filter['except'])
@@ -52,7 +49,7 @@ class RoleRepo
      * [allAvailableNamesAsArray description]
      * @return array [description]
      */
-    public function getAvailableNamesAsArray() : array
+    public function getAvailableNamesAsArray(): array
     {
         return $this->getAvailable()
             ->pluck('name')
@@ -63,7 +60,7 @@ class RoleRepo
      * [getAvailable description]
      * @return Collection [description]
      */
-    public function getAvailable() : Collection
+    public function getAvailable(): Collection
     {
         return $this->role->where('name', '<>', 'super-admin')->get();
     }
@@ -72,7 +69,7 @@ class RoleRepo
      * [getIdsAsArray description]
      * @return array [description]
      */
-    public function getIdsAsArray() : array
+    public function getIdsAsArray(): array
     {
         return $this->role->get('id')->pluck('id')->toArray();
     }

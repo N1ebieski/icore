@@ -7,26 +7,45 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Admin\Comment\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Polymorphic;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\UpdateCensoredRequest;
 
-/**
- * [CommentController description]
- */
 class CommentController implements Polymorphic
 {
+    /**
+     * Display a listing of Comments.
+     *
+     * @param  Comment       $comment       [description]
+     * @param  IndexRequest  $request       [description]
+     * @param  IndexFilter   $filter        [description]
+     * @return HttpResponse                         [description]
+     */
+    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter): HttpResponse
+    {
+        return Response::view('icore::admin.comment.index', [
+            'model' => $comment,
+            'comments' => $comment->makeRepo()->paginateByFilter($filter->all()),
+            'filter' => $filter->all(),
+            'paginate' => Config::get('database.paginate')
+        ]);
+    }
+
     /**
      * Display the specified Comment.
      *
      * @param  Comment  $comment [description]
      * @return JsonResponse          [description]
      */
-    public function show(Comment $comment) : JsonResponse
+    public function show(Comment $comment): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -42,7 +61,7 @@ class CommentController implements Polymorphic
      * @param  Comment $comment
      * @return JsonResponse
      */
-    public function edit(Comment $comment) : JsonResponse
+    public function edit(Comment $comment): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -59,7 +78,7 @@ class CommentController implements Polymorphic
      * @param  UpdateRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function update(Comment $comment, UpdateRequest $request) : JsonResponse
+    public function update(Comment $comment, UpdateRequest $request): JsonResponse
     {
         $comment->makeService()->update($request->only('content'));
 
@@ -78,7 +97,7 @@ class CommentController implements Polymorphic
      * @param  UpdateCensoredRequest $request [description]
      * @return JsonResponse                      [description]
      */
-    public function updateCensored(Comment $comment, UpdateCensoredRequest $request) : JsonResponse
+    public function updateCensored(Comment $comment, UpdateCensoredRequest $request): JsonResponse
     {
         $comment->update($request->only('censored'));
 
@@ -98,7 +117,7 @@ class CommentController implements Polymorphic
      * @param  UpdateStatusRequest $request [description]
      * @return JsonResponse                     [description]
      */
-    public function updateStatus(Comment $comment, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(Comment $comment, UpdateStatusRequest $request): JsonResponse
     {
         $comment->makeService()->updateStatus($request->only('status'));
 
@@ -120,7 +139,7 @@ class CommentController implements Polymorphic
      * @param  Comment $comment
      * @return JsonResponse
      */
-    public function destroy(Comment $comment) : JsonResponse
+    public function destroy(Comment $comment): JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
         $descendants = $comment->makeRepo()->getDescendantsAsArray();
@@ -140,7 +159,7 @@ class CommentController implements Polymorphic
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(Comment $comment, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Comment $comment, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = 0;
         // Antywzorzec, ale nie mialem wyboru, bo ClosureTable nie zmienia pozycji

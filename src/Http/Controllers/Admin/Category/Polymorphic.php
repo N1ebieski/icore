@@ -4,26 +4,66 @@ namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
+use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Category\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
-     * Show the form for editing the specified Category.
+     * Display a listing of the Category.
      *
-     * @param  Category $category
+     * @param  Category      $category      [description]
+     * @param  IndexRequest  $request       [description]
+     * @param  IndexFilter   $filter        [description]
+     * @return HttpResponse                 [description]
+     */
+    public function index(Category $category, IndexRequest $request, IndexFilter $filter): HttpResponse;
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function edit(Category $category) : JsonResponse;
+    public function create(Category $category, CreateRequest $request): JsonResponse;
+
+    /**
+     * Store a newly created Category in storage.
+     *
+     * @param  Category      $category      [description]
+     * @param  StoreRequest  $request
+     * @return JsonResponse
+     */
+    public function store(Category $category, StoreRequest $request): JsonResponse;
+    
+    /**
+     * Store collection of Categories with childrens in storage.
+     *
+     * @param  Category      $category      [description]
+     * @param  StoreGlobalRequest  $request
+     * @return JsonResponse
+     */
+    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse;    
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param EditLoad $load
+     * @return JsonResponse
+     */
+    public function edit(Category $category, EditLoad $load): JsonResponse;
 
     /**
      * Update the specified Category in storage.
@@ -32,14 +72,14 @@ interface Polymorphic
      * @param  UpdateRequest $request  [description]
      * @return JsonResponse                [description]
      */
-    public function update(Category $category, UpdateRequest $request) : JsonResponse;
+    public function update(Category $category, UpdateRequest $request): JsonResponse;
 
     /**
      * [editPosition description]
      * @param  Category     $category [description]
      * @return JsonResponse           [description]
      */
-    public function editPosition(Category $category) : JsonResponse;
+    public function editPosition(Category $category): JsonResponse;
 
     /**
      * [updatePosition description]
@@ -47,7 +87,7 @@ interface Polymorphic
      * @param  UpdatePositionRequest $request  [description]
      * @return JsonResponse                    [description]
      */
-    public function updatePosition(Category $category, UpdatePositionRequest $request) : JsonResponse;
+    public function updatePosition(Category $category, UpdatePositionRequest $request): JsonResponse;
 
     /**
      * Update Status attribute the specified Comment in storage.
@@ -56,7 +96,7 @@ interface Polymorphic
      * @param  UpdateStatusRequest $request  [description]
      * @return JsonResponse                        [description]
      */
-    public function updateStatus(Category $category, UpdateStatusRequest $request) : JsonResponse;
+    public function updateStatus(Category $category, UpdateStatusRequest $request): JsonResponse;
 
     /**
      * Remove the specified Category from storage.
@@ -64,7 +104,7 @@ interface Polymorphic
      * @param  Category $category
      * @return JsonResponse
      */
-    public function destroy(Category $category) : JsonResponse;
+    public function destroy(Category $category): JsonResponse;
 
     /**
      * Remove the collection of Categories from storage.
@@ -73,15 +113,5 @@ interface Polymorphic
      * @param  DestroyGlobalRequest $request  [description]
      * @return RedirectResponse               [description]
      */
-    public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse;
-
-    /**
-     * Undocumented function
-     *
-     * @param Category $category
-     * @param SearchRequest $request
-     * @param SearchResponse $response
-     * @return JsonResponse
-     */
-    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse;
+    public function destroyGlobal(Category $category, DestroyGlobalRequest $request): RedirectResponse;
 }

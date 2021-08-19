@@ -1,3 +1,4 @@
+// Deprecated script
 function categorySelect()
 {
     return $('#categoryOptions .form-group').map(function() {

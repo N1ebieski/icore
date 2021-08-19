@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Repositories;
 
 use N1ebieski\ICore\Models\Socialite;
 
-/**
- * [SocialiteRepo description]
- */
 class SocialiteRepo
 {
     /**
@@ -30,7 +27,7 @@ class SocialiteRepo
      * @param  string $id   [description]
      * @return Socialite|null       [description]
      */
-    public function firstByProvider(string $name, string $id) : ?Socialite
+    public function firstByProvider(string $name, string $id): ?Socialite
     {
         return $this->socialite->where('provider_name', $name)
             ->where('provider_id', $id)

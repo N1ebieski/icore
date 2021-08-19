@@ -25,13 +25,13 @@
         <span>{{ trans('icore::bans.model.user.route.index') }}</span>
     </div>
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @include('icore::admin.banmodel.user.partials.filter')
     @if ($bans->isNotEmpty())
     <form 
         action="{{ route('admin.banmodel.destroy_global') }}" 
         method="post" 
-        id="selectForm"
+        id="select-form"
     >
         @csrf
         @method('delete')
@@ -40,8 +40,8 @@
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
-                    <input type="checkbox" class="custom-control-input" id="selectAll">
-                    <label class="custom-control-label" for="selectAll">
+                    <input type="checkbox" class="custom-control-input" id="select-all">
+                    <label class="custom-control-label" for="select-all">
                         {{ trans('icore::default.select_all') }}
                     </label>
                 </div>
@@ -69,7 +69,9 @@
                 data-title="{{ trans('icore::default.confirm') }}"
             >
                 <i class="far fa-trash-alt"></i>
-                <span>{{ trans('icore::default.delete_global') }}</span>
+                <span class="d-none d-sm-inline">
+                    {{ trans('icore::default.delete_global') }}
+                </span>
             </button>
         </div>
         @endcan

@@ -39,10 +39,23 @@ class ReportService implements Creatable
      */
     public function __construct(Report $report, Auth $auth, DB $db)
     {
-        $this->report = $report;
+        $this->setReport($report);
 
         $this->auth = $auth;
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Report $report
+     * @return static
+     */
+    public function setReport(Report $report)
+    {
+        $this->report = $report;
+
+        return $this;
     }
 
     /**
@@ -51,7 +64,7 @@ class ReportService implements Creatable
      * @param  array  $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->report->user()->associate($this->auth->user());

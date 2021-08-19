@@ -5,11 +5,7 @@ namespace N1ebieski\ICore\Repositories;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
-/**
- * [TagRepo description]
- */
 class TagRepo
 {
     /**
@@ -32,7 +28,7 @@ class TagRepo
      * @param  string $slug [description]
      * @return Tag|null       [description]
      */
-    public function firstBySlug(string $slug) : ?Tag
+    public function firstBySlug(string $slug): ?Tag
     {
         return $this->tag->whereNormalized($slug)->first();
     }
@@ -42,7 +38,7 @@ class TagRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->tag->selectRaw('`tags`.*')
             ->filterExcept($filter['except'])
@@ -58,25 +54,12 @@ class TagRepo
     }
 
     /**
-     * [getBySearch description]
-     * @param  string $name [description]
-     * @return Collection        [description]
-     */
-    public function getBySearch(string $name) : Collection
-    {
-        return $this->tag->search($name)
-            ->orderByRaw('LENGTH(name) ASC')
-            ->limit(5)
-            ->get(['name']);
-    }
-
-    /**
      * Undocumented function
      *
      * @param array $component
      * @return Collection
      */
-    public function getPopularByComponent(array $component) : Collection
+    public function getPopularByComponent(array $component): Collection
     {
         $morph = $this->tag->morphs()->make();
 

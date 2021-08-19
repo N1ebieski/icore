@@ -1,5 +1,5 @@
 @component('icore::web.partials.modal')
-@slot('modal_id', 'editProfileEmailModal')
+@slot('modal_id', 'edit-profile-email-modal')
 
 @slot('modal_title')
 {{ trans('icore::profile.change_email') }}
@@ -9,7 +9,7 @@
 <form 
     method="post" 
     action="{{ route('web.profile.update_email') }}" 
-    id="updateEmailProfile"
+    id="update-email-profile"
 >
     @csrf
     @method('patch')

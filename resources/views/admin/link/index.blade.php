@@ -33,16 +33,18 @@
                 role="button"
                 class="btn btn-primary text-nowrap create" 
                 data-toggle="modal" 
-                data-target="#createModal"
+                data-target="#create-modal"
             >
                 <i class="far fa-plus-square"></i>
-                <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
+                <span class="d-none d-sm-inline">
+                    {{ trans('icore::default.create') }}
+                </span>
             </a>
         </div>
     </div>
     @endcan
 </h1>
-<div id="filterContent">
+<div id="filter-content">
     @if ($links->isNotEmpty())
     <div id="infinite-scroll">
         @foreach ($links as $link)
@@ -56,7 +58,7 @@
 </div>
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'editModal')
+@slot('modal_id', 'edit-modal')
 @slot('modal_title')
 <i class="far fa-edit"></i>
 <span> {{ trans('icore::links.route.edit') }}</span>
@@ -64,7 +66,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'createModal')
+@slot('modal_id', 'create-modal')
 @slot('modal_title')
 <i class="far fa-plus-square"></i>
 <span> {{ trans('icore::links.route.create') }}</span>
@@ -72,7 +74,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'editPositionModal')
+@slot('modal_id', 'edit-position-modal')
 @slot('modal_title')
 <i class="fas fa-sort-amount-up"></i>
 <span> {{ trans('icore::links.route.edit_position') }}</span>

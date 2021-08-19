@@ -7,34 +7,122 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
+use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
+use N1ebieski\ICore\Http\Requests\Admin\Category\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\SearchRequest;
-use N1ebieski\ICore\Http\Responses\Admin\Category\SearchResponse;
 
-/**
- * Base Category Controller
- */
 class CategoryController implements Polymorphic
 {
     /**
-     * Show the form for editing the specified Category.
+     * Display a listing of the Category.
      *
-     * @param  Category $category
+     * @param  Category      $category      [description]
+     * @param  IndexRequest  $request       [description]
+     * @param  IndexFilter   $filter        [description]
+     * @return HttpResponse                 [description]
+     */
+    public function index(Category $category, IndexRequest $request, IndexFilter $filter): HttpResponse
+    {
+        return Response::view('icore::admin.category.index', [
+            'model' => $category,
+            'categories' => $category->makeService()->paginateByFilter($filter->all()),
+            'filter' => $filter->all(),
+            'paginate' => Config::get('database.paginate')
+        ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function edit(Category $category) : JsonResponse
+    public function create(Category $category, CreateRequest $request): JsonResponse
+    {
+        return Response::json([
+            'success' => '',
+            'view' => View::make('icore::admin.category.create', [
+                'model' => $category
+            ])->render()
+        ]);
+    }
+
+    /**
+     * Store a newly created Category in storage.
+     *
+     * @param  Category      $category      [description]
+     * @param  StoreRequest  $request
+     * @return JsonResponse
+     */
+    public function store(Category $category, StoreRequest $request): JsonResponse
+    {
+        $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
+
+        $request->session()->flash(
+            'success',
+            Lang::get('icore::categories.success.store') . (
+                $request->input('parent_id') !== null ?
+                    Lang::get('icore::categories.success.store_parent', [
+                        'parent' => $category->find($request->input('parent_id'))->name
+                    ])
+                    : null
+            )
+        );
+
+        return Response::json(['success' => '' ]);
+    }
+
+    /**
+     * Store collection of Categories with childrens in storage.
+     *
+     * @param  Category      $category      [description]
+     * @param  StoreGlobalRequest  $request
+     * @return JsonResponse
+     */
+    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse
+    {
+        $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
+
+        $request->session()->flash(
+            'success',
+            Lang::get('icore::categories.success.store_global') . (
+                $request->input('parent_id') !== null ?
+                    Lang::get('icore::categories.success.store_parent', [
+                        'parent' => $category->find($request->input('parent_id'))->name
+                    ])
+                    : null
+            )
+        );
+
+        return Response::json(['success' => '' ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Category $category
+     * @param EditLoad $load
+     * @return JsonResponse
+     */
+    public function edit(Category $category, EditLoad $load): JsonResponse
     {
         return Response::json([
             'success' => '',
             'view' => View::make('icore::admin.category.edit', [
-                'category' => $category,
-                'categories' => $category->makeService()->getAsFlatTreeExceptSelf()
+                'category' => $category
             ])->render()
         ]);
     }
@@ -46,7 +134,7 @@ class CategoryController implements Polymorphic
      * @param  UpdateRequest $request  [description]
      * @return JsonResponse                [description]
      */
-    public function update(Category $category, UpdateRequest $request) : JsonResponse
+    public function update(Category $category, UpdateRequest $request): JsonResponse
     {
         $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
 
@@ -65,7 +153,7 @@ class CategoryController implements Polymorphic
      * @param  Category     $category [description]
      * @return JsonResponse           [description]
      */
-    public function editPosition(Category $category) : JsonResponse
+    public function editPosition(Category $category): JsonResponse
     {
         $category->siblings_count = $category->countSiblings() + 1;
 
@@ -83,13 +171,13 @@ class CategoryController implements Polymorphic
      * @param  UpdatePositionRequest $request  [description]
      * @return JsonResponse                    [description]
      */
-    public function updatePosition(Category $category, UpdatePositionRequest $request) : JsonResponse
+    public function updatePosition(Category $category, UpdatePositionRequest $request): JsonResponse
     {
         $category->makeService()->updatePosition($request->only('position'));
 
         return Response::json([
             'success' => '',
-            'siblings' => $category->makeRepo()->getSiblingsAsArray()+[$category->id => $category->position],
+            'siblings' => $category->makeRepo()->getSiblingsAsArray() + [$category->id => $category->position],
         ]);
     }
 
@@ -100,7 +188,7 @@ class CategoryController implements Polymorphic
      * @param  UpdateStatusRequest $request  [description]
      * @return JsonResponse                        [description]
      */
-    public function updateStatus(Category $category, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(Category $category, UpdateStatusRequest $request): JsonResponse
     {
         $category->makeService()->updateStatus($request->only('status'));
 
@@ -122,7 +210,7 @@ class CategoryController implements Polymorphic
      * @param  Category $category
      * @return JsonResponse
      */
-    public function destroy(Category $category) : JsonResponse
+    public function destroy(Category $category): JsonResponse
     {
         // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
         $descendants = $category->makeRepo()->getDescendantsAsArray();
@@ -142,7 +230,7 @@ class CategoryController implements Polymorphic
      * @param  DestroyGlobalRequest $request  [description]
      * @return RedirectResponse               [description]
      */
-    public function destroyGlobal(Category $category, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Category $category, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $category->makeService()->deleteGlobal($request->get('select'));
 
@@ -152,20 +240,5 @@ class CategoryController implements Polymorphic
                 'affected' => $deleted
             ])
         );
-    }
-
-    /**
-     * Search Categories for specified name.
-     *
-     * @param  Category      $category [description]
-     * @param  SearchRequest $request  [description]
-     * @param  SearchResponse $response [description]
-     * @return JsonResponse                [description]
-     */
-    public function search(Category $category, SearchRequest $request, SearchResponse $response) : JsonResponse
-    {
-        $categories = $category->makeRepo()->getBySearch($request->get('name'));
-
-        return $response->setCategories($categories)->makeResponse();
     }
 }

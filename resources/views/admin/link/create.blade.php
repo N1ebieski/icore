@@ -55,33 +55,21 @@
         <label for="category">
             {{ trans('icore::links.only.categories') }}:
         </label>
-        <div id="category">
-            <div id="categoryOptions"></div>
-            <div 
-                id="searchCategory" 
-                data-route="{{ route("admin.category.{$type}.search") }}" 
-                data-max=""
-                class="position-relative"
-            >
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="categories"
-                        placeholder="{{ trans('icore::categories.search_categories') }}"
-                    >
-                    <span class="input-group-append">
-                        <button 
-                            class="btn btn-outline-secondary border border-left-0"
-                            type="button"
-                        >
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
-                </div>
-                <div id="searchCategoryOptions" class="my-3"></div>
-            </div>
-        </div>
+        <input type="hidden" name="categories" value="">
+        <select 
+            class="selectpicker select-picker-category" 
+            data-live-search="true"
+            data-abs="true"
+            data-abs-max-options-length="10"
+            data-abs-text-attr="name"
+            data-abs-ajax-url="{{ route('api.category.index') }}"
+            data-style="border"
+            data-width="100%"
+            multiple
+            name="categories[]"
+            id="categories"
+        >
+        </select>
     </div>
     <button type="button" class="btn btn-primary store">
         <i class="fas fa-check"></i>

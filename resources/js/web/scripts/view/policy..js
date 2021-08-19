@@ -3,7 +3,7 @@ jQuery(document).on('click', '#policy #agree', function (e) {
 
     $('#policy').remove();
 
-    $.cookie("policyAgree", 1, { 
+    $.cookie("policy_agree", 1, { 
         path: '/',
         expires: 365
     });

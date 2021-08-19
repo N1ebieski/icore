@@ -11,9 +11,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 
-/**
- * [PostRepo description]
- */
 class PostRepo
 {
     /**
@@ -73,7 +70,7 @@ class PostRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateCommentsByFilter(array $filter) : LengthAwarePaginator
+    public function paginateCommentsByFilter(array $filter): LengthAwarePaginator
     {
         return $this->post->comments()
             ->active()
@@ -89,7 +86,7 @@ class PostRepo
      * @param  array                $filter [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function paginateByFilter(array $filter) : LengthAwarePaginator
+    public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->post->selectRaw('`posts`.*')
             ->with('tags')
@@ -173,7 +170,7 @@ class PostRepo
      * @param  array                $date [description]
      * @return LengthAwarePaginator       [description]
      */
-    public function paginateArchiveByDate(array $date) : LengthAwarePaginator
+    public function paginateArchiveByDate(array $date): LengthAwarePaginator
     {
         return $this->post->with('user:id,name')
             ->active()
@@ -189,7 +186,7 @@ class PostRepo
      * [getArchives description]
      * @return Collection [description]
      */
-    public function getArchives() : Collection
+    public function getArchives(): Collection
     {
         return $this->post->active()
             ->selectRaw('YEAR(published_at) year, MONTH(published_at) month, COUNT(*) posts_count')
@@ -205,7 +202,7 @@ class PostRepo
      * @param  string               $tag [description]
      * @return LengthAwarePaginator      [description]
      */
-    public function paginateByTag(string $tag) : LengthAwarePaginator
+    public function paginateByTag(string $tag): LengthAwarePaginator
     {
         return $this->post->withAllTags($tag)
             ->with('user:id,name')
@@ -218,7 +215,7 @@ class PostRepo
      * [paginateLatest description]
      * @return LengthAwarePaginator [description]
      */
-    public function paginateLatest() : LengthAwarePaginator
+    public function paginateLatest(): LengthAwarePaginator
     {
         return $this->post->with('user:id,name')
             ->active()
@@ -231,7 +228,7 @@ class PostRepo
      * @param  string               $name [description]
      * @return LengthAwarePaginator       [description]
      */
-    public function paginateBySearch(string $name) : LengthAwarePaginator
+    public function paginateBySearch(string $name): LengthAwarePaginator
     {
         return $this->post->with('user:id,name')
             ->from(
@@ -260,7 +257,7 @@ class PostRepo
      * [updateActivateScheduled description]
      * @return bool              [description]
      */
-    public function activateScheduled() : bool
+    public function activateScheduled(): bool
     {
         return $this->post
             ->whereDate('published_at', '<', $this->carbon->now()->format('Y-m-d'))
@@ -278,7 +275,7 @@ class PostRepo
      * @param Closure $callback
      * @return boolean
      */
-    public function chunkActiveWithModelsCount(Closure $callback) : bool
+    public function chunkActiveWithModelsCount(Closure $callback): bool
     {
         return $this->post->active()
             ->withCount(['comments AS models_count' => function ($query) {
@@ -292,7 +289,7 @@ class PostRepo
      *
      * @return Collection
      */
-    public function countByStatus() : Collection
+    public function countByStatus(): Collection
     {
         return $this->post->selectRaw("`status`, COUNT(`id`) AS `count`")
             ->groupBy('status')
@@ -304,7 +301,7 @@ class PostRepo
      *
      * @return string|null
      */
-    public function getLastActivity() : ?string
+    public function getLastActivity(): ?string
     {
         return optional(
             $this->post->active()
@@ -319,7 +316,7 @@ class PostRepo
      *
      * @return Collection
      */
-    public function getLatestForHome() : Collection
+    public function getLatestForHome(): Collection
     {
         return $this->post->active()
             ->latest()

@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
+use Illuminate\Http\Request as BaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
 
 class IndexRequest extends FormRequest
 {
@@ -17,6 +19,26 @@ class IndexRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->route('type')) {
+            $filter = [
+                'filter' => $this->input('filter', []) + [
+                    'type' => $this->route('type')
+                ]
+            ];
+
+            App::make(BaseRequest::class)->merge($filter);
+
+            $this->merge($filter);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -24,24 +46,11 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'bail|required|string|in:link,backlink',
             'page' => 'integer',
-            'except' => 'filled|array',
-            'except.*' => 'integer'
+            'filter' => 'bail|array',
+            'filter.type' => 'bail|required|string|in:link,backlink',
+            'filter.except' => 'bail|filled|array',
+            'filter.except.*' => 'bail|integer'
         ];
-    }
-    
-    /**
-     * Get all of the input and files for the request.
-     *
-     * @param  array|mixed|null  $keys
-     * @return array
-     */
-    public function all($keys = null)
-    {
-        $data = parent::all($keys);
-        $data['type'] = $this->route('type');
-
-        return $data;
     }
 }

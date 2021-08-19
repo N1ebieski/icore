@@ -31,6 +31,9 @@ try {
     require('bootstrap-select/dist/js/bootstrap-select.min.js');
     require('bootstrap-select/dist/js/i18n/defaults-pl_PL.min.js');
 
+    require('ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js');
+    require('ajax-bootstrap-select/dist/js/locale/ajax-bootstrap-select.pl-PL.min.js');
+
     require('pickadate/lib/picker.js');
     require('pickadate/lib/picker.date.js');
     require('pickadate/lib/picker.time.js');

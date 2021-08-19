@@ -40,10 +40,23 @@ class RatingService implements Creatable, Updatable, Deletable
      */
     public function __construct(Rating $rating, Auth $auth, DB $db)
     {
-        $this->rating = $rating;
+        $this->setRating($rating);
 
         $this->auth = $auth;
         $this->db = $db;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Rating $rating
+     * @return static
+     */
+    public function setRating(Rating $rating)
+    {
+        $this->rating = $rating;
+
+        return $this;
     }
 
     /**
@@ -77,11 +90,12 @@ class RatingService implements Creatable, Updatable, Deletable
      * @param  array $attributes
      * @return Model
      */
-    public function create(array $attributes) : Model
+    public function create(array $attributes): Model
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->rating->user()->associate($this->auth->user());
             $this->rating->morph()->associate($this->rating->morph);
+
             $this->rating->rating = $attributes['rating'];
 
             $this->rating->save();
@@ -95,7 +109,7 @@ class RatingService implements Creatable, Updatable, Deletable
      *
      * @return bool
      */
-    public function delete() : bool
+    public function delete(): bool
     {
         return $this->db->transaction(function () {
             return $this->rating->delete();
@@ -108,7 +122,7 @@ class RatingService implements Creatable, Updatable, Deletable
      * @param array $attributes
      * @return bool
      */
-    public function update(array $attributes) : bool
+    public function update(array $attributes): bool
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->rating->update([
@@ -123,11 +137,11 @@ class RatingService implements Creatable, Updatable, Deletable
      *
      * @return Rating|null
      */
-    protected function findByUser() : ?Rating
+    protected function findByUser(): ?Rating
     {
         $rating = $this->rating->morph->makeRepo()
             ->firstRatingByUser($this->auth->user()->id);
 
         return $rating instanceof Rating ? $this->rating = $rating : null;
-    }    
+    }
 }

@@ -28,7 +28,7 @@ class StatService
      */
     public function __construct(Stat $stat, DB $db)
     {
-        $this->stat = $stat;
+        $this->setStat($stat);
 
         $this->db = $db;
     }
@@ -36,9 +36,22 @@ class StatService
     /**
      * Undocumented function
      *
+     * @param Stat $stat
+     * @return static
+     */
+    public function setStat(Stat $stat)
+    {
+        $this->stat = $stat;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
      * @return boolean
      */
-    public function increment() : bool
+    public function increment(): bool
     {
         return $this->db->transaction(function () {
             $this->stat->morph

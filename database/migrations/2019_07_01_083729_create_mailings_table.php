@@ -17,8 +17,8 @@ class CreateMailingsTable extends Migration
         Schema::create('mailings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->longText('content_html');
-            $table->longText('content');
+            $table->longText('content_html')->nullable();
+            $table->longText('content')->nullable();
             $table->tinyInteger('status')->unsigned();
             $table->timestamp('activation_at')->nullable();
             $table->timestamps();

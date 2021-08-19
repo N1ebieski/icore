@@ -31,29 +31,33 @@
             </li>
         </ul>
         <div class="text-right ml-3">
-            <form 
-                action="{{ route('web.profile.socialite.destroy', ['socialite' => $user_socialite->id]) }}"
-                method="post"
-            >
-                @csrf
-                @method('delete')
-                <button 
-                    class="btn btn-danger submit" 
-                    data-status="delete" 
-                    data-toggle="confirmation"
-                    type="button" 
-                    data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
-                    data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
-                    data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-                    data-btn-cancel-icon-class="fas fa-ban"
-                    data-title="{{ trans('icore::profile.symlink_confirmation') }}"
+            <div class="responsive-btn-group">
+                <form 
+                    action="{{ route('web.profile.socialite.destroy', ['socialite' => $user_socialite->id]) }}"
+                    method="post"
                 >
-                    <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-md-inline">{{ trans('icore::default.delete') }}</span>
-                </button>
-            </form>
+                    @csrf
+                    @method('delete')
+                    <button 
+                        class="btn btn-danger submit" 
+                        data-status="delete" 
+                        data-toggle="confirmation"
+                        type="button" 
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban"
+                        data-title="{{ trans('icore::profile.symlink_confirmation') }}"
+                    >
+                        <i class="far fa-trash-alt"></i>
+                        <span class="d-none d-md-inline">
+                            {{ trans('icore::default.delete') }}
+                        </span>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -76,14 +80,18 @@
                 </li>
             </ul>
             <div class="text-right ml-3">
-                <a 
-                    href="{{ route('web.profile.socialite.redirect', ['provider' => $provider]) }}"
-                    role="button" 
-                    class="btn btn-primary"
-                >
-                    <i class="fas fa-link"></i>
-                    <span class="d-none d-md-inline">{{ trans('icore::profile.symlink') }}</span>
-                </a>
+                <div class="responsive-btn-group">
+                    <a 
+                        href="{{ route('web.profile.socialite.redirect', ['provider' => $provider]) }}"
+                        role="button" 
+                        class="btn btn-primary"
+                    >
+                        <i class="fas fa-link"></i>
+                        <span class="d-none d-md-inline">
+                            {{ trans('icore::profile.symlink') }}
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -54,7 +54,7 @@ class SessionCache
      *
      * @return Collection
      */
-    public function rememberCountByType() : Collection
+    public function rememberCountByType(): Collection
     {
         return $this->cache->tags(['sessions'])->remember(
             "session.countByType",
