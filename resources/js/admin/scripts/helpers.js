@@ -62,7 +62,7 @@
             $(this).parent().find('button').prop('disabled', true);
             $(this).find('i').hide();
 
-            let color = $(this).is('[class*="btn-outline-"]') && (typeof $.cookie('themeToggle') === 'undefined' || $.cookie('themeToggle') === 'light') ?
+            let color = $(this).is('[class*="btn-outline-"]') && (typeof $.cookie('theme_toggle') === 'undefined' || $.cookie('theme_toggle') === 'light') ?
                 'text-dark' : 'text-light';
 
             $(this).prepend($.sanitize('<span class="' + type + ' ' + type + '-sm ' + color + '" role="status" aria-hidden="true"></span>'));

@@ -90,7 +90,7 @@ class LayoutComposer extends Composer
      */
     public function getTheme() : ?string
     {
-        switch ((string)$this->request->cookie('themeToggle')) {
+        switch ((string)$this->request->cookie('theme_toggle')) {
             case 'dark':
                 return 'dark';
 

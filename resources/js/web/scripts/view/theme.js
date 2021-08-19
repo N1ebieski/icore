@@ -7,7 +7,7 @@ jQuery(document).on('click', 'div#themeToggle button, div#theme-toggle button', 
         // $('link[href*="web-dark.css"]').attr('href', function() {
         //     return $(this).attr('href').replace('web-dark.css', 'web.css');
         // });
-        $.cookie("themeToggle", 'light', { 
+        $.cookie("theme_toggle", 'light', { 
             path: '/',
             expires: 365
         });
@@ -17,7 +17,7 @@ jQuery(document).on('click', 'div#themeToggle button, div#theme-toggle button', 
         // $('link[href*="web.css"]').attr('href', function() {
         //     return $(this).attr('href').replace('web.css', 'web-dark.css');
         // });
-        $.cookie("themeToggle", 'dark', { 
+        $.cookie("theme_toggle", 'dark', { 
             path: '/',
             expires: 365
         });
