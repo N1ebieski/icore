@@ -295,6 +295,8 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->call('vendor:publish', ['--tag' => 'fm-views', '--force' => true], $this->getOutput());
         $this->line("\n");
+        $this->call('vendor:publish', ['--provider' => 'Laravel\Sanctum\SanctumServiceProvider', '--force' => true], $this->getOutput());
+        $this->line("\n");        
         $bar->advance();
         $this->line("\n");
         $this->line($this->lang->get('icore::install.dump'));
@@ -309,6 +311,8 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->call('migrate:fresh', ['--path' => 'database/migrations/vendor/icore', '--force' => true], $this->getOutput());
         $this->line("\n");
+        $this->call('migrate', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());
+        $this->line("\n");        
         $bar->advance();
         $this->line("\n");
         $this->line($this->lang->get('icore::install.seed'));
