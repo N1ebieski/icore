@@ -93,6 +93,10 @@ class ICoreServiceProvider extends ServiceProvider
         ], 'icore.routes.web');
 
         $this->publishes([
+            __DIR__.'/../../routes/api' => base_path('routes') . '/vendor/icore/api'
+        ], 'icore.routes.api');
+
+        $this->publishes([
             __DIR__.'/../../routes/admin' => base_path('routes') . '/vendor/icore/admin'
         ], 'icore.routes.admin');
 
