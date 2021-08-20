@@ -7,7 +7,7 @@ trait Factory
     /**
      * Inside factory. Two methods of injection:
      * 1. Array - key as parameter name, value as parameter value, example make(['file' => new File(), 'path' => 'test/'])
-     * 2. Parameters - counting from the end, earlier injected from existing object properties, example make(new File(), 'test/')
+     * 2. Parameters - counting from the first non-existing object property, example make(new File(), 'test/')
      *
      * @param array ...$parameters
      * @return static

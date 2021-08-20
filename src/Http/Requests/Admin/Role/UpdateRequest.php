@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -17,6 +16,11 @@ class UpdateRequest extends FormRequest
         return $this->role->isEditNotDefault();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         if ($this->role->name === 'user') {
@@ -43,13 +47,7 @@ class UpdateRequest extends FormRequest
                 'distinct',
                 'exists:permissions,name',
                 $this->role->name === 'user' ?
-                    Rule::in([
-                        'web.*',
-                        'web.comments.*',
-                        'web.comments.create',
-                        'web.comments.suggest',
-                        'web.comments.edit'
-                    ])
+                    'regex:/^(web\.|api\.).+/'
                     : null,
                 'no_js_validation'
             ]

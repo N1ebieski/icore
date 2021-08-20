@@ -12,34 +12,34 @@ class SearchTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_search_autocomplete_validation_fail()
-    {
-        $response = $this->get(route('web.search.autocomplete'), [
-            'search' => 'fd'
-        ]);
+    // public function test_search_autocomplete_validation_fail()
+    // {
+    //     $response = $this->get(route('web.search.autocomplete'), [
+    //         'search' => 'fd'
+    //     ]);
 
-        $response->assertSessionHasErrors(['search']);
-    }
+    //     $response->assertSessionHasErrors(['search']);
+    // }
 
-    public function test_search_autocomplete()
-    {
-        $tag = Tag::create([
-            'name' => 'Ędward Ącki'
-        ]);
+    // public function test_search_autocomplete()
+    // {
+    //     $tag = Tag::create([
+    //         'name' => 'Ędward Ącki'
+    //     ]);
 
-        // Hook z koniecznosci. Wyszukiwanie odbywa się przez AGAINST MATCH po indeksie,
-        // a DatabaseTransactions nie indeksuje ostatnio dodanego modelu.
-        DB::statement('OPTIMIZE TABLE tags');
+    //     // Hook z koniecznosci. Wyszukiwanie odbywa się przez AGAINST MATCH po indeksie,
+    //     // a DatabaseTransactions nie indeksuje ostatnio dodanego modelu.
+    //     DB::statement('OPTIMIZE TABLE tags');
 
-        $response = $this->get(route('web.search.autocomplete', [
-            'search' => 'ąck'
-        ]));
+    //     $response = $this->get(route('web.search.autocomplete', [
+    //         'search' => 'ąck'
+    //     ]));
 
-        $response->assertOk();
-        $this->assertStringContainsString($tag->name, $response->getData()[0]->name);
+    //     $response->assertOk();
+    //     $this->assertStringContainsString($tag->name, $response->getData()[0]->name);
 
-        DB::statement('DELETE FROM `tags` WHERE `tag_id` > 0');
-    }
+    //     DB::statement('DELETE FROM `tags` WHERE `tag_id` > 0');
+    // }
 
     public function test_search_validation_fail()
     {

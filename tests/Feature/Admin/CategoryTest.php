@@ -13,58 +13,58 @@ class CategoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_category_search_as_guest()
-    {
-        $response = $this->get(route('admin.category.post.search'));
+    // public function test_category_search_as_guest()
+    // {
+    //     $response = $this->get(route('admin.category.post.search'));
 
-        $response->assertRedirect(route('login'));
-    }
+    //     $response->assertRedirect(route('login'));
+    // }
 
-    public function test_category_search_without_permission()
-    {
-        $user = factory(User::class)->create();
+    // public function test_category_search_without_permission()
+    // {
+    //     $user = factory(User::class)->create();
 
-        Auth::login($user, true);
+    //     Auth::login($user, true);
 
-        $response = $this->get(route('admin.category.post.search'));
+    //     $response = $this->get(route('admin.category.post.search'));
 
-        $response->assertStatus(403);
-    }
+    //     $response->assertStatus(403);
+    // }
 
-    public function test_category_search_validation_fail()
-    {
-        $user = factory(User::class)->states('admin')->create();
+    // public function test_category_search_validation_fail()
+    // {
+    //     $user = factory(User::class)->states('admin')->create();
 
-        Auth::login($user, true);
+    //     Auth::login($user, true);
 
-        $response = $this->get(route('admin.category.post.search', [
-            'name' => 'B'
-        ]));
+    //     $response = $this->get(route('admin.category.post.search', [
+    //         'name' => 'B'
+    //     ]));
 
-        $response->assertSessionHasErrors(['name']);
-    }
+    //     $response->assertSessionHasErrors(['name']);
+    // }
 
-    public function test_category_search()
-    {
-        $user = factory(User::class)->states('admin')->create();
+    // public function test_category_search()
+    // {
+    //     $user = factory(User::class)->states('admin')->create();
 
-        $category = factory(Category::class)->states(['sentence', 'active'])->create();
+    //     $category = factory(Category::class)->states(['sentence', 'active'])->create();
 
-        // Hook z koniecznosci. Wyszukiwanie odbywa się przez AGAINST MATCH po indeksie,
-        // a DatabaseTransactions nie indeksuje ostatnio dodanego modelu.
-        DB::statement('OPTIMIZE TABLE categories');
+    //     // Hook z koniecznosci. Wyszukiwanie odbywa się przez AGAINST MATCH po indeksie,
+    //     // a DatabaseTransactions nie indeksuje ostatnio dodanego modelu.
+    //     DB::statement('OPTIMIZE TABLE categories');
 
-        Auth::login($user, true);
+    //     Auth::login($user, true);
 
-        $response = $this->get(route('admin.category.post.search', [
-            'name' => $category->name
-        ]));
+    //     $response = $this->get(route('admin.category.post.search', [
+    //         'name' => $category->name
+    //     ]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString($category->name, $response->getData()->view);
+    //     $response->assertOk()->assertJsonStructure(['success', 'view']);
+    //     $this->assertStringContainsString($category->name, $response->getData()->view);
 
-        DB::statement('DELETE FROM `categories` WHERE `id` > 0');
-    }
+    //     DB::statement('DELETE FROM `categories` WHERE `id` > 0');
+    // }
 
     public function test_category_index_as_guest()
     {

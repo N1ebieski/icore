@@ -273,6 +273,7 @@ class PageTest extends TestCase
         $response = $this->put(route('admin.page.update_full', [$page->id]), [
             'title' => 'Page zaktualizowany.',
             'content_html' => 'Ten page został zaktualizowany.',
+            'user' => $user->id,
             'status' => 1
         ]);
 
@@ -304,6 +305,7 @@ class PageTest extends TestCase
             'title' => 'Page zaktualizowany.',
             'content_html' => 'Ten page został zaktualizowany.',
             'status' => 1,
+            'user' => $user->id,
             'parent_id' => $parent->id
         ]);
 
