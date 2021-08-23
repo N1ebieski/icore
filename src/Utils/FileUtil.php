@@ -12,7 +12,7 @@ class FileUtil
 
     /**
      * [$file description]
-     * @var UploadedFile
+     * @var UploadedFile|null
      */
     protected $file;
 
@@ -63,7 +63,7 @@ class FileUtil
      */
     public function __construct(
         Storage $storage,
-        string $path,
+        string $path = null,
         UploadedFile $file = null,
         string $disk = 'public'
     ) {

@@ -8,9 +8,8 @@ use N1ebieski\ICore\Models\Tag\Tag;
 use N1ebieski\ICore\Filters\Api\Tag\IndexFilter;
 use N1ebieski\ICore\Http\Resources\Tag\TagResource;
 use N1ebieski\ICore\Http\Requests\Api\Tag\IndexRequest;
-use N1ebieski\ICore\Http\Controllers\Api\Tag\Polymorphic;
 
-class TagController implements Polymorphic
+class TagController
 {
     /**
      * Undocumented function
