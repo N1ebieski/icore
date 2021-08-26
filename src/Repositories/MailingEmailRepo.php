@@ -49,11 +49,11 @@ class MailingEmailRepo
      * @param Closure $callback
      * @return boolean
      */
-    public function chunkUnsentHasProgressMailing(int $chunk, Closure $callback): bool
+    public function chunkUnsentHasActiveMailing(int $chunk, Closure $callback): bool
     {
         return $this->mailingEmail->unsent()
             ->whereHas('mailing', function ($query) {
-                $query->progress();
+                $query->active();
             })
             ->orderBy('mailing_id', 'asc')
             ->chunk($chunk, $callback);

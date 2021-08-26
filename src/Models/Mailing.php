@@ -18,7 +18,9 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
  */
 class Mailing extends Model
 {
-    use FullTextSearchable, Filterable, Carbonable;
+    use FullTextSearchable;
+    use Filterable;
+    use Carbonable;
 
     // Configuration
 
@@ -108,10 +110,10 @@ class Mailing extends Model
      * [getProgressSuccessAttribute description]
      * @return int|null [description]
      */
-    public function getProgressSuccessAttribute() : ?int
+    public function getProgressSuccessAttribute(): ?int
     {
         return ($this->emails->isNotEmpty()) ?
-            (int)round(($this->emails->where('sent', 1)->count()/$this->emails->count())*100, 0)
+            (int)round(($this->emails->where('sent', 1)->count() / $this->emails->count()) * 100, 0)
             : null;
     }
 
@@ -119,10 +121,10 @@ class Mailing extends Model
      * [getProgressFailedAttribute description]
      * @return int|null [description]
      */
-    public function getProgressFailedAttribute() : ?int
+    public function getProgressFailedAttribute(): ?int
     {
         return ($this->emails->isNotEmpty()) ?
-            (int)round(($this->emails->where('sent', 2)->count()/$this->emails->count())*100, 0)
+            (int)round(($this->emails->where('sent', 2)->count() / $this->emails->count()) * 100, 0)
             : null;
     }
 
@@ -130,7 +132,7 @@ class Mailing extends Model
      * [getActivationAtDiffAttribute description]
      * @return string [description]
      */
-    public function getActivationAtDiffAttribute() : string
+    public function getActivationAtDiffAttribute(): string
     {
         return ($this->activation_at != null) ?
             Carbon::parse($this->activation_at)->diffForHumans(['parts' => 2])
@@ -141,7 +143,7 @@ class Mailing extends Model
      * [getContentHtmlAttribute description]
      * @return string [description]
      */
-    public function getContentHtmlAttribute() : string
+    public function getContentHtmlAttribute(): string
     {
          return Purifier::clean($this->attributes['content_html']);
     }
@@ -151,7 +153,7 @@ class Mailing extends Model
      *
      * @return string
      */
-    public function getReplacementContentHtmlAttribute() : string
+    public function getReplacementContentHtmlAttribute(): string
     {
         return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
             ->handle($this->content_html, function ($value) {
@@ -164,7 +166,7 @@ class Mailing extends Model
      *
      * @return string
      */
-    public function getReplacementContentAttribute() : string
+    public function getReplacementContentAttribute(): string
     {
         return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
             ->handle($this->content, function ($value) {
@@ -176,7 +178,7 @@ class Mailing extends Model
      * [getShortContentAttribute description]
      * @return string [description]
      */
-    public function getShortContentAttribute() : string
+    public function getShortContentAttribute(): string
     {
         return mb_substr(strip_tags($this->replacement_content), 0, 300);
     }
@@ -189,7 +191,7 @@ class Mailing extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', static::ACTIVE);
     }
@@ -200,7 +202,7 @@ class Mailing extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeProgress(Builder $query) : Builder
+    public function scopeProgress(Builder $query): Builder
     {
         return $query->where('status', static::INPROGRESS);
     }
@@ -211,7 +213,7 @@ class Mailing extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeScheduled(Builder $query) : Builder
+    public function scopeScheduled(Builder $query): Builder
     {
         return $query->where('status', static::SCHEDULED);
     }
@@ -222,7 +224,7 @@ class Mailing extends Model
      * [setActivationAtAttribute description]
      * @param [type] $value [description]
      */
-    public function setActivationAtAttribute($value) : void
+    public function setActivationAtAttribute($value): void
     {
         if ($value === null) {
             $this->attributes['activation_at'] = null;
@@ -236,7 +238,7 @@ class Mailing extends Model
      * [setContentAttribute description]
      * @param [type] $value [description]
      */
-    public function setContentAttribute($value) : void
+    public function setContentAttribute($value): void
     {
         $this->attributes['content'] = !empty($value) ?
             strip_tags(str_replace('[more]', '', $value))

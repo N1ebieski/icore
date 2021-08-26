@@ -15,7 +15,9 @@ use N1ebieski\ICore\Models\Traits\Positionable;
 
 class Link extends Model
 {
-    use Positionable, Carbonable, Filterable;
+    use Positionable;
+    use Carbonable;
+    use Filterable;
 
     // Configuration
 
@@ -115,7 +117,7 @@ class Link extends Model
      * @param  string|null  $type  [description]
      * @return Builder|null         [description]
      */
-    public function scopeFilterType(Builder $query, string $type = null) : ?Builder
+    public function scopeFilterType(Builder $query, string $type = null): ?Builder
     {
         return $query->when($type !== null, function ($query) use ($type) {
             $query->where('type', $type);
@@ -128,7 +130,7 @@ class Link extends Model
      * [getImgUrlFromStorageAttribute description]
      * @return string|null [description]
      */
-    public function getImgUrlFromStorageAttribute() : ?string
+    public function getImgUrlFromStorageAttribute(): ?string
     {
         return $this->img_url !== null ? url('/') . Storage::url($this->img_url) : null;
     }
@@ -137,7 +139,7 @@ class Link extends Model
      * [getBacklinkAsHtmlAttribute description]
      * @return string [description]
      */
-    public function getLinkAsHtmlAttribute() : string
+    public function getLinkAsHtmlAttribute(): string
     {
         $output = '<a href="' . e($this->url) . '" title="' . e($this->name) . '">';
 
@@ -158,7 +160,7 @@ class Link extends Model
      * [loadAncestorsWithoutSelf description]
      * @return self [description]
      */
-    public function loadAncestorsWithoutSelf() : self
+    public function loadAncestorsWithoutSelf(): self
     {
         return $this->load(['categories' => function ($query) {
             $query->withAncestorsExceptSelf();

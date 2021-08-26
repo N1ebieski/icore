@@ -4,7 +4,6 @@ namespace N1ebieski\ICore\Repositories;
 
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Mailing;
-use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class MailingRepo
@@ -78,7 +77,7 @@ class MailingRepo
     {
         return $this->mailing->progress()
             ->whereDoesntHave('emails', function ($query) {
-                $query->where('sent', MailingEmail::UNSENT);
+                $query->unsent();
             })
             ->update([
                 'status' => Mailing::INACTIVE,

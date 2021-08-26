@@ -72,7 +72,7 @@ class MailingCron
      * @param Carbon $delay
      * @return self
      */
-    protected function setDelay(Carbon $delay) : self
+    protected function setDelay(Carbon $delay): self
     {
         $this->delay = $delay;
 
@@ -82,13 +82,11 @@ class MailingCron
     /**
      * [__invoke description]
      */
-    public function __invoke() : void
+    public function __invoke(): void
     {
         $this->activateScheduled();
 
-        $this->progressActivated();
-
-        $this->mailingEmail->makeRepo()->chunkUnsentHasProgressMailing(
+        $this->mailingEmail->makeRepo()->chunkUnsentHasActiveMailing(
             $this->config->get('icore.mailing.limit'),
             function ($items) {
                 $items->each(function ($item) {
@@ -101,6 +99,8 @@ class MailingCron
             }
         );
 
+        $this->progressActivated();
+
         $this->deactivateCompleted();
     }
 
@@ -109,7 +109,7 @@ class MailingCron
      *
      * @param MailingEmail   $mailingEmail   [description]
      */
-    protected function addToQueue(MailingEmail $mailingEmail) : void
+    protected function addToQueue(MailingEmail $mailingEmail): void
     {
         $this->sendMailingJob->dispatch($mailingEmail)->delay($this->delay);
     }
@@ -119,7 +119,7 @@ class MailingCron
      *
      * @return void
      */
-    protected function activateScheduled() : void
+    protected function activateScheduled(): void
     {
         $this->mailingEmail->mailing()->make()->makeRepo()->activateScheduled();
     }
@@ -129,7 +129,7 @@ class MailingCron
      *
      * @return void
      */
-    protected function progressActivated() : void
+    protected function progressActivated(): void
     {
         $this->mailingEmail->mailing()->make()->makeRepo()->progressActivated();
     }
@@ -139,7 +139,7 @@ class MailingCron
      *
      * @return void
      */
-    protected function deactivateCompleted() : void
+    protected function deactivateCompleted(): void
     {
         $this->mailingEmail->mailing()->make()->makeRepo()->deactivateCompleted();
     }

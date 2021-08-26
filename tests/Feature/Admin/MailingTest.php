@@ -13,6 +13,7 @@ use N1ebieski\ICore\Crons\MailingCron;
 // use App\Jobs\SendMailing;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 
 class MailingTest extends TestCase
 {
@@ -586,6 +587,7 @@ class MailingTest extends TestCase
         $email->mailing()->associate($mailing)->save();
 
         Mail::fake();
+        Config::set('queue.default', 'database');
 
         $this->assertDatabaseHas('mailings_emails', [
             'id' => $email->id,
@@ -596,6 +598,8 @@ class MailingTest extends TestCase
         // (np. odpala się co godzinę)
         $schedule = app()->make(MailingCron::class);
         $schedule();
+
+        Artisan::call('queue:work', ['--daemon' => true, '--tries' => 3, '--once' => true]);
 
         Mail::assertSent(MailingMail::class, function ($mail) use ($email, $mailing) {
             $mail->build();
