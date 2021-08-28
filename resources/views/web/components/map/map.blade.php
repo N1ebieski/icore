@@ -1,5 +1,6 @@
 <div 
-    id="map" 
+    id="map"
+    class="map"
     data-container-class="{{ $containerClass }}"
     data-address-marker="{{ $addressMarker }}" 
     data-zoom="{{ $zoom }}"
