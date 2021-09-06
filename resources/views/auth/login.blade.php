@@ -103,7 +103,7 @@
 
                                     @if (app('router')->has('password.request'))
                                         <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            {{ trans('icore::auth.forgot') }}
+                                            {{ trans('icore::auth.reset') }}
                                         </a>
                                     @endif
                                 </div>
@@ -128,14 +128,14 @@
                             <hr>
                             <div class="form-group row mb-0">
                                 <div class="col-lg-8 offset-lg-4">
-                                    <p>
-                                        <span class="mr-1">
+                                    <div class="d-flex">
+                                        <div class="mr-2 text-nowrap">
                                             {{ trans('icore::auth.login_with') }}:
-                                        </span>
-                                        <span>
+                                        </div>
+                                        <div>
                                             <a 
                                                 href="{{ route('auth.socialite.redirect', ['provider' => 'facebook']) }}" 
-                                                class="mr-2" 
+                                                class="mr-2 text-nowrap" 
                                                 title="Facebook"
                                             >
                                                 <i class="fab fa-facebook"></i>
@@ -143,14 +143,14 @@
                                             </a>
                                             <a 
                                                 href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" 
-                                                class="mr-2" 
+                                                class="mr-2 text-nowrap" 
                                                 title="Twitter"
                                             >
                                                 <i class="fab fa-twitter"></i> 
                                                 <span> Twitter</span>
                                             </a>
-                                        </span>
-                                    </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             @endif
