@@ -14,8 +14,15 @@ class SendRequest extends FormRequest
      */
     protected $captcha;
 
+    /**
+     * Undocumented function
+     *
+     * @param Captcha $captcha
+     */
     public function __construct(Captcha $captcha)
     {
+        parent::__construct();
+
         $this->captcha = $captcha;
     }
 
@@ -29,6 +36,11 @@ class SendRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
     public function attributes()
     {
         return array_merge([], $this->captcha->toAttributes());

@@ -54,7 +54,7 @@ class EditFullViewModel extends ViewModel
      *
      * @return Collection
      */
-    public function parents() : Collection
+    public function parents(): Collection
     {
         return $this->page->makeService()->getAsFlatTreeExceptSelf();
     }
@@ -64,7 +64,7 @@ class EditFullViewModel extends ViewModel
      *
      * @return  User|null  [return description]
      */
-    public function userSelection() : ?User
+    public function userSelection(): ?User
     {
         $userId = $this->request->old('user');
 

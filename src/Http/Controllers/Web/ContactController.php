@@ -11,9 +11,6 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Mail\Contact\Mail as ContactMail;
 use N1ebieski\ICore\Http\Requests\Web\Contact\SendRequest;
 
-/**
- * [ContactController description]
- */
 class ContactController
 {
     /**
@@ -21,7 +18,7 @@ class ContactController
      *
      * @return HttpResponse
      */
-    public function show() : HttpResponse
+    public function show(): HttpResponse
     {
         return Response::view('icore::web.contact.show');
     }
@@ -31,7 +28,7 @@ class ContactController
      * @param  SendRequest $request [description]
      * @return RedirectResponse     [description]
      */
-    public function send(SendRequest $request) : RedirectResponse
+    public function send(SendRequest $request): RedirectResponse
     {
         Mail::send(App::make(ContactMail::class));
 
