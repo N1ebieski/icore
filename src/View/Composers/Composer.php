@@ -13,6 +13,11 @@ use Illuminate\Contracts\Support\Arrayable;
 
 abstract class Composer implements Arrayable
 {
+    /**
+     * Undocumented variable
+     *
+     * @var array
+     */
     protected $ignore = [];
 
     /**
@@ -41,7 +46,7 @@ abstract class Composer implements Arrayable
      *
      * @return Collection
      */
-    protected function items() : Collection
+    protected function items(): Collection
     {
         $class = new ReflectionClass($this);
 
@@ -70,7 +75,7 @@ abstract class Composer implements Arrayable
      * @param string $methodName
      * @return boolean
      */
-    protected function shouldIgnore(string $methodName) : bool
+    protected function shouldIgnore(string $methodName): bool
     {
         if (Str::startsWith($methodName, '__')) {
             return true;
@@ -84,7 +89,7 @@ abstract class Composer implements Arrayable
      *
      * @return array
      */
-    protected function ignoredMethods() : array
+    protected function ignoredMethods(): array
     {
         return array_merge(['compose', 'toArray'], $this->ignore);
     }

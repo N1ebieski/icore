@@ -4,16 +4,13 @@ namespace N1ebieski\ICore\Providers;
 
 use N1ebieski\ICore\Support\ServiceProvider;
 
-/**
- * [ICoreServiceProvider description]
- */
 class ICoreServiceProvider extends ServiceProvider
 {
     /**
      * [public description]
      * @var string
      */
-    public const VERSION = "3.0.11";
+    public const VERSION = "3.1.0";
 
     /**
      * Register services.

@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\View\Composers;
 
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Support\Str;
-use Illuminate\Contracts\Routing\UrlGenerator as Url;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use N1ebieski\ICore\View\Composers\Composer;
+use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\UrlGenerator as Url;
 
 class LayoutComposer extends Composer
 {
@@ -79,16 +79,38 @@ class LayoutComposer extends Composer
      * @param  string $separator [description]
      * @return string            [description]
      */
-    public function makeMeta(array $input, string $separator) : string
+    public function makeMeta(array $input, string $separator): string
     {
         return implode($separator, array_filter($input));
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $input
+     * @param string $separator
+     * @return string
+     */
+    public function getMeta(array $input, string $separator): string
+    {
+        return $this->makeMeta($input, $separator);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->config->get('app.url') . $this->request->getRequestUri();
     }
 
     /**
      * [get_theme description]
      * @return string|null [description]
      */
-    public function getTheme() : ?string
+    public function getTheme(): ?string
     {
         switch ((string)$this->request->cookie('theme_toggle')) {
             case 'dark':
@@ -106,7 +128,7 @@ class LayoutComposer extends Composer
      * @param string $assets
      * @return string [description]
      */
-    public function getStylesheet(string $assets = 'css/vendor/icore') : string
+    public function getStylesheet(string $assets = 'css/vendor/icore'): string
     {
         $path = '/' . $assets . '/web/web';
 
