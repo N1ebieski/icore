@@ -4,7 +4,7 @@
     data-id="{{ $tag->tag_id }}"
 >
     <div class="col my-auto d-flex justify-content-between">
-        @can('admin.categories.delete')
+        @can('admin.tags.delete')
         <div class="custom-control custom-checkbox">
             <input 
                 name="select[]" 
