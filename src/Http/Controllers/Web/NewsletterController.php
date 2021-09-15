@@ -4,28 +4,18 @@ namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Event;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\StoreRequest;
-use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
+use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
 
 class NewsletterController
 {
-    /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    protected function redirectParams() : array
-    {
-        return (array)'web.home.index';
-    }
-
     /**
      * Store a newly created Subscribe for newsletter in storage.
      *
@@ -33,7 +23,7 @@ class NewsletterController
      * @param  StoreRequest $request    [description]
      * @return JsonResponse             [description]
      */
-    public function store(Newsletter $newsletter, StoreRequest $request) : JsonResponse
+    public function store(Newsletter $newsletter, StoreRequest $request): JsonResponse
     {
         $newsletter = $newsletter->firstOrCreate(
             ['email' => $request->input('email')],
@@ -59,17 +49,17 @@ class NewsletterController
      * @param UpdateStatusRequest $request
      * @return RedirectResponse
      */
-    public function updateStatus(Newsletter $newsletter, UpdateStatusRequest $request) : RedirectResponse
+    public function updateStatus(Newsletter $newsletter, UpdateStatusRequest $request): RedirectResponse
     {
         $newsletter->update(['status' => $request->input('status')]);
 
         $newsletter->token()->update(['token' => Str::random(30)]);
 
-        return Response::redirectToRoute(...$this->redirectParams())->with(
+        return Response::redirectToRoute('web.home.index')->with(
             'success',
             $newsletter->status === Newsletter::ACTIVE ?
-                Lang::get('icore::newsletter.success.update_status.'.Newsletter::ACTIVE)
-                : Lang::get('icore::newsletter.success.update_status.'.Newsletter::INACTIVE)
+                Lang::get('icore::newsletter.success.update_status.' . Newsletter::ACTIVE)
+                : Lang::get('icore::newsletter.success.update_status.' . Newsletter::INACTIVE)
         );
     }
 }
