@@ -296,7 +296,7 @@ class InstallCommand extends Command
         $this->call('vendor:publish', ['--tag' => 'fm-views', '--force' => true], $this->getOutput());
         $this->line("\n");
         $this->call('vendor:publish', ['--provider' => 'Laravel\Sanctum\SanctumServiceProvider', '--force' => true], $this->getOutput());
-        $this->line("\n");        
+        $this->line("\n");
         $bar->advance();
         $this->line("\n");
         $this->line($this->lang->get('icore::install.dump'));
