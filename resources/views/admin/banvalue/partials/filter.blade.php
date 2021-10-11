@@ -16,7 +16,7 @@
                 </a>
             </span>
             @endif
-            @if (array_filter($filter))
+            @if (!collect($filter)->except('type')->isNullItems())
             <span>
                 <a 
                     href="{{ route('admin.banvalue.index', ['type' => $type]) }}" 

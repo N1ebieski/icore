@@ -35,7 +35,7 @@
             data-target="#create-modal"
         >
             <i class="far fa-plus-square"></i>
-            <span class="d-none d-sm-inline">{{ trans('icore::bans.value.create') }}</span>
+            <span class="d-none d-sm-inline">{{ trans('icore::default.create') }}</span>
         </a>
     </div>
     @endcan
