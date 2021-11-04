@@ -49,6 +49,6 @@ trait HasCategory
     {
         return Category::withAncestorsExceptSelf()
             ->where('id', $id)
-            ->first(['id', 'name']);
+            ->first();
     }
 }

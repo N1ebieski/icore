@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Filters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as Collect;
 
-/**
- * [abstract description]
- */
 abstract class Filter
 {
     /**
@@ -23,14 +20,15 @@ abstract class Filter
     public $parameters;
 
     /**
-     * [__construct description]
-     * @param Request $request [description]
-     * @param Collect $collect [description]
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param Collect $collect
      */
     public function __construct(Request $request, Collect $collect)
     {
         $this->collect = $collect;
-        
+
         $this->setFilters((array)$request->input('filter'));
     }
 
@@ -39,7 +37,7 @@ abstract class Filter
      * @param  array $attributes [description]
      * @return self              [description]
      */
-    public function setFilters(array $attributes) : self
+    public function setFilters(array $attributes): self
     {
         foreach (class_uses(static::class) as $filter) {
             $filterName = $this->makeFilterName($filter);
@@ -62,7 +60,7 @@ abstract class Filter
      * @param  string $value [description]
      * @return string        [description]
      */
-    protected function makeMethodName(string $value) : string
+    protected function makeMethodName(string $value): string
     {
         return 'filter' . ucfirst($value);
     }
@@ -72,7 +70,7 @@ abstract class Filter
      * @param  string $value [description]
      * @return string        [description]
      */
-    protected function makeFilterName(string $value) : string
+    protected function makeFilterName(string $value): string
     {
         return strtolower(str_replace('Has', '', class_basename($value)));
     }
@@ -81,7 +79,7 @@ abstract class Filter
      * [all description]
      * @return array [description]
      */
-    public function all() : array
+    public function all(): array
     {
         return (array)$this->parameters;
     }
@@ -101,12 +99,14 @@ abstract class Filter
      *
      * @return bool [description]
      */
-    public function isNull() : bool
+    public function isNull(): bool
     {
         if ($this->parameters) {
-            if (!array_filter($this->parameters, function ($value) {
-                return $value === null;
-            })) {
+            if (
+                !array_filter($this->parameters, function ($value) {
+                    return $value === null;
+                })
+            ) {
                 return false;
             }
         }

@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Filters\Traits;
 
 use N1ebieski\ICore\Models\Role;
 
-/**
- * [trait description]
- */
 trait HasRole
 {
     /**
@@ -24,7 +21,7 @@ trait HasRole
      * [filterRole description]
      * @param int|null $id [description]
      */
-    public function filterRole(int $id = null) : void
+    public function filterRole(int $id = null): void
     {
         $this->parameters['role'] = null;
 
@@ -40,8 +37,8 @@ trait HasRole
      * @param  int|null $id [description]
      * @return Role       [description]
      */
-    public function findRole(int $id = null) : Role
+    public function findRole(int $id = null): Role
     {
-        return Role::find($id, ['id', 'name']);
+        return Role::find($id);
     }
 }

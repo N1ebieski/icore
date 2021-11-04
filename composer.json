@@ -23,7 +23,6 @@
         "unikent/tfilecache": "2.0.2+icore",
         "laravel/sanctum": "^2.11",
         "laravel/helpers": "^1.0",
-        "laravel/sanctum": "^2.11",
         "fico7489/laravel-pivot": "^3.0",
         "guidocella/eloquent-insert-on-duplicate-key": "^2.0",
         "spatie/laravel-view-models": "^1.3",

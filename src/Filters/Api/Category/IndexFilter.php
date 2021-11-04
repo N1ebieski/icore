@@ -23,8 +23,10 @@ class IndexFilter extends Filter
     use HasPaginate;
 
     /**
-     * [setParent description]
-     * @param Category $category [description]
+     * Undocumented function
+     *
+     * @param Category $category
+     * @return void
      */
     public function setParent(Category $category)
     {
@@ -34,9 +36,10 @@ class IndexFilter extends Filter
     }
 
     /**
-     * [findParent description]
-     * @param  int|null   $id [description]
-     * @return Category     [description]
+     * Undocumented function
+     *
+     * @param integer $id
+     * @return Category
      */
     public function findParent(int $id = null): Category
     {

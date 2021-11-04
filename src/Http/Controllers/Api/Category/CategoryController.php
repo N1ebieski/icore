@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\Controllers\Api\Category;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Filters\Api\Category\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Api\Category\IndexRequest;
@@ -30,7 +31,13 @@ class CategoryController implements Polymorphic
                 )
             )
             ->additional(['meta' => [
-                'filter' => $filter->all()
+                'filter' => Collect::make($filter->all())
+                    ->replace([
+                        'parent' => $filter->get('parent') instanceof Category ?
+                            App::make(CategoryResource::class, ['category' => $filter->get('parent')])
+                            : $filter->get('parent')
+                    ])
+                    ->toArray()
             ]])
             ->response();
     }
