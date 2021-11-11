@@ -28,11 +28,11 @@ jQuery(document).on('click', 'a.editComment, a.edit-comment', function (e) {
     });
 });
 
-jQuery(document).on('click', 'button.editCommentCancel', function(e) {
+jQuery(document).on('click', 'button.editCommentCancel, button.edit-comment-cancel', function(e) {
     e.preventDefault();
 
     let $comment = $(this).closest('[id^=comment]');
 
     $comment.children('div').show();
-    $comment.find('form#editComment').remove();
+    $comment.find('form#editComment, form#edit-comment').remove();
 });

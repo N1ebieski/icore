@@ -1,5 +1,5 @@
 <form 
-    id="editComment" 
+    id="edit-comment" 
     class="position-relative" 
     data-route="{{ route('web.comment.update', [$comment->id]) }}" 
     method="post"
