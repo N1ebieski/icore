@@ -36,7 +36,7 @@ class ValidComposer extends Composer
      * @param  string  $name [description]
      * @return string|null       [description]
      */
-    public function isValid(string $name) : ?string
+    public function isValid(string $name): ?string
     {
         if ($this->session->has('errors')) {
             if ($this->session->get('errors')->has($name)) {

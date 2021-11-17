@@ -31,7 +31,7 @@ class ViewServiceProvider extends ServiceProvider
 
             $push_name = $domain[0];
             $push_sub = $domain[1];
-            $isDisplayed = '__pushonce_'.$push_name.'_'.$push_sub;
+            $isDisplayed = '__pushonce_' . $push_name . '_' . $push_sub;
 
             return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; \$__env->startPush('{$push_name}'); ?>";
         });

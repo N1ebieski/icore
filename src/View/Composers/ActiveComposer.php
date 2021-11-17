@@ -57,7 +57,7 @@ class ActiveComposer extends Composer
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    public function isCookie($input, string $output = "active") : ?string
+    public function isCookie($input, string $output = "active"): ?string
     {
         foreach ((array)$input as $cookie) {
             if ((bool)$this->request->cookie($cookie) === true) {
@@ -74,7 +74,7 @@ class ActiveComposer extends Composer
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    public function isUrl($input, string $output = "active") : ?string
+    public function isUrl($input, string $output = "active"): ?string
     {
         foreach ((array)$input as $url) {
             if ((string)$url === $this->url->current()) {
@@ -91,7 +91,7 @@ class ActiveComposer extends Composer
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    public function isRouteContains($input, string $output = "active") : ?string
+    public function isRouteContains($input, string $output = "active"): ?string
     {
         foreach ((array)$input as $string) {
             if ($this->str->contains($this->request->route()->getName(), $string)) {
@@ -108,7 +108,7 @@ class ActiveComposer extends Composer
      * @param  string $output [description]
      * @return string|null         [description]
      */
-    public function isUrlContains($input, string $output = "active") : ?string
+    public function isUrlContains($input, string $output = "active"): ?string
     {
         foreach ((array)$input as $string) {
             if ($this->request->is($string)) {
@@ -125,7 +125,7 @@ class ActiveComposer extends Composer
      * @param  string  $output [description]
      * @return string|null         [description]
      */
-    public function isTheme($input, string $output = "active") : ?string
+    public function isTheme($input, string $output = "active"): ?string
     {
         $theme = $this->app->make(LayoutComposer::class)->getTheme();
 
