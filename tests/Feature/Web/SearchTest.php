@@ -4,15 +4,15 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\DB;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 
 class SearchTest extends TestCase
 {
     use DatabaseTransactions;
 
-    // public function test_search_autocomplete_validation_fail()
+    // public function testSearchAutocompleteValidationFail()
     // {
     //     $response = $this->get(route('web.search.autocomplete'), [
     //         'search' => 'fd'
@@ -21,7 +21,7 @@ class SearchTest extends TestCase
     //     $response->assertSessionHasErrors(['search']);
     // }
 
-    // public function test_search_autocomplete()
+    // public function testSearchAutocomplete()
     // {
     //     $tag = Tag::create([
     //         'name' => 'Ędward Ącki'
@@ -41,7 +41,7 @@ class SearchTest extends TestCase
     //     DB::statement('DELETE FROM `tags` WHERE `tag_id` > 0');
     // }
 
-    public function test_search_validation_fail()
+    public function testSearchValidationFail()
     {
         $response = $this->get(route('web.search.index'), [
             'search' => 'fd'
@@ -50,7 +50,7 @@ class SearchTest extends TestCase
         $response->assertSessionHasErrors(['search', 'source']);
     }
 
-    public function test_search()
+    public function testSearch()
     {
         $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create([
             'title' => 'Post należący do testów w phpunit'
@@ -70,5 +70,4 @@ class SearchTest extends TestCase
 
         DB::statement('DELETE FROM `posts` WHERE `id` > 0');
     }
-
 }

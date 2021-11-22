@@ -9,9 +9,6 @@ use N1ebieski\ICore\Models\Rating\Comment\Rating;
 use N1ebieski\ICore\Http\Requests\Web\Rating\Comment\RateRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Rating\Comment\Polymorphic as CommentPolymorphic;
 
-/**
- * [RatingController description]
- */
 class RatingController implements CommentPolymorphic
 {
     /**
@@ -22,7 +19,7 @@ class RatingController implements CommentPolymorphic
      * @param  RateRequest   $request       [description]
      * @return JsonResponse                 [description]
      */
-    public function rate(Rating $rating, Comment $comment, RateRequest $request) : JsonResponse
+    public function rate(Rating $rating, Comment $comment, RateRequest $request): JsonResponse
     {
         $rating->setRelations(['morph' => $comment])
             ->makeService()

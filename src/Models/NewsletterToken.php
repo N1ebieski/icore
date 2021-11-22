@@ -47,7 +47,7 @@ class NewsletterToken extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function newsletter() : HasOne
+    public function newsletter(): HasOne
     {
         return $this->hasOne(Newsletter::class, 'email', 'email');
     }

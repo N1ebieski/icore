@@ -2,17 +2,14 @@
 
 namespace N1ebieski\ICore\View\Components;
 
+use Illuminate\View\View;
 use Illuminate\Contracts\Support\Htmlable;
+use N1ebieski\ICore\Rules\RecaptchaV2Rule;
+use N1ebieski\LogicCaptcha\Rules\LogicCaptchaRule;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\LogicCaptcha\Rules\LogicCaptchaRule;
-use N1ebieski\ICore\Rules\RecaptchaV2Rule;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\View\View;
 
-/**
- * [CaptchaComponent description]
- */
 class CaptchaComponent implements Htmlable
 {
     /**
@@ -89,7 +86,7 @@ class CaptchaComponent implements Htmlable
      *
      * @return array
      */
-    public function toRules() : array
+    public function toRules(): array
     {
         switch ($this->driver) {
             case 'recaptcha_v2':
@@ -121,7 +118,7 @@ class CaptchaComponent implements Htmlable
      *
      * @return array
      */
-    public function toAttributes() : array
+    public function toAttributes(): array
     {
         if ($this->driver === 'recaptcha_v2') {
             return [

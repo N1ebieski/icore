@@ -4,22 +4,22 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanModel\BanModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 
 class BanModelTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_banmodel_user_create_as_guest()
+    public function testBanmodelUserCreateAsGuest()
     {
         $response = $this->get(route('admin.banmodel.user.create', [23]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banmodel_user_create_without_permission()
+    public function testBanmodelUserCreateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -32,7 +32,7 @@ class BanModelTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_banmodel_noexist_user_create()
+    public function testBanmodelNoexistUserCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -43,7 +43,7 @@ class BanModelTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_banmodel_user_create()
+    public function testBanmodelUserCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -58,14 +58,14 @@ class BanModelTest extends TestCase
         $this->assertStringContainsString(route('admin.banmodel.user.store', [$user2->id]), $response->getData()->view);
     }
 
-    public function test_banmodel_user_store_as_guest()
+    public function testBanmodelUserStoreAsGuest()
     {
         $response = $this->post(route('admin.banmodel.user.store', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banmodel_noexist_user_store_store()
+    public function testBanmodelNoexistUserStoreStore()
     {
         $user = factory(User::class)->create();
 
@@ -78,7 +78,7 @@ class BanModelTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banmodel_user_store_without_permission()
+    public function testBanmodelUserStoreWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -93,7 +93,7 @@ class BanModelTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banmodel_user_store_validation_fail()
+    public function testBanmodelUserStoreValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -110,7 +110,7 @@ class BanModelTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banmodel_user_store()
+    public function testBanmodelUserStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -138,14 +138,14 @@ class BanModelTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banmodel_user_index_as_guest()
+    public function testBanmodelUserIndexAsGuest()
     {
         $response = $this->get(route('admin.banmodel.user.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banmodel_user_index_without_permission()
+    public function testBanmodelUserIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -156,7 +156,7 @@ class BanModelTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_banmodel_user_index_paginate()
+    public function testBanmodelUserIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -175,14 +175,14 @@ class BanModelTest extends TestCase
         $response->assertSeeInOrder([$users[30]->name]);
     }
 
-    public function test_banmodel_destroy_as_guest()
+    public function testBanmodelDestroyAsGuest()
     {
         $response = $this->delete(route('admin.banmodel.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banmodel_destroy_without_permission()
+    public function testBanmodelDestroyWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -195,7 +195,7 @@ class BanModelTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_banmodel_destroy()
+    public function testNoexistBanmodelDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -206,7 +206,7 @@ class BanModelTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_banmodel_destroy()
+    public function testBanmodelDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -229,14 +229,14 @@ class BanModelTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banmodel_destroyGlobal_as_guest()
+    public function testBanmodelDestroyGlobalAsGuest()
     {
         $response = $this->delete(route('admin.banmodel.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banmodel_destroyGlobal_without_permission()
+    public function testBanmodelDestroyGlobalWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -247,7 +247,7 @@ class BanModelTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_banmodel_destroyGlobal_validation_fail()
+    public function testBanmodelDestroyGlobalValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -261,7 +261,7 @@ class BanModelTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function test_banmodel_destroyGlobal()
+    public function testBanmodelDestroyGlobal()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -284,5 +284,4 @@ class BanModelTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

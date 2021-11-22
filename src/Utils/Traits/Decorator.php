@@ -16,7 +16,7 @@ trait Decorator
      *
      * @return object
      */
-    public function getDecorated() : object
+    public function getDecorated(): object
     {
         $decorated = $this->decorated;
 
@@ -48,7 +48,7 @@ trait Decorator
     public function __get(string $property)
     {
         $decorated = $this->getDecorated();
-        
+
         return $decorated->$property;
     }
 
@@ -61,13 +61,13 @@ trait Decorator
     public function __set(string $property, $value)
     {
         $decorated = $this->getDecorated();
-        
+
         if (property_exists($decorated, $property)) {
             $decorated->$property = $value;
         } else {
             $this->$property = $value;
         }
-        
+
         return $this;
     }
 }

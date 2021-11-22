@@ -2,13 +2,10 @@
 
 namespace N1ebieski\ICore\View\Components\Map;
 
+use Illuminate\View\View;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\View\View;
 
-/**
- * [MapComponent description]
- */
 class MapComponent implements Htmlable
 {
     /**
@@ -56,7 +53,7 @@ class MapComponent implements Htmlable
      * [toHtml description]
      * @return View [description]
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.map.map', [
             'containerClass' => $this->container_class,

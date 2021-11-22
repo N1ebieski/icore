@@ -2,22 +2,17 @@
 
 namespace N1ebieski\ICore\Models\Rating\Comment;
 
-use N1ebieski\ICore\Models\Rating\Rating as RatingBaseModel;
+use N1ebieski\ICore\Models\Rating\Rating as BaseRating;
 
-/**
- * [Comment description]
- */
-class Rating extends RatingBaseModel
+class Rating extends BaseRating
 {
-    // Configuration
-
     // Accessors
 
     /**
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliAttribute() : string
+    public function getPoliAttribute(): string
     {
         return 'comment';
     }

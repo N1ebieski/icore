@@ -8,5 +8,6 @@ use N1ebieski\ICore\Filters\Traits\HasOrderBy;
 
 class TakeFilter extends Filter
 {
-    use HasExcept, HasOrderBy;
+    use HasExcept;
+    use HasOrderBy;
 }

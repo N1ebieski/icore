@@ -2,11 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Report\Comment;
 
+use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Report\Comment\Report;
 use N1ebieski\ICore\Http\Requests\Web\Report\Comment\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Report\Comment\CreateRequest;
-use Illuminate\Http\JsonResponse;
 
 interface Polymorphic
 {
@@ -17,7 +17,7 @@ interface Polymorphic
      * @param CreateRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function create(Comment $comment, CreateRequest $request) : JsonResponse;
+    public function create(Comment $comment, CreateRequest $request): JsonResponse;
 
     /**
      * Store a newly created Report for Comment in storage.
@@ -27,5 +27,5 @@ interface Polymorphic
      * @param  StoreRequest  $request       [description]
      * @return JsonResponse                 [description]
      */
-    public function store(Comment $comment, Report $report, StoreRequest $request) : JsonResponse;
+    public function store(Comment $comment, Report $report, StoreRequest $request): JsonResponse;
 }

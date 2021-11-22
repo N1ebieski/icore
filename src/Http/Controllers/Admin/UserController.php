@@ -33,7 +33,7 @@ class UserController
      * @param  IndexFilter   $filter        [description]
      * @return HttpResponse                         [description]
      */
-    public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(User $user, Role $role, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.user.index', [
             'users' => $user->makeRepo()->paginateByFilter($filter->all()),
@@ -50,7 +50,7 @@ class UserController
      * @param  UpdateStatusRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function updateStatus(User $user, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(User $user, UpdateStatusRequest $request): JsonResponse
     {
         $user->makeService()->updateStatus($request->validated());
 
@@ -69,7 +69,7 @@ class UserController
      * @param  User         $user [description]
      * @return JsonResponse       [description]
      */
-    public function destroy(User $user) : JsonResponse
+    public function destroy(User $user): JsonResponse
     {
         $user->makeService()->delete();
 
@@ -83,7 +83,7 @@ class UserController
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(User $user, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(User $user, DestroyGlobalRequest $request): RedirectResponse
     {
         $this->authorize('deleteGlobalSelf', [User::class, $request->input('select')]);
 
@@ -102,7 +102,7 @@ class UserController
      * @param  Role         $role [description]
      * @return JsonResponse       [description]
      */
-    public function edit(User $user, Role $role) : JsonResponse
+    public function edit(User $user, Role $role): JsonResponse
     {
         $roles = $role->makeRepo()->getAvailable();
 
@@ -119,7 +119,7 @@ class UserController
      * @param  UpdateRequest $request [description]
      * @return JsonResponse           [description]
      */
-    public function update(User $user, UpdateRequest $request) : JsonResponse
+    public function update(User $user, UpdateRequest $request): JsonResponse
     {
         $user->makeService()->update($request->validated());
 
@@ -137,7 +137,7 @@ class UserController
      * @param  Role         $role [description]
      * @return JsonResponse       [description]
      */
-    public function create(Role $role) : JsonResponse
+    public function create(Role $role): JsonResponse
     {
         $roles = $role->makeRepo()->getAvailable();
 
@@ -156,7 +156,7 @@ class UserController
      * @param  StoreRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function store(User $user, StoreRequest $request) : JsonResponse
+    public function store(User $user, StoreRequest $request): JsonResponse
     {
         $user->makeService()->create($request->validated());
 

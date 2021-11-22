@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Crons;
 
 use N1ebieski\ICore\Models\Post;
 
-/**
- * [PostCron description]
- */
 class PostCron
 {
     /**
@@ -27,7 +24,7 @@ class PostCron
     /**
      * [__invoke description]
      */
-    public function __invoke() : void
+    public function __invoke(): void
     {
         $this->publicateScheduled();
     }
@@ -37,7 +34,7 @@ class PostCron
      *
      * @return int [description]
      */
-    private function publicateScheduled() : int
+    private function publicateScheduled(): int
     {
         return $this->post->makeRepo()->activateScheduled();
     }

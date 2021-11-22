@@ -3,10 +3,10 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Comment\Page;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 
 class CreateRequest extends FormRequest

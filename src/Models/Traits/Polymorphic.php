@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * [trait description]
- */
 trait Polymorphic
 {
     // Scopes
@@ -16,7 +13,7 @@ trait Polymorphic
      * @param  Builder $query      [description]
      * @return Builder|null              [description]
      */
-    public function scopePoliType(Builder $query) : ?Builder
+    public function scopePoliType(Builder $query): ?Builder
     {
         return $query->when($this->model_type !== null, function ($query) {
             $query->where("{$this->getTable()}.model_type", $this->model_type);
@@ -28,7 +25,7 @@ trait Polymorphic
      * @param  Builder $query [description]
      * @return Builder|null        [description]
      */
-    public function scopePoli(Builder $query) : ?Builder
+    public function scopePoli(Builder $query): ?Builder
     {
         return $query->when($this->model_id !== null, function ($query) {
             $query->poliType()->where("{$this->getTable()}.model_id", $this->model_id);
@@ -41,7 +38,7 @@ trait Polymorphic
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliAttribute() : string
+    public function getPoliAttribute(): string
     {
         $type = substr($this->model_type, strrpos($this->model_type, "\\") + 1);
 

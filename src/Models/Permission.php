@@ -3,12 +3,9 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
-use Spatie\Permission\Models\Permission as BasePermission;
 use N1ebieski\ICore\Repositories\PermissionRepo;
+use Spatie\Permission\Models\Permission as BasePermission;
 
-/**
- * [Permission description]
- */
 class Permission extends BasePermission
 {
     // Configuration
@@ -24,7 +21,7 @@ class Permission extends BasePermission
         'updated_at' => 'datetime'
     ];
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

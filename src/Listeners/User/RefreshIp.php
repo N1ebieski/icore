@@ -2,12 +2,9 @@
 
 namespace N1ebieski\ICore\Listeners\User;
 
-use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\Guard as Auth;
 
-/**
- * [LogSuccessfulLogin description]
- */
 class RefreshIp
 {
     /**

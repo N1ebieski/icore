@@ -11,11 +11,9 @@ use N1ebieski\ICore\Services\MailingService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\MailingRepo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
-/**
- * [Mailing description]
- */
 class Mailing extends Model
 {
     use FullTextSearchable;
@@ -96,12 +94,13 @@ class Mailing extends Model
     // Relations
 
     /**
-     * [emails description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return HasMany
      */
-    public function emails()
+    public function emails(): HasMany
     {
-        return $this->hasMany('N1ebieski\ICore\Models\MailingEmail');
+        return $this->hasMany(\N1ebieski\ICore\Models\MailingEmail::class);
     }
 
     // Accessors
@@ -245,7 +244,7 @@ class Mailing extends Model
             : null;
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

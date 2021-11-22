@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-/**
- * [AuthServiceProvider description]
- */
 class AuthServiceProvider extends ServiceProvider
 {
     /**

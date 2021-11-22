@@ -10,12 +10,10 @@ use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * [Report description]
- */
 class Report extends Model
 {
-    use Polymorphic, Carbonable;
+    use Polymorphic;
+    use Carbonable;
 
     // Configuration
 
@@ -50,21 +48,21 @@ class Report extends Model
      * [user description]
      * @return BelongsTo [description]
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('N1ebieski\ICore\Models\User');
+        return $this->belongsTo(\N1ebieski\ICore\Models\User::class);
     }
 
     /**
      * [morph description]
      * @return MorphTo [description]
      */
-    public function morph() : MorphTo
+    public function morph(): MorphTo
     {
         return $this->morphTo('morph', 'model_type', 'model_id');
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeService description]

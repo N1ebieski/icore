@@ -3,26 +3,26 @@
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
+use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Faker\Factory as Faker;
-use Illuminate\Support\Facades\Auth;
 
 class CommentTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_noexist_comment_take()
+    public function testNoexistCommentTake()
     {
         $response = $this->post(route('web.comment.take', [9999]), []);
 
         $response->assertStatus(404);
     }
 
-    public function test_comment_take()
+    public function testCommentTake()
     {
         $post = factory(Post::class)->states(['active', 'with_user', 'commentable'])->create();
 
@@ -31,7 +31,7 @@ class CommentTest extends TestCase
 
         $comment = factory(Comment::class, 15)->states(['active', 'with_user'])
             ->make()
-            ->each(function($item) use ($parent, $post) {
+            ->each(function ($item) use ($parent, $post) {
                 $item->morph()->associate($post);
                 $item->parent_id = $parent->id;
                 $item->save();
@@ -49,14 +49,14 @@ class CommentTest extends TestCase
         $this->assertStringContainsString($comment[9]->content, $response->getData()->view);
     }
 
-    public function test_comment_post_create_as_guest()
+    public function testCommentPostCreateAsGuest()
     {
         $response = $this->get(route('web.comment.post.create', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_noexist_post_create()
+    public function testCommentNoexistPostCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -69,7 +69,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_create_as_banned_user()
+    public function testCommentPostCreateAsBannedUser()
     {
         $user = factory(User::class)->states(['user', 'ban_user'])->create();
 
@@ -85,7 +85,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_create_with_banned_ip()
+    public function testCommentPostCreateWithBannedIp()
     {
         $user = factory(User::class)->states('user')->create([
             'ip' => '127.0.0.1'
@@ -108,7 +108,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_comment_disable_create()
+    public function testCommentPostCommentDisableCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -124,7 +124,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_create()
+    public function testCommentPostCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -140,14 +140,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_store_as_guest()
+    public function testCommentPostStoreAsGuest()
     {
         $response = $this->post(route('web.comment.post.store', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_noexist_post_store()
+    public function testCommentNoexistPostStore()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -160,7 +160,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_root_comment_post_store_with_banned_word()
+    public function testRootCommentPostStoreWithBannedWord()
     {
         $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
@@ -189,7 +189,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_with_disable_comments_store()
+    public function testCommentPostWithDisableCommentsStore()
     {
         $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
@@ -211,7 +211,7 @@ class CommentTest extends TestCase
         $response->assertSeeText('disabled for this post');
     }
 
-    public function test_root_comment_post_store()
+    public function testRootCommentPostStore()
     {
         $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
@@ -242,7 +242,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_noexist_comment_post_store()
+    public function testChildrenNoexistCommentPostStore()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -261,7 +261,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_comment_post_store()
+    public function testChildrenCommentPostStore()
     {
         $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function ($mock) {
             $mock->shouldReceive('validate')->andReturn(true);
@@ -296,14 +296,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_edit_as_guest()
+    public function testCommentEditAsGuest()
     {
         $response = $this->get(route('web.comment.edit', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_noexist_comment_edit()
+    public function testNoexistCommentEdit()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -316,7 +316,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_foreign_comment_edit()
+    public function testForeignCommentEdit()
     {
         $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
             ->create();
@@ -335,7 +335,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_edit()
+    public function testCommentEdit()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -358,14 +358,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update_as_guest()
+    public function testCommentUpdateAsGuest()
     {
         $response = $this->put(route('web.comment.update', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_noexist_comment_update()
+    public function testNoexistCommentUpdate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -378,7 +378,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_foreign_comment_update()
+    public function testForeignCommentUpdate()
     {
         $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
             ->create();
@@ -399,7 +399,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update_validation_fail()
+    public function testCommentUpdateValidationFail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -422,7 +422,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update()
+    public function testCommentUpdate()
     {
         $user = factory(User::class)->states('user')->create();
 

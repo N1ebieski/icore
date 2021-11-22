@@ -27,7 +27,7 @@ class ShowRequest extends FormRequest
             'page' => 'filled|integer',
             'filter' => 'array|no_js_validation',
             'filter.except' => 'bail|filled|array',
-            'filter.except.*' => 'bail|integer',            
+            'filter.except.*' => 'bail|integer',
             'filter.orderby' => [
                 'bail',
                 'nullable',

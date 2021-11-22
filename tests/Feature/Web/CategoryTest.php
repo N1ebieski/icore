@@ -2,25 +2,25 @@
 
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
+use Carbon\Carbon;
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Carbon\Carbon;
 
 class CategoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_noexist_category_show()
+    public function testNoexistCategoryShow()
     {
         $response = $this->get(route('web.category.post.show', ['dajskruiufi']));
 
         $response->assertStatus(404);
     }
 
-    public function test_category_show()
+    public function testCategoryShow()
     {
         $category = factory(Category::class)->states('active')->create();
 
@@ -29,13 +29,13 @@ class CategoryTest extends TestCase
         $response->assertViewIs('icore::web.category.post.show');
     }
 
-    public function test_category_show_paginate()
+    public function testCategoryShowPaginate()
     {
         $category = factory(Category::class)->states('active')->create();
 
         $post = factory(Post::class, 50)->states(['active', 'with_user'])
             ->make()
-            ->each(function($item, $key) use ($category) {
+            ->each(function ($item, $key) use ($category) {
                 $item->published_at = Carbon::now()->addMinutes($key);
                 $item->save();
                 $item->categories()->attach($category);

@@ -20,11 +20,13 @@ class UpdateStatusRequest extends FormRequest
         if ($this->newsletter->token->token !== $this->input('token')) {
             App::abort(HttpResponse::HTTP_FORBIDDEN, 'The token is invalid.');
         }
-                
-        if ((int)$this->input('status') === Newsletter::ACTIVE
-        && Carbon::parse($this->newsletter->token->updated_at)->lessThan(
-            Carbon::now()->subMinutes(60)
-        )) {
+
+        if (
+            (int)$this->input('status') === Newsletter::ACTIVE
+            && Carbon::parse($this->newsletter->token->updated_at)->lessThan(
+                Carbon::now()->subMinutes(60)
+            )
+        ) {
             App::abort(HttpResponse::HTTP_FORBIDDEN, 'The token period has expired.');
         }
 

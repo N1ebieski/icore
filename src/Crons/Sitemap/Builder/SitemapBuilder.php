@@ -3,14 +3,14 @@
 namespace N1ebieski\ICore\Crons\Sitemap\Builder;
 
 use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Spatie\ArrayToXml\ArrayToXml;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Crons\Sitemap\Builder\Builder;
-use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Support\Str;
 
 class SitemapBuilder extends Builder
 {
@@ -98,7 +98,7 @@ class SitemapBuilder extends Builder
      *
      * @return void
      */
-    public function addToSitemap() : void
+    public function addToSitemap(): void
     {
         $this->collection->each(function ($item) {
             $this->sitemap->push([
@@ -114,7 +114,7 @@ class SitemapBuilder extends Builder
      * @param Closure $closure
      * @return void
      */
-    public function chunkCollection(Closure $closure) : bool
+    public function chunkCollection(Closure $closure): bool
     {
         $closure(
             $this->collect->make($this->storage->disk('public')->allFiles($this->path))
@@ -137,7 +137,7 @@ class SitemapBuilder extends Builder
      *
      * @return boolean
      */
-    public function putSitemap() : bool
+    public function putSitemap(): bool
     {
         return $this->storage->disk('public')->put($this->path . '/sitemap.xml', $this->sitemap);
     }

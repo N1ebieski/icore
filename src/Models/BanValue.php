@@ -11,12 +11,11 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
-/**
- * [BanValue description]
- */
 class BanValue extends Model
 {
-    use Filterable, FullTextSearchable, Carbonable;
+    use Filterable;
+    use FullTextSearchable;
+    use Carbonable;
 
     // Configuration
 
@@ -62,14 +61,14 @@ class BanValue extends Model
      * @param  string|null  $type  [description]
      * @return Builder|null         [description]
      */
-    public function scopeFilterType(Builder $query, string $type = null) : ?Builder
+    public function scopeFilterType(Builder $query, string $type = null): ?Builder
     {
         return $query->when($type !== null, function ($query) use ($type) {
             $query->where('type', $type);
         });
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

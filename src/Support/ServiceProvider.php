@@ -4,7 +4,6 @@ namespace N1ebieski\ICore\Support;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as Collect;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 abstract class ServiceProvider extends BaseServiceProvider
@@ -15,16 +14,6 @@ abstract class ServiceProvider extends BaseServiceProvider
      * @var bool
      */
     protected $recursivelyMergeConfigs = true;
-
-    /**
-     * Undocumented function
-     *
-     * @param Application $app
-     */
-    public function __construct(Application $app)
-    {
-        parent::__construct($app);
-    }
 
     /**
      * Override. Merge the given configuration with the existing configuration.

@@ -4,10 +4,10 @@ namespace N1ebieski\ICore\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
+use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Illuminate\Database\DatabaseManager as DB;
 
 class InstallCommand extends Command
 {
@@ -89,7 +89,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function confirmation() : void
+    protected function confirmation(): void
     {
         $this->info($this->lang->get('icore::install.install'));
 
@@ -103,7 +103,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function validateUrl() : void
+    protected function validateUrl(): void
     {
         $this->line($this->lang->get('icore::install.validate.url'));
 
@@ -129,12 +129,12 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function validateConnectionMail() : void
+    protected function validateConnectionMail(): void
     {
         if ($this->config->get('mail.driver') !== 'smtp') {
             return;
         }
-        
+
         $this->line($this->lang->get('icore::install.validate.connection_mail'));
 
         try {
@@ -161,7 +161,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function validateConnectionDatabase() : void
+    protected function validateConnectionDatabase(): void
     {
         $this->line($this->lang->get('icore::install.validate.connection_database'));
 
@@ -180,7 +180,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function validateLicense() : void
+    protected function validateLicense(): void
     {
         $this->line($this->lang->get('icore::install.validate.license'));
 
@@ -312,7 +312,7 @@ class InstallCommand extends Command
         $this->call('migrate:fresh', ['--path' => 'database/migrations/vendor/icore', '--force' => true], $this->getOutput());
         $this->line("\n");
         $this->call('migrate', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());
-        $this->line("\n");        
+        $this->line("\n");
         $bar->advance();
         $this->line("\n");
         $this->line($this->lang->get('icore::install.seed'));

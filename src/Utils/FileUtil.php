@@ -123,7 +123,7 @@ class FileUtil
             $this->file = new UploadedFile($storagePath, basename($storagePath), mime_content_type($storagePath), null, true);
             $this->path = dirname($path);
         }
-        
+
         return $this;
     }
 

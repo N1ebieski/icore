@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation() : void
+    protected function prepareForValidation(): void
     {
         if ($this->has('name')) {
             $this->merge([

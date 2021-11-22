@@ -38,9 +38,9 @@ class StoreRequest extends FormRequest
                 'unique:users'
             ],
             'password' => [
-                'required', 
-                'string', 
-                'min:8', 
+                'required',
+                'string',
+                'min:8',
                 'confirmed'
             ],
             'privacy_agreement' => 'bail|accepted',

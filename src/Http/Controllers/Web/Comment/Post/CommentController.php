@@ -15,9 +15,6 @@ use N1ebieski\ICore\Http\Requests\Web\Comment\Post\CreateRequest;
 use N1ebieski\ICore\Events\Web\Comment\StoreEvent as CommentStoreEvent;
 use N1ebieski\ICore\Http\Controllers\Web\Comment\Post\Polymorphic as PostPolymorphic;
 
-/**
- * [CommentController description]
- */
 class CommentController implements PostPolymorphic
 {
     /**
@@ -27,7 +24,7 @@ class CommentController implements PostPolymorphic
      * @param  CreateRequest $request [description]
      * @return JsonResponse           [description]
      */
-    public function create(Post $post, CreateRequest $request) : JsonResponse
+    public function create(Post $post, CreateRequest $request): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -45,7 +42,7 @@ class CommentController implements PostPolymorphic
      * @param  StoreRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function store(Post $post, Comment $comment, StoreRequest $request) : JsonResponse
+    public function store(Post $post, Comment $comment, StoreRequest $request): JsonResponse
     {
         $comment = $comment->setRelations(['morph' => $post])
             ->makeService()
@@ -55,7 +52,7 @@ class CommentController implements PostPolymorphic
 
         return Response::json([
             'success' => $comment->status === Comment::ACTIVE ?
-                null : Lang::get('icore::comments.success.store.'.Comment::INACTIVE),
+                null : Lang::get('icore::comments.success.store.' . Comment::INACTIVE),
             'view' => $comment->status === Comment::ACTIVE ?
                 View::make('icore::web.comment.partials.comment', [
                     'comment' => $comment

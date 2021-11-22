@@ -1,4 +1,5 @@
 <?php
+
 namespace N1ebieski\ICore\Models\Category;
 
 use Franzose\ClosureTable\Models\ClosureTable;

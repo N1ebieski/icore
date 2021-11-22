@@ -4,18 +4,18 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use N1ebieski\ICore\Models\Newsletter;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Mail;
-use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Faker\Factory as Faker;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NewsletterTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_newsletter_store_validation_fail()
+    public function testNewsletterStoreValidationFail()
     {
         $newsletter = factory(Newsletter::class)->states('active')->create();
 
@@ -31,7 +31,7 @@ class NewsletterTest extends TestCase
         $response2->assertSessionHasErrors(['email']);
     }
 
-    public function test_newsletter_store()
+    public function testNewsletterStore()
     {
         $response = $this->post(route('web.newsletter.store'), [
             'email' => Faker::create()->unique()->safeEmail,
@@ -43,7 +43,7 @@ class NewsletterTest extends TestCase
         ]);
     }
 
-    public function test_newsletter_store_exist_status_0()
+    public function testNewsletterStoreExistStatus0()
     {
         Mail::fake();
 
@@ -73,7 +73,7 @@ class NewsletterTest extends TestCase
         });
     }
 
-    public function test_newsletter_updateStatus_with_invalid_token()
+    public function testNewsletterUpdateStatusWithInvalidToken()
     {
         $newsletter = factory(Newsletter::class)->states('inactive')->create();
         $newsletter->token()->create(['token' => Str::random(30)]);
@@ -88,7 +88,7 @@ class NewsletterTest extends TestCase
         $response->assertSeeText('token is invalid');
     }
 
-    public function test_newsletter_updateStatus_with_expired_token()
+    public function testNewsletterUpdateStatusWithExpiredToken()
     {
         $newsletter = factory(Newsletter::class)->states('inactive')->create();
         $newsletter->token()->create([
@@ -106,7 +106,7 @@ class NewsletterTest extends TestCase
         $response->assertSeeText('token period has expired');
     }
 
-    public function test_newsletter_updateStatus1()
+    public function testNewsletterUpdateStatus1()
     {
         $newsletter = factory(Newsletter::class)->states('inactive')->create();
         $newsletter->token()->create(['token' => Str::random(30)]);
@@ -126,7 +126,7 @@ class NewsletterTest extends TestCase
         ]);
     }
 
-    public function test_newsletter_updateStatus0()
+    public function testNewsletterUpdateStatus0()
     {
         $newsletter = factory(Newsletter::class)->states('active')->create();
         $newsletter->token()->create(['token' => Str::random(30)]);
@@ -138,12 +138,11 @@ class NewsletterTest extends TestCase
         ]));
 
         $response->assertRedirect(route('web.home.index'));
-        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status.'.Newsletter::INACTIVE)]);
+        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status.' . Newsletter::INACTIVE)]);
 
         $this->assertDatabaseHas('newsletters', [
             'id' => $newsletter->id,
             'status' => 0
         ]);
     }
-
 }

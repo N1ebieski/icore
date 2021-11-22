@@ -7,9 +7,6 @@ use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Tag\ShowRequest;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
@@ -20,5 +17,5 @@ interface Polymorphic
      * @param  ShowRequest $request
      * @return HttpResponse       [description]
      */
-    public function show(Tag $tag, Post $post, ShowRequest $request) : HttpResponse;
+    public function show(Tag $tag, Post $post, ShowRequest $request): HttpResponse;
 }

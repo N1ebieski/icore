@@ -2,12 +2,10 @@
 
 namespace N1ebieski\ICore\Models\Category\Post;
 
-use N1ebieski\ICore\Models\Category\Category as CategoryBaseModel;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Models\Category\Category as BaseCategory;
 
-/**
- * [Category description]
- */
-class Category extends CategoryBaseModel
+class Category extends BaseCategory
 {
     /**
      * The model's default values for attributes.
@@ -15,7 +13,7 @@ class Category extends CategoryBaseModel
      * @var array
      */
     protected $attributes = [
-        'model_type' => 'N1ebieski\\ICore\\Models\\Post',
+        'model_type' => \N1ebieski\ICore\Models\Post::class,
         'status' => self::ACTIVE,
     ];
 
@@ -26,18 +24,19 @@ class Category extends CategoryBaseModel
      */
     public function getMorphClass()
     {
-        return 'N1ebieski\\ICore\\Models\\Category\\Category';
+        return \N1ebieski\ICore\Models\Category\Category::class;
     }
 
     // Relations
 
     /**
-     * [morphs description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphToMany
      */
-    public function morphs()
+    public function morphs(): MorphToMany
     {
-        return $this->morphedByMany('N1ebieski\ICore\Models\Post', 'model', 'categories_models', 'category_id');
+        return $this->morphedByMany(\N1ebieski\ICore\Models\Post::class, 'model', 'categories_models', 'category_id');
     }
 
     // Accessors
@@ -46,7 +45,7 @@ class Category extends CategoryBaseModel
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliAttribute() : string
+    public function getPoliAttribute(): string
     {
         return 'post';
     }

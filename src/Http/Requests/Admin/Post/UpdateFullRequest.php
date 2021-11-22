@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Category\Post\Category;
 
 class UpdateFullRequest extends FormRequest

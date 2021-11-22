@@ -28,7 +28,7 @@ class Director
      *
      * @return void
      */
-    public function build() : void
+    public function build(): void
     {
         $this->builder->chunkCollection(function ($collection) {
             $this->builder->setCollection($collection);
@@ -37,7 +37,7 @@ class Director
 
             if ($this->builder->isMaxItems()) {
                 $this->builder->prepareSitemap();
-    
+
                 $this->builder->putSitemap();
 
                 $this->builder->nullSitemap();

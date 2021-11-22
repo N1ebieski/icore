@@ -14,9 +14,6 @@ use N1ebieski\ICore\Http\Requests\Web\Page\ShowRequest;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use N1ebieski\ICore\Events\Web\Page\ShowEvent as PageShowEvent;
 
-/**
- * [PageController description]
- */
 class PageController
 {
     /**
@@ -32,7 +29,7 @@ class PageController
         Comment $comment,
         ShowFilter $filter,
         ShowRequest $request
-    ) : BaseResponse {
+    ): BaseResponse {
         Event::dispatch(App::make(PageShowEvent::class, ['page' => $page]));
 
         if ($page->isRedirect()) {

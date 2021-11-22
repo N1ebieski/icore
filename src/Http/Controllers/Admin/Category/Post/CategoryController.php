@@ -40,7 +40,7 @@ class CategoryController implements Polymorphic
      * @param  IndexFilter   $filter        [description]
      * @return HttpResponse                 [description]
      */
-    public function index(Category $category, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Category $category, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return $this->decorated->index($category, $request, $filter);
     }
@@ -52,7 +52,7 @@ class CategoryController implements Polymorphic
      * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function create(Category $category, CreateRequest $request) : JsonResponse
+    public function create(Category $category, CreateRequest $request): JsonResponse
     {
         return $this->decorated->create($category, $request);
     }
@@ -64,7 +64,7 @@ class CategoryController implements Polymorphic
      * @param  StoreRequest  $request
      * @return JsonResponse
      */
-    public function store(Category $category, StoreRequest $request) : JsonResponse
+    public function store(Category $category, StoreRequest $request): JsonResponse
     {
         return $this->decorated->store($category, $request);
     }
@@ -76,7 +76,7 @@ class CategoryController implements Polymorphic
      * @param  StoreGlobalRequest  $request
      * @return JsonResponse
      */
-    public function storeGlobal(Category $category, StoreGlobalRequest $request) : JsonResponse
+    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse
     {
         return $this->decorated->storeGlobal($category, $request);
     }

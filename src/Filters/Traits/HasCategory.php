@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Filters\Traits;
 
 use N1ebieski\ICore\Models\Category\Category;
 
-/**
- * [trait description]
- */
 trait HasCategory
 {
     /**

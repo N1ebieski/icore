@@ -2,14 +2,11 @@
 
 namespace N1ebieski\ICore\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-/**
- * [MacroServiceProvider description]
- */
 class MacroServiceProvider extends ServiceProvider
 {
     /**
@@ -59,17 +56,17 @@ class MacroServiceProvider extends ServiceProvider
                 $collection->each(function ($item) use (&$closure, &$result, $relation) {
                     $value = clone $item;
                     unset($value->{$relation});
-        
+
                     $result->push($value);
-        
+
                     if ($item->relationLoaded($relation)) {
                         $closure($item->{$relation});
                     }
                 });
             };
-    
+
             $closure($this);
-    
+
             return $result->filter();
         });
 

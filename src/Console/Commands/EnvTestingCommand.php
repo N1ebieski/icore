@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
 
-/**
- * [EnvTestingCommand description]
- */
 class EnvTestingCommand extends Command
 {
     /**
@@ -74,7 +71,7 @@ class EnvTestingCommand extends Command
         $this->call('migrate:fresh', ['--path' => 'database/migrations/vendor/icore'], $this->getOutput());
         $this->info("\r");
         $this->call('migrate', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());
-        $this->line("\n");        
+        $this->line("\n");
         $bar->advance();
         $this->info("\n");
         $this->call('db:seed', ['--class' => 'N1ebieski\ICore\Seeds\Install\InstallSeeder'], $this->getOutput());

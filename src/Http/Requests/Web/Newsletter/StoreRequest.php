@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Newsletter;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\Newsletter;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {

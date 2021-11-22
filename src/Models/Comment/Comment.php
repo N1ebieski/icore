@@ -13,12 +13,20 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
 class Comment extends Entity implements CommentInterface
 {
-    use FullTextSearchable, Filterable, Polymorphic, Carbonable;
+    use FullTextSearchable;
+    use Filterable;
+    use Polymorphic;
+    use Carbonable;
 
     // Configuration
 
@@ -112,13 +120,14 @@ class Comment extends Entity implements CommentInterface
     // Relations
 
     /**
-     * [ancestors description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return BelongsToMany
      */
-    public function ancestors()
+    public function ancestors(): BelongsToMany
     {
         return $this->belongsToMany(
-            'N1ebieski\ICore\Models\Comment\Comment',
+            \N1ebieski\ICore\Models\Comment\Comment::class,
             'comments_closure',
             'descendant',
             'ancestor'
@@ -126,13 +135,14 @@ class Comment extends Entity implements CommentInterface
     }
 
     /**
-     * [descendants description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return BelongsToMany
      */
-    public function descendants()
+    public function descendants(): BelongsToMany
     {
         return $this->belongsToMany(
-            'N1ebieski\ICore\Models\Comment\Comment',
+            \N1ebieski\ICore\Models\Comment\Comment::class,
             'comments_closure',
             'ancestor',
             'descendant'
@@ -140,12 +150,13 @@ class Comment extends Entity implements CommentInterface
     }
 
     /**
-     * [childrens description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return HasMany
      */
-    public function childrens()
+    public function childrens(): HasMany
     {
-        return $this->hasMany('N1ebieski\ICore\Models\Comment\Comment', 'parent_id');
+        return $this->hasMany(\N1ebieski\ICore\Models\Comment\Comment::class, 'parent_id');
     }
 
     // public function childrensRecursive()
@@ -154,37 +165,41 @@ class Comment extends Entity implements CommentInterface
     // }
 
     /**
-     * [ratings description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphMany
      */
-    public function ratings()
+    public function ratings(): MorphMany
     {
-        return $this->morphMany('N1ebieski\ICore\Models\Rating\Comment\Rating', 'model');
+        return $this->morphMany(\N1ebieski\ICore\Models\Rating\Comment\Rating::class, 'model');
     }
 
     /**
-     * [reports description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphMany
      */
-    public function reports()
+    public function reports(): MorphMany
     {
-        return $this->morphMany('N1ebieski\ICore\Models\Report\Comment\Report', 'model');
+        return $this->morphMany(\N1ebieski\ICore\Models\Report\Comment\Report::class, 'model');
     }
 
     /**
-     * [user description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('N1ebieski\ICore\Models\User');
+        return $this->belongsTo(\N1ebieski\ICore\Models\User::class);
     }
 
     /**
-     * [morph description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphTo
      */
-    public function morph()
+    public function morph(): MorphTo
     {
         return $this->morphTo('morph', 'model_type', 'model_id');
     }
@@ -195,16 +210,16 @@ class Comment extends Entity implements CommentInterface
      * [getTypeAttribute description]
      * @return string [description]
      */
-    public function getTypeAttribute() : string
+    public function getTypeAttribute(): string
     {
-         return 'N1ebieski\ICore\\Models\\Comment\\Comment';
+         return \N1ebieski\ICore\Models\Comment\Comment::class;
     }
 
     /**
      * [getContentHtmlAttribute description]
      * @return string [description]
      */
-    public function getContentHtmlAttribute() : string
+    public function getContentHtmlAttribute(): string
     {
          return strip_tags($this->attributes['content_html']);
     }
@@ -214,7 +229,7 @@ class Comment extends Entity implements CommentInterface
      *
      * @return string
      */
-    public function getContentAsHtmlAttribute() : string
+    public function getContentAsHtmlAttribute(): string
     {
         return nl2br(e($this->content_html, false));
     }
@@ -223,7 +238,7 @@ class Comment extends Entity implements CommentInterface
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliSelfAttribute() : string
+    public function getPoliSelfAttribute(): string
     {
         return 'comment';
     }
@@ -234,7 +249,7 @@ class Comment extends Entity implements CommentInterface
      * [setContentAttribute description]
      * @param void $value [description]
      */
-    public function setContentAttribute($value) : void
+    public function setContentAttribute($value): void
     {
         $this->attributes['content'] = strip_tags(preg_replace('/\s+/', ' ', str_replace(['\n', '\r'], '', $value)));
     }
@@ -245,7 +260,7 @@ class Comment extends Entity implements CommentInterface
      * [isActive description]
      * @return bool [description]
      */
-    public function isActive() : bool
+    public function isActive(): bool
     {
         return $this->status === static::ACTIVE;
     }
@@ -254,7 +269,7 @@ class Comment extends Entity implements CommentInterface
      * [isCommentable description]
      * @return bool [description]
      */
-    public function isCommentable() : bool
+    public function isCommentable(): bool
     {
         return $this->isActive()
             && $this->getRelation('morph') !== null
@@ -270,7 +285,7 @@ class Comment extends Entity implements CommentInterface
      * @param  string|null  $orderby [description]
      * @return Builder          [description]
      */
-    public function scopeFilterCommentsOrderBy(Builder $query, string $orderby = null) : Builder
+    public function scopeFilterCommentsOrderBy(Builder $query, string $orderby = null): Builder
     {
         $order = explode('|', $orderby);
 
@@ -312,7 +327,7 @@ class Comment extends Entity implements CommentInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeWithSumRating(Builder $query) : Builder
+    public function scopeWithSumRating(Builder $query): Builder
     {
         return $query->withCount([
             'ratings AS sum_rating' => function ($query) {
@@ -327,7 +342,7 @@ class Comment extends Entity implements CommentInterface
      * @param  string|null  $orderby [description]
      * @return Builder          [description]
      */
-    public function scopeWithAllRels(Builder $query, string $orderby = null) : Builder
+    public function scopeWithAllRels(Builder $query, string $orderby = null): Builder
     {
         return $query->withSumRating()
             ->with([
@@ -363,7 +378,7 @@ class Comment extends Entity implements CommentInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeUncensored(Builder $query) : Builder
+    public function scopeUncensored(Builder $query): Builder
     {
         return $query->where('censored', static::UNCENSORED);
     }
@@ -373,7 +388,7 @@ class Comment extends Entity implements CommentInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', static::ACTIVE);
     }
@@ -383,7 +398,7 @@ class Comment extends Entity implements CommentInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeRoot(Builder $query) : Builder
+    public function scopeRoot(Builder $query): Builder
     {
         return $query->whereNull('parent_id');
     }
@@ -393,7 +408,7 @@ class Comment extends Entity implements CommentInterface
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeInactive(Builder $query) : Builder
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('status', static::INACTIVE);
     }
@@ -404,7 +419,7 @@ class Comment extends Entity implements CommentInterface
      * [loadAllRels description]
      * @return self [description]
      */
-    public function loadAllRels() : self
+    public function loadAllRels(): self
     {
         return $this->loadCount('reports')->load('morph');
     }
@@ -413,7 +428,7 @@ class Comment extends Entity implements CommentInterface
      * [loadAncestorsAndChildrens description]
      * @return self [description]
      */
-    public function loadAncestorsAndChildrens() : self
+    public function loadAncestorsAndChildrens(): self
     {
         return $this->load([
             'ancestors' => function ($q) {
@@ -470,7 +485,7 @@ class Comment extends Entity implements CommentInterface
         return !is_null($entity) ? (int)$entity->position : null;
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

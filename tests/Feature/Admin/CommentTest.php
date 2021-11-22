@@ -3,24 +3,24 @@
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 
 class CommentTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_comment_post_index_as_guest()
+    public function testCommentPostIndexAsGuest()
     {
         $response = $this->get(route('admin.comment.post.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_post_index_without_permission()
+    public function testCommentPostIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -31,7 +31,7 @@ class CommentTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_comment_post_index_paginate()
+    public function testCommentPostIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -39,7 +39,7 @@ class CommentTest extends TestCase
 
         $comment = factory(Comment::class, 50)->states(['active', 'with_user'])
             ->make()
-            ->each(function($comment) use ($post) {
+            ->each(function ($comment) use ($post) {
                 $comment->morph()->associate($post)->save();
             });
 
@@ -55,14 +55,14 @@ class CommentTest extends TestCase
         $response->assertSeeInOrder([$comment[30]->title, $comment[30]->shortContent]);
     }
 
-    public function test_comment_show_as_guest()
+    public function testCommentShowAsGuest()
     {
         $response = $this->get(route('admin.comment.show', [32]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_show_without_permission()
+    public function testCommentShowWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -79,7 +79,7 @@ class CommentTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_comment_show()
+    public function testNoexistCommentShow()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -90,7 +90,7 @@ class CommentTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_comment_show()
+    public function testCommentShow()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -114,17 +114,16 @@ class CommentTest extends TestCase
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString($parent->content, $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
-
     }
 
-    public function test_comment_post_create_as_guest()
+    public function testCommentPostCreateAsGuest()
     {
         $response = $this->get(route('admin.comment.post.create', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_noexist_post_create()
+    public function testCommentNoexistPostCreate()
     {
         $user = factory(User::class)->create();
 
@@ -137,7 +136,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_create_without_permission()
+    public function testCommentPostCreateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -153,7 +152,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_comment_post_create()
+    public function testChildrenCommentPostCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -173,14 +172,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_store_as_guest()
+    public function testCommentPostStoreAsGuest()
     {
         $response = $this->post(route('admin.comment.post.store', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_noexist_post_store()
+    public function testCommentNoexistPostStore()
     {
         $user = factory(User::class)->create();
 
@@ -193,7 +192,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_post_store_without_permission()
+    public function testCommentPostStoreWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -209,7 +208,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_noexist_comment_post_store()
+    public function testChildrenNoexistCommentPostStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -228,7 +227,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_comment_post_store()
+    public function testChildrenCommentPostStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -258,14 +257,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_edit_as_guest()
+    public function testCommentEditAsGuest()
     {
         $response = $this->get(route('admin.comment.edit', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_noexist_comment_edit()
+    public function testNoexistCommentEdit()
     {
         $user = factory(User::class)->create();
 
@@ -278,7 +277,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_edit_without_permission()
+    public function testCommentEditWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -297,7 +296,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_edit()
+    public function testCommentEdit()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -318,14 +317,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update_as_guest()
+    public function testCommentUpdateAsGuest()
     {
         $response = $this->put(route('admin.comment.update', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_noexist_comment_update()
+    public function testNoexistCommentUpdate()
     {
         $user = factory(User::class)->create();
 
@@ -338,7 +337,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update_without_permission()
+    public function testCommentUpdateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -357,7 +356,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update_validation_fail()
+    public function testCommentUpdateValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -378,7 +377,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update()
+    public function testCommentUpdate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -405,14 +404,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_updateStatus_as_guest()
+    public function testCommentUpdateStatusAsGuest()
     {
         $response = $this->patch(route('admin.comment.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_updateStatus_without_permission()
+    public function testCommentUpdateStatusWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -429,7 +428,7 @@ class CommentTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_comment_updateStatus()
+    public function testNoexistCommentUpdateStatus()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -440,7 +439,7 @@ class CommentTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_comment_updateStatus_validation_fail()
+    public function testCommentUpdateStatusValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -461,7 +460,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_updateStatus()
+    public function testCommentUpdateStatus()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -487,14 +486,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_updateCensored_as_guest()
+    public function testCommentUpdateCensoredAsGuest()
     {
         $response = $this->patch(route('admin.comment.update_censored', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_updateCensored_without_permission()
+    public function testCommentUpdateCensoredWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -511,7 +510,7 @@ class CommentTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_comment_updateCensored()
+    public function testNoexistCommentUpdateCensored()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -522,7 +521,7 @@ class CommentTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_comment_updateCensored_validation_fail()
+    public function testCommentUpdateCensoredValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -543,7 +542,7 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_updateCensored()
+    public function testCommentUpdateCensored()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -569,14 +568,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_destroy_as_guest()
+    public function testCommentDestroyAsGuest()
     {
         $response = $this->delete(route('admin.comment.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_destroy_without_permission()
+    public function testCommentDestroyWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -593,7 +592,7 @@ class CommentTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_comment_destroy()
+    public function testNoexistCommentDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -604,7 +603,7 @@ class CommentTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_comment_destroy()
+    public function testCommentDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -631,14 +630,14 @@ class CommentTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_destroyGlobal_as_guest()
+    public function testCommentDestroyGlobalAsGuest()
     {
         $response = $this->delete(route('admin.comment.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_comment_destroyGlobal_without_permission()
+    public function testCommentDestroyGlobalWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -649,7 +648,7 @@ class CommentTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_comment_destroyGlobal_validation_fail()
+    public function testCommentDestroyGlobalValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -663,7 +662,7 @@ class CommentTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function test_comment_destroyGlobal()
+    public function testCommentDestroyGlobal()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -672,7 +671,7 @@ class CommentTest extends TestCase
 
         $comment = factory(Comment::class, 10)->states(['active', 'with_user'])
             ->make()
-            ->each(function($comment) use ($post) {
+            ->each(function ($comment) use ($post) {
                 $comment->morph()->associate($post)->save();
             });
 
@@ -695,5 +694,4 @@ class CommentTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

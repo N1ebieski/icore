@@ -2,13 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Category\Post;
 
-use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest as BaseStoreGlobalRequest;
-use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest as BaseStoreGlobalRequest;
 
-/**
- * [StoreGlobalRequest description]
- */
 class StoreGlobalRequest extends BaseStoreGlobalRequest
 {
     /**

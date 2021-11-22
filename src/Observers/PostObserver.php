@@ -2,11 +2,17 @@
 
 namespace N1ebieski\ICore\Observers;
 
-use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\Cache;
 
 class PostObserver
 {
+    /**
+     * [private description]
+     * @var bool
+     */
+    private static $pivotEvent = false;
+
     /**
      * Handle the post "created" event.
      *
@@ -26,7 +32,42 @@ class PostObserver
      */
     public function updated(Post $post)
     {
-        Cache::tags(['post.'.$post->slug, 'posts'])->flush();
+        Cache::tags(['post.' . $post->slug, 'posts'])->flush();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Post $post
+     * @param [type] $relationName
+     * @param [type] $pivotIds
+     * @param [type] $pivotIdsAttributes
+     * @return void
+     */
+    public function pivotAttached(Post $post, $relationName, $pivotIds, $pivotIdsAttributes)
+    {
+        if (static::$pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
+            $this->updated($post);
+
+            static::$pivotEvent = true;
+        }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Post $post
+     * @param [type] $relationName
+     * @param [type] $pivotIds
+     * @return void
+     */
+    public function pivotDetached(Post $post, $relationName, $pivotIds)
+    {
+        if (static::$pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
+            $this->updated($post);
+
+            static::$pivotEvent = true;
+        }
     }
 
     /**
@@ -37,7 +78,7 @@ class PostObserver
      */
     public function deleted(Post $post)
     {
-        Cache::tags(['post.'.$post->slug, 'posts'])->flush();
+        Cache::tags(['post.' . $post->slug, 'posts'])->flush();
     }
 
     /**

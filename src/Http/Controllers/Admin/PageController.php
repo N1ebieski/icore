@@ -22,9 +22,6 @@ use N1ebieski\ICore\Http\Requests\Admin\Page\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdatePositionRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Page\EditFullViewModel;
 
-/**
- * [PageController description]
- */
 class PageController
 {
     /**

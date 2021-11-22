@@ -5,11 +5,14 @@ namespace N1ebieski\ICore\Observers;
 use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Page\Page;
 
-/**
- * [PageObserver description]
- */
 class PageObserver
 {
+    /**
+     * [private description]
+     * @var bool
+     */
+    private static $pivotEvent = false;
+
     /**
      * Handle the page "created" event.
      *
@@ -29,7 +32,42 @@ class PageObserver
      */
     public function updated(Page $page)
     {
-        Cache::tags(['page.'.$page->slug, 'pages'])->flush();
+        Cache::tags(['page.' . $page->slug, 'pages'])->flush();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Page $page
+     * @param [type] $relationName
+     * @param [type] $pivotIds
+     * @param [type] $pivotIdsAttributes
+     * @return void
+     */
+    public function pivotAttached(Page $page, $relationName, $pivotIds, $pivotIdsAttributes)
+    {
+        if (static::$pivotEvent === false && in_array($relationName, ['tags'])) {
+            $this->updated($page);
+
+            static::$pivotEvent = true;
+        }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Page $page
+     * @param [type] $relationName
+     * @param [type] $pivotIds
+     * @return void
+     */
+    public function pivotDetached(Page $page, $relationName, $pivotIds)
+    {
+        if (static::$pivotEvent === false && in_array($relationName, ['tags'])) {
+            $this->updated($page);
+
+            static::$pivotEvent = true;
+        }
     }
 
     /**
@@ -40,7 +78,7 @@ class PageObserver
      */
     public function deleted(Page $page)
     {
-        Cache::tags(['page.'.$page->slug, 'pages'])->flush();
+        Cache::tags(['page.' . $page->slug, 'pages'])->flush();
     }
 
     /**

@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Listeners\Comment;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use N1ebieski\ICore\Models\Comment\Comment;
 
-/**
- * [Activate description]
- */
 class Activate
 {
     /**

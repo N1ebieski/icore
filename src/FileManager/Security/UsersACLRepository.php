@@ -54,7 +54,7 @@ class UsersACLRepository implements ACLRepository
      *
      * @return array
      */
-    public function getRules() : array
+    public function getRules(): array
     {
         return [
             [
@@ -94,10 +94,12 @@ class UsersACLRepository implements ACLRepository
      *
      * @return integer
      */
-    protected function hasPermission() : int
+    protected function hasPermission(): int
     {
-        if ($this->auth->user()->can('admin.filemanager.read')
-        && $this->auth->user()->can('admin.filemanager.write')) {
+        if (
+            $this->auth->user()->can('admin.filemanager.read')
+            && $this->auth->user()->can('admin.filemanager.write')
+        ) {
             return self::ACCESS_READ_WRITE;
         }
 

@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Comment;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Comment\Comment;
 
 class UpdateRequest extends FormRequest
@@ -42,7 +42,7 @@ class UpdateRequest extends FormRequest
                 'required',
                 'min:3',
                 'max:10000',
-                !empty($this->bans) ? 'not_regex:/(.*)(\s|^)('.$this->bans.')(\s|\.|,|\?|$)(.*)/i' : null
+                !empty($this->bans) ? 'not_regex:/(.*)(\s|^)(' . $this->bans . ')(\s|\.|,|\?|$)(.*)/i' : null
             ],
         ];
     }

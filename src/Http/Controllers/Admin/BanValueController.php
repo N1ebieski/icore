@@ -18,9 +18,6 @@ use N1ebieski\ICore\Http\Requests\Admin\BanValue\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanValue\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanValue\DestroyGlobalRequest;
 
-/**
- * [BanValueController description]
- */
 class BanValueController
 {
     /**
@@ -32,7 +29,7 @@ class BanValueController
      * @param  IndexFilter  $filter   [description]
      * @return HttpResponse           [description]
      */
-    public function index(string $type, BanValue $banValue, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(string $type, BanValue $banValue, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.banvalue.index', [
             'type' => $type,
@@ -48,7 +45,7 @@ class BanValueController
      * @param  BanValue     $banValue [description]
      * @return JsonResponse           [description]
      */
-    public function edit(BanValue $banValue) : JsonResponse
+    public function edit(BanValue $banValue): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -65,7 +62,7 @@ class BanValueController
      * @param  UpdateRequest $request  [description]
      * @return JsonResponse            [description]
      */
-    public function update(BanValue $banValue, UpdateRequest $request) : JsonResponse
+    public function update(BanValue $banValue, UpdateRequest $request): JsonResponse
     {
         $banValue->update($request->only(['value']));
 
@@ -84,7 +81,7 @@ class BanValueController
      * @param CreateRequest $request
      * @return JsonResponse       [description]
      */
-    public function create(string $type, CreateRequest $request) : JsonResponse
+    public function create(string $type, CreateRequest $request): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -102,7 +99,7 @@ class BanValueController
      * @param  StoreRequest $request  [description]
      * @return JsonResponse           [description]
      */
-    public function store(string $type, BanValue $banValue, StoreRequest $request) : JsonResponse
+    public function store(string $type, BanValue $banValue, StoreRequest $request): JsonResponse
     {
         $banValue->create([
             'type' => $type,
@@ -120,7 +117,7 @@ class BanValueController
      * @param  BanValue         $banValue [description]
      * @return JsonResponse       [description]
      */
-    public function destroy(BanValue $banValue) : JsonResponse
+    public function destroy(BanValue $banValue): JsonResponse
     {
         $banValue->delete();
 
@@ -134,7 +131,7 @@ class BanValueController
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(BanValue $banValue, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(BanValue $banValue, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $banValue->whereIn('id', $request->get('select'))->delete();
 

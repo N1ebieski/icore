@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\View\Components\Archive\Post;
 
-use Illuminate\Contracts\Support\Htmlable;
-use N1ebieski\ICore\Models\Post;
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
+use N1ebieski\ICore\Models\Post;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 
 class ArchiveComponent implements Htmlable
 {
@@ -36,7 +36,7 @@ class ArchiveComponent implements Htmlable
         $this->view = $view;
     }
 
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.archive.post.archive', [
             'archives' => $this->post->makeCache()->rememberArchives()

@@ -12,9 +12,6 @@ use N1ebieski\ICore\Http\Requests\Web\Report\Comment\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Report\Comment\CreateRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Report\Comment\Polymorphic as CommentPolymorphic;
 
-/**
- * [ReportController description]
- */
 class ReportController implements CommentPolymorphic
 {
     /**
@@ -24,7 +21,7 @@ class ReportController implements CommentPolymorphic
      * @param CreateRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function create(Comment $comment, CreateRequest $request) : JsonResponse
+    public function create(Comment $comment, CreateRequest $request): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -42,7 +39,7 @@ class ReportController implements CommentPolymorphic
      * @param  StoreRequest  $request       [description]
      * @return JsonResponse                 [description]
      */
-    public function store(Comment $comment, Report $report, StoreRequest $request) : JsonResponse
+    public function store(Comment $comment, Report $report, StoreRequest $request): JsonResponse
     {
         $report->setRelations(['morph' => $comment])
             ->makeService()

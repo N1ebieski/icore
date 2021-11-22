@@ -3,10 +3,10 @@
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use App\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller
 {
@@ -20,7 +20,6 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
-
     use ResetsPasswords;
 
     /**
@@ -47,7 +46,7 @@ class ResetPasswordController extends Controller
      * @param string $token
      * @return HttpResponse
      */
-    public function showResetForm(Request $request, string $token = null) : HttpResponse
+    public function showResetForm(Request $request, string $token = null): HttpResponse
     {
         return Response::view('icore::auth.passwords.reset', [
             'token' => $token,

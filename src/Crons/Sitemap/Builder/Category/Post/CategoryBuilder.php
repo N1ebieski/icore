@@ -10,7 +10,6 @@ use N1ebieski\ICore\Crons\Sitemap\Builder\Builder;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
-
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 class CategoryBuilder extends Builder
@@ -80,7 +79,7 @@ class CategoryBuilder extends Builder
      * @param Closure $closure
      * @return void
      */
-    public function chunkCollection(Closure $closure) : bool
+    public function chunkCollection(Closure $closure): bool
     {
         return $this->category->makeRepo()->chunkActiveWithModelsCount($closure);
     }

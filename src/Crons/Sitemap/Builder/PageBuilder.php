@@ -4,12 +4,12 @@ namespace N1ebieski\ICore\Crons\Sitemap\Builder;
 
 use Closure;
 use Illuminate\Support\Carbon;
-use N1ebieski\ICore\Models\Page\Page;
 use Spatie\ArrayToXml\ArrayToXml;
+use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Crons\Sitemap\Builder\Builder;
-use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 class PageBuilder extends Builder
@@ -79,7 +79,7 @@ class PageBuilder extends Builder
      * @param Closure $closure
      * @return void
      */
-    public function chunkCollection(Closure $closure) : bool
+    public function chunkCollection(Closure $closure): bool
     {
         return $this->page->makeRepo()->chunkActiveWithModelsCount($closure);
     }

@@ -10,12 +10,10 @@ use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
-/**
- * [Mail description]
- */
 class Mail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * [public description]
@@ -74,13 +72,13 @@ class Mail extends Mailable
      * [subcopy description]
      * @return string|null [description]
      */
-    private function subcopy() : ?string
+    private function subcopy(): ?string
     {
         switch ($this->mailingEmail->model_type) {
-            case 'N1ebieski\ICore\\Models\\User':
+            case \N1ebieski\ICore\Models\User::class:
                 return null;
 
-            case 'N1ebieski\ICore\\Models\\Newsletter':
+            case \N1ebieski\ICore\Models\Newsletter::class:
                 $this->mailingEmail->load('morph');
                 return $this->lang->get('icore::newsletter.subcopy.subscribe', [
                     'cancel' => $this->url->route('web.newsletter.update_status', [

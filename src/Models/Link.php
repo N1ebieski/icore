@@ -12,6 +12,8 @@ use N1ebieski\ICore\Repositories\LinkRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Positionable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Link extends Model
 {
@@ -55,53 +57,27 @@ class Link extends Model
      */
     public $path = 'vendor/icore/links';
 
-    // Overrides
-
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(function (Link $link) {
-            $link->position = $link->position ?? $link->getNextAfterLastPosition();
-        });
-
-        // Everytime the model is removed, we have to decrement siblings position by 1
-        static::deleted(function (Link $link) {
-            $link->decrementSiblings($link->position, null);
-        });
-
-        // Everytime the model's position
-        // is changed, all siblings reordering will happen,
-        // so they will always keep the proper order.
-        static::saved(function (Link $link) {
-            $link->reorderSiblings();
-        });
-    }
-
     // Relations
 
     /**
-     * [siblings description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return HasMany
      */
-    public function siblings()
+    public function siblings(): HasMany
     {
-        return $this->hasMany('N1ebieski\ICore\Models\Link', 'type', 'type');
+        return $this->hasMany(\N1ebieski\ICore\Models\Link::class, 'type', 'type');
     }
 
     /**
-     * [categories description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphToMany
      */
-    public function categories()
+    public function categories(): MorphToMany
     {
         return $this->morphToMany(
-            'N1ebieski\ICore\Models\Category\Category',
+            \N1ebieski\ICore\Models\Category\Category::class,
             'model',
             'categories_models',
             'model_id',
@@ -167,7 +143,7 @@ class Link extends Model
         }]);
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

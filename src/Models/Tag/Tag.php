@@ -66,7 +66,7 @@ class Tag extends Taggable
      * @param string $orderby
      * @return Builder
      */
-    public function scopeFilterOrderBySearch(Builder $query, string $search = null) : Builder
+    public function scopeFilterOrderBySearch(Builder $query, string $search = null): Builder
     {
         return $query->when($search !== null, function ($query) use ($search) {
             return $query->orderByRaw('LENGTH(name) ASC');
@@ -85,7 +85,7 @@ class Tag extends Taggable
             ->groupBy('tags.tag_id');
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

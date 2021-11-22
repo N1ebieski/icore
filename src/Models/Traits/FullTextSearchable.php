@@ -26,7 +26,7 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function className() : string
+    protected function className(): string
     {
         return class_basename(strtolower(static::class));
     }
@@ -36,7 +36,7 @@ trait FullTextSearchable
      *
      * @return void
      */
-    protected function splitModelMatches() : void
+    protected function splitModelMatches(): void
     {
         preg_match_all('/([a-z]+):\"(.*?)\"/', $this->term, $matches);
 
@@ -54,7 +54,7 @@ trait FullTextSearchable
      * Prepares words for matching search
      * @return void [description]
      */
-    protected function splitExactMatches() : void
+    protected function splitExactMatches(): void
     {
         preg_match_all('/"(.*?)"/', $this->term, $matches);
 
@@ -73,7 +73,7 @@ trait FullTextSearchable
      * @param string $term
      * @return boolean
      */
-    protected function isContainsSymbol(string $match) : bool
+    protected function isContainsSymbol(string $match): bool
     {
         return Str::contains($match, ['.', '-', '+', '<', '>', '@', '*', '(', ')', '~']);
     }
@@ -84,7 +84,7 @@ trait FullTextSearchable
      * @param string $match
      * @return string
      */
-    protected function createExactMatch(string $match) : string
+    protected function createExactMatch(string $match): string
     {
         return '"' . $match . '"';
     }
@@ -93,7 +93,7 @@ trait FullTextSearchable
      * Prepares words for a loose search
      * @return void
      */
-    protected function splitMatches() : void
+    protected function splitMatches(): void
     {
         $matches = explode(' ', $this->term);
 
@@ -106,7 +106,7 @@ trait FullTextSearchable
                 if ($match === end($matches)) {
                     $match .= '*';
                 }
-                
+
                 $this->search[$this->className()][] = '+' . $match;
             }
         }
@@ -117,7 +117,7 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function search() : string
+    protected function search(): string
     {
         return implode(' ', (array)$this->search[$this->className()]);
     }
@@ -127,7 +127,7 @@ trait FullTextSearchable
      *
      * @return string
      */
-    protected function columns() : string
+    protected function columns(): string
     {
         return implode(',', $this->searchable);
     }
@@ -138,7 +138,7 @@ trait FullTextSearchable
      * @param  string  $term  [description]
      * @return Builder        [description]
      */
-    public function scopeSearch(Builder $query, string $term) : Builder
+    public function scopeSearch(Builder $query, string $term): Builder
     {
         $this->term = $term;
 
@@ -165,7 +165,7 @@ trait FullTextSearchable
      * @param string $term
      * @return Builder
      */
-    public function scopeOrderBySearch(Builder $query, string $term) : Builder
+    public function scopeOrderBySearch(Builder $query, string $term): Builder
     {
         $this->term = $term;
 

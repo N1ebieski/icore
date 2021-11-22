@@ -16,9 +16,6 @@ use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\StoreRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\BanModel\User\Polymorphic as UserPolymorphic;
 
-/**
- * [BanModelController description]
- */
 class BanModelController implements UserPolymorphic
 {
     /**
@@ -29,7 +26,7 @@ class BanModelController implements UserPolymorphic
      * @param  IndexFilter  $filter   [description]
      * @return HttpResponse                 [description]
      */
-    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.banmodel.user.index', [
             'bans' => $banModel->paginateByFilter($filter->all()),
@@ -44,7 +41,7 @@ class BanModelController implements UserPolymorphic
      * @param  User         $user [description]
      * @return JsonResponse       [description]
      */
-    public function create(User $user) : JsonResponse
+    public function create(User $user): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -63,7 +60,7 @@ class BanModelController implements UserPolymorphic
      * @param  StoreRequest $request  [description]
      * @return JsonResponse           [description]
      */
-    public function store(User $user, BanModel $banModel, BanValue $banValue, StoreRequest $request) : JsonResponse
+    public function store(User $user, BanModel $banModel, BanValue $banValue, StoreRequest $request): JsonResponse
     {
         if ($request->has('user')) {
             $banModel->morph()->associate($user)->save();

@@ -2,17 +2,30 @@
 
 namespace N1ebieski\ICore\Models\Stat\Page;
 
-use N1ebieski\ICore\Models\Stat\Stat as BaseStatModel;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Models\Stat\Stat as BaseStat;
 
-class Stat extends BaseStatModel
+class Stat extends BaseStat
 {
+    // Configuration
+
+    /**
+     * Get the class name for polymorphic relations.
+     *
+     * @return string
+     */
+    public function getMorphClass()
+    {
+        return \N1ebieski\ICore\Models\Stat\Stat::class;
+    }
+
     // Accessors
 
     /**
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliAttribute() : string
+    public function getPoliAttribute(): string
     {
         return 'page';
     }
@@ -26,23 +39,14 @@ class Stat extends BaseStatModel
         return \N1ebieski\IPage\Models\Page\Page::class;
     }
 
-    /**
-     * Get the class name for polymorphic relations.
-     *
-     * @return string
-     */
-    public function getMorphClass()
-    {
-        return \N1ebieski\ICore\Models\Stat\Stat::class;
-    }
-
     // Relations
 
     /**
-     * [morphs description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphToMany
      */
-    public function morphs()
+    public function morphs(): MorphToMany
     {
         return $this->morphedByMany(\N1ebieski\IPage\Models\Page\Page::class, 'model', 'stats_values');
     }

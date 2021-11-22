@@ -2,16 +2,38 @@
 
 namespace N1ebieski\ICore\Observers;
 
-use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Link;
+use Illuminate\Support\Facades\Cache;
 
-/**
- * [LinkObserver description]
- */
 class LinkObserver
 {
     /**
-     * Handle the page "created" event.
+     * Handle the link "saving" event.
+     *
+     * @param  \N1ebieski\ICore\Models\Link  $link
+     * @return void
+     */
+    public function saving(Link $link)
+    {
+        $link->position = $link->position ?? $link->getNextAfterLastPosition();
+    }
+
+    /**
+     * Handle the link "saved" event.
+     *
+     * @param  \N1ebieski\ICore\Models\Link  $link
+     * @return void
+     */
+    public function saved(Link $link)
+    {
+        // Everytime the model's position
+        // is changed, all siblings reordering will happen,
+        // so they will always keep the proper order.
+        $link->reorderSiblings();
+    }
+
+    /**
+     * Handle the link "created" event.
      *
      * @param  \N1ebieski\ICore\Models\Link  $link
      * @return void
@@ -22,7 +44,7 @@ class LinkObserver
     }
 
     /**
-     * Handle the page "updated" event.
+     * Handle the link "updated" event.
      *
      * @param  \N1ebieski\ICore\Models\Link  $link
      * @return void
@@ -33,18 +55,21 @@ class LinkObserver
     }
 
     /**
-     * Handle the page "deleted" event.
+     * Handle the link "deleted" event.
      *
      * @param  \N1ebieski\ICore\Models\Link  $link
      * @return void
      */
     public function deleted(Link $link)
     {
+        // Everytime the model is removed, we have to decrement siblings position by 1
+        $link->decrementSiblings($link->position, null);
+
         Cache::tags(['links'])->flush();
     }
 
     /**
-     * Handle the page "restored" event.
+     * Handle the link "restored" event.
      *
      * @param  \N1ebieski\ICore\Models\Link  $link
      * @return void
@@ -55,7 +80,7 @@ class LinkObserver
     }
 
     /**
-     * Handle the page "force deleted" event.
+     * Handle the link "force deleted" event.
      *
      * @param  \N1ebieski\ICore\Models\Link  $link
      * @return void

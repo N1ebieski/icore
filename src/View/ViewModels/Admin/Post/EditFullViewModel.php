@@ -69,7 +69,7 @@ class EditFullViewModel extends ViewModel
      *
      * @return  int [return description]
      */
-    public function maxTags() : int
+    public function maxTags(): int
     {
         return (int)$this->config->get('icore.post.max_tags');
     }
@@ -79,7 +79,7 @@ class EditFullViewModel extends ViewModel
      *
      * @return  int [return description]
      */
-    public function maxCategories() : int
+    public function maxCategories(): int
     {
         return (int)$this->config->get('icore.post.max_categories');
     }
@@ -89,7 +89,7 @@ class EditFullViewModel extends ViewModel
      *
      * @return  Collection  [return description]
      */
-    public function categoriesSelection() : Collection
+    public function categoriesSelection(): Collection
     {
         if ($this->request->old('categories')) {
             return $this->category->makeRepo()->getByIds($this->request->old('categories'));
@@ -103,7 +103,7 @@ class EditFullViewModel extends ViewModel
      *
      * @return  User|null  [return description]
      */
-    public function userSelection() : ?User
+    public function userSelection(): ?User
     {
         $userId = $this->request->old('user');
 

@@ -22,7 +22,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasRoles, FullTextSearchable, Filterable, Carbonable, PivotEventTrait;
+    use Notifiable;
+    use HasRoles;
+    use FullTextSearchable;
+    use Filterable;
+    use Carbonable;
+    use PivotEventTrait;
 
     // Configuration
 
@@ -121,63 +126,42 @@ class User extends Authenticatable implements MustVerifyEmail
         'updated_at' => 'datetime'
     ];
 
-    // Overrides
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::pivotAttached(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
-            if ($model->pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
-                $model->fireModelEvent('updated');
-                $model->pivotEvent = true;
-            }
-        });
-
-        static::pivotDetached(function ($model, $relationName, $pivotIds) {
-            if ($model->pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
-                $model->fireModelEvent('updated');
-                $model->pivotEvent = true;
-            }
-        });
-    }
-
     // Relations
 
     /**
      * [socialites description]
      * @return HasMany [description]
      */
-    public function socialites() : HasMany
+    public function socialites(): HasMany
     {
-        return $this->hasMany('N1ebieski\ICore\Models\Socialite');
+        return $this->hasMany(\N1ebieski\ICore\Models\Socialite::class);
     }
 
     /**
      * [posts description]
      * @return HasMany [description]
      */
-    public function posts() : HasMany
+    public function posts(): HasMany
     {
-        return $this->hasMany('N1ebieski\ICore\Models\Post');
+        return $this->hasMany(\N1ebieski\ICore\Models\Post::class);
     }
 
     /**
      * [ban description]
      * @return MorphOne [description]
      */
-    public function ban() : MorphOne
+    public function ban(): MorphOne
     {
-        return $this->morphOne('N1ebieski\ICore\Models\BanModel\BanModel', 'model');
+        return $this->morphOne(\N1ebieski\ICore\Models\BanModel\BanModel::class, 'model');
     }
 
     /**
      * [emails description]
      * @return MorphMany [description]
      */
-    public function emails() : MorphMany
+    public function emails(): MorphMany
     {
-        return $this->morphMany('N1ebieski\ICore\Models\MailingEmail', 'model');
+        return $this->morphMany(\N1ebieski\ICore\Models\MailingEmail::class, 'model');
     }
 
     // Accessors
@@ -186,9 +170,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * [getShortNameAttribute description]
      * @return string [description]
      */
-    public function getShortNameAttribute() : string
+    public function getShortNameAttribute(): string
     {
-        return (strlen($this->name) > 20) ? substr($this->name, 0, 20).'...' : $this->name;
+        return (strlen($this->name) > 20) ? substr($this->name, 0, 20) . '...' : $this->name;
     }
 
     // Scopes
@@ -199,7 +183,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param  Role|null  $role  [description]
      * @return Builder|null        [description]
      */
-    public function scopeFilterRole(Builder $query, Role $role = null) : ?Builder
+    public function scopeFilterRole(Builder $query, Role $role = null): ?Builder
     {
         return $query->when($role !== null, function ($query) use ($role) {
             $query->role($role->name);
@@ -212,7 +196,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param Builder $query
      * @return Builder
      */
-    public function scopeMarketing(Builder $query) : Builder
+    public function scopeMarketing(Builder $query): Builder
     {
         return $query->where('marketing', static::WITH_MARKETING);
     }
@@ -223,12 +207,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param Builder $query
      * @return Builder
      */
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', static::ACTIVE);
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

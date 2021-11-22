@@ -13,7 +13,7 @@ class FileManager extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_filemanager_read_public_disk_as_guest()
+    public function testFilemanagerReadPublicDiskAsGuest()
     {
         $response = $this->withHeaders([
                 'Accept' => 'application/json',
@@ -23,7 +23,7 @@ class FileManager extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_filemanager_write_public_disk_as_guest()
+    public function testFilemanagerWritePublicDiskAsGuest()
     {
         Storage::fake('public');
 
@@ -44,7 +44,7 @@ class FileManager extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_filemanager_read_public_disk_as_user()
+    public function testFilemanagerReadPublicDiskAsUser()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -58,7 +58,7 @@ class FileManager extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_filemanager_write_public_disk_as_user()
+    public function testFilemanagerWritePublicDiskAsUser()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -83,7 +83,7 @@ class FileManager extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_filemanager_write_public_disk_as_admin()
+    public function testFilemanagerWritePublicDiskAsAdmin()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -109,7 +109,7 @@ class FileManager extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_filemanager_write_public_vendor_disk_as_superadmin()
+    public function testFilemanagerWritePublicVendorDiskAsSuperadmin()
     {
         $user = factory(User::class)->states('super-admin')->create();
 

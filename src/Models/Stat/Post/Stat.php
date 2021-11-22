@@ -2,29 +2,12 @@
 
 namespace N1ebieski\ICore\Models\Stat\Post;
 
-use N1ebieski\ICore\Models\Stat\Stat as BaseStatModel;
+use N1ebieski\ICore\Models\Stat\Stat as BaseStat;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class Stat extends BaseStatModel
+class Stat extends BaseStat
 {
-    // Accessors
-
-    /**
-     * [getPoliAttribute description]
-     * @return string [description]
-     */
-    public function getPoliAttribute() : string
-    {
-        return 'post';
-    }
-
-    /**
-     * [getModelTypeAttribute description]
-     * @return string [description]
-     */
-    public function getModelTypeAttribute()
-    {
-        return \N1ebieski\IPost\Models\Post::class;
-    }
+    // Configuration
 
     /**
      * Get the class name for polymorphic relations.
@@ -36,13 +19,34 @@ class Stat extends BaseStatModel
         return \N1ebieski\ICore\Models\Stat\Stat::class;
     }
 
+    // Accessors
+
+    /**
+     * [getPoliAttribute description]
+     * @return string [description]
+     */
+    public function getPoliAttribute(): string
+    {
+        return 'post';
+    }
+
+    /**
+     * [getModelTypeAttribute description]
+     * @return string [description]
+     */
+    public function getModelTypeAttribute(): string
+    {
+        return \N1ebieski\IPost\Models\Post::class;
+    }
+
     // Relations
 
     /**
-     * [morphs description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphToMany
      */
-    public function morphs()
+    public function morphs(): MorphToMany
     {
         return $this->morphedByMany(\N1ebieski\IPost\Models\Post::class, 'model', 'stats_values');
     }

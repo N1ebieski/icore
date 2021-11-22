@@ -2,14 +2,11 @@
 
 namespace N1ebieski\ICore\View\Components\Comment;
 
+use Illuminate\View\View;
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\View\View;
 
-/**
- * [LatestComponent description]
- */
 class LatestComponent implements Htmlable
 {
     /**
@@ -52,7 +49,7 @@ class LatestComponent implements Htmlable
      * [toHtml description]
      * @return View [description]
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.comment.latest', [
             'comments' => $this->comment->makeCache()->rememberLatestByComponent([

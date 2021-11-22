@@ -3,23 +3,23 @@
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Role;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RoleTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_role_index_as_guest()
+    public function testRoleIndexAsGuest()
     {
         $response = $this->get(route('admin.role.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_role_index_without_permission()
+    public function testRoleIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -30,7 +30,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_role_index_paginate()
+    public function testRoleIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -45,14 +45,14 @@ class RoleTest extends TestCase
         $response->assertSeeInOrder([$role[30]->name]);
     }
 
-    public function test_role_destroy_as_guest()
+    public function testRoleDestroyAsGuest()
     {
         $response = $this->delete(route('admin.role.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_role_destroy_without_permission()
+    public function testRoleDestroyWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -65,7 +65,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_role_destroy_default()
+    public function testRoleDestroyDefault()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -78,7 +78,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_role_destroy()
+    public function testNoexistRoleDestroy()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -89,7 +89,7 @@ class RoleTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_role_destroy()
+    public function testRoleDestroy()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -114,14 +114,14 @@ class RoleTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_role_edit_as_guest()
+    public function testRoleEditAsGuest()
     {
         $response = $this->get(route('admin.role.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_role_edit_without_permission()
+    public function testRoleEditWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -134,7 +134,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_role_edit_default()
+    public function testRoleEditDefault()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -147,7 +147,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_role_edit()
+    public function testNoexistRoleEdit()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -158,7 +158,7 @@ class RoleTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_role_edit()
+    public function testRoleEdit()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -171,17 +171,16 @@ class RoleTest extends TestCase
         $response->assertOk()->assertViewIs('icore::admin.role.edit');
         $response->assertSee($role->name);
         $response->assertSee(route('admin.role.update', [$role->id]));
-
     }
 
-    public function test_role_update_as_guest()
+    public function testRoleUpdateAsGuest()
     {
         $response = $this->put(route('admin.role.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_role_update_without_permission()
+    public function testRoleUpdateWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -194,7 +193,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_role_update_default()
+    public function testRoleUpdateDefault()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -207,7 +206,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_role_update()
+    public function testNoexistRoleUpdate()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -218,7 +217,7 @@ class RoleTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_update_default_user_validation_fail()
+    public function testUserUpdateDefaultUserValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -236,7 +235,7 @@ class RoleTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_role_update_validation_fail()
+    public function testRoleUpdateValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -254,7 +253,7 @@ class RoleTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_role_update()
+    public function testRoleUpdate()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -285,14 +284,14 @@ class RoleTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_role_create_as_guest()
+    public function testRoleCreateAsGuest()
     {
         $response = $this->get(route('admin.role.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_role_create_without_permission()
+    public function testRoleCreateWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -303,7 +302,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_role_create()
+    public function testRoleCreate()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -313,17 +312,16 @@ class RoleTest extends TestCase
 
         $response->assertOk()->assertViewIs('icore::admin.role.create');
         $response->assertSee(route('admin.role.store'));
-
     }
 
-    public function test_role_store_as_guest()
+    public function testRoleStoreAsGuest()
     {
         $response = $this->post(route('admin.role.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_role_store_without_permission()
+    public function testRoleStoreWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -334,7 +332,7 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_role_store_validation_fail()
+    public function testRoleStoreValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -350,7 +348,7 @@ class RoleTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_role_store()
+    public function testRoleStore()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -378,5 +376,4 @@ class RoleTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

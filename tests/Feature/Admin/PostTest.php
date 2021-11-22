@@ -4,25 +4,25 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
+use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
-use Faker\Factory as Faker;
 
 class PostTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_post_index_as_guest()
+    public function testPostIndexAsGuest()
     {
         $response = $this->get(route('admin.post.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_index_without_permission()
+    public function testPostIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -33,7 +33,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_post_index_paginate()
+    public function testPostIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -51,14 +51,14 @@ class PostTest extends TestCase
         $response->assertSeeInOrder([$post[30]->title, $post[30]->shortContent]);
     }
 
-    public function test_post_edit_as_guest()
+    public function testPostEditAsGuest()
     {
         $response = $this->get(route('admin.post.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_edit_without_permission()
+    public function testPostEditWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -71,7 +71,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_post_edit()
+    public function testNoexistPostEdit()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -82,7 +82,7 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_post_edit()
+    public function testPostEdit()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -95,17 +95,16 @@ class PostTest extends TestCase
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString($post->content, $response->getData()->view);
         $this->assertStringContainsString(route('admin.post.update', [$post->id]), $response->getData()->view);
-
     }
 
-    public function test_post_update_as_guest()
+    public function testPostUpdateAsGuest()
     {
         $response = $this->put(route('admin.post.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_update_without_permission()
+    public function testPostUpdateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -118,7 +117,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_post_update()
+    public function testNoexistPostUpdate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -129,7 +128,7 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_post_update_validation_fail()
+    public function testPostUpdateValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -147,7 +146,7 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_update()
+    public function testPostUpdate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -171,14 +170,14 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_editFull_as_guest()
+    public function testPostEditFullAsGuest()
     {
         $response = $this->get(route('admin.post.edit_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_editFull_without_permission()
+    public function testPostEditFullWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -191,7 +190,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_post_editFull()
+    public function testNoexistPostEditFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -202,7 +201,7 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_post_editFull()
+    public function testPostEditFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -215,17 +214,16 @@ class PostTest extends TestCase
         $response->assertOk()->assertViewIs('icore::admin.post.edit_full');
         $response->assertSeeInOrder([$post->title, $post->content]);
         $response->assertSee(route('admin.post.update_full', [$post->id]));
-
     }
 
-    public function test_post_updateFull_as_guest()
+    public function testPostUpdateFullAsGuest()
     {
         $response = $this->put(route('admin.post.update_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_updateFull_without_permission()
+    public function testPostUpdateFullWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -238,7 +236,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_post_updateFull()
+    public function testNoexistPostUpdateFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -249,7 +247,7 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_post_updateFull_validation_fail()
+    public function testPostUpdateFullValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -267,7 +265,7 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_updateFull()
+    public function testPostUpdateFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -310,14 +308,14 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_updateStatus_as_guest()
+    public function testPostUpdateStatusAsGuest()
     {
         $response = $this->patch(route('admin.post.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_updateStatus_without_permission()
+    public function testPostUpdateStatusWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -330,7 +328,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_post_updateStatus()
+    public function testNoexistPostUpdateStatus()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -341,7 +339,7 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_post_updateStatus_validation_fail()
+    public function testPostUpdateStatusValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -358,7 +356,7 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_updateStatus()
+    public function testPostUpdateStatus()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -380,14 +378,14 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_destroy_as_guest()
+    public function testPostDestroyAsGuest()
     {
         $response = $this->delete(route('admin.post.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_destroy_without_permission()
+    public function testPostDestroyWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -400,7 +398,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_post_destroy()
+    public function testNoexistPostDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -411,7 +409,7 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_post_destroy()
+    public function testPostDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -434,14 +432,14 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_destroyGlobal_as_guest()
+    public function testPostDestroyGlobalAsGuest()
     {
         $response = $this->delete(route('admin.post.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_destroyGlobal_without_permission()
+    public function testPostDestroyGlobalWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -452,7 +450,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_post_destroyGlobal_validation_fail()
+    public function testPostDestroyGlobalValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -466,7 +464,7 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function test_post_destroyGlobal()
+    public function testPostDestroyGlobal()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -492,14 +490,14 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_create_as_guest()
+    public function testPostCreateAsGuest()
     {
         $response = $this->get(route('admin.post.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_create_without_permission()
+    public function testPostCreateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -510,7 +508,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_post_create()
+    public function testPostCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -520,17 +518,16 @@ class PostTest extends TestCase
 
         $response->assertOk()->assertViewIs('icore::admin.post.create');
         $response->assertSee(route('admin.post.store'));
-
     }
 
-    public function test_post_store_as_guest()
+    public function testPostStoreAsGuest()
     {
         $response = $this->post(route('admin.post.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_post_store_without_permission()
+    public function testPostStoreWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -541,7 +538,7 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_post_store_validation_fail()
+    public function testPostStoreValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -557,7 +554,7 @@ class PostTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_post_store()
+    public function testPostStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -598,5 +595,4 @@ class PostTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

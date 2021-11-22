@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\BanModel\User;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
                 'required_without_all:ip',
                 'exists:users,id',
                 Rule::unique('bans_models', 'model_id')->where(function ($query) {
-                    $query->where('model_type', 'N1ebieski\ICore\Models\User');
+                    $query->where('model_type', \N1ebieski\ICore\Models\User::class);
                 })
             ],
             'ip' => [

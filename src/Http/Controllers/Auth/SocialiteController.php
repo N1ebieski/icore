@@ -2,18 +2,15 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
-use N1ebieski\ICore\Models\Socialite as Social;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Laravel\Socialite\Facades\Socialite;
+use N1ebieski\ICore\Models\Socialite as Social;
 
-/**
- * [SocialiteController description]
- */
 class SocialiteController
 {
     /**
@@ -21,7 +18,7 @@ class SocialiteController
      *
      * @param string $provider [description]
      */
-    private static function configRedirect(string $provider) : void
+    private static function configRedirect(string $provider): void
     {
         // Troche partyzantka, ale musze tak zrobic bo Socialite dla Twittera nie daje
         // zdefiniowac innego callbacku przez metode redirectUrl
@@ -39,7 +36,7 @@ class SocialiteController
      * @param string $provider
      * @return RedirectResponse
      */
-    public function redirect(string $provider) : RedirectResponse
+    public function redirect(string $provider): RedirectResponse
     {
         $this->configRedirect($provider);
 
@@ -57,7 +54,7 @@ class SocialiteController
      * @param string $provider
      * @return RedirectResponse
      */
-    public function callback(Social $socialite, string $provider) : RedirectResponse
+    public function callback(Social $socialite, string $provider): RedirectResponse
     {
         $this->configRedirect($provider);
 

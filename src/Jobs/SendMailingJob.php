@@ -2,24 +2,24 @@
 
 namespace N1ebieski\ICore\Jobs;
 
+use Exception;
 use Illuminate\Bus\Queueable;
+use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use N1ebieski\ICore\Models\MailingEmail;
-use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Container\Container as App;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
-use Exception;
-use N1ebieski\ICore\Models\Mailing;
 
-/**
- * [SendMailing description]
- */
 class SendMailingJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Delete the job if its models no longer exist.

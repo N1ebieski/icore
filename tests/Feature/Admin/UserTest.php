@@ -3,23 +3,23 @@
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Post;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_user_index_as_guest()
+    public function testUserIndexAsGuest()
     {
         $response = $this->get(route('admin.user.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_index_without_permission()
+    public function testUserIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -30,7 +30,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_index_paginate()
+    public function testUserIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -48,14 +48,14 @@ class UserTest extends TestCase
         $response->assertSeeInOrder([$us[30]->name, $us[30]->email]);
     }
 
-    public function test_user_updateStatus_as_guest()
+    public function testUserUpdateStatusAsGuest()
     {
         $response = $this->patch(route('admin.user.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_updateStatus_without_permission()
+    public function testUserUpdateStatusWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -68,7 +68,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_user_updateStatus()
+    public function testNoexistUserUpdateStatus()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -79,7 +79,7 @@ class UserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_updateStatus_self()
+    public function testUserUpdateStatusSelf()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -94,7 +94,7 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_updateStatus_validation_fail()
+    public function testUserUpdateStatusValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -111,7 +111,7 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_updateStatus()
+    public function testUserUpdateStatus()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -133,14 +133,14 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_destroy_as_guest()
+    public function testUserDestroyAsGuest()
     {
         $response = $this->delete(route('admin.user.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_destroy_without_permission()
+    public function testUserDestroyWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -153,7 +153,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_destroy_self()
+    public function testUserDestroySelf()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -164,7 +164,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_user_destroy()
+    public function testNoexistUserDestroy()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -175,7 +175,7 @@ class UserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_destroy()
+    public function testUserDestroy()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -198,14 +198,14 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_destroyGlobal_as_guest()
+    public function testUserDestroyGlobalAsGuest()
     {
         $response = $this->delete(route('admin.user.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_destroyGlobal_without_permission()
+    public function testUserDestroyGlobalWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -216,7 +216,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_destroyGlobal_validation_fail()
+    public function testUserDestroyGlobalValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -230,7 +230,7 @@ class UserTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function test_user_destroyGlobal_with_self()
+    public function testUserDestroyGlobalWithSelf()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -247,7 +247,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_destroyGlobal()
+    public function testUserDestroyGlobal()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -273,14 +273,14 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_edit_as_guest()
+    public function testUserEditAsGuest()
     {
         $response = $this->get(route('admin.user.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_edit_without_permission()
+    public function testUserEditWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -293,7 +293,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_edit_self()
+    public function testUserEditSelf()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -304,7 +304,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_user_edit()
+    public function testNoexistUserEdit()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -315,7 +315,7 @@ class UserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_edit()
+    public function testUserEdit()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -328,17 +328,16 @@ class UserTest extends TestCase
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString($us->name, $response->getData()->view);
         $this->assertStringContainsString(route('admin.user.update', [$us->id]), $response->getData()->view);
-
     }
 
-    public function test_user_update_as_guest()
+    public function testUserUpdateAsGuest()
     {
         $response = $this->put(route('admin.user.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_update_without_permission()
+    public function testUserUpdateWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -351,7 +350,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_update_self()
+    public function testUserUpdateSelf()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -362,7 +361,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_user_update()
+    public function testNoexistUserUpdate()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -373,7 +372,7 @@ class UserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_update_validation_fail()
+    public function testUserUpdateValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -391,7 +390,7 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_update()
+    public function testUserUpdate()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -417,14 +416,14 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_create_as_guest()
+    public function testUserCreateAsGuest()
     {
         $response = $this->get(route('admin.user.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_create_without_permission()
+    public function testUserCreateWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -435,7 +434,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_create()
+    public function testUserCreate()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -445,17 +444,16 @@ class UserTest extends TestCase
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString(route('admin.user.store'), $response->getData()->view);
-
     }
 
-    public function test_user_store_as_guest()
+    public function testUserStoreAsGuest()
     {
         $response = $this->post(route('admin.user.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_user_store_without_permission()
+    public function testUserStoreWithoutPermission()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -466,7 +464,7 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_store_validation_fail()
+    public function testUserStoreValidationFail()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -482,7 +480,7 @@ class UserTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_user_store()
+    public function testUserStore()
     {
         $user = factory(User::class)->states('super-admin')->create();
 
@@ -515,5 +513,4 @@ class UserTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

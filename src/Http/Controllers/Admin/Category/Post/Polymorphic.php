@@ -21,7 +21,7 @@ interface Polymorphic
      * @param  IndexFilter   $filter        [description]
      * @return HttpResponse                 [description]
      */
-    public function index(Category $category, IndexRequest $request, IndexFilter $filter) : HttpResponse;
+    public function index(Category $category, IndexRequest $request, IndexFilter $filter): HttpResponse;
 
     /**
      * Undocumented function
@@ -30,7 +30,7 @@ interface Polymorphic
      * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function create(Category $category, CreateRequest $request) : JsonResponse;
+    public function create(Category $category, CreateRequest $request): JsonResponse;
 
     /**
      * Store a newly created Category in storage.
@@ -39,7 +39,7 @@ interface Polymorphic
      * @param  StoreRequest  $request
      * @return JsonResponse
      */
-    public function store(Category $category, StoreRequest $request) : JsonResponse;
+    public function store(Category $category, StoreRequest $request): JsonResponse;
 
     /**
      * Store collection of Categories with childrens in storage.
@@ -48,5 +48,5 @@ interface Polymorphic
      * @param  StoreGlobalRequest  $request
      * @return JsonResponse
      */
-    public function storeGlobal(Category $category, StoreGlobalRequest $request) : JsonResponse;
+    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse;
 }

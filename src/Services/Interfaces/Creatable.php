@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Services\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * [interface description]
- */
 interface Creatable
 {
     /**
@@ -14,5 +11,5 @@ interface Creatable
      * @param  array $attributes [description]
      * @return Model             [description]
      */
-    public function create(array $attributes) : Model;
+    public function create(array $attributes): Model;
 }

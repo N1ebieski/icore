@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Mailing;
 
-use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditRequest extends FormRequest
 {

@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Filters\Traits;
 
 use N1ebieski\ICore\Models\User;
 
-/**
- * [trait description]
- */
 trait HasAuthor
 {
     /**
@@ -24,7 +21,7 @@ trait HasAuthor
      * [filterAuthor description]
      * @param int|null $id [description]
      */
-    public function filterAuthor(int $id = null) : void
+    public function filterAuthor(int $id = null): void
     {
         $this->parameters['author'] = null;
 
@@ -40,7 +37,7 @@ trait HasAuthor
      * @param  int  $id [description]
      * @return User     [description]
      */
-    protected function findAuthor(int $id) : User
+    protected function findAuthor(int $id): User
     {
         return User::find($id, ['id', 'name']);
     }

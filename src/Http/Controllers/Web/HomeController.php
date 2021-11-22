@@ -13,7 +13,7 @@ class HomeController
      *
      * @return HttpResponse
      */
-    public function index(Post $post) : HttpResponse
+    public function index(Post $post): HttpResponse
     {
         return Response::view('icore::web.home.index', [
             'posts' => $post->makeCache()->rememberLatestForHome()

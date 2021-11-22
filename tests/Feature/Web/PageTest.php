@@ -11,14 +11,14 @@ class PageTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_noexist_page_show()
+    public function testNoexistPageShow()
     {
         $response = $this->get(route('web.page.show', ['dajskruiufi']));
 
         $response->assertStatus(404);
     }
 
-    public function test_page_show()
+    public function testPageShow()
     {
         $page = factory(Page::class)->states(['active', 'commentable', 'with_user'])->create();
 
@@ -27,14 +27,14 @@ class PageTest extends TestCase
         $response->assertSeeInOrder([$page->title, $page->content]);
     }
 
-    public function test_page_show_paginate()
+    public function testPageShowPaginate()
     {
         $page = factory(Page::class)->states(['active', 'commentable', 'with_user'])->create();
 
         $comment = factory(Comment::class, 50)
             ->states(['active', 'with_user'])
             ->make()
-            ->each(function($item) use ($page) {
+            ->each(function ($item) use ($page) {
                 $item->morph()->associate($page)->save();
             });
 

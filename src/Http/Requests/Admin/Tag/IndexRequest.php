@@ -31,7 +31,7 @@ class IndexRequest extends FormRequest
             'page' => 'integer',
             'filter' => 'array|no_js_validation',
             'filter.except' => 'bail|filled|array',
-            'filter.except.*' => 'bail|integer',            
+            'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
             'filter.orderby' => [
                 'bail',
@@ -39,7 +39,7 @@ class IndexRequest extends FormRequest
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,sum|asc,sum|desc',
                 'no_js_validation'
             ],
-            'filter.paginate' => Rule::in([$paginate, ($paginate*2), ($paginate*4)]) . '|integer|no_js_validation'
+            'filter.paginate' => Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]) . '|integer|no_js_validation'
         ];
     }
 }

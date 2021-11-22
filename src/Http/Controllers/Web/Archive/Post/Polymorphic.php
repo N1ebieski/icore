@@ -6,9 +6,6 @@ use N1ebieski\ICore\Models\Post;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Archive\IndexRequest;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
@@ -20,5 +17,5 @@ interface Polymorphic
      * @param  IndexRequest $request [description]
      * @return HttpResponse          [description]
      */
-    public function show(int $month, int $year, Post $post, IndexRequest $request) : HttpResponse;
+    public function show(int $month, int $year, Post $post, IndexRequest $request): HttpResponse;
 }

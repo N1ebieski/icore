@@ -30,9 +30,9 @@ class CreateRequest extends FormRequest
 
     public function all($keys = null)
     {
-       $data = parent::all($keys);
-       $data['type'] = $this->route('type');
+        $data = parent::all($keys);
+        $data['type'] = $this->route('type');
 
-       return $data;
+        return $data;
     }
 }

@@ -2,14 +2,11 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\NewsletterToken;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-/**
- * [Newsletter description]
- */
 class Newsletter extends Model
 {
     // Configuration
@@ -68,7 +65,7 @@ class Newsletter extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function token() : HasOne
+    public function token(): HasOne
     {
         return $this->hasOne(NewsletterToken::class, 'email', 'email');
     }
@@ -81,7 +78,7 @@ class Newsletter extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', static::ACTIVE);
     }

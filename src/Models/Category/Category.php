@@ -2,18 +2,20 @@
 
 namespace N1ebieski\ICore\Models\Category;
 
-use Franzose\ClosureTable\Models\Entity;
-use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use Illuminate\Database\Eloquent\Builder;
-use Franzose\ClosureTable\Extensions\QueryBuilder;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Repositories\CategoryRepo;
+use Franzose\ClosureTable\Models\Entity;
 use N1ebieski\ICore\Cache\CategoryCache;
+use Illuminate\Database\Eloquent\Builder;
+use Cviebrock\EloquentSluggable\Sluggable;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Services\CategoryService;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Repositories\CategoryRepo;
+use Franzose\ClosureTable\Extensions\QueryBuilder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Entity implements CategoryInterface
 {
@@ -113,37 +115,41 @@ class Category extends Entity implements CategoryInterface
     // Relations
 
     /**
-     * [ancestors description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return BelongsToMany
      */
-    public function ancestors()
+    public function ancestors(): BelongsToMany
     {
         return $this->belongsToMany(static::class, 'categories_closure', 'descendant', 'ancestor');
     }
 
     /**
-     * [descendants description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return BelongsToMany
      */
-    public function descendants()
+    public function descendants(): BelongsToMany
     {
         return $this->belongsToMany(static::class, 'categories_closure', 'ancestor', 'descendant');
     }
 
     /**
-     * [childrens description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return HasMany
      */
-    public function childrens()
+    public function childrens(): HasMany
     {
         return $this->hasMany(static::class, 'parent_id');
     }
 
     /**
-     * Recursive relation of childrens()
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return HasMany
      */
-    public function childrensRecursiveWithAllRels()
+    public function childrensRecursiveWithAllRels(): HasMany
     {
         return $this->childrens()->withRecursiveAllRels();
     }
@@ -295,7 +301,7 @@ class Category extends Entity implements CategoryInterface
         }]);
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

@@ -14,9 +14,6 @@ use N1ebieski\ICore\Http\Requests\Web\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Web\Post\SearchRequest;
 use N1ebieski\ICore\Events\Web\Post\ShowEvent as PostShowEvent;
 
-/**
- * [PostController description]
- */
 class PostController
 {
     /**
@@ -26,7 +23,7 @@ class PostController
      * @param IndexRequest $request
      * @return HttpResponse
      */
-    public function index(Post $post, IndexRequest $request) : HttpResponse
+    public function index(Post $post, IndexRequest $request): HttpResponse
     {
         return Response::view('icore::web.post.index', [
             'posts' => $post->makeCache()->rememberLatest($request->get('page') ?? 1),
@@ -41,7 +38,7 @@ class PostController
      * @param  ShowFilter  $filter  [description]
      * @return HttpResponse                 [description]
      */
-    public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter) : HttpResponse
+    public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter): HttpResponse
     {
         $postCache = $post->makeCache();
 
@@ -71,7 +68,7 @@ class PostController
      * @param  SearchRequest $request [description]
      * @return HttpResponse                   [description]
      */
-    public function search(Post $post, SearchRequest $request) : HttpResponse
+    public function search(Post $post, SearchRequest $request): HttpResponse
     {
         return Response::view('icore::web.post.search', [
             'posts' => $post->makeRepo()->paginateBySearch($request->get('search')),

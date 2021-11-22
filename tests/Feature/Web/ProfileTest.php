@@ -2,22 +2,22 @@
 
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
+use Mockery;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProfileTest extends TestCase
 {
     use DatabaseTransactions;
 
-    const PROVIDER = 'facebook';
+    private const PROVIDER = 'facebook';
 
-    static function socialite_mock(array $user)
+    protected static function socialiteMock(array $user)
     {
         $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
 
@@ -35,56 +35,56 @@ class ProfileTest extends TestCase
          // echo ' sad: ' . $abstractUser->getEmail();
     }
 
-    public function test_profile_edit_guest_user()
+    public function testProfileEditGuestUser()
     {
         $response = $this->get(route('web.profile.edit'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_update_guest_user()
+    public function testProfileUpdateGuestUser()
     {
         $response = $this->put(route('web.profile.update'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_edit_socialite_guest_user()
+    public function testProfileEditSocialiteGuestUser()
     {
         $response = $this->get(route('web.profile.edit_socialite'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_redirect_password_guest_user()
+    public function testProfileRedirectPasswordGuestUser()
     {
         $response = $this->get(route('web.profile.redirect_password'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_update_email_guest_user()
+    public function testProfileUpdateEmailGuestUser()
     {
         $response = $this->patch(route('web.profile.update_email'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_socialite_redirect_guest_user()
+    public function testProfileSocialiteRedirectGuestUser()
     {
         $response = $this->get(route('web.profile.socialite.redirect', ['provider' => 'facebook']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_socialite_callback_guest_user()
+    public function testProfileSocialiteCallbackGuestUser()
     {
         $response = $this->get(route('web.profile.socialite.callback', ['provider' => 'facebook']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_edit_socialite()
+    public function testProfileEditSocialite()
     {
         $user = factory(User::class)->states('user')->create();
         $user->socialites()->create([
@@ -96,13 +96,13 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.edit_socialite'));
 
-        $response->assertSee('href="' .route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"');
-        $response->assertSee('action="' .route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"');
+        $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"');
+        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"');
 
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_socialite_callback_without_email()
+    public function testProfileSocialiteCallbackWithoutEmail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -122,10 +122,9 @@ class ProfileTest extends TestCase
         $response->assertSee('alert-success');
 
         $this->assertTrue(Auth::check());
-
     }
 
-    public function test_profile_socialite_callback_foreign_provider_id()
+    public function testProfileSocialiteCallbackForeignProviderId()
     {
         $user1 = factory(User::class)->states('user')->create();
         $user1->socialites()->create([
@@ -149,10 +148,9 @@ class ProfileTest extends TestCase
         $response->assertSessionHas('danger');
 
         $this->assertTrue(Auth::check());
-
     }
 
-    public function test_profile_edit_password()
+    public function testProfileEditPassword()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -165,7 +163,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_edit_password_without_verify_email()
+    public function testProfileEditPasswordWithoutVerifyEmail()
     {
         $user = factory(User::class)->states('user')->create([
             'email_verified_at' => null
@@ -180,7 +178,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_redirect_password()
+    public function testProfileRedirectPassword()
     {
         Notification::fake();
 
@@ -198,14 +196,14 @@ class ProfileTest extends TestCase
         Notification::assertSentTo([$user], ResetPassword::class);
     }
 
-    public function test_profile_socialite_destroy_guest_user()
+    public function testProfileSocialiteDestroyGuestUser()
     {
         $response = $this->delete(route('web.profile.socialite.destroy', ['socialite' => 4]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_profile_edit_email()
+    public function testProfileEditEmail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -218,7 +216,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_update_exist_email()
+    public function testProfileUpdateExistEmail()
     {
         $user1 = factory(User::class)->states('user')->create();
         $user2 = factory(User::class)->states('user')->create();
@@ -237,7 +235,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_update_email_validation_fail()
+    public function testProfileUpdateEmailValidationFail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -255,7 +253,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_update_email()
+    public function testProfileUpdateEmail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -280,7 +278,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_edit()
+    public function testProfileEdit()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -293,7 +291,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_update_validation_fail()
+    public function testProfileUpdateValidationFail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -311,7 +309,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_update()
+    public function testProfileUpdate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -335,7 +333,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_socialite_destroy_with_invalid_id()
+    public function testProfileSocialiteDestroyWithInvalidId()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -348,7 +346,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_socialite_destroy_foreign_id()
+    public function testProfileSocialiteDestroyForeignId()
     {
         $user1 = factory(User::class)->states('user')->create();
         $user1->socialites()->create([
@@ -367,7 +365,7 @@ class ProfileTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_profile_socialite_destroy_id()
+    public function testProfileSocialiteDestroyId()
     {
         $user = factory(User::class)->states('user')->create();
         $user->socialites()->create([
@@ -385,5 +383,4 @@ class ProfileTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

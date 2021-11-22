@@ -12,7 +12,7 @@ class HomeController
      *
      * @return HttpResponse
      */
-    public function index() : HttpResponse
+    public function index(): HttpResponse
     {
         return Response::view('icore::admin.home.index');
     }

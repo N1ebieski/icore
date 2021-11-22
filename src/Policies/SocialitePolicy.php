@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Policies;
 
-use N1ebieski\ICore\Models\Socialite;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\Socialite;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SocialitePolicy

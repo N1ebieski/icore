@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Report\Report;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Models\Report\Report;
 
-/**
- * [trait description]
- */
 trait Filterable
 {
     /**
@@ -19,7 +16,7 @@ trait Filterable
      * @param  string|null  $search [description]
      * @return Builder|null          [description]
      */
-    public function scopeFilterSearch(Builder $query, string $search = null) : ?Builder
+    public function scopeFilterSearch(Builder $query, string $search = null): ?Builder
     {
         return $query->when($search !== null, function ($query) use ($search) {
             return $query->search($search);
@@ -32,7 +29,7 @@ trait Filterable
      * @param  int|null  $status [description]
      * @return Builder|null          [description]
      */
-    public function scopeFilterStatus(Builder $query, int $status = null) : ?Builder
+    public function scopeFilterStatus(Builder $query, int $status = null): ?Builder
     {
         return $query->when($status !== null, function ($query) use ($status) {
             return $query->where('status', $status);
@@ -45,7 +42,7 @@ trait Filterable
      * @param  int|null  $paginate [description]
      * @return LengthAwarePaginator [description]
      */
-    public function scopeFilterPaginate(Builder $query, int $paginate = null) : LengthAwarePaginator
+    public function scopeFilterPaginate(Builder $query, int $paginate = null): LengthAwarePaginator
     {
         return $query->paginate($paginate ?? config('database.paginate'));
     }
@@ -58,7 +55,7 @@ trait Filterable
      * @param string $orderby
      * @return Builder
      */
-    public function scopeFilterOrderBySearch(Builder $query, string $search = null) : Builder
+    public function scopeFilterOrderBySearch(Builder $query, string $search = null): Builder
     {
         return $query->when($search !== null, function ($query) use ($search) {
             return $query->orderBySearch($search);
@@ -71,7 +68,7 @@ trait Filterable
      * @param  string|null  $orderby [description]
      * @return Builder           [description]
      */
-    public function scopeFilterOrderBy(Builder $query, string $orderby = null) : Builder
+    public function scopeFilterOrderBy(Builder $query, string $orderby = null): Builder
     {
         $order = explode('|', $orderby);
 
@@ -88,7 +85,7 @@ trait Filterable
      * @param  int|null $report [description]
      * @return Builder|null          [description]
      */
-    public function scopeFilterReport(Builder $query, int $report = null) : ?Builder
+    public function scopeFilterReport(Builder $query, int $report = null): ?Builder
     {
         return $query->when($report === Report::REPORTED, function ($query) {
             return $query->whereHas('reports');
@@ -101,7 +98,7 @@ trait Filterable
      * @param  User|null  $author [description]
      * @return Builder|null          [description]
      */
-    public function scopeFilterAuthor(Builder $query, User $author = null) : ?Builder
+    public function scopeFilterAuthor(Builder $query, User $author = null): ?Builder
     {
         return $query->when($author !== null, function ($query) use ($author) {
             return $query->where('user_id', $author->id);
@@ -114,7 +111,7 @@ trait Filterable
      * @param  Category|null  $category [description]
      * @return Builder|null            [description]
      */
-    public function scopeFilterCategory(Builder $query, Category $category = null) : ?Builder
+    public function scopeFilterCategory(Builder $query, Category $category = null): ?Builder
     {
         return $query->when($category !== null, function ($query) use ($category) {
             $query->whereHas('categories', function ($q) use ($category) {

@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\View\Components\Page;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\View\View;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Collection as Collect;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 
-/**
- * [CategoryComponent description]
- */
 class FooterComponent implements Htmlable
 {
     /**
@@ -81,7 +78,7 @@ class FooterComponent implements Htmlable
      * [toHtml description]
      * @return View [description]
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         $pages = $this->page->makeCache()->rememberWithRecursiveChildrensByComponent([
             'pattern' => $this->pattern !== null ?

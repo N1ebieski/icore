@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Category\Category;
 
 class StoreRequest extends FormRequest
@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
     /**
      * [prepareUrl description]
      */
-    protected function prepareUrlAttribute() : void
+    protected function prepareUrlAttribute(): void
     {
         if ($this->has('url') && $this->input('url') !== null) {
             $this->merge(['url' => preg_replace('/(\/)$/', null, $this->input('url'))]);

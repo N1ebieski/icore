@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Page;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {

@@ -2,12 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * [UpdateRequest description]
- */
 class UpdateRequest extends FormRequest
 {
     /**

@@ -3,12 +3,12 @@
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
 use N1ebieski\ICore\Models\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Http\Controllers\Controller;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
 use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 
@@ -24,7 +24,6 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
     use RegistersUsers;
 
     /**
@@ -59,7 +58,7 @@ class RegisterController extends Controller
      *
      * @return HttpResponse
      */
-    public function showRegistrationForm() : HttpResponse
+    public function showRegistrationForm(): HttpResponse
     {
         return Response::view('icore::auth.register');
     }

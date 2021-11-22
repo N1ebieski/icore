@@ -23,7 +23,7 @@ interface Polymorphic
      * @param  IndexFilter   $filter        [description]
      * @return HttpResponse                         [description]
      */
-    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : HttpResponse;
+    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter): HttpResponse;
 
     /**
      * Display the specified Comment.
@@ -31,7 +31,7 @@ interface Polymorphic
      * @param  Comment  $comment [description]
      * @return JsonResponse          [description]
      */
-    public function show(Comment $comment) : JsonResponse;
+    public function show(Comment $comment): JsonResponse;
 
     /**
      * Show the form for editing the specified Comment.
@@ -39,7 +39,7 @@ interface Polymorphic
      * @param  Comment $comment
      * @return JsonResponse
      */
-    public function edit(Comment $comment) : JsonResponse;
+    public function edit(Comment $comment): JsonResponse;
 
     /**
      * Update the specified Comment in storage.
@@ -48,7 +48,7 @@ interface Polymorphic
      * @param  UpdateRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function update(Comment $comment, UpdateRequest $request) : JsonResponse;
+    public function update(Comment $comment, UpdateRequest $request): JsonResponse;
 
     /**
      * Update Censored attribute the specified Comment in storage.
@@ -57,7 +57,7 @@ interface Polymorphic
      * @param  UpdateCensoredRequest $request [description]
      * @return JsonResponse                      [description]
      */
-    public function updateCensored(Comment $comment, UpdateCensoredRequest $request) : JsonResponse;
+    public function updateCensored(Comment $comment, UpdateCensoredRequest $request): JsonResponse;
 
     /**
      * Update Status attribute the specified Comment in storage.
@@ -66,7 +66,7 @@ interface Polymorphic
      * @param  UpdateStatusRequest $request [description]
      * @return JsonResponse                     [description]
      */
-    public function updateStatus(Comment $comment, UpdateStatusRequest $request) : JsonResponse;
+    public function updateStatus(Comment $comment, UpdateStatusRequest $request): JsonResponse;
 
     /**
      * Remove the specified Comment from storage.
@@ -74,7 +74,7 @@ interface Polymorphic
      * @param  Comment $comment
      * @return JsonResponse
      */
-    public function destroy(Comment $comment) : JsonResponse;
+    public function destroy(Comment $comment): JsonResponse;
 
     /**
      * Remove the collection of Comments from storage.
@@ -83,5 +83,5 @@ interface Polymorphic
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(Comment $comment, DestroyGlobalRequest $request) : RedirectResponse;
+    public function destroyGlobal(Comment $comment, DestroyGlobalRequest $request): RedirectResponse;
 }

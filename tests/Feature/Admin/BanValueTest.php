@@ -4,22 +4,22 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 
 class BanValueTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_banvalue_create_as_guest()
+    public function testBanvalueCreateAsGuest()
     {
         $response = $this->get(route('admin.banvalue.create', ['ip']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banvalue_create_without_permission()
+    public function testBanvalueCreateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -30,7 +30,7 @@ class BanValueTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_banvalue_noexist_type_create()
+    public function testBanvalueNoexistTypeCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -41,7 +41,7 @@ class BanValueTest extends TestCase
         $response->assertSessionHasErrors(['type']);
     }
 
-    public function test_banvalue_create()
+    public function testBanvalueCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -53,14 +53,14 @@ class BanValueTest extends TestCase
         $this->assertStringContainsString(route('admin.banvalue.store', ['ip']), $response->getData()->view);
     }
 
-    public function test_banvalue_store_as_guest()
+    public function testBanvalueStoreAsGuest()
     {
         $response = $this->post(route('admin.banvalue.store', ['ip']), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banvalue_noexist_type_store()
+    public function testBanvalueNoexistTypeStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -71,7 +71,7 @@ class BanValueTest extends TestCase
         $response->assertSessionHasErrors(['type']);
     }
 
-    public function test_banmodel_user_store_without_permission()
+    public function testBanmodelUserStoreWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -84,7 +84,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_store_validation_fail()
+    public function testBanvalueStoreValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -101,7 +101,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_store()
+    public function testBanvalueStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -121,14 +121,14 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_index_as_guest()
+    public function testBanvalueIndexAsGuest()
     {
         $response = $this->get(route('admin.banvalue.index', ['ip']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banvalue_index_without_permission()
+    public function testBanvalueIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -139,7 +139,7 @@ class BanValueTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_banvalue_index_paginate()
+    public function testBanvalueIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -158,14 +158,14 @@ class BanValueTest extends TestCase
         $response->assertSeeInOrder([$banvalue[30]->ip]);
     }
 
-    public function test_banvalue_destroy_as_guest()
+    public function testBanvalueDestroyAsGuest()
     {
         $response = $this->delete(route('admin.banvalue.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banvalue_destroy_without_permission()
+    public function testBanvalueDestroyWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -178,7 +178,7 @@ class BanValueTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_banvalue_destroy()
+    public function testNoexistBanvalueDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -189,7 +189,7 @@ class BanValueTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_banvalue_destroy()
+    public function testBanvalueDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -212,14 +212,14 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_destroyGlobal_as_guest()
+    public function testBanvalueDestroyGlobalAsGuest()
     {
         $response = $this->delete(route('admin.banvalue.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_banvalue_destroyGlobal_without_permission()
+    public function testBanvalueDestroyGlobalWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -230,7 +230,7 @@ class BanValueTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_banvalue_destroyGlobal_validation_fail()
+    public function testBanvalueDestroyGlobalValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -244,7 +244,7 @@ class BanValueTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function test_banvalue_destroyGlobal()
+    public function testBanvalueDestroyGlobal()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -270,14 +270,14 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_edit_as_guest()
+    public function testBanvalueEditAsGuest()
     {
         $response = $this->get(route('admin.banvalue.edit', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_noexist_banvalue_edit()
+    public function testNoexistBanvalueEdit()
     {
         $user = factory(User::class)->create();
 
@@ -290,7 +290,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_edit_without_permission()
+    public function testBanvalueEditWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -305,7 +305,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_edit()
+    public function testBanvalueEdit()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -322,14 +322,14 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_update_as_guest()
+    public function testBanvalueUpdateAsGuest()
     {
         $response = $this->put(route('admin.banvalue.update', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_noexist_banvalue_update()
+    public function testNoexistBanvalueUpdate()
     {
         $user = factory(User::class)->create();
 
@@ -342,7 +342,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_update_without_permission()
+    public function testBanvalueUpdateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -357,7 +357,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_comment_update_validation_fail()
+    public function testCommentUpdateValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -374,7 +374,7 @@ class BanValueTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_banvalue_update()
+    public function testBanvalueUpdate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -397,5 +397,4 @@ class BanValueTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

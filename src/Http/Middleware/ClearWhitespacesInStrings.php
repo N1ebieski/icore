@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\TransformsRequest;
 
-/**
- * [ConvertEmptyStringsToNull description]
- */
 class ClearWhitespacesInStrings extends TransformsRequest
 {
     /**

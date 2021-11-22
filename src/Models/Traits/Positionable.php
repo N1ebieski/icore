@@ -2,16 +2,13 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
-/**
- * [Positionable description]
- */
 trait Positionable
 {
     /**
      * [reorderSiblings description]
      * @return void [description]
      */
-    public function reorderSiblings() : void
+    public function reorderSiblings(): void
     {
         $originalPosition = $this->getOriginal('position');
 
@@ -32,7 +29,7 @@ trait Positionable
      * @param  int|null $to   [description]
      * @return bool         [description]
      */
-    public function decrementSiblings(int $from = null, int $to = null) : bool
+    public function decrementSiblings(int $from = null, int $to = null): bool
     {
         return $this->siblings()
             ->when($from !== null, function ($query) use ($from) {
@@ -51,7 +48,7 @@ trait Positionable
      * @param  int|null $to   [description]
      * @return bool         [description]
      */
-    public function incrementSiblings(int $from = null, int $to = null) : bool
+    public function incrementSiblings(int $from = null, int $to = null): bool
     {
         return $this->siblings()
             ->when($from !== null, function ($query) use ($from) {
@@ -68,7 +65,7 @@ trait Positionable
      * [countSiblings description]
      * @return int [description]
      */
-    public function countSiblings() : int
+    public function countSiblings(): int
     {
         return $this->siblings()->count();
     }
@@ -77,7 +74,7 @@ trait Positionable
      * [getNextAfterLastPosition description]
      * @return int [description]
      */
-    public function getNextAfterLastPosition() : int
+    public function getNextAfterLastPosition(): int
     {
         $last = $this->siblings()
             ->orderBy('position', 'desc')

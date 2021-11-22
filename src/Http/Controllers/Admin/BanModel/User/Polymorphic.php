@@ -11,10 +11,6 @@ use N1ebieski\ICore\Filters\Admin\BanModel\User\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\StoreRequest;
 
-/**
- * [interface description]
- * @var [type]
- */
 interface Polymorphic
 {
     /**
@@ -25,7 +21,7 @@ interface Polymorphic
      * @param  IndexFilter  $filter   [description]
      * @return HttpResponse           [description]
      */
-    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter) : HttpResponse;
+    public function index(BanModel $banModel, IndexRequest $request, IndexFilter $filter): HttpResponse;
 
     /**
      * Show the form for creating a new BanModel.
@@ -33,7 +29,7 @@ interface Polymorphic
      * @param  User         $user [description]
      * @return JsonResponse       [description]
      */
-    public function create(User $user) : JsonResponse;
+    public function create(User $user): JsonResponse;
 
     /**
      * Store a newly created BanModel and BanValue.ip in storage.
@@ -44,5 +40,5 @@ interface Polymorphic
      * @param  StoreRequest $request  [description]
      * @return JsonResponse           [description]
      */
-    public function store(User $user, BanModel $banModel, BanValue $banValue, StoreRequest $request) : JsonResponse;
+    public function store(User $user, BanModel $banModel, BanValue $banValue, StoreRequest $request): JsonResponse;
 }

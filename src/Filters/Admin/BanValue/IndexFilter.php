@@ -7,10 +7,9 @@ use N1ebieski\ICore\Filters\Traits\HasSearch;
 use N1ebieski\ICore\Filters\Traits\HasOrderBy;
 use N1ebieski\ICore\Filters\Traits\HasPaginate;
 
-/**
- * [IndexFilter description]
- */
 class IndexFilter extends Filter
 {
-    use HasSearch, HasOrderBy, HasPaginate;
+    use HasSearch;
+    use HasOrderBy;
+    use HasPaginate;
 }

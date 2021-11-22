@@ -27,7 +27,7 @@ class LinkController
      * @param IndexFilter $filter
      * @return HttpResponse
      */
-    public function index(string $type, Link $link, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(string $type, Link $link, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.link.index', [
             'type' => $type,
@@ -43,7 +43,7 @@ class LinkController
      * @param CreateRequest $request
      * @return JsonResponse       [description]
      */
-    public function create(string $type, CreateRequest $request) : JsonResponse
+    public function create(string $type, CreateRequest $request): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -61,7 +61,7 @@ class LinkController
      * @param  StoreRequest $request  [description]
      * @return JsonResponse           [description]
      */
-    public function store(string $type, Link $link, StoreRequest $request) : JsonResponse
+    public function store(string $type, Link $link, StoreRequest $request): JsonResponse
     {
         $link->makeService()->create($request->validated() + ['type' => $type]);
 
@@ -76,7 +76,7 @@ class LinkController
      * @param  Link             $link [description]
      * @return JsonResponse           [description]
      */
-    public function edit(Link $link) : JsonResponse
+    public function edit(Link $link): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -93,7 +93,7 @@ class LinkController
      * @param  UpdateRequest $request  [description]
      * @return JsonResponse            [description]
      */
-    public function update(Link $link, UpdateRequest $request) : JsonResponse
+    public function update(Link $link, UpdateRequest $request): JsonResponse
     {
         $link->makeService()->update($request->validated());
 
@@ -110,7 +110,7 @@ class LinkController
      * @param  Link     $link [description]
      * @return JsonResponse           [description]
      */
-    public function editPosition(Link $link) : JsonResponse
+    public function editPosition(Link $link): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -127,7 +127,7 @@ class LinkController
      * @param  UpdatePositionRequest $request  [description]
      * @return JsonResponse                    [description]
      */
-    public function updatePosition(Link $link, UpdatePositionRequest $request) : JsonResponse
+    public function updatePosition(Link $link, UpdatePositionRequest $request): JsonResponse
     {
         $link->makeService()->updatePosition($request->only('position'));
 
@@ -143,7 +143,7 @@ class LinkController
      * @param  Link         $link [description]
      * @return JsonResponse       [description]
      */
-    public function destroy(Link $link) : JsonResponse
+    public function destroy(Link $link): JsonResponse
     {
         $link->makeService()->delete();
 

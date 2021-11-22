@@ -2,19 +2,19 @@
 
 namespace N1ebieski\ICore\Jobs\Tag;
 
-use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Bus\Queueable;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-/**
- * [CachePopularTags description]
- */
 class CachePopularTagsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Delete the job if its models no longer exist.

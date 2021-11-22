@@ -2,14 +2,11 @@
 
 namespace N1ebieski\ICore\View\Components\Tag;
 
-use Illuminate\Contracts\Support\Htmlable;
-use N1ebieski\ICore\Models\Tag\Tag;
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
+use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 
-/**
- * [TagComponent description]
- */
 class TagComponent implements Htmlable
 {
     /**
@@ -61,7 +58,7 @@ class TagComponent implements Htmlable
      * [toHtml description]
      * @return View [description]
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.tag.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([

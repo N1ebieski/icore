@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Stat\Stat;
+use Illuminate\Database\Eloquent\Builder;
 
 trait StatFilterable
 {
@@ -16,7 +16,7 @@ trait StatFilterable
      * @param string $stat
      * @return Builder
      */
-    public function scopeWithCountStats(Builder $query, string $stat) : Builder
+    public function scopeWithCountStats(Builder $query, string $stat): Builder
     {
         return $query->selectRaw("`stats_values`.`value` as `{$stat}`")
             ->leftJoin('stats_values', function ($query) use ($stat) {
@@ -35,7 +35,7 @@ trait StatFilterable
      * @param  string|null  $orderby [description]
      * @return Builder           [description]
      */
-    public function scopeFilterOrderBy(Builder $query, string $orderby = null) : Builder
+    public function scopeFilterOrderBy(Builder $query, string $orderby = null): Builder
     {
         $order = explode('|', $orderby);
 

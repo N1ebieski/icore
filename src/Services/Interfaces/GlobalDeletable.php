@@ -2,9 +2,6 @@
 
 namespace N1ebieski\ICore\Services\Interfaces;
 
-/**
- * [interface description]
- */
 interface GlobalDeletable
 {
     /**
@@ -12,5 +9,5 @@ interface GlobalDeletable
      * @param  array $ids [description]
      * @return int        [description]
      */
-    public function deleteGlobal(array $ids) : int;
+    public function deleteGlobal(array $ids): int;
 }

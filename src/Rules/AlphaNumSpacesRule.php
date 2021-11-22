@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
-/**
- * [AlphaNumSpaces description]
- */
 class AlphaNumSpacesRule implements Rule
 {
     /**

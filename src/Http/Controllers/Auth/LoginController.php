@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use N1ebieski\ICore\Http\Requests\Auth\Login\LoginRequest;
 
@@ -21,7 +21,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
     use AuthenticatesUsers;
 
     /**
@@ -46,7 +45,7 @@ class LoginController extends Controller
      *
      * @return HttpResponse
      */
-    public function showLoginForm() : HttpResponse
+    public function showLoginForm(): HttpResponse
     {
         return Response::view('icore::auth.login');
     }
@@ -56,7 +55,7 @@ class LoginController extends Controller
      *
      * @return string
      */
-    public function redirectTo() : string
+    public function redirectTo(): string
     {
         return Request::input('redirect') ?? $this->redirectTo;
     }

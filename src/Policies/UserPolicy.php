@@ -40,7 +40,7 @@ class UserPolicy
      * @param array $ids
      * @return boolean
      */
-    public function deleteGlobalSelf(User $current_user, array $ids) : bool
+    public function deleteGlobalSelf(User $current_user, array $ids): bool
     {
         foreach ($ids as $id) {
             if ($current_user->id === (int)$id) {

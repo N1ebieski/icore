@@ -46,7 +46,7 @@ interface Polymorphic
      * @return JsonResponse
      */
     public function store(Category $category, StoreRequest $request): JsonResponse;
-    
+
     /**
      * Store collection of Categories with childrens in storage.
      *
@@ -54,7 +54,7 @@ interface Polymorphic
      * @param  StoreGlobalRequest  $request
      * @return JsonResponse
      */
-    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse;    
+    public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse;
 
     /**
      * Undocumented function

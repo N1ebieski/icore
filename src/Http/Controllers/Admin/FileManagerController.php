@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 
 class FileManagerController
 {
@@ -12,7 +12,7 @@ class FileManagerController
      *
      * @return HttpResponse
      */
-    public function index() : HttpResponse
+    public function index(): HttpResponse
     {
         return Response::view('icore::admin.filemanager.index');
     }

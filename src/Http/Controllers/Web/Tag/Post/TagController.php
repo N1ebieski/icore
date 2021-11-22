@@ -9,9 +9,6 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Tag\ShowRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Tag\Post\Polymorphic;
 
-/**
- * [TagController description]
- */
 class TagController implements Polymorphic
 {
     /**
@@ -22,7 +19,7 @@ class TagController implements Polymorphic
      * @param  ShowRequest $request
      * @return HttpResponse       [description]
      */
-    public function show(Tag $tag, Post $post, ShowRequest $request) : HttpResponse
+    public function show(Tag $tag, Post $post, ShowRequest $request): HttpResponse
     {
         return Response::view('icore::web.tag.post.show', [
             'tag' => $tag,

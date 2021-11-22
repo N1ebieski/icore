@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Comment\Page;
 
-use N1ebieski\ICore\Http\Requests\Web\Comment\Page\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Web\Comment\Page\StoreRequest;
+use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
-use Illuminate\Http\JsonResponse;
+use N1ebieski\ICore\Http\Requests\Web\Comment\Page\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Web\Comment\Page\CreateRequest;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
@@ -20,7 +17,7 @@ interface Polymorphic
      * @param  CreateRequest $request [description]
      * @return JsonResponse           [description]
      */
-    public function create(Page $page, CreateRequest $request) : JsonResponse;
+    public function create(Page $page, CreateRequest $request): JsonResponse;
 
     /**
      * [store description]
@@ -29,5 +26,5 @@ interface Polymorphic
      * @param  StoreRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function store(Page $page, Comment $comment, StoreRequest $request) : JsonResponse;
+    public function store(Page $page, Comment $comment, StoreRequest $request): JsonResponse;
 }

@@ -2,23 +2,11 @@
 
 namespace N1ebieski\ICore\Models\Comment\Page;
 
-use N1ebieski\ICore\Models\Comment\Comment as CommentBaseModel;
+use N1ebieski\ICore\Models\Comment\Comment as BaseComment;
 
-/**
- * [Comment description]
- */
-class Comment extends CommentBaseModel
+class Comment extends BaseComment
 {
     // Configuration
-
-    /**
-     * [getModelTypeAttribute description]
-     * @return [type] [description]
-     */
-    public function getModelTypeAttribute()
-    {
-        return 'N1ebieski\\ICore\\Models\\Page\\Page';
-    }
 
     /**
      * Get the class name for polymorphic relations.
@@ -27,16 +15,26 @@ class Comment extends CommentBaseModel
      */
     public function getMorphClass()
     {
-        return 'N1ebieski\\ICore\\Models\\Comment\\Comment';
+        return \N1ebieski\ICore\Models\Comment\Comment::class;
     }
 
     // Accessors
 
     /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getModelTypeAttribute(): string
+    {
+        return \N1ebieski\ICore\Models\Page\Page::class;
+    }
+
+    /**
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliAttribute() : string
+    public function getPoliAttribute(): string
     {
         return 'page';
     }

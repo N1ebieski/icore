@@ -9,12 +9,10 @@ use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
-/**
- * [Confirmation description]
- */
 class ConfirmationMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * [protected description]
@@ -59,7 +57,7 @@ class ConfirmationMail extends Mailable
      *
      * @return self
      */
-    public function build() : self
+    public function build(): self
     {
         return $this->subject($this->lang->get('icore::newsletter.subscribe_confirm'))
             ->to($this->newsletter->email)

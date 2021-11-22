@@ -8,9 +8,6 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
-/**
- * [Recaptcha_v2 description]
- */
 class RecaptchaV2Rule implements Rule
 {
     /**
@@ -89,7 +86,7 @@ class RecaptchaV2Rule implements Rule
      * @param string $value
      * @return GuzzleResponse
      */
-    protected function makeResponse(string $value) : GuzzleResponse
+    protected function makeResponse(string $value): GuzzleResponse
     {
         return $this->response = $this->guzzle->request('POST', $this->verifyUrl, [
             'form_params' => [
@@ -104,7 +101,7 @@ class RecaptchaV2Rule implements Rule
      *
      * @return object
      */
-    protected function prepareResponse() : object
+    protected function prepareResponse(): object
     {
         return json_decode($this->response->getBody());
     }

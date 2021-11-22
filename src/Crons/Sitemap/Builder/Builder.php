@@ -150,9 +150,9 @@ abstract class Builder
      * @param integer $count
      * @return integer
      */
-    protected function countPages(int $count) : int
+    protected function countPages(int $count): int
     {
-        $pages = ceil($count/$this->paginate);
+        $pages = ceil($count / $this->paginate);
 
         return $pages > 0 ? $pages : 1;
     }
@@ -162,7 +162,7 @@ abstract class Builder
      *
      * @return void
      */
-    public function addToSitemap() : void
+    public function addToSitemap(): void
     {
         $this->collection->each(function ($item) {
             for ($i = 1; $i <= $this->countPages($item->models_count); $i++) {
@@ -184,11 +184,11 @@ abstract class Builder
      *
      * @return boolean
      */
-    public function putSitemap() : bool
+    public function putSitemap(): bool
     {
         $this->iterator++;
 
-        return $this->storage->disk('public')->put($this->path . '/sitemap-' . $this->iterator .'.xml', $this->sitemap);
+        return $this->storage->disk('public')->put($this->path . '/sitemap-' . $this->iterator . '.xml', $this->sitemap);
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class Builder
      *
      * @return void
      */
-    public function nullSitemap() : void
+    public function nullSitemap(): void
     {
         $this->sitemap = $this->collect->make([]);
     }
@@ -206,7 +206,7 @@ abstract class Builder
      *
      * @return string
      */
-    public function prepareSitemap() : string
+    public function prepareSitemap(): string
     {
         return $this->sitemap = $this->arrayToXml->convert(
             [
@@ -228,10 +228,10 @@ abstract class Builder
      *
      * @return boolean
      */
-    public function isMaxItems() : bool
+    public function isMaxItems(): bool
     {
         return $this->sitemap->count() >= $this->maxItems || $this->collection->count() < 1000;
     }
 
-    abstract public function chunkCollection(Closure $closure) : bool;
+    abstract public function chunkCollection(Closure $closure): bool;
 }

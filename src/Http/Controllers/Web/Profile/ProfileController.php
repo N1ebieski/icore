@@ -22,7 +22,7 @@ class ProfileController
      *
      * @return HttpResponse
      */
-    public function edit() : HttpResponse
+    public function edit(): HttpResponse
     {
         Config::set('jsvalidation.focus_on_error', false);
 
@@ -36,7 +36,7 @@ class ProfileController
      *
      * @return HttpResponse
      */
-    public function editSocialite() : HttpResponse
+    public function editSocialite(): HttpResponse
     {
         return Response::view('icore::web.profile.edit_socialite', [
             'user' => Auth::user()->load('socialites')
@@ -49,7 +49,7 @@ class ProfileController
      * @param Request $request
      * @return RedirectResponse
      */
-    public function redirectPassword(Request $request) : RedirectResponse
+    public function redirectPassword(Request $request): RedirectResponse
     {
         $request->request->add(['email' => Auth::user()->email]);
 
@@ -69,7 +69,7 @@ class ProfileController
      * @param  UpdateEmailRequest $request [description]
      * @return RedirectResponse            [description]
      */
-    public function updateEmail(UpdateEmailRequest $request) : RedirectResponse
+    public function updateEmail(UpdateEmailRequest $request): RedirectResponse
     {
         Auth::user()->update([
             'email' => $request->get('email'),
@@ -90,7 +90,7 @@ class ProfileController
      * @param  UpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(UpdateRequest $request) : RedirectResponse
+    public function update(UpdateRequest $request): RedirectResponse
     {
         Auth::user()->update([
             'name' => $request->input('name'),

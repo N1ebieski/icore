@@ -2,13 +2,10 @@
 
 namespace N1ebieski\ICore\Listeners\Newsletter;
 
-use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Container\Container as App;
+use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 
-/**
- * [SendConfirmation description]
- */
 class SendConfirmation
 {
     /**
@@ -43,7 +40,7 @@ class SendConfirmation
      * @param  object  $event
      * @return void
      */
-    public function handle($event) : void
+    public function handle($event): void
     {
         $this->mailer->send($this->app->make(ConfirmationMail::class, [
             'newsletter' => $event->newsletter

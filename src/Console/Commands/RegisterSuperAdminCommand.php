@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\Console\Commands;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator as Lang;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Support\Carbon;
 
 class RegisterSuperAdminCommand extends Command
 {
@@ -87,7 +87,7 @@ class RegisterSuperAdminCommand extends Command
      *
      * @return boolean
      */
-    protected function authorize() : bool
+    protected function authorize(): bool
     {
         return $this->user->whereHas('roles', function ($query) {
             $query->where('name', 'super-admin');
@@ -100,7 +100,7 @@ class RegisterSuperAdminCommand extends Command
      * @param array $attributes
      * @return boolean
      */
-    protected function validate(array $attributes) : bool
+    protected function validate(array $attributes): bool
     {
         $validator = $this->validator->make(
             [
@@ -128,7 +128,7 @@ class RegisterSuperAdminCommand extends Command
      *
      * @return array
      */
-    protected function prepareAttributes() : array
+    protected function prepareAttributes(): array
     {
         while (true) {
             $attributes = [
@@ -152,7 +152,7 @@ class RegisterSuperAdminCommand extends Command
      * @param array $attributes
      * @return User
      */
-    protected function create(array $attributes) : User
+    protected function create(array $attributes): User
     {
         $user = $this->user->create([
             'name' => $attributes['name'],

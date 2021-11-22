@@ -8,7 +8,7 @@ trait HasExcept
      * [filterExcept description]
      * @param int|null $value [description]
      */
-    public function filterExcept(array $value = null) : void
+    public function filterExcept(array $value = null): void
     {
         $this->parameters['except'] = $value;
     }

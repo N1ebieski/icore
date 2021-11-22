@@ -3,25 +3,25 @@
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
+use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Faker\Factory as Faker;
-use Illuminate\Support\Facades\Auth;
 
 class ReportTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_report_comment_create_as_guest()
+    public function testReportCommentCreateAsGuest()
     {
         $response = $this->get(route('web.report.comment.create', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_report_noexist_comment_create()
+    public function testReportNoexistCommentCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -34,7 +34,7 @@ class ReportTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_report_inactive_comment_create()
+    public function testReportInactiveCommentCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -49,7 +49,7 @@ class ReportTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_report_comment_create()
+    public function testReportCommentCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -65,14 +65,14 @@ class ReportTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_report_comment_store_as_guest()
+    public function testReportCommentStoreAsGuest()
     {
         $response = $this->post(route('web.report.comment.store', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_report_noexist_comment_store()
+    public function testReportNoexistCommentStore()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -85,7 +85,7 @@ class ReportTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_report_inactive_comment_store()
+    public function testReportInactiveCommentStore()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -100,7 +100,7 @@ class ReportTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_report_comment_store_validation_fail()
+    public function testReportCommentStoreValidationFail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -117,7 +117,7 @@ class ReportTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_report_comment_store()
+    public function testReportCommentStore()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -141,5 +141,4 @@ class ReportTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

@@ -15,7 +15,7 @@ class BanValueObserver
      */
     public function created(BanValue $banValue)
     {
-        Cache::tags(['bans.'.$banValue->type])->flush();
+        Cache::tags(['bans.' . $banValue->type])->flush();
     }
 
     /**
@@ -26,7 +26,7 @@ class BanValueObserver
      */
     public function updated(BanValue $banValue)
     {
-        Cache::tags(['bans.'.$banValue->type])->flush();
+        Cache::tags(['bans.' . $banValue->type])->flush();
     }
 
     /**
@@ -37,7 +37,7 @@ class BanValueObserver
      */
     public function deleted(BanValue $banValue)
     {
-        Cache::tags(['bans.'.$banValue->type])->flush();
+        Cache::tags(['bans.' . $banValue->type])->flush();
     }
 
     /**

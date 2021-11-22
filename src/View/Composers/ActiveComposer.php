@@ -2,11 +2,11 @@
 
 namespace N1ebieski\ICore\View\Composers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Contracts\Routing\UrlGenerator as Url;
-use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Http\Request;
 use N1ebieski\ICore\View\Composers\Composer;
+use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Contracts\Routing\UrlGenerator as Url;
 
 class ActiveComposer extends Composer
 {

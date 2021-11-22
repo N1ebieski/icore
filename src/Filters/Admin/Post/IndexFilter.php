@@ -12,5 +12,10 @@ use N1ebieski\ICore\Filters\Traits\HasPaginate;
 
 class IndexFilter extends Filter
 {
-    use HasExcept, HasSearch, HasStatus, HasOrderBy, HasCategory, HasPaginate;
+    use HasExcept;
+    use HasSearch;
+    use HasStatus;
+    use HasOrderBy;
+    use HasCategory;
+    use HasPaginate;
 }

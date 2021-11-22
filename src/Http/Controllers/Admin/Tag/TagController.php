@@ -23,7 +23,7 @@ class TagController
     /**
      * Undocumented variable
      *
-     * @var [type]
+     * @var TagService
      */
     protected $tagService;
 
@@ -45,7 +45,7 @@ class TagController
      * @param IndexFilter $filter
      * @return HttpResponse
      */
-    public function index(Tag $tag, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Tag $tag, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.tag.index', [
             'tags' => $tag->makeRepo()->paginateByFilter($filter->all()),
@@ -59,7 +59,7 @@ class TagController
      *
      * @return JsonResponse
      */
-    public function create() : JsonResponse
+    public function create(): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -73,7 +73,7 @@ class TagController
      * @param StoreRequest $request
      * @return JsonResponse
      */
-    public function store(StoreRequest $request) : JsonResponse
+    public function store(StoreRequest $request): JsonResponse
     {
         $this->tagService->create($request->validated());
 
@@ -88,7 +88,7 @@ class TagController
      * @param Tag $tag
      * @return JsonResponse
      */
-    public function edit(Tag $tag) : JsonResponse
+    public function edit(Tag $tag): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -106,7 +106,7 @@ class TagController
      * @param UpdateRequest $request
      * @return JsonResponse
      */
-    public function update(Tag $tag, UpdateRequest $request) : JsonResponse
+    public function update(Tag $tag, UpdateRequest $request): JsonResponse
     {
         $this->tagService->setTag($tag)->update($request->validated());
 
@@ -124,7 +124,7 @@ class TagController
      * @param Tag $tag
      * @return JsonResponse
      */
-    public function destroy(Tag $tag) : JsonResponse
+    public function destroy(Tag $tag): JsonResponse
     {
         $this->tagService->setTag($tag)->delete();
 
@@ -137,7 +137,7 @@ class TagController
      * @param DestroyGlobalRequest $request
      * @return RedirectResponse
      */
-    public function destroyGlobal(DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $this->tagService->deleteGlobal($request->input('select'));
 

@@ -3,26 +3,26 @@
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
-use N1ebieski\ICore\Models\User;
+use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Report\Report;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Faker\Factory as Faker;
-use Illuminate\Support\Facades\Auth;
 
 class ReportTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_report_comment_show_as_guest()
+    public function testReportCommentShowAsGuest()
     {
         $response = $this->get(route('admin.report.comment.show', [32]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_report_comment_show_without_permission()
+    public function testReportCommentShowWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -38,7 +38,7 @@ class ReportTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_report_noexist_comment_show()
+    public function testReportNoexistCommentShow()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -49,7 +49,7 @@ class ReportTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_report_comment_show()
+    public function testReportCommentShow()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -61,7 +61,7 @@ class ReportTest extends TestCase
         $report = factory(Report::class, 10)
             ->states('with_user')
             ->make()
-            ->each(function($report) use ($comment) {
+            ->each(function ($report) use ($comment) {
                 $report->morph()->associate($comment)->save();
             });
 
@@ -71,17 +71,16 @@ class ReportTest extends TestCase
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString($report[6]->content, $response->getData()->view);
-
     }
 
-    public function test_report_comment_clear_as_guest()
+    public function testReportCommentClearAsGuest()
     {
         $response = $this->delete(route('admin.report.comment.clear', [32]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_report_comment_clear_without_permission()
+    public function testReportCommentClearWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -97,7 +96,7 @@ class ReportTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_report_noexist_comment_clear()
+    public function testReportNoexistCommentClear()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -108,7 +107,7 @@ class ReportTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_report_comment_clear()
+    public function testReportCommentClear()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -120,7 +119,7 @@ class ReportTest extends TestCase
         $report = factory(Report::class, 10)
             ->states('with_user')
             ->make()
-            ->each(function($report) use ($comment) {
+            ->each(function ($report) use ($comment) {
                 $report->morph()->associate($comment)->save();
             });
 
@@ -134,5 +133,4 @@ class ReportTest extends TestCase
 
         $this->assertTrue($deleted === 0);
     }
-
 }

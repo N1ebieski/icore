@@ -2,12 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Profile;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * [UpdateRequest description]
- */
 class UpdateRequest extends FormRequest
 {
     /**

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\MailingEmailService;
 use N1ebieski\ICore\Repositories\MailingEmailRepo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MailingEmail extends Model
 {
@@ -72,18 +74,19 @@ class MailingEmail extends Model
     /**
      * Undocumented function
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function mailing()
+    public function mailing(): BelongsTo
     {
-        return $this->belongsTo('N1ebieski\ICore\Models\Mailing');
+        return $this->belongsTo(\N1ebieski\ICore\Models\Mailing::class);
     }
 
     /**
-     * [morph description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphTo
      */
-    public function morph()
+    public function morph(): MorphTo
     {
         return $this->morphTo('morph', 'model_type', 'model_id');
     }
@@ -96,12 +99,12 @@ class MailingEmail extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeUnsent(Builder $query) : Builder
+    public function scopeUnsent(Builder $query): Builder
     {
         return $query->where('sent', static::UNSENT);
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

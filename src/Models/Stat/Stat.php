@@ -12,7 +12,8 @@ use N1ebieski\ICore\Models\Traits\Polymorphic;
 
 class Stat extends Model
 {
-    use Polymorphic, Carbonable;
+    use Polymorphic;
+    use Carbonable;
 
     // Configuration
 
@@ -59,7 +60,7 @@ class Stat extends Model
         'updated_at' => 'datetime'
     ];
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

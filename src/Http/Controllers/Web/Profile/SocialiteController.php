@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Response;
 use Laravel\Socialite\Facades\Socialite;
 use N1ebieski\ICore\Models\Socialite as Social;
 
-/**
- * [SocialiteController description]
- */
 class SocialiteController
 {
     /**
@@ -55,7 +52,7 @@ class SocialiteController
      * @param string $provider
      * @return RedirectResponse
      */
-    public function callback(Social $socialite, string $provider) : RedirectResponse
+    public function callback(Social $socialite, string $provider): RedirectResponse
     {
         $this->configRedirect($provider);
 
@@ -88,7 +85,7 @@ class SocialiteController
      * @param  Social $socialite [description]
      * @return RedirectResponse  [description]
      */
-    public function destroy(Social $socialite) : RedirectResponse
+    public function destroy(Social $socialite): RedirectResponse
     {
         $socialite->delete();
 

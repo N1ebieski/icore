@@ -2,22 +2,22 @@
 
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
-use Tests\TestCase;
-use Socialite;
-use N1ebieski\ICore\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 use Mockery;
+use Tests\TestCase;
+use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SocialiteTest extends TestCase
 {
     use DatabaseTransactions;
 
-    const PROVIDER = 'facebook';
+    private const PROVIDER = 'facebook';
 
     public $socialLoginRedirects;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +29,7 @@ class SocialiteTest extends TestCase
         ];
     }
 
-    static function socialite_mock(array $user)
+    protected static function socialiteMock(array $user)
     {
         $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
 
@@ -47,7 +47,7 @@ class SocialiteTest extends TestCase
          // echo ' sad: ' . $abstractUser->getEmail();
     }
 
-    public function test_redirect_provider()
+    public function testRedirectProvider()
     {
         $providers = ['twitter', 'facebook'];
 
@@ -72,14 +72,14 @@ class SocialiteTest extends TestCase
         }
     }
 
-    public function test_invalid_provider()
+    public function testInvalidProvider()
     {
         $response = $this->get(route('auth.socialite.callback', ['invalid-provider']));
 
         $response->assertRedirect('/login');
     }
 
-    public function test_callback_as_logged_user()
+    public function testCallbackAsLoggedUser()
     {
         $user = factory(User::class)->create();
 
@@ -92,7 +92,7 @@ class SocialiteTest extends TestCase
         Auth::logout();
     }
 
-    public function test_callback_without_nothing()
+    public function testCallbackWithoutNothing()
     {
         $this->socialite_mock([
             'id' => '',
@@ -106,7 +106,7 @@ class SocialiteTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function test_callback_without_email()
+    public function testCallbackWithoutEmail()
     {
         $this->socialite_mock([
             'id' => 343242342,
@@ -121,7 +121,7 @@ class SocialiteTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function test_callback_noexist_user()
+    public function testCallbackNoexistUser()
     {
         $this->socialite_mock([
             'id' => 343242342,
@@ -145,7 +145,7 @@ class SocialiteTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_callback_exist_user_foreign_email()
+    public function testCallbackExistUserForeignEmail()
     {
         $socialAccount = factory(User::class)->states('user')->create();
 
@@ -163,7 +163,7 @@ class SocialiteTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function test_callback_exist_user()
+    public function testCallbackExistUser()
     {
         $socialAccount = factory(User::class)->states('user')->create();
         $socialAccount->socialites()->create([

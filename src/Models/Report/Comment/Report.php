@@ -2,12 +2,9 @@
 
 namespace N1ebieski\ICore\Models\Report\Comment;
 
-use N1ebieski\ICore\Models\Report\Report as ReportBaseModel;
+use N1ebieski\ICore\Models\Report\Report as BaseReport;
 
-/**
- * [Comment description]
- */
-class Report extends ReportBaseModel
+class Report extends BaseReport
 {
     // Accessors
 
@@ -15,7 +12,7 @@ class Report extends ReportBaseModel
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliAttribute() : string
+    public function getPoliAttribute(): string
     {
         return 'comment';
     }

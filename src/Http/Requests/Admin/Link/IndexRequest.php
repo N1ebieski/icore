@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
-use Illuminate\Http\Request as BaseRequest;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request as BaseRequest;
 
 class IndexRequest extends FormRequest
 {

@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Comment\Post;
 
+use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\App;
-use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
-use N1ebieski\ICore\Models\Post;
 
 class CreateRequest extends FormRequest
 {

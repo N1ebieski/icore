@@ -24,7 +24,7 @@ class RoleController
      * @param IndexRequest $request [description]
      * @return HttpResponse         [description]
      */
-    public function index(Role $role, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Role $role, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.role.index', [
             'roles' => $role->makeRepo()->paginateByFilter($filter->all()),
@@ -37,7 +37,7 @@ class RoleController
      * @param  Permission $permission [description]
      * @return HttpResponse           [description]
      */
-    public function create(Permission $permission) : HttpResponse
+    public function create(Permission $permission): HttpResponse
     {
         $permissions = $permission->orderBy('name', 'asc')->get();
 
@@ -54,7 +54,7 @@ class RoleController
      * @param  StoreRequest $request [description]
      * @return RedirectResponse                [description]
      */
-    public function store(Role $role, StoreRequest $request) : RedirectResponse
+    public function store(Role $role, StoreRequest $request): RedirectResponse
     {
         $role->makeService()->create($request->only(['name', 'perm']));
 
@@ -69,7 +69,7 @@ class RoleController
      * @param  EditRequest $request   [description]
      * @return HttpResponse           [description]
      */
-    public function edit(Role $role, EditRequest $request) : HttpResponse
+    public function edit(Role $role, EditRequest $request): HttpResponse
     {
         $permissions = $role->makeService()->getPermissionsByRole();
 
@@ -87,7 +87,7 @@ class RoleController
      * @param  UpdateRequest $request [description]
      * @return RedirectResponse           [description]
      */
-    public function update(Role $role, UpdateRequest $request) : RedirectResponse
+    public function update(Role $role, UpdateRequest $request): RedirectResponse
     {
         $role->makeService()->update($request->only(['perm', 'name']));
 
@@ -102,7 +102,7 @@ class RoleController
      * @param  DestroyRequest $request  [description]
      * @return RedirectResponse         [description]
      */
-    public function destroy(Role $role, DestroyRequest $request) : RedirectResponse
+    public function destroy(Role $role, DestroyRequest $request): RedirectResponse
     {
         $role->delete();
 

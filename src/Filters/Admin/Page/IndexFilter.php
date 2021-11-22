@@ -13,7 +13,12 @@ use N1ebieski\ICore\Filters\Traits\HasPaginate;
 
 class IndexFilter extends Filter
 {
-    use HasExcept, HasSearch, HasStatus, HasOrderBy, HasParent, HasPaginate;
+    use HasExcept;
+    use HasSearch;
+    use HasStatus;
+    use HasOrderBy;
+    use HasParent;
+    use HasPaginate;
 
     /**
      * [setParent description]
@@ -31,7 +36,7 @@ class IndexFilter extends Filter
      * @param  int|null $id [description]
      * @return Page       [description]
      */
-    public function findParent(int $id = null) : Page
+    public function findParent(int $id = null): Page
     {
         return Page::find($id, ['id', 'title']);
     }

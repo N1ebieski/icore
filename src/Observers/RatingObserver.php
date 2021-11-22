@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Observers;
 use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\Rating\Rating;
 
-/**
- * [RatingObserver description]
- */
 class RatingObserver
 {
     /**

@@ -11,9 +11,6 @@ use N1ebieski\ICore\Http\Requests\Admin\Comment\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Comment\Page\CreateRequest;
 
-/**
- * [interface description]
- */
 interface Polymorphic
 {
     /**
@@ -24,7 +21,7 @@ interface Polymorphic
      * @param  IndexFilter   $filter        [description]
      * @return HttpResponse                 [description]
      */
-    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter) : HttpResponse;
+    public function index(Comment $comment, IndexRequest $request, IndexFilter $filter): HttpResponse;
 
     /**
      * Show the form for creating a new Comment for Page.
@@ -33,7 +30,7 @@ interface Polymorphic
      * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function create(Page $page, CreateRequest $request) : JsonResponse;
+    public function create(Page $page, CreateRequest $request): JsonResponse;
 
     /**
      * [store description]
@@ -42,5 +39,5 @@ interface Polymorphic
      * @param  StoreRequest $request [description]
      * @return JsonResponse          [description]
      */
-    public function store(Page $page, Comment $comment, StoreRequest $request) : JsonResponse;
+    public function store(Page $page, Comment $comment, StoreRequest $request): JsonResponse;
 }

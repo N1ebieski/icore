@@ -8,7 +8,7 @@ trait HasType
      * [filterType description]
      * @param string|null $value [description]
      */
-    public function filterType(string $value = null) : void
+    public function filterType(string $value = null): void
     {
         $this->parameters['type'] = $value;
     }

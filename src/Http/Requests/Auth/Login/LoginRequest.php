@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Http\Requests\Auth\Login;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * [LoginRequest description]
- */
 class LoginRequest extends FormRequest
 {
     /**

@@ -2,20 +2,18 @@
 
 namespace N1ebieski\ICore\Mail\Contact;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Http\Request;
+use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Translation\Translator as Lang;
-use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\UrlGenerator as URL;
+use Illuminate\Contracts\Translation\Translator as Lang;
 
-/**
- * [Mail description]
- */
 class Mail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * [protected description]
@@ -88,7 +86,7 @@ class Mail extends Mailable
      * [subcopy description]
      * @return string [description]
      */
-    protected function subcopy() : string
+    protected function subcopy(): string
     {
         return $this->lang->get('icore::contact.subcopy.form', [
             'url' => $this->url->route('web.contact.show')

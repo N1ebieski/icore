@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Http\Controllers\Admin\Report\Comment\Polymorphic;
 
-/**
- * [ReportController description]
- */
 class ReportController implements Polymorphic
 {
     /**
@@ -19,7 +16,7 @@ class ReportController implements Polymorphic
      * @param  Comment  $comment [description]
      * @return JsonResponse          [description]
      */
-    public function show(Comment $comment) : JsonResponse
+    public function show(Comment $comment): JsonResponse
     {
         $reports = $comment->reports()->with('user:id,name')->get();
 
@@ -38,7 +35,7 @@ class ReportController implements Polymorphic
      * @param  Comment $comment [description]
      * @return JsonResponse         [description]
      */
-    public function clear(Comment $comment) : JsonResponse
+    public function clear(Comment $comment): JsonResponse
     {
         $comment->reports()->delete();
 

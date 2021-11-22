@@ -10,7 +10,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var string
      */
-    public const VERSION = "3.1.7";
+    public const VERSION = "4.0.0";
 
     /**
      * Register services.
@@ -19,7 +19,7 @@ class ICoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.  '/../../config/icore.php', 'icore');
+        $this->mergeConfigFrom(__DIR__ .  '/../../config/icore.php', 'icore');
 
         $this->app->register(\Unikent\Cache\TaggableFileCacheServiceProvider::class);
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
@@ -86,19 +86,19 @@ class ICoreServiceProvider extends ServiceProvider
         ], 'icore.config');
 
         $this->publishes([
-            __DIR__.'/../../routes/web' => base_path('routes') . '/vendor/icore/web'
+            __DIR__ . '/../../routes/web' => base_path('routes') . '/vendor/icore/web'
         ], 'icore.routes.web');
 
         $this->publishes([
-            __DIR__.'/../../routes/api' => base_path('routes') . '/vendor/icore/api'
+            __DIR__ . '/../../routes/api' => base_path('routes') . '/vendor/icore/api'
         ], 'icore.routes.api');
 
         $this->publishes([
-            __DIR__.'/../../routes/admin' => base_path('routes') . '/vendor/icore/admin'
+            __DIR__ . '/../../routes/admin' => base_path('routes') . '/vendor/icore/admin'
         ], 'icore.routes.admin');
 
         $this->publishes([
-            __DIR__.'/../../routes/auth.php' => base_path('routes') . '/vendor/icore/auth.php'
+            __DIR__ . '/../../routes/auth.php' => base_path('routes') . '/vendor/icore/auth.php'
         ], 'icore.routes.auth');
 
         $this->publishes([

@@ -64,7 +64,7 @@ class CategoryService implements
         DB $db
     ) {
         $this->setCategory($category);
-        
+
         $this->collect = $collect;
         $this->db = $db;
 

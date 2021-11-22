@@ -3,18 +3,19 @@
 namespace N1ebieski\ICore\Models\BanModel;
 
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\Polymorphic;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 
-/**
- * [BanModel description]
- */
 class BanModel extends Model
 {
-    use Filterable, FullTextSearchable, Polymorphic, Carbonable;
+    use Filterable;
+    use FullTextSearchable;
+    use Polymorphic;
+    use Carbonable;
 
     // Configuration
 
@@ -49,10 +50,11 @@ class BanModel extends Model
     // Relations
 
     /**
-     * [morph description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphTo
      */
-    public function morph()
+    public function morph(): MorphTo
     {
         return $this->morphTo('morph', 'model_type', 'model_id');
     }
@@ -65,7 +67,7 @@ class BanModel extends Model
      * @param  [type]  $orderby [description]
      * @return Builder           [description]
      */
-    public function scopeFilterOrderBy(Builder $query, $orderby = null) : Builder
+    public function scopeFilterOrderBy(Builder $query, $orderby = null): Builder
     {
         $order = explode('|', $orderby);
 

@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Http\Requests\Admin\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * [DestroyGlobalRequest description]
- */
 class DestroyGlobalRequest extends FormRequest
 {
     /**

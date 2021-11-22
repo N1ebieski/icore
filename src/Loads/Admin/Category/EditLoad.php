@@ -13,7 +13,7 @@ class EditLoad
     public function __construct(Request $request)
     {
         $category = $request->route('category');
-        
+
         $parent = $category->getParent();
 
         if ($parent !== null) {

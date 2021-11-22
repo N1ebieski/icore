@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Crons\Tag;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Jobs\Tag\CachePopularTagsJob;
 
-/**
- * [PopularTagsCron description]
- */
 class PopularTagsCron
 {
     /**
@@ -15,7 +12,7 @@ class PopularTagsCron
      * @var Category
      */
     protected $category;
-    
+
     /**
      * [private description]
      * @var CachePopularTagsJob
@@ -31,14 +28,14 @@ class PopularTagsCron
     public function __construct(Category $category, CachePopularTagsJob $cachePopularTagsJob)
     {
         $this->category = $category;
-        
+
         $this->cachePopularTagsJob = $cachePopularTagsJob;
     }
 
     /**
      * [__invoke description]
      */
-    public function __invoke() : void
+    public function __invoke(): void
     {
         $this->addToQueue();
     }
@@ -48,7 +45,7 @@ class PopularTagsCron
      *
      * @return void
      */
-    private function addToQueue() : void
+    private function addToQueue(): void
     {
         $this->cachePopularTagsJob->dispatch();
 

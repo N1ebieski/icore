@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
@@ -19,7 +19,6 @@ class ForgotPasswordController extends Controller
     | your application to your users. Feel free to explore this trait.
     |
     */
-
     use SendsPasswordResetEmails;
 
     /**
@@ -37,7 +36,7 @@ class ForgotPasswordController extends Controller
      *
      * @return HttpResponse
      */
-    public function showLinkRequestForm() : HttpResponse
+    public function showLinkRequestForm(): HttpResponse
     {
         return Response::view('icore::auth.passwords.email');
     }

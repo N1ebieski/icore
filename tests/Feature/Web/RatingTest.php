@@ -4,23 +4,23 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\Models\Rating\Rating;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Auth;
+use N1ebieski\ICore\Models\Rating\Rating;
+use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RatingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_rating_comment_rate_as_guest()
+    public function testRatingCommentRateAsGuest()
     {
         $response = $this->get(route('web.rating.comment.rate', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_rating_noexist_comment_rate()
+    public function testRatingNoexistCommentRate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -33,7 +33,7 @@ class RatingTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_rating_comment_rate_validation_fail()
+    public function testRatingCommentRateValidationFail()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -48,7 +48,7 @@ class RatingTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_rating_comment_rate_create()
+    public function testRatingCommentRateCreate()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -68,7 +68,7 @@ class RatingTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_rating_comment_rate_delete()
+    public function testRatingCommentRateDelete()
     {
         $user = factory(User::class)->states('user')->create();
 
@@ -94,7 +94,7 @@ class RatingTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_rating_comment_rate_update()
+    public function testRatingCommentRateUpdate()
     {
         $user = factory(User::class)->states('user')->create();
 

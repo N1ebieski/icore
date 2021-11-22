@@ -2,15 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Rating\Comment;
 
+use Illuminate\Http\JsonResponse;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Rating\Comment\Rating;
 use N1ebieski\ICore\Http\Requests\Web\Rating\Comment\RateRequest;
-use Illuminate\Http\JsonResponse;
 
-/**
- * [interface description]
- * @var [type]
- */
 interface Polymorphic
 {
     /**
@@ -21,5 +17,5 @@ interface Polymorphic
      * @param  RateRequest   $request       [description]
      * @return JsonResponse                 [description]
      */
-    public function rate(Rating $rating, Comment $comment, RateRequest $request) : JsonResponse;
+    public function rate(Rating $rating, Comment $comment, RateRequest $request): JsonResponse;
 }

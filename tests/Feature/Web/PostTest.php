@@ -3,32 +3,32 @@
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
+use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Crons\PostCron;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use N1ebieski\ICore\Crons\PostCron;
-use Faker\Factory as Faker;
 
 class PostTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_post_index()
+    public function testPostIndex()
     {
         $response = $this->get(route('web.post.index'));
 
         $response->assertViewIs('icore::web.post.index');
     }
 
-    public function test_noexist_post_show()
+    public function testNoexistPostShow()
     {
         $response = $this->get(route('web.post.show', ['dajskruiufi']));
 
         $response->assertStatus(404);
     }
 
-    public function test_post_show()
+    public function testPostShow()
     {
         $category = factory(Category::class)->states('active')->create();
 
@@ -46,7 +46,7 @@ class PostTest extends TestCase
         $response->assertSee($tag);
     }
 
-    public function test_post_show_comments_disable()
+    public function testPostShowCommentsDisable()
     {
         $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'not_commentable'])
             ->create();
@@ -54,7 +54,7 @@ class PostTest extends TestCase
         $comment = factory(Comment::class, 50)
             ->states(['active', 'with_user'])
             ->make()
-            ->each(function($item) use ($post) {
+            ->each(function ($item) use ($post) {
                 $item->morph()->associate($post)->save();
             });
 
@@ -64,7 +64,7 @@ class PostTest extends TestCase
         $response->assertSee($post->title);
     }
 
-    public function test_post_show_paginate()
+    public function testPostShowPaginate()
     {
         $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
             ->create();
@@ -72,7 +72,7 @@ class PostTest extends TestCase
             $comment = factory(Comment::class, 50)
                 ->states(['active', 'with_user'])
                 ->make()
-                ->each(function($item) use ($post) {
+                ->each(function ($item) use ($post) {
                     $item->morph()->associate($post)->save();
                 });
 
@@ -87,7 +87,7 @@ class PostTest extends TestCase
         $response->assertSee($comment[30]->content);
     }
 
-    public function test_post_publish_scheduled()
+    public function testPostPublishScheduled()
     {
         $post = factory(Post::class)->states(['scheduled', 'with_user', 'commentable'])
             ->create();

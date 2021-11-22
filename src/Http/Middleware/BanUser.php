@@ -3,13 +3,10 @@
 namespace N1ebieski\ICore\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 
-/**
- * Checks if the User is banned
- */
 class BanUser
 {
     /**

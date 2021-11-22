@@ -20,15 +20,18 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-/**
- * [Post description]
- */
 class Post extends Model
 {
-    use Sluggable, Taggable, FullTextSearchable, PivotEventTrait, Carbonable;
+    use Sluggable;
+    use Taggable;
+    use FullTextSearchable;
+    use PivotEventTrait;
+    use Carbonable;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }
@@ -137,7 +140,7 @@ class Post extends Model
      *
      * @return array
      */
-    public function sluggable() : array
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -181,25 +184,6 @@ class Post extends Model
 
     // Overrides
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::pivotAttached(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
-            if ($model->pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
-                $model->fireModelEvent('updated');
-                $model->pivotEvent = true;
-            }
-        });
-
-        static::pivotDetached(function ($model, $relationName, $pivotIds) {
-            if ($model->pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
-                $model->fireModelEvent('updated');
-                $model->pivotEvent = true;
-            }
-        });
-    }
-
     /**
      * Override relacji tags, bo ma hardcodowane nazwy pól
      *
@@ -216,13 +200,14 @@ class Post extends Model
     // Relations
 
     /**
-     * [categories description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphToMany
      */
-    public function categories()
+    public function categories(): MorphToMany
     {
         return $this->morphToMany(
-            'N1ebieski\ICore\Models\Category\Category',
+            \N1ebieski\ICore\Models\Category\Category::class,
             'model',
             'categories_models',
             'model_id',
@@ -231,21 +216,23 @@ class Post extends Model
     }
 
     /**
-     * [user description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('N1ebieski\ICore\Models\User');
+        return $this->belongsTo(\N1ebieski\ICore\Models\User::class);
     }
 
     /**
-     * [comments description]
-     * @return [type] [description]
+     * Undocumented function
+     *
+     * @return MorphMany
      */
-    public function comments()
+    public function comments(): MorphMany
     {
-        return $this->morphMany('N1ebieski\ICore\Models\Comment\Comment', 'model');
+        return $this->morphMany(\N1ebieski\ICore\Models\Comment\Comment::class, 'model');
     }
 
     /**
@@ -253,7 +240,7 @@ class Post extends Model
      *
      * @return MorphToMany
      */
-    public function stats() : MorphToMany
+    public function stats(): MorphToMany
     {
         return $this->morphToMany(
             \N1ebieski\ICore\Models\Stat\Post\Stat::class,
@@ -270,7 +257,7 @@ class Post extends Model
      * [getModelTypeAttribute description]
      * @return string [description]
      */
-    public function getModelTypeAttribute() : string
+    public function getModelTypeAttribute(): string
     {
         return get_class($this);
     }
@@ -279,7 +266,7 @@ class Post extends Model
      * [getPoliAttribute description]
      * @return string [description]
      */
-    public function getPoliSelfAttribute() : string
+    public function getPoliSelfAttribute(): string
     {
         return 'post';
     }
@@ -288,7 +275,7 @@ class Post extends Model
      * [getPublishedAtDiffAttribute description]
      * @return string [description]
      */
-    public function getPublishedAtDiffAttribute() : string
+    public function getPublishedAtDiffAttribute(): string
     {
         return ($this->published_at != null) ?
             Carbon::parse($this->published_at)->diffForHumans(['parts' => 2])
@@ -299,7 +286,7 @@ class Post extends Model
      * [getContentHtmlAttribute description]
      * @return string [description]
      */
-    public function getContentHtmlAttribute() : string
+    public function getContentHtmlAttribute(): string
     {
         return Purifier::clean($this->attributes['content_html']);
     }
@@ -308,7 +295,7 @@ class Post extends Model
      * [getMetaTitleAttribute description]
      * @return string [description]
      */
-    public function getMetaTitleAttribute() : string
+    public function getMetaTitleAttribute(): string
     {
         return (!empty($this->attributes['seo_title'])) ? $this->attributes['seo_title'] : $this->title;
     }
@@ -317,7 +304,7 @@ class Post extends Model
      * [getMetaDescAttribute description]
      * @return string [description]
      */
-    public function getMetaDescAttribute() : string
+    public function getMetaDescAttribute(): string
     {
         return (!empty($this->attributes['seo_desc'])) ? $this->attributes['seo_desc'] : $this->shortContent;
     }
@@ -327,7 +314,7 @@ class Post extends Model
      *
      * @return string
      */
-    public function getReplacementContentAttribute() : string
+    public function getReplacementContentAttribute(): string
     {
         return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
             ->handle($this->content, function ($value) {
@@ -339,7 +326,7 @@ class Post extends Model
      * Short content used in the listing
      * @return string [description]
      */
-    public function getShortContentAttribute() : string
+    public function getShortContentAttribute(): string
     {
         return mb_substr(
             e(strip_tags($this->replacement_content), false),
@@ -353,7 +340,7 @@ class Post extends Model
      *
      * @return string
      */
-    public function getReplacementContentHtmlAttribute() : string
+    public function getReplacementContentHtmlAttribute(): string
     {
         return App::make(Pipeline::class)
             ->send($this->content_html)
@@ -368,7 +355,7 @@ class Post extends Model
      * Full content without more link
      * @return string [description]
      */
-    public function getNoMoreContentHtmlAttribute() : string
+    public function getNoMoreContentHtmlAttribute(): string
     {
         return str_replace(
             '<p>[more]</p>',
@@ -381,7 +368,7 @@ class Post extends Model
      * Content to the point of more link
      * @return string [description]
      */
-    public function getLessContentHtmlAttribute() : string
+    public function getLessContentHtmlAttribute(): string
     {
         $cut = explode('<p>[more]</p>', $this->replacement_content_html);
 
@@ -395,7 +382,7 @@ class Post extends Model
      * [getFirstImageAttribute description]
      * @return string|null [description]
      */
-    public function getFirstImageAttribute() : ?string
+    public function getFirstImageAttribute(): ?string
     {
         preg_match('/<img.+src=(?:\'|")(.*?)(?:\'|")/', $this->content_html, $image);
 
@@ -408,7 +395,7 @@ class Post extends Model
      * [setPublishedAtAttribute description]
      * @param string|null $value [description]
      */
-    public function setPublishedAtAttribute(string $value = null) : void
+    public function setPublishedAtAttribute(string $value = null): void
     {
         if ($value === null) {
             $this->attributes['published_at'] = null;
@@ -422,7 +409,7 @@ class Post extends Model
      * [setContentAttribute description]
      * @param string $value [description]
      */
-    public function setContentAttribute(string $value) : void
+    public function setContentAttribute(string $value): void
     {
         $this->attributes['content'] = !empty($value) ?
             strip_tags(str_replace('[more]', '', $value))
@@ -435,7 +422,7 @@ class Post extends Model
      * [isCommentable description]
      * @return bool [description]
      */
-    public function isCommentable() : bool
+    public function isCommentable(): bool
     {
         return $this->comment === static::WITH_COMMENT;
     }
@@ -444,7 +431,7 @@ class Post extends Model
      * [isActive description]
      * @return bool [description]
      */
-    public function isActive() : bool
+    public function isActive(): bool
     {
         return $this->status === static::ACTIVE;
     }
@@ -456,7 +443,7 @@ class Post extends Model
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where([
             ['posts.status', '=', static::ACTIVE],
@@ -470,7 +457,7 @@ class Post extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeScheduled(Builder $query) : Builder
+    public function scopeScheduled(Builder $query): Builder
     {
         return $query->where([
             ['posts.status', '=', static::SCHEDULED],
@@ -478,7 +465,7 @@ class Post extends Model
         ]);
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

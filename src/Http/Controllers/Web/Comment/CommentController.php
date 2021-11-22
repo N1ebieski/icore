@@ -21,7 +21,7 @@ class CommentController implements Polymorphic
      * @param  EditRequest  $request [description]
      * @return JsonResponse          [description]
      */
-    public function edit(Comment $comment, EditRequest $request) : JsonResponse
+    public function edit(Comment $comment, EditRequest $request): JsonResponse
     {
         return Response::json([
             'success' => '',
@@ -38,7 +38,7 @@ class CommentController implements Polymorphic
      * @param  UpdateRequest  $request        [description]
      * @return JsonResponse                   [description]
      */
-    public function update(Comment $comment, UpdateRequest $request) : JsonResponse
+    public function update(Comment $comment, UpdateRequest $request): JsonResponse
     {
         $comment->makeService()->update($request->only('content'));
 
@@ -59,7 +59,7 @@ class CommentController implements Polymorphic
      * @param TakeFilter $filer
      * @return JsonResponse
      */
-    public function take(Comment $comment, TakeRequest $request, TakeFilter $filter) : JsonResponse
+    public function take(Comment $comment, TakeRequest $request, TakeFilter $filter): JsonResponse
     {
         return Response::json([
             'success' => '',

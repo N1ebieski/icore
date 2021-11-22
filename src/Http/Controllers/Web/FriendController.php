@@ -12,7 +12,7 @@ class FriendController
      *
      * @return HttpResponse
      */
-    public function index() : HttpResponse
+    public function index(): HttpResponse
     {
         return Response::view('icore::web.friend.index');
     }

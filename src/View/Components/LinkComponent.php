@@ -9,9 +9,6 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-/**
- * [CategoryComponent description]
- */
 class LinkComponent implements Htmlable
 {
     /**
@@ -84,7 +81,7 @@ class LinkComponent implements Htmlable
      * [toHtml description]
      * @return View [description]
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.link', [
             'links' => $this->link->makeCache()->rememberLinksByComponent([

@@ -7,9 +7,6 @@ use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use N1ebieski\ICore\View\Components\Tag\TagComponent as BaseTagComponent;
 
-/**
- * [TagComponent description]
- */
 class TagComponent extends BaseTagComponent
 {
     /**
@@ -43,7 +40,7 @@ class TagComponent extends BaseTagComponent
      * [toHtml description]
      * @return View [description]
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.tag.post.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([

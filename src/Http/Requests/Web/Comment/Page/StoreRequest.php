@@ -3,12 +3,12 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Comment\Page;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\BanValue;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 
@@ -76,7 +76,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'min:3',
                 'max:10000',
-                !empty($this->bans) ? 'not_regex:/(.*)(\s|^)('.$this->bans.')(\s|\.|,|\?|$)(.*)/i' : null
+                !empty($this->bans) ? 'not_regex:/(.*)(\s|^)(' . $this->bans . ')(\s|\.|,|\?|$)(.*)/i' : null
             ],
             'parent_id' => [
                 'nullable',

@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\View\Components;
 
-use Illuminate\Contracts\Support\Htmlable;
-use N1ebieski\ICore\Models\Newsletter;
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\View\View;
+use N1ebieski\ICore\Models\Newsletter;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 
 class NewsletterComponent implements Htmlable
 {
@@ -41,7 +41,7 @@ class NewsletterComponent implements Htmlable
      *
      * @return View
      */
-    public function toHtml() : View
+    public function toHtml(): View
     {
         return $this->view->make('icore::web.components.newsletter');
     }

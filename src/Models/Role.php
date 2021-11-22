@@ -3,18 +3,16 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Services\RoleService;
+use N1ebieski\ICore\Repositories\RoleRepo;
+use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Spatie\Permission\Models\Role as BaseRole;
-use N1ebieski\ICore\Repositories\RoleRepo;
-use N1ebieski\ICore\Services\RoleService;
-use N1ebieski\ICore\Models\Traits\Carbonable;
 
-/**
- * [Role description]
- */
 class Role extends BaseRole
 {
-    use Carbonable, Filterable;
+    use Carbonable;
+    use Filterable;
 
     // Configuration
 
@@ -45,7 +43,7 @@ class Role extends BaseRole
      * [isEditDefault description]
      * @return bool [description]
      */
-    public function isEditNotDefault() : bool
+    public function isEditNotDefault(): bool
     {
         return !in_array($this->name, ['super-admin', 'admin']);
     }
@@ -54,12 +52,12 @@ class Role extends BaseRole
      * [isDeleteDefault description]
      * @return bool [description]
      */
-    public function isDeleteNotDefault() : bool
+    public function isDeleteNotDefault(): bool
     {
         return !in_array($this->name, ['super-admin', 'admin', 'user']);
     }
 
-    // Makers
+    // Factories
 
     /**
      * [makeRepo description]

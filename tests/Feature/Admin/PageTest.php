@@ -4,22 +4,22 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 
 class PageTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_page_index_as_guest()
+    public function testPageIndexAsGuest()
     {
         $response = $this->get(route('admin.page.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_index_without_permission()
+    public function testPageIndexWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -30,7 +30,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_page_index_paginate()
+    public function testPageIndexPaginate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -45,14 +45,14 @@ class PageTest extends TestCase
         $response->assertSeeInOrder([$page[30]->title, $page[30]->shortContent]);
     }
 
-    public function test_page_edit_as_guest()
+    public function testPageEditAsGuest()
     {
         $response = $this->get(route('admin.page.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_edit_without_permission()
+    public function testPageEditWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -65,7 +65,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_edit()
+    public function testNoexistPageEdit()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -76,7 +76,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_edit()
+    public function testPageEdit()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -89,17 +89,16 @@ class PageTest extends TestCase
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString($page->content, $response->getData()->view);
         $this->assertStringContainsString(route('admin.page.update', [$page->id]), $response->getData()->view);
-
     }
 
-    public function test_page_update_as_guest()
+    public function testPageUpdateAsGuest()
     {
         $response = $this->put(route('admin.page.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_update_without_permission()
+    public function testPageUpdateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -112,7 +111,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_update()
+    public function testNoexistPageUpdate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -123,7 +122,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_update_validation_fail()
+    public function testPageUpdateValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -141,7 +140,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_update()
+    public function testPageUpdate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -165,14 +164,14 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_editFull_as_guest()
+    public function testPageEditFullAsGuest()
     {
         $response = $this->get(route('admin.page.edit_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_editFull_without_permission()
+    public function testPageEditFullWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -185,7 +184,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_editFull()
+    public function testNoexistPageEditFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -196,7 +195,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_editFull()
+    public function testPageEditFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -209,17 +208,16 @@ class PageTest extends TestCase
         $response->assertOk()->assertViewIs('icore::admin.page.edit_full');
         $response->assertSeeInOrder([$page->title, $page->content]);
         $response->assertSee(route('admin.page.update_full', [$page->id]));
-
     }
 
-    public function test_page_updateFull_as_guest()
+    public function testPageUpdateFullAsGuest()
     {
         $response = $this->put(route('admin.page.update_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_updateFull_without_permission()
+    public function testPageUpdateFullWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -232,7 +230,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_updateFull()
+    public function testNoexistPageUpdateFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -243,7 +241,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_updateFull_validation_fail()
+    public function testPageUpdateFullValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -262,7 +260,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_root_page_update_full()
+    public function testRootPageUpdateFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -289,7 +287,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_page_update_full()
+    public function testChildrenPageUpdateFull()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -327,14 +325,14 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_updateStatus_as_guest()
+    public function testPageUpdateStatusAsGuest()
     {
         $response = $this->patch(route('admin.page.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_updateStatus_without_permission()
+    public function testPageUpdateStatusWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -347,7 +345,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_updateStatus()
+    public function testNoexistPageUpdateStatus()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -358,7 +356,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_updateStatus_validation_fail()
+    public function testPageUpdateStatusValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -375,7 +373,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_updateStatus()
+    public function testPageUpdateStatus()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -397,14 +395,14 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_destroy_as_guest()
+    public function testPageDestroyAsGuest()
     {
         $response = $this->delete(route('admin.page.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_destroy_without_permission()
+    public function testPageDestroyWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -417,7 +415,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_destroy()
+    public function testNoexistPageDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -428,7 +426,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_destroy()
+    public function testPageDestroy()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -451,14 +449,14 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_destroyGlobal_as_guest()
+    public function testPageDestroyGlobalAsGuest()
     {
         $response = $this->delete(route('admin.page.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_destroyGlobal_without_permission()
+    public function testPageDestroyGlobalWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -469,7 +467,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_page_destroyGlobal_validation_fail()
+    public function testPageDestroyGlobalValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -483,7 +481,7 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function test_page_destroyGlobal()
+    public function testPageDestroyGlobal()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -509,14 +507,14 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_create_as_guest()
+    public function testPageCreateAsGuest()
     {
         $response = $this->get(route('admin.page.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_create_without_permission()
+    public function testPageCreateWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -527,7 +525,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_page_create()
+    public function testPageCreate()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -537,17 +535,16 @@ class PageTest extends TestCase
 
         $response->assertOk()->assertViewIs('icore::admin.page.create');
         $response->assertSee(route('admin.page.store'));
-
     }
 
-    public function test_page_store_as_guest()
+    public function testPageStoreAsGuest()
     {
         $response = $this->post(route('admin.page.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_store_without_permission()
+    public function testPageStoreWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -558,7 +555,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_page_store_validation_fail()
+    public function testPageStoreValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -575,7 +572,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_root_page_store()
+    public function testRootPageStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -601,7 +598,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_children_page_store()
+    public function testChildrenPageStore()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -636,14 +633,14 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_edit_position_as_guest()
+    public function testPageEditPositionAsGuest()
     {
         $response = $this->get(route('admin.page.edit_position', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_edit_position_without_permission()
+    public function testPageEditPositionWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -656,7 +653,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_edit_position()
+    public function testNoexistPageEditPosition()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -667,7 +664,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_edit_position()
+    public function testPageEditPosition()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -678,19 +675,18 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString('value="'.$page->position.'"', $response->getData()->view);
+        $this->assertStringContainsString('value="' . $page->position . '"', $response->getData()->view);
         $this->assertStringContainsString(route('admin.page.update_position', [$page->id]), $response->getData()->view);
-
     }
 
-    public function test_page_update_position_as_guest()
+    public function testPageUpdatePositionAsGuest()
     {
         $response = $this->patch(route('admin.page.update_position', [2323]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_page_update_position_without_permission()
+    public function testPageUpdatePositionWithoutPermission()
     {
         $user = factory(User::class)->create();
 
@@ -703,7 +699,7 @@ class PageTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_noexist_page_update_position()
+    public function testNoexistPageUpdatePosition()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -714,7 +710,7 @@ class PageTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_page_update_position_validation_fail()
+    public function testPageUpdatePositionValidationFail()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -731,7 +727,7 @@ class PageTest extends TestCase
         $this->assertTrue(Auth::check());
     }
 
-    public function test_page_update_position()
+    public function testPageUpdatePosition()
     {
         $user = factory(User::class)->states('admin')->create();
 
@@ -765,5 +761,4 @@ class PageTest extends TestCase
 
         $this->assertTrue(Auth::check());
     }
-
 }

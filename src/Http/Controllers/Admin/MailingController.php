@@ -29,7 +29,7 @@ class MailingController
      * @param  IndexFilter     $filter          [description]
      * @return HttpResponse                             [description]
      */
-    public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter) : HttpResponse
+    public function index(Mailing $mailing, IndexRequest $request, IndexFilter $filter): HttpResponse
     {
         return Response::view('icore::admin.mailing.index', [
             'mailings' => $mailing->makeRepo()->paginateByFilter($filter->all()),
@@ -43,7 +43,7 @@ class MailingController
      *
      * @return HttpResponse               [description]
      */
-    public function create() : HttpResponse
+    public function create(): HttpResponse
     {
         return Response::view('icore::admin.mailing.create');
     }
@@ -55,7 +55,7 @@ class MailingController
      * @param  StoreRequest     $request [description]
      * @return RedirectResponse          [description]
      */
-    public function store(Mailing $mailing, StoreRequest $request) : RedirectResponse
+    public function store(Mailing $mailing, StoreRequest $request): RedirectResponse
     {
         $mailing = $mailing->makeService()->create($request->all());
 
@@ -72,7 +72,7 @@ class MailingController
      * @param EditRequest $request [description]
      * @return HttpResponse                [description]
      */
-    public function edit(Mailing $mailing, EditRequest $request) : HttpResponse
+    public function edit(Mailing $mailing, EditRequest $request): HttpResponse
     {
         return Response::view('icore::admin.mailing.edit', ['mailing' => $mailing]);
     }
@@ -84,7 +84,7 @@ class MailingController
      * @param  UpdateRequest $request [description]
      * @return RedirectResponse           [description]
      */
-    public function update(Mailing $mailing, UpdateRequest $request) : RedirectResponse
+    public function update(Mailing $mailing, UpdateRequest $request): RedirectResponse
     {
         $mailing->makeService()->update($request->all());
 
@@ -104,7 +104,7 @@ class MailingController
      * @param  UpdateStatusRequest $request [description]
      * @return JsonResponse                 [description]
      */
-    public function updateStatus(Mailing $mailing, UpdateStatusRequest $request) : JsonResponse
+    public function updateStatus(Mailing $mailing, UpdateStatusRequest $request): JsonResponse
     {
         $mailing->makeService()->updateStatus($request->only('status'));
 
@@ -123,7 +123,7 @@ class MailingController
      * @param  Mailing         $mailing [description]
      * @return JsonResponse       [description]
      */
-    public function reset(Mailing $mailing) : JsonResponse
+    public function reset(Mailing $mailing): JsonResponse
     {
         $mailing->makeService()->reset();
 
@@ -141,7 +141,7 @@ class MailingController
      * @param  Mailing $mailing [description]
      * @return JsonResponse       [description]
      */
-    public function destroy(Mailing $mailing) : JsonResponse
+    public function destroy(Mailing $mailing): JsonResponse
     {
         $mailing->makeService()->delete();
 
@@ -155,7 +155,7 @@ class MailingController
      * @param  DestroyGlobalRequest $request [description]
      * @return RedirectResponse              [description]
      */
-    public function destroyGlobal(Mailing $mailing, DestroyGlobalRequest $request) : RedirectResponse
+    public function destroyGlobal(Mailing $mailing, DestroyGlobalRequest $request): RedirectResponse
     {
         $deleted = $mailing->makeService()->deleteGlobal($request->get('select'));
 
