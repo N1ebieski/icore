@@ -94,7 +94,7 @@ class SocialiteTest extends TestCase
 
     public function testCallbackWithoutNothing()
     {
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => '',
             'email' => '',
             'name' => ''
@@ -108,7 +108,7 @@ class SocialiteTest extends TestCase
 
     public function testCallbackWithoutEmail()
     {
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => 343242342,
             'email' => '',
             'name' => 'Gdadas Dasdasd'
@@ -123,7 +123,7 @@ class SocialiteTest extends TestCase
 
     public function testCallbackNoexistUser()
     {
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => 343242342,
             'email' => 'sasasdas@sdasdasd.com',
             'name' => 'Gdadas Dasdasd'
@@ -149,7 +149,7 @@ class SocialiteTest extends TestCase
     {
         $socialAccount = factory(User::class)->states('user')->create();
 
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => 343242342,
             'email' => $socialAccount->email,
             'name' => 'Gdadas Dasdasd'
@@ -171,7 +171,7 @@ class SocialiteTest extends TestCase
             'provider_id' => 343242342
         ]);
 
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => 343242342,
             'email' => '',
             'name' => 'Gdadas Dasdasd'

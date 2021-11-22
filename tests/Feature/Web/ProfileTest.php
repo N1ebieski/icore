@@ -106,7 +106,7 @@ class ProfileTest extends TestCase
     {
         $user = factory(User::class)->states('user')->create();
 
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => '3423423424',
             'email' => '',
             'name' => 'Bungo Bugosław'
@@ -134,7 +134,7 @@ class ProfileTest extends TestCase
 
         $user2 = factory(User::class)->create();
 
-        $this->socialite_mock([
+        $this->socialiteMock([
             'id' => '343242342',
             'email' => '',
             'name' => 'Bungo Bugosław'
