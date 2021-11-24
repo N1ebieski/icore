@@ -17,7 +17,8 @@ return [
     'subscribe_confirmation' => 'Newsletter subscription confirmation',
     'subscribe_confirm' => 'Confirm your subscription',
     'subcopy' => [
-        'subscribe' => 'You get this message because you subscribe our newsletter. If you no longer want to receive messages, click on the link <a href=":cancel">:cancel</a>'
+        'subscribe' => 'You are receiving this message because you subscribe our newsletter. If you no longer want to receive messages, click on the link <a href=":cancel">:cancel</a>',
+        'user' => 'You are receiving this message because you have registered for an account and you have agreed to receive "marketing information". If you no longer want to receive messages, click on the link <a href=":cancel">:cancel</a> and after logging into your account, uncheck "marketing information".'        
     ],
     'mail' => [
         'subscribe_confirm' => [

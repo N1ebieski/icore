@@ -60,7 +60,7 @@ class Mail extends Mailable
      */
     public function build()
     {
-        $this->mailingEmail->load('mailing');
+        $this->mailingEmail->load(['mailing', 'morph']);
 
         return $this->subject($this->mailingEmail->mailing->title)
             ->to($this->mailingEmail->email)
@@ -76,10 +76,11 @@ class Mail extends Mailable
     {
         switch ($this->mailingEmail->model_type) {
             case \N1ebieski\ICore\Models\User::class:
-                return null;
+                return $this->lang->get('icore::newsletter.subcopy.user', [
+                    'cancel' => $this->url->route('web.profile.edit')
+                ]);
 
             case \N1ebieski\ICore\Models\Newsletter::class:
-                $this->mailingEmail->load('morph');
                 return $this->lang->get('icore::newsletter.subcopy.subscribe', [
                     'cancel' => $this->url->route('web.newsletter.update_status', [
                         $this->mailingEmail->morph->id,
