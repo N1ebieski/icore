@@ -114,7 +114,7 @@ class MailingEmailService
             $this->user->marketing()
                 ->active()
                 ->chunk(1000, function ($items) {
-                    $id = $this->makeLastId();
+                    $id = $this->makeLastId() + 1;
 
                     $attributes = [];
 
@@ -148,7 +148,7 @@ class MailingEmailService
         $this->db->transaction(function () {
             $this->newsletter->active()
                 ->chunk(1000, function ($items) {
-                    $id = $this->makeLastId();
+                    $id = $this->makeLastId() + 1;
 
                     $attributes = [];
 
@@ -181,7 +181,7 @@ class MailingEmailService
     public function createEmailRecipients(array $items): void
     {
         $this->db->transaction(function () use ($items) {
-            $id = $this->makeLastId();
+            $id = $this->makeLastId() + 1;
 
             foreach ($items as $item) {
                 // Create attributes manually, no within model because multiple
