@@ -17,7 +17,9 @@
                 $form.find('.loader-absolute').remove();
             },
             success: function (response) {
-                $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
+                setTimeout(function() {
+                    $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
+                }, 300);
 
                 document.title = document.title.replace(/:\s(\d+)/, ': 1');
                 history.replaceState(null, null, href);
