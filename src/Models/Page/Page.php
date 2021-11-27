@@ -445,7 +445,7 @@ class Page extends Entity implements PageInterface
      */
     public function getShortTitleAttribute(): string
     {
-        return (strlen($this->title) > 15) ? substr($this->title, 0, 15) : $this->title;
+        return (strlen($this->title) > 20) ? substr($this->title, 0, 20) : $this->title;
     }
 
     /**
