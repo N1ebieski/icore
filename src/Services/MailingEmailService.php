@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Newsletter;
 use N1ebieski\ICore\Models\MailingEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
 
 class MailingEmailService
@@ -113,20 +114,20 @@ class MailingEmailService
         $this->db->transaction(function () {
             $this->user->marketing()
                 ->active()
-                ->chunk(1000, function ($items) {
+                ->chunk(1000, function (Collection $users) {
                     $id = $this->makeLastId() + 1;
 
                     $attributes = [];
 
-                    $items->each(function ($item) use (&$attributes, &$id) {
+                    $users->each(function (User $user) use (&$attributes, &$id) {
                         // Create attributes manually, no within model because multiple
                         // models may be huge performance impact
                         $attributes[] = [
                             'id' => $id++,
                             'mailing_id' => $this->mailingEmail->mailing->id,
-                            'model_type' => get_class($item),
-                            'model_id' => $item->id,
-                            'email' => $item->email,
+                            'model_type' => $user->getMorphClass(),
+                            'model_id' => $user->id,
+                            'email' => $user->email,
                             'sent' => MailingEmail::UNSENT,
                             'created_at' => $this->carbon->now(),
                             'updated_at' => $this->carbon->now()
@@ -147,20 +148,20 @@ class MailingEmailService
     {
         $this->db->transaction(function () {
             $this->newsletter->active()
-                ->chunk(1000, function ($items) {
+                ->chunk(1000, function (Collection $newsletters) {
                     $id = $this->makeLastId() + 1;
 
                     $attributes = [];
 
-                    $items->each(function ($item) use (&$attributes, &$id) {
+                    $newsletters->each(function (Newsletter $newsletter) use (&$attributes, &$id) {
                         // Create attributes manually, no within model because multiple
                         // models may be huge performance impact
                         $attributes[] = [
                             'id' => $id++,
                             'mailing_id' => $this->mailingEmail->mailing->id,
-                            'model_type' => get_class($item),
-                            'model_id' => $item->id,
-                            'email' => $item->email,
+                            'model_type' => $newsletter->getMorphClass(),
+                            'model_id' => $newsletter->id,
+                            'email' => $newsletter->email,
                             'sent' => MailingEmail::UNSENT,
                             'created_at' => $this->carbon->now(),
                             'updated_at' => $this->carbon->now()
