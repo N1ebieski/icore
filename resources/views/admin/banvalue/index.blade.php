@@ -25,7 +25,7 @@
         <span>{{ trans("icore::bans.value.{$type}.route.index") }}</span>
     </div>
     @can('admin.bans.create')
-    <div class="ml-auto text-right">
+    <div class="ml-auto text-right responsive-btn-group">
         <a 
             href="#" 
             data-route="{{ route('admin.banvalue.create', [$type]) }}" 
