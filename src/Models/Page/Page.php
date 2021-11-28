@@ -463,7 +463,7 @@ class Page extends Entity implements PageInterface
 
     /**
      * [setContentAttribute description]
-     * @param void $value [description]
+     * @param string $value [description]
      */
     public function setContentAttribute($value): void
     {
