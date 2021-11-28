@@ -15,6 +15,11 @@ class UpdateRequest extends FormRequest
      */
     protected $bans;
 
+    /**
+     * Undocumented function
+     *
+     * @param BanValue $banValue
+     */
     public function __construct(BanValue $banValue)
     {
         $this->bans = $banValue->makeCache()->rememberAllWordsAsString();
