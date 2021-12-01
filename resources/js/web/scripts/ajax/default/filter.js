@@ -17,7 +17,8 @@
                 $form.find('.loader-absolute').remove();
             },
             success: function (response) {
-                $('modal-backdrop').remove();
+                // Trick to prevent open modal during filter content append
+                $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open').removeAttr('style');
 
                 $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
