@@ -22,7 +22,7 @@ jQuery(document).on('readyAndAjax', function () {
             $('#is-pagination').first().remove();
         },
         padding: 0,
-        nextSelector: 'a#is-next',
+        nextSelector: 'a#is-next:last',
         contentSelector: '#infinite-scroll',
         pagingSelector: '.pagination',
         callback: function (nextHref) {

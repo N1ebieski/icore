@@ -122,4 +122,5 @@
             </div>
         </div>
     </div>
+    @include('icore::admin.banmodel.user.partials.filter_filter')
 </form>

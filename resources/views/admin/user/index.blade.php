@@ -97,8 +97,6 @@
     @endif
 </div>
 
-@include('icore::admin.user.partials.filter_filter')
-
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'edit-modal')
 @slot('modal_title')
