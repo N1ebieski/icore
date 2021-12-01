@@ -8,16 +8,19 @@
                 $('#filterContent, #filter-content').find('.btn').prop('disabled', true);
                 $('#filterOrderBy, #filter-orderby').prop('disabled', true);
                 $('#filterPaginate, #filter-paginate').prop('disabled', true);
+
                 $form.children('div').append($.getLoader('spinner-border'));
+
                 $('#filterModal, #filter-modal').modal('hide');
             },
             complete: function () {
                 $form.find('.loader-absolute').remove();
             },
             success: function (response) {
-                setTimeout(function() {
-                    $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
-                }, 300);
+                $('modal-backdrop').remove();
+                $('body').removeClass('modal-open').removeAttr('style');
+
+                $('#filterContent, #filter-content').html($.sanitize($(response).find('#filterContent, #filter-content').html()));
 
                 document.title = document.title.replace(/:\s(\d+)/, ': 1');
                 history.replaceState(null, null, href);
