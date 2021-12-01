@@ -18,7 +18,7 @@ jQuery(document).on('click', 'a.takeComment, a.take-comment', function (e) {
                         return $(this).attr('data-id');
                     })
                     .get(),
-                orderby: $element.closest('#filterContent').find('#filterCommentOrderBy').val()
+                orderby: $element.closest('#filterContent, #filter-content').find('#filterCommentOrderBy, #filter-orderby-comment').val()
             },
         },
         beforeSend: function () {

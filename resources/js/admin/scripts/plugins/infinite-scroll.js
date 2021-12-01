@@ -5,15 +5,15 @@ jQuery(document).on('readyAndAjax', function () {
         debug: false,
         autoTrigger: $is.data('autotrigger') == true ? true : false,
         data: function () {
-            let except = $(this).find('[id^=row]').map(function () {
+            let filter = $('#filter').serializeObject().filter || {};
+
+            filter.except = $(this).find('[id^=row]').map(function () {
                 return $(this).attr('data-id');
             }).get();
 
-            if (except.length) {
+            if (Object.keys(filter).length) {
                 return {
-                    filter: {
-                        except: except
-                    }
+                    filter: filter
                 };
             }
         },
