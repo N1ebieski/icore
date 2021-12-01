@@ -103,3 +103,5 @@
     @endif
 </div>
 @endsection
+
+@include('icore::admin.mailing.partials.filter_filter')

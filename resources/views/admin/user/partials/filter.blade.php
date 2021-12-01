@@ -134,5 +134,4 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.user.partials.filter_filter')
 </form>

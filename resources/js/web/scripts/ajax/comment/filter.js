@@ -8,7 +8,9 @@
                 $('#filterContent, #filter-content').find('.btn').prop('disabled', true);
                 $('#filterOrderBy, #filter-orderby').prop('disabled', true);
                 $('#filterPaginate, #filter-paginate').prop('disabled', true);
+
                 $form.children('div').append($.getLoader('spinner-border'));
+
                 $('#filterModal, #filter-modal').modal('hide');
             },
             complete: function () {

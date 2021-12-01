@@ -131,5 +131,4 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.mailing.partials.filter_filter')
 </form>

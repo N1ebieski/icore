@@ -165,5 +165,4 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.comment.partials.filter_filter')
 </form>

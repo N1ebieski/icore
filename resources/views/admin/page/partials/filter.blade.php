@@ -170,5 +170,4 @@
             </div>
         </div>
     </div>
-    @include('icore::admin.page.partials.filter_filter')
 </form>
