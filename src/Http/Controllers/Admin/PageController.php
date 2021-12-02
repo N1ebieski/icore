@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
@@ -11,16 +12,15 @@ use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Filters\Admin\Page\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Page\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateStatusRequest;
+use N1ebieski\ICore\View\ViewModels\Admin\Page\EditFullViewModel;
 use N1ebieski\ICore\Http\Requests\Admin\Page\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdatePositionRequest;
-use N1ebieski\ICore\View\ViewModels\Admin\Page\EditFullViewModel;
 
 class PageController
 {
@@ -207,7 +207,6 @@ class PageController
 
         return Response::json([
             'success' => '',
-            // Pobieramy potomków aby na froncie jQuery wiedział jakie rowsy usunąć
             'descendants' => $descendants
         ]);
     }
