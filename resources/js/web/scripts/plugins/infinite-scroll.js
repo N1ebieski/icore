@@ -1,4 +1,3 @@
-//$('ul.pagination').hide();
 jQuery(document).on('readyAndAjax', function () {
     let $is = $('#infinite-scroll');
 
@@ -12,7 +11,7 @@ jQuery(document).on('readyAndAjax', function () {
                 return $(this).attr('data-id');
             }).get();
 
-            if (Object.keys(filter).length) {
+            if (filter.except.length) {
                 return {
                     filter: filter
                 };
