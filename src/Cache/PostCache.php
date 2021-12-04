@@ -132,27 +132,6 @@ class PostCache
     }
 
     /**
-     * I have to disable cache in tags because it takes too much memory in Redis
-     */
-
-    // /**
-    //  * [rememberByTag description]
-    //  * @param  Tag                  $tag  [description]
-    //  * @param  int                  $page [description]
-    //  * @return LengthAwarePaginator       [description]
-    //  */
-    // public function rememberByTag(Tag $tag, int $page) : LengthAwarePaginator
-    // {
-    //     return cache()->tags(['posts'])->remember(
-    //         "post.paginateByTag.{$tag->normalized}.".$page,
-    //         $this->carbon->now()->addMinutes($this->minutes),
-    //         function () use ($tag) {
-    //             return $this->post->makeRepo()->paginateByTag($tag->name);
-    //         }
-    //     );
-    // }
-
-    /**
      * [rememeberArchiveByDate description]
      * @param  int                  $month [description]
      * @param  int                  $year  [description]
