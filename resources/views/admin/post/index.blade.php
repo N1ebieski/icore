@@ -46,7 +46,7 @@
     >
         @csrf
         @method('delete')
-        @can('destroy users')
+        @can('admin.posts.delete')
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
