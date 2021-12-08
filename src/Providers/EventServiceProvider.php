@@ -58,6 +58,7 @@ class EventServiceProvider extends ServiceProvider
         \N1ebieski\ICore\Models\Comment\Page\Comment::observe(\N1ebieski\ICore\Observers\CommentObserver::class);
 
         \N1ebieski\ICore\Models\BanValue::observe(\N1ebieski\ICore\Observers\BanValueObserver::class);
+
         \N1ebieski\ICore\Models\Page\Page::observe(\N1ebieski\ICore\Observers\PageObserver::class);
 
         \N1ebieski\ICore\Models\Link::observe(\N1ebieski\ICore\Observers\LinkObserver::class);
