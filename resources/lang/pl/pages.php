@@ -45,5 +45,5 @@ return [
     'position' => 'Pozycja',
     'pages' => 'Podstrony',
     'map' => 'Zobacz również',
-    'more' => 'pokaż więcej &raquo',
+    'more' => 'pokaż więcej &raquo;',
 ];

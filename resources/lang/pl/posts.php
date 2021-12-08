@@ -33,7 +33,7 @@ return [
     ],
     'draft' => 'szkic',
     'create' => 'Dodaj post',
-    'more' => 'pokaż więcej &raquo',
+    'more' => 'pokaż więcej &raquo;',
     'comment' => 'Komentarze włączone',
     'status' => [
         Post::ACTIVE => 'aktywne',
