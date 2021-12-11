@@ -1,36 +1,37 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use N1ebieski\ICore\Http\Controllers\Admin\UserController;
 
-Route::match(['get', 'post'], '/users/index', 'UserController@index')
+Route::match(['get', 'post'], '/users/index', [UserController::class, 'index'])
     ->name('user.index')
     ->middleware('permission:admin.users.view');
 
-Route::patch('/users/{user}', 'UserController@updateStatus')
+Route::patch('/users/{user}', [UserController::class, 'updateStatus'])
     ->middleware(['role:super-admin', 'can:actionSelf,user'])
     ->name('user.update_status')
     ->where('user', '[0-9]+');
 
-Route::delete('/users/{user}', 'UserController@destroy')
+Route::delete('/users/{user}', [UserController::class, 'destroy'])
     ->middleware(['role:super-admin', 'can:actionSelf,user'])
     ->name('user.destroy')
     ->where('user', '[0-9]+');
-Route::delete('/users', 'UserController@destroyGlobal')
+Route::delete('/users', [UserController::class, 'destroyGlobal'])
     ->middleware('role:super-admin')
     ->name('user.destroy_global');
 
-Route::get('/users/{user}/edit', 'UserController@edit')
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])
     ->middleware(['role:super-admin', 'can:actionSelf,user'])
     ->name('user.edit')
     ->where('user', '[0-9]+');
-Route::put('/users/{user}', 'UserController@update')
+Route::put('/users/{user}', [UserController::class, 'update'])
     ->middleware(['role:super-admin', 'can:actionSelf,user'])
     ->name('user.update')
     ->where('user', '[0-9]+');
 
-Route::get('/users/create', 'UserController@create')
+Route::get('/users/create', [UserController::class, 'create'])
     ->middleware('role:super-admin')
     ->name('user.create');
-Route::post('/users', 'UserController@store')
+Route::post('/users', [UserController::class, 'store'])
     ->middleware('role:super-admin')
     ->name('user.store');

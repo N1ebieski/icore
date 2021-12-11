@@ -2,7 +2,6 @@
 
 namespace N1ebieski\ICore\Providers;
 
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -14,7 +13,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'N1ebieski\ICore\Http\Controllers';
+    // protected $namespace = 'N1ebieski\ICore\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -69,13 +68,22 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAuthRoutes()
     {
-        $this->app['router']->middleware('icore.web')
-            ->namespace($this->namespace)
+        if ($this->app['config']->get('icore.routes.auth.enabled') === false) {
+            return;
+        }
+
+        $router = $this->app['router']->middleware('icore.web');
+
+        $router->group(function ($router) {
+            if (!file_exists(base_path('routes') . '/vendor/icore/auth.php')) {
+                require(__DIR__ . '/../../routes/auth.php');
+            }
+        });
+
+        $router->namespace($this->app['config']->get('icore.routes.auth.namespace', $this->namespace))
             ->group(function ($router) {
-                if (file_exists($override = base_path('routes') . '/vendor/icore/auth.php')) {
-                    require($override);
-                } else {
-                    require(__DIR__ . '/../../routes/auth.php');
+                if (file_exists($filename = base_path('routes') . '/vendor/icore/auth.php')) {
+                    require($filename);
                 }
             });
     }
@@ -89,16 +97,25 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        $this->app['router']->middleware(['icore.web', 'icore.force.verified'])
-            ->as('web.')
-            ->namespace($this->namespace . '\Web')
+        if ($this->app['config']->get('icore.routes.web.enabled') === false) {
+            return;
+        }
+
+        $router = $this->app['router']->middleware(['icore.web', 'icore.force.verified'])
+            ->as('web.');
+
+        $router->group(function ($router) {
+            foreach (glob(__DIR__ . '/../../routes/web/*.php') as $filename) {
+                if (!file_exists(base_path('routes') . '/vendor/icore/web/' . basename($filename))) {
+                    require($filename);
+                }
+            }
+        });
+
+        $router->namespace($this->app['config']->get('icore.routes.web.namespace', $this->namespace . '\Web'))
             ->group(function ($router) {
-                foreach (glob(__DIR__ . '/../../routes/web/*.php') as $filename) {
-                    if (file_exists($override = base_path('routes') . '/vendor/icore/web/' . basename($filename))) {
-                        require($override);
-                    } else {
-                        require($filename);
-                    }
+                foreach (glob(base_path('routes') . '/vendor/icore/web/*.php') as $filename) {
+                    require($filename);
                 }
             });
     }
@@ -112,25 +129,33 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        $this->app['router']->middleware([
+        if ($this->app['config']->get('icore.routes.api.enabled') === false) {
+            return;
+        }
+
+        $router = $this->app['router']->middleware([
                 \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
                 'icore.api',
                 'icore.force.verified'
             ])
             ->prefix('api')
-            ->as('api.')
-            ->namespace($this->namespace . '\Api')
+            ->as('api.');
+
+        $router->group(function ($router) {
+            foreach (glob(__DIR__ . '/../../routes/api/*.php') as $filename) {
+                if (!file_exists(base_path('routes') . '/vendor/icore/api/' . basename($filename))) {
+                    require($filename);
+                }
+            }
+        });
+
+        $router->namespace($this->app['config']->get('icore.routes.api.namespace', $this->namespace . '\Api'))
             ->group(function ($router) {
-                foreach (glob(__DIR__ . '/../../routes/api/*.php') as $filename) {
-                    if (file_exists($override = base_path('routes') . '/vendor/icore/api/' . basename($filename))) {
-                        require($override);
-                    } else {
-                        require($filename);
-                    }
+                foreach (glob(base_path('routes') . '/vendor/icore/api/*.php') as $filename) {
+                    require($filename);
                 }
             });
     }
-
 
     /**
      * Define the "admin" routes for the application.
@@ -141,22 +166,31 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminRoutes()
     {
-        $this->app['router']->middleware([
+        if ($this->app['config']->get('icore.routes.admin.enabled') === false) {
+            return;
+        }
+
+        $router = $this->app['router']->middleware([
                 'icore.web',
                 'auth',
                 'verified',
                 'permission:admin.access'
             ])
             ->prefix('admin')
-            ->as('admin.')
-            ->namespace($this->namespace . '\Admin')
+            ->as('admin.');
+
+        $router->group(function ($router) {
+            foreach (glob(__DIR__ . '/../../routes/admin/*.php') as $filename) {
+                if (!file_exists(base_path('routes') . '/vendor/icore/admin/' . basename($filename))) {
+                    require($filename);
+                }
+            }
+        });
+
+        $router->namespace($this->app['config']->get('icore.routes.admin.namespace', $this->namespace . '\Admin'))
             ->group(function ($router) {
-                foreach (glob(__DIR__ . '/../../routes/admin/*.php') as $filename) {
-                    if (file_exists($override = base_path('routes') . '/vendor/icore/admin/' . basename($filename))) {
-                        require($override);
-                    } else {
-                        require($filename);
-                    }
+                foreach (glob(base_path('routes') . '/vendor/icore/admin/*.php') as $filename) {
+                    require($filename);
                 }
             });
     }

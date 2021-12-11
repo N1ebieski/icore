@@ -10,6 +10,25 @@ return [
 
     'layout' => env('ICORE_LAYOUT', 'icore'),
 
+    'routes' => [
+        'auth' => [
+            'namespace' => null,
+            'enabled' => true
+        ],
+        'web' => [
+            'namespace' => null,
+            'enabled' => true
+        ],
+        'admin' => [
+            'namespace' => null,
+            'enabled' => true
+        ],
+        'api' => [
+            'namespace' => null,
+            'enabled' => true
+        ]
+    ],
+
     'post' => [
         'max_categories' => (int)env('ICORE_POST_MAX_CATEGORIES', 5),
         'max_tags' => (int)env('ICORE_POST_MAX_TAGS', 10),
