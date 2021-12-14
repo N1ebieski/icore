@@ -11,12 +11,17 @@ jQuery(document).ready(function () {
 
     $(window).scroll(function () {
         if (!$('body').hasClass('modal-open')) {
-            var a = $(window).scrollTop();
+            if ($('.trumbowyg-button-pane').css('position') === 'fixed') {
+                $navbar.fadeOut();
+                
+                return;
+            }
 
-            var b = $navbar.height() + 10;
+            let a = $(window).scrollTop();
+            let b = $navbar.height() + 10;
     
             currentScrollTop = a;
-    
+
             if (c < currentScrollTop && c > b) {
                 $navbar.fadeOut();
             } else {

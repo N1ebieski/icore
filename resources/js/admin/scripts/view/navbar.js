@@ -8,9 +8,15 @@
     }
 
     $(window).scroll(function () {
-        if (!$('body').hasClass('modal-open')) {        
-            var a = $(window).scrollTop();
-            var b = $navbar.height() + 10;
+        if (!$('body').hasClass('modal-open')) {   
+            if ($('.trumbowyg-button-pane').css('position') === 'fixed') {
+                $navbar.fadeOut();
+                
+                return;
+            }            
+            
+            let a = $(window).scrollTop();
+            let b = $navbar.height() + 10;
 
             currentScrollTop = a;
 
