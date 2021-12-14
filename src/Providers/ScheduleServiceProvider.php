@@ -45,6 +45,7 @@ class ScheduleServiceProvider extends ServiceProvider
             $cron = "0 0 */{$days} * *";
         }
 
+        // TODO: #37 Check is it working with runInBackground @N1ebieski
         if ($this->app['config']->get('cache.default') === 'tfile') {
             $this->schedule->exec('cd storage/framework/cache && rm -r data')
                 ->name('ClearCacheTfile')
@@ -87,11 +88,6 @@ class ScheduleServiceProvider extends ServiceProvider
                 ->name('CleanDirectories')
                 ->hourly()
                 ->runInBackground();
-
-            // $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\Tag\Post\PopularTagsCron::class))
-            //     ->name('Post.PopularTagsCron')
-            //     ->daily()
-            //     ->runInBackground();
         });
     }
 }
