@@ -105,7 +105,7 @@
     z-index: 999;
     min-width: $sidebar-collapsed-width !important;
     min-height: 100vh;
-    @include sidebar-icons;
+    @include sidebar-icons;    
 
     &:not(.toggled) {
         .nav-item {
@@ -166,7 +166,7 @@
     &.toggled {
         min-width: 0 !important;
         width: 0 !important;
-        overflow: hidden;
+        overflow: hidden;    
 
         .nav-item {
             .nav-link {
@@ -181,17 +181,20 @@
 @media (max-width: 767.98px) {
     .sidebar {
         min-width: $sidebar-base-width !important;
-        display: none;
+        visibility: hidden;
+        transition: all 0.35s ease;
+        transform: translateX(-100%);
+
+        &.show {
+            transform: translateX(0);
+            visibility: visible !important;
+        }  
 
         &.scroll {
             overflow-y: auto;
             overflow-x: hidden;
             height: 100vh;
             padding-bottom: 15vh; 
-        }
-
-        &.show {
-            display: block;
         }
 
         .nav-item {
