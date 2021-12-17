@@ -43,14 +43,14 @@
  *      --> .btn-purple, .btn-sm-purple, .btn-md-purple, ...
  *    Where the class' content is applicable to that screen size.
  */
- @mixin create-breakpoint-class ($class-name-prefix, $class-name-suffix) {
+@mixin create-breakpoint-class ($class-name-prefix, $class-name-suffix) {
     @each $breakpoint in map-keys($grid-breakpoints) {
-      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
-  
-      .#{$class-name-prefix}#{$infix}-#{$class-name-suffix} {
-        @include media-breakpoint-up ($breakpoint) {
-          @content;
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+        .#{$class-name-prefix}#{$infix}-#{$class-name-suffix} {
+            @include media-breakpoint-up ($breakpoint) {
+                @content;
+            }
         }
-      }
     }
-  }
+}
