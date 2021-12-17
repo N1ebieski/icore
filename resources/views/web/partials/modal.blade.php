@@ -8,7 +8,7 @@
     data-focus="false"
 >
     <div 
-        class="modal-dialog modal-dialog-centered {{ $modal_size ?? null }}" 
+        class="modal-dialog modal-dialog-scrollable modal-dialog-centered {{ $modal_size ?? null }}" 
         role="document"
     >
         <div class="modal-content">

@@ -1,4 +1,18 @@
-<form method="post" data-route="{{ route('admin.banmodel.user.store', [$model->id]) }}">
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'create-banuser-modal')
+
+@slot('modal_title')
+<i class="fas fa-user-slash"></i>
+<span> {{ trans('icore::bans.route.create') }}</span>
+@endslot
+
+@slot('modal_body')
+<form 
+    method="post"
+    id="edit-banmodel"
+    data-route="{{ route('admin.banmodel.user.store', [$model->id]) }}"
+>
     <div class="form-group">
         <div class="custom-control custom-checkbox">
             <input 
@@ -29,6 +43,11 @@
         </div>
     </div>
     @endif
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
     <button type="button" class="btn btn-primary store-banmodel">
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
@@ -37,4 +56,7 @@
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent

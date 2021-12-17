@@ -6,7 +6,7 @@ $(document).on(
 
         let $element = $(this);
 
-        let $form = $element.closest('form');
+        let $form = $element.closest('.modal-content').find('form');
         $form.btn = $form.find('.btn');
         $form.input = $form.find('.form-control, .custom-control-input');
         

@@ -6,7 +6,7 @@ $(document).on(
 
         let $element = $(this);
 
-        let $form = $element.closest('form');
+        let $form = $element.closest('.modal-content').find('form:visible');
         $form.btn = $form.find('.btn');
         $form.input = $form.find('.form-control');
 
@@ -54,8 +54,8 @@ $(document).on(
                         $form.find('#' + $.escapeSelector(key)).closest('.form-group').append($.getError(key, value));
 
                         if (i === 0 && $('#' + $.escapeSelector(key)).length) {
-                            $('.modal').animate({
-                                scrollTop: $('#' + $.escapeSelector(key)).position().top + 50
+                            $form.parent().animate({
+                                scrollTop: $form.parent().scrollTop() + $form.find('#' + $.escapeSelector(key)).closest('.form-group').position().top
                             }, 1000);
                         }
 

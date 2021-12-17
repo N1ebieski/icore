@@ -1,3 +1,15 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'create-modal')
+
+@slot('modal_size', 'modal-lg')
+
+@slot('modal_title')
+<i class="far fa-plus-square"></i>
+<span> {{ trans('icore::categories.route.create') }}</span>
+@endslot
+
+@slot('modal_body')
 <nav class="mb-3">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a 
@@ -24,7 +36,7 @@
         </a>
     </div>
 </nav>
-<div class="tab-content" id="nav-tabContent">
+<div class="tab-content" id="nav-tab-content">
     <div 
         class="tab-pane fade show active" 
         id="nav-single" 
@@ -32,8 +44,8 @@
         aria-labelledby="nav-single-tab"
     >
         <form 
+            id="create-category"        
             data-route="{{ route("admin.category.{$model->poli}.store") }}" 
-            id="store"
         >
             <div class="form-group">
                 <label for="name">
@@ -84,14 +96,6 @@
                     </optgroup>
                 </select>
             </div>
-            <button type="button" class="btn btn-primary store">
-                <i class="fas fa-check"></i>
-                <span>{{ trans('icore::default.submit') }}</span>
-            </button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                <i class="fas fa-ban"></i>
-                <span>{{ trans('icore::default.cancel') }}</span>
-            </button>
         </form>
     </div>
     <div 
@@ -101,8 +105,8 @@
         aria-labelledby="nav-json-tab"
     >
         <form 
+            id="create-category"        
             data-route="{{ route("admin.category.{$model->poli}.store_global") }}" 
-            id="store"
         >
             <div class="form-group">
                 <label for="names">
@@ -156,14 +160,30 @@
                     </select>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary store">
-                <i class="fas fa-check"></i>
-                <span>{{ trans('icore::default.submit') }}</span>
-            </button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                <i class="fas fa-ban"></i>
-                <span>{{ trans('icore::default.cancel') }}</span>
-            </button>
         </form>
     </div>
 </div>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary store"
+        form="create-category"
+    >
+        <i class="fas fa-check"></i>
+        <span>{{ trans('icore::default.submit') }}</span>
+    </button>
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
+        <i class="fas fa-ban"></i>
+        <span>{{ trans('icore::default.cancel') }}</span>
+    </button>
+</div>
+@endslot
+
+@endcomponent
