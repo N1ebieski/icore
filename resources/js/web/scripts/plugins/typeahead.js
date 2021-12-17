@@ -1,4 +1,4 @@
-(function ($) {
+$(document).on('ready.n1ebieski/icore/web/scripts/plugins/typeahead@init', function () {
     let typeahead = function () {
         let $input = $("#typeahead");
 
@@ -37,9 +37,7 @@
         });
     };
 
-    jQuery(document).ready(function () {
-        $.when( typeahead() ).then(function () {
-            $("input.tt-input").css('background-color', '');
-        });
+    $.when( typeahead() ).then(function () {
+        $("input.tt-input").css('background-color', '');
     });
-})(jQuery);
+});

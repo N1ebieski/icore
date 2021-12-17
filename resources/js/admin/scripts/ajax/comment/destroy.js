@@ -1,29 +1,33 @@
-jQuery(document).on('click', '.destroyComment, .destroy-comment', function (e) {
-    e.preventDefault();
+$(document).on(
+    'click.n1ebieski/icore/admin/scripts/ajax/comment@destroy',
+    '.destroyComment, .destroy-comment',
+    function (e) {
+        e.preventDefault();
 
-    let $element = $(this);
-    let $row = $('#row' + $element.data('id'));
+        let $element = $(this);
+        let $row = $('#row' + $element.data('id'));
 
-    jQuery.ajax({
-        url: $element.data('route'),
-        method: 'delete',
-        beforeSend: function () {
-            $row.find('.responsive-btn-group').addClass('disabled');
-            $row.find('[data-btn-ok-class*="destroyComment"], [data-btn-ok-class*="destroy-comment"]').getLoader('show');
-        },
-        complete: function () {
-            $row.find('[data-btn-ok-class*="destroyComment"], [data-btn-ok-class*="destroy-comment"]').getLoader('hide');
-        },
-        success: function (response) {
-            $row.fadeOut('slow');
+        $.ajax({
+            url: $element.data('route'),
+            method: 'delete',
+            beforeSend: function () {
+                $row.find('.responsive-btn-group').addClass('disabled');
+                $row.find('[data-btn-ok-class*="destroyComment"], [data-btn-ok-class*="destroy-comment"]').getLoader('show');
+            },
+            complete: function () {
+                $row.find('[data-btn-ok-class*="destroyComment"], [data-btn-ok-class*="destroy-comment"]').getLoader('hide');
+            },
+            success: function (response) {
+                $row.fadeOut('slow');
 
-            $.each(response.descendants, function (key, value) {
-                let $rowDescendant = $('#row' + value);
+                $.each(response.descendants, function (key, value) {
+                    let $rowDescendant = $('#row' + value);
 
-                if ($rowDescendant.length) {
-                    $rowDescendant.fadeOut('slow');
-                }
-            });
-        }
-    });
-});
+                    if ($rowDescendant.length) {
+                        $rowDescendant.fadeOut('slow');
+                    }
+                });
+            }
+        });
+    }
+);

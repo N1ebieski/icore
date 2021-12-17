@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/jquery-lazy@init', function () {
     $('.lazy').lazy({
         effect: "fadeIn",
         effectTime: "fast",

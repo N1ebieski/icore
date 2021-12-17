@@ -1,10 +1,14 @@
-jQuery(document).on('click', '#policy #agree', function (e) {
-    e.preventDefault();
+$(document).on(
+    'click.n1ebieski/icore/web/scripts/view/policy@agree',
+    '#policy #agree',
+    function (e) {
+        e.preventDefault();
 
-    $('#policy').remove();
+        $('#policy').remove();
 
-    $.cookie("policy_agree", 1, { 
-        path: '/',
-        expires: 365
-    });
-});
+        $.cookie("policy_agree", 1, { 
+            path: '/',
+            expires: 365
+        });
+    }
+);

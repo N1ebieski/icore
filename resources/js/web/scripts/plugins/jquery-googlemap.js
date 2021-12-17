@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+$(document).on('ready.n1ebieski/icore/web/scripts/plugins/jquery-googlemap@init', function () {
     $('#map, .map').each(function () {
         let $map = $(this);
 

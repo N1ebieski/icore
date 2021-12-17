@@ -1,22 +1,24 @@
-jQuery(document).ready(function () {
+$(function () {
+    $(document).trigger('ready');
     $(document).trigger('readyAndAjax');
 });
 
-jQuery(document).ajaxComplete(function () {
+$(document).ajaxComplete(function () {
     $(document).trigger('readyAndAjax');
 });
 
-jQuery(document).on('readyAndAjax', function () {
-    $('form').find('input, select').keypress(function (e) {
-        if (e.which == 13) {
-            e.preventDefault();
-            
-            return false;
-        }
-    });
+$(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/actions@enter', function () {
+    $('form').find('input, select')
+        .on('keypress', function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                
+                return false;
+            }
+        });
 });
 
-jQuery(window).on('readyAndAjax', function () {
+$(window).on('readyAndAjax.n1ebieski/icore/admin/scripts/actions@focusSpellcheck', function () {
     if (navigator.userAgent.indexOf("Firefox") != -1) {
         $('[spellcheck="true"]:first').focusWithoutScrolling();
     }

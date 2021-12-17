@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/web/scripts/view/custom-file-input@init', function () {
     $(".custom-file-input").each(function () {
         $(this).on("change", function () {
             var files = [];

@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/view/counter@init', function () {
     $('.counter').each(function () {
         let $counter = $(this);
         $counter.name = $.escapeSelector($counter.data('name'));
@@ -16,7 +16,7 @@ jQuery(document).on('readyAndAjax', function () {
             ];
     
             $.each($elements.filter((item) => item != null), function () {
-                $(this).keyup(function () {
+                $(this).on('keyup', function () {
                     let length = $(this).attr('contenteditable') ?
                         parseFloat($(this).text().length)
                         : parseFloat($($.parseHTML($(this).val())).text().length);

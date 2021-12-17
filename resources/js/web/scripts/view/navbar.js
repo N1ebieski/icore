@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+$(document).on('ready.n1ebieski/icore/web/scripts/view/navbar@init', function () {
     let c = $(window).scrollTop();
 
     let currentScrollTop = 0;
@@ -9,7 +9,7 @@ jQuery(document).ready(function () {
         return;
     }
 
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
         if (!$('body').hasClass('modal-open')) {
             if ($('.trumbowyg-button-pane').css('position') === 'fixed') {
                 $navbar.fadeOut();
@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
     });
 });
 
-jQuery(document).ready(function () {
+$(document).on('ready.n1ebieski/icore/web/scripts/view/navbar@hashtag', function () {
     let hash = window.location.hash;
 
     let $navbar = $('.menu.navbar');
@@ -51,18 +51,22 @@ jQuery(document).ready(function () {
     }
 });
 
-jQuery(document).on('click', ".modal-backdrop, #navbarToggle, #navbar-toggle", function (e) {
-    e.preventDefault();
+$(document).on(
+    'click.n1ebieski/icore/web/scripts/view/navbar@toggle',
+    ".modal-backdrop, #navbarToggle, #navbar-toggle",
+    function (e) {
+        e.preventDefault();
 
-    if ($('.modal-backdrop').length) {
-        $('.navbar-collapse').collapse('hide');
-        $('.modal-backdrop').fadeOut('slow', function() {
-            $(this).remove();
-        });
-        $('body').removeClass('modal-open');
-    } else {
-        $('.navbar-collapse').collapse('show');
-        $('<div class="modal-backdrop show z-900"></div>').appendTo('body').hide().fadeIn();
-        $('body').addClass('modal-open');
+        if ($('.modal-backdrop').length) {
+            $('.navbar-collapse').collapse('hide');
+            $('.modal-backdrop').fadeOut('slow', function() {
+                $(this).remove();
+            });
+            $('body').removeClass('modal-open');
+        } else {
+            $('.navbar-collapse').collapse('show');
+            $('<div class="modal-backdrop show z-900"></div>').appendTo('body').hide().fadeIn();
+            $('body').addClass('modal-open');
+        }
     }
-});
+);

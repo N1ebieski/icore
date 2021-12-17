@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function() {
+jQuery(document).on('readyAndAjax.n1ebieski/icore/web/scripts/plugins/bootstrap-select/default@init', function() {
     $('.select-picker').each(function () {
         let $sp = $(this);
 

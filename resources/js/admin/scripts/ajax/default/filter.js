@@ -1,4 +1,4 @@
-(function ($) {
+$(document).on('ready.n1ebieski/icore/admin/scripts/ajax/default@filter', function () {
     function ajaxFilter ($form, href) {
         $.ajax({
             url: href,
@@ -29,39 +29,55 @@
         });
     }
 
-    jQuery(document).on('change', '#filterOrderBy, #filter-orderby', function (e) {
-        e.preventDefault();
+    $(document).on(
+        'change.n1ebieski/icore/admin/scripts/ajax/default@filterOrderBy',
+        '#filterOrderBy, #filter-orderby',
+            function (e) {
+            e.preventDefault();
 
-        let $form = $('#filter');
-        $form.href = $form.data('route') + '?' + $form.serialize();
+            let $form = $('#filter');
+            $form.href = $form.data('route') + '?' + $form.serialize();
 
-        ajaxFilter($form, $form.href);
-    });
+            ajaxFilter($form, $form.href);
+        }
+    );
 
-    jQuery(document).on('click', '#filterFilter, #filter-filter', function (e) {
-        e.preventDefault();
+    $(document).on(
+        'click.n1ebieski/icore/admin/scripts/ajax/default@filterFilter',
+        '#filterFilter, #filter-filter',
+        function (e) {
+            e.preventDefault();
 
-        let $form = $('#filter');
-        $form.href = $form.data('route') + '?' + $form.serialize();
+            let $form = $('#filter');
+            $form.href = $form.data('route') + '?' + $form.serialize();
 
-        if ($('#filter').valid()) ajaxFilter($form, $form.href);
-    });
+            if ($('#filter').valid()) ajaxFilter($form, $form.href);
+        }
+    );
 
-    jQuery(document).on('click', 'a.filterOption, a.filter-option', function (e) {
-        e.preventDefault();
+    $(document).on(
+        'click.n1ebieski/icore/admin/scripts/ajax/default@filterOption',
+        'a.filterOption, a.filter-option',
+        function (e) {
+            e.preventDefault();
 
-        let $form = $('#filter');
-        $form.href = $form.data('route') + '?' + $form.find('[name!="' + $.escapeSelector($(this).data('name'))+'"]').serialize();
+            let $form = $('#filter');
+            $form.href = $form.data('route') + '?' + $form.find('[name!="' + $.escapeSelector($(this).data('name'))+'"]').serialize();
 
-        ajaxFilter($form, $form.href);
-    });
+            ajaxFilter($form, $form.href);
+        }
+    );
 
-    jQuery(document).on('change', '#filterPaginate, #filter-paginate', function (e) {
-        e.preventDefault();
+    $(document).on(
+        'change.n1ebieski/icore/admin/scripts/ajax/default@filterPaginate',
+        '#filterPaginate, #filter-paginate',
+        function (e) {
+            e.preventDefault();
 
-        let $form = $('#filter');
-        $form.href =  $form.data('route') + '?' + $form.serialize();
+            let $form = $('#filter');
+            $form.href =  $form.data('route') + '?' + $form.serialize();
 
-        ajaxFilter($form, $form.href);
-    });
-})(jQuery);
+            ajaxFilter($form, $form.href);
+        }
+    );
+})

@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/web/scripts/plugins/infinite-scroll@init', function () {
     let $is = $('#infinite-scroll');
 
     $is.jscroll({

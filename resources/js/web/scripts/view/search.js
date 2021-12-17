@@ -1,17 +1,21 @@
-$(document).on('click', '.search-toggler', function (e) {
-    e.preventDefault();
+$(document).on(
+    'click.n1ebieski/icore/web/scripts/view/search@toggle',
+    '.search-toggler',
+    function (e) {
+        e.preventDefault();
 
-    if (window.innerWidth >= 768) {
-        $('#pagesToggle, #pages-toggle').fadeToggle(0);
-    } else {
-        $('#navbarLogo, #navbar-logo').fadeToggle(0);
-        $('#navbarToggle, #navbar-toggle').fadeToggle(0);
+        if (window.innerWidth >= 768) {
+            $('#pagesToggle, #pages-toggle').fadeToggle(0);
+        } else {
+            $('#navbarLogo, #navbar-logo').fadeToggle(0);
+            $('#navbarToggle, #navbar-toggle').fadeToggle(0);
+        }
+        $('#searchForm, #search-form').fadeToggle(0);
+        $('.search-toggler').find('i').toggleClass("fa-search fa-times");
     }
-    $('#searchForm, #search-form').fadeToggle(0);
-    $('.search-toggler').find('i').toggleClass("fa-search fa-times");
-});
+);
 
-$(document).ready(function () {
+$(document).on('ready.n1ebieski/icore/web/scripts/view/search@disable', function () {
     let $form = $('form#searchForm, form#search-form');
     $form.btn = $form.find('button');
 
@@ -24,13 +28,13 @@ $(document).ready(function () {
     });
 });
 
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/web/scripts/view/search@enter', function () {
     let $form = $('form#searchForm, form#search-form');
     $form.btn = $form.find('button');
 
-    $form.find('input[name="search"]').keypress(function (e) {
+    $form.find('input[name="search"]').on('keypress', function (e) {
         if (e.which == 13 && $form.btn.prop('disabled') === false) {
-            $('form#searchForm, form#search-form').submit();
+            $('form#searchForm, form#search-form').trigger('submit');
             return false;
         }
     });

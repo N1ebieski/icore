@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/trumbowyg@init', function () {
     if (!$('.trumbowyg-box').length) {
         let $trumbowyg = $('#content_html_trumbowyg');
 
@@ -63,15 +63,19 @@ jQuery(document).on('readyAndAjax', function () {
             });
         });
 
-        $(document).on('click', 'button#filemanager', function (e) {
-            e.preventDefault();
+        $(document).on(
+            'click.n1ebieski/icore/admin/scripts/plugins/trumbowyg@fileManager',
+            'button#filemanager',
+            function (e) {
+                e.preventDefault();
 
-            window.open(
-                '/admin/file-manager/fm-button',
-                'fm',
-                'resizable=yes,status=no,scrollbars=yes,toolbar=no,menubar=no,width=1366,height=768'
-            );
-        });
+                window.open(
+                    '/admin/file-manager/fm-button',
+                    'fm',
+                    'resizable=yes,status=no,scrollbars=yes,toolbar=no,menubar=no,width=1366,height=768'
+                );
+            }
+        );
     }
 });
 

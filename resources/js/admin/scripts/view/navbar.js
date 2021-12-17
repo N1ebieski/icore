@@ -1,4 +1,4 @@
-(function ($) {
+$(document).on('ready.n1ebieski/icore/admin/scripts/view/navbar@init', function () {
     let c = $(window).scrollTop();
     let currentScrollTop = 0;
     let $navbar = $('.navbar');
@@ -7,7 +7,7 @@
         return;
     }
 
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
         if (!$('body').hasClass('modal-open')) {   
             if ($('.trumbowyg-button-pane').css('position') === 'fixed') {
                 $navbar.fadeOut();
@@ -28,4 +28,4 @@
             c = currentScrollTop;
         }            
    });
-})(jQuery);
+});

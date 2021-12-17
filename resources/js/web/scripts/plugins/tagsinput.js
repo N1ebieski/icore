@@ -1,4 +1,4 @@
-jQuery(document).ready(function () {
+$(document).on('ready.n1ebieski/icore/web/scripts/plugins/tagsinput@init', function () {
     $('.tagsinput').each(function () {
         let $tagsinput = $(this);
         

@@ -1,4 +1,4 @@
-$(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/web/scripts/plugins/magnific-popup@init', function () {
     let $lightbox = $('.lightbox');
 
     if ($lightbox.length) {

@@ -1,4 +1,4 @@
-(function ($) {
+$(document).on('ready.n1ebieski/icore/web/scripts/ajax/comment@filter', function () {
     let ajaxFilterComment = function ($form, href) {
         $.ajax({
             url: href,
@@ -24,12 +24,16 @@
         });
     };
 
-    jQuery(document).on('change', '#filterCommentOrderBy, #filter-orderby-comment', function (e) {
-        e.preventDefault();
+    $(document).on(
+        'change.n1ebieski/icore/web/scripts/ajax/comment@filterOrderBy',
+        '#filterCommentOrderBy, #filter-orderby-comment',
+        function (e) {
+            e.preventDefault();
 
-        let $form = $('#filter');
-        $form.href = $form.data('route') + '?' + $form.serialize();
+            let $form = $('#filter');
+            $form.href = $form.data('route') + '?' + $form.serialize();
 
-        ajaxFilterComment($form, $form.href);
-    });
-})(jQuery);
+            ajaxFilterComment($form, $form.href);
+        }
+    );
+});

@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function () {
+$(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-confirmation@init', function () {
     $('[data-toggle=confirmation]').each(function () {
         let $confirmation = $(this);
 

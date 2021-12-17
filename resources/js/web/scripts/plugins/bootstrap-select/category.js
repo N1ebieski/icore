@@ -1,4 +1,4 @@
-jQuery(document).on('readyAndAjax', function() {
+$(document).on('readyAndAjax.n1ebieski/icore/web/scripts/plugins/bootstrap-select/category@init', function () {
     $('.select-picker-category').each(function () {
         let $sp = $(this);
 
