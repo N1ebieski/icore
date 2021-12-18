@@ -1,4 +1,8 @@
 (function($) {
+    $.fn.chart = function (options) {
+        return new Chart(this, options);
+    };
+
     $.fn.serializeObject = function() {
 
         var self = this,
