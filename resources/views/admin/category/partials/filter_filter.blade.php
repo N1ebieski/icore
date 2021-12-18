@@ -54,6 +54,8 @@
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}"
     </label>
     <select 
+        id="filter-parent"       
+        name="filter[parent]" 
         class="selectpicker select-picker-category" 
         data-live-search="true"
         data-abs="true"
@@ -63,8 +65,7 @@
         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::filter.default')], ['value' => 0, 'text' => trans('icore::categories.roots')]]) }}"
         data-style="border"
         data-width="100%"
-        name="filter[parent]"
-        id="filter-parent"
+        data-size="5"
     >
         <optgroup label="{{ trans('icore::default.current_option') }}">
             <option value="">

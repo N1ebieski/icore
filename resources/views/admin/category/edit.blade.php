@@ -1,7 +1,17 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'edit-modal')
+
+@slot('modal_title')
+<i class="far fa-edit"></i>
+<span> {{ trans('icore::categories.route.edit') }}</span>
+@endslot
+
+@slot('modal_body')
 <form 
     data-route="{{ route('admin.category.update', ['category' => $category->id]) }}"
     data-id="{{ $category->id }}" 
-    id="update"
+    id="edit-category"
 >
     <div class="form-group">
         <label for="name">
@@ -38,6 +48,8 @@
             {{ trans('icore::categories.parent_id') }}
         </label>
         <select 
+            id="parent_id"            
+            name="parent_id"    
             class="selectpicker select-picker-category" 
             data-live-search="true"
             data-abs="true"
@@ -48,8 +60,7 @@
             data-abs-filter-except="{{ json_encode($category->descendants->pluck('id')->toArray()) }}"
             data-style="border"
             data-width="100%"
-            name="parent_id"
-            id="parent_id"
+            data-size="5"
         >
             <optgroup label="{{ trans('icore::default.current_option') }}">
                 <option value="" {{ ($category->isRoot()) ? 'selected' : '' }}>
@@ -69,12 +80,28 @@
             </optgroup>
         </select>
     </div>
-    <button type="button" data-id="{{ $category->id }}" class="btn btn-primary update">
+</form>
+@endslot
+
+@slot('modal_footer')    
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary update"
+        form="edit-category"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent

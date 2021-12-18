@@ -77,6 +77,8 @@
                     {{ trans('icore::categories.parent_id') }}
                 </label>
                 <select 
+                    id="parent_id"                     
+                    name="parent_id"           
                     class="selectpicker select-picker-category" 
                     data-live-search="true"
                     data-abs="true"
@@ -86,8 +88,7 @@
                     data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
                     data-style="border"
                     data-width="100%"
-                    name="parent_id"
-                    id="parent_id"
+                    data-size="5"
                 >
                     <optgroup label="{{ trans('icore::default.current_option') }}">
                         <option value="">
@@ -142,6 +143,8 @@
                         {{ trans('icore::categories.parent_id') }}
                     </label>
                     <select 
+                        id="parent_id"                      
+                        name="parent_id"                  
                         class="selectpicker select-picker-category" 
                         data-live-search="true"
                         data-abs="true"
@@ -151,8 +154,7 @@
                         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
                         data-style="border"
                         data-width="100%"
-                        name="parent_id"
-                        id="parent_id"
+                        data-size="5"
                     >
                         <option value="">
                             {{ trans('icore::categories.null') }}
