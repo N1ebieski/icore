@@ -116,7 +116,7 @@
                         class="btn btn-dark create"
                         data-route="{{ route('admin.banmodel.user.create', ['user' => $user->id]) }}"
                         data-toggle="modal" 
-                        data-target="#create-ban-user-modal"
+                        data-target="#create-banmodel-user-modal"
                     >
                         <i class="fas fa-user-slash"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.ban') }}</span>

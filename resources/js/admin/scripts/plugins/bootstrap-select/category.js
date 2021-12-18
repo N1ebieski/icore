@@ -1,5 +1,5 @@
 $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-select/category@init', function () {
-    $('.select-picker-category').each(function () {
+    $('select.select-picker-category').each(function () {
         let $sp = $(this);
 
         if ($sp.data('loaded') === true) {

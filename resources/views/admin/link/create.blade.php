@@ -1,4 +1,18 @@
-<form method="post" data-route="{{ route('admin.link.store', [$type]) }}">
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'create-modal')
+
+@slot('modal_title')
+<i class="far fa-plus-square"></i>
+<span> {{ trans('icore::links.route.create') }}</span>
+@endslot
+
+@slot('modal_body')
+<form 
+    id="create-link"
+    method="post" 
+    data-route="{{ route('admin.link.store', [$type]) }}"
+>
     <div class="form-group">
         <label for="name">
             {{ trans('icore::links.name') }}:
@@ -57,6 +71,8 @@
         </label>
         <input type="hidden" name="categories" value="">
         <select 
+            id="categories"   
+            name="categories[]"     
             class="selectpicker select-picker-category" 
             data-live-search="true"
             data-abs="true"
@@ -65,18 +81,33 @@
             data-abs-ajax-url="{{ route('api.category.index') }}"
             data-style="border"
             data-width="100%"
+            data-container="body"
             multiple
-            name="categories[]"
-            id="categories"
         >
         </select>
     </div>
-    <button type="button" class="btn btn-primary store">
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary store"
+        form="create-link"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent

@@ -37,7 +37,7 @@
 <div class="d-inline">
     <button 
         type="button" 
-        class="btn btn-primary update-position-category"
+        class="btn btn-primary update-position"
         form="edit-position-category"
     >
         <i class="fas fa-check"></i>

@@ -60,7 +60,7 @@
             data-abs-filter-except="{{ json_encode($category->descendants->pluck('id')->toArray()) }}"
             data-style="border"
             data-width="100%"
-            data-size="5"
+            data-container="body"
         >
             <optgroup label="{{ trans('icore::default.current_option') }}">
                 <option value="" {{ ($category->isRoot()) ? 'selected' : '' }}>

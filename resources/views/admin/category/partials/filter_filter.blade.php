@@ -65,7 +65,7 @@
         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::filter.default')], ['value' => 0, 'text' => trans('icore::categories.roots')]]) }}"
         data-style="border"
         data-width="100%"
-        data-size="5"
+        data-container="body"
     >
         <optgroup label="{{ trans('icore::default.current_option') }}">
             <option value="">

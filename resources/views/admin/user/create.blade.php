@@ -1,4 +1,17 @@
-<form data-route="{{ route('admin.user.store') }}" id="store">
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'create-modal')
+
+@slot('modal_title')
+<i class="far fa-plus-square"></i>
+<span> {{ trans('icore::users.route.create') }}</span>
+@endslot
+
+@slot('modal_body')
+<form 
+    id="create-user"
+    data-route="{{ route('admin.user.store') }}"
+>
     <div class="form-group">
         <label for="name">
             {{ trans('icore::auth.name.label') }}
@@ -61,12 +74,28 @@
             @endforeach
         </select>
     </div>
-    <button type="button" class="btn btn-primary store">
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary store"
+        form="create-user"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.submit') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent

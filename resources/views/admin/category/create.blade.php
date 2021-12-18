@@ -88,12 +88,27 @@
                     data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
                     data-style="border"
                     data-width="100%"
-                    data-size="5"
+                    data-container="body"
                 >
                     <optgroup label="{{ trans('icore::default.current_option') }}">
-                        <option value="">
+                        @if ($parent === null)
+                        <option 
+                            value="" 
+                            selected
+                        >
                             {{ trans('icore::categories.null') }}
                         </option>
+                        @else
+                        <option 
+                            @if ($parent->ancestors->isNotEmpty())
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $parent->name }}'
+                            @endif
+                            value="{{ $parent->id }}" 
+                            selected
+                        >
+                            {{ $parent->name }}
+                        </option>
+                        @endif
                     </optgroup>
                 </select>
             </div>
@@ -154,11 +169,26 @@
                         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
                         data-style="border"
                         data-width="100%"
-                        data-size="5"
+                        data-container="body"
                     >
-                        <option value="">
+                        @if ($parent === null)
+                        <option 
+                            value="" 
+                            selected
+                        >
                             {{ trans('icore::categories.null') }}
                         </option>
+                        @else
+                        <option 
+                            @if ($parent->ancestors->isNotEmpty())
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $parent->name }}'
+                            @endif
+                            value="{{ $parent->id }}" 
+                            selected
+                        >
+                            {{ $parent->name }}
+                        </option>
+                        @endif
                     </select>
                 </div>
             </div>

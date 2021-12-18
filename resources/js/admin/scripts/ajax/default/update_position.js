@@ -1,12 +1,12 @@
 $(document).on(
-    'click.n1ebieski/icore/admin/scripts/ajax/page@updatePosition',
-    '.updatePositionPage, .update-position-page',
+    'click.n1ebieski/icore/admin/scripts/ajax/default@updatePosition',
+    '.updatePosition, .update-position',
     function (e) {
         e.preventDefault();
 
         let $element = $(this);
 
-        let $form = $element.closest('form');
+        let $form = $element.closest('.modal-content').find('form');
 
         $.ajax({
             url: $form.data('route'),

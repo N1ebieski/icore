@@ -1,3 +1,12 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', "show-report-{$model->poli_self}-modal")
+
+@slot('modal_title')
+<span>{{ trans('icore::reports.route.show') }}</span>
+@endslot
+
+@slot('modal_body')
 <div>
     @if ($reports->isNotEmpty())
     @foreach ($reports as $report)
@@ -16,6 +25,11 @@
     </div>
     @endforeach
     @endif
+</div>
+@endslot
+
+@slot('modal_footer')
+<div>
     <button 
         type="button" 
         class="btn btn-danger clear-report"
@@ -26,3 +40,6 @@
         <span>{{ trans('icore::default.clear') }}</span>
     </button>
 </div>
+@endslot
+
+@endcomponent

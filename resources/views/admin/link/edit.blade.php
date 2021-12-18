@@ -1,4 +1,15 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'edit-modal')
+
+@slot('modal_title')
+<i class="far fa-edit"></i>
+<span> {{ trans('icore::links.route.edit') }}</span>
+@endslot
+
+@slot('modal_body')
 <form 
+    id="edit-link"
     method="post" 
     data-route="{{ route('admin.link.update', [$link->id]) }}" 
     data-id="{{ $link->id }}"
@@ -82,6 +93,8 @@
         </label>
         <input type="hidden" name="categories" value="">
         <select 
+            id="categories"  
+            name="categories[]"      
             class="selectpicker select-picker-category" 
             data-live-search="true"
             data-abs="true"
@@ -90,9 +103,8 @@
             data-abs-ajax-url="{{ route('api.category.index') }}"
             data-style="border"
             data-width="100%"
+            data-container="body"
             multiple
-            name="categories[]"
-            id="categories"
         >
             @if ($link->categories->isNotEmpty())
             <optgroup label="{{ trans('icore::default.current_option') }}">
@@ -112,12 +124,28 @@
         </select>
         @includeWhen($errors->has('categories'), 'icore::admin.partials.errors', ['name' => 'categories'])
     </div>
-    <button type="button" class="btn btn-primary update">
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary update"
+        form="edit-link"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent

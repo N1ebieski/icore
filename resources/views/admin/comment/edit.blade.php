@@ -1,4 +1,17 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'edit-comment-modal')
+
+@slot('modal_size', 'modal-lg')
+
+@slot('modal_title')
+<i class="far fa-edit"></i>
+<span> {{ trans('icore::comments.route.edit') }}</span>
+@endslot
+
+@slot('modal_body')
 <form 
+    id="edit-comment"
     method="post" 
     data-route="{{ route('admin.comment.update', ['comment' => $comment->id]) }}"
     data-id="{{ $comment->id }}"
@@ -14,12 +27,28 @@
             id="content"
         >{{ $comment->content_html }}</textarea>
     </div>
-    <button type="button" class="btn btn-primary update">
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary update"
+        form="edit-comment"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent

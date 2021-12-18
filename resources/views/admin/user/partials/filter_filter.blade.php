@@ -1,6 +1,7 @@
 @inject('user', 'N1ebieski\ICore\Models\User')
 
 @component('icore::admin.partials.modal')
+
 @slot('modal_id', 'filter-modal')
 
 @slot('modal_title')
@@ -70,8 +71,16 @@
         @endforeach
     </select>
 </div>
+@endslot
+
+@slot('modal_footer')
 <div class="d-inline">
-    <button type="button" class="btn btn-primary btn-send" id="filter-filter">
+    <button 
+        id="filter-filter"
+        type="button" 
+        class="btn btn-primary btn-send" 
+        form="filter"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.apply') }}</span>
     </button>
@@ -81,6 +90,7 @@
     </button>
 </div>
 @endslot
+
 @endcomponent
 
 @push('script')

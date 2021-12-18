@@ -2,6 +2,7 @@
 @inject('report', 'N1ebieski\ICore\Models\Report\Comment\Report')
 
 @component('icore::admin.partials.modal')
+
 @slot('modal_id', 'filter-modal')
 
 @slot('modal_title')
@@ -101,17 +102,30 @@
         </option>
     </select>
 </div>
+@endslot
+
+@slot('modal_footer')
 <div class="d-inline">
-    <button type="button" class="btn btn-primary btn-send" id="filter-filter">
+    <button 
+        id="filter-filter"
+        type="button" 
+        class="btn btn-primary btn-send"
+        form="filter"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.apply') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </div>
 @endslot
+
 @endcomponent
 
 @push('script')

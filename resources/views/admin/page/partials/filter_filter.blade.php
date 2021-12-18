@@ -1,6 +1,7 @@
 @inject('page', 'N1ebieski\ICore\Models\Page\Page')
 
 @component('icore::admin.partials.modal')
+
 @slot('modal_id', 'filter-modal')
 
 @slot('modal_title')
@@ -54,12 +55,13 @@
         {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}"
     </label>
     <select 
+        id="filter-parent"  
+        name="filter[parent]"  
         class="selectpicker select-picker" 
         data-live-search="true"
         data-style="border"
         data-width="100%"
-        name="filter[parent]"
-        id="filter-parent"
+        data-container="body"
     >
         <option value="">
             {{ trans('icore::filter.default') }}
@@ -84,17 +86,30 @@
     </select>
 </div>
 @endif
+@endslot
+
+@slot('modal_footer')
 <div class="d-inline">
-    <button type="button" class="btn btn-primary btn-send" id="filter-filter">
+    <button
+        id="filter-filter"
+        type="button"
+        class="btn btn-primary btn-send"
+        form="filter"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.apply') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button"
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
 </div>
 @endslot
+
 @endcomponent
 
 @push('script')

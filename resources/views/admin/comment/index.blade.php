@@ -117,7 +117,7 @@
 @endcomponent
 
 @component('icore::admin.partials.modal')
-@slot('modal_id', 'create-banuser-modal')
+@slot('modal_id', 'create-banmodel-user-modal')
 @slot('modal_title')
 <i class="fas fa-user-slash"></i>
 <span> {{ trans('icore::bans.route.create') }}</span>

@@ -1,3 +1,15 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'show-comment-modal')
+
+@slot('modal_size', 'modal-lg')
+
+@slot('modal_title')
+<i class="far fa-comments"></i>
+<span> {{ trans('icore::comments.route.show_disqus') }}</span>
+@endslot
+
+@slot('modal_body')
 <div>
     @if ($comment->ancestors->isNotEmpty())
         @foreach ($comment->ancestors as $ancestor)
@@ -76,3 +88,6 @@
         @endforeach
     @endif
 </div>
+@endslot
+
+@endcomponent

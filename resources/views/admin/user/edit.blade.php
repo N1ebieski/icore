@@ -1,7 +1,17 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'edit-modal')
+
+@slot('modal_title')
+<i class="far fa-edit"></i>
+<span> {{ trans('icore::users.route.edit') }}</span>
+@endslot
+
+@slot('modal_body')
 <form 
+    id="edit-user"
     data-route="{{ route('admin.user.update', ['user' => $user->id]) }}"
     data-id="{{ $user->id }}" 
-    id="update"
 >
     <div class="form-group">
         <label for="name">
@@ -45,23 +55,28 @@
             @endforeach
         </select>
     </div>
-    <button type="button" data-id="{{ $user->id }}" class="btn btn-primary update">
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary update"
+        form="edit-user"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-    @if (!$user->socialites->isEmpty())
-    <hr>
-        <span>{{ ucfirst(trans('icore::users.symlink')) }}:</span>
-        <span class="text-primary">
-        @foreach ($user->socialites as $user_socialite)
-            <i class="fab fa-{{ $user_socialite->provider_name }}"></i> 
-            <span>{{ $user_socialite->provider_name }}</span>
-            @if (!$loop->last),@endif
-        @endforeach
-        </span>
-    @endif
-</form>
+</div>
+@endslot
+
+@endcomponent

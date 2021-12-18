@@ -31,7 +31,7 @@
                 type="button" 
                 class="btn btn-primary text-nowrap create" 
                 data-toggle="modal"
-                data-route="{{ route("admin.category.{$model->poli}.create", ['parent_id' => $filter['parent'] ?? null]) }}"
+                data-route="{{ route("admin.category.{$model->poli}.create", ['parent_id' => optional($filter['parent'])->id]) }}"
                 data-target="#create-modal"
             >
                 <i class="far fa-plus-square"></i>

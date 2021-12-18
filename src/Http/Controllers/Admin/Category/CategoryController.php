@@ -55,7 +55,8 @@ class CategoryController implements Polymorphic
         return Response::json([
             'success' => '',
             'view' => View::make('icore::admin.category.create', [
-                'model' => $category
+                'model' => $category,
+                'parent' => $category->find($request->input('parent_id'))
             ])->render()
         ]);
     }

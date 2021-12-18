@@ -1,7 +1,19 @@
+@component('icore::admin.partials.modal')
+
+@slot('modal_id', 'edit-modal')
+
+@slot('modal_size', 'modal-lg')
+
+@slot('modal_title')
+<i class="far fa-edit"></i>
+<span> {{ trans('icore::pages.route.edit') }}</span>
+@endslot
+
+@slot('modal_body')
 <form 
+    id="edit-page"
     data-route="{{ route('admin.page.update', [$page->id]) }}"
     data-id="{{ $page->id }}" 
-    id="update"
 >
     <div class="form-group">
         <label for="title">
@@ -36,12 +48,28 @@
             >{{ old('content_html', $page->content_html) }}</textarea>
         </div>
     </div>
-    <button type="button" class="btn btn-primary update">
+</form>
+@endslot
+
+@slot('modal_footer')
+<div class="d-inline">
+    <button 
+        type="button" 
+        class="btn btn-primary update"
+        form="edit-page"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
-</form>
+</div>
+@endslot
+
+@endcomponent
