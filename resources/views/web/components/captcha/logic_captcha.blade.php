@@ -12,7 +12,7 @@
                     <i class="fas fa-sync-alt"></i>
                 </button>
             </div>
-            <input class="form-control" type="text" name="captcha">
+            <input class="form-control" type="text" name="captcha" id="captcha">
         </div>
     </div>
     @includeWhen($errors->has('captcha'), 'icore::web.partials.errors', ['name' => 'captcha'])

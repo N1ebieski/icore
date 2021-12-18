@@ -6,12 +6,13 @@ $(document).on(
 
         let $element = $(this);
 
-        let $form = $element.closest('form');
+        let $form = $element.closest('.modal-content').find('form');
         $form.btn = $form.find('.btn');
         $form.input = $form.find('.form-control');
 
         let $modal = {
-            body: $form.closest('.modal-body')
+            body: $element.closest('.modal-content').find('.modal-body'),
+            footer: $element.closest('.modal-content').find('.modal-footer')
         };
 
         $.ajax({
@@ -30,6 +31,7 @@ $(document).on(
                 $form.input.addClass('is-valid');
             },
             success: function (response) {
+                $modal.footer.empty();
                 $modal.body.html($.getAlert('success', response.success));
             },
             error: function (response) {

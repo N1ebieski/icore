@@ -8,10 +8,12 @@ $(document).on(
 
         let $modal = {
             body: $($element.attr('data-target')).find('.modal-body'),
+            footer: $($element.data('target')).find('.modal-footer'),
             content: $($element.attr('data-target')).find('.modal-content')
         };
 
         $modal.body.empty();
+        $modal.footer.empty();
 
         $.ajax({
             url: $element.data('route'),
@@ -23,7 +25,7 @@ $(document).on(
                 $modal.content.find('.loader-absolute').remove();
             },
             success: function (response) {
-                $modal.body.html($.sanitize(response.view));
+                $modal.content.html($.sanitize($(response.view).find('.modal-content').html()));
             }
         });
     }

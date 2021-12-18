@@ -10,7 +10,7 @@
 @slot('modal_body')
 <form 
     method="post"
-    id="edit-banmodel"
+    id="create-banmodel"
     data-route="{{ route('admin.banmodel.user.store', [$model->id]) }}"
 >
     <div class="form-group">
@@ -48,11 +48,19 @@
 
 @slot('modal_footer')
 <div class="d-inline">
-    <button type="button" class="btn btn-primary store-banmodel">
+    <button 
+        type="button"
+        class="btn btn-primary store-banmodel"
+        form="create-banmodel"
+    >
         <i class="fas fa-check"></i>
         <span>{{ trans('icore::default.save') }}</span>
     </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+    <button 
+        type="button" 
+        class="btn btn-secondary" 
+        data-dismiss="modal"
+    >
         <i class="fas fa-ban"></i>
         <span>{{ trans('icore::default.cancel') }}</span>
     </button>
