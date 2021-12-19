@@ -10,24 +10,24 @@ class UsersACLRepository implements ACLRepository
     /**
      * @var int
      */
-    private const ACCESS_DENIED = 0;
+    protected const ACCESS_DENIED = 0;
 
     /**
      * @var int
      */
-    private const ACCESS_READ = 1;
+    protected const ACCESS_READ = 1;
 
     /**
      * @var int
      */
-    private const ACCESS_READ_WRITE = 2;
+    protected const ACCESS_READ_WRITE = 2;
 
     /**
      * Undocumented variable
      *
      * @var Auth
      */
-    private $auth;
+    protected $auth;
 
     /**
      * Undocumented function
