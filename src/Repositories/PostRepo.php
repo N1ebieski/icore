@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -41,6 +42,13 @@ class PostRepo
     protected $app;
 
     /**
+     * Undocumented variable
+     *
+     * @var Auth
+     */
+    protected $auth;
+
+    /**
      * Config
      * @var int
      */
@@ -53,14 +61,21 @@ class PostRepo
      * @param Config $config
      * @param Carbon $carbon
      * @param App $app
+     * @param Auth $auth
      */
-    public function __construct(Post $post, Config $config, Carbon $carbon, App $app)
-    {
+    public function __construct(
+        Post $post,
+        Config $config,
+        Carbon $carbon,
+        App $app,
+        Auth $auth
+    ) {
         $this->post = $post;
 
         $this->config = $config;
         $this->carbon = $carbon;
         $this->app = $app;
+        $this->auth = $auth;
 
         $this->paginate = $config->get('database.paginate');
     }
@@ -92,7 +107,15 @@ class PostRepo
             ->with('tags')
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
-            ->filterStatus($filter['status'])
+            ->when(
+                $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),
+                function ($query) {
+                    $query->active();
+                },
+                function ($query) use ($filter) {
+                    $query->filterStatus($filter['status']);
+                }
+            )
             ->when($filter['orderby'] === null, function ($query) use ($filter) {
                 $query->filterOrderBySearch($filter['search']);
             })

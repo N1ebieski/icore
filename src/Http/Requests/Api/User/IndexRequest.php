@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Api\User;
 
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -37,9 +38,10 @@ class IndexRequest extends FormRequest
                 'bail',
                 'nullable',
                 'integer',
-                'in:1' . (
-                    optional($this->user())->can('admin.users.view') ? ',0' : null
-                )
+                Rule::in([
+                    User::ACTIVE,
+                    optional($this->user())->can('admin.users.view') ? User::INACTIVE : null
+                ])
             ],
             'filter.role' => [
                 'bail',

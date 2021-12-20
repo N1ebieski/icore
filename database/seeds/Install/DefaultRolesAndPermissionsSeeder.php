@@ -6,9 +6,6 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-/**
- * [DefaultRolesAndPermissionsSeeder description]
- */
 class DefaultRolesAndPermissionsSeeder extends Seeder
 {
     /**
@@ -109,6 +106,9 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
 
         Permission::firstOrCreate(['name' => 'api.tags.*']);
         Permission::firstOrCreate(['name' => 'api.tags.view']);
+
+        Permission::firstOrCreate(['name' => 'api.posts.*']);
+        Permission::firstOrCreate(['name' => 'api.posts.view']);
 
         // create roles and assign created permissions
         $role = Role::firstOrCreate(['name' => 'super-admin']);

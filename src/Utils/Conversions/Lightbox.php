@@ -44,8 +44,11 @@ class Lightbox implements Handler
      */
     public function handle($value, Closure $next)
     {
-        $this->dom->loadHTML(mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8'));
-        $galleryId = $this->str->uuid();
+        $this->dom->loadHTML(
+            mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8'),
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        $galleryId = (string)$this->str->uuid();
 
         foreach ($this->dom->getElementsByTagName('img') as $img) {
             $imgSrc = $img->attributes->getNamedItem('src')->nodeValue;

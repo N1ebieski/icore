@@ -176,7 +176,7 @@ class CategoryCache
     {
         return $this->cache->tags(["categories"])
             ->get(
-                "category.{$this->category->poli}.getByFilter.{$page}"
+                "category.{$this->category->poli}.paginateByFilter.{$page}"
             );
     }
 
@@ -190,7 +190,7 @@ class CategoryCache
     {
         return $this->cache->tags(["categories"])
             ->put(
-                "category.{$this->category->poli}.getByFilter.{$page}",
+                "category.{$this->category->poli}.paginateByFilter.{$page}",
                 $categories,
                 $this->carbon->now()->addMinutes($this->minutes)
             );

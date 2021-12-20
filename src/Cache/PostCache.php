@@ -5,6 +5,8 @@ namespace N1ebieski\ICore\Cache;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -31,6 +33,20 @@ class PostCache
     protected $carbon;
 
     /**
+     * Undocumented variable
+     *
+     * @var Collect
+     */
+    protected $collect;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Auth
+     */
+    protected $auth;
+
+    /**
      * Configuration
      * @var int
      */
@@ -43,13 +59,23 @@ class PostCache
      * @param Cache $cache
      * @param Config $config
      * @param Carbon $carbon
+     * @param Collect $collect
+     * @param Auth $auth
      */
-    public function __construct(Post $post, Cache $cache, Config $config, Carbon $carbon)
-    {
+    public function __construct(
+        Post $post,
+        Cache $cache,
+        Config $config,
+        Carbon $carbon,
+        Collect $collect,
+        Auth $auth
+    ) {
         $this->post = $post;
 
         $this->cache = $cache;
         $this->carbon = $carbon;
+        $this->collect = $collect;
+        $this->auth = $auth;
 
         $this->minutes = $config->get('cache.minutes');
     }
@@ -219,5 +245,58 @@ class PostCache
                 return $this->post->makeRepo()->getLatestForHome();
             }
         );
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $filter
+     * @param integer $page
+     * @return LengthAwarePaginator
+     */
+    public function rememberByFilter(array $filter, int $page): LengthAwarePaginator
+    {
+        if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
+            $posts = $this->getByFilter($page);
+        }
+
+        if (!isset($posts) || !$posts) {
+            $posts = $this->post->makeRepo()->paginateByFilter($filter);
+
+            if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
+                $this->putByFilter($posts, $page);
+            }
+        }
+
+        return $posts;
+    }
+
+    /**
+     * [getByFilter description]
+     * @param  int                  $page [description]
+     * @return LengthAwarePaginator|null       [description]
+     */
+    public function getByFilter(int $page): ?LengthAwarePaginator
+    {
+        return $this->cache->tags(["posts"])
+            ->get(
+                "post.paginateByFilter.{$page}"
+            );
+    }
+
+    /**
+     * [putByFilter description]
+     * @param  LengthAwarePaginator $posts [description]
+     * @param  int                  $page     [description]
+     * @return bool                           [description]
+     */
+    public function putByFilter(LengthAwarePaginator $posts, int $page): bool
+    {
+        return $this->cache->tags(["posts"])
+            ->put(
+                "post.paginateByFilter.{$page}",
+                $posts,
+                $this->carbon->now()->addMinutes($this->minutes)
+            );
     }
 }
