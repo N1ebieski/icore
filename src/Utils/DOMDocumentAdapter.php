@@ -2,7 +2,6 @@
 
 namespace N1ebieski\ICore\Utils;
 
-use DOMNode;
 use DOMDocument;
 
 class DOMDocumentAdapter
@@ -31,10 +30,8 @@ class DOMDocumentAdapter
      */
     public function loadHTML(string $source, int $options = 0)
     {
-        $this->decorated->loadHTML(
-            mb_convert_encoding($source, 'HTML-ENTITIES', 'UTF-8'),
-            $options
-        );
+        $this->decorated->loadHTML('<?xml encoding="utf-8"?>' . $source, $options);
+        $this->decorated->encoding = 'utf-8';
 
         return $this->decorated;
     }
@@ -42,24 +39,14 @@ class DOMDocumentAdapter
     /**
      * Undocumented function
      *
-     * @param DOMNode|null $node
      * @return string|false
      */
-    public function saveHTML(DOMNode $node = null)
+    public function saveHTML()
     {
-        # remove <!DOCTYPE
+        // remove <!DOCTYPE
         $this->decorated->removeChild($this->decorated->doctype);
 
-        # remove <html><body></body></html>
-        $this->decorated->replaceChild(
-            $this->decorated->firstChild->firstChild->firstChild,
-            $this->decorated->firstChild
-        );
-
-        return mb_convert_encoding(
-            $this->decorated->saveHtml($node),
-            'UTF-8',
-            'HTML-ENTITIES'
-        );
+        // remove <html><body></body></html>
+        return substr(trim($this->decorated->saveHtml($this->decorated->documentElement)), 12, -14);
     }
 }
