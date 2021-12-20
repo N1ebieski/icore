@@ -33,7 +33,6 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'short_content' => $this->short_content,
             'content' => $this->content,
-            'replacement' => $this->replacement_content,
             'content_html' => $this->content_html,
             'no_more_content_html' => $this->no_more_content_html,
             'less_content_html' => $this->less_content_html,
@@ -48,6 +47,7 @@ class PostResource extends JsonResource
                 'label' => Lang::get("icore::posts.status.{$this->status}")
             ],
             'comment' => (bool)$this->comment,
+            'first_image' => $this->first_image,
             'published_at' => $this->published_at,
             'published_at_diff' => $this->published_at_diff,
             'created_at' => $this->created_at,

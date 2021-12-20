@@ -70,6 +70,6 @@ class Lightbox implements Handler
             $a->appendChild($img);
         }
 
-        return $next($this->dom->saveHtml());
+        return $next(mb_convert_encoding($this->dom->saveHtml(), 'UTF-8', 'HTML-ENTITIES'));
     }
 }
