@@ -3,7 +3,9 @@
 namespace N1ebieski\ICore\Http\Resources\Post;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -53,7 +55,15 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at,
             'created_at_diff' => $this->created_at_diff,
             'updated_at' => $this->updated_at,
-            'updated_at_diff' => $this->updated_at_diff
+            'updated_at_diff' => $this->updated_at_diff,
+            'links' => [
+                $this->mergeWhen(Config::get('icore.routes.web.enabled') === true, [
+                    'web' => URL::route('web.post.show', [$this->slug])
+                ]),
+                $this->mergeWhen(Config::get('icore.routes.admin.enabled') === true, [
+                    'admin' => URL::route('admin.post.edit_full', [$this->id])
+                ])
+            ]
         ];
     }
 }
