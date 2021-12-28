@@ -372,10 +372,10 @@ class Post extends Model
     {
         $cut = explode('<p>[more]</p>', $this->replacement_content_html);
 
-        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
+        return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [
                 $this->slug,
                 '#more'
-            ]) . '">' . Lang::get('icore::posts.more') . '</a>' : $this->replacement_content_html;
+            ]) . '">' . Lang::get('icore::posts.more') . '</a></p>' : $this->replacement_content_html;
     }
 
     /**
