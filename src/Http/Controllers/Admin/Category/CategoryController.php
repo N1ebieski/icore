@@ -57,6 +57,7 @@ class CategoryController implements Polymorphic
             'view' => View::make('icore::admin.category.create', [
                 'model' => $category,
                 'parent' => $category->find($request->input('parent_id'))
+                    ->loadAncestorsExceptSelf()
             ])->render()
         ]);
     }
