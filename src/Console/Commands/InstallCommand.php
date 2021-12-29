@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
@@ -46,6 +47,13 @@ class InstallCommand extends Command
     protected $db;
 
     /**
+     * [protected description]
+     * @var GuzzleClient
+     */
+    protected $guzzle;
+
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -67,13 +75,15 @@ class InstallCommand extends Command
      * @param Lang $lang
      * @param Validator $validator
      * @param DB $db
+     * @param GuzzleClient $guzzle
      */
     public function __construct(
         Composer $composer,
         Config $config,
         Lang $lang,
         Validator $validator,
-        DB $db
+        DB $db,
+        GuzzleClient $guzzle
     ) {
         parent::__construct();
 
@@ -82,6 +92,7 @@ class InstallCommand extends Command
         $this->lang = $lang;
         $this->validator = $validator;
         $this->db = $db;
+        $this->guzzle = $guzzle;
     }
 
     /**

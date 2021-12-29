@@ -45,7 +45,7 @@
     >
         <form 
             id="create-category"        
-            data-route="{{ route("admin.category.{$model->poli}.store") }}" 
+            data-route="{{ route("admin.category.{$category->poli}.store") }}" 
         >
             <div class="form-group">
                 <label for="name">
@@ -84,7 +84,7 @@
                     data-abs="true"
                     data-abs-max-options-length="10"
                     data-abs-text-attr="name"
-                    data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
+                    data-abs-ajax-url="{{ route("api.category.{$category->poli}.index") }}"
                     data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
                     data-style="border"
                     data-width="100%"
@@ -122,7 +122,7 @@
     >
         <form 
             id="create-category"        
-            data-route="{{ route("admin.category.{$model->poli}.store_global") }}" 
+            data-route="{{ route("admin.category.{$category->poli}.store_global") }}" 
         >
             <div class="form-group">
                 <label for="names">
@@ -165,7 +165,7 @@
                         data-abs="true"
                         data-abs-max-options-length="10"
                         data-abs-text-attr="name"
-                        data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
+                        data-abs-ajax-url="{{ route("api.category.{$category->poli}.index") }}"
                         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
                         data-style="border"
                         data-width="100%"

@@ -2,11 +2,10 @@
 
 namespace N1ebieski\ICore\Rules;
 
-use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Contracts\Validation\Rule;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
+use N1ebieski\ICore\Http\Clients\RecaptchaV2\CheckClient;
 
 class RecaptchaV2Rule implements Rule
 {
@@ -20,9 +19,9 @@ class RecaptchaV2Rule implements Rule
     /**
      * Undocumented variable
      *
-     * @var GuzzleClient
+     * @var CheckClient
      */
-    protected $guzzle;
+    protected $client;
 
     /**
      * Undocumented variable
@@ -34,35 +33,21 @@ class RecaptchaV2Rule implements Rule
     /**
      * Undocumented variable
      *
-     * @var object|GuzzleResponse
-     */
-    protected $response;
-
-    /**
-     * Undocumented variable
-     *
      * @var string
      */
     protected $secretKey;
-
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
      * Undocumented function
      *
      * @param Lang $lang
      * @param Config $config
-     * @param GuzzleClient $guzzle
+     * @param CheckClient $client
      */
-    public function __construct(Lang $lang, Config $config, GuzzleClient $guzzle)
+    public function __construct(Lang $lang, Config $config, CheckClient $client)
     {
         $this->lang = $lang;
-        $this->guzzle = $guzzle;
+        $this->client = $client;
 
         $this->secretKey = $config->get('services.recaptcha_v2.secret_key');
     }
@@ -81,32 +66,6 @@ class RecaptchaV2Rule implements Rule
     }
 
     /**
-     * Undocumented function
-     *
-     * @param string $value
-     * @return GuzzleResponse
-     */
-    protected function makeResponse(string $value): GuzzleResponse
-    {
-        return $this->response = $this->guzzle->request('POST', $this->verifyUrl, [
-            'form_params' => [
-                'secret' => $this->secretKey,
-                'response' => $value
-            ]
-        ]);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return object
-     */
-    protected function prepareResponse(): object
-    {
-        return json_decode($this->response->getBody());
-    }
-
-    /**
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
@@ -116,12 +75,15 @@ class RecaptchaV2Rule implements Rule
     public function passes($attribute, $value)
     {
         try {
-            $this->makeResponse($value);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $this->client->request(null, [
+                'secret' => $this->secretKey,
+                'response' => $value
+            ]);
+        } catch (\Exception $e) {
             return false;
         }
 
-        return $this->prepareResponse()->success;
+        return $this->client->getContents()->success;
     }
 
     /**

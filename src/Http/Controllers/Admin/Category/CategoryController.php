@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
@@ -18,6 +19,7 @@ use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
+use N1ebieski\ICore\View\ViewModels\Admin\Category\CreateViewModel;
 use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
@@ -54,11 +56,9 @@ class CategoryController implements Polymorphic
     {
         return Response::json([
             'success' => '',
-            'view' => View::make('icore::admin.category.create', [
-                'model' => $category,
-                'parent' => $category->find($request->input('parent_id'))
-                    ->loadAncestorsExceptSelf()
-            ])->render()
+            'view' => View::make('icore::admin.category.create', App::make(CreateViewModel::class, [
+                'category' => $category
+            ]))->render()
         ]);
     }
 
