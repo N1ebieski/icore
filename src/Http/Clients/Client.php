@@ -24,6 +24,20 @@ abstract class Client
     /**
      * Undocumented variable
      *
+     * @var string
+     */
+    protected $method;
+
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    protected $url;
+
+    /**
+     * Undocumented variable
+     *
      * @var object|string
      */
     protected $contents;
@@ -41,29 +55,54 @@ abstract class Client
     /**
      * Undocumented function
      *
-     * @param array $query
+     * @param string $method
      * @return static
      */
-    public function setQuery(array $query)
+    protected function setMethod(string $method)
     {
-        foreach ($query as $key => $value) {
-            if (is_int($key)) {
-                $this->uri = preg_replace('/({[a-z0-9]+})/', $value, $this->uri, 1);
+        $this->method = $method;
 
-                unset($query[$key]);
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $url
+     * @return static
+     */
+    protected function setUrl(string $url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    protected function setQueryFromParams(array $params)
+    {
+        foreach ($params as $key => $value) {
+            if (is_int($key)) {
+                $this->url = preg_replace('/({[a-z0-9]+})/', $value, $this->url, 1);
+
+                unset($params[$key]);
             } else {
-                if (strpos($this->uri, '{' . $key . '}') === false) {
+                if (strpos($this->url, '{' . $key . '}') === false) {
                     continue;
                 }
 
-                $this->uri = str_replace('{' . $key . '}', $value, $this->uri);
+                $this->url = str_replace('{' . $key . '}', $value, $this->url);
 
-                unset($query[$key]);
+                unset($params[$key]);
             }
         }
 
-        if (!empty($query)) {
-            $this->uri .= '?' . http_build_query($query);
+        if ($this->method === 'GET' && !empty($params)) {
+            $this->url .= '?' . http_build_query($params);
         }
 
         return $this;
@@ -77,14 +116,13 @@ abstract class Client
      */
     public function setParams(array $params)
     {
+        $this->setQueryFromParams($params);
+
         if (!isset($this->options['form_params'])) {
             $this->options['form_params'] = [];
         }
 
-        $this->options['form_params'] = array_replace_recursive(
-            $this->options['form_params'],
-            $params
-        );
+        $this->options['form_params'] = $params;
 
         return $this;
     }
@@ -95,7 +133,7 @@ abstract class Client
      * @param array $headers
      * @return static
      */
-    public function setHeaders(array $headers)
+    protected function setHeaders(array $headers)
     {
         if (!isset($this->options['headers'])) {
             $this->options['headers'] = [];
@@ -140,57 +178,6 @@ abstract class Client
     /**
      * Undocumented function
      *
-     * @param string $url
-     * @return static
-     */
-    public function setUrl(string $url)
-    {
-        $this->setHostFromUrl($url);
-        $this->setUriFromUrl($url);
-
-        return $this;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param string $url
-     * @return static
-     */
-    protected function setHostFromUrl(string $url)
-    {
-        $result = parse_url($url);
-
-        $this->host = $result['scheme'] . '://' . $result['host'];
-        $this->host .= isset($result['port']) ? ':' . $result['port'] : '';
-
-        return $this;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param string $url
-     * @return static
-     */
-    protected function setUriFromUrl(string $url)
-    {
-        $this->uri = '';
-
-        $result = parse_url($url);
-
-        if (isset($result['path'])) {
-            $this->uri = $result['path'];
-            $this->uri .= isset($result['query']) ? '?' . $result['query'] : '';
-            $this->uri .= isset($result['fragment']) ? '#' . $result['fragment'] : '';
-        }
-
-        return $this;
-    }
-
-    /**
-     * Undocumented function
-     *
      * @return ResponseInterface
      */
     public function getResponse(): ResponseInterface
@@ -211,15 +198,15 @@ abstract class Client
     /**
      * Undocumented function
      *
-     * @param array|null $query
+     * @param string $method
+     * @param string $url
      * @param array|null $params
-     * @return void
+     * @return object|string
      */
-    public function request(array $query = null, array $params = null)
+    public function request(string $method, string $url, array $params = null)
     {
-        if (!empty($query)) {
-            $this->setQuery($query);
-        }
+        $this->setMethod($method);
+        $this->setUrl($url);
 
         if (!empty($params)) {
             $this->setParams($params);
@@ -235,10 +222,56 @@ abstract class Client
     /**
      * Undocumented function
      *
+     * @param string $url
+     * @param array|null $params
+     * @return object|string
+     */
+    public function get(string $url, array $params = null)
+    {
+        return $this->request('GET', $url, $params);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $url
+     * @param array|null $params
+     * @return object|string
+     */
+    public function post(string $url, array $params = null)
+    {
+        return $this->request('POST', $url, $params);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $url
+     * @param array|null $params
+     * @return object|string
+     */
+    public function patch(string $url, array $params = null)
+    {
+        return $this->request('PATCH', $url, $params);
+    }
+
+    /**
+     * Undocumented function
+     *
      * @return ResponseInterface
      */
     protected function makeResponse(): ResponseInterface
     {
-        return $this->client->request($this->method, $this->host . $this->uri, $this->options);
+        try {
+            $response = $this->client->request($this->method, $this->url, $this->options);
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+            throw new \N1ebieski\ICore\Exceptions\Client\TransferException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+
+        return $response;
     }
 }

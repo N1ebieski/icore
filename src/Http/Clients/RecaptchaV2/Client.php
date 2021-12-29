@@ -2,24 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Clients\RecaptchaV2;
 
-use N1ebieski\ICore\Http\Clients\Client;
+use N1ebieski\ICore\Http\Clients\Client as BaseClient;
 
-class CheckClient extends Client
+class Client extends BaseClient
 {
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $method = 'POST';
-
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $uri = '/recaptcha/api/siteverify';
-
     /**
      * Undocumented variable
      *
@@ -35,4 +21,17 @@ class CheckClient extends Client
     protected $options = [
         'verify' => false
     ];
+
+    /**
+     * Undocumented function
+     *
+     * @param string $url
+     * @return static
+     */
+    protected function setUrl(string $url)
+    {
+        $this->url = $this->host . $url;
+
+        return $this;
+    }
 }

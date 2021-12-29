@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Exceptions\Intelekt\Post;
+namespace N1ebieski\ICore\Exceptions\Client;
 
 use N1ebieski\ICore\Exceptions\CustomException;
 

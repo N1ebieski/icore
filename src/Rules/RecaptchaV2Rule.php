@@ -3,9 +3,9 @@
 namespace N1ebieski\ICore\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use N1ebieski\ICore\Http\Clients\RecaptchaV2\Client;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
-use N1ebieski\ICore\Http\Clients\RecaptchaV2\CheckClient;
 
 class RecaptchaV2Rule implements Rule
 {
@@ -19,7 +19,7 @@ class RecaptchaV2Rule implements Rule
     /**
      * Undocumented variable
      *
-     * @var CheckClient
+     * @var Client
      */
     protected $client;
 
@@ -42,9 +42,9 @@ class RecaptchaV2Rule implements Rule
      *
      * @param Lang $lang
      * @param Config $config
-     * @param CheckClient $client
+     * @param Client $client
      */
-    public function __construct(Lang $lang, Config $config, CheckClient $client)
+    public function __construct(Lang $lang, Config $config, Client $client)
     {
         $this->lang = $lang;
         $this->client = $client;
@@ -75,7 +75,7 @@ class RecaptchaV2Rule implements Rule
     public function passes($attribute, $value)
     {
         try {
-            $this->client->request(null, [
+            $this->client->post('/recaptcha/api/siteverify', [
                 'secret' => $this->secretKey,
                 'response' => $value
             ]);
