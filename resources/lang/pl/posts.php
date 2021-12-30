@@ -40,5 +40,14 @@ return [
         Post::INACTIVE => 'nieaktywne',
         Post::SCHEDULED => 'zaplanowane',
     ],
-    'related' => 'Podobne posty'
+    'related' => 'Podobne posty',
+    'chart' => [
+        'x' => [
+            'label' => 'Data'
+        ],
+        'y' => [
+            'label' => 'Ilość treści'
+        ],
+        'count_by_date' => 'Wykres ilości postów i podstron na osi czasu'
+    ]
 ];

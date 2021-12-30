@@ -37,5 +37,6 @@ return [
     'global' => 'Masowo',
     'open' => 'Otwórz',
     'close' => 'Zamknij',
-    'current_option' => 'Aktualny wybór'
+    'current_option' => 'Aktualny wybór',
+    'all' => 'Razem'
 ];

@@ -19,12 +19,12 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Page\PageInterface;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Page extends Entity implements PageInterface
 {
@@ -574,6 +574,21 @@ class Page extends Entity implements PageInterface
         return $query->when($only !== null, function ($query) use ($only) {
             $query->whereIn('id', $only);
         });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActiveByDate(Builder $query): Builder
+    {
+        return $query->selectRaw("YEAR(`page`.`created_at`) `year`, MONTH(`page`.`created_at`) `month`, 'pages' AS `type`, COUNT(*) AS `count`")
+            ->from("{$this->getTable()} AS page")
+            ->where('page.status', $this::ACTIVE)
+            ->groupBy('year')
+            ->groupBy('month');
     }
 
     // Factories

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -346,6 +347,25 @@ class PostRepo
             ->with(['user', 'categories', 'tags'])
             ->orderBy('published_at', 'desc')
             ->limit($this->config->get('icore.home.max'))
+            ->get();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Builder|null $pages
+     * @return Collection
+     */
+    public function countActiveByDateUnionPages(Builder $pages = null): Collection
+    {
+        return $this->post->selectRaw("YEAR(`post`.`created_at`) `year`, MONTH(`post`.`created_at`) `month`, 'posts' AS `type`, COUNT(*) AS `count`")
+            ->from("{$this->post->getTable()} AS post")
+            ->where('post.status', $this->post::ACTIVE)
+            ->groupBy('year')
+            ->groupBy('month')
+            ->unionAll($pages)
+            ->orderBy('year')
+            ->orderBy('month')
             ->get();
     }
 }

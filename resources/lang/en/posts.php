@@ -40,5 +40,14 @@ return [
         Post::INACTIVE => 'inactive',
         Post::SCHEDULED => 'scheduled',
     ],
-    'related' => 'Related posts'
+    'related' => 'Related posts',
+    'chart' => [
+        'x' => [
+            'label' => 'Data'
+        ],
+        'y' => [
+            'label' => 'Number of content'
+        ],
+        'count_by_date' => 'Chart of number of posts and pages on timeline'
+    ]
 ];

@@ -37,5 +37,6 @@ return [
     'global' => 'Multi',
     'open' => 'Open',
     'close' => 'Close',
-    'current_option' => 'Currently Selected'
+    'current_option' => 'Currently Selected',
+    'all' => 'All'
 ];
