@@ -13,6 +13,7 @@ use N1ebieski\ICore\Repositories\UserRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use N1ebieski\ICore\Models\Traits\HasApiTokens;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -22,6 +23,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use HasApiTokens;
     use Notifiable;
     use HasRoles;
     use FullTextSearchable;
