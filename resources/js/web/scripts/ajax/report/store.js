@@ -10,11 +10,6 @@ $(document).on(
         $form.btn = $form.find('.btn');
         $form.input = $form.find('.form-control');
 
-        let $modal = {
-            body: $element.closest('.modal-content').find('.modal-body'),
-            footer: $element.closest('.modal-content').find('.modal-footer')
-        };
-
         $.ajax({
             url: $form.data('route'),
             method: 'post',
@@ -31,8 +26,9 @@ $(document).on(
                 $form.input.addClass('is-valid');
             },
             success: function (response) {
-                $modal.footer.empty();
-                $modal.body.html($.getAlert('success', response.success));
+                $('.modal').modal('hide');
+
+                $('body').addToast(response.success);
             },
             error: function (response) {
                 let errors = response.responseJSON;

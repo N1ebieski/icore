@@ -152,6 +152,48 @@
         return $.sanitize('<div class="alert alert-' + type + ' alert-time" role="alert">' + text + '</div>');
     };
 
+    $.fn.addToast = function (options) {
+        options = {
+            title: typeof options === 'string' ? options : options.title,
+            type: options.type || 'success',
+            message: options.message || ''
+        };
+
+        let $toast = $($.sanitize(`
+            <div>
+                <div 
+                    class="toast bg-${options.type}"
+                    role="alert" 
+                    aria-live="assertive" 
+                    aria-atomic="true" 
+                    data-delay="20000" 
+                >
+                    <div class="toast-header">
+                        <strong class="mr-auto">${options.title}</strong>
+                        <button 
+                            type="button" 
+                            class="text-dark ml-2 mb-1 close" 
+                            data-dismiss="toast" 
+                            aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>             
+                </div>
+            </div>
+        `));
+
+        if (options.message.length) {
+            $toast.find('.toast').append($.sanitize(`
+                <div class="toast-body bg-light text-dark">
+                    ${options.message}
+                </div>
+            `));
+        }
+
+        return this.append($toast.html());
+    };
+
     $.getError = function (id, text) {
         return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-' + id + '">' + text + '</span>');
     };
