@@ -140,6 +140,8 @@ class UserService implements
 
             $this->user->emails()->delete();
 
+            $this->user->tokens()->delete();
+
             return $this->user->delete();
         });
     }
@@ -158,6 +160,9 @@ class UserService implements
 
             $this->user->emails()->make()->whereIn('model_id', $ids)
                 ->where('model_type', $this->user->getMorphClass())->delete();
+
+            $this->user->tokens()->make()->whereIn('tokenable_id', $ids)
+                ->where('tokenable_type', $this->user->getMorphClass())->delete();
 
             return $this->user->whereIn('id', $ids)->delete();
         });
