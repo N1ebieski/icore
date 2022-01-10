@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Schema;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -36,13 +37,36 @@ trait FullTextSearchable
      *
      * @return void
      */
+    protected function splitColumnMatches(): void
+    {
+        $columns = implode('|', Schema::getColumnListing($this->getTable()));
+
+        preg_match_all('/(' . $columns . '):\"?(.*?)(?:(\"|\s|$))/', $this->term, $matches);
+
+        foreach ($matches[0] as $match) {
+            [$id, $value] = explode(':', $match);
+
+            $this->search[trim($id)] = trim(str_replace('"', '', $value));
+
+            $this->term = str_replace($match, '', $this->term);
+        }
+
+        $this->term = trim($this->term);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     protected function splitModelMatches(): void
     {
         preg_match_all('/([a-z]+):\"(.*?)\"/', $this->term, $matches);
 
         foreach ($matches[0] as $match) {
             [$model, $word] = explode(':', $match);
-            $this->search[$model] = '+' . $word;
+
+            $this->search[trim($model)] = '+' . trim($word);
 
             $this->term = str_replace($match, '', $this->term);
         }
@@ -142,6 +166,7 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
+        $this->splitColumnMatches();
         $this->splitModelMatches();
         $this->splitExactMatches();
         $this->splitMatches();
@@ -169,6 +194,7 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
+        $this->splitColumnMatches();
         $this->splitModelMatches();
         $this->splitExactMatches();
         $this->splitMatches();
