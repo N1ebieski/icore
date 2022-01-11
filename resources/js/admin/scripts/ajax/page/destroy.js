@@ -12,10 +12,10 @@ $(document).on(
             method: 'delete',
             beforeSend: function () {
                 $row.find('.responsive-btn-group').addClass('disabled');
-                $row.find('[data-btn-ok-class*="destroyPage"], [data-btn-ok-class*="destroy-page"]').getLoader('show');
+                $row.find('[data-btn-ok-class*="destroyPage"], [data-btn-ok-class*="destroy-page"]').loader('show');
             },
             complete: function () {
-                $row.find('[data-btn-ok-class*="destroyPage"], [data-btn-ok-class*="destroy-page"]').getLoader('hide');
+                $row.find('[data-btn-ok-class*="destroyPage"], [data-btn-ok-class*="destroy-page"]').loader('hide');
             },
             success: function (response) {
                 $row.fadeOut('slow');

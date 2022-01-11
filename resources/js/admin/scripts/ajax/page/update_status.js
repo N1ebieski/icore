@@ -19,10 +19,10 @@ $(document).on(
             },
             beforeSend: function () {
                 $row.btnGroup.addClass('disabled');
-                $element.getLoader('show');
+                $element.loader('show');
             },
             success: function (response) {
-                $element.getLoader('hide');
+                $element.loader('hide');
 
                 if (response.status == 1) {
                     $row.btnGroup.removeClass('disabled');

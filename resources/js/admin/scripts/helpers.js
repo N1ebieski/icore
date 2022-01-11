@@ -126,7 +126,7 @@
         return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
     };
 
-    $.fn.getLoader = function (action, type = 'spinner-border') {
+    $.fn.loader = function (action, type = 'spinner-border') {
         if (action == 'show') {
             $(this).parent().find('button').prop('disabled', true);
             $(this).find('i').hide();
@@ -144,12 +144,40 @@
         }
     };
 
-    $.getLoader = function (type = 'spinner-border', loader = 'loader-absolute') {
-        return $.sanitize('<div class="' + loader + '"><div class="' + type + '"><span class="sr-only">Loading...</span></div></div>');
+    $.fn.addLoader = function (options = null) {
+        options = {
+            type: typeof options === 'string' ? options : 'spinner-border',
+            class: options?.class || 'loader-absolute'
+        };
+
+        return this.append($.sanitize(`
+            <div class="${options.class}">
+                <div class="${options.type}">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        `));
     };
 
-    $.getAlert = function (type, text) {
-        return $.sanitize('<div class="alert alert-' + type + ' alert-time" role="alert">' + text + '</div>');
+    $.fn.addAlert = function (options) {
+        options = {
+            message: typeof options === 'string' ? options : options.message,
+            type: options.type || 'danger'
+        };
+
+        return this.prepend($.sanitize(`
+            <div class="alert alert-${options.type} alert-time" role="alert">
+                <button 
+                    type="button" 
+                    class="text-dark close" 
+                    data-dismiss="alert" 
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                ${options.message}
+            </div>
+        `));
     };
 
     $.fn.addToast = function (options) {
@@ -194,7 +222,22 @@
         return this.append($toast.html());
     };
 
-    $.getError = function (id, text) {
-        return $.sanitize('<span class="invalid-feedback d-block font-weight-bold" id="error-' + id + '">' + text + '</span>');
+    $.fn.addError = function (options) {
+        options = {
+            message: typeof options === 'string' ? options : options.message,
+            id: options.id || null
+        };
+
+        let $error = $($.sanitize(`
+            <div>
+                <span class="invalid-feedback d-block font-weight-bold">${options.message}</span>
+            </div>
+        `));
+
+        if (options.id !== null) {
+            $error.find('.invalid-feedback').attr('id', options.id);
+        }
+
+        return this.append($error.html());
     };
 })(jQuery);

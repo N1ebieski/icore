@@ -21,13 +21,13 @@ $(document).on(
             contentType: false,
             dataType: 'json',
             beforeSend: function () {
-                $element.getLoader('show');
+                $element.loader('show');
                 $form.find('.invalid-feedback').remove();
                 $form.input.removeClass('is-valid');
                 $form.input.removeClass('is-invalid');
             },
             complete: function () {
-                $element.getLoader('hide');
+                $element.loader('hide');
                 $form.input.addClass('is-valid');
             },
             success: function (response) {
@@ -51,7 +51,10 @@ $(document).on(
                         }
                         
                         $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
-                        $form.find('#' + $.escapeSelector(key)).closest('.form-group').append($.getError(key, value));
+                        $form.find('#' + $.escapeSelector(key)).closest('.form-group').addError({
+                            id: key,
+                            message: value
+                        });
 
                         if (i === 0 && $('#' + $.escapeSelector(key)).length) {
                             $form.parent().animate({
@@ -66,7 +69,10 @@ $(document).on(
                 }
 
                 if (response.responseJSON.message) {
-                    $form.prepend($.getAlert('danger', response.responseJSON.message));
+                    $('body').addToast({
+                        title: response.responseJSON.message,
+                        type: 'danger'
+                    });
                 }            
             }
         });

@@ -8,7 +8,7 @@ $(document).on('ready.n1ebieski/icore/web/scripts/ajax/comment@filter', function
                 $('#filterContent, #filter-content').find('.btn').prop('disabled', true);
                 $('#filterOrderBy, #filter-orderby').prop('disabled', true);
                 $('#filterPaginate, #filter-paginate').prop('disabled', true);
-                $form.children('div').append($.getLoader('spinner-border'));
+                $form.children('div').addLoader();
                 $('#filterModal, #filter-modal').modal('hide');
             },
             complete: function () {

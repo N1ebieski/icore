@@ -15,10 +15,10 @@ $(document).on(
                 position: $form.find('#position').val(),
             },
             beforeSend: function () {
-                $element.getLoader('show');
+                $element.loader('show');
             },
             complete: function () {
-                $element.getLoader('hide');
+                $element.loader('hide');
             },
             success: function (response) {
                 $('.modal').modal('hide');

@@ -16,13 +16,13 @@ $(document).on(
             data: $form.serialize(),
             dataType: 'json',
             beforeSend: function () {
-                $element.getLoader('show');
+                $element.loader('show');
                 $('.invalid-feedback').remove();
                 $form.input.removeClass('is-valid');
                 $form.input.removeClass('is-invalid');
             },
             complete: function () {
-                $element.getLoader('hide');
+                $element.loader('hide');
                 $form.input.addClass('is-valid');
             },
             success: function (response) {
@@ -34,7 +34,10 @@ $(document).on(
                 if (response.responseJSON.errors) {
                     $.each(response.responseJSON.errors, function (key, value) {
                         $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
-                        $form.find('#' + $.escapeSelector(key)).closest('.form-group').append($.getError(key, value));
+                        $form.find('#' + $.escapeSelector(key)).closest('.form-group').addError({
+                            id: key,
+                            message: value
+                        });
                     });
                 }
             }

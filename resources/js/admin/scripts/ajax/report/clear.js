@@ -10,10 +10,10 @@ $(document).on(
             url: $element.data('route'),
             method: 'delete',
             beforeSend: function () {
-                $element.getLoader('show');
+                $element.loader('show');
             },
             complete: function () {
-                $element.getLoader('hide');
+                $element.loader('hide');
             },
             success: function (response) {
                 let $row = $('#row' + $element.attr('data-id'));

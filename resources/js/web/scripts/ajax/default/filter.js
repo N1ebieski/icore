@@ -9,7 +9,7 @@ $(document).on('ready.n1ebieski/icore/web/scripts/ajax/default@filter', function
                 $('#filterOrderBy, #filter-orderby').prop('disabled', true);
                 $('#filterPaginate, #filter-paginate').prop('disabled', true);
 
-                $form.children('div').append($.getLoader('spinner-border'));
+                $form.children('div').addLoader();
 
                 $('#filterModal, #filter-modal').modal('hide');
             },

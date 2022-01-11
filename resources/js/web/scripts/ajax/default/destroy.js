@@ -13,10 +13,10 @@ $(document).on(
             method: 'delete',
             beforeSend: function () {
                 $row.find('.responsive-btn-group').addClass('disabled');
-                $row.find('[data-btn-ok-class*="destroy"]').getLoader('show');
+                $row.find('[data-btn-ok-class*="destroy"]').loader('show');
             },
             complete: function () {
-                $row.find('[data-btn-ok-class*="destroy"]').getLoader('hide');
+                $row.find('[data-btn-ok-class*="destroy"]').loader('hide');
             },
             success: function (response) {
                 $row.fadeOut('slow');

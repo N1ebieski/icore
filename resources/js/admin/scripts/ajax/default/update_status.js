@@ -15,10 +15,10 @@ $(document).on(
             },
             beforeSend: function () {
                 $row.find('.responsive-btn-group').addClass('disabled');
-                $element.getLoader('show');
+                $element.loader('show');
             },
             success: function (response) {
-                $element.getLoader('hide');
+                $element.loader('hide');
 
                 $row.html($.sanitize($(response.view).html()));
 
