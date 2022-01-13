@@ -62,7 +62,7 @@ trait FullTextSearchable
         preg_match_all('/([a-z]+):\"(.*?)\"/', $this->term, $matches);
 
         foreach ($matches[0] as $key => $value) {
-            $this->search[trim($matches[1][$key])] = '+' . trim($matches[2][$key]);
+            $this->search[trim($matches[1][$key])] = '+"' . trim($matches[2][$key]) . '"';
 
             $this->term = str_replace($value, '', $this->term);
         }
