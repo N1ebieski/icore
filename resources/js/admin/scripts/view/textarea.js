@@ -2,7 +2,7 @@ $(document).on(
     'readyAndAjax.n1ebieski/icore/admin/scripts/view/textarea@init',
     function () {
         $('textarea').each(function () {
-            if ($(this).hasClass('trumbowyg-textarea')) {
+            if ($(this).hasClass('trumbowyg-textarea') || $(this).is('[id*=trumbowyg]')) {
                 return;
             }
 
