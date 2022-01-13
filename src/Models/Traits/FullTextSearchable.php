@@ -37,18 +37,16 @@ trait FullTextSearchable
      *
      * @return void
      */
-    protected function splitColumnMatches(): void
+    protected function splitAttributeMatches(): void
     {
         $columns = implode('|', Schema::getColumnListing($this->getTable()));
 
-        preg_match_all('/(' . $columns . '):\"?(.*?)(?:(\"|\s|$))/', $this->term, $matches);
+        preg_match_all('/(' . $columns . '):\"(.*?)\"/', $this->term, $matches);
 
-        foreach ($matches[0] as $match) {
-            [$id, $value] = explode(':', $match);
+        foreach ($matches[0] as $key => $value) {
+            $this->search[trim($matches[1][$key])] = trim(str_replace('"', '', $matches[2][$key]));
 
-            $this->search[trim($id)] = trim(str_replace('"', '', $value));
-
-            $this->term = str_replace($match, '', $this->term);
+            $this->term = str_replace($value, '', $this->term);
         }
 
         $this->term = trim($this->term);
@@ -59,16 +57,14 @@ trait FullTextSearchable
      *
      * @return void
      */
-    protected function splitModelMatches(): void
+    protected function splitRelationMatches(): void
     {
         preg_match_all('/([a-z]+):\"(.*?)\"/', $this->term, $matches);
 
-        foreach ($matches[0] as $match) {
-            [$model, $word] = explode(':', $match);
+        foreach ($matches[0] as $key => $value) {
+            $this->search[trim($matches[1][$key])] = '+' . trim($matches[2][$key]);
 
-            $this->search[trim($model)] = '+' . trim($word);
-
-            $this->term = str_replace($match, '', $this->term);
+            $this->term = str_replace($value, '', $this->term);
         }
 
         $this->term = trim($this->term);
@@ -166,8 +162,8 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
-        $this->splitColumnMatches();
-        $this->splitModelMatches();
+        $this->splitAttributeMatches();
+        $this->splitRelationMatches();
         $this->splitExactMatches();
         $this->splitMatches();
 
@@ -194,8 +190,8 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
-        $this->splitColumnMatches();
-        $this->splitModelMatches();
+        $this->splitAttributeMatches();
+        $this->splitRelationMatches();
         $this->splitExactMatches();
         $this->splitMatches();
 
