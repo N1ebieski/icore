@@ -17,7 +17,7 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/infinite-scro
                 };
             }
         },
-        loadingHtml: $.getLoader('spinner-border', 'loader'),
+        loadingHtml: '<div class="loader"><div class="spinner-border"><span class="sr-only">Loading...</span></div></div>',
         loadingFunction: function () {
             $('#is-pagination').first().remove();
         },

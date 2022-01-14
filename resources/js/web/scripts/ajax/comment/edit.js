@@ -13,7 +13,10 @@ $(document).on(
             method: 'get',
             beforeSend: function () {
                 $comment.children('div').hide();
-                $comment.append($.getLoader('spinner-border', 'loader'));
+                $comment.addLoader({
+                    type: 'spinner-border',
+                    class: 'loader'
+                });
             },
             complete: function () {
                 $comment.find('.loader').remove();
@@ -25,7 +28,7 @@ $(document).on(
                 $comment.children('div').show();
 
                 if (response.responseJSON.message) {
-                    $comment.children('div').prepend($.getAlert('danger', response.responseJSON.message));
+                    $comment.parent().addAlert(response.responseJSON.message);
                 }
             }
         });

@@ -61,7 +61,7 @@ class PostResource extends JsonResource
                     'web' => URL::route('web.post.show', [$this->slug])
                 ]),
                 $this->mergeWhen(Config::get('icore.routes.admin.enabled') === true, [
-                    'admin' => URL::route('admin.post.edit_full', [$this->id])
+                    'admin' => URL::route('admin.post.index', ['filter[search]' => 'id:"' . $this->id . '"'])
                 ])
             ]
         ];

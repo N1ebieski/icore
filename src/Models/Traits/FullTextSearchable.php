@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Schema;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -36,15 +37,34 @@ trait FullTextSearchable
      *
      * @return void
      */
-    protected function splitModelMatches(): void
+    protected function splitAttributeMatches(): void
+    {
+        $columns = implode('|', Schema::getColumnListing($this->getTable()));
+
+        preg_match_all('/(' . $columns . '):\"(.*?)\"/', $this->term, $matches);
+
+        foreach ($matches[0] as $key => $value) {
+            $this->search[trim($matches[1][$key])] = trim(str_replace('"', '', $matches[2][$key]));
+
+            $this->term = str_replace($value, '', $this->term);
+        }
+
+        $this->term = trim($this->term);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    protected function splitRelationMatches(): void
     {
         preg_match_all('/([a-z]+):\"(.*?)\"/', $this->term, $matches);
 
-        foreach ($matches[0] as $match) {
-            [$model, $word] = explode(':', $match);
-            $this->search[$model] = '+' . $word;
+        foreach ($matches[0] as $key => $value) {
+            $this->search[trim($matches[1][$key])] = '+"' . trim($matches[2][$key]) . '"';
 
-            $this->term = str_replace($match, '', $this->term);
+            $this->term = str_replace($value, '', $this->term);
         }
 
         $this->term = trim($this->term);
@@ -142,7 +162,8 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
-        $this->splitModelMatches();
+        $this->splitAttributeMatches();
+        $this->splitRelationMatches();
         $this->splitExactMatches();
         $this->splitMatches();
 
@@ -169,7 +190,8 @@ trait FullTextSearchable
     {
         $this->term = $term;
 
-        $this->splitModelMatches();
+        $this->splitAttributeMatches();
+        $this->splitRelationMatches();
         $this->splitExactMatches();
         $this->splitMatches();
 

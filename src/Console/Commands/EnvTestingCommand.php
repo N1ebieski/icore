@@ -67,10 +67,10 @@ class EnvTestingCommand extends Command
         $this->composer->dumpOptimized();
         $this->info("\r");
         $bar->advance();
+        $this->line("\n");
+        $this->call('migrate:fresh', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());        
         $this->info("\n");
-        $this->call('migrate:fresh', ['--path' => 'database/migrations/vendor/icore'], $this->getOutput());
-        $this->info("\r");
-        $this->call('migrate', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());
+        $this->call('migrate', ['--path' => 'database/migrations/vendor/icore'], $this->getOutput());
         $this->line("\n");
         $bar->advance();
         $this->info("\n");

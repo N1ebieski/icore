@@ -17,27 +17,30 @@ $(document).on(
             data: $form.serialize(),
             dataType: 'json',
             beforeSend: function () {
-                $element.getLoader('show');
+                $element.loader('show');
                 $('.invalid-feedback').remove();
                 $('.valid-feedback').remove();
                 $form.input.removeClass('is-valid');
                 $form.input.removeClass('is-invalid');
             },
             complete: function () {
-                $element.getLoader('hide');
+                $element.loader('hide');
                 $form.input.addClass('is-valid');
             },
             success: function (response) {
                 if (response.success) {
                     $form.find('[name="email"]').val('');
-                    $form.find('[name="email"]').closest('.form-group').append($.getMessage(response.success));
+                    $form.find('[name="email"]').closest('.form-group').addMessage(response.success);
                 }
             },
             error: function (response) {
                 if (response.responseJSON.errors) {
                     $.each(response.responseJSON.errors, function (key, value) {
                         $form.find('[name="' + key + '"]').addClass('is-invalid');
-                        $form.find('[name="' + key + '"]').closest('.form-group').append($.getError(key, value));
+                        $form.find('[name="' + key + '"]').closest('.form-group').addError({
+                            id: key,
+                            message: value
+                        });
                     });
                 }
             }

@@ -26,7 +26,10 @@ $(document).on(
             },
             beforeSend: function () {
                 $element.hide();
-                $div.append($.getLoader('spinner-border', 'loader'));
+                $div.addLoader({
+                    type: 'spinner-border',
+                    class: 'loader'
+                });
             },
             complete: function () {
                 $div.find('.loader').remove();

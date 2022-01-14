@@ -19,7 +19,7 @@ $(document).on(
             url: $element.data('route'),
             method: 'get',
             beforeSend: function () {
-                $modal.body.append($.getLoader('spinner-grow'));
+                $modal.body.addLoader('spinner-grow');
             },
             complete: function () {
                 $modal.body.find('.loader-absolute').remove();
@@ -29,7 +29,10 @@ $(document).on(
             },
             error: function (response) {
                 if (response.responseJSON.message) {
-                    $modal.body.prepend($.getAlert('danger', response.responseJSON.message));
+                    $('body').addToast({
+                        title: response.responseJSON.message,
+                        type: 'danger'
+                    });
                 }
             }        
         });

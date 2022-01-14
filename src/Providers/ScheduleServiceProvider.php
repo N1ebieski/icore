@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 
@@ -25,39 +26,6 @@ class ScheduleServiceProvider extends ServiceProvider
     }
 
     /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    protected function prepareClearCacheSchedule(): void
-    {
-        $hours = ceil($this->app['config']->get('cache.minutes') / 60);
-
-        if ($hours <= 0 || $hours > 672) {
-            return;
-        }
-
-        if ($hours < 24) {
-            $cron = "0 */{$hours} * * *";
-        } else {
-            $days = ceil($hours / 24);
-
-            $cron = "0 0 */{$days} * *";
-        }
-
-        // TODO: #37 Check is it working with runInBackground @N1ebieski
-        if ($this->app['config']->get('cache.default') === 'tfile') {
-            $this->schedule->exec('cd storage/framework/cache && rm -r data')
-                ->name('ClearCacheTfile')
-                ->cron($cron);
-        }
-
-        $this->schedule->command('cache:clear')
-            ->name('ClearCache')
-            ->cron($cron);
-    }
-
-    /**
      * Bootstrap services.
      *
      * @return void
@@ -67,7 +35,7 @@ class ScheduleServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $this->schedule = $this->app->make(Schedule::class);
 
-            $this->prepareClearCacheSchedule();
+            $this->callClearCacheSchedule();
 
             $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
                 ->name('MailingCron')
@@ -89,5 +57,38 @@ class ScheduleServiceProvider extends ServiceProvider
                 ->hourly()
                 ->runInBackground();
         });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    protected function callClearCacheSchedule(): void
+    {
+        $hours = ceil(Config::get('cache.minutes') / 60);
+
+        if ($hours <= 0 || $hours > 672) {
+            return;
+        }
+
+        if ($hours < 24) {
+            $cron = "0 */{$hours} * * *";
+        } else {
+            $days = ceil($hours / 24);
+
+            $cron = "0 0 */{$days} * *";
+        }
+
+        // TODO: #37 Check is it working with runInBackground @N1ebieski
+        if (Config::get('cache.default') === 'tfile') {
+            $this->schedule->exec('cd storage/framework/cache && rm -r data')
+                ->name('ClearCacheTfile')
+                ->cron($cron);
+        }
+
+        $this->schedule->command('cache:clear')
+            ->name('ClearCache')
+            ->cron($cron);
     }
 }

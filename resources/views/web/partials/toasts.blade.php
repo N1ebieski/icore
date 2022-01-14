@@ -1,12 +1,12 @@
 @if (session()->has('success'))
 <div 
-    class="toast bg-success text-white" 
+    class="toast" 
     role="alert" 
     aria-live="assertive" 
     aria-atomic="true" 
     data-delay="20000" 
 >
-    <div class="toast-header">
+    <div class="toast-header bg-success">
         <strong class="mr-auto">{{ session()->get('success') }}</strong>
         <button 
             type="button" 
@@ -17,5 +17,10 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+    @if (session()->has('message'))
+    <div class="toast-body bg-light text-dark">
+        {{ session()->get('message') }}
+    </div>
+    @endif
 </div>
 @endif
