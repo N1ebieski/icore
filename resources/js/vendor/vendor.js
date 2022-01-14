@@ -54,6 +54,14 @@ $.ajaxSetup({
     }
 });
 
+$(document).ajaxError(function (event, request) {
+    if (request.status === 401) {
+        window.location = '/auth/login';
+
+        return;
+    }
+});
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
