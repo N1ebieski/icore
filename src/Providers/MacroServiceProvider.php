@@ -90,7 +90,7 @@ class MacroServiceProvider extends ServiceProvider
                 hexdec(substr($hash, 2, 2)),
                 hexdec(substr($hash, 4, 2))
             ];
-    
+
             return 'rgb(' . implode(', ', $rgb) . ')';
         });
 

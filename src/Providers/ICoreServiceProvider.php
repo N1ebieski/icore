@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Support\ServiceProvider;
 
 class ICoreServiceProvider extends ServiceProvider
@@ -34,7 +35,7 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app->register(ScheduleServiceProvider::class);
         $this->app->register(CommandServiceProvider::class);
 
-        $this->app['router']->middlewareGroup('icore.web', [
+        Route::middlewareGroup('icore.web', [
             // 'throttle:60,1',
             \N1ebieski\ICore\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
@@ -49,7 +50,7 @@ class ICoreServiceProvider extends ServiceProvider
             \Nckg\Minify\Middleware\MinifyResponse::class
         ]);
 
-        $this->app['router']->middlewareGroup('icore.api', [
+        Route::middlewareGroup('icore.api', [
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
@@ -58,13 +59,13 @@ class ICoreServiceProvider extends ServiceProvider
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class
         ]);
 
-        $this->app['router']->aliasMiddleware('permission', \Spatie\Permission\Middlewares\PermissionMiddleware::class);
-        $this->app['router']->aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
-        $this->app['router']->aliasMiddleware('icore.ban.user', \N1ebieski\ICore\Http\Middleware\BanUser::class);
-        $this->app['router']->aliasMiddleware('icore.ban.ip', \N1ebieski\ICore\Http\Middleware\BanIp::class);
-        $this->app['router']->aliasMiddleware('icore.force.verified', \N1ebieski\ICore\Http\Middleware\VerifyEmail::class);
-        $this->app['router']->aliasMiddleware('icore.guest', \N1ebieski\ICore\Http\Middleware\RedirectIfAuthenticated::class);
-        $this->app['router']->aliasMiddleware('icore.migration', \N1ebieski\ICore\Http\Middleware\CheckMigration::class);
+        Route::aliasMiddleware('permission', \Spatie\Permission\Middlewares\PermissionMiddleware::class);
+        Route::aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
+        Route::aliasMiddleware('icore.ban.user', \N1ebieski\ICore\Http\Middleware\BanUser::class);
+        Route::aliasMiddleware('icore.ban.ip', \N1ebieski\ICore\Http\Middleware\BanIp::class);
+        Route::aliasMiddleware('icore.force.verified', \N1ebieski\ICore\Http\Middleware\VerifyEmail::class);
+        Route::aliasMiddleware('icore.guest', \N1ebieski\ICore\Http\Middleware\RedirectIfAuthenticated::class);
+        Route::aliasMiddleware('icore.migration', \N1ebieski\ICore\Http\Middleware\CheckMigration::class);
     }
 
     /**

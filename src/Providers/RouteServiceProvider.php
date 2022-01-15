@@ -2,6 +2,8 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -24,22 +26,22 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        $this->app['router']->bind('post_cache', function ($value) {
+        Route::bind('post_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\PostCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(404);
         });
 
-        $this->app['router']->bind('page_cache', function ($value) {
+        Route::bind('page_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\PageCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(404);
         });
 
-        $this->app['router']->bind('category_post_cache', function ($value) {
+        Route::bind('category_post_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Models\Category\Post\Category::class)
                 ->makeCache()->rememberBySlug($value) ?? $this->app->abort(404);
         });
 
-        $this->app['router']->bind('tag_cache', function ($value) {
+        Route::bind('tag_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\TagCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(404);
         });
@@ -68,11 +70,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAuthRoutes()
     {
-        if ($this->app['config']->get('icore.routes.auth.enabled') === false) {
+        if (Config::get('icore.routes.auth.enabled') === false) {
             return;
         }
 
-        $router = $this->app['router']->middleware('icore.web');
+        $router = Route::middleware('icore.web')
+            ->prefix(Config::get('icore.routes.auth.prefix'));
 
         $router->group(function ($router) {
             if (!file_exists(base_path('routes') . '/vendor/icore/auth.php')) {
@@ -80,7 +83,7 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        $router->namespace($this->app['config']->get('icore.routes.auth.namespace', $this->namespace))
+        $router->namespace(Config::get('icore.routes.auth.namespace', $this->namespace))
             ->group(function ($router) {
                 if (file_exists($filename = base_path('routes') . '/vendor/icore/auth.php')) {
                     require($filename);
@@ -97,11 +100,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        if ($this->app['config']->get('icore.routes.web.enabled') === false) {
+        if (Config::get('icore.routes.web.enabled') === false) {
             return;
         }
 
-        $router = $this->app['router']->middleware(['icore.web', 'icore.force.verified'])
+        $router = Route::middleware(['icore.web', 'icore.force.verified'])
+            ->prefix(Config::get('icore.routes.web.prefix'))
             ->as('web.');
 
         $router->group(function ($router) {
@@ -112,7 +116,7 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        $router->namespace($this->app['config']->get('icore.routes.web.namespace', $this->namespace . '\Web'))
+        $router->namespace(Config::get('icore.routes.web.namespace', $this->namespace . '\Web'))
             ->group(function ($router) {
                 foreach (glob(base_path('routes') . '/vendor/icore/web/*.php') as $filename) {
                     require($filename);
@@ -129,12 +133,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        if ($this->app['config']->get('icore.routes.api.enabled') === false) {
+        if (Config::get('icore.routes.api.enabled') === false) {
             return;
         }
 
-        $router = $this->app['router']->middleware(['icore.api', 'icore.force.verified'])
-            ->prefix('api')
+        $router = Route::middleware(['icore.api', 'icore.force.verified'])
+            ->prefix(Config::get('icore.routes.api.prefix', 'api'))
             ->as('api.');
 
         $router->group(function ($router) {
@@ -145,7 +149,7 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        $router->namespace($this->app['config']->get('icore.routes.api.namespace', $this->namespace . '\Api'))
+        $router->namespace(Config::get('icore.routes.api.namespace', $this->namespace . '\Api'))
             ->group(function ($router) {
                 foreach (glob(base_path('routes') . '/vendor/icore/api/*.php') as $filename) {
                     require($filename);
@@ -162,17 +166,17 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminRoutes()
     {
-        if ($this->app['config']->get('icore.routes.admin.enabled') === false) {
+        if (Config::get('icore.routes.admin.enabled') === false) {
             return;
         }
 
-        $router = $this->app['router']->middleware([
+        $router = Route::middleware([
                 'icore.web',
                 'auth',
                 'verified',
                 'permission:admin.access'
             ])
-            ->prefix('admin')
+            ->prefix(Config::get('icore.routes.admin.prefix', 'admin'))
             ->as('admin.');
 
         $router->group(function ($router) {
@@ -183,7 +187,7 @@ class RouteServiceProvider extends ServiceProvider
             }
         });
 
-        $router->namespace($this->app['config']->get('icore.routes.admin.namespace', $this->namespace . '\Admin'))
+        $router->namespace(Config::get('icore.routes.admin.namespace', $this->namespace . '\Admin'))
             ->group(function ($router) {
                 foreach (glob(base_path('routes') . '/vendor/icore/admin/*.php') as $filename) {
                     require($filename);
