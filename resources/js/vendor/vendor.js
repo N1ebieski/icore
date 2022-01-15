@@ -56,7 +56,7 @@ $.ajaxSetup({
 
 $(document).ajaxError(function (event, request) {
     if (request.status === 401) {
-        window.location = '/auth/login';
+        window.location = '/login';
 
         return;
     }
