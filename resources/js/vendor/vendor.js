@@ -21,6 +21,7 @@ try {
     require('trumbowyg/dist/langs/pl.min.js');
     require('trumbowyg/dist/plugins/colors/trumbowyg.colors.min.js');
     require('trumbowyg/dist/plugins/history/trumbowyg.history.min.js');
+    require('trumbowyg/dist/plugins/table/trumbowyg.table.min.js');
 
     require('jquery-lazy/jquery.lazy.js');
 

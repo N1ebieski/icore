@@ -33,6 +33,7 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/trumbowyg@ini
                 ['superscript', 'subscript'],
                 ['link'],
                 ['insertImage'],
+                ['table'],
                 ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
                 ['unorderedList', 'orderedList'],
                 ['horizontalRule'],
