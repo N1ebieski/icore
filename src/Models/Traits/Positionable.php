@@ -10,7 +10,7 @@ trait Positionable
      */
     public function reorderSiblings(): void
     {
-        $originalPosition = (int)$this->getOriginal('position');
+        $originalPosition = $this->getOriginal('position');
 
         if (is_int($originalPosition)) {
             if ($this->position > $originalPosition) {
