@@ -38,6 +38,13 @@ abstract class Client
     /**
      * Undocumented variable
      *
+     * @var array
+     */
+    protected $options = [];
+
+    /**
+     * Undocumented variable
+     *
      * @var object|string
      */
     protected $contents;
@@ -118,11 +125,13 @@ abstract class Client
     {
         $this->setQueryFromParams($params);
 
-        if (!isset($this->options['form_params'])) {
-            $this->options['form_params'] = [];
-        }
+        $formParams = array_filter($params, function ($key) {
+            return is_string($key);
+        }, ARRAY_FILTER_USE_KEY);
 
-        $this->options['form_params'] = $params;
+        if (!empty($formParams)) {
+            $this->options['form_params'] = $formParams;
+        }
 
         return $this;
     }
@@ -135,10 +144,6 @@ abstract class Client
      */
     protected function setHeaders(array $headers)
     {
-        if (!isset($this->options['headers'])) {
-            $this->options['headers'] = [];
-        }
-
         $this->options['headers'] = array_replace_recursive(
             $this->options['headers'],
             $headers
