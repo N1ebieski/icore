@@ -32,7 +32,7 @@ trait Filterable
     public function scopeFilterStatus(Builder $query, int $status = null): ?Builder
     {
         return $query->when($status !== null, function ($query) use ($status) {
-            return $query->where('status', $status);
+            return $query->where("{$this->getTable()}.status", $status);
         });
     }
 
@@ -101,7 +101,7 @@ trait Filterable
     public function scopeFilterAuthor(Builder $query, User $author = null): ?Builder
     {
         return $query->when($author !== null, function ($query) use ($author) {
-            return $query->where('user_id', $author->id);
+            return $query->where("{$this->getTable()}.user_id", $author->id);
         });
     }
 
