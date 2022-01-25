@@ -10,7 +10,7 @@
             : null
     ],
     'desc' => [$post->meta_desc],
-    'keys' => [$post->tagList],
+    'keys' => [$post->tag_list],
     'index' => (bool)$post->seo_noindex === true ? 'noindex' : 'index',
     'follow' => (bool)$post->seo_nofollow === true ? 'nofollow' : 'follow',
     'og' => [

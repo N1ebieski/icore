@@ -86,7 +86,7 @@
                         name="tags" 
                         id="tags" 
                         class="form-control tagsinput {{ $isValid('tags') }}"
-                        value="{{ old('tags', $page->tagList) }}" 
+                        value="{{ old('tags', $page->tag_list) }}" 
                         placeholder="{{ trans('icore::pages.tags.placeholder') }}" 
                         data-max="{{ config('icore.page.max_tags') }}"
                         data-max-chars="{{ config('icore.tag.max_chars') }}"

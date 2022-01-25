@@ -41,7 +41,7 @@ class SocialiteController
         try {
             return Socialite::driver($provider)->redirect();
         } catch (\Exception $e) {
-            return Response::redirectToRoute('web.profile.edit_socialite');
+            return Response::redirectToRoute('web.profile.socialites');
         }
     }
 
@@ -59,14 +59,14 @@ class SocialiteController
         try {
             $providerUser = Socialite::driver($provider)->user();
         } catch (\Exception $e) {
-            return Response::redirectToRoute('web.profile.edit_socialite');
+            return Response::redirectToRoute('web.profile.socialites');
         }
 
         $socialiteService = $socialite->makeService();
         $authUser = $socialiteService->findUser($providerUser, $provider);
 
         if (!is_null($authUser)) {
-            return Response::redirectToRoute('web.profile.edit_socialite')->with(
+            return Response::redirectToRoute('web.profile.socialites')->with(
                 'danger',
                 Lang::get('icore::profile.error.symlink_exist', ['provider' => ucfirst($provider)])
             );
@@ -74,7 +74,7 @@ class SocialiteController
 
         $socialiteService->setSocialiteUser(Auth::user())->create([]);
 
-        return Response::redirectToRoute('web.profile.edit_socialite')->with(
+        return Response::redirectToRoute('web.profile.socialites')->with(
             'success',
             Lang::get('icore::profile.success.symlink_create', ['provider' => ucfirst($provider)])
         );
@@ -89,7 +89,7 @@ class SocialiteController
     {
         $socialite->delete();
 
-        return Response::redirectToRoute('web.profile.edit_socialite')->with(
+        return Response::redirectToRoute('web.profile.socialites')->with(
             'success',
             Lang::get('icore::profile.success.symlink_delete')
         );

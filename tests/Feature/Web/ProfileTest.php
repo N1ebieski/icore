@@ -51,7 +51,7 @@ class ProfileTest extends TestCase
 
     public function testProfileEditSocialiteGuestUser()
     {
-        $response = $this->get(route('web.profile.edit_socialite'));
+        $response = $this->get(route('web.profile.socialites'));
 
         $response->assertRedirect(route('login'));
     }
@@ -94,7 +94,7 @@ class ProfileTest extends TestCase
 
         Auth::login($user, true);
 
-        $response = $this->get(route('web.profile.edit_socialite'));
+        $response = $this->get(route('web.profile.socialites'));
 
         $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"');
         $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"');
@@ -117,7 +117,7 @@ class ProfileTest extends TestCase
         $response = $this->followingRedirects()->get(route('web.profile.socialite.callback', ['provider' => self::PROVIDER]));
 
         //$response->assertSessionHas('success');
-        $response->assertViewIs('icore::web.profile.edit_socialite');
+        $response->assertViewIs('icore::web.profile.socialites');
         $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"');
         $response->assertSee('alert-success');
 
@@ -144,7 +144,7 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.socialite.callback', ['provider' => self::PROVIDER]));
 
-        $response->assertRedirect(route('web.profile.edit_socialite'));
+        $response->assertRedirect(route('web.profile.socialites'));
         $response->assertSessionHas('danger');
 
         $this->assertTrue(Auth::check());
@@ -378,7 +378,7 @@ class ProfileTest extends TestCase
         $response = $this->followingRedirects()->delete(route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]));
 
         $response->assertSee(route('web.profile.socialite.redirect', ['provider' => self::PROVIDER]));
-        $response->assertViewIs('icore::web.profile.edit_socialite');
+        $response->assertViewIs('icore::web.profile.socialites');
         //$response->assertSessionHas('warning', trans('icore::alerts.socialite_store.warning', ['provider' => ucfirst(self::PROVIDER)]));
 
         $this->assertTrue(Auth::check());

@@ -30,7 +30,7 @@
                         {!! $post->shortContent !!}...
                     </li>
                     <li>
-                        <small>{{ $post->tagList }}</small>
+                        <small>{{ $post->tag_list }}</small>
                     </li>
                     <li>
                         <small>{{ trans('icore::posts.published_at.label') }}: {{ $post->published_at_diff }}</small>

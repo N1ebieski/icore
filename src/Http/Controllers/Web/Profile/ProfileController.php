@@ -36,9 +36,9 @@ class ProfileController
      *
      * @return HttpResponse
      */
-    public function editSocialite(): HttpResponse
+    public function socialites(): HttpResponse
     {
-        return Response::view('icore::web.profile.edit_socialite', [
+        return Response::view('icore::web.profile.socialites', [
             'user' => Auth::user()->load('socialites')
         ]);
     }

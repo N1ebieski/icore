@@ -19,12 +19,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-    Route::get('profile/edit/socialite', [ProfileController::class, 'editSocialite'])
-        ->name('profile.edit_socialite');
-
     Route::get('profile/edit/password', [ProfileController::class, 'redirectPassword'])
         ->name('profile.redirect_password')->middleware('verified');
 
     Route::patch('profile/email', [ProfileController::class, 'updateEmail'])
         ->name('profile.update_email');
+
+    Route::get('profile/socialites', [ProfileController::class, 'socialites'])
+        ->name('profile.socialites');        
 });
