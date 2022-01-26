@@ -99,17 +99,6 @@ trait FullTextSearchable
     }
 
     /**
-     * Undocumented function
-     *
-     * @param string $match
-     * @return string
-     */
-    protected function createExactMatch(string $match): string
-    {
-        return '"' . $match . '"';
-    }
-
-    /**
      * Prepares words for a loose search
      * @return void
      */
@@ -120,7 +109,7 @@ trait FullTextSearchable
         foreach ($matches as $match) {
             if (strlen($match) >= 3) {
                 $match = $this->isContainsSymbol($match) ?
-                    $this->createExactMatch($match)
+                    "' . $match . '"
                     : $match;
 
                 if ($match === end($matches)) {
