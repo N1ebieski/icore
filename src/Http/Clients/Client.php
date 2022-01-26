@@ -130,7 +130,10 @@ abstract class Client
         }, ARRAY_FILTER_USE_KEY);
 
         if (!empty($formParams)) {
-            $this->options['form_params'] = $formParams;
+            $this->options['form_params'] = array_replace_recursive(
+                $this->options['form_params'] ?? [],
+                $formParams
+            );
         }
 
         return $this;
@@ -145,7 +148,7 @@ abstract class Client
     protected function setHeaders(array $headers)
     {
         $this->options['headers'] = array_replace_recursive(
-            $this->options['headers'],
+            $this->options['headers'] ?? [],
             $headers
         );
 
