@@ -5,10 +5,10 @@ use N1ebieski\ICore\Http\Controllers\Admin\BanValueController;
 use N1ebieski\ICore\Http\Controllers\Admin\BanModel\BanModelController;
 use N1ebieski\ICore\Http\Controllers\Admin\BanModel\User\BanModelController as UserBanModelController;
 
-Route::match(['get', 'post'], 'bans/user/index', [UserBanModelController::class, 'index'])
+Route::match(['post', 'get'], 'bans/user/index', [UserBanModelController::class, 'index'])
     ->name('banmodel.user.index')
     ->middleware('permission:admin.bans.view');
-Route::match(['get', 'post'], 'bans/{type}/index', [BanValueController::class, 'index'])
+Route::match(['post', 'get'], 'bans/{type}/index', [BanValueController::class, 'index'])
     ->name('banvalue.index')
     ->middleware('permission:admin.bans.view')
     ->where('type', '[A-Za-z]+');

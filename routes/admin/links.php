@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\LinkController;
 
-Route::match(['get', 'post'], 'links/{type}/index', [LinkController::class, 'index'])
+Route::match(['post', 'get'], 'links/{type}/index', [LinkController::class, 'index'])
     ->name('link.index')
     ->middleware('permission:admin.links.view')
     ->where('type', '[A-Za-z]+');

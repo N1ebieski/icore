@@ -5,11 +5,11 @@ use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Page\CommentController as PageCommentController;
 use N1ebieski\ICore\Http\Controllers\Admin\Comment\Post\CommentController as PostCommentController;
 
-Route::match(['get', 'post'], 'comments/post/index', [PostCommentController::class, 'index'])
+Route::match(['post', 'get'], 'comments/post/index', [PostCommentController::class, 'index'])
     ->name('comment.post.index')
     ->middleware('permission:admin.comments.view');
 
-Route::match(['get', 'post'], 'comments/page/index', [PageCommentController::class, 'index'])
+Route::match(['post', 'get'], 'comments/page/index', [PageCommentController::class, 'index'])
     ->name('comment.page.index')
     ->middleware('permission:admin.comments.view');
 

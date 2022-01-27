@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\RoleController;
 
-Route::match(['get', 'post'], '/roles/index', [RoleController::class, 'index'])
+Route::match(['post', 'get'], '/roles/index', [RoleController::class, 'index'])
     ->name('role.index')
     ->middleware('permission:admin.roles.view');
 

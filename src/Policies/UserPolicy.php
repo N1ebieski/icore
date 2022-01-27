@@ -12,38 +12,39 @@ class UserPolicy
     /**
      * Undocumented function
      *
-     * @param User $current_user
+     * @param User $authUser
      * @param User $user
      * @return void
      */
-    public function view(User $current_user, User $user)
+    public function view(User $authUser, User $user)
     {
-        return $current_user->id === $user->id;
+        return $authUser->can('admin.users.view')        
+            || $authUser->id === $user->id;
     }
 
     /**
      * Undocumented function
      *
-     * @param User $current_user
+     * @param User $authUser
      * @param User $user
      * @return void
      */
-    public function actionSelf(User $current_user, User $user)
+    public function actionSelf(User $authUser, User $user)
     {
-        return $current_user->id !== $user->id;
+        return $authUser->id !== $user->id;
     }
 
     /**
      * Undocumented function
      *
-     * @param User $current_user
+     * @param User $authUser
      * @param array $ids
      * @return boolean
      */
-    public function deleteGlobalSelf(User $current_user, array $ids): bool
+    public function deleteGlobalSelf(User $authUser, array $ids): bool
     {
         foreach ($ids as $id) {
-            if ($current_user->id === (int)$id) {
+            if ($authUser->id === (int)$id) {
                 return false;
             }
         }

@@ -9,13 +9,18 @@ use N1ebieski\ICore\Http\Requests\Api\Category\IndexRequest as BaseIndexRequest;
 class IndexRequest extends BaseIndexRequest
 {
     /**
-     * Undocumented function
+     * Undocumented variable
      *
-     * @param Category $category
+     * @var Category
      */
-    public function __construct(Category $category)
+    protected $category;
+
+    /**
+     * Undocumented function
+     */
+    public function __construct()
     {
-        $this->category = $category;
+        $this->category = Category::make();
     }
 
     /**

@@ -10,6 +10,19 @@ use N1ebieski\ICore\Services\TokenService;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Controllers\Auth\LoginController;
 
+/**
+ * @group Authentication
+ *
+ * > Routes:
+ *
+ *     /routes/vendor/icore/api/auth.php
+ *
+ * > Controllers:
+ *
+ *     N1ebieski\ICore\Http\Controllers\Api\Auth\TokenController
+ *     N1ebieski\ICore\Http\Controllers\Api\Auth\UserController
+ *
+ */
 class TokenController
 {
     /**
@@ -40,7 +53,23 @@ class TokenController
     }
 
     /**
-     * Undocumented function
+     * Token
+     *
+     * Create access token and (optional) refresh token.
+     *
+     * <aside class="notice">Access token expires after 2 hours. Refresh token expires after 1 year.</aside>
+     *
+     * @bodyParam email string Example: kontakt@demo.icore.intelekt.net.pl
+     * @bodyParam password string Example: demo1234
+     * @bodyParam remember boolean Example: true
+     *
+     * @response 201 scenario=success {
+     *  "access_token": "1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9",
+     *  "refresh_token": "2|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM"
+     * }
+     *
+     * @responseField access_token string
+     * @responseField refresh_token string (only if remember param was true)
      *
      * @param Request $request
      * @return JsonResponse
@@ -62,11 +91,27 @@ class TokenController
         return Response::json(array_filter([
             'access_token' => $accessToken->plainTextToken,
             'refresh_token' => isset($refreshToken) ? $refreshToken->plainTextToken : null
-        ]));
+        ]), HttpResponse::HTTP_CREATED);
     }
 
     /**
-     * Undocumented function
+     * Refresh token
+     *
+     * Create new access token and refresh token.
+     *
+     * <aside class="success">Refresh token must be in the Authorization header with the value "Bearer {YOUR_REFRESH_TOKEN}".</aside>
+     *
+     * @authenticated
+     *
+     * @header Authorization Bearer {YOUR_REFRESH_TOKEN}
+     *
+     * @response 201 scenario=success {
+     *  "access_token": "3|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9",
+     *  "refresh_token": "4|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM"
+     * }
+     *
+     * @responseField access_token string
+     * @responseField refresh_token string
      *
      * @param Request $request
      * @return JsonResponse
@@ -90,11 +135,20 @@ class TokenController
         return Response::json([
             'access_token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken
-        ]);
+        ], HttpResponse::HTTP_CREATED);
     }
 
     /**
-     * Undocumented function
+     * Revoke token
+     *
+     * Revoke access token and refresh token.
+     *
+     * @authenticated
+     *
+     * @response 204 scenario=success
+     *
+     * @responseField access_token string
+     * @responseField refresh_token string
      *
      * @param Request $request
      * @return JsonResponse

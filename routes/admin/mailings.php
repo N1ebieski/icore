@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\MailingController;
 
-Route::match(['get', 'post'], 'mailings/index', [MailingController::class, 'index'])
+Route::match(['post', 'get'], 'mailings/index', [MailingController::class, 'index'])
     ->name('mailing.index')
     ->middleware('permission:admin.mailings.view');
 

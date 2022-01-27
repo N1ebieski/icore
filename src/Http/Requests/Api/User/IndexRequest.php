@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Http\Requests\Api\User;
 
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Config;
@@ -46,6 +47,7 @@ class IndexRequest extends FormRequest
             'filter.role' => [
                 'bail',
                 'nullable',
+                'integer',
                 'exists:roles,id'
             ],
             'filter.orderby' => [
@@ -57,6 +59,47 @@ class IndexRequest extends FormRequest
                 'bail',
                 'integer',
                 Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]),
+            ]
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        $paginate = Config::get('database.paginate');
+
+        return [
+            'page' => [
+                'example' => 1
+            ],
+            'filter.except' => [
+                'description' => 'Array containing IDs, excluding records from the list.',
+            ],
+            'filter.search' => [
+                'description' => 'Search by keyword.',
+                'example' => ''
+            ],
+            'filter.status' => [
+                'description' => sprintf(
+                    'Must be one of %1$s or %2$s (available only for admin.users.view)',
+                    User::ACTIVE,
+                    User::INACTIVE
+                ),
+                'example' => User::ACTIVE
+            ],
+            'filter.role' => [
+                'example' => 1,
+            ],
+            'filter.orderby' => [
+                'description' => 'Sorting the result list.',
+            ],
+            'filter.paginate' => [
+                'description' => 'Number of records in the list.',
+                'example' => Arr::random([$paginate, ($paginate * 2), ($paginate * 4)])
             ]
         ];
     }

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\PageController;
 
-Route::match(['get', 'post'], 'pages/index', [PageController::class, 'index'])
+Route::match(['post', 'get'], 'pages/index', [PageController::class, 'index'])
     ->name('page.index')
     ->middleware('permission:admin.pages.view');
 

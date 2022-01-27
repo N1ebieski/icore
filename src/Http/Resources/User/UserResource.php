@@ -40,8 +40,7 @@ class UserResource extends JsonResource
                 }
             ),
             'email' => $this->when(
-                optional($request->user())->can('admin.users.view')
-                || optional($request->user())->can('view', $this->resource),
+                optional($request->user())->can('view', $this->resource),
                 function () {
                     return $this->email;
                 }
@@ -51,7 +50,7 @@ class UserResource extends JsonResource
                 'label' => Lang::get("icore::users.status.{$this->status}")
             ],
             'marketing' => $this->when(
-                optional($request->user())->can('admin.users.view'),
+                optional($request->user())->can('view', $this->resource),
                 function () {
                     return [
                         'value' => $this->marketing,
@@ -65,8 +64,7 @@ class UserResource extends JsonResource
             'updated_at_diff' => $this->updated_at_diff,
             'roles' => App::make(RoleResource::class)->collection($this->whenLoaded('roles')),
             'socialites' => $this->when(
-                optional($request->user())->can('admin.users.view')
-                || optional($request->user())->can('view', $this->resource),
+                optional($request->user())->can('view', $this->resource),
                 function () {
                     return  App::make(SocialiteResource::class)->collection($this->whenLoaded('socialites'));
                 }

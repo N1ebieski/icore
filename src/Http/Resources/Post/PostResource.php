@@ -3,10 +3,12 @@
 namespace N1ebieski\ICore\Http\Resources\Post;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Resources\Json\JsonResource;
+use N1ebieski\ICore\Http\Resources\User\UserResource;
 
 class PostResource extends JsonResource
 {
@@ -63,7 +65,13 @@ class PostResource extends JsonResource
                 $this->mergeWhen(Config::get('icore.routes.admin.enabled') === true, [
                     'admin' => URL::route('admin.post.index', ['filter[search]' => 'id:"' . $this->id . '"'])
                 ])
-            ]
+            ],
+            'user' => $this->when(
+                $this->relationLoaded('user'),
+                function () {
+                    return App::make(UserResource::class, ['user' => $this->user]);
+                }
+            )
         ];
     }
 }

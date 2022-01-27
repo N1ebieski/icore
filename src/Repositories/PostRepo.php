@@ -105,7 +105,7 @@ class PostRepo
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->post->selectRaw('`posts`.*')
-            ->with('tags')
+            ->with(['tags', 'user'])
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->when(
@@ -138,7 +138,7 @@ class PostRepo
                 'categories' => function ($query) {
                     $query->withAncestorsExceptSelf()->active();
                 },
-                'user:id,name',
+                'user',
                 'tags'
             ])
             ->when(

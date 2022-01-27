@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\UserController;
 
-Route::match(['get', 'post'], '/users/index', [UserController::class, 'index'])
+Route::match(['post', 'get'], '/users/index', [UserController::class, 'index'])
     ->name('user.index')
     ->middleware('permission:admin.users.view');
 

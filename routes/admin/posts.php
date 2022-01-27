@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\PostController;
 
-Route::match(['get', 'post'], 'posts/index', [PostController::class, 'index'])
+Route::match(['post', 'get'], 'posts/index', [PostController::class, 'index'])
     ->name('post.index')
     ->middleware('permission:admin.posts.view');
 

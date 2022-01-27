@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Http\Requests\Api\Category;
 
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
@@ -79,6 +80,48 @@ class IndexRequest extends FormRequest
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,name|asc,name|desc,position|asc,position|desc,real_depth|asc,real_depth|desc'
             ],
             'filter.paginate' => Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]) . '|integer|no_js_validation'
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        $paginate = Config::get('database.paginate');
+
+        return [
+            'page' => [
+                'example' => 1
+            ],
+            'filter.except' => [
+                'description' => 'Array containing IDs, excluding records from the list.',
+            ],
+            'filter.search' => [
+                'description' => 'Search by keyword.',
+                'example' => ''
+            ],
+            'filter.status' => [
+                'description' => sprintf(
+                    'Must be one of %1$s or %2$s (available only for admin.categories.view)',
+                    Category::ACTIVE,
+                    Category::INACTIVE
+                ),
+                'example' => Category::ACTIVE
+            ],
+            'filter.parent' => [
+                'description' => 'ID of category parent. If 0, shows only roots.',
+                'example' => 0,
+            ],
+            'filter.orderby' => [
+                'description' => 'Sorting the result list.',
+            ],
+            'filter.paginate' => [
+                'description' => 'Number of records in the list.',
+                'example' => Arr::random([$paginate, ($paginate * 2), ($paginate * 4)])
+            ]
         ];
     }
 }

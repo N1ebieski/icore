@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\CategoryController;
 use N1ebieski\ICore\Http\Controllers\Admin\Category\Post\CategoryController as PostCategoryController;
 
-Route::match(['get', 'post'], 'categories/post/index', [PostCategoryController::class, 'index'])
+Route::match(['post', 'get'], 'categories/post/index', [PostCategoryController::class, 'index'])
     ->name('category.post.index')
     ->middleware('permission:admin.categories.view');
 
