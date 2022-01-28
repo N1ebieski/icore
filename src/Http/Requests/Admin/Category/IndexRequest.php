@@ -28,10 +28,27 @@ class IndexRequest extends FormRequest
         if ($this->has('filter.parent')) {
             $this->merge([
                 'filter' => $this->input('filter') + [
-                    '_parent' => !empty($this->input('filter.parent')) ?
+                    'real_parent' => $this->input('filter.parent'),
+                    'parent' => !empty($this->input('filter.parent')) ?
                         $this->input('filter.parent')
                         : null
                     ]
+            ]);
+        }
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     *
+     * @return void
+     */
+    protected function passedValidation()
+    {
+        if ($this->has('filter.parent')) {
+            $this->merge([
+                'filter' => [
+                    'parent' => $this->input('filter.real_parent')
+                ] + $this->input('filter')
             ]);
         }
     }
@@ -52,7 +69,7 @@ class IndexRequest extends FormRequest
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
             'filter.status' => 'bail|nullable|integer|in:0,1|no_js_validation',
-            'filter._parent' => 'bail|nullable|integer|exists:categories,id|no_js_validation',
+            'filter.parent' => 'bail|nullable|integer|exists:categories,id|no_js_validation',
             'filter.orderby' => [
                 'bail',
                 'nullable',

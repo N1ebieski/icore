@@ -30,10 +30,27 @@ class IndexRequest extends FormRequest
         if ($this->has('filter.parent')) {
             $this->merge([
                 'filter' => [
-                    '_parent' => !empty($this->input('filter.parent')) ?
+                    'real_parent' => $this->input('filter.parent'),
+                    'parent' => !empty($this->input('filter.parent')) ?
                         $this->input('filter.parent')
                         : null
-                    ] + $this->input('filter')
+                ] + $this->input('filter')
+            ]);
+        }
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     *
+     * @return void
+     */
+    protected function passedValidation()
+    {
+        if ($this->has('filter.parent')) {
+            $this->merge([
+                'filter' => [
+                    'parent' => $this->input('filter.real_parent')
+                ] + $this->input('filter')
             ]);
         }
     }
@@ -61,7 +78,7 @@ class IndexRequest extends FormRequest
                     optional($this->user())->can('admin.categories.view') ? ',0' : null
                 )
             ],
-            'filter._parent' => [
+            'filter.parent' => [
                 'bail',
                 'nullable',
                 'integer',
@@ -98,6 +115,7 @@ class IndexRequest extends FormRequest
             ],
             'filter.except' => [
                 'description' => 'Array containing IDs, excluding records from the list.',
+                'example' => null
             ],
             'filter.search' => [
                 'description' => 'Search by keyword.',
@@ -113,10 +131,11 @@ class IndexRequest extends FormRequest
             ],
             'filter.parent' => [
                 'description' => 'ID of category parent. If 0, shows only roots.',
-                'example' => 0,
+                'example' => 0
             ],
             'filter.orderby' => [
                 'description' => 'Sorting the result list.',
+                'example' => ''
             ],
             'filter.paginate' => [
                 'description' => 'Number of records in the list.',

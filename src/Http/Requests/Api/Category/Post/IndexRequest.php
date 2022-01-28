@@ -31,7 +31,7 @@ class IndexRequest extends BaseIndexRequest
     public function rules()
     {
         return array_merge(parent::rules(), [
-            'filter._parent' => [
+            'filter.parent' => [
                 'bail',
                 'nullable',
                 'integer',
