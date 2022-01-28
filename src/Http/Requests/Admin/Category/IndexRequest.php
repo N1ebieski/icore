@@ -28,7 +28,7 @@ class IndexRequest extends FormRequest
         if ($this->has('filter.parent')) {
             $this->merge([
                 'filter' => $this->input('filter') + [
-                    '_parent' => $this->input('filter.parent') != 0 ?
+                    '_parent' => !empty($this->input('filter.parent')) ?
                         $this->input('filter.parent')
                         : null
                     ]

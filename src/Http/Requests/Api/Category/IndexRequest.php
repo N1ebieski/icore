@@ -30,7 +30,7 @@ class IndexRequest extends FormRequest
         if ($this->has('filter.parent')) {
             $this->merge([
                 'filter' => [
-                    'parent' => $this->input('filter.parent') != 0 ?
+                    '_parent' => !empty($this->input('filter.parent')) ?
                         $this->input('filter.parent')
                         : null
                     ] + $this->input('filter')
@@ -61,7 +61,7 @@ class IndexRequest extends FormRequest
                     optional($this->user())->can('admin.categories.view') ? ',0' : null
                 )
             ],
-            'filter.parent' => [
+            'filter._parent' => [
                 'bail',
                 'nullable',
                 'integer',

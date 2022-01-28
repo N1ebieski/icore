@@ -73,7 +73,7 @@ class IndexRequest extends FormRequest
                 'bail',
                 'nullable',
                 'integer',
-                Rule::exists('posts', 'id')
+                Rule::exists('categories', 'id')
                     ->where(function ($query) use ($post) {
                         $query->where('model_type', $post->getMorphClass())
                             ->when(

@@ -37,6 +37,7 @@ class CategoryController implements Polymorphic
                             App::make(CategoryResource::class, ['category' => $filter->get('parent')])
                             : $filter->get('parent')
                     ])
+                    ->forget('category')
                     ->toArray()
             ]])
             ->response();
