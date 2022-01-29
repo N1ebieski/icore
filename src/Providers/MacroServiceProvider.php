@@ -78,6 +78,10 @@ class MacroServiceProvider extends ServiceProvider
 
         Collection::macro('isNullItems', function () {
             return $this->every(function ($value, $key) {
+                if (is_array($value)) {
+                    return Collection::make($value)->isNullItems();
+                }
+
                 return $value === null;
             });
         });
