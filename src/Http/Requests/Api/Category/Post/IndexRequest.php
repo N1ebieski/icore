@@ -18,9 +18,11 @@ class IndexRequest extends BaseIndexRequest
     /**
      * Undocumented function
      */
-    public function __construct()
+    public function __construct(Category $category)
     {
-        $this->category = Category::make();
+        parent::__construct();
+
+        $this->category = $category;
     }
 
     /**
