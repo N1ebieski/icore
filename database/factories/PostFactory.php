@@ -1,9 +1,9 @@
 <?php
 
-use Faker\Generator as Faker;
-use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\Post;
 use Carbon\Carbon;
+use Faker\Generator as Faker;
+use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
 
 $factory->define(Post::class, function (Faker $faker) {
     $content = $faker->text(2000);
@@ -85,4 +85,8 @@ $factory->state(Post::class, 'with_user', function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id
     ];
+});
+
+$factory->afterCreatingState(Post::class, 'with_user', function ($post) {
+    $post->load('user');
 });

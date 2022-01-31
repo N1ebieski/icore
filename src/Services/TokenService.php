@@ -70,7 +70,7 @@ class TokenService implements Deletable
          */
         $user = $this->token->tokenable ?? $this->auth->user();
 
-        $accessToken = $user->createToken($attributes['name'], $attributes['scopes'], $attributes['expiration']);
+        $accessToken = $user->createToken($attributes['name'], $attributes['abilities'], $attributes['expiration']);
 
         if (array_key_exists('refresh', $attributes) && $attributes['refresh'] === true) {
             $refreshToken = $user->createToken($attributes['name'], ['refresh'], $this->config->get('sanctum.refresh_expiration'));

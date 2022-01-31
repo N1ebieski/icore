@@ -83,7 +83,7 @@ class TokenController
 
         [$accessToken, $refreshToken] = $this->tokenService->create([
             'name' => 'login',
-            'scopes' => ['api.*'],
+            'abilities' => ['api.*'],
             'expiration' => Config::get('sanctum.access_expiration'),
             'refresh' => filter_var($request->input('remember'), FILTER_VALIDATE_BOOLEAN) ?: null
         ]);
@@ -127,7 +127,7 @@ class TokenController
 
         [$accessToken, $refreshToken] = $this->tokenService->create([
             'name' => 'login',
-            'scopes' => ['api.*'],
+            'abilities' => ['api.*'],
             'expiration' => Config::get('sanctum.access_expiration'),
             'refresh' => true
         ]);
