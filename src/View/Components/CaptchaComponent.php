@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\View\Components;
 
 use Illuminate\View\View;
 use Illuminate\Contracts\Support\Htmlable;
-use N1ebieski\ICore\Rules\RecaptchaV2Rule;
-use N1ebieski\LogicCaptcha\Rules\LogicCaptchaRule;
-use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
@@ -20,23 +17,10 @@ class CaptchaComponent implements Htmlable
     protected $view;
 
     /**
-     * Undocumented variable
-     *
-     * @var App
-     */
-    protected $app;
-
-    /**
      * [private description]
-     * @var string
+     * @var Config
      */
-    protected $driver;
-
-    /**
-     * [private description]
-     * @var string
-     */
-    protected $site_key;
+    protected $config;
 
     /**
      * [private description]
@@ -48,17 +32,14 @@ class CaptchaComponent implements Htmlable
      * Undocumented function
      *
      * @param ViewFactory $view
-     * @param App $app
      * @param Config $config
      * @param integer $id
      */
-    public function __construct(ViewFactory $view, App $app, Config $config, int $id = null)
+    public function __construct(ViewFactory $view, Config $config, int $id = null)
     {
         $this->view = $view;
-        $this->app = $app;
+        $this->config = $config;
 
-        $this->driver = $config->get('icore.captcha.driver');
-        $this->site_key = $config->get('services.recaptcha_v2.site_key');
         $this->id = $id;
     }
 
@@ -69,63 +50,21 @@ class CaptchaComponent implements Htmlable
      */
     public function toHtml()
     {
-        switch ($this->driver) {
+        switch ($this->config->get('icore.captcha.driver')) {
+            case 'recaptcha_invisible':
+                return $this->view->make('icore::web.components.captcha.recaptcha_invisible', [
+                    'site_key' => $this->config->get('services.recaptcha_invisible.site_key')
+                ]);
+
             case 'recaptcha_v2':
-                return $this->view->make('icore::web.components.captcha.recaptcha_v2')
-                    ->with('site_key', $this->site_key);
+                return $this->view->make('icore::web.components.captcha.recaptcha_v2', [
+                    'site_key' => $this->config->get('services.recaptcha_v2.site_key')
+                ]);
 
             case 'logic_captcha':
                 return $this->view->make('icore::web.components.captcha.logic_captcha', [
                     'id' => $this->id
                 ]);
         }
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    public function toRules(): array
-    {
-        switch ($this->driver) {
-            case 'recaptcha_v2':
-                return [
-                    'g-recaptcha-response' => [
-                        'required',
-                        $this->app->make(RecaptchaV2Rule::class),
-                        'no_js_validation'
-                    ]
-                ];
-
-            case 'logic_captcha':
-                return [
-                    'captcha' => [
-                        'required',
-                        'string',
-                        $this->app->make(LogicCaptchaRule::class),
-                        'no_js_validation'
-                    ]
-                ];
-
-            default:
-                return [];
-        }
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    public function toAttributes(): array
-    {
-        if ($this->driver === 'recaptcha_v2') {
-            return [
-                'g-recaptcha-response' => 'captcha'
-            ];
-        }
-
-        return [];
     }
 }

@@ -117,22 +117,53 @@
     };
 
     /**
-     * Plugin refreshujący recaptche v2. Potrzebne w przypadku pobrania formularza przez ajax
+     * Plugin refreshujący recaptche v2/invisible. Potrzebne w przypadku pobrania formularza przez ajax
      */
     $.fn.recaptcha = function () {
         if (this.hasClass('g-recaptcha')) {
-            var widgetId;
+            let callback = null;
+            let $button;
+
+            // W przypadku recaptcha invisible musimy pobrać button i zdefiniować callback
+            if (this.data('size') === 'invisible') {
+                let $form = this.closest('form');
+                
+                if ($form.is('[id]')) {
+                    $button = $(`button[form="${$form.attr('id')}"]:last`);
+                }
+
+                if (typeof $button === 'undefined' || !$button.length) {
+                    $button = $form.find('button[class*="btn-primary"]:last, button[type="submit"]:last');
+                }
+
+                callback = function () {
+                    if ($button.attr('type') === 'submit') {
+                        $button.closest('form').submit();
+                    } else {
+                        $button.trigger('click');
+                    }
+                }
+
+                $button.addClass('captcha');
+            }
+
+            let widgetId;
             // Przypadek, gdy nowy token generowany jest w momencie pobrania formularza
             // przez ajax. Wówczas trzeba go na nowo zrenderować pod nowym widgetId
             if (!this.html().length) {
                 widgetId = grecaptcha.render(this[0], {
-                    'sitekey' : this.attr('data-sitekey')
-                });
+                    'sitekey': this.attr('data-sitekey'),
+                    'callback': callback
+                });              
             }
             // W przeciwnym razie (tzn. jeśli token jest prawidłowo wygenerowany) pobieramy
             // jego widgetId
             else {
                 widgetId = parseInt(this.find('textarea[name="g-recaptcha-response"]').attr('id').match(/\d+$/), 10);
+            }
+
+            if (typeof $button !== 'undefined' && $button.length) {
+                $button.attr('data-widgetid', widgetId);
             }
 
             // Resetowanie tokena. Konieczne w przypadku gdy formularz został wypełniony
