@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
-use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
 
 class RegisterController extends Controller
 {
+    use CaptchaExtended;
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -34,23 +36,13 @@ class RegisterController extends Controller
     protected $redirectTo = '/';
 
     /**
-     * Undocumented variable
-     *
-     * @var Captcha
-     */
-    protected $captcha;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  Captcha $captcha
      * @return void
      */
-    public function __construct(Captcha $captcha)
+    public function __construct()
     {
         $this->middleware('icore.guest');
-
-        $this->captcha = $captcha;
     }
 
     /**
@@ -75,9 +67,9 @@ class RegisterController extends Controller
 
         return Validator::make(
             $data,
-            array_merge($register->rules(), $this->captcha->toRules()),
+            array_merge($register->rules(), $this->prepareCaptchaRules()),
             [],
-            $this->captcha->toAttributes()
+            $this->prepareCaptchaAttributes()
         );
     }
 

@@ -76,7 +76,7 @@ class IndexRequest extends FormRequest
             'page' => [
                 'example' => 1
             ],
-            'filter.except' => [
+            'filter.except.*' => [
                 'description' => 'Array containing IDs, excluding records from the list.',
             ],
             'filter.search' => [

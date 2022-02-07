@@ -10,15 +10,11 @@ use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
-use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
+use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
 
 class StoreRequest extends FormRequest
 {
-    /**
-     * [protected description]
-     * @var Captcha
-     */
-    protected $captcha;
+    use CaptchaExtended;
 
     /**
      * [private description]
@@ -26,10 +22,13 @@ class StoreRequest extends FormRequest
      */
     protected $bans;
 
-    public function __construct(Captcha $captcha, BanValue $banValue)
+    /**
+     * Undocumented function
+     *
+     * @param BanValue $banValue
+     */
+    public function __construct(BanValue $banValue)
     {
-        $this->captcha = $captcha;
-
         $this->bans = $banValue->makeCache()->rememberAllWordsAsString();
     }
 
@@ -50,6 +49,11 @@ class StoreRequest extends FormRequest
         return $this->page->status === Page::ACTIVE;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         if (!$this->has('parent_id') || $this->get('parent_id') == 0) {
@@ -59,9 +63,14 @@ class StoreRequest extends FormRequest
         }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function attributes()
     {
-        return array_merge([], $this->captcha->toAttributes());
+        return array_merge([], $this->prepareCaptchaAttributes());
     }
 
     /**
@@ -85,7 +94,7 @@ class StoreRequest extends FormRequest
                     $query->where('status', Comment::ACTIVE);
                 }),
             ]
-        ], $this->captcha->toRules());
+        ], $this->prepareCaptchaRules());
     }
 
     /**

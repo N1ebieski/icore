@@ -3,28 +3,11 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Contact;
 
 use Illuminate\Foundation\Http\FormRequest;
-use N1ebieski\ICore\View\Components\CaptchaComponent as Captcha;
+use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
 
 class SendRequest extends FormRequest
 {
-    /**
-     * Undocumented variable
-     *
-     * @var Captcha
-     */
-    protected $captcha;
-
-    /**
-     * Undocumented function
-     *
-     * @param Captcha $captcha
-     */
-    public function __construct(Captcha $captcha)
-    {
-        parent::__construct();
-
-        $this->captcha = $captcha;
-    }
+    use CaptchaExtended;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -43,7 +26,7 @@ class SendRequest extends FormRequest
      */
     public function attributes()
     {
-        return array_merge([], $this->captcha->toAttributes());
+        return array_merge([], $this->prepareCaptchaAttributes());
     }
 
     /**
@@ -58,6 +41,6 @@ class SendRequest extends FormRequest
             'title' => 'required',
             'content' => 'required',
             'contact_agreement' => 'bail|accepted'
-        ], $this->captcha->toRules());
+        ], $this->prepareCaptchaRules());
     }
 }
