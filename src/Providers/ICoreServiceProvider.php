@@ -128,6 +128,10 @@ class ICoreServiceProvider extends ServiceProvider
         ], 'icore.views.web');
 
         $this->publishes([
+            __DIR__ . '/../../public/docs' => public_path('docs'),
+        ], 'icore.public.docs');
+
+        $this->publishes([
             __DIR__ . '/../../public/css' => public_path('css/vendor/icore'),
             __DIR__ . '/../../public/mix-manifest.json' => public_path('mix-manifest.json')
         ], 'icore.public.css');

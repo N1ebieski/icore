@@ -17,6 +17,7 @@ use N1ebieski\ICore\Http\Controllers\Api\Category\CategoryController as BaseCate
  *
  * > Controller:
  *
+ *     N1ebieski\ICore\Http\Controllers\Api\Category\CategoryController
  *     N1ebieski\ICore\Http\Controllers\Api\Category\Post\CategoryController
  *
  * > Resource:
