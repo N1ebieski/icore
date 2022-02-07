@@ -12,7 +12,9 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+
     require('jscroll');
+
     require('jquery.cookie');
 
     require('jquery.easing');
