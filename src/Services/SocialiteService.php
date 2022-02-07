@@ -123,10 +123,7 @@ class SocialiteService implements Creatable
     {
         // Sprawdzenie czy provider zwraca adres e-mail
         if (empty($this->providerUser->getEmail())) {
-            throw new \N1ebieski\ICore\Exceptions\Socialite\NoEmailException(
-                'Provider has not provided the user\'s email address.',
-                HttpResponse::HTTP_FORBIDDEN
-            );
+            throw new \N1ebieski\ICore\Exceptions\Socialite\NoEmailException();
         }
 
         // Sprawdzenie czy uzytkownik jest zarejestrowany jako User
@@ -135,10 +132,7 @@ class SocialiteService implements Creatable
 
         // Jesli tak, odrzucamy request i prosimy usera by powiazal konto z poziomu edycji profilu
         if ($this->socialiteUser) {
-            throw new \N1ebieski\ICore\Exceptions\Socialite\EmailExistException(
-                'There is a registered account for the email address provided.',
-                HttpResponse::HTTP_FORBIDDEN
-            );
+            throw new \N1ebieski\ICore\Exceptions\Socialite\EmailExistException();
         }
 
         // Jesli nie, tworzymy go
