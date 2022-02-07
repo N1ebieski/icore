@@ -86,7 +86,3 @@ $factory->state(Post::class, 'with_user', function (Faker $faker) {
         'user_id' => factory(User::class)->create()->id
     ];
 });
-
-$factory->afterCreatingState(Post::class, 'with_user', function ($post) {
-    $post->load('user');
-});
