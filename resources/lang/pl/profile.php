@@ -22,7 +22,8 @@ return [
     'route' => [
         'index' => 'Profil',
         'edit' => 'Edycja profilu',
-        'edit_socialite' => 'Połącz z SocialMedia'
+        'socialites' => 'Połącz z SocialMedia',
+        'tokens' => 'Tokeny API'
     ],
     'pages' => 'Podstrony'
 ];
