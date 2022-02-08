@@ -59,6 +59,8 @@ class ICoreServiceProvider extends ServiceProvider
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class
         ]);
 
+        Route::aliasMiddleware('abilities', \Laravel\Sanctum\Http\Middleware\CheckAbilities::class);
+        Route::aliasMiddleware('ability', \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class);
         Route::aliasMiddleware('permission', \Spatie\Permission\Middlewares\PermissionMiddleware::class);
         Route::aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
         Route::aliasMiddleware('icore.ban.user', \N1ebieski\ICore\Http\Middleware\BanUser::class);
