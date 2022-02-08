@@ -34,5 +34,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::match(['post', 'get'], 'profile/tokens', [ProfileController::class, 'tokens'])
         ->name('profile.tokens')
-        ->middleware('permission:web.tokens.create|web.tokens.delete');
+        ->middleware(['permission:api.access', 'permission:web.tokens.create|web.tokens.delete']);
 });
