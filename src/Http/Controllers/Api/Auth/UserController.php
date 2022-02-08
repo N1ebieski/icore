@@ -8,7 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Http\Resources\User\UserResource;
 
 /**
- * @group Authentication
+ * @group Authenticated user
+ *
+ * > Routes:
+ *
+ *     /routes/vendor/icore/api/user.php
+ *
+ * > Controller:
+ *
+ *     N1ebieski\ICore\Http\Controllers\Api\Auth\UserController
+ *
  */
 class UserController
 {
@@ -34,7 +43,6 @@ class UserController
      *
      * @apiResource N1ebieski\ICore\Http\Resources\User\UserResource
      * @apiResourceModel N1ebieski\ICore\Models\User states=active,user with=roles
-     * @apiResourceAdditional meta="Paging, filtering and sorting information"
      *
      * @return JsonResponse
      */

@@ -23,7 +23,7 @@ class VerifyEmail
             return $request->expectsJson() ?
                 App::abort(
                     HttpResponse::HTTP_FORBIDDEN,
-                    'Your email address is not verified.'
+                    'Your email address is not verified'
                 )
                 : Response::redirectToRoute('verification.notice');
         }

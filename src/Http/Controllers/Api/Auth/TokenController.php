@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Services\TokenService;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Http\Requests\Api\Auth\RevokeRequest;
 use N1ebieski\ICore\Http\Controllers\Auth\LoginController;
+use N1ebieski\ICore\Http\Requests\Api\Auth\RefreshRequest;
 
 /**
  * @group Authentication
@@ -19,8 +21,8 @@ use N1ebieski\ICore\Http\Controllers\Auth\LoginController;
  *
  * > Controllers:
  *
+ *     N1ebieski\ICore\Http\Controllers\Api\Auth\RegisterController
  *     N1ebieski\ICore\Http\Controllers\Api\Auth\TokenController
- *     N1ebieski\ICore\Http\Controllers\Api\Auth\UserController
  *
  */
 class TokenController
@@ -59,8 +61,10 @@ class TokenController
      *
      * <aside class="notice">Access token expires after 2 hours. Refresh token expires after 1 year.</aside>
      *
-     * @bodyParam email string Example: kontakt@demo.icore.intelekt.net.pl
-     * @bodyParam password string Example: demo1234
+     * @unauthenticated
+     *
+     * @bodyParam email string required Example: kontakt@demo.icore.intelekt.net.pl
+     * @bodyParam password string required Example: demo1234
      * @bodyParam remember boolean Example: true
      *
      * @response 201 scenario=success {
@@ -76,7 +80,7 @@ class TokenController
      */
     public function token(Request $request): JsonResponse
     {
-        // API is stateless but we use validate login logic from laravel/ui
+        // API for token guard is stateless but we use validate login logic from laravel/ui
         $request->setLaravelSession(optional());
 
         $this->decorated->login($request);
@@ -87,6 +91,9 @@ class TokenController
             'expiration' => Config::get('sanctum.access_expiration'),
             'refresh' => filter_var($request->input('remember'), FILTER_VALIDATE_BOOLEAN) ?: null
         ]);
+
+        // We have to remove cookie credentials
+        $this->decorated->logout($request);
 
         return Response::json(array_filter([
             'access_token' => $accessToken->plainTextToken,
@@ -113,10 +120,10 @@ class TokenController
      * @responseField access_token string
      * @responseField refresh_token string
      *
-     * @param Request $request
+     * @param RefreshRequest $request
      * @return JsonResponse
      */
-    public function refresh(Request $request): JsonResponse
+    public function refresh(RefreshRequest $request): JsonResponse
     {
         /**
          * @var \N1ebieski\ICore\Models\User
@@ -150,10 +157,10 @@ class TokenController
      * @responseField access_token string
      * @responseField refresh_token string
      *
-     * @param Request $request
+     * @param RevokeRequest $request
      * @return JsonResponse
      */
-    public function revoke(Request $request): JsonResponse
+    public function revoke(RevokeRequest $request): JsonResponse
     {
        /**
          * @var \N1ebieski\ICore\Models\User
