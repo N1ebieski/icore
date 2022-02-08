@@ -24,4 +24,18 @@
         </a>
     </li>
     @endif
+    @canany(['web.tokens.edit', 'web.tokens.delete'])
+    @can('api.access')
+    <li class="nav-item {{ $isUrl(route('web.profile.tokens')) }}">
+        <a 
+            class="nav-link {{ $isUrl(route('web.profile.tokens')) }}"
+            title="{{ trans('icore::profile.route.tokens') }}"
+            href="{{ route('web.profile.tokens') }}"
+        >
+            <i class="fas fa-fw fa-user-lock"></i>
+            <span>{{ trans('icore::profile.route.tokens') }}</span>
+        </a>
+    </li>
+    @endcan
+    @endcan
 </ul>

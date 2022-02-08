@@ -31,4 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::patch('profile/email', [ProfileController::class, 'updateEmail'])
         ->name('profile.update_email');
+
+    Route::match(['post', 'get'], 'profile/tokens', [ProfileController::class, 'tokens'])
+        ->name('profile.tokens')
+        ->middleware('permission:web.tokens.create|web.tokens.delete');
 });
