@@ -45,12 +45,7 @@ class CategoryController implements Polymorphic
     public function index(Category $category, IndexRequest $request, IndexFilter $filter): JsonResponse
     {
         return App::make(CategoryResource::class)
-            ->collection(
-                $category->makeCache()->rememberByFilter(
-                    $filter->all(),
-                    $request->input('page') ?? 1
-                )
-            )
+            ->collection($category->makeCache()->rememberByFilter($filter->all()))
             ->additional(['meta' => [
                 'filter' => Collect::make($filter->all())
                     ->replace([

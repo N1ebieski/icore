@@ -22,17 +22,17 @@ class StatCache
     protected $cache;
 
     /**
+     * [protected description]
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Undocumented variable
      *
      * @var Carbon
      */
     protected $carbon;
-
-    /**
-     * Config
-     * @var int
-     */
-    protected $minutes;
 
     /**
      * Undocumented function
@@ -47,9 +47,8 @@ class StatCache
         $this->stat = $stat;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->carbon = $carbon;
-
-        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -61,7 +60,7 @@ class StatCache
     {
         return $this->cache->remember(
             "stat.{$this->stat->poli}.firstBySlug.{$slug}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->stat->makeRepo()->firstBySlug($slug);
             }

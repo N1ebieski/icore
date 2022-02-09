@@ -2,11 +2,11 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -26,6 +26,12 @@ class CategoryCache
     protected $cache;
 
     /**
+     * [protected description]
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Undocumented variable
      *
      * @var Carbon
@@ -42,15 +48,9 @@ class CategoryCache
     /**
      * Undocumented variable
      *
-     * @var Auth
+     * @var Request
      */
-    protected $auth;
-
-    /**
-     * Config
-     * @var int
-     */
-    protected $minutes;
+    protected $request;
 
     /**
      * Undocumented function
@@ -60,7 +60,7 @@ class CategoryCache
      * @param Config $config
      * @param Carbon $carbon
      * @param Collect $collect
-     * @param Auth $auth
+     * @param Request $request
      */
     public function __construct(
         Category $category,
@@ -68,16 +68,15 @@ class CategoryCache
         Config $config,
         Carbon $carbon,
         Collect $collect,
-        Auth $auth
+        Request $request
     ) {
         $this->category = $category;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->carbon = $carbon;
         $this->collect = $collect;
-        $this->auth = $auth;
-
-        $this->minutes = $config->get('cache.minutes');
+        $this->request = $request;
     }
 
     /**
@@ -89,7 +88,7 @@ class CategoryCache
     {
         return $this->cache->remember(
             "category.firstBySlug.{$slug}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->category->makeRepo()->firstBySlug($slug);
             }
@@ -98,14 +97,13 @@ class CategoryCache
 
     /**
      * [rememberPosts description]
-     * @param  int                  $page [description]
      * @return LengthAwarePaginator       [description]
      */
-    public function rememberPosts(int $page): LengthAwarePaginator
+    public function rememberPosts(): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "category.{$this->category->id}.paginatePosts.{$page}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            "category.{$this->category->id}.paginatePosts.{$this->request->input('page')}",
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->category->makeRepo()->paginatePosts();
             }
@@ -120,7 +118,7 @@ class CategoryCache
     {
         return $this->cache->tags(['categories'])->remember(
             "category.{$this->category->poli}.getWithRecursiveChildrens",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->category->makeRepo()->getWithRecursiveChildrens();
             }
@@ -136,7 +134,7 @@ class CategoryCache
     {
         return $this->cache->tags(['categories'])->remember(
             "category.{$this->category->poli}.countByStatus",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->category->makeRepo()->countByStatus();
             }
@@ -147,20 +145,19 @@ class CategoryCache
      * Undocumented function
      *
      * @param array $filter
-     * @param integer $page
      * @return LengthAwarePaginator
      */
-    public function rememberByFilter(array $filter, int $page): LengthAwarePaginator
+    public function rememberByFilter(array $filter): LengthAwarePaginator
     {
-        if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
-            $categories = $this->getByFilter($page);
+        if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
+            $categories = $this->getByFilter($this->request->input('page'));
         }
 
         if (!isset($categories) || !$categories) {
             $categories = $this->category->makeRepo()->paginateByFilter($filter);
 
-            if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
-                $this->putByFilter($categories, $page);
+            if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
+                $this->putByFilter($categories, $this->request->input('page'));
             }
         }
 
@@ -169,30 +166,28 @@ class CategoryCache
 
     /**
      * [getByFilter description]
-     * @param  int                  $page [description]
      * @return LengthAwarePaginator|null       [description]
      */
-    public function getByFilter(int $page): ?LengthAwarePaginator
+    public function getByFilter(): ?LengthAwarePaginator
     {
         return $this->cache->tags(["categories"])
             ->get(
-                "category.{$this->category->poli}.paginateByFilter.{$page}"
+                "category.{$this->category->poli}.paginateByFilter.{$this->request->input('page')}"
             );
     }
 
     /**
      * [putByFilter description]
      * @param  LengthAwarePaginator $categories [description]
-     * @param  int                  $page     [description]
      * @return bool                           [description]
      */
-    public function putByFilter(LengthAwarePaginator $categories, int $page): bool
+    public function putByFilter(LengthAwarePaginator $categories): bool
     {
         return $this->cache->tags(["categories"])
             ->put(
-                "category.{$this->category->poli}.paginateByFilter.{$page}",
+                "category.{$this->category->poli}.paginateByFilter.{$this->request->input('page')}",
                 $categories,
-                $this->carbon->now()->addMinutes($this->minutes)
+                $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
             );
     }
 }

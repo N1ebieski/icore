@@ -24,17 +24,17 @@ class MigrationCache
     protected $cache;
 
     /**
+     * [protected description]
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Undocumented variable
      *
      * @var Carbon
      */
     protected $carbon;
-
-    /**
-     * Configuration
-     * @var int
-     */
-    protected $minutes;
 
     /**
      * Undocumented function
@@ -48,9 +48,8 @@ class MigrationCache
     {
         $this->db = $db;
         $this->cache = $cache;
+        $this->config = $config;
         $this->carbon = $carbon;
-
-        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -62,7 +61,7 @@ class MigrationCache
     {
         return $this->cache->tags(['migrations'])->remember(
             "migration.getAll",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->db->table('migrations')->get();
             }

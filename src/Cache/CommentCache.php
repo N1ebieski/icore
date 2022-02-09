@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,10 +26,10 @@ class CommentCache
     protected $cache;
 
     /**
-     * Config
-     * @var int
+     * [protected description]
+     * @var Config
      */
-    protected $minutes;
+    protected $config;
 
     /**
      * [private description]
@@ -43,46 +44,54 @@ class CommentCache
     protected $carbon;
 
     /**
-     * [__construct description]
-     * @param Comment        $comment        [description]
-     * @param Cache          $cache          [description]
-     * @param Config         $config         [description]
-     * @param Collect        $collect        [description]
-     * @param Carbon         $carbon         [description]
+     * [protected description]
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * Undocumented function
+     *
+     * @param Comment $comment
+     * @param Cache $cache
+     * @param Config $config
+     * @param Collect $collect
+     * @param Carbon $carbon
+     * @param Request $request
      */
     public function __construct(
         Comment $comment,
         Cache $cache,
         Config $config,
         Collect $collect,
-        Carbon $carbon
+        Carbon $carbon,
+        Request $request
     ) {
         $this->comment = $comment;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->collect = $collect;
         $this->carbon = $carbon;
-
-        $this->minutes = $config->get('cache.minutes');
+        $this->request = $request;
     }
 
     /**
      * [rememberRootsByFilter description]
      * @param  array               $filter [description]
-     * @param  int                  $page   [description]
      * @return LengthAwarePaginator         [description]
      */
-    public function rememberRootsByFilter(array $filter, int $page): LengthAwarePaginator
+    public function rememberRootsByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems()) {
-            $comments = $this->getRootsByFilter($page);
+            $comments = $this->getRootsByFilter($this->request->input('page'));
         }
 
         if (!isset($comments) || !$comments) {
             $comments = $this->comment->makeService()->getRootsByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems()) {
-                $this->putRootsByFilter($comments, $page);
+                $this->putRootsByFilter($comments, $this->request->input('page'));
             }
         }
 
@@ -91,33 +100,31 @@ class CommentCache
 
     /**
      * [getRootsByFilter description]
-     * @param  int                  $page [description]
      * @return LengthAwarePaginator|null       [description]
      */
-    public function getRootsByFilter(int $page): ?LengthAwarePaginator
+    public function getRootsByFilter(): ?LengthAwarePaginator
     {
         return $this->cache->tags([
             "comment.{$this->comment->poli}.{$this->comment->morph->id}"
         ])->get(
-            "{$this->comment->poli}.getRootsByFilter.{$this->comment->morph->id}.{$page}"
+            "{$this->comment->poli}.getRootsByFilter.{$this->comment->morph->id}.{$this->request->input('page')}"
         );
     }
 
     /**
      * [putRootsByFilter description]
      * @param  LengthAwarePaginator $comments [description]
-     * @param  int                  $page     [description]
      * @return bool                           [description]
      */
-    public function putRootsByFilter(LengthAwarePaginator $comments, int $page): bool
+    public function putRootsByFilter(LengthAwarePaginator $comments): bool
     {
         return $this->cache->tags([
             "comment.{$this->comment->poli}.{$this->comment->morph->id}"
         ])
         ->put(
-            "{$this->comment->poli}.getRootsByFilter.{$this->comment->morph->id}.{$page}",
+            "{$this->comment->poli}.getRootsByFilter.{$this->comment->morph->id}.{$this->request->input('page')}",
             $comments,
-            $this->carbon->now()->addMinutes($this->minutes)
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
         );
     }
 
@@ -133,7 +140,7 @@ class CommentCache
 
         return $this->cache->tags(['comments'])->remember(
             "comment.{$this->comment->poli}.getByComponent.{$json}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->comment->makeRepo()->getByComponent($component);
             }
@@ -149,7 +156,7 @@ class CommentCache
     {
         return $this->cache->tags(['comments'])->remember(
             "comment.countByModelTypeAndStatus",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->comment->makeRepo()->countByModelTypeAndStatus();
             }

@@ -24,6 +24,12 @@ class PageCache
 
     /**
      * [protected description]
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * [protected description]
      * @var Carbon
      */
     protected $carbon;
@@ -47,9 +53,8 @@ class PageCache
         $this->page = $page;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->carbon = $carbon;
-
-        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -63,7 +68,7 @@ class PageCache
 
         return $this->cache->tags(['pages'])->remember(
             "page.getWithChildrensByComponent.{$json}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithChildrensByComponent($component);
             }
@@ -81,7 +86,7 @@ class PageCache
 
         return $this->cache->tags(['pages'])->remember(
             "page.getWithRecursiveChildrensByComponent.{$json}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithRecursiveChildrensByComponent($component);
             }
@@ -97,7 +102,7 @@ class PageCache
     {
         return $this->cache->tags(['page.' . $slug])->remember(
             "page.firstBySlug.{$slug}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->page->makeRepo()->firstBySlug($slug);
             }
@@ -112,10 +117,9 @@ class PageCache
     {
         return $this->cache->tags(['page.' . $this->page->slug])->remember(
             "page.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                return $this->page->loadRecursiveChildrens()
-                    ->loadActiveSiblings();
+                return $this->page->loadRecursiveChildrens()->loadActiveSiblings();
             }
         );
     }

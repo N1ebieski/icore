@@ -24,15 +24,15 @@ class BanValueCache
 
     /**
      * [protected description]
-     * @var Carbon
+     * @var Config
      */
-    protected $carbon;
+    protected $config;
 
     /**
      * [protected description]
-     * @var int
+     * @var Carbon
      */
-    protected $minutes;
+    protected $carbon;
 
     /**
      * [private description]
@@ -58,10 +58,9 @@ class BanValueCache
         $this->banValue = $banValue;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->str = $str;
         $this->carbon = $carbon;
-
-        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -72,7 +71,7 @@ class BanValueCache
     {
         return $this->cache->tags('bans.ip')->remember(
             "banValue.getAllIpsAsString",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 $ips = $this->banValue->whereType('ip')->get();
 
@@ -89,7 +88,7 @@ class BanValueCache
     {
         return $this->cache->tags('bans.word')->remember(
             "banValue.getAllWordsAsString",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 $words = $this->banValue->whereType('word')->get();
 

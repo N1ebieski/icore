@@ -82,12 +82,7 @@ class PostController
     public function index(Post $post, IndexRequest $request, IndexFilter $filter): JsonResponse
     {
         return App::make(PostResource::class)
-            ->collection(
-                $post->makeCache()->rememberByFilter(
-                    $filter->all(),
-                    $request->input('page') ?? 1
-                )
-            )
+            ->collection($post->makeCache()->rememberByFilter($filter->all()))
             ->additional(['meta' => [
                 'filter' => Collect::make($filter->all())
                     ->replace([

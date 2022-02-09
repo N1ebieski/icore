@@ -26,7 +26,7 @@ class PostController
     public function index(Post $post, IndexRequest $request): HttpResponse
     {
         return Response::view('icore::web.post.index', [
-            'posts' => $post->makeCache()->rememberLatest($request->get('page') ?? 1),
+            'posts' => $post->makeCache()->rememberLatest(),
         ]);
     }
 
@@ -52,7 +52,7 @@ class PostController
             'comments' => (bool)$post->comment === true ?
                 $comment->setRelations(['morph' => $post])
                     ->makeCache()
-                    ->rememberRootsByFilter($filter->all(), $request->input('page') ?? 1)
+                    ->rememberRootsByFilter($filter->all())
                 : null,
             'filter' => $filter->all(),
             'catsAsArray' => [

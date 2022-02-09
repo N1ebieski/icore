@@ -2,10 +2,10 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Collection as Collect;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -23,6 +23,12 @@ class UserCache
      * @var Cache
      */
     protected $cache;
+
+    /**
+     * [protected description]
+     * @var Config
+     */
+    protected $config;
 
     /**
      * Config
@@ -45,9 +51,9 @@ class UserCache
     /**
      * Undocumented variable
      *
-     * @var Auth
+     * @var Request
      */
-    protected $auth;
+    protected $request;
 
     /**
      * Undocumented function
@@ -57,7 +63,7 @@ class UserCache
      * @param Config $config
      * @param Collect $collect
      * @param Carbon $carbon
-     * @param Auth $auth
+     * @param Request $request
      */
     public function __construct(
         User $user,
@@ -65,36 +71,34 @@ class UserCache
         Config $config,
         Collect $collect,
         Carbon $carbon,
-        Auth $auth
+        Request $request
     ) {
         $this->user = $user;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->collect = $collect;
         $this->carbon = $carbon;
-        $this->auth = $auth;
-
-        $this->minutes = $config->get('cache.minutes');
+        $this->request = $request;
     }
 
     /**
      * Undocumented function
      *
      * @param array $filter
-     * @param integer $page
      * @return LengthAwarePaginator
      */
-    public function rememberByFilter(array $filter, int $page): LengthAwarePaginator
+    public function rememberByFilter(array $filter): LengthAwarePaginator
     {
-        if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
-            $users = $this->getByFilter($page);
+        if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
+            $users = $this->getByFilter($this->request->input('page'));
         }
 
         if (!isset($users) || !$users) {
             $users = $this->user->makeRepo()->paginateByFilter($filter);
 
-            if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
-                $this->putByFilter($users, $page);
+            if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
+                $this->putByFilter($users, $this->request->input('page'));
             }
         }
 
@@ -103,30 +107,28 @@ class UserCache
 
     /**
      * [getByFilter description]
-     * @param  int                  $page [description]
      * @return LengthAwarePaginator|null       [description]
      */
-    public function getByFilter(int $page): ?LengthAwarePaginator
+    public function getByFilter(): ?LengthAwarePaginator
     {
         return $this->cache->tags(["users"])
             ->get(
-                "user.getByFilter.{$page}"
+                "user.getByFilter.{$this->request->input('page')}"
             );
     }
 
     /**
      * [putByFilter description]
      * @param  LengthAwarePaginator $users [description]
-     * @param  int                  $page     [description]
      * @return bool                           [description]
      */
-    public function putByFilter(LengthAwarePaginator $users, int $page): bool
+    public function putByFilter(LengthAwarePaginator $users): bool
     {
         return $this->cache->tags(["users"])
         ->put(
-            "user.getByFilter.{$page}",
+            "user.getByFilter.{$this->request->input('page')}",
             $users,
-            $this->carbon->now()->addMinutes($this->minutes)
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
         );
     }
 }

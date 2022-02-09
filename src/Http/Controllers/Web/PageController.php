@@ -44,10 +44,7 @@ class PageController
             'comments' => (bool)$page->comment === true ?
                 $comment->setRelations(['morph' => $page])
                     ->makeCache()
-                    ->rememberRootsByFilter(
-                        $filter->all(),
-                        $request->get('page') ?? 1
-                    )
+                    ->rememberRootsByFilter($filter->all())
                 : null,
             'filter' => $filter->all()
         ]);

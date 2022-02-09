@@ -2,11 +2,11 @@
 
 namespace N1ebieski\ICore\Cache;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -42,15 +42,9 @@ class PostCache
     /**
      * Undocumented variable
      *
-     * @var Auth
+     * @var Request
      */
-    protected $auth;
-
-    /**
-     * Configuration
-     * @var int
-     */
-    protected $minutes;
+    protected $request;
 
     /**
      * Undocumented function
@@ -60,7 +54,7 @@ class PostCache
      * @param Config $config
      * @param Carbon $carbon
      * @param Collect $collect
-     * @param Auth $auth
+     * @param Request $request
      */
     public function __construct(
         Post $post,
@@ -68,28 +62,26 @@ class PostCache
         Config $config,
         Carbon $carbon,
         Collect $collect,
-        Auth $auth
+        Request $request
     ) {
         $this->post = $post;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->carbon = $carbon;
         $this->collect = $collect;
-        $this->auth = $auth;
-
-        $this->minutes = $config->get('cache.minutes');
+        $this->request = $request;
     }
 
     /**
      * [rememberLatest description]
-     * @param  int    $page [description]
      * @return LengthAwarePaginator       [description]
      */
-    public function rememberLatest(int $page): LengthAwarePaginator
+    public function rememberLatest(): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "post.paginateLatest.{$page}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            "post.paginateLatest.{$this->request->input('page')}",
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->paginateLatest();
             }
@@ -104,7 +96,7 @@ class PostCache
     {
         return $this->cache->tags(['post.' . $this->post->slug])->remember(
             "post.firstPrevious.{$this->post->id}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->firstPrevious();
             }
@@ -119,7 +111,7 @@ class PostCache
     {
         return $this->cache->tags(['post.' . $this->post->slug])->remember(
             "post.firstNext.{$this->post->id}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->firstNext();
             }
@@ -134,7 +126,7 @@ class PostCache
     {
         return $this->cache->tags(['post.' . $this->post->slug])->remember(
             "post.getRelated.{$this->post->id}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->getRelated();
             }
@@ -150,7 +142,7 @@ class PostCache
     {
         return $this->cache->tags(['post.' . $slug])->remember(
             "post.firstBySlug.{$slug}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->post->makeRepo()->firstBySlug($slug);
             }
@@ -161,14 +153,13 @@ class PostCache
      * [rememeberArchiveByDate description]
      * @param  int                  $month [description]
      * @param  int                  $year  [description]
-     * @param  int                  $page  [description]
      * @return LengthAwarePaginator        [description]
      */
-    public function rememeberArchiveByDate(int $month, int $year, int $page): LengthAwarePaginator
+    public function rememeberArchiveByDate(int $month, int $year): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "post.paginateArchiveByDate.{$month}.{$year}.{$page}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            "post.paginateArchiveByDate.{$month}.{$year}.{$this->request->input('page')}",
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($month, $year) {
                 return $this->post->makeRepo()->paginateArchiveByDate([
                     'month' => $month,
@@ -186,7 +177,7 @@ class PostCache
     {
         return $this->cache->tags(['posts'])->remember(
             'post.getArchives',
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 $posts = $this->post->makeRepo()->getArchives();
 
@@ -209,7 +200,7 @@ class PostCache
     {
         return $this->cache->tags(['posts'])->remember(
             "post.countByStatus",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->countByStatus();
             }
@@ -225,7 +216,7 @@ class PostCache
     {
         return $this->cache->tags(['posts'])->remember(
             "post.lastActivity",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->getLastActivity();
             }
@@ -240,7 +231,7 @@ class PostCache
     {
         return $this->cache->tags(["posts"])->remember(
             "post.getLatestForHome",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->getLatestForHome();
             }
@@ -251,20 +242,19 @@ class PostCache
      * Undocumented function
      *
      * @param array $filter
-     * @param integer $page
      * @return LengthAwarePaginator
      */
-    public function rememberByFilter(array $filter, int $page): LengthAwarePaginator
+    public function rememberByFilter(array $filter): LengthAwarePaginator
     {
-        if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
-            $posts = $this->getByFilter($page);
+        if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
+            $posts = $this->getByFilter($this->request->input('page'));
         }
 
         if (!isset($posts) || !$posts) {
             $posts = $this->post->makeRepo()->paginateByFilter($filter);
 
-            if ($this->collect->make($filter)->isNullItems() && $this->auth->guest()) {
-                $this->putByFilter($posts, $page);
+            if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
+                $this->putByFilter($posts, $this->request->input('page'));
             }
         }
 
@@ -273,30 +263,28 @@ class PostCache
 
     /**
      * [getByFilter description]
-     * @param  int                  $page [description]
      * @return LengthAwarePaginator|null       [description]
      */
-    public function getByFilter(int $page): ?LengthAwarePaginator
+    public function getByFilter(): ?LengthAwarePaginator
     {
         return $this->cache->tags(["posts"])
             ->get(
-                "post.paginateByFilter.{$page}"
+                "post.paginateByFilter.{$this->request->input('page')}"
             );
     }
 
     /**
      * [putByFilter description]
      * @param  LengthAwarePaginator $posts [description]
-     * @param  int                  $page     [description]
      * @return bool                           [description]
      */
-    public function putByFilter(LengthAwarePaginator $posts, int $page): bool
+    public function putByFilter(LengthAwarePaginator $posts): bool
     {
         return $this->cache->tags(["posts"])
             ->put(
-                "post.paginateByFilter.{$page}",
+                "post.paginateByFilter.{$this->request->input('page')}",
                 $posts,
-                $this->carbon->now()->addMinutes($this->minutes)
+                $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
             );
     }
 }

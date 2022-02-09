@@ -23,17 +23,17 @@ class LinkCache
     protected $cache;
 
     /**
+     * Cache driver
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Undocumented variable
      *
      * @var Carbon
      */
     protected $carbon;
-
-    /**
-     * Configuration
-     * @var int
-     */
-    protected $minutes;
 
     /**
      * Undocumented function
@@ -48,9 +48,8 @@ class LinkCache
         $this->link = $link;
 
         $this->cache = $cache;
+        $this->config = $config;
         $this->carbon = $carbon;
-
-        $this->minutes = $config->get('cache.minutes');
     }
 
     /**
@@ -64,7 +63,7 @@ class LinkCache
 
         return $this->cache->tags(['links'])->remember(
             "link.getLinksByComponent.{$json}",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->link->makeRepo()->getLinksByComponent($component);
             }

@@ -70,10 +70,7 @@ class UserController
     {
         return App::make(UserResource::class)
             ->collection(
-                $user->makeCache()->rememberByFilter(
-                    $filter->all(),
-                    $request->input('page') ?? 1
-                )
+                $user->makeCache()->rememberByFilter($filter->all())
             )
             ->additional(['meta' => [
                 'filter' => Collect::make($filter->all())
