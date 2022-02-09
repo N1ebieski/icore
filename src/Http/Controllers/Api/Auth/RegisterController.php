@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Resources\User\UserResource;
-use N1ebieski\ICore\Http\Controllers\Auth\LoginController;
 use N1ebieski\ICore\Http\Controllers\Auth\RegisterController as BaseRegisterController;
 
 /**
@@ -19,7 +18,7 @@ class RegisterController
     /**
      * Undocumented variable
      *
-     * @var LoginController
+     * @var BaseRegisterController
      */
     protected $decorated;
 
