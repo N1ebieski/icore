@@ -70,7 +70,14 @@ class RegisterController
     {
         $this->decorated->register($request);
 
-        return App::make(UserResource::class, ['user' => Auth::user()])
+        /**
+         * @var \N1ebieski\ICore\Models\User
+         */
+        $user = $request->user();
+
+        Auth::logout();
+
+        return App::make(UserResource::class, ['user' => $user])
             ->response()
             ->setStatusCode(HttpResponse::HTTP_CREATED);
     }

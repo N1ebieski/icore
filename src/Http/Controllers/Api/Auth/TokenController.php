@@ -162,7 +162,7 @@ class TokenController
      */
     public function revoke(RevokeRequest $request): JsonResponse
     {
-       /**
+        /**
          * @var \N1ebieski\ICore\Models\User
          */
         $user = $request->user();
