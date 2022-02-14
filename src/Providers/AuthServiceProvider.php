@@ -39,7 +39,7 @@ class AuthServiceProvider extends ServiceProvider
                 & !strpos($ability, 'Default')) ? true : null;
         });
 
-        Sanctum::usePersonalAccessTokenModel(\N1ebieski\ICore\Models\PersonalAccessToken::class);
+        Sanctum::usePersonalAccessTokenModel(\N1ebieski\ICore\Models\Token\PersonalAccessToken::class);
         Sanctum::authenticateAccessTokensUsing(function ($token, $isValid) {
             return $isValid
                 && $token->expired_at->gte(Carbon::now())

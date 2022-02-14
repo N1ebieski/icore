@@ -1,7 +1,7 @@
 $(document).on('readyAndAjax.n1ebieski/icore/web/scripts/view/toasts@init', function () {
-    $('.toast').toast('show');
+    $('.toast').toast('show'); 
 
-    $('.toast').on('hidden.bs.toast', function () {
+    $(document).on('hidden.bs.toast', '.toast', function () {
         $(this).remove();
-    });    
+    });
 });

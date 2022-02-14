@@ -70,4 +70,24 @@ class UserRepo
     {
         return $this->user->where('email', $email)->first();
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $filter
+     * @return LengthAwarePaginator
+     */
+    public function paginateTokensByFilter(array $filter): LengthAwarePaginator
+    {
+        return $this->user->tokens()
+            ->whereJsonDoesntContain('abilities', 'refresh')
+            ->filterExcept($filter['except'])
+            ->filterSearch($filter['search'])
+            ->filterStatus($filter['status'])
+            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+                $query->filterOrderBySearch($filter['search']);
+            })
+            ->filterOrderBy($filter['orderby'])
+            ->filterPaginate($filter['paginate']);
+    }
 }

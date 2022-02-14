@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-<h1 class="h4 mb-4 border-bottom pb-2">
+<h1 class="h5 mb-4 border-bottom pb-2">
     <i class="fas fa-fw fa-user-edit"></i>
     <span>{{ trans('icore::profile.route.edit') }}:</span>
 </h1>

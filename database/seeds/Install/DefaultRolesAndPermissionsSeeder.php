@@ -96,7 +96,12 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'web.comments.suggest']);
         Permission::firstOrCreate(['name' => 'web.comments.edit']);
 
+        Permission::firstOrCreate(['name' => 'web.tokens.*']);
+        Permission::firstOrCreate(['name' => 'web.tokens.create']);
+        Permission::firstOrCreate(['name' => 'web.tokens.delete']);
+
         Permission::firstOrCreate(['name' => 'api.*']);
+        Permission::firstOrCreate(['name' => 'api.access']);
 
         Permission::firstOrCreate(['name' => 'api.users.*']);
         Permission::firstOrCreate(['name' => 'api.users.view']);
@@ -110,13 +115,29 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'api.posts.*']);
         Permission::firstOrCreate(['name' => 'api.posts.view']);
 
+        Permission::firstOrCreate(['name' => 'api.tokens.*']);
+        Permission::firstOrCreate(['name' => 'api.tokens.create']);
+        Permission::firstOrCreate(['name' => 'api.tokens.delete']);
+
         // create roles and assign created permissions
-        $role = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);
 
-        $role = Role::firstOrCreate(['name' => 'admin'])
-            ->givePermissionTo(['admin.*', 'web.*', 'api.*']);
+        $admin = Role::firstOrCreate(['name' => 'admin']);
 
-        $role = Role::firstOrCreate(['name' => 'user'])
-            ->givePermissionTo(['web.*']);
+        if ($admin->wasRecentlyCreated) {
+            $admin->givePermissionTo(['admin.*', 'web.*', 'api.*']);
+        }
+
+        $user = Role::firstOrCreate(['name' => 'user']);
+
+        if ($user->wasRecentlyCreated) {
+            $user->givePermissionTo(['web.*']);
+        }
+
+        $api = Role::firstOrCreate(['name' => 'api']);
+
+        if ($api->wasRecentlyCreated) {
+            $api->givePermissionTo(['api.*']);
+        }
     }
 }

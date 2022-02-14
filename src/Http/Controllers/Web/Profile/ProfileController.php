@@ -9,7 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Filters\Web\Profile\TokensFilter;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use N1ebieski\ICore\Http\Requests\Web\Profile\TokensRequest;
 use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Web\Profile\UpdateEmailRequest;
 
@@ -101,5 +103,26 @@ class ProfileController
             'success',
             Lang::get('icore::profile.success.update')
         );
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param TokensRequest $request
+     * @param TokensFilter $filter
+     * @return HttpResponse
+     */
+    public function tokens(TokensRequest $request, TokensFilter $filter): HttpResponse
+    {
+        /**
+         * @var \N1ebieski\ICore\Models\User
+         */
+        $user = $request->user();
+
+        return Response::view('icore::web.profile.tokens', [
+            'filter' => $filter->all(),
+            'tokens' => $user->makeRepo()->paginateTokensByFilter($filter->all()),
+            'paginate' => Config::get('database.paginate')
+        ]);
     }
 }
