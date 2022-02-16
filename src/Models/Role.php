@@ -54,7 +54,7 @@ class Role extends BaseRole
      */
     public function isDeleteNotDefault(): bool
     {
-        return !in_array($this->name, ['super-admin', 'admin', 'user']);
+        return !in_array($this->name, ['super-admin', 'admin', 'user', 'api']);
     }
 
     // Factories

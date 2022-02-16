@@ -1,34 +1,31 @@
-(function($) {
-    $.fn.serializeObject = function() {
-
+(function ($) {
+    $.fn.serializeObject = function () {
         var self = this,
             json = {},
             push_counters = {},
             patterns = {
-                "validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
-                "key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
-                "push":     /^$/,
-                "fixed":    /^\d+$/,
-                "named":    /^[a-zA-Z0-9_]+$/
+                validate: /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+                key: /[a-zA-Z0-9_]+|(?=\[\])/g,
+                push: /^$/,
+                fixed: /^\d+$/,
+                named: /^[a-zA-Z0-9_]+$/,
             };
 
-
-        this.build = function(base, key, value){
+        this.build = function (base, key, value) {
             base[key] = value;
             return base;
         };
 
-        this.push_counter = function(key){
-            if(push_counters[key] === undefined){
+        this.push_counter = function (key) {
+            if (push_counters[key] === undefined) {
                 push_counters[key] = 0;
             }
             return push_counters[key]++;
         };
 
-        $.each($(this).serializeArray(), function(){
-
+        $.each($(this).serializeArray(), function () {
             // Skip invalid keys
-            if(!patterns.validate.test(this.name)){
+            if (!patterns.validate.test(this.name)) {
                 return;
             }
 
@@ -37,23 +34,29 @@
                 merge = this.value,
                 reverse_key = this.name;
 
-            while((k = keys.pop()) !== undefined){
-
+            while ((k = keys.pop()) !== undefined) {
                 // Adjust reverse_key
-                reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+                reverse_key = reverse_key.replace(
+                    new RegExp("\\[" + k + "\\]$"),
+                    ""
+                );
 
                 // Push
-                if(k.match(patterns.push)){
-                    merge = self.build([], self.push_counter(reverse_key), merge);
+                if (k.match(patterns.push)) {
+                    merge = self.build(
+                        [],
+                        self.push_counter(reverse_key),
+                        merge
+                    );
                 }
 
                 // Fixed
-                else if(k.match(patterns.fixed)){
+                else if (k.match(patterns.fixed)) {
                     merge = self.build([], k, merge);
                 }
 
                 // Named
-                else if(k.match(patterns.named)){
+                else if (k.match(patterns.named)) {
                     merge = self.build({}, k, merge);
                 }
             }
@@ -66,12 +69,15 @@
 
     $.fn.autoHeight = function (options) {
         let options_ = {
-            autogrow: typeof options.autogrow === "boolean" ? options.autogrow : true
+            autogrow: typeof options.autogrow === "boolean" ? options.autogrow : true,
         };
 
         function autoHeight_(element) {
             if (element.offsetHeight < element.scrollHeight) {
-                return $(element).css({ 'height': 'auto' })
+                return $(element)
+                    .css({
+                        height: "auto",
+                    })
                     .height(element.scrollHeight);
             }
 
@@ -83,7 +89,7 @@
         }
 
         return this.each(function () {
-            autoHeight_(this).on('input', function () {
+            autoHeight_(this).on("input", function () {
                 autoHeight_(this);
             });
         });
@@ -91,19 +97,24 @@
 
     $.fn.removeClassStartingWith = function (begin) {
         this.removeClass(function (index, className) {
-            return (className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []).join(' ');
+            return (
+                className.match(new RegExp("\\b" + begin + "\\S+", "g")) || []
+            ).join(" ");
         });
     };
 
-    $.sanitize = function(html) {
-        let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
+    $.sanitize = function (html) {
+        let $output = $($.parseHTML("<div>" + html + "</div>", null, false));
 
-        $output.find('*').each(function(index, node) {
-            $.each(node.attributes, function() {
+        $output.find("*").each(function (index, node) {
+            $.each(node.attributes, function () {
                 let attrName = this.name;
                 let attrValue = this.value;
 
-                if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
+                if (
+                    attrName.indexOf("on") == 0 ||
+                    attrValue.indexOf("javascript:") == 0
+                ) {
                     $(node).removeAttr(attrName);
                 }
             });
@@ -113,38 +124,40 @@
     };
 
     $.getUrlParameter = function (url, name) {
-        return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+        return (RegExp(name + "=" + "(.+?)(&|$)").exec(url) || [, null])[1];
     };
 
     /**
      * Plugin refreshujący recaptche v2/invisible. Potrzebne w przypadku pobrania formularza przez ajax
      */
     $.fn.recaptcha = function () {
-        if (this.hasClass('g-recaptcha')) {
+        if (this.hasClass("g-recaptcha")) {
             let callback = null;
             let $button;
 
             // W przypadku recaptcha invisible musimy pobrać button i zdefiniować callback
-            if (this.data('size') === 'invisible') {
-                let $form = this.closest('form');
-                
-                if ($form.is('[id]')) {
-                    $button = $(`button[form="${$form.attr('id')}"]:last`);
+            if (this.data("size") === "invisible") {
+                let $form = this.closest("form");
+
+                if ($form.is("[id]")) {
+                    $button = $(`button[form="${$form.attr("id")}"]:last`);
                 }
 
-                if (typeof $button === 'undefined' || !$button.length) {
-                    $button = $form.find('button[class*="btn-primary"]:last, button[type="submit"]:last');
+                if (typeof $button === "undefined" || !$button.length) {
+                    $button = $form.find(
+                        'button[class*="btn-primary"]:last, button[type="submit"]:last'
+                    );
                 }
 
                 callback = function () {
-                    if ($button.attr('type') === 'submit') {
-                        $button.closest('form').submit();
+                    if ($button.attr("type") === "submit") {
+                        $button.closest("form").submit();
                     } else {
-                        $button.trigger('click');
+                        $button.trigger("click");
                     }
-                }
+                };
 
-                $button.addClass('captcha');
+                $button.addClass("captcha");
             }
 
             let widgetId;
@@ -152,18 +165,23 @@
             // przez ajax. Wówczas trzeba go na nowo zrenderować pod nowym widgetId
             if (!this.html().length) {
                 widgetId = grecaptcha.render(this[0], {
-                    'sitekey': this.attr('data-sitekey'),
-                    'callback': callback
-                });              
+                    sitekey: this.attr("data-sitekey"),
+                    callback: callback,
+                });
             }
             // W przeciwnym razie (tzn. jeśli token jest prawidłowo wygenerowany) pobieramy
             // jego widgetId
             else {
-                widgetId = parseInt(this.find('textarea[name="g-recaptcha-response"]').attr('id').match(/\d+$/), 10);
+                widgetId = parseInt(
+                    this.find('textarea[name="g-recaptcha-response"]')
+                    .attr("id")
+                    .match(/\d+$/),
+                    10
+                );
             }
 
-            if (typeof $button !== 'undefined' && $button.length) {
-                $button.attr('data-widgetid', widgetId);
+            if (typeof $button !== "undefined" && $button.length) {
+                $button.attr("data-widgetid", widgetId);
             }
 
             // Resetowanie tokena. Konieczne w przypadku gdy formularz został wypełniony
@@ -176,34 +194,48 @@
     };
 
     $.fn.captcha = function () {
-        if (this.hasClass('logic_captcha')) {
-            this.find('input[name="captcha"]').val('');
-            this.find('.reload_captcha_base64').trigger('click');
+        if (this.hasClass("logic_captcha")) {
+            this.find('input[name="captcha"]').val("");
+            this.find(".reload_captcha_base64").trigger("click");
         }
     };
 
-    $.fn.loader = function (action, type = 'spinner-border') {
-        if (action == 'show') {
-            $(this).parent().find('button').prop('disabled', true);
-            $(this).find('i').hide();
+    $.fn.loader = function (action, type = "spinner-border") {
+        if (action == "show") {
+            $(this).parent().find("button").prop("disabled", true);
+            $(this).find("i").hide();
 
-            let color = $(this).is('[class*="btn-outline-"]') && (typeof $.cookie('theme_toggle') === 'undefined' || $.cookie('theme_toggle') === 'light') ?
-                'text-dark' : 'text-light';
+            let color =
+                $(this).is('[class*="btn-outline-"]') &&
+                (typeof $.cookie("theme_toggle") === "undefined" ||
+                    $.cookie("theme_toggle") === "light") ?
+                "text-dark" :
+                "text-light";
 
-            $(this).prepend($.sanitize('<span class="' + type + ' ' + type + '-sm ' + color + '" role="status" aria-hidden="true"></span>'));
+            $(this).prepend(
+                $.sanitize(
+                    '<span class="' +
+                    type +
+                    " " +
+                    type +
+                    "-sm " +
+                    color +
+                    '" role="status" aria-hidden="true"></span>'
+                )
+            );
         }
 
-        if (action == 'hide') {
-            $(this).parent().find('button').prop('disabled', false);
-            $(this).find('i').show();
+        if (action == "hide") {
+            $(this).parent().find("button").prop("disabled", false);
+            $(this).find("i").show();
             $(this).find('[role="status"]').remove();
         }
     };
 
     $.fn.addLoader = function (options = null) {
         options = {
-            type: typeof options === 'string' ? options : 'spinner-border',
-            class: options?.class || 'loader-absolute'
+            type: typeof options === "string" ? options : "spinner-border",
+            class: options?.class || "loader-absolute",
         };
 
         return this.append($.sanitize(`
@@ -217,8 +249,8 @@
 
     $.fn.addAlert = function (options) {
         options = {
-            message: typeof options === 'string' ? options : options.message,
-            type: options.type || 'danger'
+            message: typeof options === "string" ? options : options.message,
+            type: options.type || "danger",
         };
 
         return this.prepend($.sanitize(`
@@ -235,12 +267,12 @@
             </div>
         `));
     };
-        
+
     $.fn.addToast = function (options) {
         options = {
-            title: typeof options === 'string' ? options : options.title,
-            type: options.type || 'success',
-            message: options.message || ''
+            title: typeof options === "string" ? options : options.title,
+            type: options.type || "success",
+            message: options.message || "",
         };
 
         let $toast = $($.sanitize(`
@@ -268,7 +300,7 @@
         `));
 
         if (options.message.length) {
-            $toast.find('.toast').append($.sanitize(`
+            $toast.find(".toast").append($.sanitize(`
                 <div class="toast-body bg-light text-dark">
                     ${options.message}
                 </div>
@@ -280,8 +312,8 @@
 
     $.fn.addError = function (options) {
         options = {
-            message: typeof options === 'string' ? options : options.message,
-            id: options.id || null
+            message: typeof options === "string" ? options : options.message,
+            id: options.id || null,
         };
 
         let $error = $($.sanitize(`
@@ -291,7 +323,7 @@
         `));
 
         if (options.id !== null) {
-            $error.find('.invalid-feedback').attr('id', options.id);
+            $error.find(".invalid-feedback").attr("id", options.id);
         }
 
         return this.append($error.html());
@@ -299,20 +331,71 @@
 
     $.fn.addMessage = function (options) {
         options = {
-            message: typeof options === 'string' ? options : options.message,
-            id: options.id || null
+            message: typeof options === "string" ? options : options.message,
+            id: options.id || null,
         };
 
         let $message = $($.sanitize(`
             <div>
-            <span class="valid-feedback d-block font-weight-bold">${options.message}</span>
+                <span class="valid-feedback d-block font-weight-bold">${options.message}</span>
             </div>
         `));
 
         if (options.id !== null) {
-            $message.find('.valid-feedback').attr('id', options.id);
+            $message.find(".valid-feedback").attr("id", options.id);
         }
 
         return this.append($message.html());
+    };
+
+    $.fn.clipboard = function (options) {
+        if (options.lang === "pl") {
+            $.fn.clipboard.defaults.translations = {
+                title: "Skopiuj do schowka",
+                success: "Skopiowano do schowka",
+            };
+        }
+
+        options = $.extend({
+            lang: "en",
+        }, $.fn.clipboard.defaults, options);
+
+        this.append($.sanitize(`
+            <button
+                style="position:absolute;right:0;top:0;"
+                class="btn p-0 m-0 copy-to-clipboard" 
+                type="submit"
+            >
+                <i 
+                    data-toggle="tooltip" 
+                    data-placement="top"
+                    title="${options.translations.title}" 
+                    class="fas fa-copy"
+                ></i>
+            </button>                
+        `));
+
+        $(document).trigger('readyAndAjax.*/bootstrap_tooltips@init');
+
+        this.on("click", ".copy-to-clipboard", function (e) {
+            e.preventDefault();
+
+            navigator.clipboard.writeText($(this).parent().text().trim());
+
+            $("body").addToast({
+                title: options.translations.success,
+                type: "success",
+            });
+
+            $(document).trigger('readyAndAjax.*/toasts@init');
+        });
+
+        return this;
+    };
+    $.fn.clipboard.defaults = {
+        translations: {
+            title: "Copy to clipboard",
+            success: "Copied to the clipboard",
+        },
     };
 })(jQuery);

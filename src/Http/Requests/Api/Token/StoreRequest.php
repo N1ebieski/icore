@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Http\Requests\Web\Token;
+namespace N1ebieski\ICore\Http\Requests\Api\Token;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -80,9 +80,32 @@ class StoreRequest extends FormRequest
             'abilities' => 'bail|required|array',
             'abilities.*' => [
                 'bail',
+                'required',
                 'string',
                 'distinct',
                 Rule::in($this->token::ABILITIES)
+            ]
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'example' => 'Access'
+            ],
+            'expiration' => [
+                'description' => 'Token expiration time on days. If null is unlimited.',
+                'example' => 7
+            ],
+            'abilities.*' => [
+                'description' => 'Array containing scopes. Wildcard supported.',
+                'example' => ['api.*']
             ]
         ];
     }

@@ -41,6 +41,23 @@ class PermissionRepo
     }
 
     /**
+     * [getUserWithRole description]
+     * @param  int        $id [description]
+     * @return Collection     [description]
+     */
+    public function getApiWithRole(int $id): Collection
+    {
+        return $this->permission->with([
+                'roles' => function ($query) use ($id) {
+                    $query->where('id', $id);
+                }
+            ])
+            ->where('name', 'like', 'api.%')
+            ->orderBy('name', 'asc')
+            ->get();
+    }
+
+    /**
      * [getWithRole description]
      * @param  int        $id [description]
      * @return Collection     [description]

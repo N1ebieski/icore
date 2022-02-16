@@ -3,7 +3,7 @@ $(document).on(
     'select#expiration',
     function () {
         if ($(this).val() === 'custom') {
-            $(this).replaceWith('<input type="number" id="expiration" name="expiration" class="form-control">');
+            $(this).replaceWith(`<input type="number" id="expiration" name="expiration" class="form-control">`);
         }
     }
 );

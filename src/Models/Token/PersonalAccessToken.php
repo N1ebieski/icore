@@ -3,7 +3,9 @@
 namespace N1ebieski\ICore\Models\Token;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Services\TokenService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +16,7 @@ class PersonalAccessToken extends BasePersonalAccessToken
 {
     use Filterable;
     use Carbonable;
+    use WildcardAbilities;
     use FullTextSearchable;
 
     /**
@@ -98,5 +101,16 @@ class PersonalAccessToken extends BasePersonalAccessToken
     public function getExpiredAtDiffAttribute(): string
     {
         return Carbon::parse($this->expired_at)->diffForHumans(['parts' => 2]);
+    }
+
+    // Factories
+
+    /**
+     * [makeService description]
+     * @return TokenService [description]
+     */
+    public function makeService()
+    {
+        return App::make(TokenService::class, ['token' => $this]);
     }
 }

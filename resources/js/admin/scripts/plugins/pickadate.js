@@ -1,10 +1,11 @@
 $(document).on('ready.n1ebieski/icore/admin/scripts/plugins/pickadate@init', function () {
+    console.log($.fn.pickadate);
     if ($('.datepicker, .timepicker').data('lang') === 'pl') {
         $.extend($.fn.pickadate.defaults, {
-            monthsFull: [ 'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień' ],
-            monthsShort: [ 'sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru' ],
-            weekdaysFull: [ 'niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota' ],
-            weekdaysShort: [ 'niedz.', 'pn.', 'wt.', 'śr.', 'cz.', 'pt.', 'sob.' ],
+            monthsFull: ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'],
+            monthsShort: ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'],
+            weekdaysFull: ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'],
+            weekdaysShort: ['niedz.', 'pn.', 'wt.', 'śr.', 'cz.', 'pt.', 'sob.'],
             today: 'Dzisiaj',
             clear: 'Usuń',
             close: 'Zamknij',
@@ -12,7 +13,7 @@ $(document).on('ready.n1ebieski/icore/admin/scripts/plugins/pickadate@init', fun
             format: 'd mmmm yyyy',
             formatSubmit: 'yyyy/mm/dd'
         });
-        
+
         $.extend($.fn.pickatime.defaults, {
             clear: 'usunąć'
         });

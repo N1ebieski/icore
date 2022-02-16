@@ -18,7 +18,7 @@ class UserPolicy
      */
     public function view(User $authUser, User $user)
     {
-        return $authUser->can('admin.users.view')        
+        return $authUser->can('admin.users.view')
             || $authUser->id === $user->id;
     }
 

@@ -58,6 +58,7 @@ class IndexRequest extends FormRequest
             ],
             'filter.except.*' => [
                 'description' => 'Array containing IDs, excluding records from the list.',
+                'example' => []
             ],
             'filter.search' => [
                 'description' => 'Search by keyword.',

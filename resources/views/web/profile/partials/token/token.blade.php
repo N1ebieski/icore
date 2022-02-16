@@ -6,7 +6,7 @@
     <div class="col my-auto d-flex justify-content-between">
         <ul class="list-unstyled mb-0 pb-0">
             <li>{{ $token->name }}</li>
-            <li>{{ implode(',', $token->abilities) }}</li>
+            <li>{{ implode(', ', $token->abilities) }}</li>
             <li>
                 <small>
                     {{ trans('icore::tokens.expired_at') }}:

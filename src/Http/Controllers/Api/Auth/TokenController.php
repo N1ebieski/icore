@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
-use N1ebieski\ICore\Services\TokenService;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Api\Auth\RevokeRequest;
 use N1ebieski\ICore\Http\Controllers\Auth\LoginController;
 use N1ebieski\ICore\Http\Requests\Api\Auth\RefreshRequest;
+use N1ebieski\ICore\Models\Token\PersonalAccessToken as Token;
 
 /**
  * @group Authentication
@@ -35,23 +35,13 @@ class TokenController
     protected $decorated;
 
     /**
-     * Undocumented variable
-     *
-     * @var TokenService
-     */
-    protected $tokenService;
-
-    /**
      * Undocumented function
      *
      * @param LoginController $decorated
-     * @param TokenService $tokenService
      */
-    public function __construct(LoginController $decorated, TokenService $tokenService)
+    public function __construct(LoginController $decorated)
     {
         $this->decorated = $decorated;
-
-        $this->tokenService = $tokenService;
     }
 
     /**
@@ -75,17 +65,18 @@ class TokenController
      * @responseField access_token string
      * @responseField refresh_token string (only if remember param was true)
      *
+     * @param Token $token
      * @param Request $request
      * @return JsonResponse
      */
-    public function token(Request $request): JsonResponse
+    public function token(Token $token, Request $request): JsonResponse
     {
         // API for token guard is stateless but we use validate login logic from laravel/ui
         $request->setLaravelSession(optional());
 
         $this->decorated->login($request);
 
-        [$accessToken, $refreshToken] = $this->tokenService->create([
+        [$accessToken, $refreshToken] = $token->makeService()->create([
             'name' => 'login',
             'abilities' => ['api.*'],
             'expiration' => Config::get('sanctum.access_expiration'),
@@ -120,19 +111,20 @@ class TokenController
      * @responseField access_token string
      * @responseField refresh_token string
      *
+     * @param Token $token
      * @param RefreshRequest $request
      * @return JsonResponse
      */
-    public function refresh(RefreshRequest $request): JsonResponse
+    public function refresh(Token $token, RefreshRequest $request): JsonResponse
     {
         /**
          * @var \N1ebieski\ICore\Models\User
          */
         $user = $request->user();
 
-        $this->tokenService->setToken($user->currentAccessToken())->delete();
+        $user->currentAccessToken()->makeService()->delete();
 
-        [$accessToken, $refreshToken] = $this->tokenService->create([
+        [$accessToken, $refreshToken] = $token->makeService()->create([
             'name' => 'login',
             'abilities' => ['api.*'],
             'expiration' => Config::get('sanctum.access_expiration'),
@@ -167,7 +159,7 @@ class TokenController
          */
         $user = $request->user();
 
-        $this->tokenService->setToken($user->currentAccessToken())->delete();
+        $user->currentAccessToken()->makeService()->delete();
 
         return Response::json('', HttpResponse::HTTP_NO_CONTENT);
     }
