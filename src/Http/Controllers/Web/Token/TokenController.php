@@ -21,7 +21,7 @@ class TokenController
      */
     public function create(Token $token): JsonResponse
     {
-        $abilities = Collect::make($token::ABILITIES);
+        $abilities = Collect::make($token::$abilities);
 
         return Response::json([
             'view' => View::make('icore::web.token.create', [

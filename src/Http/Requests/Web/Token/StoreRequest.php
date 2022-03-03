@@ -82,7 +82,7 @@ class StoreRequest extends FormRequest
                 'bail',
                 'string',
                 'distinct',
-                Rule::in($this->token::ABILITIES)
+                Rule::in($this->token::$abilities)
             ]
         ];
     }

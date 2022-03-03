@@ -38,7 +38,7 @@ class PersonalAccessToken extends BasePersonalAccessToken
     /**
      * @var array
      */
-    public const ABILITIES = [
+    public static $abilities = [
         'api.*',
         'api.tokens.*',
         'api.tokens.create',
