@@ -146,9 +146,6 @@ class TokenController
      *
      * @response 204 scenario=success
      *
-     * @responseField access_token string
-     * @responseField refresh_token string
-     *
      * @param RevokeRequest $request
      * @return JsonResponse
      */

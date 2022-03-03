@@ -3,12 +3,8 @@
 namespace N1ebieski\ICore\Http\Controllers\Api\Token;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Http\Requests\Api\Token\StoreRequest;
 use N1ebieski\ICore\Models\Token\PersonalAccessToken as Token;
 
@@ -37,6 +33,8 @@ class TokenController
      *
      * Create personal access token.
      *
+     * <aside class="notice">Available only to users with permissions: api.access and api.tokens.create.</aside>
+     *
      * @authenticated
      *
      * @response 201 scenario=success {
@@ -58,15 +56,23 @@ class TokenController
         ], HttpResponse::HTTP_CREATED);
     }
 
-    // /**
-    //  * Undocumented function
-    //  *
-    //  * @return JsonResponse
-    //  */
-    // public function destroy(Token $token): JsonResponse
-    // {
-    //     $token->makeService()->delete();
+    /**
+     * Delete token
+     *
+     * Delete personal access token.
+     *
+     * <aside class="notice">Available only to users with permissions: api.access and api.tokens.delete.</aside>
+     *
+     * @authenticated
+     *
+     * @urlParam token integer required The token ID. No-example
+     *
+     * @return JsonResponse
+     */
+    public function destroy(Token $token): JsonResponse
+    {
+        $token->makeService()->delete();
 
-    //     return Response::json([], HttpResponse::HTTP_NO_CONTENT);
-    // }
+        return Response::json([], HttpResponse::HTTP_NO_CONTENT);
+    }
 }

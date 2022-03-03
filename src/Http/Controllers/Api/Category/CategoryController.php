@@ -17,7 +17,7 @@ use N1ebieski\ICore\Http\Controllers\Api\Category\Polymorphic;
 class CategoryController implements Polymorphic
 {
     /**
-     * Index of categories
+     * Index of all categories
      *
      * @bodyParam filter.status int Must be one of 1 or 0 (available only for admin.categories.view). Example: 1
      *

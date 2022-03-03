@@ -58,20 +58,30 @@ class PostResource extends JsonResource
             'created_at_diff' => $this->created_at_diff,
             'updated_at' => $this->updated_at,
             'updated_at_diff' => $this->updated_at_diff,
-            'links' => [
-                $this->mergeWhen(Config::get('icore.routes.web.enabled') === true, [
-                    'web' => URL::route('web.post.show', [$this->slug])
-                ]),
-                $this->mergeWhen(Config::get('icore.routes.admin.enabled') === true, [
-                    'admin' => URL::route('admin.post.index', ['filter[search]' => 'id:"' . $this->id . '"'])
-                ])
-            ],
             'user' => $this->when(
                 $this->relationLoaded('user'),
                 function () {
                     return App::make(UserResource::class, ['user' => $this->user]);
                 }
-            )
+            ),
+            'links' => [
+                $this->mergeWhen(
+                    Config::get('icore.routes.web.enabled') === true && $this->status === Post::ACTIVE,
+                    function () {
+                        return [
+                            'web' => URL::route('web.post.show', [$this->slug])
+                        ];
+                    }
+                ),
+                $this->mergeWhen(
+                    Config::get('icore.routes.admin.enabled') === true && optional($request->user())->can('admin.posts.view'),
+                    function () {
+                        return [
+                            'admin' => URL::route('admin.post.index', ['filter[search]' => 'id:"' . $this->id . '"'])
+                        ];
+                    }
+                )
+            ]
         ];
     }
 }

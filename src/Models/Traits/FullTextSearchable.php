@@ -109,7 +109,7 @@ trait FullTextSearchable
         foreach ($matches as $match) {
             if (strlen($match) >= 3) {
                 $match = $this->isContainsSymbol($match) ?
-                    "' . $match . '"
+                    '"' . $match . '"'
                     : $match;
 
                 if ($match === end($matches)) {
