@@ -38,11 +38,11 @@ class PostController
     /**
      * Index of posts
      *
-     * <aside class="notice">Available only to users with permission: api.posts.view.</aside>
+     * <aside class="notice">Available only to users with permission: api.access and api.posts.view.</aside>
      *
      * @authenticated
      *
-     * @bodyParam filter.status int Must be one of 1, 0 (available only for admin.categories.view) or 2 (available only for admin.categories.view). Example: 1
+     * @bodyParam filter.status int Must be one of 1 or (available only for admin.categories.view) 0, 2. Example: 1
      *
      * @responseField id int
      * @responseField title string
@@ -67,8 +67,8 @@ class PostController
      * @responseField created_at_diff string
      * @responseField updated_at string
      * @responseField updated_at_diff string
-     * @responseField links object Contains links to resources on the website and in the administration panel.
      * @responseField user object Contains relationship User author.
+     * @responseField links object Contains links to resources on the website and in the administration panel.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Post\PostResource
      * @apiResourceModel N1ebieski\ICore\Models\Post states=active,publish,with_user with=user

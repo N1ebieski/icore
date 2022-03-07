@@ -38,7 +38,7 @@ class UserController
     /**
      * Index of users
      *
-     * <aside class="notice">Available only to users with permissions: api.users.view and admin.users.view.</aside>
+     * <aside class="notice">Available only to users with permissions: api.access, api.users.view and admin.users.view.</aside>
      *
      * @authenticated
      *

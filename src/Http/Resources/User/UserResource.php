@@ -49,12 +49,11 @@ class UserResource extends JsonResource
                 'value' => $this->status,
                 'label' => Lang::get("icore::users.status.{$this->status}")
             ],
-            'marketing' => $this->when(
+            $this->mergeWhen(
                 optional($request->user())->can('view', $this->resource),
                 function () {
                     return [
-                        'value' => $this->marketing,
-                        'label' => Lang::get("icore::users.status.{$this->marketing}")
+                        'marketing' => $this->marketing
                     ];
                 }
             ),

@@ -39,6 +39,6 @@ trait HasAuthor
      */
     protected function findAuthor(int $id): User
     {
-        return User::find($id, ['id', 'name']);
+        return User::find($id);
     }
 }

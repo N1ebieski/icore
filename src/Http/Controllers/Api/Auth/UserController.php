@@ -26,6 +26,8 @@ class UserController
      *
      * Show authenticated User resource
      *
+     * <aside class="notice">Available only to users with permission: api.access.</aside>
+     *
      * @authenticated
      *
      * @responseField id int

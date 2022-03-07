@@ -19,6 +19,33 @@ class PersonalAccessToken extends BasePersonalAccessToken
     use WildcardAbilities;
     use FullTextSearchable;
 
+    // Configration
+
+    /**
+     * @var array
+     */
+    public static $abilities = [
+        'api.*',
+        'api.users.*',
+        'api.users.view',
+        'api.categories.*',
+        'api.categories.view',
+        'api.tags.*',
+        'api.tags.view',
+        'api.posts.*',
+        'api.posts.view',
+        'api.tokens.*',
+        'api.tokens.create',
+        'api.tokens.delete'
+    ];
+
+    /**
+     * The columns of the full text index
+     *
+     * @var array
+     */
+    protected $searchable = ['name'];
+
     /**
      * Create a new Eloquent model instance.
      *
@@ -32,25 +59,6 @@ class PersonalAccessToken extends BasePersonalAccessToken
 
         parent::__construct($attributes);
     }
-
-    // Configration
-
-    /**
-     * @var array
-     */
-    public static $abilities = [
-        'api.*',
-        'api.tokens.*',
-        'api.tokens.create',
-        'api.tokens.delete'
-    ];
-
-    /**
-     * The columns of the full text index
-     *
-     * @var array
-     */
-    protected $searchable = ['name'];
 
     // Relations
 
