@@ -62,11 +62,8 @@ class PostController
      * @responseField comment boolean Determines whether comments are allowed.
      * @responseField first_image string Address of the first image in the post for META.
      * @responseField published_at string
-     * @responseField published_at_diff string
      * @responseField created_at string
-     * @responseField created_at_diff string
      * @responseField updated_at string
-     * @responseField updated_at_diff string
      * @responseField user object Contains relationship User author.
      * @responseField links object Contains links to resources on the website and in the administration panel.
      * @responseField meta object Paging, filtering and sorting information.

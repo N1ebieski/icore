@@ -31,23 +31,14 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            $this->mergeWhen(
-                $this->depth === null,
-                function () {
-                    return [
-                        'icon' => $this->icon,
-                        'status' => [
-                            'value' => $this->status,
-                            'label' => Lang::get("icore::filter.status.{$this->status}")
-                        ],
-                        'real_depth' => $this->real_depth,
-                        'created_at' => $this->created_at,
-                        'created_at_diff' => $this->created_at_diff,
-                        'updated_at' => $this->updated_at,
-                        'updated_at_diff' => $this->updated_at_diff
-                    ];
-                }
-            ),
+            'icon' => $this->icon,
+            'status' => [
+                'value' => $this->status,
+                'label' => Lang::get("icore::filter.status.{$this->status}")
+            ],
+            'real_depth' => $this->real_depth,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'ancestors' => App::make(CategoryResource::class)->collection($this->whenLoaded('ancestors'))
         ];
     }

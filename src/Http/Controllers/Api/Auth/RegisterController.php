@@ -54,9 +54,7 @@ class RegisterController
      * @responseField status object Contains int value and string label
      * @responseField marketing object Email marketing consent, contains int value and string label (available only for admin.users.view or owner).
      * @responseField created_at string
-     * @responseField created_at_diff string
      * @responseField updated_at string
-     * @responseField updated_at_diff string
      * @responseField roles object[] Contains relationships Roles.
      * @responseField socialites object[] Contains relationships Socialites (available only for admin.users.view or owner).
      *

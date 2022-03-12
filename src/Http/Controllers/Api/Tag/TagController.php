@@ -39,9 +39,7 @@ class TagController
      * @responseField name string
      * @responseField slug string
      * @responseField created_at string
-     * @responseField created_at_diff string
      * @responseField updated_at string
-     * @responseField updated_at_diff string
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Tag\TagResource
      * @apiResourceModel N1ebieski\ICore\Models\Tag\Tag

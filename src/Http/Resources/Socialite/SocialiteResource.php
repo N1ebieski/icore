@@ -29,19 +29,7 @@ class SocialiteResource extends JsonResource
             'id' => $this->id,
             'provider_name' => $this->provider_name,
             'created_at' => $this->created_at,
-            'created_at_diff' => $this->created_at_diff,
-            'updated_at' => $this->when(
-                optional($request->user())->can('admin.users.view'),
-                function () {
-                    return $this->updated_at;
-                }
-            ),
-            'updated_at_diff' => $this->when(
-                optional($request->user())->can('admin.users.view'),
-                function () {
-                    return $this->updated_at_diff;
-                }
-            )
+            'updated_at' => $this->updated_at,
         ];
     }
 }

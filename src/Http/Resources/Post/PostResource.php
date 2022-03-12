@@ -53,15 +53,14 @@ class PostResource extends JsonResource
             'comment' => (bool)$this->comment,
             'first_image' => $this->first_image,
             'published_at' => $this->published_at,
-            'published_at_diff' => $this->published_at_diff,
             'created_at' => $this->created_at,
-            'created_at_diff' => $this->created_at_diff,
             'updated_at' => $this->updated_at,
-            'updated_at_diff' => $this->updated_at_diff,
-            'user' => $this->when(
+            $this->mergeWhen(
                 $this->relationLoaded('user'),
                 function () {
-                    return App::make(UserResource::class, ['user' => $this->user]);
+                    return [
+                        'user' => App::make(UserResource::class, ['user' => $this->user->setAttribute('depth', 1)])
+                    ];
                 }
             ),
             'links' => [
