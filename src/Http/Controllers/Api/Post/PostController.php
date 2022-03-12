@@ -38,7 +38,7 @@ class PostController
     /**
      * Index of posts
      *
-     * <aside class="notice">Available only to users with permission: api.access and api.posts.view.</aside>
+     * <aside class="notice">Available only to users with permissions: api.access and api.posts.view.</aside>
      *
      * @authenticated
      *

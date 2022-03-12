@@ -54,10 +54,10 @@ class UserController
      * @responseField updated_at string
      * @responseField roles object[] Contains relationship Roles.
      * @responseField socialites object[] Contains relationship Socialites (available only for admin.users.view or owner).
+     * @responseField meta object Paging, filtering and sorting information.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\User\UserResource
      * @apiResourceModel N1ebieski\ICore\Models\User states=active,user with=roles
-     * @apiResourceAdditional meta="Paging, filtering and sorting information"
      *
      * @param User $user
      * @param IndexRequest $request

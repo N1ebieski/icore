@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Http\Requests\Traits;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Rules\RecaptchaV2Rule;
+use N1ebieski\ICore\Rules\RecaptchaInvisibleRule;
 use N1ebieski\LogicCaptcha\Rules\LogicCaptchaRule;
 
 trait CaptchaExtended
@@ -20,7 +21,7 @@ trait CaptchaExtended
                 return [
                     'g-recaptcha-response' => [
                         'required',
-                        App::make(RecaptchaV2Rule::class),
+                        App::make(RecaptchaInvisibleRule::class),
                         'no_js_validation'
                     ]
                 ];

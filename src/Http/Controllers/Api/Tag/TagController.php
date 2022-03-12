@@ -40,10 +40,10 @@ class TagController
      * @responseField slug string
      * @responseField created_at string
      * @responseField updated_at string
+     * @responseField meta object Paging, filtering and sorting information.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Tag\TagResource
      * @apiResourceModel N1ebieski\ICore\Models\Tag\Tag
-     * @apiResourceAdditional meta="Paging, filtering and sorting information"
      *
      * @param Tag $tag
      * @param IndexRequest $request

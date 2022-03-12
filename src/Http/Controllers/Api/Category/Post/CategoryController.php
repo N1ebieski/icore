@@ -63,10 +63,10 @@ class CategoryController implements Polymorphic
      * @responseField created_at string
      * @responseField updated_at string
      * @responseField ancestors object[] Contains relationship Category ancestors (parent and higher).
+     * @responseField meta object Paging, filtering and sorting information.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Category\CategoryResource
      * @apiResourceModel N1ebieski\ICore\Models\Category\Post\Category states=active,sentence
-     * @apiResourceAdditional meta="Paging, filtering and sorting information"
      *
      * @param  Category      $category      [description]
      * @param  IndexRequest  $request       [description]
