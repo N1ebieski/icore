@@ -51,7 +51,7 @@ class PostController
      * @responseField content string Post without HTML formatting.
      * @responseField content_html string Post with HTML formatting.
      * @responseField no_more_content_html string Post with HTML formatting without "show more" button.
-     * @responseField less_content_html string Post with HTML formatting for the "show more" button.
+     * @responseField less_content_html string Post with HTML formatting with "show more" button.
      * @responseField seo_title string Title for SEO.
      * @responseField meta_title string Title for META.
      * @responseField seo_desc string Description for SEO.
@@ -69,10 +69,10 @@ class PostController
      * @responseField updated_at_diff string
      * @responseField user object Contains relationship User author.
      * @responseField links object Contains links to resources on the website and in the administration panel.
+     * @responseField meta object Paging, filtering and sorting information.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Post\PostResource
      * @apiResourceModel N1ebieski\ICore\Models\Post states=active,publish,with_user with=user
-     * @apiResourceAdditional meta="Paging, filtering and sorting information"
      *
      * @param Post $post
      * @param IndexRequest $request

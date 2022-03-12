@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 /**
@@ -52,7 +51,7 @@ try {
 } catch (e) {}
 
 $.ajaxSetup({
-    'headers':{
+    'headers': {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });

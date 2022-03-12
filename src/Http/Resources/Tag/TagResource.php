@@ -17,7 +17,6 @@ class TagResource extends JsonResource
         parent::__construct($tag);
     }
 
-
     /**
      * Transform the resource into an array.
      *
@@ -30,10 +29,17 @@ class TagResource extends JsonResource
             'id' => $this->tag_id,
             'name' => $this->name,
             'slug' => $this->normalized,
-            'created_at' => $this->created_at,
-            'created_at_diff' => $this->created_at_diff,
-            'updated_at' => $this->updated_at,
-            'updated_at_diff' => $this->updated_at_diff
+            $this->mergeWhen(
+                $this->depth === 9,
+                function () {
+                    return [
+                        'created_at' => $this->created_at,
+                        'created_at_diff' => $this->created_at_diff,
+                        'updated_at' => $this->updated_at,
+                        'updated_at_diff' => $this->updated_at_diff
+                    ];
+                }
+            )
         ];
     }
 }

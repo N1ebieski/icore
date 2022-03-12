@@ -1,5 +1,4 @@
 $(document).on('ready.n1ebieski/icore/admin/scripts/plugins/pickadate@init', function () {
-    console.log($.fn.pickadate);
     if ($('.datepicker, .timepicker').data('lang') === 'pl') {
         $.extend($.fn.pickadate.defaults, {
             monthsFull: ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'],

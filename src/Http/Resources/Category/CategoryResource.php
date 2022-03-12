@@ -19,7 +19,6 @@ class CategoryResource extends JsonResource
         parent::__construct($category);
     }
 
-
     /**
      * Transform the resource into an array.
      *
@@ -32,16 +31,23 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'icon' => $this->icon,
-            'status' => [
-                'value' => $this->status,
-                'label' => Lang::get("icore::filter.status.{$this->status}")
-            ],
-            'real_depth' => $this->real_depth,
-            'created_at' => $this->created_at,
-            'created_at_diff' => $this->created_at_diff,
-            'updated_at' => $this->updated_at,
-            'updated_at_diff' => $this->updated_at_diff,
+            $this->mergeWhen(
+                $this->depth === null,
+                function () {
+                    return [
+                        'icon' => $this->icon,
+                        'status' => [
+                            'value' => $this->status,
+                            'label' => Lang::get("icore::filter.status.{$this->status}")
+                        ],
+                        'real_depth' => $this->real_depth,
+                        'created_at' => $this->created_at,
+                        'created_at_diff' => $this->created_at_diff,
+                        'updated_at' => $this->updated_at,
+                        'updated_at_diff' => $this->updated_at_diff
+                    ];
+                }
+            ),
             'ancestors' => App::make(CategoryResource::class)->collection($this->whenLoaded('ancestors'))
         ];
     }
