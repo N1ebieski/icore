@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Rules\RecaptchaV2Rule;
 use N1ebieski\ICore\Rules\RecaptchaInvisibleRule;
 use N1ebieski\LogicCaptcha\Rules\LogicCaptchaRule;
+use N1ebieski\LogicCaptcha\Rules\LogicCaptchaApiRule;
 
 trait CaptchaExtended
 {
@@ -36,18 +37,54 @@ trait CaptchaExtended
                 ];
 
             case 'logic_captcha':
-                return [
-                    'captcha' => [
-                        'required',
-                        'string',
-                        App::make(LogicCaptchaRule::class),
-                        'no_js_validation'
-                    ]
-                ];
+                if ($this->has('key')) {
+                    return [
+                        'key' => [
+                            'bail',
+                            'required',
+                            'array',
+                        ],
+                        'captcha' => [
+                            'bail',
+                            'required',
+                            'string',
+                            App::make(LogicCaptchaApiRule::class)
+                        ]
+                    ];
+                } else {
+                    return [
+                        'captcha' => [
+                            'required',
+                            'string',
+                            App::make(LogicCaptchaRule::class),
+                            'no_js_validation'
+                        ]
+                    ];
+                }
 
             default:
                 return [];
         }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'g-recaptcha-response' => [
+                'description' => 'Recaptcha response.'
+            ],
+            'key' => [
+                'description' => 'Array contains encode logic captcha keys.'
+            ],
+            'captcha' => [
+                'description' => 'Logic captcha response.'
+            ]
+        ];
     }
 
     /**

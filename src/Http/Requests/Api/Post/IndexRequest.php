@@ -128,10 +128,11 @@ class IndexRequest extends FormRequest
             ],
             'filter.category' => [
                 'description' => 'ID of category contains posts.',
-                'example' => null
+                'example' => ''
             ],
             'filter.orderby' => [
                 'description' => 'Sorting the result list.',
+                'example' => ''
             ],
             'filter.paginate' => [
                 'description' => 'Number of records in the list.',
