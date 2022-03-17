@@ -106,8 +106,6 @@ class IndexRequest extends FormRequest
      */
     public function bodyParameters(): array
     {
-        $paginate = Config::get('database.paginate');
-
         return [
             'page' => [
                 'example' => 1
@@ -130,7 +128,7 @@ class IndexRequest extends FormRequest
             ],
             'filter.parent' => [
                 'description' => 'ID of category parent. If 0, shows only roots.',
-                'example' => 0
+                'example' => ''
             ],
             'filter.orderby' => [
                 'description' => 'Sorting the result list.',
@@ -138,7 +136,7 @@ class IndexRequest extends FormRequest
             ],
             'filter.paginate' => [
                 'description' => 'Number of records in the list.',
-                'example' => $paginate
+                'example' => ''
             ]
         ];
     }

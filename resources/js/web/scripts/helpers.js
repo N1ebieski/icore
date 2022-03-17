@@ -72,7 +72,7 @@
             autogrow: typeof options.autogrow === "boolean" ? options.autogrow : true,
         };
 
-        function autoHeight_(element) {
+        function autoHeight_ (element) {
             if (element.offsetHeight < element.scrollHeight) {
                 return $(element)
                     .css({
@@ -164,7 +164,7 @@
             // Przypadek, gdy nowy token generowany jest w momencie pobrania formularza
             // przez ajax. Wówczas trzeba go na nowo zrenderować pod nowym widgetId
             if (!this.html().length) {
-                widgetId = grecaptcha.render(this[0], {
+                widgetId = window.grecaptcha.render(this[0], {
                     sitekey: this.attr("data-sitekey"),
                     callback: callback,
                 });
@@ -188,8 +188,8 @@
             // błędnie, ajax zwrócił errory, bez nowego formularza. W takim przypadku
             // recaptcha nie rozpozna już wcześniejszego rozwiązania, trzeba zresetować i
             // dać użytkownikowi możliwość ponownego przesłania formularza
-            if (Number.isInteger(widgetId)) grecaptcha.reset(widgetId);
-            else grecaptcha.reset();
+            if (Number.isInteger(widgetId)) window.grecaptcha.reset(widgetId);
+            else window.grecaptcha.reset();
         }
     };
 

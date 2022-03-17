@@ -72,7 +72,7 @@ trait CaptchaExtended
      *
      * @return array
      */
-    public function bodyParameters(): array
+    public function prepareCaptchaBodyParameters(): array
     {
         return [
             'g-recaptcha-response' => [
