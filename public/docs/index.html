@@ -28,7 +28,7 @@
             </style>
 
     <script>
-        var baseUrl = "https://demo.idir.intelekt.net.pl";
+        var baseUrl = "https://demo.icore.intelekt.net.pl";
         var useCsrf = Boolean(1);
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -84,19 +84,6 @@
                                                     </ul>
                             </ul>
                     <ul id="tocify-header-3" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="tokens">
-                    <a href="#tokens">Tokens</a>
-                </li>
-                                    <ul id="tocify-subheader-tokens" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="tokens-POSTapi-tokens">
-                        <a href="#tokens-POSTapi-tokens">Create token</a>
-                    </li>
-                                    <li class="tocify-item level-2" data-unique="tokens-DELETEapi-tokens--token-">
-                        <a href="#tokens-DELETEapi-tokens--token-">Delete token</a>
-                    </li>
-                                                    </ul>
-                            </ul>
-                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="authentication">
                     <a href="#authentication">Authentication</a>
                 </li>
@@ -115,7 +102,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-5" class="tocify-header">
+                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="categories">
                     <a href="#categories">Categories</a>
                 </li>
@@ -128,7 +115,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-6" class="tocify-header">
+                    <ul id="tocify-header-5" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="posts">
                     <a href="#posts">Posts</a>
                 </li>
@@ -138,13 +125,26 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-7" class="tocify-header">
+                    <ul id="tocify-header-6" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="tags">
                     <a href="#tags">Tags</a>
                 </li>
                                     <ul id="tocify-subheader-tags" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="tags-POSTapi-tags-index">
                         <a href="#tags-POSTapi-tags-index">Index of tags</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-7" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="tokens">
+                    <a href="#tokens">Tokens</a>
+                </li>
+                                    <ul id="tocify-subheader-tokens" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="tokens-POSTapi-tokens">
+                        <a href="#tokens-POSTapi-tokens">Create token</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="tokens-DELETEapi-tokens--token-">
+                        <a href="#tokens-DELETEapi-tokens--token-">Delete token</a>
                     </li>
                                                     </ul>
                             </ul>
@@ -182,7 +182,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <blockquote>
 <p>Base URL</p>
 </blockquote>
-<pre><code class="language-yaml">https://demo.idir.intelekt.net.pl</code></pre>
+<pre><code class="language-yaml">https://demo.icore.intelekt.net.pl</code></pre>
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is authenticated by sending an <strong><code>Authorization</code></strong> header with the value <strong><code>"Bearer {YOUR_ACCESS_TOKEN}"</code></strong> or by sending cookie session credentials with <strong><code>Referer</code></strong>/<strong><code>Origin</code></strong> header from stateful domain.</p>
@@ -215,7 +215,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://demo.idir.intelekt.net.pl/api/user" \
+    --get "https://demo.icore.intelekt.net.pl/api/user" \
     --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -223,7 +223,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/user"
+    "https://demo.icore.intelekt.net.pl/api/user"
 );
 
 const headers = {
@@ -241,7 +241,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'https://demo.idir.intelekt.net.pl/api/user',
+    'https://demo.icore.intelekt.net.pl/api/user',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
@@ -258,7 +258,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/user'
+url = 'https://demo.icore.intelekt.net.pl/api/user'
 headers = {
   'Authorization': 'Bearer {YOUR_ACCESS_TOKEN}',
   'Content-Type': 'application/json',
@@ -278,14 +278,14 @@ response.json()</code></pre></div>
 
 <code class="language-json">{
     &quot;data&quot;: {
-        &quot;id&quot;: 106,
-        &quot;name&quot;: &quot;Mr. Destin Lemke DVM&quot;,
+        &quot;id&quot;: 112,
+        &quot;name&quot;: &quot;Lizeth Oberbrunner&quot;,
         &quot;status&quot;: {
             &quot;value&quot;: 1,
             &quot;label&quot;: &quot;active&quot;
         },
-        &quot;created_at&quot;: &quot;2022-03-18T16:05:36.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2022-03-18T16:05:36.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
         &quot;roles&quot;: [
             {
                 &quot;id&quot;: 3,
@@ -399,359 +399,7 @@ response.json()</code></pre></div>
 <br>
 <p>Contains relationships Socialites (available only for admin.users.view or owner).</p>
         </p>
-            <h1 id="tokens">Tokens</h1>
-
-    <blockquote>
-<p>Routes:</p>
-</blockquote>
-<pre><code>/routes/vendor/icore/api/tokens.php</code></pre>
-<blockquote>
-<p>Controller:</p>
-</blockquote>
-<pre><code>N1ebieski\ICore\Http\Controllers\Api\Token\TokenController</code></pre>
-<p>Permissions:</p>
-<ul>
-<li>api.* - access to all api endpoints</li>
-<li>api.tokens.* - access to all tokens endpoints</li>
-<li>api.tokens.create - access to create token endpoint</li>
-<li>api.tokens.delete - access to delete token endpoint</li>
-</ul>
-
-            <h2 id="tokens-POSTapi-tokens">Create token</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-<p>Create personal access token.</p>
-<aside class="notice">Available only to users with permissions: api.access and api.tokens.create.</aside>
-
-<span id="example-requests-POSTapi-tokens">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/tokens" \
-    --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"name\": \"Access\",
-    \"expiration\": 7,
-    \"abilities\": [
-        \"api.*\"
-    ]
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/tokens"
-);
-
-const headers = {
-    "Authorization": "Bearer {YOUR_ACCESS_TOKEN}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Access",
-    "expiration": 7,
-    "abilities": [
-        "api.*"
-    ]
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-
-<div class="php-example">
-    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/tokens',
-    [
-        'headers' =&gt; [
-            'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-        'json' =&gt; [
-            'name' =&gt; 'Access',
-            'expiration' =&gt; 7,
-            'abilities' =&gt; [
-                'api.*',
-            ],
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre></div>
-
-
-<div class="python-example">
-    <pre><code class="language-python">import requests
-import json
-
-url = 'https://demo.idir.intelekt.net.pl/api/tokens'
-payload = {
-    "name": "Access",
-    "expiration": 7,
-    "abilities": [
-        "api.*"
-    ]
-}
-headers = {
-  'Authorization': 'Bearer {YOUR_ACCESS_TOKEN}',
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-tokens">
-            <blockquote>
-            <p>Example response (201, success):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;access_token&quot;: &quot;1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-POSTapi-tokens" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-tokens"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-tokens"></code></pre>
-</span>
-<span id="execution-error-POSTapi-tokens" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-tokens"></code></pre>
-</span>
-<form id="form-POSTapi-tokens" data-method="POST"
-      data-path="api/tokens"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Authorization":"Bearer {YOUR_ACCESS_TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-tokens', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-tokens"
-                    onclick="tryItOut('POSTapi-tokens');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-tokens"
-                    onclick="cancelTryOut('POSTapi-tokens');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-tokens" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/tokens</code></b>
-        </p>
-                <p>
-            <label id="auth-POSTapi-tokens" hidden>Authorization header:
-                <b><code>Bearer </code></b><input type="text"
-                                                                name="Authorization"
-                                                                data-prefix="Bearer "
-                                                                data-endpoint="POSTapi-tokens"
-                                                                data-component="header"></label>
-        </p>
-                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <p>
-            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="name"
-               data-endpoint="POSTapi-tokens"
-               value="Access"
-               data-component="body" hidden>
-    <br>
-<p>Must be between 3 and 255 characters.</p>
-        </p>
-                <p>
-            <b><code>expiration</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
-                <input type="number"
-               name="expiration"
-               data-endpoint="POSTapi-tokens"
-               value="7"
-               data-component="body" hidden>
-    <br>
-<p>Token expiration time on days. If null is unlimited. Must not be greater than 1000.</p>
-        </p>
-                <p>
-            <b><code>abilities</code></b>&nbsp;&nbsp;<small>string[]</small>  &nbsp;
-                <input type="text"
-               name="abilities[0]"
-               data-endpoint="POSTapi-tokens"
-               data-component="body" hidden>
-        <input type="text"
-               name="abilities[1]"
-               data-endpoint="POSTapi-tokens"
-               data-component="body" hidden>
-    <br>
-<p>Array containing scopes. Wildcard supported. Must be one of <code>api.<em></code>, <code>api.users.</em></code>, <code>api.users.view</code>, <code>api.categories.<em></code>, <code>api.categories.view</code>, <code>api.tags.</em></code>, <code>api.tags.view</code>, <code>api.posts.<em></code>, <code>api.posts.view</code>, <code>api.tokens.</em></code>, <code>api.tokens.create</code>, or <code>api.tokens.delete</code>.</p>
-        </p>
-        </form>
-
-    <h3>Response</h3>
-    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
-            <p>
-            <b><code>access_token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-<br>
-
-        </p>
-                <h2 id="tokens-DELETEapi-tokens--token-">Delete token</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-<p>Delete personal access token.</p>
-<aside class="notice">Available only to users with permissions: api.access and api.tokens.delete.</aside>
-
-<span id="example-requests-DELETEapi-tokens--token-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request DELETE \
-    "https://demo.idir.intelekt.net.pl/api/tokens/" \
-    --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/tokens/"
-);
-
-const headers = {
-    "Authorization": "Bearer {YOUR_ACCESS_TOKEN}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-
-<div class="php-example">
-    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$response = $client-&gt;delete(
-    'https://demo.idir.intelekt.net.pl/api/tokens/',
-    [
-        'headers' =&gt; [
-            'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre></div>
-
-
-<div class="python-example">
-    <pre><code class="language-python">import requests
-import json
-
-url = 'https://demo.idir.intelekt.net.pl/api/tokens/'
-headers = {
-  'Authorization': 'Bearer {YOUR_ACCESS_TOKEN}',
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-
-response = requests.request('DELETE', url, headers=headers)
-response.json()</code></pre></div>
-
-</span>
-
-<span id="example-responses-DELETEapi-tokens--token-">
-</span>
-<span id="execution-results-DELETEapi-tokens--token-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-tokens--token-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-tokens--token-"></code></pre>
-</span>
-<span id="execution-error-DELETEapi-tokens--token-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-tokens--token-"></code></pre>
-</span>
-<form id="form-DELETEapi-tokens--token-" data-method="DELETE"
-      data-path="api/tokens/{token}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Authorization":"Bearer {YOUR_ACCESS_TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-tokens--token-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-tokens--token-"
-                    onclick="tryItOut('DELETEapi-tokens--token-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-tokens--token-"
-                    onclick="cancelTryOut('DELETEapi-tokens--token-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-tokens--token-" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-red">DELETE</small>
-            <b><code>api/tokens/{token}</code></b>
-        </p>
-                <p>
-            <label id="auth-DELETEapi-tokens--token-" hidden>Authorization header:
-                <b><code>Bearer </code></b><input type="text"
-                                                                name="Authorization"
-                                                                data-prefix="Bearer "
-                                                                data-endpoint="DELETEapi-tokens--token-"
-                                                                data-component="header"></label>
-        </p>
-                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <p>
-                <b><code>token</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="token"
-               data-endpoint="DELETEapi-tokens--token-"
-               value=""
-               data-component="url" hidden>
-    <br>
-<p>The token ID.</p>
-            </p>
-                    </form>
-
-        <h1 id="authentication">Authentication</h1>
+            <h1 id="authentication">Authentication</h1>
 
     <blockquote>
 <p>Routes:</p>
@@ -777,7 +425,7 @@ N1ebieski\ICore\Http\Controllers\Api\Auth\TokenController</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/token" \
+    "https://demo.icore.intelekt.net.pl/api/token" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -790,7 +438,7 @@ N1ebieski\ICore\Http\Controllers\Api\Auth\TokenController</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/token"
+    "https://demo.icore.intelekt.net.pl/api/token"
 );
 
 const headers = {
@@ -814,7 +462,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/token',
+    'https://demo.icore.intelekt.net.pl/api/token',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -835,7 +483,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/token'
+url = 'https://demo.icore.intelekt.net.pl/api/token'
 payload = {
     "email": "kontakt@demo.icore.intelekt.net.pl",
     "password": "demo1234",
@@ -973,7 +621,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/refresh" \
+    "https://demo.icore.intelekt.net.pl/api/refresh" \
     --header "Authorization: Bearer {YOUR_REFRESH_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -981,7 +629,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/refresh"
+    "https://demo.icore.intelekt.net.pl/api/refresh"
 );
 
 const headers = {
@@ -999,7 +647,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/refresh',
+    'https://demo.icore.intelekt.net.pl/api/refresh',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {YOUR_REFRESH_TOKEN}',
@@ -1016,7 +664,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/refresh'
+url = 'https://demo.icore.intelekt.net.pl/api/refresh'
 headers = {
   'Authorization': 'Bearer {YOUR_REFRESH_TOKEN}',
   'Content-Type': 'application/json',
@@ -1115,7 +763,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/revoke" \
+    "https://demo.icore.intelekt.net.pl/api/revoke" \
     --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1123,7 +771,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/revoke"
+    "https://demo.icore.intelekt.net.pl/api/revoke"
 );
 
 const headers = {
@@ -1141,7 +789,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/revoke',
+    'https://demo.icore.intelekt.net.pl/api/revoke',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
@@ -1158,7 +806,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/revoke'
+url = 'https://demo.icore.intelekt.net.pl/api/revoke'
 headers = {
   'Authorization': 'Bearer {YOUR_ACCESS_TOKEN}',
   'Content-Type': 'application/json',
@@ -1240,7 +888,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/register" \
+    "https://demo.icore.intelekt.net.pl/api/register" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1257,7 +905,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/register"
+    "https://demo.icore.intelekt.net.pl/api/register"
 );
 
 const headers = {
@@ -1285,7 +933,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/register',
+    'https://demo.icore.intelekt.net.pl/api/register',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1310,7 +958,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/register'
+url = 'https://demo.icore.intelekt.net.pl/api/register'
 payload = {
     "name": "N1ebieski",
     "email": "example@example.pl",
@@ -1338,14 +986,14 @@ response.json()</code></pre></div>
 
 <code class="language-json">{
     &quot;data&quot;: {
-        &quot;id&quot;: 103,
-        &quot;name&quot;: &quot;Adolf Bauch PhD&quot;,
+        &quot;id&quot;: 109,
+        &quot;name&quot;: &quot;Dr. Ali Toy MD&quot;,
         &quot;status&quot;: {
             &quot;value&quot;: 1,
             &quot;label&quot;: &quot;active&quot;
         },
-        &quot;created_at&quot;: &quot;2022-03-18T16:05:31.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2022-03-18T16:05:31.000000Z&quot;,
+        &quot;created_at&quot;: &quot;2022-03-18T16:08:52.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2022-03-18T16:08:52.000000Z&quot;,
         &quot;roles&quot;: [
             {
                 &quot;id&quot;: 3,
@@ -1590,7 +1238,7 @@ N1ebieski\ICore\Http\Controllers\Api\Category\Post\CategoryController</code></pr
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/categories/post/index" \
+    "https://demo.icore.intelekt.net.pl/api/categories/post/index" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1609,7 +1257,7 @@ N1ebieski\ICore\Http\Controllers\Api\Category\Post\CategoryController</code></pr
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/categories/post/index"
+    "https://demo.icore.intelekt.net.pl/api/categories/post/index"
 );
 
 const headers = {
@@ -1639,7 +1287,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/categories/post/index',
+    'https://demo.icore.intelekt.net.pl/api/categories/post/index',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1666,7 +1314,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/categories/post/index'
+url = 'https://demo.icore.intelekt.net.pl/api/categories/post/index'
 payload = {
     "page": 1,
     "filter": {
@@ -1697,30 +1345,30 @@ response.json()</code></pre></div>
 <code class="language-json">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1079,
-            &quot;name&quot;: &quot;Mollitia quis&quot;,
-            &quot;slug&quot;: &quot;mollitia-quis&quot;,
+            &quot;id&quot;: 1083,
+            &quot;name&quot;: &quot;Nobis qui&quot;,
+            &quot;slug&quot;: &quot;nobis-qui&quot;,
             &quot;icon&quot;: null,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
                 &quot;label&quot;: &quot;active&quot;
             },
             &quot;real_depth&quot;: 0,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;
         },
         {
-            &quot;id&quot;: 1080,
-            &quot;name&quot;: &quot;Et quidem&quot;,
-            &quot;slug&quot;: &quot;et-quidem&quot;,
+            &quot;id&quot;: 1084,
+            &quot;name&quot;: &quot;Ipsum earum&quot;,
+            &quot;slug&quot;: &quot;ipsum-earum&quot;,
             &quot;icon&quot;: null,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
                 &quot;label&quot;: &quot;active&quot;
             },
             &quot;real_depth&quot;: 0,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;
         }
     ]
 }</code>
@@ -1919,7 +1567,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/categories/index" \
+    "https://demo.icore.intelekt.net.pl/api/categories/index" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1938,7 +1586,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/categories/index"
+    "https://demo.icore.intelekt.net.pl/api/categories/index"
 );
 
 const headers = {
@@ -1968,7 +1616,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/categories/index',
+    'https://demo.icore.intelekt.net.pl/api/categories/index',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1995,7 +1643,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/categories/index'
+url = 'https://demo.icore.intelekt.net.pl/api/categories/index'
 payload = {
     "page": 1,
     "filter": {
@@ -2026,30 +1674,30 @@ response.json()</code></pre></div>
 <code class="language-json">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1077,
-            &quot;name&quot;: &quot;Enim eos&quot;,
-            &quot;slug&quot;: &quot;enim-eos&quot;,
+            &quot;id&quot;: 1081,
+            &quot;name&quot;: &quot;Cumque dolor&quot;,
+            &quot;slug&quot;: &quot;cumque-dolor&quot;,
             &quot;icon&quot;: null,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
                 &quot;label&quot;: &quot;active&quot;
             },
             &quot;real_depth&quot;: 0,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:52.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:52.000000Z&quot;
         },
         {
-            &quot;id&quot;: 1078,
-            &quot;name&quot;: &quot;Voluptate est&quot;,
-            &quot;slug&quot;: &quot;voluptate-est&quot;,
+            &quot;id&quot;: 1082,
+            &quot;name&quot;: &quot;Molestiae illo&quot;,
+            &quot;slug&quot;: &quot;molestiae-illo&quot;,
             &quot;icon&quot;: null,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
                 &quot;label&quot;: &quot;active&quot;
             },
             &quot;real_depth&quot;: 0,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:52.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:52.000000Z&quot;
         }
     ]
 }</code>
@@ -2270,7 +1918,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/posts/index" \
+    "https://demo.icore.intelekt.net.pl/api/posts/index" \
     --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2290,7 +1938,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/posts/index"
+    "https://demo.icore.intelekt.net.pl/api/posts/index"
 );
 
 const headers = {
@@ -2321,7 +1969,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/posts/index',
+    'https://demo.icore.intelekt.net.pl/api/posts/index',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
@@ -2349,7 +1997,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/posts/index'
+url = 'https://demo.icore.intelekt.net.pl/api/posts/index'
 payload = {
     "page": 1,
     "filter": {
@@ -2381,18 +2029,18 @@ response.json()</code></pre></div>
 <code class="language-json">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 167,
-            &quot;slug&quot;: &quot;aliquam-sit-qui-sit-optio&quot;,
-            &quot;title&quot;: &quot;Aliquam sit qui sit optio.&quot;,
-            &quot;short_content&quot;: &quot;Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Od&quot;,
-            &quot;content&quot;: &quot;Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.&quot;,
-            &quot;content_html&quot;: &quot;&lt;p&gt;Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.&lt;/p&gt;&quot;,
-            &quot;no_more_content_html&quot;: &quot;&lt;p&gt;Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.&lt;/p&gt;&quot;,
-            &quot;less_content_html&quot;: &quot;&lt;p&gt;Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.&lt;/p&gt;&quot;,
+            &quot;id&quot;: 169,
+            &quot;slug&quot;: &quot;reiciendis-voluptatem-ipsa-temporibus&quot;,
+            &quot;title&quot;: &quot;Reiciendis voluptatem ipsa temporibus.&quot;,
+            &quot;short_content&quot;: &quot;Molestias itaque in ducimus sed eaque veniam animi. Numquam temporibus excepturi dolores accusantium. Recusandae laborum aliquam dicta optio. Corporis officia enim porro nostrum et. Amet placeat sint architecto rem. Natus non facere aut ullam est voluptatem. Ipsa nihil voluptatem architecto quaerat dolor totam delectus. Suscipit ut est necessitatibus aspernatur laboriosam. Iure autem voluptatem voluptates. Et provident natus ab non et nisi. Quia dignissimos velit soluta sit voluptatem odio est q&quot;,
+            &quot;content&quot;: &quot;Molestias itaque in ducimus sed eaque veniam animi. Numquam temporibus excepturi dolores accusantium. Recusandae laborum aliquam dicta optio. Corporis officia enim porro nostrum et. Amet placeat sint architecto rem. Natus non facere aut ullam est voluptatem. Ipsa nihil voluptatem architecto quaerat dolor totam delectus. Suscipit ut est necessitatibus aspernatur laboriosam. Iure autem voluptatem voluptates. Et provident natus ab non et nisi. Quia dignissimos velit soluta sit voluptatem odio est quasi. Sint sunt ea natus minus et sapiente. Molestiae est praesentium quia fugiat inventore qui. Est eligendi magnam aut occaecati. Repellendus dolores quo et consequatur voluptas est. Vel cupiditate adipisci optio quas iste. Cumque aut reiciendis minima veritatis aperiam est. Molestiae saepe quidem iste voluptatum sint sit quibusdam. Repellendus iste deleniti et ex. Ipsam voluptatibus corporis eaque amet quisquam. Rerum rerum quia rerum consequatur reiciendis cumque. Commodi laudantium quod facere tempore tempore. Et blanditiis minima atque aliquid atque non. Dolor asperiores qui magni necessitatibus omnis. Eligendi in recusandae placeat facilis nihil cum ratione et. Non minus est ut veritatis. Qui vel cum vel reprehenderit aliquam sed nobis voluptatem. Sunt quod quia facilis qui aut eum voluptates. Et et delectus velit inventore doloribus. Exercitationem esse minus voluptatibus optio accusantium. Omnis explicabo ea praesentium dolorem. Dolores autem eum debitis voluptas eaque. Ea qui eligendi esse sint ipsum harum. Voluptas in maiores eveniet nobis ea sint est. Cumque itaque saepe tempore reprehenderit qui voluptas dolor. Quia sint nemo quasi placeat eveniet numquam. Repudiandae qui sed tempora. Rerum consequatur sapiente praesentium doloremque eius dicta natus reprehenderit. Laudantium quo et et unde doloremque quia ducimus magnam. Illo qui laudantium aut.&quot;,
+            &quot;content_html&quot;: &quot;&lt;p&gt;Molestias itaque in ducimus sed eaque veniam animi. Numquam temporibus excepturi dolores accusantium. Recusandae laborum aliquam dicta optio. Corporis officia enim porro nostrum et. Amet placeat sint architecto rem. Natus non facere aut ullam est voluptatem. Ipsa nihil voluptatem architecto quaerat dolor totam delectus. Suscipit ut est necessitatibus aspernatur laboriosam. Iure autem voluptatem voluptates. Et provident natus ab non et nisi. Quia dignissimos velit soluta sit voluptatem odio est quasi. Sint sunt ea natus minus et sapiente. Molestiae est praesentium quia fugiat inventore qui. Est eligendi magnam aut occaecati. Repellendus dolores quo et consequatur voluptas est. Vel cupiditate adipisci optio quas iste. Cumque aut reiciendis minima veritatis aperiam est. Molestiae saepe quidem iste voluptatum sint sit quibusdam. Repellendus iste deleniti et ex. Ipsam voluptatibus corporis eaque amet quisquam. Rerum rerum quia rerum consequatur reiciendis cumque. Commodi laudantium quod facere tempore tempore. Et blanditiis minima atque aliquid atque non. Dolor asperiores qui magni necessitatibus omnis. Eligendi in recusandae placeat facilis nihil cum ratione et. Non minus est ut veritatis. Qui vel cum vel reprehenderit aliquam sed nobis voluptatem. Sunt quod quia facilis qui aut eum voluptates. Et et delectus velit inventore doloribus. Exercitationem esse minus voluptatibus optio accusantium. Omnis explicabo ea praesentium dolorem. Dolores autem eum debitis voluptas eaque. Ea qui eligendi esse sint ipsum harum. Voluptas in maiores eveniet nobis ea sint est. Cumque itaque saepe tempore reprehenderit qui voluptas dolor. Quia sint nemo quasi placeat eveniet numquam. Repudiandae qui sed tempora. Rerum consequatur sapiente praesentium doloremque eius dicta natus reprehenderit. Laudantium quo et et unde doloremque quia ducimus magnam. Illo qui laudantium aut.&lt;/p&gt;&quot;,
+            &quot;no_more_content_html&quot;: &quot;&lt;p&gt;Molestias itaque in ducimus sed eaque veniam animi. Numquam temporibus excepturi dolores accusantium. Recusandae laborum aliquam dicta optio. Corporis officia enim porro nostrum et. Amet placeat sint architecto rem. Natus non facere aut ullam est voluptatem. Ipsa nihil voluptatem architecto quaerat dolor totam delectus. Suscipit ut est necessitatibus aspernatur laboriosam. Iure autem voluptatem voluptates. Et provident natus ab non et nisi. Quia dignissimos velit soluta sit voluptatem odio est quasi. Sint sunt ea natus minus et sapiente. Molestiae est praesentium quia fugiat inventore qui. Est eligendi magnam aut occaecati. Repellendus dolores quo et consequatur voluptas est. Vel cupiditate adipisci optio quas iste. Cumque aut reiciendis minima veritatis aperiam est. Molestiae saepe quidem iste voluptatum sint sit quibusdam. Repellendus iste deleniti et ex. Ipsam voluptatibus corporis eaque amet quisquam. Rerum rerum quia rerum consequatur reiciendis cumque. Commodi laudantium quod facere tempore tempore. Et blanditiis minima atque aliquid atque non. Dolor asperiores qui magni necessitatibus omnis. Eligendi in recusandae placeat facilis nihil cum ratione et. Non minus est ut veritatis. Qui vel cum vel reprehenderit aliquam sed nobis voluptatem. Sunt quod quia facilis qui aut eum voluptates. Et et delectus velit inventore doloribus. Exercitationem esse minus voluptatibus optio accusantium. Omnis explicabo ea praesentium dolorem. Dolores autem eum debitis voluptas eaque. Ea qui eligendi esse sint ipsum harum. Voluptas in maiores eveniet nobis ea sint est. Cumque itaque saepe tempore reprehenderit qui voluptas dolor. Quia sint nemo quasi placeat eveniet numquam. Repudiandae qui sed tempora. Rerum consequatur sapiente praesentium doloremque eius dicta natus reprehenderit. Laudantium quo et et unde doloremque quia ducimus magnam. Illo qui laudantium aut.&lt;/p&gt;&quot;,
+            &quot;less_content_html&quot;: &quot;&lt;p&gt;Molestias itaque in ducimus sed eaque veniam animi. Numquam temporibus excepturi dolores accusantium. Recusandae laborum aliquam dicta optio. Corporis officia enim porro nostrum et. Amet placeat sint architecto rem. Natus non facere aut ullam est voluptatem. Ipsa nihil voluptatem architecto quaerat dolor totam delectus. Suscipit ut est necessitatibus aspernatur laboriosam. Iure autem voluptatem voluptates. Et provident natus ab non et nisi. Quia dignissimos velit soluta sit voluptatem odio est quasi. Sint sunt ea natus minus et sapiente. Molestiae est praesentium quia fugiat inventore qui. Est eligendi magnam aut occaecati. Repellendus dolores quo et consequatur voluptas est. Vel cupiditate adipisci optio quas iste. Cumque aut reiciendis minima veritatis aperiam est. Molestiae saepe quidem iste voluptatum sint sit quibusdam. Repellendus iste deleniti et ex. Ipsam voluptatibus corporis eaque amet quisquam. Rerum rerum quia rerum consequatur reiciendis cumque. Commodi laudantium quod facere tempore tempore. Et blanditiis minima atque aliquid atque non. Dolor asperiores qui magni necessitatibus omnis. Eligendi in recusandae placeat facilis nihil cum ratione et. Non minus est ut veritatis. Qui vel cum vel reprehenderit aliquam sed nobis voluptatem. Sunt quod quia facilis qui aut eum voluptates. Et et delectus velit inventore doloribus. Exercitationem esse minus voluptatibus optio accusantium. Omnis explicabo ea praesentium dolorem. Dolores autem eum debitis voluptas eaque. Ea qui eligendi esse sint ipsum harum. Voluptas in maiores eveniet nobis ea sint est. Cumque itaque saepe tempore reprehenderit qui voluptas dolor. Quia sint nemo quasi placeat eveniet numquam. Repudiandae qui sed tempora. Rerum consequatur sapiente praesentium doloremque eius dicta natus reprehenderit. Laudantium quo et et unde doloremque quia ducimus magnam. Illo qui laudantium aut.&lt;/p&gt;&quot;,
             &quot;seo_title&quot;: null,
-            &quot;meta_title&quot;: &quot;Aliquam sit qui sit optio.&quot;,
-            &quot;seo_desc&quot;: &quot;Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.&quot;,
-            &quot;meta_desc&quot;: &quot;Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.&quot;,
+            &quot;meta_title&quot;: &quot;Reiciendis voluptatem ipsa temporibus.&quot;,
+            &quot;seo_desc&quot;: &quot;Excepturi eaque neque tempore ut sunt. Dolorem eum in ut. Minus ad fugiat ut sit sint ullam. Culpa minus laudantium numquam.&quot;,
+            &quot;meta_desc&quot;: &quot;Excepturi eaque neque tempore ut sunt. Dolorem eum in ut. Minus ad fugiat ut sit sint ullam. Culpa minus laudantium numquam.&quot;,
             &quot;seo_noindex&quot;: true,
             &quot;seo_nofollow&quot;: false,
             &quot;status&quot;: {
@@ -2401,37 +2049,37 @@ response.json()</code></pre></div>
             },
             &quot;comment&quot;: true,
             &quot;first_image&quot;: null,
-            &quot;published_at&quot;: &quot;2021-09-12T20:43:17.000000Z&quot;,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
+            &quot;published_at&quot;: &quot;2021-06-25T06:07:25.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
             &quot;user&quot;: {
-                &quot;id&quot;: 104,
-                &quot;name&quot;: &quot;Jovany Ankunding Sr.&quot;,
+                &quot;id&quot;: 110,
+                &quot;name&quot;: &quot;Tomasa Kirlin PhD&quot;,
                 &quot;status&quot;: {
-                    &quot;value&quot;: 0,
-                    &quot;label&quot;: &quot;inactive&quot;
+                    &quot;value&quot;: 1,
+                    &quot;label&quot;: &quot;active&quot;
                 },
-                &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;
+                &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;
             },
             &quot;links&quot;: {
-                &quot;web&quot;: &quot;http://demo.idir.intelekt.net.pl/posts/aliquam-sit-qui-sit-optio&quot;
+                &quot;web&quot;: &quot;http://demo.icore.intelekt.net.pl/posts/reiciendis-voluptatem-ipsa-temporibus&quot;
             }
         },
         {
-            &quot;id&quot;: 168,
-            &quot;slug&quot;: &quot;ipsum-aspernatur-laudantium-blanditiis&quot;,
-            &quot;title&quot;: &quot;Ipsum aspernatur laudantium blanditiis.&quot;,
-            &quot;short_content&quot;: &quot;Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremq&quot;,
-            &quot;content&quot;: &quot;Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.&quot;,
-            &quot;content_html&quot;: &quot;&lt;p&gt;Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.&lt;/p&gt;&quot;,
-            &quot;no_more_content_html&quot;: &quot;&lt;p&gt;Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.&lt;/p&gt;&quot;,
-            &quot;less_content_html&quot;: &quot;&lt;p&gt;Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.&lt;/p&gt;&quot;,
+            &quot;id&quot;: 170,
+            &quot;slug&quot;: &quot;quae-aspernatur-maxime-ut-quia-porro&quot;,
+            &quot;title&quot;: &quot;Quae aspernatur maxime ut quia porro.&quot;,
+            &quot;short_content&quot;: &quot;Non voluptas voluptas tempora. Qui maxime facilis quae quia ex. Ab occaecati consequatur veritatis eveniet officiis nesciunt ut rem. Molestias nulla molestiae veritatis ut. Nihil qui vitae omnis nam maiores. Impedit ullam quia sequi accusamus magni. Unde nam et et. Impedit iusto quia pariatur excepturi omnis laboriosam. Dolor sint officiis aut dolor quam. Aut non asperiores est tenetur dolores eaque eaque. Optio eum dolores provident repellendus. Rem doloribus dolores aut accusamus eius tempore.&quot;,
+            &quot;content&quot;: &quot;Non voluptas voluptas tempora. Qui maxime facilis quae quia ex. Ab occaecati consequatur veritatis eveniet officiis nesciunt ut rem. Molestias nulla molestiae veritatis ut. Nihil qui vitae omnis nam maiores. Impedit ullam quia sequi accusamus magni. Unde nam et et. Impedit iusto quia pariatur excepturi omnis laboriosam. Dolor sint officiis aut dolor quam. Aut non asperiores est tenetur dolores eaque eaque. Optio eum dolores provident repellendus. Rem doloribus dolores aut accusamus eius tempore. Eligendi officia ut est voluptates magni. Asperiores et voluptas vel atque quia et. Ipsam iste dolorum veniam sint quae tempora. Corporis voluptas enim quis illum debitis consequatur. Tempora quo sint maxime tempore. Et temporibus velit minus est iusto aliquam quia rerum. Iusto aspernatur suscipit aut. Molestiae sint aliquid deserunt asperiores occaecati officia. Alias voluptate sit et voluptas. Magni dolores dolor deleniti nostrum deserunt. Architecto et placeat voluptatibus aut excepturi. Autem vitae omnis nobis est illo. Sunt minus atque sunt et quod vitae voluptates. Voluptates cupiditate aut in sed numquam. Voluptatem laboriosam vero ipsum molestias totam alias. Debitis voluptatibus sit reprehenderit praesentium. Id facilis qui ut porro. Alias sit quod nihil voluptatum dignissimos sunt quia ea. Quos odit in eum optio quia voluptates repudiandae. Numquam ad odit ullam officiis. Rerum ut in ut odit dolores autem. Optio ducimus quia et ratione. Hic commodi ut in ut magni culpa. Vel dignissimos molestiae dolor et veritatis est quidem. Officia est itaque earum tenetur fugit mollitia qui. Vel in qui vitae est laudantium voluptates quia. Nemo aliquam libero eaque et sit nihil praesentium. Saepe dolores nostrum ullam ullam corrupti rerum ratione soluta. Sint et molestias harum. Possimus soluta veritatis adipisci et ut. Officia consequatur accusantium modi qui optio esse illum.&quot;,
+            &quot;content_html&quot;: &quot;&lt;p&gt;Non voluptas voluptas tempora. Qui maxime facilis quae quia ex. Ab occaecati consequatur veritatis eveniet officiis nesciunt ut rem. Molestias nulla molestiae veritatis ut. Nihil qui vitae omnis nam maiores. Impedit ullam quia sequi accusamus magni. Unde nam et et. Impedit iusto quia pariatur excepturi omnis laboriosam. Dolor sint officiis aut dolor quam. Aut non asperiores est tenetur dolores eaque eaque. Optio eum dolores provident repellendus. Rem doloribus dolores aut accusamus eius tempore. Eligendi officia ut est voluptates magni. Asperiores et voluptas vel atque quia et. Ipsam iste dolorum veniam sint quae tempora. Corporis voluptas enim quis illum debitis consequatur. Tempora quo sint maxime tempore. Et temporibus velit minus est iusto aliquam quia rerum. Iusto aspernatur suscipit aut. Molestiae sint aliquid deserunt asperiores occaecati officia. Alias voluptate sit et voluptas. Magni dolores dolor deleniti nostrum deserunt. Architecto et placeat voluptatibus aut excepturi. Autem vitae omnis nobis est illo. Sunt minus atque sunt et quod vitae voluptates. Voluptates cupiditate aut in sed numquam. Voluptatem laboriosam vero ipsum molestias totam alias. Debitis voluptatibus sit reprehenderit praesentium. Id facilis qui ut porro. Alias sit quod nihil voluptatum dignissimos sunt quia ea. Quos odit in eum optio quia voluptates repudiandae. Numquam ad odit ullam officiis. Rerum ut in ut odit dolores autem. Optio ducimus quia et ratione. Hic commodi ut in ut magni culpa. Vel dignissimos molestiae dolor et veritatis est quidem. Officia est itaque earum tenetur fugit mollitia qui. Vel in qui vitae est laudantium voluptates quia. Nemo aliquam libero eaque et sit nihil praesentium. Saepe dolores nostrum ullam ullam corrupti rerum ratione soluta. Sint et molestias harum. Possimus soluta veritatis adipisci et ut. Officia consequatur accusantium modi qui optio esse illum.&lt;/p&gt;&quot;,
+            &quot;no_more_content_html&quot;: &quot;&lt;p&gt;Non voluptas voluptas tempora. Qui maxime facilis quae quia ex. Ab occaecati consequatur veritatis eveniet officiis nesciunt ut rem. Molestias nulla molestiae veritatis ut. Nihil qui vitae omnis nam maiores. Impedit ullam quia sequi accusamus magni. Unde nam et et. Impedit iusto quia pariatur excepturi omnis laboriosam. Dolor sint officiis aut dolor quam. Aut non asperiores est tenetur dolores eaque eaque. Optio eum dolores provident repellendus. Rem doloribus dolores aut accusamus eius tempore. Eligendi officia ut est voluptates magni. Asperiores et voluptas vel atque quia et. Ipsam iste dolorum veniam sint quae tempora. Corporis voluptas enim quis illum debitis consequatur. Tempora quo sint maxime tempore. Et temporibus velit minus est iusto aliquam quia rerum. Iusto aspernatur suscipit aut. Molestiae sint aliquid deserunt asperiores occaecati officia. Alias voluptate sit et voluptas. Magni dolores dolor deleniti nostrum deserunt. Architecto et placeat voluptatibus aut excepturi. Autem vitae omnis nobis est illo. Sunt minus atque sunt et quod vitae voluptates. Voluptates cupiditate aut in sed numquam. Voluptatem laboriosam vero ipsum molestias totam alias. Debitis voluptatibus sit reprehenderit praesentium. Id facilis qui ut porro. Alias sit quod nihil voluptatum dignissimos sunt quia ea. Quos odit in eum optio quia voluptates repudiandae. Numquam ad odit ullam officiis. Rerum ut in ut odit dolores autem. Optio ducimus quia et ratione. Hic commodi ut in ut magni culpa. Vel dignissimos molestiae dolor et veritatis est quidem. Officia est itaque earum tenetur fugit mollitia qui. Vel in qui vitae est laudantium voluptates quia. Nemo aliquam libero eaque et sit nihil praesentium. Saepe dolores nostrum ullam ullam corrupti rerum ratione soluta. Sint et molestias harum. Possimus soluta veritatis adipisci et ut. Officia consequatur accusantium modi qui optio esse illum.&lt;/p&gt;&quot;,
+            &quot;less_content_html&quot;: &quot;&lt;p&gt;Non voluptas voluptas tempora. Qui maxime facilis quae quia ex. Ab occaecati consequatur veritatis eveniet officiis nesciunt ut rem. Molestias nulla molestiae veritatis ut. Nihil qui vitae omnis nam maiores. Impedit ullam quia sequi accusamus magni. Unde nam et et. Impedit iusto quia pariatur excepturi omnis laboriosam. Dolor sint officiis aut dolor quam. Aut non asperiores est tenetur dolores eaque eaque. Optio eum dolores provident repellendus. Rem doloribus dolores aut accusamus eius tempore. Eligendi officia ut est voluptates magni. Asperiores et voluptas vel atque quia et. Ipsam iste dolorum veniam sint quae tempora. Corporis voluptas enim quis illum debitis consequatur. Tempora quo sint maxime tempore. Et temporibus velit minus est iusto aliquam quia rerum. Iusto aspernatur suscipit aut. Molestiae sint aliquid deserunt asperiores occaecati officia. Alias voluptate sit et voluptas. Magni dolores dolor deleniti nostrum deserunt. Architecto et placeat voluptatibus aut excepturi. Autem vitae omnis nobis est illo. Sunt minus atque sunt et quod vitae voluptates. Voluptates cupiditate aut in sed numquam. Voluptatem laboriosam vero ipsum molestias totam alias. Debitis voluptatibus sit reprehenderit praesentium. Id facilis qui ut porro. Alias sit quod nihil voluptatum dignissimos sunt quia ea. Quos odit in eum optio quia voluptates repudiandae. Numquam ad odit ullam officiis. Rerum ut in ut odit dolores autem. Optio ducimus quia et ratione. Hic commodi ut in ut magni culpa. Vel dignissimos molestiae dolor et veritatis est quidem. Officia est itaque earum tenetur fugit mollitia qui. Vel in qui vitae est laudantium voluptates quia. Nemo aliquam libero eaque et sit nihil praesentium. Saepe dolores nostrum ullam ullam corrupti rerum ratione soluta. Sint et molestias harum. Possimus soluta veritatis adipisci et ut. Officia consequatur accusantium modi qui optio esse illum.&lt;/p&gt;&quot;,
             &quot;seo_title&quot;: null,
-            &quot;meta_title&quot;: &quot;Ipsum aspernatur laudantium blanditiis.&quot;,
-            &quot;seo_desc&quot;: &quot;Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.&quot;,
-            &quot;meta_desc&quot;: &quot;Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.&quot;,
-            &quot;seo_noindex&quot;: true,
+            &quot;meta_title&quot;: &quot;Quae aspernatur maxime ut quia porro.&quot;,
+            &quot;seo_desc&quot;: &quot;Ad voluptatem et in et commodi nobis. Illum ratione minus repellat deserunt sed. Et nihil temporibus aut iusto similique ut in.&quot;,
+            &quot;meta_desc&quot;: &quot;Ad voluptatem et in et commodi nobis. Illum ratione minus repellat deserunt sed. Et nihil temporibus aut iusto similique ut in.&quot;,
+            &quot;seo_noindex&quot;: false,
             &quot;seo_nofollow&quot;: false,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
@@ -2439,21 +2087,21 @@ response.json()</code></pre></div>
             },
             &quot;comment&quot;: false,
             &quot;first_image&quot;: null,
-            &quot;published_at&quot;: &quot;2021-09-16T22:59:35.000000Z&quot;,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
+            &quot;published_at&quot;: &quot;2021-05-17T06:45:35.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
             &quot;user&quot;: {
-                &quot;id&quot;: 105,
-                &quot;name&quot;: &quot;Mohammed Boyer&quot;,
+                &quot;id&quot;: 111,
+                &quot;name&quot;: &quot;Jordane Wintheiser&quot;,
                 &quot;status&quot;: {
-                    &quot;value&quot;: 1,
-                    &quot;label&quot;: &quot;active&quot;
+                    &quot;value&quot;: 0,
+                    &quot;label&quot;: &quot;inactive&quot;
                 },
-                &quot;created_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;,
-                &quot;updated_at&quot;: &quot;2022-03-18T16:05:33.000000Z&quot;
+                &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+                &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;
             },
             &quot;links&quot;: {
-                &quot;web&quot;: &quot;http://demo.idir.intelekt.net.pl/posts/ipsum-aspernatur-laudantium-blanditiis&quot;
+                &quot;web&quot;: &quot;http://demo.icore.intelekt.net.pl/posts/quae-aspernatur-maxime-ut-quia-porro&quot;
             }
         }
     ]
@@ -2747,7 +2395,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/tags/index" \
+    "https://demo.icore.intelekt.net.pl/api/tags/index" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -2764,7 +2412,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/tags/index"
+    "https://demo.icore.intelekt.net.pl/api/tags/index"
 );
 
 const headers = {
@@ -2792,7 +2440,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/tags/index',
+    'https://demo.icore.intelekt.net.pl/api/tags/index',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2817,7 +2465,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/tags/index'
+url = 'https://demo.icore.intelekt.net.pl/api/tags/index'
 payload = {
     "page": 1,
     "filter": {
@@ -2846,18 +2494,18 @@ response.json()</code></pre></div>
 <code class="language-json">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 174,
-            &quot;name&quot;: &quot;Consequatur&quot;,
-            &quot;slug&quot;: &quot;consequatur&quot;,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:35.000000Z&quot;
+            &quot;id&quot;: 176,
+            &quot;name&quot;: &quot;Quasi&quot;,
+            &quot;slug&quot;: &quot;quasi&quot;,
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;
         },
         {
-            &quot;id&quot;: 175,
-            &quot;name&quot;: &quot;Tempore&quot;,
-            &quot;slug&quot;: &quot;tempore&quot;,
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:35.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:35.000000Z&quot;
+            &quot;id&quot;: 177,
+            &quot;name&quot;: &quot;Sint&quot;,
+            &quot;slug&quot;: &quot;sint&quot;,
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;
         }
     ]
 }</code>
@@ -3003,7 +2651,359 @@ response.json()</code></pre></div>
 <br>
 <p>Paging, filtering and sorting information.</p>
         </p>
-            <h1 id="users">Users</h1>
+            <h1 id="tokens">Tokens</h1>
+
+    <blockquote>
+<p>Routes:</p>
+</blockquote>
+<pre><code>/routes/vendor/icore/api/tokens.php</code></pre>
+<blockquote>
+<p>Controller:</p>
+</blockquote>
+<pre><code>N1ebieski\ICore\Http\Controllers\Api\Token\TokenController</code></pre>
+<p>Permissions:</p>
+<ul>
+<li>api.* - access to all api endpoints</li>
+<li>api.tokens.* - access to all tokens endpoints</li>
+<li>api.tokens.create - access to create token endpoint</li>
+<li>api.tokens.delete - access to delete token endpoint</li>
+</ul>
+
+            <h2 id="tokens-POSTapi-tokens">Create token</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Create personal access token.</p>
+<aside class="notice">Available only to users with permissions: api.access and api.tokens.create.</aside>
+
+<span id="example-requests-POSTapi-tokens">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "https://demo.icore.intelekt.net.pl/api/tokens" \
+    --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": \"Access\",
+    \"expiration\": 7,
+    \"abilities\": [
+        \"api.*\"
+    ]
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://demo.icore.intelekt.net.pl/api/tokens"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Access",
+    "expiration": 7,
+    "abilities": [
+        "api.*"
+    ]
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'https://demo.icore.intelekt.net.pl/api/tokens',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'Access',
+            'expiration' =&gt; 7,
+            'abilities' =&gt; [
+                'api.*',
+            ],
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'https://demo.icore.intelekt.net.pl/api/tokens'
+payload = {
+    "name": "Access",
+    "expiration": 7,
+    "abilities": [
+        "api.*"
+    ]
+}
+headers = {
+  'Authorization': 'Bearer {YOUR_ACCESS_TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-tokens">
+            <blockquote>
+            <p>Example response (201, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;access_token&quot;: &quot;1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-tokens" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-tokens"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-tokens"></code></pre>
+</span>
+<span id="execution-error-POSTapi-tokens" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-tokens"></code></pre>
+</span>
+<form id="form-POSTapi-tokens" data-method="POST"
+      data-path="api/tokens"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {YOUR_ACCESS_TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-tokens', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-tokens"
+                    onclick="tryItOut('POSTapi-tokens');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-tokens"
+                    onclick="cancelTryOut('POSTapi-tokens');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-tokens" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/tokens</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTapi-tokens" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTapi-tokens"
+                                                                data-component="header"></label>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="name"
+               data-endpoint="POSTapi-tokens"
+               value="Access"
+               data-component="body" hidden>
+    <br>
+<p>Must be between 3 and 255 characters.</p>
+        </p>
+                <p>
+            <b><code>expiration</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="expiration"
+               data-endpoint="POSTapi-tokens"
+               value="7"
+               data-component="body" hidden>
+    <br>
+<p>Token expiration time on days. If null is unlimited. Must not be greater than 1000.</p>
+        </p>
+                <p>
+            <b><code>abilities</code></b>&nbsp;&nbsp;<small>string[]</small>  &nbsp;
+                <input type="text"
+               name="abilities[0]"
+               data-endpoint="POSTapi-tokens"
+               data-component="body" hidden>
+        <input type="text"
+               name="abilities[1]"
+               data-endpoint="POSTapi-tokens"
+               data-component="body" hidden>
+    <br>
+<p>Array containing scopes. Wildcard supported. Must be one of <code>api.<em></code>, <code>api.users.</em></code>, <code>api.users.view</code>, <code>api.categories.<em></code>, <code>api.categories.view</code>, <code>api.tags.</em></code>, <code>api.tags.view</code>, <code>api.posts.<em></code>, <code>api.posts.view</code>, <code>api.tokens.</em></code>, <code>api.tokens.create</code>, or <code>api.tokens.delete</code>.</p>
+        </p>
+        </form>
+
+    <h3>Response</h3>
+    <h4 class="fancy-heading-panel"><b>Response Fields</b></h4>
+            <p>
+            <b><code>access_token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+<br>
+
+        </p>
+                <h2 id="tokens-DELETEapi-tokens--token-">Delete token</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Delete personal access token.</p>
+<aside class="notice">Available only to users with permissions: api.access and api.tokens.delete.</aside>
+
+<span id="example-requests-DELETEapi-tokens--token-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "https://demo.icore.intelekt.net.pl/api/tokens/" \
+    --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://demo.icore.intelekt.net.pl/api/tokens/"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'https://demo.icore.intelekt.net.pl/api/tokens/',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'https://demo.icore.intelekt.net.pl/api/tokens/'
+headers = {
+  'Authorization': 'Bearer {YOUR_ACCESS_TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-tokens--token-">
+</span>
+<span id="execution-results-DELETEapi-tokens--token-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-tokens--token-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-tokens--token-"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-tokens--token-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-tokens--token-"></code></pre>
+</span>
+<form id="form-DELETEapi-tokens--token-" data-method="DELETE"
+      data-path="api/tokens/{token}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Authorization":"Bearer {YOUR_ACCESS_TOKEN}","Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-tokens--token-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-tokens--token-"
+                    onclick="tryItOut('DELETEapi-tokens--token-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-tokens--token-"
+                    onclick="cancelTryOut('DELETEapi-tokens--token-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-tokens--token-" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/tokens/{token}</code></b>
+        </p>
+                <p>
+            <label id="auth-DELETEapi-tokens--token-" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="DELETEapi-tokens--token-"
+                                                                data-component="header"></label>
+        </p>
+                <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="token"
+               data-endpoint="DELETEapi-tokens--token-"
+               value=""
+               data-component="url" hidden>
+    <br>
+<p>The token ID.</p>
+            </p>
+                    </form>
+
+        <h1 id="users">Users</h1>
 
     <blockquote>
 <p>Routes:</p>
@@ -3038,7 +3038,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://demo.idir.intelekt.net.pl/api/users/index" \
+    "https://demo.icore.intelekt.net.pl/api/users/index" \
     --header "Authorization: Bearer {YOUR_ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3049,7 +3049,7 @@ response.json()</code></pre></div>
         \"search\": \"\",
         \"status\": 1,
         \"role\": \"\",
-        \"orderby\": \"updated_at|desc\",
+        \"orderby\": \"updated_at|asc\",
         \"paginate\": \"\"
     }
 }"
@@ -3058,7 +3058,7 @@ response.json()</code></pre></div>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://demo.idir.intelekt.net.pl/api/users/index"
+    "https://demo.icore.intelekt.net.pl/api/users/index"
 );
 
 const headers = {
@@ -3074,7 +3074,7 @@ let body = {
         "search": "",
         "status": 1,
         "role": "",
-        "orderby": "updated_at|desc",
+        "orderby": "updated_at|asc",
         "paginate": ""
     }
 };
@@ -3089,7 +3089,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'https://demo.idir.intelekt.net.pl/api/users/index',
+    'https://demo.icore.intelekt.net.pl/api/users/index',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {YOUR_ACCESS_TOKEN}',
@@ -3103,7 +3103,7 @@ $response = $client-&gt;post(
                 'search' =&gt; '',
                 'status' =&gt; 1,
                 'role' =&gt; '',
-                'orderby' =&gt; 'updated_at|desc',
+                'orderby' =&gt; 'updated_at|asc',
                 'paginate' =&gt; '',
             ],
         ],
@@ -3117,7 +3117,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://demo.idir.intelekt.net.pl/api/users/index'
+url = 'https://demo.icore.intelekt.net.pl/api/users/index'
 payload = {
     "page": 1,
     "filter": {
@@ -3125,7 +3125,7 @@ payload = {
         "search": "",
         "status": 1,
         "role": "",
-        "orderby": "updated_at|desc",
+        "orderby": "updated_at|asc",
         "paginate": ""
     }
 }
@@ -3149,14 +3149,14 @@ response.json()</code></pre></div>
 <code class="language-json">{
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 107,
-            &quot;name&quot;: &quot;Ethelyn Krajcik&quot;,
+            &quot;id&quot;: 113,
+            &quot;name&quot;: &quot;Christy Cronin&quot;,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
                 &quot;label&quot;: &quot;active&quot;
             },
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:36.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:36.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
             &quot;roles&quot;: [
                 {
                     &quot;id&quot;: 3,
@@ -3167,14 +3167,14 @@ response.json()</code></pre></div>
             ]
         },
         {
-            &quot;id&quot;: 108,
-            &quot;name&quot;: &quot;Emmalee Rau&quot;,
+            &quot;id&quot;: 114,
+            &quot;name&quot;: &quot;Dr. Jasen Runolfsdottir DVM&quot;,
             &quot;status&quot;: {
                 &quot;value&quot;: 1,
                 &quot;label&quot;: &quot;active&quot;
             },
-            &quot;created_at&quot;: &quot;2022-03-18T16:05:36.000000Z&quot;,
-            &quot;updated_at&quot;: &quot;2022-03-18T16:05:36.000000Z&quot;,
+            &quot;created_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
+            &quot;updated_at&quot;: &quot;2022-03-18T16:08:53.000000Z&quot;,
             &quot;roles&quot;: [
                 {
                     &quot;id&quot;: 3,
@@ -3305,7 +3305,7 @@ response.json()</code></pre></div>
                 <input type="text"
                name="filter.orderby"
                data-endpoint="POSTapi-users-index"
-               value="updated_at|desc"
+               value="updated_at|asc"
                data-component="body" hidden>
     <br>
 <p>Sorting the result list. Must be one of <code>created_at|asc</code>, <code>created_at|desc</code>, <code>updated_at|asc</code>, or <code>updated_at|desc</code>.</p>
