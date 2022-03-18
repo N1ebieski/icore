@@ -16,11 +16,11 @@
     <li class="nav-item {{ $isUrl(route('web.profile.socialites')) }}">
         <a 
             class="nav-link {{ $isUrl(route('web.profile.socialites')) }}"
-            title="{{ trans('icore::profile.route.edit_socialite') }}"
+            title="{{ trans('icore::profile.route.socialites') }}"
             href="{{ route('web.profile.socialites') }}"
         >
             <i class="fab fa-fw fa-facebook-square"></i>
-            <span>{{ trans('icore::profile.route.edit_socialite') }}</span>
+            <span>{{ trans('icore::profile.route.socialites') }}</span>
         </a>
     </li>
     @endif

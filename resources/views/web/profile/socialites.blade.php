@@ -1,7 +1,7 @@
 @extends(config('icore.layout') . '::web.profile.layouts.layout', [
-    'title' => [trans('icore::profile.route.edit_socialite')],
-    'desc' => [trans('icore::profile.route.edit_socialite')],
-    'keys' => [trans('icore::profile.route.edit_socialite')]
+    'title' => [trans('icore::profile.route.socialites')],
+    'desc' => [trans('icore::profile.route.socialites')],
+    'keys' => [trans('icore::profile.route.socialites')]
 ])
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
     {{ trans('icore::profile.route.index') }}
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-    {{ trans('icore::profile.route.edit_socialite') }}
+    {{ trans('icore::profile.route.socialites') }}
 </li>
 @endsection
 
