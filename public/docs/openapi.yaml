@@ -1,0 +1,1155 @@
+openapi: 3.0.3
+info:
+  title: 'API Documentation - iCore - mini platforma blogowa'
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'https://demo.idir.intelekt.net.pl'
+paths:
+  /api/user:
+    get:
+      summary: 'Show user'
+      description: "Show authenticated User resource\n\n<aside class=\"notice\">Available only to users with permission: api.access.</aside>"
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_ACCESS_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 106
+                    name: 'Mr. Destin Lemke DVM'
+                    status:
+                      value: 1
+                      label: active
+                    created_at: '2022-03-18T16:05:36.000000Z'
+                    updated_at: '2022-03-18T16:05:36.000000Z'
+                    roles:
+                      -
+                        id: 3
+                        name: user
+                        created_at: '2021-01-06T17:27:36.000000Z'
+                        updated_at: '2021-01-06T17:27:36.000000Z'
+                properties:
+                  data:
+                    type: object
+                    example:
+                      id: 106
+                      name: 'Mr. Destin Lemke DVM'
+                      status:
+                        value: 1
+                        label: active
+                      created_at: '2022-03-18T16:05:36.000000Z'
+                      updated_at: '2022-03-18T16:05:36.000000Z'
+                      roles:
+                        -
+                          id: 3
+                          name: user
+                          created_at: '2021-01-06T17:27:36.000000Z'
+                          updated_at: '2021-01-06T17:27:36.000000Z'
+      tags:
+        - 'Authenticated user'
+  /api/tokens:
+    post:
+      summary: 'Create token'
+      description: "Create personal access token.\n\n<aside class=\"notice\">Available only to users with permissions: api.access and api.tokens.create.</aside>"
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_ACCESS_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  access_token: 1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9
+                properties:
+                  access_token:
+                    type: string
+                    example: 1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9
+                    description: ''
+      tags:
+        - Tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must be between 3 and 255 characters.'
+                  example: Access
+                expiration:
+                  type: integer
+                  description: 'Token expiration time on days. If null is unlimited. Must not be greater than 1000.'
+                  example: 7
+                abilities:
+                  type: array
+                  description: 'Array containing scopes. Wildcard supported. Must be one of <code>api.*</code>, <code>api.users.*</code>, <code>api.users.view</code>, <code>api.categories.*</code>, <code>api.categories.view</code>, <code>api.tags.*</code>, <code>api.tags.view</code>, <code>api.posts.*</code>, <code>api.posts.view</code>, <code>api.tokens.*</code>, <code>api.tokens.create</code>, or <code>api.tokens.delete</code>.'
+                  example:
+                    - 'api.*'
+                  items:
+                    type: string
+              required:
+                - name
+                - abilities
+  '/api/tokens/{token}':
+    delete:
+      summary: 'Delete token'
+      description: "Delete personal access token.\n\n<aside class=\"notice\">Available only to users with permissions: api.access and api.tokens.delete.</aside>"
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_ACCESS_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - Tokens
+    parameters:
+      -
+        in: path
+        name: token
+        description: 'The token ID.'
+        example: null
+        required: true
+        schema:
+          type: integer
+  /api/token:
+    post:
+      summary: Token
+      description: "Create access token and (optional) refresh token.\n\n<aside class=\"notice\">Access token expires after 2 hours. Refresh token expires after 1 year.</aside>"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  access_token: 1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9
+                  refresh_token: 2|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM
+                properties:
+                  access_token:
+                    type: string
+                    example: 1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9
+                    description: ''
+                  refresh_token:
+                    type: string
+                    example: 2|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM
+                    description: '(only if remember param was true)'
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: ''
+                  example: kontakt@demo.icore.intelekt.net.pl
+                password:
+                  type: string
+                  description: ''
+                  example: demo1234
+                remember:
+                  type: boolean
+                  description: ''
+                  example: true
+              required:
+                - email
+                - password
+      security: []
+  /api/refresh:
+    post:
+      summary: 'Refresh token'
+      description: "Create new access token and refresh token.\n\n<aside class=\"success\">Refresh token must be in the Authorization header with the value \"Bearer {YOUR_REFRESH_TOKEN}\".</aside>"
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_REFRESH_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  access_token: 3|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9
+                  refresh_token: 4|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM
+                properties:
+                  access_token:
+                    type: string
+                    example: 3|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9
+                    description: ''
+                  refresh_token:
+                    type: string
+                    example: 4|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM
+                    description: ''
+      tags:
+        - Authentication
+  /api/revoke:
+    post:
+      summary: 'Revoke token'
+      description: 'Revoke access token and refresh token.'
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_ACCESS_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        204:
+          description: success
+      tags:
+        - Authentication
+  /api/register:
+    post:
+      summary: Register
+      description: 'Create user and send email verification notification'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 103
+                    name: 'Adolf Bauch PhD'
+                    status:
+                      value: 1
+                      label: active
+                    created_at: '2022-03-18T16:05:31.000000Z'
+                    updated_at: '2022-03-18T16:05:31.000000Z'
+                    roles:
+                      -
+                        id: 3
+                        name: user
+                        created_at: '2021-01-06T17:27:36.000000Z'
+                        updated_at: '2021-01-06T17:27:36.000000Z'
+                properties:
+                  data:
+                    type: object
+                    example:
+                      id: 103
+                      name: 'Adolf Bauch PhD'
+                      status:
+                        value: 1
+                        label: active
+                      created_at: '2022-03-18T16:05:31.000000Z'
+                      updated_at: '2022-03-18T16:05:31.000000Z'
+                      roles:
+                        -
+                          id: 3
+                          name: user
+                          created_at: '2021-01-06T17:27:36.000000Z'
+                          updated_at: '2021-01-06T17:27:36.000000Z'
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: N1ebieski
+                email:
+                  type: string
+                  description: ''
+                  example: example@example.pl
+                password:
+                  type: string
+                  description: ''
+                  example: demo1234
+                password_confirmation:
+                  type: string
+                  description: ''
+                  example: demo1234
+                privacy_agreement:
+                  type: boolean
+                  description: 'Acceptance of privacy policy'
+                  example: true
+                contact_agreement:
+                  type: boolean
+                  description: 'Acceptance of receiving e-mail system notifications'
+                  example: true
+                marketing_agreement:
+                  type: boolean
+                  description: 'Acceptance of receiving marketing information notifications'
+                  example: true
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+                - privacy_agreement
+                - contact_agreement
+      security: []
+  /api/categories/post/index:
+    post:
+      summary: 'Index of post''s categories'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1079
+                      name: 'Mollitia quis'
+                      slug: mollitia-quis
+                      icon: null
+                      status:
+                        value: 1
+                        label: active
+                      real_depth: 0
+                      created_at: '2022-03-18T16:05:33.000000Z'
+                      updated_at: '2022-03-18T16:05:33.000000Z'
+                    -
+                      id: 1080
+                      name: 'Et quidem'
+                      slug: et-quidem
+                      icon: null
+                      status:
+                        value: 1
+                        label: active
+                      real_depth: 0
+                      created_at: '2022-03-18T16:05:33.000000Z'
+                      updated_at: '2022-03-18T16:05:33.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1079
+                        name: 'Mollitia quis'
+                        slug: mollitia-quis
+                        icon: null
+                        status:
+                          value: 1
+                          label: active
+                        real_depth: 0
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                      -
+                        id: 1080
+                        name: 'Et quidem'
+                        slug: et-quidem
+                        icon: null
+                        status:
+                          value: 1
+                          label: active
+                        real_depth: 0
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                    items:
+                      type: object
+      tags:
+        - Categories
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: ''
+                  example: 1
+                filter:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    except:
+                      type: array
+                      description: 'Array containing IDs, excluding records from the list.'
+                      example: []
+                      items:
+                        type: integer
+                    search:
+                      type: string
+                      description: 'Search by keyword. Must be at least 3 characters. Must not be greater than 255 characters.'
+                      example: ''
+                    status:
+                      type: integer
+                      description: 'Must be one of 1 or 0 (available only for admin.categories.view).'
+                      example: 1
+                    parent:
+                      type: integer
+                      description: 'ID of category parent. If 0, shows only roots.'
+                      example: ''
+                    orderby:
+                      type: string
+                      description: 'Sorting the result list. Must be one of <code>created_at|asc</code>, <code>created_at|desc</code>, <code>updated_at|asc</code>, <code>updated_at|desc</code>, <code>name|asc</code>, <code>name|desc</code>, <code>position|asc</code>, <code>position|desc</code>, <code>real_depth|asc</code>, or <code>real_depth|desc</code>.'
+                      example: ''
+                    paginate:
+                      type: integer
+                      description: 'Number of records in the list. Must be one of <code>25</code>, <code>50</code>, or <code>100</code>.'
+                      example: ''
+      security: []
+  /api/categories/index:
+    post:
+      summary: 'Index of all categories'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1077
+                      name: 'Enim eos'
+                      slug: enim-eos
+                      icon: null
+                      status:
+                        value: 1
+                        label: active
+                      real_depth: 0
+                      created_at: '2022-03-18T16:05:33.000000Z'
+                      updated_at: '2022-03-18T16:05:33.000000Z'
+                    -
+                      id: 1078
+                      name: 'Voluptate est'
+                      slug: voluptate-est
+                      icon: null
+                      status:
+                        value: 1
+                        label: active
+                      real_depth: 0
+                      created_at: '2022-03-18T16:05:33.000000Z'
+                      updated_at: '2022-03-18T16:05:33.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1077
+                        name: 'Enim eos'
+                        slug: enim-eos
+                        icon: null
+                        status:
+                          value: 1
+                          label: active
+                        real_depth: 0
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                      -
+                        id: 1078
+                        name: 'Voluptate est'
+                        slug: voluptate-est
+                        icon: null
+                        status:
+                          value: 1
+                          label: active
+                        real_depth: 0
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                    items:
+                      type: object
+      tags:
+        - Categories
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: ''
+                  example: 1
+                filter:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    except:
+                      type: array
+                      description: 'Array containing IDs, excluding records from the list.'
+                      example: []
+                      items:
+                        type: integer
+                    search:
+                      type: string
+                      description: 'Search by keyword. Must be at least 3 characters. Must not be greater than 255 characters.'
+                      example: ''
+                    status:
+                      type: integer
+                      description: 'Must be one of 1 or 0 (available only for admin.categories.view).'
+                      example: 1
+                    parent:
+                      type: integer
+                      description: 'ID of category parent. If 0, shows only roots.'
+                      example: ''
+                    orderby:
+                      type: string
+                      description: 'Sorting the result list. Must be one of <code>created_at|asc</code>, <code>created_at|desc</code>, <code>updated_at|asc</code>, <code>updated_at|desc</code>, <code>name|asc</code>, <code>name|desc</code>, <code>position|asc</code>, <code>position|desc</code>, <code>real_depth|asc</code>, or <code>real_depth|desc</code>.'
+                      example: ''
+                    paginate:
+                      type: integer
+                      description: 'Number of records in the list. Must be one of <code>25</code>, <code>50</code>, or <code>100</code>.'
+                      example: ''
+      security: []
+  /api/posts/index:
+    post:
+      summary: 'Index of posts'
+      description: '<aside class="notice">Available only to users with permissions: api.access and api.posts.view.</aside>'
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_ACCESS_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 167
+                      slug: aliquam-sit-qui-sit-optio
+                      title: 'Aliquam sit qui sit optio.'
+                      short_content: 'Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Od'
+                      content: 'Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.'
+                      content_html: '<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.</p>'
+                      no_more_content_html: '<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.</p>'
+                      less_content_html: '<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.</p>'
+                      seo_title: null
+                      meta_title: 'Aliquam sit qui sit optio.'
+                      seo_desc: 'Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.'
+                      meta_desc: 'Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.'
+                      seo_noindex: true
+                      seo_nofollow: false
+                      status:
+                        value: 1
+                        label: active
+                      comment: true
+                      first_image: null
+                      published_at: '2021-09-12T20:43:17.000000Z'
+                      created_at: '2022-03-18T16:05:33.000000Z'
+                      updated_at: '2022-03-18T16:05:33.000000Z'
+                      user:
+                        id: 104
+                        name: 'Jovany Ankunding Sr.'
+                        status:
+                          value: 0
+                          label: inactive
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                      links:
+                        web: 'http://demo.idir.intelekt.net.pl/posts/aliquam-sit-qui-sit-optio'
+                    -
+                      id: 168
+                      slug: ipsum-aspernatur-laudantium-blanditiis
+                      title: 'Ipsum aspernatur laudantium blanditiis.'
+                      short_content: 'Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremq'
+                      content: 'Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.'
+                      content_html: '<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.</p>'
+                      no_more_content_html: '<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.</p>'
+                      less_content_html: '<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.</p>'
+                      seo_title: null
+                      meta_title: 'Ipsum aspernatur laudantium blanditiis.'
+                      seo_desc: 'Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.'
+                      meta_desc: 'Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.'
+                      seo_noindex: true
+                      seo_nofollow: false
+                      status:
+                        value: 1
+                        label: active
+                      comment: false
+                      first_image: null
+                      published_at: '2021-09-16T22:59:35.000000Z'
+                      created_at: '2022-03-18T16:05:33.000000Z'
+                      updated_at: '2022-03-18T16:05:33.000000Z'
+                      user:
+                        id: 105
+                        name: 'Mohammed Boyer'
+                        status:
+                          value: 1
+                          label: active
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                      links:
+                        web: 'http://demo.idir.intelekt.net.pl/posts/ipsum-aspernatur-laudantium-blanditiis'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 167
+                        slug: aliquam-sit-qui-sit-optio
+                        title: 'Aliquam sit qui sit optio.'
+                        short_content: 'Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Od'
+                        content: 'Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.'
+                        content_html: '<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.</p>'
+                        no_more_content_html: '<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.</p>'
+                        less_content_html: '<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.</p>'
+                        seo_title: null
+                        meta_title: 'Aliquam sit qui sit optio.'
+                        seo_desc: 'Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.'
+                        meta_desc: 'Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.'
+                        seo_noindex: true
+                        seo_nofollow: false
+                        status:
+                          value: 1
+                          label: active
+                        comment: true
+                        first_image: null
+                        published_at: '2021-09-12T20:43:17.000000Z'
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                        user:
+                          id: 104
+                          name: 'Jovany Ankunding Sr.'
+                          status:
+                            value: 0
+                            label: inactive
+                          created_at: '2022-03-18T16:05:33.000000Z'
+                          updated_at: '2022-03-18T16:05:33.000000Z'
+                        links:
+                          web: 'http://demo.idir.intelekt.net.pl/posts/aliquam-sit-qui-sit-optio'
+                      -
+                        id: 168
+                        slug: ipsum-aspernatur-laudantium-blanditiis
+                        title: 'Ipsum aspernatur laudantium blanditiis.'
+                        short_content: 'Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremq'
+                        content: 'Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.'
+                        content_html: '<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.</p>'
+                        no_more_content_html: '<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.</p>'
+                        less_content_html: '<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.</p>'
+                        seo_title: null
+                        meta_title: 'Ipsum aspernatur laudantium blanditiis.'
+                        seo_desc: 'Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.'
+                        meta_desc: 'Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.'
+                        seo_noindex: true
+                        seo_nofollow: false
+                        status:
+                          value: 1
+                          label: active
+                        comment: false
+                        first_image: null
+                        published_at: '2021-09-16T22:59:35.000000Z'
+                        created_at: '2022-03-18T16:05:33.000000Z'
+                        updated_at: '2022-03-18T16:05:33.000000Z'
+                        user:
+                          id: 105
+                          name: 'Mohammed Boyer'
+                          status:
+                            value: 1
+                            label: active
+                          created_at: '2022-03-18T16:05:33.000000Z'
+                          updated_at: '2022-03-18T16:05:33.000000Z'
+                        links:
+                          web: 'http://demo.idir.intelekt.net.pl/posts/ipsum-aspernatur-laudantium-blanditiis'
+                    items:
+                      type: object
+      tags:
+        - Posts
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: ''
+                  example: 1
+                filter:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    except:
+                      type: array
+                      description: 'Array containing IDs, excluding records from the list.'
+                      example: []
+                      items:
+                        type: integer
+                    search:
+                      type: string
+                      description: 'Search by keyword. Must be at least 3 characters. Must not be greater than 255 characters.'
+                      example: ''
+                    status:
+                      type: integer
+                      description: 'Must be one of 1 or (available only for admin.categories.view) 0, 2.'
+                      example: 1
+                    category:
+                      type: integer
+                      description: 'ID of category contains posts.'
+                      example: ''
+                    orderby:
+                      type: string
+                      description: 'Sorting the result list. Must be one of <code>created_at|asc</code>, <code>created_at|desc</code>, <code>updated_at|asc</code>, <code>updated_at|desc</code>, <code>title|asc</code>, <code>title|desc</code>, <code>view|desc</code>, or <code>view|asc</code>.'
+                      example: ''
+                    paginate:
+                      type: integer
+                      description: 'Number of records in the list. Must be one of <code>25</code>, <code>50</code>, or <code>100</code>.'
+                      example: ''
+  /api/tags/index:
+    post:
+      summary: 'Index of tags'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 174
+                      name: Consequatur
+                      slug: consequatur
+                      created_at: '2022-03-18T16:05:35.000000Z'
+                      updated_at: '2022-03-18T16:05:35.000000Z'
+                    -
+                      id: 175
+                      name: Tempore
+                      slug: tempore
+                      created_at: '2022-03-18T16:05:35.000000Z'
+                      updated_at: '2022-03-18T16:05:35.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 174
+                        name: Consequatur
+                        slug: consequatur
+                        created_at: '2022-03-18T16:05:35.000000Z'
+                        updated_at: '2022-03-18T16:05:35.000000Z'
+                      -
+                        id: 175
+                        name: Tempore
+                        slug: tempore
+                        created_at: '2022-03-18T16:05:35.000000Z'
+                        updated_at: '2022-03-18T16:05:35.000000Z'
+                    items:
+                      type: object
+      tags:
+        - Tags
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: ''
+                  example: 1
+                filter:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    except:
+                      type: array
+                      description: 'Array containing IDs, excluding records from the list.'
+                      example: []
+                      items:
+                        type: integer
+                    search:
+                      type: string
+                      description: 'Search by keyword. Must be at least 3 characters. Must not be greater than 255 characters.'
+                      example: ''
+                    orderby:
+                      type: string
+                      description: 'Sorting the result list. Must be one of <code>created_at|asc</code>, <code>created_at|desc</code>, <code>updated_at|asc</code>, <code>updated_at|desc</code>, <code>sum|asc</code>, or <code>sum|desc</code>.'
+                      example: ''
+                    paginate:
+                      type: integer
+                      description: 'Number of records in the list. Must be one of <code>25</code>, <code>50</code>, or <code>100</code>.'
+                      example: ''
+      security: []
+  /api/users/index:
+    post:
+      summary: 'Index of users'
+      description: '<aside class="notice">Available only to users with permissions: api.access, api.users.view and admin.users.view.</aside>'
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_ACCESS_TOKEN}'
+          schema:
+            type: string
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 107
+                      name: 'Ethelyn Krajcik'
+                      status:
+                        value: 1
+                        label: active
+                      created_at: '2022-03-18T16:05:36.000000Z'
+                      updated_at: '2022-03-18T16:05:36.000000Z'
+                      roles:
+                        -
+                          id: 3
+                          name: user
+                          created_at: '2021-01-06T17:27:36.000000Z'
+                          updated_at: '2021-01-06T17:27:36.000000Z'
+                    -
+                      id: 108
+                      name: 'Emmalee Rau'
+                      status:
+                        value: 1
+                        label: active
+                      created_at: '2022-03-18T16:05:36.000000Z'
+                      updated_at: '2022-03-18T16:05:36.000000Z'
+                      roles:
+                        -
+                          id: 3
+                          name: user
+                          created_at: '2021-01-06T17:27:36.000000Z'
+                          updated_at: '2021-01-06T17:27:36.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 107
+                        name: 'Ethelyn Krajcik'
+                        status:
+                          value: 1
+                          label: active
+                        created_at: '2022-03-18T16:05:36.000000Z'
+                        updated_at: '2022-03-18T16:05:36.000000Z'
+                        roles:
+                          -
+                            id: 3
+                            name: user
+                            created_at: '2021-01-06T17:27:36.000000Z'
+                            updated_at: '2021-01-06T17:27:36.000000Z'
+                      -
+                        id: 108
+                        name: 'Emmalee Rau'
+                        status:
+                          value: 1
+                          label: active
+                        created_at: '2022-03-18T16:05:36.000000Z'
+                        updated_at: '2022-03-18T16:05:36.000000Z'
+                        roles:
+                          -
+                            id: 3
+                            name: user
+                            created_at: '2021-01-06T17:27:36.000000Z'
+                            updated_at: '2021-01-06T17:27:36.000000Z'
+                    items:
+                      type: object
+      tags:
+        - Users
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: ''
+                  example: 1
+                filter:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    except:
+                      type: array
+                      description: 'Array containing IDs, excluding records from the list.'
+                      example: []
+                      items:
+                        type: integer
+                    search:
+                      type: string
+                      description: 'Search by keyword. Must be at least 3 characters. Must not be greater than 255 characters.'
+                      example: ''
+                    status:
+                      type: integer
+                      description: 'Must be one of 1 or 0 (available only for admin.users.view).'
+                      example: 1
+                    role:
+                      type: integer
+                      description: ''
+                      example: ''
+                    orderby:
+                      type: string
+                      description: 'Sorting the result list. Must be one of <code>created_at|asc</code>, <code>created_at|desc</code>, <code>updated_at|asc</code>, or <code>updated_at|desc</code>.'
+                      example: updated_at|desc
+                    paginate:
+                      type: integer
+                      description: 'Number of records in the list. Must be one of <code>25</code>, <code>50</code>, or <code>100</code>.'
+                      example: ''
+tags:
+  -
+    name: 'Authenticated user'
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/user.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Auth\\UserController"
+  -
+    name: Tokens
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/tokens.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Token\\TokenController\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.tokens.* - access to all tokens endpoints\n- api.tokens.create - access to create token endpoint\n- api.tokens.delete - access to delete token endpoint"
+  -
+    name: Authentication
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/auth.php\n\n> Controllers:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Auth\\RegisterController\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Auth\\TokenController"
+  -
+    name: Categories
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/categories.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Category\\CategoryController\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Category\\Post\\CategoryController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\Category\\CategoryResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.categories.* - access to all categories endpoints\n- api.categories.view - access to endpoints with collection of categories"
+  -
+    name: Posts
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/posts.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Post\\PostController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\Post\\PostResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.posts.* - access to all posts endpoints\n- api.posts.view - access to endpoints with collection of posts"
+  -
+    name: Tags
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/tags.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Tag\\TagController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\Tag\\TagResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.tags.* - access to all tags endpoints\n- api.tags.view - access to endpoints with collection of tags"
+  -
+    name: Users
+    description: "\n> Routes:\n\n    /routes/vendor/icore/api/users.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\User\\UserController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\User\\UserResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.users.* - access to all users endpoints\n- api.users.view - access to endpoints with collection of users"
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: ''
+security:
+  -
+    default: []

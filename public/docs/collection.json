@@ -1,0 +1,488 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "https:\/\/demo.idir.intelekt.net.pl"
+        }
+    ],
+    "info": {
+        "name": "API Documentation - iCore - mini platforma blogowa",
+        "_postman_id": "40429026-74ec-4bda-a124-efbf5d8040d8",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authenticated user",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/user.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Auth\\UserController",
+            "item": [
+                {
+                    "name": "Show user",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Show authenticated User resource\n\n<aside class=\"notice\">Available only to users with permission: api.access.<\/aside>"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":{\"id\":106,\"name\":\"Mr. Destin Lemke DVM\",\"status\":{\"value\":1,\"label\":\"active\"},\"created_at\":\"2022-03-18T16:05:36.000000Z\",\"updated_at\":\"2022-03-18T16:05:36.000000Z\",\"roles\":[{\"id\":3,\"name\":\"user\",\"created_at\":\"2021-01-06T17:27:36.000000Z\",\"updated_at\":\"2021-01-06T17:27:36.000000Z\"}]}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tokens",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/tokens.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Token\\TokenController\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.tokens.* - access to all tokens endpoints\n- api.tokens.create - access to create token endpoint\n- api.tokens.delete - access to delete token endpoint",
+            "item": [
+                {
+                    "name": "Create token",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/tokens",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/tokens"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Access\",\"expiration\":7,\"abilities\":[\"api.*\"]}"
+                        },
+                        "description": "Create personal access token.\n\n<aside class=\"notice\">Available only to users with permissions: api.access and api.tokens.create.<\/aside>"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"access_token\": \"1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete token",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/tokens\/:token",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/tokens\/:token",
+                            "variable": [
+                                {
+                                    "id": "token",
+                                    "key": "token",
+                                    "value": "",
+                                    "description": "The token ID."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Delete personal access token.\n\n<aside class=\"notice\">Available only to users with permissions: api.access and api.tokens.delete.<\/aside>"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Authentication",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/auth.php\n\n> Controllers:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Auth\\RegisterController\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Auth\\TokenController",
+            "item": [
+                {
+                    "name": "Token",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/token",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/token"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"kontakt@demo.icore.intelekt.net.pl\",\"password\":\"demo1234\",\"remember\":true}"
+                        },
+                        "description": "Create access token and (optional) refresh token.\n\n<aside class=\"notice\">Access token expires after 2 hours. Refresh token expires after 1 year.<\/aside>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n \"access_token\": \"1|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9\",\n \"refresh_token\": \"2|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Refresh token",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/refresh",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/refresh"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Create new access token and refresh token.\n\n<aside class=\"success\">Refresh token must be in the Authorization header with the value \"Bearer {YOUR_REFRESH_TOKEN}\".<\/aside>"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n \"access_token\": \"3|LN8Gmqe6cRHQpPr5X5GW9wFXuqHVK09L8FSb7Ju9\",\n \"refresh_token\": \"4|hVHAhrgiBmSbyYjbVAC17wjwAJyKK8TQmhglBAtM\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Revoke token",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/revoke",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/revoke"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Revoke access token and refresh token."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Register",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/register",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/register"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"N1ebieski\",\"email\":\"example@example.pl\",\"password\":\"demo1234\",\"password_confirmation\":\"demo1234\",\"privacy_agreement\":true,\"contact_agreement\":true,\"marketing_agreement\":true}"
+                        },
+                        "description": "Create user and send email verification notification",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":{\"id\":103,\"name\":\"Adolf Bauch PhD\",\"status\":{\"value\":1,\"label\":\"active\"},\"created_at\":\"2022-03-18T16:05:31.000000Z\",\"updated_at\":\"2022-03-18T16:05:31.000000Z\",\"roles\":[{\"id\":3,\"name\":\"user\",\"created_at\":\"2021-01-06T17:27:36.000000Z\",\"updated_at\":\"2021-01-06T17:27:36.000000Z\"}]}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/categories.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Category\\CategoryController\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Category\\Post\\CategoryController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\Category\\CategoryResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.categories.* - access to all categories endpoints\n- api.categories.view - access to endpoints with collection of categories",
+            "item": [
+                {
+                    "name": "Index of post's categories",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories\/post\/index",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories\/post\/index"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"page\":1,\"filter\":{\"except\":[],\"search\":\"\",\"status\":1,\"parent\":\"\",\"orderby\":\"\",\"paginate\":\"\"}}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":1079,\"name\":\"Mollitia quis\",\"slug\":\"mollitia-quis\",\"icon\":null,\"status\":{\"value\":1,\"label\":\"active\"},\"real_depth\":0,\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\"},{\"id\":1080,\"name\":\"Et quidem\",\"slug\":\"et-quidem\",\"icon\":null,\"status\":{\"value\":1,\"label\":\"active\"},\"real_depth\":0,\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\"}]}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Index of all categories",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/categories\/index",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/categories\/index"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"page\":1,\"filter\":{\"except\":[],\"search\":\"\",\"status\":1,\"parent\":\"\",\"orderby\":\"\",\"paginate\":\"\"}}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":1077,\"name\":\"Enim eos\",\"slug\":\"enim-eos\",\"icon\":null,\"status\":{\"value\":1,\"label\":\"active\"},\"real_depth\":0,\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\"},{\"id\":1078,\"name\":\"Voluptate est\",\"slug\":\"voluptate-est\",\"icon\":null,\"status\":{\"value\":1,\"label\":\"active\"},\"real_depth\":0,\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\"}]}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Posts",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/posts.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Post\\PostController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\Post\\PostResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.posts.* - access to all posts endpoints\n- api.posts.view - access to endpoints with collection of posts",
+            "item": [
+                {
+                    "name": "Index of posts",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/posts\/index",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/posts\/index"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"page\":1,\"filter\":{\"except\":[],\"search\":\"\",\"status\":1,\"category\":\"\",\"orderby\":\"\",\"paginate\":\"\"}}"
+                        },
+                        "description": "<aside class=\"notice\">Available only to users with permissions: api.access and api.posts.view.<\/aside>"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":167,\"slug\":\"aliquam-sit-qui-sit-optio\",\"title\":\"Aliquam sit qui sit optio.\",\"short_content\":\"Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Od\",\"content\":\"Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.\",\"content_html\":\"<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.<\\\/p>\",\"no_more_content_html\":\"<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.<\\\/p>\",\"less_content_html\":\"<p>Qui autem qui natus aut. Maxime voluptate aliquid et aliquid veritatis unde. Provident totam ut quo sunt amet totam. Ut odio et aperiam. Odit sit rem aut. Delectus quam fugit autem sed. Ea aut quas provident modi necessitatibus in. Atque molestiae ipsa omnis totam quam. Quia ut eveniet maxime repellendus porro nostrum. Illo occaecati libero minima quia quam. Dolor et rerum molestiae explicabo. Illo perspiciatis et necessitatibus ullam sunt nulla alias officia. Labore iste perspiciatis qui ut. Odit facilis aliquam a rem. Sapiente necessitatibus aut aut nemo rerum aut. Qui a maiores quam ab neque animi distinctio et. Exercitationem harum dolorem illo alias qui nostrum dolore. Quidem natus accusantium dolores minus quam quo pariatur praesentium. Dolores quia enim voluptatibus consequatur dolorem. Ut ut pariatur corrupti atque. Omnis eum eligendi possimus. Ullam id aliquid ea enim ducimus. Sed quia animi earum quo. Esse porro ipsum voluptatem ipsam laborum et voluptatem. Ex dolores optio rerum sunt voluptatem sed facilis. Illo aut distinctio nemo iste rerum blanditiis inventore. Aut architecto vitae possimus sit molestias omnis. Non ut ratione ut animi. Sunt possimus quidem suscipit nostrum provident. Minus consequatur vero quod sed aut. Et et nobis quo dolores temporibus qui in ipsa. Voluptatem ex eos odio sit sit molestias itaque rerum. Aspernatur aspernatur voluptatum molestiae. Dolor porro aut molestiae alias non quod accusantium. Vel similique dolorem rerum sunt. Magnam error quaerat libero sint. Sit laboriosam fugiat cupiditate ut architecto. Quod ea deleniti corrupti id ducimus vel ullam accusantium. Totam porro quidem culpa quidem deleniti nostrum placeat. Quam et aut ut natus molestiae et similique. Deserunt autem beatae vel id. Voluptatem et quia sunt consequatur accusantium. Voluptate et velit non et nisi. Minus vel sint hic saepe dolorem delectus ipsum iusto.<\\\/p>\",\"seo_title\":null,\"meta_title\":\"Aliquam sit qui sit optio.\",\"seo_desc\":\"Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.\",\"meta_desc\":\"Numquam deleniti iure corporis eveniet delectus et. Sint voluptas explicabo ipsa nemo deleniti. Ut molestiae sint officiis totam consectetur sint. Unde id distinctio adipisci illo natus.\",\"seo_noindex\":true,\"seo_nofollow\":false,\"status\":{\"value\":1,\"label\":\"active\"},\"comment\":true,\"first_image\":null,\"published_at\":\"2021-09-12T20:43:17.000000Z\",\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\",\"user\":{\"id\":104,\"name\":\"Jovany Ankunding Sr.\",\"status\":{\"value\":0,\"label\":\"inactive\"},\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\"},\"links\":{\"web\":\"http:\\\/\\\/demo.idir.intelekt.net.pl\\\/posts\\\/aliquam-sit-qui-sit-optio\"}},{\"id\":168,\"slug\":\"ipsum-aspernatur-laudantium-blanditiis\",\"title\":\"Ipsum aspernatur laudantium blanditiis.\",\"short_content\":\"Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremq\",\"content\":\"Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.\",\"content_html\":\"<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.<\\\/p>\",\"no_more_content_html\":\"<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.<\\\/p>\",\"less_content_html\":\"<p>Consequuntur mollitia saepe consequatur delectus porro. Sit praesentium eveniet quis veniam. Maiores provident consequuntur dignissimos et aspernatur. Voluptates numquam nemo molestiae. Est repellat provident alias libero. Aspernatur nihil unde perspiciatis. Autem eius id ut officia nulla. Mollitia aut voluptate ipsum consectetur neque dolor. Sint fugiat reiciendis accusantium. Voluptatum similique sit est error ut ipsum. Suscipit beatae reprehenderit vitae numquam ut nam incidunt. Unde doloremque a ex minus repudiandae. Aut non neque similique ut voluptates consectetur. Pariatur voluptas autem consequatur facere sit qui. Accusamus doloremque qui eum dolores eum consequatur. Nam architecto temporibus impedit et. Quae quia nihil atque dolor accusamus. Tempora repellat autem delectus et porro ut non. Deserunt excepturi autem autem et a maxime. Autem autem odit ex animi magni. Nam expedita repellendus est ea in autem. Consequatur amet aut at voluptatibus fugiat odit atque. Ab quas soluta aut et unde aut. Et omnis architecto nemo voluptatem mollitia veritatis iure distinctio. Ea adipisci placeat et non error sunt aperiam. Officiis voluptatum voluptas vero optio voluptatem reiciendis consequatur ullam. Facilis quia et ipsum alias. Eos cumque qui voluptatibus et. Quam rem nulla velit. Facere minus dicta quasi voluptates. Cumque quam cumque nulla debitis. Veritatis accusamus voluptatum vel mollitia suscipit. Accusamus voluptatem voluptatem et. Ipsa qui placeat eos modi laborum. Nostrum nulla odit quia distinctio harum distinctio assumenda ad. Facilis sint esse voluptas quas. Expedita et cupiditate est nisi est sed. Omnis dicta aut aliquid qui doloremque. Aut aut natus dolores perferendis. Distinctio voluptas qui tenetur non fuga consectetur. Laudantium illum id neque laboriosam odio. Velit velit accusantium soluta nihil cumque quia molestiae vero. Magni quidem omnis vitae maxime quis assumenda dolor molestias.<\\\/p>\",\"seo_title\":null,\"meta_title\":\"Ipsum aspernatur laudantium blanditiis.\",\"seo_desc\":\"Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.\",\"meta_desc\":\"Quia occaecati recusandae accusamus delectus. Qui voluptas exercitationem quasi dolores. Officia sed laudantium eius tempore ipsa iusto. Totam eius animi consequatur quod.\",\"seo_noindex\":true,\"seo_nofollow\":false,\"status\":{\"value\":1,\"label\":\"active\"},\"comment\":false,\"first_image\":null,\"published_at\":\"2021-09-16T22:59:35.000000Z\",\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\",\"user\":{\"id\":105,\"name\":\"Mohammed Boyer\",\"status\":{\"value\":1,\"label\":\"active\"},\"created_at\":\"2022-03-18T16:05:33.000000Z\",\"updated_at\":\"2022-03-18T16:05:33.000000Z\"},\"links\":{\"web\":\"http:\\\/\\\/demo.idir.intelekt.net.pl\\\/posts\\\/ipsum-aspernatur-laudantium-blanditiis\"}}]}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/tags.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\Tag\\TagController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\Tag\\TagResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.tags.* - access to all tags endpoints\n- api.tags.view - access to endpoints with collection of tags",
+            "item": [
+                {
+                    "name": "Index of tags",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/tags\/index",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/tags\/index"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"page\":1,\"filter\":{\"except\":[],\"search\":\"\",\"orderby\":\"\",\"paginate\":\"\"}}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":174,\"name\":\"Consequatur\",\"slug\":\"consequatur\",\"created_at\":\"2022-03-18T16:05:35.000000Z\",\"updated_at\":\"2022-03-18T16:05:35.000000Z\"},{\"id\":175,\"name\":\"Tempore\",\"slug\":\"tempore\",\"created_at\":\"2022-03-18T16:05:35.000000Z\",\"updated_at\":\"2022-03-18T16:05:35.000000Z\"}]}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "description": "\n> Routes:\n\n    \/routes\/vendor\/icore\/api\/users.php\n\n> Controller:\n\n    N1ebieski\\ICore\\Http\\Controllers\\Api\\User\\UserController\n\n> Resource:\n\n    N1ebieski\\ICore\\Http\\Resources\\User\\UserResource\n\nPermissions:\n\n- api.* - access to all api endpoints\n- api.users.* - access to all users endpoints\n- api.users.view - access to endpoints with collection of users",
+            "item": [
+                {
+                    "name": "Index of users",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/users\/index",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/users\/index"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"page\":1,\"filter\":{\"except\":[],\"search\":\"\",\"status\":1,\"role\":\"\",\"orderby\":\"updated_at|desc\",\"paginate\":\"\"}}"
+                        },
+                        "description": "<aside class=\"notice\">Available only to users with permissions: api.access, api.users.view and admin.users.view.<\/aside>"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":107,\"name\":\"Ethelyn Krajcik\",\"status\":{\"value\":1,\"label\":\"active\"},\"created_at\":\"2022-03-18T16:05:36.000000Z\",\"updated_at\":\"2022-03-18T16:05:36.000000Z\",\"roles\":[{\"id\":3,\"name\":\"user\",\"created_at\":\"2021-01-06T17:27:36.000000Z\",\"updated_at\":\"2021-01-06T17:27:36.000000Z\"}]},{\"id\":108,\"name\":\"Emmalee Rau\",\"status\":{\"value\":1,\"label\":\"active\"},\"created_at\":\"2022-03-18T16:05:36.000000Z\",\"updated_at\":\"2022-03-18T16:05:36.000000Z\",\"roles\":[{\"id\":3,\"name\":\"user\",\"created_at\":\"2021-01-06T17:27:36.000000Z\",\"updated_at\":\"2021-01-06T17:27:36.000000Z\"}]}]}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer"
+    }
+}
