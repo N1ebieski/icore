@@ -1,9 +1,9 @@
-(function($) {
+(function ($) {
     $.fn.chart = function (options) {
         return new Chart(this, options);
     };
 
-    $.fn.serializeObject = function() {
+    $.fn.serializeObject = function () {
 
         var self = this,
             json = {},
@@ -17,19 +17,19 @@
             };
 
 
-        this.build = function(base, key, value){
+        this.build = function (base, key, value){
             base[key] = value;
             return base;
         };
 
-        this.push_counter = function(key){
+        this.push_counter = function (key){
             if(push_counters[key] === undefined){
                 push_counters[key] = 0;
             }
             return push_counters[key]++;
         };
 
-        $.each($(this).serializeArray(), function(){
+        $.each($(this).serializeArray(), function (){
 
             // Skip invalid keys
             if(!patterns.validate.test(this.name)){
@@ -73,7 +73,7 @@
             autogrow: typeof options.autogrow === "boolean" ? options.autogrow : true
         };
 
-        function autoHeight_(element) {
+        function autoHeight_ (element) {
             if (element.offsetHeight < element.scrollHeight) {
                 return $(element).css({ 'height': 'auto' })
                     .height(element.scrollHeight);
@@ -108,8 +108,8 @@
     $.sanitize = function (html) {
         let $output = $($.parseHTML('<div>' + html + '</div>', null, false));
 
-        $output.find('*').each(function(index, node) {
-            $.each(node.attributes, function() {
+        $output.find('*').each(function (index, node) {
+            $.each(node.attributes, function () {
                 let attrName = this.name;
                 let attrValue = this.value;
 
@@ -240,4 +240,55 @@
 
         return this.append($error.html());
     };
+
+    $.fn.clipboard = function (options) {
+        if (options.lang === "pl") {
+            $.fn.clipboard.defaults.translations = {
+                title: "Skopiuj do schowka",
+                success: "Skopiowano do schowka",
+            };
+        }
+
+        options = $.extend({
+            lang: "en",
+        }, $.fn.clipboard.defaults, options);
+
+        this.append($.sanitize(`
+            <button
+                style="position:absolute;right:0;top:0;"
+                class="btn p-0 m-0 copy-to-clipboard" 
+                type="submit"
+            >
+                <i 
+                    data-toggle="tooltip" 
+                    data-placement="top"
+                    title="${options.translations.title}" 
+                    class="fas fa-copy"
+                ></i>
+            </button>                
+        `));
+
+        $(document).trigger('readyAndAjax.*/bootstrap_tooltips@init');
+
+        this.on("click", ".copy-to-clipboard", function (e) {
+            e.preventDefault();
+
+            navigator.clipboard.writeText($(this).parent().text().trim());
+
+            $("body").addToast({
+                title: options.translations.success,
+                type: "success",
+            });
+
+            $(document).trigger('readyAndAjax.*/toasts@init');
+        });
+
+        return this;
+    };
+    $.fn.clipboard.defaults = {
+        translations: {
+            title: "Copy to clipboard",
+            success: "Copied to the clipboard",
+        },
+    };    
 })(jQuery);
