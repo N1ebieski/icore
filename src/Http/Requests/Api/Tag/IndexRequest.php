@@ -30,7 +30,7 @@ class IndexRequest extends FormRequest
         return [
             'page' => 'integer',
             'filter' => 'bail|array',
-            'filter.except' => 'bail|filled|array',
+            'filter.except' => 'bail|nullable|array',
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
             'filter.orderby' => [
@@ -38,7 +38,12 @@ class IndexRequest extends FormRequest
                 'nullable',
                 'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,sum|asc,sum|desc'
             ],
-            'filter.paginate' => Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]) . '|integer'
+            'filter.paginate' => [
+                'bail',
+                'nullable',
+                'integer',
+                Rule::in([$paginate, ($paginate * 2), ($paginate * 4)])
+            ]
         ];
     }
 

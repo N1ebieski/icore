@@ -90,6 +90,7 @@ class IndexRequest extends FormRequest
             ],
             'filter.paginate' => [
                 'bail',
+                'nullable',
                 'integer',
                 Rule::in([$paginate, ($paginate * 2), ($paginate * 4)])
             ]
