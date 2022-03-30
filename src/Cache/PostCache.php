@@ -182,7 +182,7 @@ class PostCache
                 $posts = $this->post->makeRepo()->getArchives();
 
                 $posts->map(function ($item) {
-                    $item->month_localized = $this->carbon->createFromFormat('m', $item->month)
+                    $item->month_localized = $this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}")
                         ->locale($this->config->get('app.locale'))
                         ->isoFormat('MMMM');
                 });
