@@ -183,7 +183,8 @@ class PostCache
 
                 $posts->map(function ($item) {
                     $item->month_localized = $this->carbon->createFromFormat('m', $item->month)
-                    ->formatLocalized('%B');
+                        ->locale($this->config->get('app.locale'))
+                        ->isoFormat('MMMM');
                 });
 
                 return $posts;
