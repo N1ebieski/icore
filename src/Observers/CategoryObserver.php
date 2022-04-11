@@ -8,6 +8,19 @@ use N1ebieski\ICore\Models\Category\Category;
 class CategoryObserver
 {
     /**
+     * Handle the link "saving" event.
+     *
+     * @param  \N1ebieski\ICore\Models\Category\Category  $category
+     * @return void
+     */
+    public function saving(Category $category)
+    {
+        $parent = $category->find($category->parent_id);
+
+        $category->real_depth = $parent !== null ? $parent->real_depth + 1 : 0;
+    }
+
+    /**
      * Handle the category "created" event.
      *
      * @param  \N1ebieski\ICore\Models\Category\Category  $category

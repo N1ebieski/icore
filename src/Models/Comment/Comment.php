@@ -13,15 +13,15 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Comment extends Entity implements CommentInterface
+class Comment extends Entity
 {
     use FullTextSearchable;
     use Filterable;
@@ -246,10 +246,12 @@ class Comment extends Entity implements CommentInterface
     // Mutators
 
     /**
-     * [setContentAttribute description]
-     * @param void $value [description]
+     * Undocumented function
+     *
+     * @param string $value
+     * @return void
      */
-    public function setContentAttribute($value): void
+    public function setContentAttribute(string $value): void
     {
         $this->attributes['content'] = strip_tags(preg_replace('/\s+/', ' ', str_replace(['\n', '\r'], '', $value)));
     }

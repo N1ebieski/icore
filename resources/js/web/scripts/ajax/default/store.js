@@ -27,7 +27,7 @@ $(document).on(
                 $element.loader('hide');
                 $form.input.addClass('is-valid');
             },
-            success: function (response) {
+            success: function () {
                 $('.modal').modal('hide');
                 
                 window.location.reload();

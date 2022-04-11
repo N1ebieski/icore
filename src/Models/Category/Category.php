@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Category extends Entity implements CategoryInterface
+class Category extends Entity
 {
     use Sluggable;
     use Filterable;
@@ -202,9 +202,10 @@ class Category extends Entity implements CategoryInterface
      * Retrieve the model for a bound value.
      *
      * @param  mixed  $value
+     * @param  string|null  $field
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public function resolveRouteBinding($value)
+    public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('id', $value)->orWhere('slug', $value)
             ->WithAncestorsExceptSelf()->first() ?? abort(404);

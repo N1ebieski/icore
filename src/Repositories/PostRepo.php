@@ -132,7 +132,7 @@ class PostRepo
      */
     public function firstBySlug(string $slug)
     {
-        return $this->post->whereSlug($slug)
+        return $this->post->where('slug', $slug)
             ->active()
             ->with([
                 'categories' => function ($query) {

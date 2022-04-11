@@ -92,10 +92,10 @@ class CategoryRepo
      */
     public function getAsTree(): Collection
     {
-        return $this->category->getTreeByQuery(
-            $this->category->poliType()
-                ->orderBy('position', 'asc')
-        );
+        return  $this->category->poliType()
+            ->orderBy('position', 'asc')
+            ->get()
+            ->toTree();
     }
 
     /**
@@ -104,18 +104,18 @@ class CategoryRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
-        return $this->category->getTreeByQuery(
-            $this->category->whereNotIn(
-                'id',
-                $this->category->find($this->category->id)
+        return $this->category->whereNotIn(
+            'id',
+            $this->category->find($this->category->id)
                     ->descendants()
                     ->get(['id'])
                     ->pluck('id')
                     ->toArray()
-            )
+        )
             ->poliType()
             ->orderBy('position', 'asc')
-        );
+            ->get()
+            ->toTree();
     }
 
     /**

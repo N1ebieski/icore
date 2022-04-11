@@ -26,7 +26,7 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Page extends Entity implements PageInterface
+class Page extends Entity
 {
     use Sluggable;
     use Taggable;
@@ -384,7 +384,7 @@ class Page extends Entity implements PageInterface
      */
     public function getShortContentAttribute(): string
     {
-        return e(substr(strip_tags($this->replacement_content), 0, 500), false);
+        return e(mb_substr(strip_tags($this->replacement_content), 0, 500), false);
     }
 
     /**

@@ -11,7 +11,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var string
      */
-    public const VERSION = "6.0.2";
+    public const VERSION = "7.0.0";
 
     /**
      * Register services.
@@ -45,6 +45,7 @@ class ICoreServiceProvider extends ServiceProvider
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
+            \N1ebieski\ICore\Http\Middleware\TrimStrings::class,
             \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
             \Nckg\Minify\Middleware\MinifyResponse::class
@@ -54,6 +55,7 @@ class ICoreServiceProvider extends ServiceProvider
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
+            \N1ebieski\ICore\Http\Middleware\TrimStrings::class,
             \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,

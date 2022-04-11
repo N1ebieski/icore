@@ -134,7 +134,7 @@ class MailingEmailService
                         ];
                     });
 
-                    $this->mailingEmail->insertIgnore($attributes);
+                    $this->mailingEmail->insertOrIgnore($attributes);
                 });
         });
     }
@@ -168,7 +168,7 @@ class MailingEmailService
                         ];
                     });
 
-                    $this->mailingEmail->insertIgnore($attributes);
+                    $this->mailingEmail->insertOrIgnore($attributes);
                 });
         });
     }
@@ -198,7 +198,7 @@ class MailingEmailService
                     'updated_at' => $this->carbon->now()
                 ];
 
-                $this->mailingEmail->insertIgnore($attributes);
+                $this->mailingEmail->insertOrIgnore($attributes);
             }
         });
     }

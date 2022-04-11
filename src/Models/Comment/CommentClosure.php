@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Models\Comment;
 
 use Franzose\ClosureTable\Models\ClosureTable;
 
-class CommentClosure extends ClosureTable implements CommentClosureInterface
+class CommentClosure extends ClosureTable
 {
     /**
      * The table associated with the model.

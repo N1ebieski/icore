@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Jobs;
 
-use Exception;
+use Throwable;
 use Illuminate\Bus\Queueable;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Contracts\Mail\Mailer;
@@ -82,10 +82,10 @@ class SendMailingJob implements ShouldQueue
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param  Throwable  $exception
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed(Throwable $exception)
     {
         $this->mailingEmail->makeRepo()->markAsError();
     }

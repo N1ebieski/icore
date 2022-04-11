@@ -16,7 +16,8 @@
             <label class="custom-control-label" for="select{{ $category->id }}">
         @endcan
             <ul class="list-unstyled mb-0 pb-0">
-                @if ($category->relationLoaded('ancestors') && $category->ancestors->isNotEmpty())
+                @if ((!isset($filter) || !collect($filter)->except(['paginate', 'except', 'parent'])->isEmptyItems())
+                && $category->relationLoaded('ancestors') && $category->ancestors->isNotEmpty())
                 <li>
                     <small>
                         <span>{{ trans('icore::categories.ancestors') }}:</span>
