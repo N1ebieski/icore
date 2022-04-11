@@ -12,6 +12,7 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Services\CategoryService;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Repositories\CategoryRepo;
+use N1ebieski\ICore\Models\Traits\HasRealDepth;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
@@ -24,6 +25,7 @@ class Category extends Entity
     use FullTextSearchable;
     use Polymorphic;
     use Carbonable;
+    use HasRealDepth;
 
     // Configuration
 

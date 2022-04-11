@@ -15,9 +15,18 @@ class CategoryObserver
      */
     public function saving(Category $category)
     {
-        $parent = $category->find($category->parent_id);
+        $category->real_depth = $category->getNextRealDepth();
+    }
 
-        $category->real_depth = $parent !== null ? $parent->real_depth + 1 : 0;
+    /**
+     * Handle the link "saved" event.
+     *
+     * @param  \N1ebieski\ICore\Models\Category\Category  $category
+     * @return void
+     */
+    public function saved(Category $category)
+    {
+        $category->reorderRealDepths();
     }
 
     /**

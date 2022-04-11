@@ -94,7 +94,7 @@ class PostRepo
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
             ->filterCommentsOrderBy($filter['orderby'])
-            ->filterPaginate($this->paginate);
+            ->filterPaginate(10);
     }
 
     /**

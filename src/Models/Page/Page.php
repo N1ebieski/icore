@@ -16,7 +16,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PageRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Page\PageInterface;
+use N1ebieski\ICore\Models\Traits\HasRealDepth;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,6 +33,7 @@ class Page extends Entity
     use FullTextSearchable;
     use PivotEventTrait;
     use Carbonable;
+    use HasRealDepth;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }

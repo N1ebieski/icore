@@ -76,9 +76,9 @@ class PageRepo
      */
     public function getAsTree(): Collection
     {
-        return $this->page->getTreeByQuery(
-            $this->page->withAncestorsExceptSelf()
-        );
+        return $this->page->withAncestorsExceptSelf()
+            ->get()
+            ->toTree();
     }
 
     /**
@@ -87,17 +87,17 @@ class PageRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
-        return $this->page->getTreeByQuery(
-            $this->page->whereNotIn(
-                'id',
-                $this->page->find($this->page->id)
+        return $this->page->whereNotIn(
+            'id',
+            $this->page->find($this->page->id)
                     ->descendants()
                     ->get(['id'])
                     ->pluck('id')
                     ->toArray()
-            )
+        )
             ->withAncestorsExceptSelf()
-        );
+            ->get()
+            ->toTree();
     }
 
     /**
@@ -125,7 +125,8 @@ class PageRepo
     public function getSiblingsAsArray(): array
     {
         return $this->page->getSiblings(['id', 'position'])
-            ->pluck('position', 'id')->toArray();
+            ->pluck('position', 'id')
+            ->toArray();
     }
 
     /**

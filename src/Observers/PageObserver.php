@@ -14,6 +14,28 @@ class PageObserver
     private static $pivotEvent = false;
 
     /**
+     * Handle the link "saving" event.
+     *
+     * @param  Page  $page
+     * @return void
+     */
+    public function saving(Page $page)
+    {
+        $page->real_depth = $page->getNextRealDepth();
+    }
+
+    /**
+     * Handle the link "saved" event.
+     *
+     * @param  Page  $page
+     * @return void
+     */
+    public function saved(Page $page)
+    {
+        $page->reorderRealDepths();
+    }
+
+    /**
      * Handle the page "created" event.
      *
      * @param  \N1ebieski\ICore\Models\Page\Page  $page

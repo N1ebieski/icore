@@ -8,6 +8,28 @@ use N1ebieski\ICore\Models\Comment\Comment;
 class CommentObserver
 {
     /**
+     * Handle the link "saving" event.
+     *
+     * @param  Comment  $comment
+     * @return void
+     */
+    public function saving(Comment $comment)
+    {
+        $comment->real_depth = $comment->getNextRealDepth();
+    }
+
+    /**
+     * Handle the link "saved" event.
+     *
+     * @param  Comment  $comment
+     * @return void
+     */
+    public function saved(Comment $comment)
+    {
+        $comment->reorderRealDepths();
+    }
+
+    /**
      * Handle the post "created" event.
      *
      * @param  Comment  $comment

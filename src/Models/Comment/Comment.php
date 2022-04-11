@@ -12,6 +12,7 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\HasRealDepth;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -27,6 +28,7 @@ class Comment extends Entity
     use Filterable;
     use Polymorphic;
     use Carbonable;
+    use HasRealDepth;
 
     // Configuration
 
