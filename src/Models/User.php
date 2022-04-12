@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -30,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Filterable;
     use Carbonable;
     use PivotEventTrait;
+    use HasFactory;
 
     // Configuration
 
@@ -127,6 +129,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\User\UserFactory::new();
+    }
 
     // Relations
 

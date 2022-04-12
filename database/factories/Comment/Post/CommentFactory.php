@@ -1,28 +1,31 @@
 <?php
 
-use Faker\Generator as Faker;
-use N1ebieski\ICore\Models\User;
+namespace N1ebieski\ICore\Database\Factories\Comment\Post;
+
+use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\Database\Factories\Comment\CommentFactory as BaseCommentFactory;
 
-$factory->define(Comment::class, function (Faker $faker) {
+class CommentFactory extends BaseCommentFactory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Comment::class;
 
-    $content = $faker->text(300);
-
-    return [
-        'content_html' => $content,
-        'content' => $content,
-        'status' => rand(0, 1),
-    ];
-});
-
-$factory->state(Comment::class, 'active', function (Faker $faker) {
-    return [
-        'status' => 1
-    ];
-});
-
-$factory->state(Comment::class, 'with_user', function (Faker $faker) {
-    return [
-        'user_id' => factory(User::class)->create()->id
-    ];
-});
+    /**
+    * Undocumented function
+    *
+    * @return static
+    */
+    public function withPost()
+    {
+        return $this->for(
+            Post::factory()->active()->commentable()->publish()->withUser(),
+            'morph'
+        );
+    }
+}

@@ -11,6 +11,7 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tag extends Taggable
 {
@@ -18,6 +19,7 @@ class Tag extends Taggable
     use Polymorphic;
     use Filterable;
     use Carbonable;
+    use HasFactory;
 
     // Configuration
 
@@ -55,6 +57,16 @@ class Tag extends Taggable
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Tag\TagFactory::new();
+    }
 
     // Scopes
 

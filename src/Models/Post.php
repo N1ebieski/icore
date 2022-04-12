@@ -23,6 +23,7 @@ use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Post extends Model
@@ -32,6 +33,7 @@ class Post extends Model
     use FullTextSearchable;
     use PivotEventTrait;
     use Carbonable;
+    use HasFactory;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }
@@ -165,6 +167,16 @@ class Post extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Post\PostFactory::new();
+    }
 
     /**
      * Retrieve the model for a bound value.

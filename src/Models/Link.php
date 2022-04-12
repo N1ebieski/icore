@@ -13,6 +13,7 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Positionable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Link extends Model
@@ -20,6 +21,7 @@ class Link extends Model
     use Positionable;
     use Carbonable;
     use Filterable;
+    use HasFactory;
 
     // Configuration
 
@@ -56,6 +58,16 @@ class Link extends Model
      * @var string
      */
     public $path = 'vendor/icore/links';
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Link\LinkFactory::new();
+    }
 
     // Relations
 

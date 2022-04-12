@@ -72,8 +72,7 @@ class BanModel extends Model
         $order = explode('|', $orderby);
 
         if (count($order) == 2) {
-            return $query->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc')
-                ->orderBy('bans_models.id', 'asc');
+            return $query->orderBy($order[0], $order[1])->orderBy('bans_models.id', 'asc');
         }
 
         return $query->latest('bans_models.created_at');

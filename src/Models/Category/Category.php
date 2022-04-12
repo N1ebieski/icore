@@ -16,6 +16,7 @@ use N1ebieski\ICore\Models\Traits\HasRealDepth;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Entity
@@ -26,6 +27,7 @@ class Category extends Entity
     use Polymorphic;
     use Carbonable;
     use HasRealDepth;
+    use HasFactory;
 
     // Configuration
 
@@ -113,6 +115,16 @@ class Category extends Entity
     protected $attributes = [
         'status' => self::ACTIVE,
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \N1ebieski\ICore\Database\Factories\Category\CategoryFactory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Category\CategoryFactory::new();
+    }
 
     // Relations
 

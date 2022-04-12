@@ -36,7 +36,7 @@ class Stat extends BaseStat
      */
     public function getModelTypeAttribute(): string
     {
-        return \N1ebieski\IPost\Models\Post::class;
+        return \N1ebieski\ICore\Models\Post::class;
     }
 
     // Relations
@@ -48,6 +48,6 @@ class Stat extends BaseStat
      */
     public function morphs(): MorphToMany
     {
-        return $this->morphedByMany(\N1ebieski\IPost\Models\Post::class, 'model', 'stats_values');
+        return $this->morphedByMany(\N1ebieski\ICore\Models\Post::class, 'model', 'stats_values');
     }
 }

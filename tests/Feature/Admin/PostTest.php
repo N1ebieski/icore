@@ -4,7 +4,6 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +23,9 @@ class PostTest extends TestCase
 
     public function testPostIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.index'));
 
@@ -35,20 +34,22 @@ class PostTest extends TestCase
 
     public function testPostIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class, 50)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->count(50)->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.index', [
             'page' => 2,
-            'orderby' => 'created_at|asc'
+            'filter' => [
+                'orderby' => 'created_at|asc'
+            ]
         ]));
 
         $response->assertViewIs('icore::admin.post.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$post[30]->title, $post[30]->shortContent]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$post[30]->title, $post[30]->shortContent], false);
     }
 
     public function testPostEditAsGuest()
@@ -60,11 +61,11 @@ class PostTest extends TestCase
 
     public function testPostEditWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.edit', [$post->id]));
 
@@ -73,9 +74,9 @@ class PostTest extends TestCase
 
     public function testNoexistPostEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.edit', [2327382]));
 
@@ -84,15 +85,16 @@ class PostTest extends TestCase
 
     public function testPostEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.edit', [$post->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString($post->content, $response->getData()->view);
         $this->assertStringContainsString(route('admin.post.update', [$post->id]), $response->getData()->view);
     }
@@ -106,11 +108,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update', [$post->id]));
 
@@ -119,9 +121,9 @@ class PostTest extends TestCase
 
     public function testNoexistPostUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update', [2327382]));
 
@@ -130,11 +132,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update', [$post->id]), [
             'title' => '',
@@ -148,11 +150,11 @@ class PostTest extends TestCase
 
     public function testPostUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update', [$post->id]), [
             'title' => 'Post zaktualizowany.',
@@ -179,11 +181,11 @@ class PostTest extends TestCase
 
     public function testPostEditFullWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.edit_full', [$post->id]));
 
@@ -192,9 +194,9 @@ class PostTest extends TestCase
 
     public function testNoexistPostEditFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.edit_full', [2327382]));
 
@@ -203,17 +205,17 @@ class PostTest extends TestCase
 
     public function testPostEditFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.edit_full', [$post->id]));
 
         $response->assertOk()->assertViewIs('icore::admin.post.edit_full');
-        $response->assertSeeInOrder([$post->title, $post->content]);
-        $response->assertSee(route('admin.post.update_full', [$post->id]));
+        $response->assertSeeInOrder([$post->title, $post->content], false);
+        $response->assertSee(route('admin.post.update_full', [$post->id]), false);
     }
 
     public function testPostUpdateFullAsGuest()
@@ -225,11 +227,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateFullWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update_full', [$post->id]));
 
@@ -238,9 +240,9 @@ class PostTest extends TestCase
 
     public function testNoexistPostUpdateFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update_full', [2327382]));
 
@@ -249,11 +251,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateFullValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update_full', [$post->id]), [
             'title' => 'Hdjshdjshdjshdjsds',
@@ -267,13 +269,13 @@ class PostTest extends TestCase
 
     public function testPostUpdateFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.post.update_full', [$post->id]), [
             'categories' => [$category->id],
@@ -317,11 +319,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateStatusWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.post.update_status', [$post->id]));
 
@@ -330,9 +332,9 @@ class PostTest extends TestCase
 
     public function testNoexistPostUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.post.update_status', [2327382]));
 
@@ -341,11 +343,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateStatusValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.post.update_status', [$post->id]), [
             'status' => 323,
@@ -358,11 +360,11 @@ class PostTest extends TestCase
 
     public function testPostUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.post.update_status', [$post->id]), [
             'status' => 0,
@@ -387,11 +389,11 @@ class PostTest extends TestCase
 
     public function testPostDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.post.destroy', [$post->id]));
 
@@ -400,9 +402,9 @@ class PostTest extends TestCase
 
     public function testNoexistPostDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.post.destroy', [2327382]));
 
@@ -411,11 +413,11 @@ class PostTest extends TestCase
 
     public function testPostDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
@@ -441,9 +443,9 @@ class PostTest extends TestCase
 
     public function testPostDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.post.destroy_global'), []);
 
@@ -452,9 +454,9 @@ class PostTest extends TestCase
 
     public function testPostDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.post.destroy_global', [
             'dasdas',
@@ -466,11 +468,11 @@ class PostTest extends TestCase
 
     public function testPostDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class, 10)->states(['active', 'publish', 'with_user'])->create();
+        $post = Post::factory()->count(10)->active()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.post.index'));
 
@@ -499,9 +501,9 @@ class PostTest extends TestCase
 
     public function testPostCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.create'));
 
@@ -510,14 +512,14 @@ class PostTest extends TestCase
 
     public function testPostCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.post.create'));
 
         $response->assertOk()->assertViewIs('icore::admin.post.create');
-        $response->assertSee(route('admin.post.store'));
+        $response->assertSee(route('admin.post.store'), false);
     }
 
     public function testPostStoreAsGuest()
@@ -529,9 +531,9 @@ class PostTest extends TestCase
 
     public function testPostStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.post.store'));
 
@@ -540,9 +542,9 @@ class PostTest extends TestCase
 
     public function testPostStoreValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.post.store'), [
             'title' => 'Hdjshdjshdjshdjsds',
@@ -556,11 +558,11 @@ class PostTest extends TestCase
 
     public function testPostStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.post.store'), [
             'categories' => [$category->id],

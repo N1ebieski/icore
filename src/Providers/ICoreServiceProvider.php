@@ -52,7 +52,7 @@ class ICoreServiceProvider extends ServiceProvider
         ]);
 
         Route::middlewareGroup('icore.api', [
-            'throttle:60,1',
+            'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
             \N1ebieski\ICore\Http\Middleware\TrimStrings::class,
@@ -83,10 +83,6 @@ class ICoreServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'icore');
 
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'icore');
-
-        if ($this->app->environment('local')) {
-            $this->app->make('Illuminate\Database\Eloquent\Factory')->load(base_path('database/factories') . '/vendor/icore');
-        }
 
         $this->publishes([
             __DIR__ . '/../../config/icore.php' => config_path('icore.php'),
@@ -161,7 +157,7 @@ class ICoreServiceProvider extends ServiceProvider
         ], 'icore.migrations');
 
         $this->publishes([
-            __DIR__ . '/../../database/seeds' => base_path('database/seeds') . '/vendor/icore',
-        ], 'icore.seeds');
+            __DIR__ . '/../../database/seeders' => base_path('database/seeders') . '/vendor/icore',
+        ], 'icore.seeders');
     }
 }

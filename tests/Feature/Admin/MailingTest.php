@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Crons\MailingCron;
 use Illuminate\Support\Facades\Artisan;
-// use App\Jobs\SendMailing;
 use N1ebieski\ICore\Models\MailingEmail;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -28,9 +27,9 @@ class MailingTest extends TestCase
 
     public function testMailingIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.mailing.index'));
 
@@ -39,17 +38,22 @@ class MailingTest extends TestCase
 
     public function testMailingIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $mailing = factory(Mailing::class, 50)->create();
+        $mailing = Mailing::factory()->count(50)->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
-        $response = $this->get(route('admin.mailing.index', ['page' => 2, 'orderby' => 'created_at|asc']));
+        $response = $this->get(route('admin.mailing.index', [
+            'page' => 2,
+            'filter' => [
+                'orderby' => 'created_at|asc'
+            ]
+        ]));
 
         $response->assertViewIs('icore::admin.mailing.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$mailing[30]->title, $mailing[30]->shortContent]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$mailing[30]->title, $mailing[30]->shortContent], false);
     }
 
     public function testMailingEditAsGuest()
@@ -61,11 +65,11 @@ class MailingTest extends TestCase
 
     public function testMailingEditWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.mailing.edit', [$mailing->id]));
 
@@ -74,9 +78,9 @@ class MailingTest extends TestCase
 
     public function testNoexistMailingEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.mailing.edit', [2327382]));
 
@@ -85,17 +89,17 @@ class MailingTest extends TestCase
 
     public function testMailingEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.mailing.edit', [$mailing->id]));
 
         $response->assertOk()->assertViewIs('icore::admin.mailing.edit');
-        $response->assertSeeInOrder([$mailing->title, $mailing->content]);
-        $response->assertSee(route('admin.mailing.update', [$mailing->id]));
+        $response->assertSeeInOrder([$mailing->title, $mailing->content], false);
+        $response->assertSee(route('admin.mailing.update', [$mailing->id]), false);
     }
 
     public function testMailingUpdateAsGuest()
@@ -107,11 +111,11 @@ class MailingTest extends TestCase
 
     public function testMailingUpdateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.mailing.update', [$mailing->id]));
 
@@ -120,9 +124,9 @@ class MailingTest extends TestCase
 
     public function testNoexistMailingUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.mailing.update', [2327382]));
 
@@ -131,11 +135,11 @@ class MailingTest extends TestCase
 
     public function testMailingUpdateValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.mailing.update', [$mailing->id]), [
             'title' => '',
@@ -150,13 +154,13 @@ class MailingTest extends TestCase
 
     public function testMailingUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->states(['marketing', 'active'])->create();
+        $user2 = User::factory()->marketing()->active()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.mailing.update', [$mailing->id]), [
             'title' => 'Mailing zaktualizowany.',
@@ -192,11 +196,11 @@ class MailingTest extends TestCase
 
     public function testMailingUpdateStatusWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.mailing.update_status', [$mailing->id]));
 
@@ -205,9 +209,9 @@ class MailingTest extends TestCase
 
     public function testNoexistMailingUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.mailing.update_status', [2327382]));
 
@@ -216,11 +220,11 @@ class MailingTest extends TestCase
 
     public function testMailingUpdateStatusValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.mailing.update_status', [$mailing->id]), [
             'status' => 323,
@@ -233,11 +237,11 @@ class MailingTest extends TestCase
 
     public function testMailingUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $mailing = factory(Mailing::class)->states('active')->create();
+        $mailing = Mailing::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.mailing.update_status', [$mailing->id]), [
             'status' => 0,
@@ -262,11 +266,11 @@ class MailingTest extends TestCase
 
     public function testMailingDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.mailing.destroy', [$mailing->id]));
 
@@ -275,9 +279,9 @@ class MailingTest extends TestCase
 
     public function testNoexistMailingDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.mailing.destroy', [2327382]));
 
@@ -286,15 +290,15 @@ class MailingTest extends TestCase
 
     public function testMailingDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
-        $email = factory(MailingEmail::class)->states('with_user')->make();
-        $email->mailing()->associate($mailing)->save();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        $email = MailingEmail::factory()->withUser()->for($mailing)->create();
+
+        Auth::login($user);
 
         $this->assertDatabaseHas('mailings', [
             'id' => $mailing->id,
@@ -328,9 +332,9 @@ class MailingTest extends TestCase
 
     public function testMailingDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.mailing.destroy_global'), []);
 
@@ -339,9 +343,9 @@ class MailingTest extends TestCase
 
     public function testMailingDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.mailing.destroy_global', [
             'dasdas',
@@ -353,11 +357,11 @@ class MailingTest extends TestCase
 
     public function testMailingDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $mailing = factory(Mailing::class, 10)->create();
+        $mailing = Mailing::factory()->count(10)->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.mailing.index'));
 
@@ -386,9 +390,9 @@ class MailingTest extends TestCase
 
     public function testMailingCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.mailing.create'));
 
@@ -397,14 +401,14 @@ class MailingTest extends TestCase
 
     public function testMailingCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.mailing.create'));
 
         $response->assertOk()->assertViewIs('icore::admin.mailing.create');
-        $response->assertSee(route('admin.mailing.store'));
+        $response->assertSee(route('admin.mailing.store'), false);
     }
 
     public function testMailingStoreAsGuest()
@@ -416,9 +420,9 @@ class MailingTest extends TestCase
 
     public function testMailingStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.mailing.store'));
 
@@ -427,9 +431,9 @@ class MailingTest extends TestCase
 
     public function testMailingStoreValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.mailing.store'), [
             'title' => '',
@@ -446,9 +450,9 @@ class MailingTest extends TestCase
 
     public function testMailingStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.mailing.store'), [
             'title' => 'Mailing dodany.',
@@ -486,11 +490,11 @@ class MailingTest extends TestCase
 
     public function testMailingResetWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.mailing.reset', [$mailing->id]));
 
@@ -499,9 +503,9 @@ class MailingTest extends TestCase
 
     public function testNoexistMailingReset()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.mailing.reset', [2327382]));
 
@@ -510,15 +514,15 @@ class MailingTest extends TestCase
 
     public function testMailingReset()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        $mailing = factory(Mailing::class)->create();
-        $email = factory(MailingEmail::class)->states('with_user')->make();
-        $email->mailing()->associate($mailing)->save();
+        $mailing = Mailing::factory()->create();
 
-        Auth::login($user, true);
+        $email = MailingEmail::factory()->withUser()->for($mailing)->create();
+
+        Auth::login($user);
 
         $this->assertDatabaseHas('mailings', [
             'id' => $mailing->id,
@@ -547,7 +551,7 @@ class MailingTest extends TestCase
     // {
     //     config(['queue.default' => 'database']);
     //
-    //     $mailing = factory(Mailing::class)->make();
+    //     $mailing = Mailing::factory()->make();
     //     $mailing->status = 1;
     //     $mailing->save();
     //
@@ -579,10 +583,9 @@ class MailingTest extends TestCase
 
     public function testMailingQueueJob()
     {
-        $mailing = factory(Mailing::class)->states('active')->create();
+        $mailing = Mailing::factory()->active()->create();
 
-        $email = factory(MailingEmail::class)->states('with_email')->make();
-        $email->mailing()->associate($mailing)->save();
+        $email = MailingEmail::factory()->email()->for($mailing)->create();
 
         Mail::fake();
         Config::set('queue.default', 'database');

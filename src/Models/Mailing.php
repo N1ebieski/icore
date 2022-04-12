@@ -13,12 +13,14 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\MailingRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mailing extends Model
 {
     use FullTextSearchable;
     use Filterable;
     use Carbonable;
+    use HasFactory;
 
     // Configuration
 
@@ -90,6 +92,16 @@ class Mailing extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Mailing\MailingFactory::new();
+    }
 
     // Relations
 

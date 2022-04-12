@@ -9,9 +9,12 @@ use N1ebieski\ICore\Services\MailingEmailService;
 use N1ebieski\ICore\Repositories\MailingEmailRepo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MailingEmail extends Model
 {
+    use HasFactory;
+
     // Configuration
 
     /**
@@ -68,6 +71,16 @@ class MailingEmail extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\MailingEmail\MailingEmailFactory::new();
+    }
 
     // Relations
 

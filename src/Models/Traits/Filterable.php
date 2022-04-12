@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Models\Traits;
 
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Report\Report;
 use N1ebieski\ICore\Models\Category\Category;
@@ -44,7 +45,7 @@ trait Filterable
      */
     public function scopeFilterPaginate(Builder $query, int $paginate = null): LengthAwarePaginator
     {
-        return $query->paginate($paginate ?? config('database.paginate'));
+        return $query->paginate($paginate ?? Config::get('database.paginate'));
     }
 
     /**
@@ -72,8 +73,8 @@ trait Filterable
     {
         $order = explode('|', $orderby);
 
-        if (count($order) == 2) {
-            return $query->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc');
+        if (count($order) === 2) {
+            return $query->orderBy($order[0], $order[1])->orderBy('id', 'asc');
         }
 
         return $query->latest();

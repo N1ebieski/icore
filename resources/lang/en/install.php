@@ -13,7 +13,7 @@ return [
         'langs' => 'Copying language location files...',
         'migrations' => 'Copying migration...',
         'factories' => 'Copying factories...',
-        'seeds' => 'Copying seeders...',
+        'seeders' => 'Copying seeders...',
         'views' => 'Copying view files...',
         'js' => 'Copying javascript assets...',
         'sass' => 'Copying sass assets...',

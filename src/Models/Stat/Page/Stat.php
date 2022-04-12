@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Models\Stat\Page;
 
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Models\Stat\Stat as BaseStat;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Stat extends BaseStat
 {
@@ -36,7 +36,7 @@ class Stat extends BaseStat
      */
     public function getModelTypeAttribute()
     {
-        return \N1ebieski\IPage\Models\Page\Page::class;
+        return \N1ebieski\ICore\Models\Page\Page::class;
     }
 
     // Relations
@@ -48,6 +48,6 @@ class Stat extends BaseStat
      */
     public function morphs(): MorphToMany
     {
-        return $this->morphedByMany(\N1ebieski\IPage\Models\Page\Page::class, 'model', 'stats_values');
+        return $this->morphedByMany(\N1ebieski\ICore\Models\Page\Page::class, 'model', 'stats_values');
     }
 }

@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -34,6 +35,7 @@ class Page extends Entity
     use PivotEventTrait;
     use Carbonable;
     use HasRealDepth;
+    use HasFactory;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }
@@ -184,7 +186,17 @@ class Page extends Entity
         'updated_at' => 'datetime'
     ];
 
-    // Overrides
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Page\PageFactory::new();
+    }
+
+    // Relations
 
     /**
      * Override relacji tags, bo ma hardcodowane nazwy pól
@@ -198,8 +210,6 @@ class Page extends Entity
         return $this->morphToMany($model, 'model', 'tags_models', 'model_id', 'tag_id')
             ->withTimestamps();
     }
-
-    // Relations
 
     /**
      * Undocumented function

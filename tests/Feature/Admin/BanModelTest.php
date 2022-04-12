@@ -21,11 +21,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banmodel.user.create', [$user2->id]));
 
@@ -34,9 +34,9 @@ class BanModelTest extends TestCase
 
     public function testBanmodelNoexistUserCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banmodel.user.create', [312312]));
 
@@ -45,11 +45,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banmodel.user.create', [$user2->id]));
 
@@ -67,9 +67,9 @@ class BanModelTest extends TestCase
 
     public function testBanmodelNoexistUserStoreStore()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banmodel.user.store', [9999]), []);
 
@@ -80,11 +80,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banmodel.user.store', [$user2->id]), []);
 
@@ -95,11 +95,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserStoreValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->states('ban_user')->create();
+        $user2 = User::factory()->banUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banmodel.user.store', [$user2->id]), [
             'user' => $user2->id,
@@ -112,11 +112,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->create();
+        $user2 = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banmodel.user.store', [$user2->id]), [
             'user' => $user2->id,
@@ -147,9 +147,9 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banmodel.user.index'));
 
@@ -158,21 +158,26 @@ class BanModelTest extends TestCase
 
     public function testBanmodelUserIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
-        $users = factory(User::class, 50)->create();
+        $users = User::factory()->count(50)->create();
 
         foreach ($users as $u) {
             $u->ban()->create();
         }
 
-        $response = $this->get(route('admin.banmodel.user.index', ['page' => 2, 'orderby' => 'bans_models.created_at|desc']));
+        $response = $this->get(route('admin.banmodel.user.index', [
+            'page' => 2,
+            'filter' => [
+                'orderby' => 'bans_models.created_at|desc'
+            ]
+        ]));
 
         $response->assertViewIs('icore::admin.banmodel.user.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$users[30]->name]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$users[30]->name], false);
     }
 
     public function testBanmodelDestroyAsGuest()
@@ -184,11 +189,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $user2 = factory(User::class)->states('ban_user')->create();
+        $user2 = User::factory()->banUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banmodel.destroy', [$user2->ban->id]));
 
@@ -197,9 +202,9 @@ class BanModelTest extends TestCase
 
     public function testNoexistBanmodelDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banmodel.destroy', [2327382]));
 
@@ -208,11 +213,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $user2 = factory(User::class)->states('ban_user')->create();
+        $user2 = User::factory()->banUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('bans_models', [
             'id' => $user2->ban->id,
@@ -238,9 +243,9 @@ class BanModelTest extends TestCase
 
     public function testBanmodelDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banmodel.destroy_global'), []);
 
@@ -249,9 +254,9 @@ class BanModelTest extends TestCase
 
     public function testBanmodelDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banmodel.destroy_global', [
             'dasdas',
@@ -263,11 +268,11 @@ class BanModelTest extends TestCase
 
     public function testBanmodelDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $users = factory(User::class, 20)->states('ban_user')->create();
+        $users = User::factory()->count(20)->banUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.banmodel.user.index'));
 

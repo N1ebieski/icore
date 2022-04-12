@@ -14,9 +14,9 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/trumbowyg@ini
                 more: {
                     fn: function () {
                         $trumbowyg.trumbowyg('execCmd', {
-                        	cmd: 'insertHtml',
-                        	param: '<p>[more]</p>',
-                        	forceCss: false,
+                            cmd: 'insertHtml',
+                            param: '<p>[more]</p>',
+                            forceCss: false,
                         });
                     },
                     title: 'Button "show more"',
@@ -80,6 +80,6 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/trumbowyg@ini
     }
 });
 
-function fmSetLink($url) {
+function fmSetLink ($url) {
     $('div.trumbowyg-modal-box').find('input[name=url]').val($url);
 }

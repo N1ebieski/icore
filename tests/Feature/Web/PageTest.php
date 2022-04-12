@@ -24,7 +24,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('web.page.show', [$page->slug]));
 
-        $response->assertSeeInOrder([$page->title, $page->content]);
+        $response->assertSeeInOrder([$page->title, $page->content], false);
     }
 
     public function testPageShowPaginate()
@@ -44,8 +44,8 @@ class PageTest extends TestCase
             'orderby' => 'created_at|asc'
         ]));
 
-        $response->assertSee('class="pagination"');
-        $response->assertSee($page->title);
-        $response->assertSee($comment[30]->content);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSee($page->title, false);
+        $response->assertSee($comment[30]->content, false);
     }
 }

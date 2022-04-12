@@ -38,7 +38,7 @@ class ArchiveTest extends TestCase
         $response = $this->get(route('web.archive.post.show', ['month' => 12, 'year' => 2018, 'page' => 2]));
 
         $response->assertViewIs('icore::web.archive.post.show');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeText($post[10]->title);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeText($post[10]->title, false);
     }
 }

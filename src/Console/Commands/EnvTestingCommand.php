@@ -60,7 +60,7 @@ class EnvTestingCommand extends Command
         $this->info("\r");
         $bar->advance();
         $this->info("\n");
-        $this->call('vendor:publish', ['--tag' => 'icore.seeds', '--force' => true], $this->getOutput());
+        $this->call('vendor:publish', ['--tag' => 'icore.seeders', '--force' => true], $this->getOutput());
         $this->info("\r");
         $bar->advance();
         $this->info("\n");
@@ -68,13 +68,13 @@ class EnvTestingCommand extends Command
         $this->info("\r");
         $bar->advance();
         $this->line("\n");
-        $this->call('migrate:fresh', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());        
+        $this->call('migrate:fresh', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());
         $this->info("\n");
         $this->call('migrate', ['--path' => 'database/migrations/vendor/icore'], $this->getOutput());
         $this->line("\n");
         $bar->advance();
         $this->info("\n");
-        $this->call('db:seed', ['--class' => 'N1ebieski\ICore\Seeds\Install\InstallSeeder'], $this->getOutput());
+        $this->call('db:seed', ['--class' => 'N1ebieski\ICore\Database\Seeders\Install\InstallSeeder'], $this->getOutput());
         $this->info("\r");
         $bar->advance();
         $this->info("\n");

@@ -4,7 +4,6 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -12,59 +11,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class CategoryTest extends TestCase
 {
     use DatabaseTransactions;
-
-    // public function testCategorySearchAsGuest()
-    // {
-    //     $response = $this->get(route('admin.category.post.search'));
-
-    //     $response->assertRedirect(route('login'));
-    // }
-
-    // public function testCategorySearchWithoutPermission()
-    // {
-    //     $user = factory(User::class)->create();
-
-    //     Auth::login($user, true);
-
-    //     $response = $this->get(route('admin.category.post.search'));
-
-    //     $response->assertStatus(403);
-    // }
-
-    // public function testCategorySearchValidationFail()
-    // {
-    //     $user = factory(User::class)->states('admin')->create();
-
-    //     Auth::login($user, true);
-
-    //     $response = $this->get(route('admin.category.post.search', [
-    //         'name' => 'B'
-    //     ]));
-
-    //     $response->assertSessionHasErrors(['name']);
-    // }
-
-    // public function testCategorySearch()
-    // {
-    //     $user = factory(User::class)->states('admin')->create();
-
-    //     $category = factory(Category::class)->states(['sentence', 'active'])->create();
-
-    //     // Hook z koniecznosci. Wyszukiwanie odbywa się przez AGAINST MATCH po indeksie,
-    //     // a DatabaseTransactions nie indeksuje ostatnio dodanego modelu.
-    //     DB::statement('OPTIMIZE TABLE categories');
-
-    //     Auth::login($user, true);
-
-    //     $response = $this->get(route('admin.category.post.search', [
-    //         'name' => $category->name
-    //     ]));
-
-    //     $response->assertOk()->assertJsonStructure(['success', 'view']);
-    //     $this->assertStringContainsString($category->name, $response->getData()->view);
-
-    //     DB::statement('DELETE FROM `categories` WHERE `id` > 0');
-    // }
 
     public function testCategoryIndexAsGuest()
     {
@@ -75,9 +21,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.post.index'));
 
@@ -86,20 +32,22 @@ class CategoryTest extends TestCase
 
     public function testCategoryIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class, 50)->states('active')->create();
+        $category = Category::factory()->count(50)->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.post.index', [
-            'parent' => 0,
-            'orderby' => 'created_at|desc'
+            'filter' => [
+                'parent' => 0,
+                'orderby' => 'created_at|desc'
+            ]
         ]));
 
         $response->assertViewIs('icore::admin.category.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$category[30]->title, $category[30]->shortContent]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$category[30]->title, $category[30]->shortContent], false);
     }
 
     public function testCategoryUpdateStatusAsGuest()
@@ -111,11 +59,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdateStatusWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_status', [$category->id]));
 
@@ -124,9 +72,9 @@ class CategoryTest extends TestCase
 
     public function testNoexistCategoryUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_status', [2327382]));
 
@@ -135,11 +83,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdateStatusValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_status', [$category->id]), [
             'status' => 323,
@@ -152,11 +100,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_status', [$category->id]), [
             'status' => 0,
@@ -181,11 +129,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryEditWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.edit', [$category->id]));
 
@@ -194,9 +142,9 @@ class CategoryTest extends TestCase
 
     public function testNoexistCategoryEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.edit', [9999]));
 
@@ -207,11 +155,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.edit', [$category->id]));
 
@@ -231,11 +179,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.category.update', [$category->id]));
 
@@ -244,9 +192,9 @@ class CategoryTest extends TestCase
 
     public function testNoexistCategoryUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.category.update', [9999]), []);
 
@@ -257,11 +205,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdateValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.category.update', [$category->id]), [
             'name' => ''
@@ -274,11 +222,11 @@ class CategoryTest extends TestCase
 
     public function testRootCategoryUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.category.update', [$category->id]), [
             'name' => '<b>Kategoria</b> <script>Testowa</script>'
@@ -298,13 +246,13 @@ class CategoryTest extends TestCase
 
     public function testChildrenCategoryUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $parent = factory(Category::class)->states('active')->create();
+        $parent = Category::factory()->active()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.category.update', [$category->id]), [
             'name' => '<b>Kategoria</b> <script>Testowa</script>',
@@ -338,9 +286,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.post.create'));
 
@@ -349,9 +297,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryPostCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.post.create'));
 
@@ -370,9 +318,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryPostStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.category.post.store'));
 
@@ -381,9 +329,9 @@ class CategoryTest extends TestCase
 
     public function testRootCategoryPostStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.category.post.store'), [
             'name' => '<b>Kategoria</b> <script>OK</script>'
@@ -403,11 +351,11 @@ class CategoryTest extends TestCase
 
     public function testChildrenCategoryPostStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $parent = factory(Category::class)->states('active')->create();
+        $parent = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.category.post.store'), [
             'name' => '<b>Kategoria</b> <script>OK</script>',
@@ -442,9 +390,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryPostStoreGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.category.post.store_global'));
 
@@ -453,9 +401,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryPostStoreGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.category.post.store_global'), [
             'names' => '',
@@ -468,11 +416,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryPostStoreGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $parent = factory(Category::class)->states('active')->create();
+        $parent = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.category.post.store_global'), [
             'names' => '
@@ -523,11 +471,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.category.destroy', [$category->id]));
 
@@ -536,9 +484,9 @@ class CategoryTest extends TestCase
 
     public function testNoexistCategoryDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.category.destroy', [2327382]));
 
@@ -547,11 +495,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -577,9 +525,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.category.destroy_global'), []);
 
@@ -588,9 +536,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.category.destroy_global', [
             'dasdas',
@@ -602,11 +550,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class, 10)->states('active')->create();
+        $category = Category::factory()->count(10)->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.category.post.index'));
 
@@ -635,11 +583,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryEditPositionWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.edit_position', [$category->id]));
 
@@ -648,9 +596,9 @@ class CategoryTest extends TestCase
 
     public function testNoexistCategoryEditPosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.edit_position', [2327382]));
 
@@ -659,11 +607,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryEditPosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.category.edit_position', [$category->id]));
 
@@ -681,11 +629,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdatePositionWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_position', [$category->id]));
 
@@ -694,9 +642,9 @@ class CategoryTest extends TestCase
 
     public function testNoexistCategoryUpdatePosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_position', [2327382]));
 
@@ -705,11 +653,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdatePositionValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::factory()->active()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_position', [$category->id]), [
             'position' => 1232
@@ -722,9 +670,9 @@ class CategoryTest extends TestCase
 
     public function testCategoryUpdatePosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $category = factory(Category::class, 3)->states('active')->create();
+        $category = Category::factory()->count(3)->active()->create();
 
         $this->assertDatabaseHas('categories', [
             'id' => $category[0]->id,
@@ -736,7 +684,7 @@ class CategoryTest extends TestCase
             'position' => 2
         ]);
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_position', [$category[2]->id]), [
             'position' => 0

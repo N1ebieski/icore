@@ -66,7 +66,7 @@ class SearchTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::web.post.search');
-        $response->assertSeeInOrder([$post->title, $post->content_html]);
+        $response->assertSeeInOrder([$post->title, $post->content_html], false);
 
         DB::statement('DELETE FROM `posts` WHERE `id` > 0');
     }

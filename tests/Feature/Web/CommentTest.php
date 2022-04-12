@@ -80,7 +80,7 @@ class CommentTest extends TestCase
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
-        $response->assertSeeText('you are banned');
+        $response->assertSeeText('you are banned', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -103,7 +103,7 @@ class CommentTest extends TestCase
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
-        $response->assertSeeText('you are banned');
+        $response->assertSeeText('you are banned', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -119,7 +119,7 @@ class CommentTest extends TestCase
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
-        $response->assertSeeText('disabled for this post');
+        $response->assertSeeText('disabled for this post', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -208,7 +208,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertStatus(403);
-        $response->assertSeeText('disabled for this post');
+        $response->assertSeeText('disabled for this post', false);
     }
 
     public function testRootCommentPostStore()

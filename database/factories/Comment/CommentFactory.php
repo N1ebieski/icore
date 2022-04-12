@@ -1,41 +1,72 @@
 <?php
 
-use Faker\Generator as Faker;
-use N1ebieski\ICore\Models\User;
+namespace N1ebieski\ICore\Database\Factories\Comment;
+
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Comment::class, function (Faker $faker) {
+class CommentFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Comment::class;
 
-    $content = $faker->text(300);
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        $content = $this->faker->text(300);
 
-    return [
-        'content_html' => $content,
-        'content' => $content,
-        'status' => rand(0, 1),
-    ];
-});
+        return [
+            'content_html' => $content,
+            'content' => $content,
+            'status' => rand(Comment::INACTIVE, Comment::ACTIVE)
+        ];
+    }
 
-$factory->state(Comment::class, 'active', function () {
-    return [
-        'status' => 1
-    ];
-});
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function active()
+    {
+        return $this->state(function () {
+            return [
+                'status' => Comment::ACTIVE
+            ];
+        });
+    }
 
-$factory->state(Comment::class, 'inactive', function () {
-    return [
-        'status' => 0
-    ];
-});
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function inactive()
+    {
+        return $this->state(function () {
+            return [
+                'status' => Comment::INACTIVE
+            ];
+        });
+    }
 
-$factory->state(Comment::class, 'with_user', function () {
-    return [
-        'user_id' => factory(User::class)->create()->id
-    ];
-});
-
-$factory->afterMakingState(Comment::class, 'with_post', function ($comment) {
-    $comment->morph()->associate(
-        factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])->create()
-    );
-});
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function withUser()
+    {
+        return $this->for(User::factory());
+    }
+}

@@ -41,8 +41,8 @@ class RoleTest extends TestCase
         $response = $this->get(route('admin.role.index', ['page' => 2]));
 
         $response->assertViewIs('icore::admin.role.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$role[30]->name]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$role[30]->name], false);
     }
 
     public function testRoleDestroyAsGuest()
@@ -169,8 +169,8 @@ class RoleTest extends TestCase
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
         $response->assertOk()->assertViewIs('icore::admin.role.edit');
-        $response->assertSee($role->name);
-        $response->assertSee(route('admin.role.update', [$role->id]));
+        $response->assertSee($role->name, false);
+        $response->assertSee(route('admin.role.update', [$role->id]), false);
     }
 
     public function testRoleUpdateAsGuest()
@@ -311,7 +311,7 @@ class RoleTest extends TestCase
         $response = $this->get(route('admin.role.create'));
 
         $response->assertOk()->assertViewIs('icore::admin.role.create');
-        $response->assertSee(route('admin.role.store'));
+        $response->assertSee(route('admin.role.store'), false);
     }
 
     public function testRoleStoreAsGuest()

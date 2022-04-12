@@ -254,9 +254,9 @@ class InstallCommand extends Command
         $this->line("\n");
         $bar->advance();
         $this->line("\n");
-        $this->line($this->lang->get('icore::install.publish.seeds'));
+        $this->line($this->lang->get('icore::install.publish.seeders'));
         $this->line("\n");
-        $this->call('vendor:publish', ['--tag' => 'icore.seeds', '--force' => true], $this->getOutput());
+        $this->call('vendor:publish', ['--tag' => 'icore.seeders', '--force' => true], $this->getOutput());
         $this->line("\n");
         $bar->advance();
         $this->line("\n");
@@ -320,7 +320,7 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->line($this->lang->get('icore::install.migrate'));
         $this->line("\n");
-        $this->call('migrate:fresh', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());        
+        $this->call('migrate:fresh', ['--path' => 'database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php', '--force' => true], $this->getOutput());
         $this->line("\n");
         $this->call('migrate', ['--path' => 'database/migrations/vendor/icore', '--force' => true], $this->getOutput());
         $this->line("\n");
@@ -328,7 +328,7 @@ class InstallCommand extends Command
         $this->line("\n");
         $this->line($this->lang->get('icore::install.seed'));
         $this->line("\n");
-        $this->call('db:seed', ['--class' => 'N1ebieski\ICore\Seeds\Install\InstallSeeder', '--force' => true], $this->getOutput());
+        $this->call('db:seed', ['--class' => 'N1ebieski\ICore\Database\Seeders\Install\InstallSeeder', '--force' => true], $this->getOutput());
         $this->line("\n");
         $bar->advance();
         $this->line("\n");

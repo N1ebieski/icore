@@ -9,16 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class FileManager extends TestCase
+class FileManagerTest extends TestCase
 {
     use DatabaseTransactions;
 
     public function testFilemanagerReadPublicDiskAsGuest()
     {
-        $response = $this->withHeaders([
-                'Accept' => 'application/json',
-            ])
-            ->get(route('fm.content', ['disk' => 'public']));
+        $response = $this->getJson(route('fm.content', ['disk' => 'public']));
 
         $response->assertStatus(401);
     }
@@ -27,10 +24,7 @@ class FileManager extends TestCase
     {
         Storage::fake('public');
 
-        $response = $this->withHeaders([
-                'Accept' => 'application/json',
-            ])
-            ->post(route('fm.upload', [
+        $response = $this->postJson(route('fm.upload', [
                 'disk' => 'public',
                 'path' => '',
                 'overwrite' => 1,
@@ -46,30 +40,24 @@ class FileManager extends TestCase
 
     public function testFilemanagerReadPublicDiskAsUser()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::factory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
-        $response = $this->withHeaders([
-                'Accept' => 'application/json',
-            ])
-            ->get(route('fm.content', ['disk' => 'public']));
+        $response = $this->getJson(route('fm.content', ['disk' => 'public']));
 
         $response->assertStatus(403);
     }
 
     public function testFilemanagerWritePublicDiskAsUser()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::factory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         Storage::fake('public');
 
-        $response = $this->withHeaders([
-                'Accept' => 'application/json',
-            ])
-            ->post(route('fm.upload', [
+        $response = $this->postJson(route('fm.upload', [
                 'disk' => 'public',
                 'path' => '',
                 'overwrite' => 1,
@@ -85,16 +73,13 @@ class FileManager extends TestCase
 
     public function testFilemanagerWritePublicDiskAsAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         Storage::fake('public');
 
-        $response = $this->withHeaders([
-                'Accept' => 'application/json',
-            ])
-            ->post(route('fm.upload'), [
+        $response = $this->postJson(route('fm.upload'), [
                 'disk' => 'public',
                 'path' => '',
                 'overwrite' => 1,
@@ -111,9 +96,9 @@ class FileManager extends TestCase
 
     public function testFilemanagerWritePublicVendorDiskAsSuperadmin()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::factory()->superadmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         Storage::fake('public');
 

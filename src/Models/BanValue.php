@@ -10,12 +10,14 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BanValue extends Model
 {
     use Filterable;
     use FullTextSearchable;
     use Carbonable;
+    use HasFactory;
 
     // Configuration
 
@@ -52,6 +54,16 @@ class BanValue extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory::new();
+    }
 
     // Scopes
 

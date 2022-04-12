@@ -22,9 +22,9 @@ class CommentTest extends TestCase
 
     public function testCommentPostIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.index'));
 
@@ -33,26 +33,24 @@ class CommentTest extends TestCase
 
     public function testCommentPostIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class, 50)->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($comment) use ($post) {
-                $comment->morph()->associate($post)->save();
-            });
+        $comment = Comment::factory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.index', [
             'page' => 2,
-            'orderby' => 'created_at|desc'
+            'filter' => [
+                'orderby' => 'created_at|desc'
+            ]
         ]));
 
         $response->assertViewIs('icore::admin.comment.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$comment[30]->title, $comment[30]->shortContent]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$comment[30]->title, $comment[30]->shortContent], false);
     }
 
     public function testCommentShowAsGuest()
@@ -64,15 +62,13 @@ class CommentTest extends TestCase
 
     public function testCommentShowWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.show', [$comment->id]));
 
@@ -81,9 +77,9 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentShow()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.show', [4343434]));
 
@@ -92,26 +88,22 @@ class CommentTest extends TestCase
 
     public function testCommentShow()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $parent = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $parent->morph()->associate($post)->save();
+        $parent = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])
-            ->make([
-                'parent_id' => $parent->id
-            ]);
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create([
+            'parent_id' => $parent->id
+        ]);
 
-        $comment->morph()->associate($post)->save();
-
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.show', [$comment->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString($parent->content, $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
     }
@@ -125,9 +117,9 @@ class CommentTest extends TestCase
 
     public function testCommentNoexistPostCreate()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.create', [9999]));
 
@@ -138,12 +130,11 @@ class CommentTest extends TestCase
 
     public function testCommentPostCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.create', [$post->id]));
 
@@ -154,21 +145,19 @@ class CommentTest extends TestCase
 
     public function testChildrenCommentPostCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $parent = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $parent->morph()->associate($post)->save();
+        $parent = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.create', [$post->id, 'parent_id' => $parent->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString(route('admin.comment.post.store', [$post->id]), $response->getData()->view);
 
+        $this->assertStringContainsString(route('admin.comment.post.store', [$post->id]), $response->getData()->view);
         $this->assertTrue(Auth::check());
     }
 
@@ -181,9 +170,9 @@ class CommentTest extends TestCase
 
     public function testCommentNoexistPostStore()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.comment.post.store', [9999]), []);
 
@@ -194,12 +183,11 @@ class CommentTest extends TestCase
 
     public function testCommentPostStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.comment.post.store', [$post->id]), []);
 
@@ -210,12 +198,11 @@ class CommentTest extends TestCase
 
     public function testChildrenNoexistCommentPostStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.comment.post.store', [$post->id]), [
             'content' => '<b>Komentarz</b> zostal dodany. <script>dsdasd</script>',
@@ -229,15 +216,13 @@ class CommentTest extends TestCase
 
     public function testChildrenCommentPostStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $parent = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $parent->morph()->associate($post)->save();
+        $parent = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.comment.post.store', [$post->id]), [
             'content' => '<b>Komentarz</b> zostal dodany. <script>dsdasd</script>',
@@ -245,15 +230,14 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
 
+        $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
         $this->assertDatabaseHas('comments', [
             'content' => 'Komentarz zostal dodany. dsdasd',
             'parent_id' => $parent->id,
             'model_id' => $post->id,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post'
         ]);
-
         $this->assertTrue(Auth::check());
     }
 
@@ -266,9 +250,9 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentEdit()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.edit', [9999]));
 
@@ -279,15 +263,13 @@ class CommentTest extends TestCase
 
     public function testCommentEditWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.edit', [$comment->id]));
 
@@ -298,19 +280,18 @@ class CommentTest extends TestCase
 
     public function testCommentEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.comment.edit', [$comment->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString(route('admin.comment.update', [$comment->id]), $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
 
@@ -326,9 +307,9 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdate()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.comment.update', [9999]), []);
 
@@ -339,15 +320,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.comment.update', [$comment->id]), []);
 
@@ -358,15 +337,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.comment.update', [$comment->id]), [
             'content' => ''
@@ -379,28 +356,25 @@ class CommentTest extends TestCase
 
     public function testCommentUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.comment.update', [$comment->id]), [
             'content' => '<b>Komentarz</b> został zaktualizowany. <script>dsadad</script>'
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
 
+        $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
             'content' => 'Komentarz został zaktualizowany. dsadad'
         ]);
-
         $this->assertTrue(Auth::check());
     }
 
@@ -413,15 +387,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateStatusWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_status', [$comment->id]));
 
@@ -430,9 +402,9 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_status', [2327382]));
 
@@ -441,15 +413,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateStatusValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_status', [$comment->id]), [
             'status' => 323,
@@ -462,15 +432,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_status', [$comment->id]), [
             'status' => 0,
@@ -482,7 +450,6 @@ class CommentTest extends TestCase
             'id' => $comment->id,
             'status' => 0,
         ]);
-
         $this->assertTrue(Auth::check());
     }
 
@@ -495,15 +462,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateCensoredWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_censored', [$comment->id]));
 
@@ -512,9 +477,9 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdateCensored()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_censored', [43423424]));
 
@@ -523,15 +488,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateCensoredValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_censored', [$comment->id]), [
             'censored' => 323,
@@ -544,15 +507,13 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateCensored()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_censored', [$comment->id]), [
             'censored' => 1,
@@ -564,7 +525,6 @@ class CommentTest extends TestCase
             'id' => $comment->id,
             'censored' => 1,
         ]);
-
         $this->assertTrue(Auth::check());
     }
 
@@ -577,15 +537,13 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.comment.destroy', [$comment->id]));
 
@@ -594,9 +552,9 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.comment.destroy', [2327382]));
 
@@ -605,28 +563,24 @@ class CommentTest extends TestCase
 
     public function testCommentDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
         ]);
 
         $response = $this->delete(route('admin.comment.destroy', [$comment->id]), []);
-
         $response->assertOk()->assertJsonStructure(['success']);
 
         $this->assertDatabaseMissing('comments', [
             'id' => $comment->id,
         ]);
-
         $this->assertTrue(Auth::check());
     }
 
@@ -639,9 +593,9 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.comment.destroy_global'), []);
 
@@ -650,9 +604,9 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.comment.destroy_global', [
             'dasdas',
@@ -664,18 +618,13 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $post = factory(Post::class)->states(['active', 'commentable', 'publish', 'with_user'])
-            ->create();
+        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = factory(Comment::class, 10)->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($comment) use ($post) {
-                $comment->morph()->associate($post)->save();
-            });
+        $comment = Comment::factory()->count(10)->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.comment.post.index'));
 
@@ -691,7 +640,6 @@ class CommentTest extends TestCase
         $deleted = Comment::whereIn('id', $select)->count();
 
         $this->assertTrue($deleted === 0);
-
         $this->assertTrue(Auth::check());
     }
 }

@@ -8,11 +8,13 @@ use N1ebieski\ICore\Repositories\RoleRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Spatie\Permission\Models\Role as BaseRole;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends BaseRole
 {
     use Carbonable;
     use Filterable;
+    use HasFactory;
 
     // Configuration
 
@@ -36,6 +38,16 @@ class Role extends BaseRole
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Role\RoleFactory::new();
+    }
 
     // Checkers
 

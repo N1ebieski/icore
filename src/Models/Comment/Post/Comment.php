@@ -18,6 +18,16 @@ class Comment extends BaseComment
         return \N1ebieski\ICore\Models\Comment\Comment::class;
     }
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Comment\Post\CommentFactory::new();
+    }
+
     // Accessors
 
     /**

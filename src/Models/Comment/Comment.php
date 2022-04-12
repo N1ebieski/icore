@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Comment extends Entity
@@ -29,6 +30,7 @@ class Comment extends Entity
     use Polymorphic;
     use Carbonable;
     use HasRealDepth;
+    use HasFactory;
 
     // Configuration
 
@@ -118,6 +120,16 @@ class Comment extends Entity
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Comment\CommentFactory::new();
+    }
 
     // Relations
 

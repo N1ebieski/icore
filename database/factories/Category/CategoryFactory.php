@@ -1,23 +1,57 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace N1ebieski\ICore\Database\Factories\Category;
+
 use N1ebieski\ICore\Models\Category\Category;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Category::class, function (Faker $faker) {
-    return [
-        'name' => ucfirst($faker->word),
-        'status' => rand(Category::INACTIVE, Category::ACTIVE)
-    ];
-});
+class CategoryFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Category::class;
 
-$factory->state(Category::class, 'active', function (Faker $faker) {
-    return [
-        'status' => Category::ACTIVE
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => ucfirst($this->faker->word),
+            'status' => rand(Category::INACTIVE, Category::ACTIVE)
+        ];
+    }
 
-$factory->state(Category::class, 'sentence', function (Faker $faker) {
-    return [
-        'name' => ucfirst($faker->word . ' ' . $faker->word)
-    ];
-});
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function active()
+    {
+        return $this->state(function () {
+            return [
+                'status' => Category::ACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function sentence()
+    {
+        return $this->state(function () {
+            return [
+                'name' => ucfirst($this->faker->word . ' ' . $this->faker->word)
+            ];
+        });
+    }
+}

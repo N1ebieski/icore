@@ -85,7 +85,7 @@ class NewsletterTest extends TestCase
         ]));
 
         $response->assertStatus(403);
-        $response->assertSeeText('token is invalid');
+        $response->assertSeeText('token is invalid', false);
     }
 
     public function testNewsletterUpdateStatusWithExpiredToken()
@@ -103,7 +103,7 @@ class NewsletterTest extends TestCase
         ]));
 
         $response->assertStatus(403);
-        $response->assertSeeText('token period has expired');
+        $response->assertSeeText('token period has expired', false);
     }
 
     public function testNewsletterUpdateStatus1()

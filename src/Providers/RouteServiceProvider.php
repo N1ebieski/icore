@@ -2,8 +2,11 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -24,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+        $this->configureRateLimiting();
 
         Route::bind('post_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\PostCache::class)->rememberBySlug($value)
@@ -45,22 +48,16 @@ class RouteServiceProvider extends ServiceProvider
             return $this->app->make(\N1ebieski\ICore\Cache\TagCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(404);
         });
-    }
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
-    {
-        $this->mapApiRoutes();
+        $this->routes(function () {
+            $this->mapApiRoutes();
 
-        $this->mapAdminRoutes();
+            $this->mapAdminRoutes();
 
-        $this->mapAuthRoutes();
+            $this->mapAuthRoutes();
 
-        $this->mapWebRoutes();
+            $this->mapWebRoutes();
+        });
     }
 
     /**
@@ -193,5 +190,17 @@ class RouteServiceProvider extends ServiceProvider
                     require($filename);
                 }
             });
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     *
+     * @return void
+     */
+    protected function configureRateLimiting()
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
     }
 }

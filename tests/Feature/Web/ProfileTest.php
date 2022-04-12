@@ -96,8 +96,8 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.socialites'));
 
-        $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"');
-        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"');
+        $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"', false);
+        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -118,8 +118,8 @@ class ProfileTest extends TestCase
 
         //$response->assertSessionHas('success');
         $response->assertViewIs('icore::web.profile.socialites');
-        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"');
-        $response->assertSee('alert-success');
+        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"', false);
+        $response->assertSee('alert-success', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -158,7 +158,7 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.edit'));
 
-        $response->assertSee('href="' . route('web.profile.redirect_password') . '"');
+        $response->assertSee('href="' . route('web.profile.redirect_password') . '"', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -211,7 +211,7 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.edit'));
 
-        $response->assertSee('value="' . $user->email . '"');
+        $response->assertSee('value="' . $user->email . '"', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -286,7 +286,7 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.edit'));
 
-        $response->assertSee('value="' . $user->name . '"');
+        $response->assertSee('value="' . $user->name . '"', false);
 
         $this->assertTrue(Auth::check());
     }
@@ -377,7 +377,7 @@ class ProfileTest extends TestCase
 
         $response = $this->followingRedirects()->delete(route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]));
 
-        $response->assertSee(route('web.profile.socialite.redirect', ['provider' => self::PROVIDER]));
+        $response->assertSee(route('web.profile.socialite.redirect', ['provider' => self::PROVIDER]), false);
         $response->assertViewIs('icore::web.profile.socialites');
         //$response->assertSessionHas('warning', trans('icore::alerts.socialite_store.warning', ['provider' => ucfirst(self::PROVIDER)]));
 

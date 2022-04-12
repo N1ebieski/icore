@@ -44,8 +44,8 @@ class UserTest extends TestCase
         ]));
 
         $response->assertViewIs('icore::admin.user.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$us[30]->name, $us[30]->email]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$us[30]->name, $us[30]->email], false);
     }
 
     public function testUserUpdateStatusAsGuest()

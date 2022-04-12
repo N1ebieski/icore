@@ -40,10 +40,10 @@ class PostTest extends TestCase
 
         $response = $this->get(route('web.post.show', [$post->slug]));
 
-        $response->assertSee($post->title);
-        $response->assertSee($category->name);
-        $response->assertSee($post->user->name);
-        $response->assertSee($tag);
+        $response->assertSee($post->title, false);
+        $response->assertSee($category->nam, false);
+        $response->assertSee($post->user->name, false);
+        $response->assertSee($tag, false);
     }
 
     public function testPostShowCommentsDisable()
@@ -61,7 +61,7 @@ class PostTest extends TestCase
         $response = $this->get(route('web.post.show', [$post->slug]));
 
         $response->assertDontSee($comment[1]->content);
-        $response->assertSee($post->title);
+        $response->assertSee($post->title, false);
     }
 
     public function testPostShowPaginate()
@@ -69,12 +69,12 @@ class PostTest extends TestCase
         $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
             ->create();
 
-            $comment = factory(Comment::class, 50)
-                ->states(['active', 'with_user'])
-                ->make()
-                ->each(function ($item) use ($post) {
-                    $item->morph()->associate($post)->save();
-                });
+        $comment = factory(Comment::class, 50)
+            ->states(['active', 'with_user'])
+            ->make()
+            ->each(function ($item) use ($post) {
+                $item->morph()->associate($post)->save();
+            });
 
         $response = $this->get(route('web.post.show', [
             $post->slug,
@@ -82,9 +82,9 @@ class PostTest extends TestCase
             'orderby' => 'created_at|asc'
         ]));
 
-        $response->assertSee('class="pagination"');
-        $response->assertSee($post->title);
-        $response->assertSee($comment[30]->content);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSee($post->title, false);
+        $response->assertSee($comment[30]->content, false);
     }
 
     public function testPostPublishScheduled()

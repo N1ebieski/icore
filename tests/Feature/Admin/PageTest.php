@@ -21,9 +21,9 @@ class PageTest extends TestCase
 
     public function testPageIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.index'));
 
@@ -32,17 +32,17 @@ class PageTest extends TestCase
 
     public function testPageIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class, 50)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->count(50)->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.index', ['page' => 2, 'orderby' => 'created_at|asc']));
 
         $response->assertViewIs('icore::admin.page.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$page[30]->title, $page[30]->shortContent]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$page[30]->title, $page[30]->shortContent], false);
     }
 
     public function testPageEditAsGuest()
@@ -54,11 +54,11 @@ class PageTest extends TestCase
 
     public function testPageEditWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit', [$page->id]));
 
@@ -67,9 +67,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit', [2327382]));
 
@@ -78,11 +78,11 @@ class PageTest extends TestCase
 
     public function testPageEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit', [$page->id]));
 
@@ -100,11 +100,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update', [$page->id]));
 
@@ -113,9 +113,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update', [2327382]));
 
@@ -124,11 +124,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update', [$page->id]), [
             'title' => '',
@@ -142,11 +142,11 @@ class PageTest extends TestCase
 
     public function testPageUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update', [$page->id]), [
             'title' => 'Page zaktualizowany.',
@@ -154,13 +154,12 @@ class PageTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString('Ten page został zaktualizowany.', $response->getData()->view);
 
+        $this->assertStringContainsString('Ten page został zaktualizowany.', $response->getData()->view);
         $this->assertDatabaseHas('pages', [
             'content' => 'Ten page został zaktualizowany.',
             'title' => 'Page zaktualizowany.',
         ]);
-
         $this->assertTrue(Auth::check());
     }
 
@@ -173,11 +172,11 @@ class PageTest extends TestCase
 
     public function testPageEditFullWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit_full', [$page->id]));
 
@@ -186,9 +185,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageEditFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit_full', [2327382]));
 
@@ -197,17 +196,17 @@ class PageTest extends TestCase
 
     public function testPageEditFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit_full', [$page->id]));
 
         $response->assertOk()->assertViewIs('icore::admin.page.edit_full');
-        $response->assertSeeInOrder([$page->title, $page->content]);
-        $response->assertSee(route('admin.page.update_full', [$page->id]));
+        $response->assertSeeInOrder([$page->title, $page->content], false);
+        $response->assertSee(route('admin.page.update_full', [$page->id]), false);
     }
 
     public function testPageUpdateFullAsGuest()
@@ -219,11 +218,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateFullWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update_full', [$page->id]));
 
@@ -232,9 +231,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdateFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update_full', [2327382]));
 
@@ -243,11 +242,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateFullValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update_full', [$page->id]), [
             'title' => '',
@@ -262,11 +261,11 @@ class PageTest extends TestCase
 
     public function testRootPageUpdateFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.page.update_full', [$page->id]), [
             'title' => 'Page zaktualizowany.',
@@ -289,13 +288,13 @@ class PageTest extends TestCase
 
     public function testChildrenPageUpdateFull()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $parent = factory(Page::class)->states(['active', 'with_user'])->create();
+        $parent = Page::factory()->active()->withUser()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.page.edit_full', [$page->id]));
 
@@ -334,11 +333,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateStatusWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_status', [$page->id]));
 
@@ -347,9 +346,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_status', [2327382]));
 
@@ -358,11 +357,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateStatusValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_status', [$page->id]), [
             'status' => 323,
@@ -375,11 +374,11 @@ class PageTest extends TestCase
 
     public function testPageUpdateStatus()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_status', [$page->id]), [
             'status' => 0,
@@ -404,11 +403,11 @@ class PageTest extends TestCase
 
     public function testPageDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.page.destroy', [$page->id]));
 
@@ -417,9 +416,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.page.destroy', [2327382]));
 
@@ -428,11 +427,11 @@ class PageTest extends TestCase
 
     public function testPageDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('pages', [
             'id' => $page->id,
@@ -458,9 +457,9 @@ class PageTest extends TestCase
 
     public function testPageDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.page.destroy_global'), []);
 
@@ -469,9 +468,9 @@ class PageTest extends TestCase
 
     public function testPageDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.page.destroy_global', [
             'dasdas',
@@ -483,11 +482,11 @@ class PageTest extends TestCase
 
     public function testPageDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class, 10)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->count(10)->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.page.index'));
 
@@ -516,9 +515,9 @@ class PageTest extends TestCase
 
     public function testPageCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.create'));
 
@@ -527,14 +526,14 @@ class PageTest extends TestCase
 
     public function testPageCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.create'));
 
         $response->assertOk()->assertViewIs('icore::admin.page.create');
-        $response->assertSee(route('admin.page.store'));
+        $response->assertSee(route('admin.page.store'), false);
     }
 
     public function testPageStoreAsGuest()
@@ -546,9 +545,9 @@ class PageTest extends TestCase
 
     public function testPageStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.page.store'));
 
@@ -557,9 +556,9 @@ class PageTest extends TestCase
 
     public function testPageStoreValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.page.store'), [
             'title' => '',
@@ -574,9 +573,9 @@ class PageTest extends TestCase
 
     public function testRootPageStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.page.store'), [
             'title' => 'Page dodany.',
@@ -600,11 +599,11 @@ class PageTest extends TestCase
 
     public function testChildrenPageStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $parent = factory(Page::class)->states(['active', 'with_user'])->create();
+        $parent = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.page.store'), [
             'title' => 'Page dodany.',
@@ -642,11 +641,11 @@ class PageTest extends TestCase
 
     public function testPageEditPositionWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
@@ -655,9 +654,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageEditPosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit_position', [2327382]));
 
@@ -666,11 +665,11 @@ class PageTest extends TestCase
 
     public function testPageEditPosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
@@ -688,11 +687,11 @@ class PageTest extends TestCase
 
     public function testPageUpdatePositionWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_position', [$page->id]));
 
@@ -701,9 +700,9 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdatePosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_position', [2327382]));
 
@@ -712,11 +711,11 @@ class PageTest extends TestCase
 
     public function testPageUpdatePositionValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->active()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_position', [$page->id]), [
             'position' => 1232
@@ -729,9 +728,9 @@ class PageTest extends TestCase
 
     public function testPageUpdatePosition()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $page = factory(Page::class, 3)->states(['active', 'with_user'])->create();
+        $page = Page::factory()->count(3)->active()->withUser()->create();
 
         $this->assertDatabaseHas('pages', [
             'id' => $page[0]->id,
@@ -743,7 +742,7 @@ class PageTest extends TestCase
             'position' => 2
         ]);
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->patch(route('admin.page.update_position', [$page[2]->id]), [
             'position' => 0

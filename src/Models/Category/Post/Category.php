@@ -7,6 +7,8 @@ use N1ebieski\ICore\Models\Category\Category as BaseCategory;
 
 class Category extends BaseCategory
 {
+    // Configuration
+
     /**
      * The model's default values for attributes.
      *
@@ -25,6 +27,16 @@ class Category extends BaseCategory
     public function getMorphClass()
     {
         return \N1ebieski\ICore\Models\Category\Category::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \N1ebieski\ICore\Database\Factories\Category\Post\CategoryFactory
+     */
+    protected static function newFactory()
+    {
+        return \N1ebieski\ICore\Database\Factories\Category\Post\CategoryFactory::new();
     }
 
     // Relations

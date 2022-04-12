@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
@@ -26,6 +27,8 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
+
         Blade::directive('pushonce', function ($expression) {
             $domain = explode('.', trim(substr($expression, 1, -1)));
 

@@ -21,9 +21,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueCreateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.create', ['ip']));
 
@@ -32,9 +32,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueNoexistTypeCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.create', ['dasdad']));
 
@@ -43,9 +43,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueCreate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.create', ['ip']));
 
@@ -62,9 +62,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueNoexistTypeStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banvalue.store', ['dasdada']), []);
 
@@ -73,9 +73,9 @@ class BanValueTest extends TestCase
 
     public function testBanmodelUserStoreWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banvalue.store', ['ip']), []);
 
@@ -86,11 +86,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueStoreValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $banmodel = factory(BanValue::class)->states('ip')->create();
+        $banmodel = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banvalue.store', ['ip']), [
             'value' => $banmodel->value,
@@ -103,9 +103,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueStore()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.banvalue.store', ['ip']), [
             'value' => '22.222.22.22',
@@ -130,9 +130,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.index', ['ip']));
 
@@ -141,21 +141,23 @@ class BanValueTest extends TestCase
 
     public function testBanvalueIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
-        $banvalue = factory(BanValue::class, 50)->states('ip')->create();
+        $banvalue = BanValue::factory()->count(50)->ip()->create();
 
         $response = $this->get(route('admin.banvalue.index', [
             'type' => 'ip',
             'page' => 2,
-            'orderby' => 'created_at|desc'
+            'filter' => [
+                'orderby' => 'created_at|desc'
+            ]
         ]));
 
         $response->assertViewIs('icore::admin.banvalue.index');
-        $response->assertSee('class="pagination"');
-        $response->assertSeeInOrder([$banvalue[30]->ip]);
+        $response->assertSee('class="pagination"', false);
+        $response->assertSeeInOrder([$banvalue[30]->ip], false);
     }
 
     public function testBanvalueDestroyAsGuest()
@@ -167,11 +169,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueDestroyWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banvalue.destroy', [$banvalue->id]));
 
@@ -180,9 +182,9 @@ class BanValueTest extends TestCase
 
     public function testNoexistBanvalueDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banvalue.destroy', [2327382]));
 
@@ -191,11 +193,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueDestroy()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('bans_values', [
             'id' => $banvalue->id,
@@ -221,9 +223,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueDestroyGlobalWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banvalue.destroy_global'), []);
 
@@ -232,9 +234,9 @@ class BanValueTest extends TestCase
 
     public function testBanvalueDestroyGlobalValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.banvalue.destroy_global', [
             'dasdas',
@@ -246,11 +248,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueDestroyGlobal()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $banvalue = factory(BanValue::class, 20)->states('ip')->create();
+        $banvalue = BanValue::factory()->count(20)->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->get(route('admin.banvalue.index', ['ip']));
 
@@ -279,9 +281,9 @@ class BanValueTest extends TestCase
 
     public function testNoexistBanvalueEdit()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.edit', [9999]));
 
@@ -292,11 +294,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueEditWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.edit', [$banvalue->id]));
 
@@ -307,11 +309,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueEdit()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.banvalue.edit', [$banvalue->id]));
 
@@ -331,9 +333,9 @@ class BanValueTest extends TestCase
 
     public function testNoexistBanvalueUpdate()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.banvalue.update', [9999]), []);
 
@@ -344,11 +346,11 @@ class BanValueTest extends TestCase
 
     public function testBanvalueUpdateWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.banvalue.update', [$banvalue->id]), []);
 
@@ -359,11 +361,11 @@ class BanValueTest extends TestCase
 
     public function testCommentUpdateValidationFail()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.banvalue.update', [$banvalue->id]), [
             'value' => ''
@@ -376,12 +378,12 @@ class BanValueTest extends TestCase
 
     public function testBanvalueUpdate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
-        $banvalue = factory(BanValue::class)->states('ip')->create();
+        $banvalue = BanValue::factory()->ip()->create();
         $new_ip = '32.343.54.232';
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.banvalue.update', [$banvalue->id]), [
             'value' => $new_ip

@@ -13,7 +13,7 @@ return [
         'langs' => 'Kopiowanie plików lokalizacji językowej...',
         'migrations' => 'Kopiowanie migracji...',
         'factories' => 'Kopiowanie faktorek...',
-        'seeds' => 'Kopiowanie seederów...',
+        'seeders' => 'Kopiowanie seederów...',
         'views' => 'Kopiowanie plików widoku...',
         'js' => 'Kopiowanie assetów javascript...',
         'sass' => 'Kopiowanie assetów sass...',
