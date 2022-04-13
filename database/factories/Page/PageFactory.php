@@ -86,6 +86,6 @@ class PageFactory extends Factory
     */
     public function withUser()
     {
-        return $this->for(User::factory());
+        return $this->for(User::makeFactory());
     }
 }

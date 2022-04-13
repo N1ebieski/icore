@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\NewsletterToken;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Newsletter\NewsletterFactory;
 
 class Newsletter extends Model
 {
@@ -94,5 +95,18 @@ class Newsletter extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', static::ACTIVE);
+    }
+
+    // Factories
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return NewsletterFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

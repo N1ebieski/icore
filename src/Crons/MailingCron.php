@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Crons;
 
 use Carbon\Carbon;
-use N1ebieski\ICore\Models\MailingEmail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use N1ebieski\ICore\Jobs\SendMailingJob;
 use Illuminate\Contracts\Config\Repository as Config;
 

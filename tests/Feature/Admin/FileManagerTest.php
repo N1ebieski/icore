@@ -40,7 +40,7 @@ class FileManagerTest extends TestCase
 
     public function testFilemanagerReadPublicDiskAsUser()
     {
-        $user = User::factory()->user()->create();
+        $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
 
@@ -51,7 +51,7 @@ class FileManagerTest extends TestCase
 
     public function testFilemanagerWritePublicDiskAsUser()
     {
-        $user = User::factory()->user()->create();
+        $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
 
@@ -73,7 +73,7 @@ class FileManagerTest extends TestCase
 
     public function testFilemanagerWritePublicDiskAsAdmin()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -96,7 +96,7 @@ class FileManagerTest extends TestCase
 
     public function testFilemanagerWritePublicVendorDiskAsSuperadmin()
     {
-        $user = User::factory()->superadmin()->create();
+        $user = User::makeFactory()->superadmin()->create();
 
         Auth::login($user);
 

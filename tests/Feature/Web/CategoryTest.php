@@ -5,7 +5,6 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 use Carbon\Carbon;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -22,7 +21,7 @@ class CategoryTest extends TestCase
 
     public function testCategoryShow()
     {
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::makeFactory()->active()->create();
 
         $response = $this->get(route('web.category.post.show', [$category->slug]));
 
@@ -31,15 +30,15 @@ class CategoryTest extends TestCase
 
     public function testCategoryShowPaginate()
     {
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::makeFactory()->active()->create();
 
-        $post = factory(Post::class, 50)->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($item, $key) use ($category) {
-                $item->published_at = Carbon::now()->addMinutes($key);
-                $item->save();
-                $item->categories()->attach($category);
-            });
+        $post = Post::makeFactory()->count(50)->active()->withUser()->hasAttached($category)
+            ->sequence(function ($sequence) {
+                return [
+                    'published_at' => Carbon::now()->addMinutes($sequence->index)
+                ];
+            })
+            ->create();
 
         $response = $this->get(route('web.category.post.show', [$category->slug, 'page' => 2]));
 

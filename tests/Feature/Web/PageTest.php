@@ -20,7 +20,7 @@ class PageTest extends TestCase
 
     public function testPageShow()
     {
-        $page = factory(Page::class)->states(['active', 'commentable', 'with_user'])->create();
+        $page = Page::makeFactory()->active()->commentable()->withUser()->create();
 
         $response = $this->get(route('web.page.show', [$page->slug]));
 
@@ -29,19 +29,16 @@ class PageTest extends TestCase
 
     public function testPageShowPaginate()
     {
-        $page = factory(Page::class)->states(['active', 'commentable', 'with_user'])->create();
+        $page = Page::makeFactory()->active()->commentable()->withUser()->create();
 
-        $comment = factory(Comment::class, 50)
-            ->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($item) use ($page) {
-                $item->morph()->associate($page)->save();
-            });
+        $comment = Comment::makeFactory()->count(50)->active()->withUser()->for($page, 'morph')->create();
 
         $response = $this->get(route('web.page.show', [
             $page->slug,
             'page' => 2,
-            'orderby' => 'created_at|asc'
+            'filter' => [
+                'orderby' => 'created_at|asc'
+            ]
         ]));
 
         $response->assertSee('class="pagination"', false);

@@ -8,10 +8,13 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Services\SocialiteService;
 use N1ebieski\ICore\Repositories\SocialiteRepo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory;
 
 class Socialite extends Model
 {
     use Carbonable;
+    use HasFactory;
 
     // Configuration
 
@@ -43,6 +46,16 @@ class Socialite extends Model
         'updated_at' => 'datetime'
     ];
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return SocialiteFactory::new();
+    }
+
     // Relations
 
     /**
@@ -72,5 +85,16 @@ class Socialite extends Model
     public function makeService()
     {
         return App::make(SocialiteService::class, ['socialite' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return SocialiteFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

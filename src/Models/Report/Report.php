@@ -10,6 +10,7 @@ use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Report\ReportFactory;
 
 class Report extends Model
 {
@@ -83,5 +84,16 @@ class Report extends Model
     public function makeService()
     {
         return App::make(ReportService::class, ['report' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return ReportFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

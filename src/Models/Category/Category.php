@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
 
 class Category extends Entity
 {
@@ -343,5 +344,16 @@ class Category extends Entity
     public function makeService()
     {
         return App::make(CategoryService::class, ['category' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return CategoryFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

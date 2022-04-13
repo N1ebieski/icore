@@ -11,6 +11,7 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
 
 class BanValue extends Model
 {
@@ -98,5 +99,16 @@ class BanValue extends Model
     public function makeCache()
     {
         return App::make(BanValueCache::class, ['banvalue' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return BanValueFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

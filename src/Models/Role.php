@@ -9,6 +9,7 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Spatie\Permission\Models\Role as BaseRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Role\RoleFactory;
 
 class Role extends BaseRole
 {
@@ -87,5 +88,16 @@ class Role extends BaseRole
     public function makeService()
     {
         return App::make(RoleService::class, ['role' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return RoleFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models\Category\Post;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Models\Category\Category as BaseCategory;
+use N1ebieski\ICore\Database\Factories\Category\Post\CategoryFactory;
 
 class Category extends BaseCategory
 {
@@ -60,5 +61,18 @@ class Category extends BaseCategory
     public function getPoliAttribute(): string
     {
         return 'post';
+    }
+
+    // Factories
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return CategoryFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Repositories;
 
 use Closure;
-use N1ebieski\ICore\Models\MailingEmail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingEmailRepo
 {

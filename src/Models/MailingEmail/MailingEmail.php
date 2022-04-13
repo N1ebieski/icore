@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Models;
+namespace N1ebieski\ICore\Models\MailingEmail;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +10,7 @@ use N1ebieski\ICore\Repositories\MailingEmailRepo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\MailingEmail\MailingEmailFactory;
 
 class MailingEmail extends Model
 {
@@ -135,5 +136,16 @@ class MailingEmail extends Model
     public function makeService()
     {
         return App::make(MailingEmailService::class, ['mailingEmail' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return MailingEmailFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

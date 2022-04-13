@@ -21,7 +21,7 @@ class PageTest extends TestCase
 
     public function testPageIndexWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -32,9 +32,9 @@ class PageTest extends TestCase
 
     public function testPageIndexPaginate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->count(50)->active()->withUser()->create();
+        $page = Page::makeFactory()->count(50)->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -54,9 +54,9 @@ class PageTest extends TestCase
 
     public function testPageEditWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -67,7 +67,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageEdit()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -78,9 +78,9 @@ class PageTest extends TestCase
 
     public function testPageEdit()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -100,9 +100,9 @@ class PageTest extends TestCase
 
     public function testPageUpdateWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -113,7 +113,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -124,9 +124,9 @@ class PageTest extends TestCase
 
     public function testPageUpdateValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -136,15 +136,13 @@ class PageTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['title']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageUpdate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -160,7 +158,6 @@ class PageTest extends TestCase
             'content' => 'Ten page został zaktualizowany.',
             'title' => 'Page zaktualizowany.',
         ]);
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageEditFullAsGuest()
@@ -172,9 +169,9 @@ class PageTest extends TestCase
 
     public function testPageEditFullWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -185,7 +182,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageEditFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -196,9 +193,9 @@ class PageTest extends TestCase
 
     public function testPageEditFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -218,9 +215,9 @@ class PageTest extends TestCase
 
     public function testPageUpdateFullWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -231,7 +228,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdateFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -242,9 +239,9 @@ class PageTest extends TestCase
 
     public function testPageUpdateFullValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -255,15 +252,13 @@ class PageTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['title', 'status']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRootPageUpdateFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -282,17 +277,15 @@ class PageTest extends TestCase
             'title' => 'Page zaktualizowany.',
             'parent_id' => null
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenPageUpdateFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $parent = Page::factory()->active()->withUser()->create();
+        $parent = Page::makeFactory()->active()->withUser()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -320,8 +313,6 @@ class PageTest extends TestCase
             'ancestor' => $parent->id,
             'depth' => 1
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageUpdateStatusAsGuest()
@@ -333,9 +324,9 @@ class PageTest extends TestCase
 
     public function testPageUpdateStatusWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -346,7 +337,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdateStatus()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -357,9 +348,9 @@ class PageTest extends TestCase
 
     public function testPageUpdateStatusValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -368,15 +359,13 @@ class PageTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['status']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageUpdateStatus()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -390,8 +379,6 @@ class PageTest extends TestCase
             'id' => $page->id,
             'status' => 0,
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageDestroyAsGuest()
@@ -403,9 +390,9 @@ class PageTest extends TestCase
 
     public function testPageDestroyWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -416,7 +403,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageDestroy()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -427,9 +414,9 @@ class PageTest extends TestCase
 
     public function testPageDestroy()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -444,8 +431,6 @@ class PageTest extends TestCase
         $this->assertDatabaseMissing('pages', [
             'id' => $page->id,
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageDestroyGlobalAsGuest()
@@ -457,7 +442,7 @@ class PageTest extends TestCase
 
     public function testPageDestroyGlobalWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -468,7 +453,7 @@ class PageTest extends TestCase
 
     public function testPageDestroyGlobalValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -482,9 +467,9 @@ class PageTest extends TestCase
 
     public function testPageDestroyGlobal()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->count(10)->active()->withUser()->create();
+        $page = Page::makeFactory()->count(10)->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -502,8 +487,6 @@ class PageTest extends TestCase
         $deleted = Page::whereIn('id', $select)->get();
 
         $this->assertTrue($deleted->count() === 0);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageCreateAsGuest()
@@ -515,7 +498,7 @@ class PageTest extends TestCase
 
     public function testPageCreateWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -526,7 +509,7 @@ class PageTest extends TestCase
 
     public function testPageCreate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -545,7 +528,7 @@ class PageTest extends TestCase
 
     public function testPageStoreWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -556,7 +539,7 @@ class PageTest extends TestCase
 
     public function testPageStoreValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -567,13 +550,11 @@ class PageTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['title', 'status']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRootPageStore()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -593,15 +574,13 @@ class PageTest extends TestCase
         ])->first();
 
         $this->assertTrue($page->exists());
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenPageStore()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $parent = Page::factory()->active()->withUser()->create();
+        $parent = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -628,8 +607,6 @@ class PageTest extends TestCase
             'ancestor' => $parent->id,
             'depth' => 1
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageEditPositionAsGuest()
@@ -641,9 +618,9 @@ class PageTest extends TestCase
 
     public function testPageEditPositionWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -654,7 +631,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageEditPosition()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -665,9 +642,9 @@ class PageTest extends TestCase
 
     public function testPageEditPosition()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -687,9 +664,9 @@ class PageTest extends TestCase
 
     public function testPageUpdatePositionWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -700,7 +677,7 @@ class PageTest extends TestCase
 
     public function testNoexistPageUpdatePosition()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -711,9 +688,9 @@ class PageTest extends TestCase
 
     public function testPageUpdatePositionValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->active()->withUser()->create();
+        $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -722,15 +699,13 @@ class PageTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['position']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPageUpdatePosition()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $page = Page::factory()->count(3)->active()->withUser()->create();
+        $page = Page::makeFactory()->count(3)->active()->withUser()->create();
 
         $this->assertDatabaseHas('pages', [
             'id' => $page[0]->id,
@@ -757,7 +732,5 @@ class PageTest extends TestCase
             'id' => $page[0]->id,
             'position' => 1
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 }

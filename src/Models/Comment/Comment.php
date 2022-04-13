@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\Database\Factories\Comment\CommentFactory;
 
 class Comment extends Entity
 {
@@ -528,5 +529,16 @@ class Comment extends Entity
     public function makeService()
     {
         return App::make(CommentService::class, ['comment' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return CommentFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

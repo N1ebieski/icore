@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Services;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Newsletter;
-use N1ebieski\ICore\Models\MailingEmail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
 

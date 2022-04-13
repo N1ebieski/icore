@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Database\Seeders\Env;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Mailing;
-use N1ebieski\ICore\Models\MailingEmail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Faker\Factory as Faker;
 
 /**

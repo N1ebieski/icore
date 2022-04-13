@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Database\Factories\MailingEmail;
 
 use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\MailingEmail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MailingEmailFactory extends Factory
@@ -25,16 +25,6 @@ class MailingEmailFactory extends Factory
         return [
             //
         ];
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return static
-     */
-    public function withUser()
-    {
-        return $this->for(User::factory());
     }
 
     /**

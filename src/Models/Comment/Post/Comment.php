@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Models\Comment\Post;
 
 use N1ebieski\ICore\Models\Comment\Comment as BaseComment;
+use N1ebieski\ICore\Database\Factories\Comment\Post\CommentFactory;
 
 class Comment extends BaseComment
 {
@@ -46,5 +47,18 @@ class Comment extends BaseComment
     public function getModelTypeAttribute(): string
     {
         return \N1ebieski\ICore\Models\Post::class;
+    }
+
+    // Factories
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return CommentFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

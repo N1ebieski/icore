@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use N1ebieski\ICore\Database\Factories\User\UserFactory;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -175,7 +176,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function emails(): MorphMany
     {
-        return $this->morphMany(\N1ebieski\ICore\Models\MailingEmail::class, 'model');
+        return $this->morphMany(\N1ebieski\ICore\Models\MailingEmail\MailingEmail::class, 'model');
     }
 
     // Accessors
@@ -253,5 +254,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function makeCache()
     {
         return App::make(UserCache::class, ['user' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return UserFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

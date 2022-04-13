@@ -21,9 +21,9 @@ class RoleTest extends TestCase
 
     public function testRoleIndexWithoutPermission()
     {
-        $user = factory(User::class)->create();
+        $user = User::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.index'));
 
@@ -32,11 +32,11 @@ class RoleTest extends TestCase
 
     public function testRoleIndexPaginate()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $role = factory(Role::class, 50)->create();
+        $role = Role::makeFactory()->count(50)->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.index', ['page' => 2]));
 
@@ -54,11 +54,11 @@ class RoleTest extends TestCase
 
     public function testRoleDestroyWithoutPermission()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.role.destroy', [$role->id]));
 
@@ -67,11 +67,11 @@ class RoleTest extends TestCase
 
     public function testRoleDestroyDefault()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
         $role = Role::whereName('user')->first();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.role.destroy', [$role->id]));
 
@@ -80,9 +80,9 @@ class RoleTest extends TestCase
 
     public function testNoexistRoleDestroy()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->delete(route('admin.role.destroy', [2327382]));
 
@@ -91,11 +91,11 @@ class RoleTest extends TestCase
 
     public function testRoleDestroy()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $this->assertDatabaseHas('roles', [
             'id' => $role->id,
@@ -110,8 +110,6 @@ class RoleTest extends TestCase
         $this->assertDatabaseMissing('roles', [
             'id' => $role->id,
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRoleEditAsGuest()
@@ -123,11 +121,11 @@ class RoleTest extends TestCase
 
     public function testRoleEditWithoutPermission()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
@@ -136,11 +134,11 @@ class RoleTest extends TestCase
 
     public function testRoleEditDefault()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        $role = Role::whereName('super-admin')->first();
+        $role = Role::where('name', 'super-admin')->first();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
@@ -149,9 +147,9 @@ class RoleTest extends TestCase
 
     public function testNoexistRoleEdit()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.edit', [2327382]));
 
@@ -160,11 +158,11 @@ class RoleTest extends TestCase
 
     public function testRoleEdit()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
@@ -182,11 +180,11 @@ class RoleTest extends TestCase
 
     public function testRoleUpdateWithoutPermission()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.role.update', [$role->id]));
 
@@ -195,11 +193,11 @@ class RoleTest extends TestCase
 
     public function testRoleUpdateDefault()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
         $role = Role::whereName('super-admin')->first();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.role.update', [$role->id]));
 
@@ -208,9 +206,9 @@ class RoleTest extends TestCase
 
     public function testNoexistRoleUpdate()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.role.update', [2327382]));
 
@@ -219,11 +217,11 @@ class RoleTest extends TestCase
 
     public function testUserUpdateDefaultUserValidationFail()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        $role = Role::whereName('user')->first();
+        $role = Role::where('name', 'user')->first();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.role.update', [$role->id]), [
             'name' => 'user',
@@ -231,17 +229,15 @@ class RoleTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['perm.3627']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRoleUpdateValidationFail()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.role.update', [$role->id]), [
             'name' => 'user',
@@ -249,17 +245,15 @@ class RoleTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['name', 'perm.467']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRoleUpdate()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        $role = factory(Role::class)->create();
+        $role = Role::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('admin.role.update', [$role->id]), [
             'name' => 'Bungo',
@@ -280,8 +274,6 @@ class RoleTest extends TestCase
             'role_id' => $role->id,
             'permission_id' => 2
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRoleCreateAsGuest()
@@ -293,9 +285,9 @@ class RoleTest extends TestCase
 
     public function testRoleCreateWithoutPermission()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::makeFactory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.create'));
 
@@ -304,9 +296,9 @@ class RoleTest extends TestCase
 
     public function testRoleCreate()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('admin.role.create'));
 
@@ -323,9 +315,9 @@ class RoleTest extends TestCase
 
     public function testRoleStoreWithoutPermission()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::makeFactory()->admin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.role.store'));
 
@@ -334,9 +326,9 @@ class RoleTest extends TestCase
 
     public function testRoleStoreValidationFail()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.role.store'), [
             'name' => 'user',
@@ -344,15 +336,13 @@ class RoleTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['name', 'perm.467']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRoleStore()
     {
-        $user = factory(User::class)->states('super-admin')->create();
+        $user = User::makeFactory()->superAdmin()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('admin.role.store'), [
             'name' => 'Bungo',
@@ -373,7 +363,5 @@ class RoleTest extends TestCase
             'role_id' => $role->id,
             'permission_id' => 2
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 }

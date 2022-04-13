@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
-use N1ebieski\ICore\Models\MailingEmail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Translation\Translator as Lang;
 

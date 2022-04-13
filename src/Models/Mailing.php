@@ -14,6 +14,7 @@ use N1ebieski\ICore\Repositories\MailingRepo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
 
 class Mailing extends Model
 {
@@ -112,7 +113,7 @@ class Mailing extends Model
      */
     public function emails(): HasMany
     {
-        return $this->hasMany(\N1ebieski\ICore\Models\MailingEmail::class);
+        return $this->hasMany(\N1ebieski\ICore\Models\MailingEmail\MailingEmail::class);
     }
 
     // Accessors
@@ -274,5 +275,16 @@ class Mailing extends Model
     public function makeService()
     {
         return App::make(MailingService::class, ['mailing' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return MailingFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

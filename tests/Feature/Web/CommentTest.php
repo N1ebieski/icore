@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
-use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -24,18 +23,13 @@ class CommentTest extends TestCase
 
     public function testCommentTake()
     {
-        $post = factory(Post::class)->states(['active', 'with_user', 'commentable'])->create();
+        $post = Post::makeFactory()->active()->commentable()->withUser()->create();
 
-        $parent = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $parent->morph()->associate($post)->save();
+        $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        $comment = factory(Comment::class, 15)->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($item) use ($parent, $post) {
-                $item->morph()->associate($post);
-                $item->parent_id = $parent->id;
-                $item->save();
-            });
+        $comment = Comment::makeFactory()->count(15)->active()->withUser()->for($post, 'morph')->create([
+            'parent_id' => $parent->id
+        ]);
 
         $response = $this->post(route('web.comment.take', [$parent->id]), [
             'filter' => [
@@ -45,6 +39,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString(route('web.comment.take', [$parent->id]), $response->getData()->view);
         $this->assertStringContainsString($comment[9]->content, $response->getData()->view);
     }
@@ -58,86 +53,75 @@ class CommentTest extends TestCase
 
     public function testCommentNoexistPostCreate()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('web.comment.post.create', [9999]));
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostCreateAsBannedUser()
     {
-        $user = factory(User::class)->states(['user', 'ban_user'])->create();
+        $user = User::makeFactory()->user()->banUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
         $response->assertSeeText('you are banned', false);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostCreateWithBannedIp()
     {
-        $user = factory(User::class)->states('user')->create([
+        $user = User::makeFactory()->user()->create([
             'ip' => '127.0.0.1'
         ]);
 
-        Auth::login($user, true);
-
-        BanValue::create([
-            'type' => 'ip',
+        BanValue::makeFactory()->ip()->create([
             'value' => $user->ip
         ]);
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])->create();
+        Auth::login($user);
+
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
         $response->assertSeeText('you are banned', false);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostCommentDisableCreate()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'not_commentable'])->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->notCommentable()->create();
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
         $response->assertSeeText('disabled for this post', false);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostCreate()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
         $this->assertStringContainsString(route('web.comment.post.store', [$post->id]), $response->getData()->view);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostStoreAsGuest()
@@ -149,15 +133,13 @@ class CommentTest extends TestCase
 
     public function testCommentNoexistPostStore()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('web.comment.post.store', [9999]), []);
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testRootCommentPostStoreWithBannedWord()
@@ -166,12 +148,11 @@ class CommentTest extends TestCase
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         BanValue::create([
             'type' => 'word',
@@ -185,8 +166,6 @@ class CommentTest extends TestCase
 
         $response->assertSessionHasErrors('content');
         $this->assertStringContainsString('DUPA', session('errors')->get('content')[0]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostWithDisableCommentsStore()
@@ -195,12 +174,11 @@ class CommentTest extends TestCase
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'not_commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->notCommentable()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('web.comment.post.store', [$post->id]), [
             'content' => '<b>Komentarz</b> zostal dodany. <script>dsdasd</script>',
@@ -217,12 +195,11 @@ class CommentTest extends TestCase
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('web.comment.post.store', [$post->id]), [
             'content' => '<b>Komentarz</b> zostal dodany. <script>dsdasd</script>',
@@ -238,18 +215,15 @@ class CommentTest extends TestCase
             'model_id' => $post->id,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post'
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenNoexistCommentPostStore()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('web.comment.post.store', [$post->id]), [
             'content' => '<b>Komentarz</b> zostal dodany. <script>dsdasd</script>',
@@ -257,8 +231,6 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['parent_id']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenCommentPostStore()
@@ -267,15 +239,13 @@ class CommentTest extends TestCase
             $mock->shouldReceive('validate')->andReturn(true);
         });
 
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        $parent = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $parent->morph()->associate($post)->save();
+        $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->post(route('web.comment.post.store', [$post->id]), [
             'content' => '<b>Komentarz</b> zostal dodany. <script>dsdasd</script>',
@@ -284,6 +254,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
@@ -292,8 +263,6 @@ class CommentTest extends TestCase
             'model_id' => $post->id,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post'
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentEditAsGuest()
@@ -305,57 +274,46 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentEdit()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('web.comment.edit', [9999]));
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testForeignCommentEdit()
     {
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('web.comment.edit', [$comment->id]));
 
         $response->assertStatus(403);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentEdit()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        $comment = factory(Comment::class)->states('active')->make();
-        $comment->morph()->associate($post);
-        $comment->user()->associate($user);
-        $comment->save();
+        $comment = Comment::makeFactory()->active()->for($post, 'morph')->for($user)->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('web.comment.edit', [$comment->id]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString(route('web.comment.update', [$comment->id]), $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateAsGuest()
@@ -367,87 +325,70 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdate()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('web.comment.update', [9999]), []);
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testForeignCommentUpdate()
     {
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        $comment = factory(Comment::class)->states(['active', 'with_user'])->make();
-        $comment->morph()->associate($post)->save();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('web.comment.update', [$comment->id]), [
             'content' => 'Hdsjdhsjdsj'
         ]);
 
         $response->assertStatus(403);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateValidationFail()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        $comment = factory(Comment::class)->states('active')->make();
-        $comment->morph()->associate($post);
-        $comment->user()->associate($user);
-        $comment->save();
+        $comment = Comment::makeFactory()->active()->for($post, 'morph')->for($user)->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('web.comment.update', [$comment->id]), [
             'content' => ''
         ]);
 
         $response->assertSessionHasErrors(['content']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdate()
     {
-        $user = factory(User::class)->states('user')->create();
+        $user = User::makeFactory()->user()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->commentable()->withUser()->create();
 
-        $comment = factory(Comment::class)->states('active')->make();
-        $comment->morph()->associate($post);
-        $comment->user()->associate($user);
-        $comment->save();
+        $comment = Comment::makeFactory()->active()->for($post, 'morph')->for($user)->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->put(route('web.comment.update', [$comment->id]), [
             'content' => '<b>Komentarz</b> został zaktualizowany. <script>dsadad</script>'
         ]);
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
+
         $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
             'content' => 'Komentarz został zaktualizowany. dsadad'
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 }

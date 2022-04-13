@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 
 class Post extends Model
 {
@@ -505,5 +506,16 @@ class Post extends Model
     public function makeService()
     {
         return App::make(PostService::class, ['post' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return PostFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

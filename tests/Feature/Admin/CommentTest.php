@@ -22,7 +22,7 @@ class CommentTest extends TestCase
 
     public function testCommentPostIndexWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -33,11 +33,11 @@ class CommentTest extends TestCase
 
     public function testCommentPostIndexPaginate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->count(50)->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -62,11 +62,11 @@ class CommentTest extends TestCase
 
     public function testCommentShowWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -77,7 +77,7 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentShow()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -88,13 +88,13 @@ class CommentTest extends TestCase
 
     public function testCommentShow()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $parent = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create([
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create([
             'parent_id' => $parent->id
         ]);
 
@@ -117,39 +117,35 @@ class CommentTest extends TestCase
 
     public function testCommentNoexistPostCreate()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.create', [9999]));
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostCreateWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.create', [$post->id]));
 
         $response->assertStatus(403);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenCommentPostCreate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $parent = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -158,7 +154,6 @@ class CommentTest extends TestCase
         $response->assertOk()->assertJsonStructure(['success', 'view']);
 
         $this->assertStringContainsString(route('admin.comment.post.store', [$post->id]), $response->getData()->view);
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostStoreAsGuest()
@@ -170,37 +165,33 @@ class CommentTest extends TestCase
 
     public function testCommentNoexistPostStore()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
         $response = $this->post(route('admin.comment.post.store', [9999]), []);
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentPostStoreWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
         Auth::login($user);
 
         $response = $this->post(route('admin.comment.post.store', [$post->id]), []);
 
         $response->assertStatus(403);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenNoexistCommentPostStore()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -210,17 +201,15 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['parent_id']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testChildrenCommentPostStore()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $parent = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -238,7 +227,6 @@ class CommentTest extends TestCase
             'model_id' => $post->id,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post'
         ]);
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentEditAsGuest()
@@ -250,41 +238,37 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentEdit()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.edit', [9999]));
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentEditWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.edit', [$comment->id]));
 
         $response->assertStatus(403);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentEdit()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -294,8 +278,6 @@ class CommentTest extends TestCase
 
         $this->assertStringContainsString(route('admin.comment.update', [$comment->id]), $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateAsGuest()
@@ -307,41 +289,37 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdate()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
         $response = $this->put(route('admin.comment.update', [9999]), []);
 
         $response->assertStatus(404);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
         $response = $this->put(route('admin.comment.update', [$comment->id]), []);
 
         $response->assertStatus(403);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -350,17 +328,15 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['content']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -375,7 +351,6 @@ class CommentTest extends TestCase
             'id' => $comment->id,
             'content' => 'Komentarz został zaktualizowany. dsadad'
         ]);
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateStatusAsGuest()
@@ -387,11 +362,11 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateStatusWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -402,7 +377,7 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdateStatus()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -413,11 +388,11 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateStatusValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -426,17 +401,15 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['status']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateStatus()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -450,7 +423,6 @@ class CommentTest extends TestCase
             'id' => $comment->id,
             'status' => 0,
         ]);
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateCensoredAsGuest()
@@ -462,11 +434,11 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateCensoredWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -477,7 +449,7 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentUpdateCensored()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -488,11 +460,11 @@ class CommentTest extends TestCase
 
     public function testCommentUpdateCensoredValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -501,17 +473,15 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['censored']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentUpdateCensored()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -525,7 +495,6 @@ class CommentTest extends TestCase
             'id' => $comment->id,
             'censored' => 1,
         ]);
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentDestroyAsGuest()
@@ -537,11 +506,11 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -552,7 +521,7 @@ class CommentTest extends TestCase
 
     public function testNoexistCommentDestroy()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -563,11 +532,11 @@ class CommentTest extends TestCase
 
     public function testCommentDestroy()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->active()->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -581,7 +550,6 @@ class CommentTest extends TestCase
         $this->assertDatabaseMissing('comments', [
             'id' => $comment->id,
         ]);
-        $this->assertTrue(Auth::check());
     }
 
     public function testCommentDestroyGlobalAsGuest()
@@ -593,7 +561,7 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyGlobalWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -604,7 +572,7 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyGlobalValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -618,11 +586,11 @@ class CommentTest extends TestCase
 
     public function testCommentDestroyGlobal()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->commentable()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::factory()->count(10)->withUser()->for($post, 'morph')->create();
+        $comment = Comment::makeFactory()->count(10)->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
@@ -640,6 +608,5 @@ class CommentTest extends TestCase
         $deleted = Comment::whereIn('id', $select)->count();
 
         $this->assertTrue($deleted === 0);
-        $this->assertTrue(Auth::check());
     }
 }

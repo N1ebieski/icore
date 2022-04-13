@@ -4,10 +4,16 @@ namespace N1ebieski\ICore\Models;
 
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\NewsletterToken\NewsletterTokenFactory;
 
 class NewsletterToken extends Model
 {
+    use HasFactory;
+
+    // Configuration
+
     /**
      * The table associated with the model.
      *
@@ -40,15 +46,38 @@ class NewsletterToken extends Model
         'updated_at' => 'datetime'
     ];
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return NewsletterTokenFactory::new();
+    }
+
     // Relations
 
     /**
      * Undocumented function
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return BelongsTo
      */
-    public function newsletter(): HasOne
+    public function newsletter(): BelongsTo
     {
-        return $this->hasOne(Newsletter::class, 'email', 'email');
+        return $this->belongsTo(Newsletter::class, 'email', 'email');
+    }
+
+    // Factories
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return NewsletterTokenFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

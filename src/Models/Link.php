@@ -15,6 +15,7 @@ use N1ebieski\ICore\Models\Traits\Positionable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Database\Factories\Link\LinkFactory;
 
 class Link extends Model
 {
@@ -182,5 +183,16 @@ class Link extends Model
     public function makeService()
     {
         return App::make(LinkService::class, ['link' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return LinkFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

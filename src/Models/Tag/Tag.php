@@ -12,6 +12,7 @@ use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Tag\TagFactory;
 
 class Tag extends Taggable
 {
@@ -117,12 +118,23 @@ class Tag extends Taggable
         return App::make(TagCache::class, ['tag' => $this]);
     }
 
-    // /**
-    //  * [makeService description]
-    //  * @return TagService [description]
-    //  */
-    // public function makeService()
-    // {
-    //     return app()->make(TagService::class, ['tag' => $this]);
-    // }
+    /**
+     * [makeService description]
+     * @return TagService [description]
+     */
+    public function makeService()
+    {
+        return app()->make(TagService::class, ['tag' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return TagFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
+    }
 }

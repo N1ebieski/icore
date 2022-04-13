@@ -9,6 +9,7 @@ use N1ebieski\ICore\Models\Traits\Polymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Database\Factories\Rating\RatingFactory;
 
 class Rating extends Model
 {
@@ -80,5 +81,16 @@ class Rating extends Model
     public function makeService()
     {
         return App::make(RatingService::class, ['rating' => $this]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param mixed $parameters
+     * @return RatingFactory
+     */
+    public static function makeFactory(...$parameters)
+    {
+        return static::factory($parameters);
     }
 }

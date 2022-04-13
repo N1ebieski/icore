@@ -3,9 +3,9 @@
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
-use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Crons\PostCron;
+use N1ebieski\ICore\Models\Tag\Post\Tag;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -30,33 +30,25 @@ class PostTest extends TestCase
 
     public function testPostShow()
     {
-        $category = factory(Category::class)->states('active')->create();
+        $category = Category::makeFactory()->active()->create();
 
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user'])->create();
-        $post->categories()->attach($category);
+        $post = Post::makeFactory()->active()->publish()->withUser()->hasAttached($category)->create();
 
-        $tag = Faker::create()->word;
-        $post->tag($tag);
+        $tags = Tag::makeFactory()->hasAttached($post, [], 'morphs')->count(5)->create();
 
         $response = $this->get(route('web.post.show', [$post->slug]));
 
         $response->assertSee($post->title, false);
         $response->assertSee($category->nam, false);
         $response->assertSee($post->user->name, false);
-        $response->assertSee($tag, false);
+        $response->assertSee($tags[0]->name, false);
     }
 
     public function testPostShowCommentsDisable()
     {
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'not_commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->notCommentable()->create();
 
-        $comment = factory(Comment::class, 50)
-            ->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($item) use ($post) {
-                $item->morph()->associate($post)->save();
-            });
+        $comment = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
         $response = $this->get(route('web.post.show', [$post->slug]));
 
@@ -66,20 +58,16 @@ class PostTest extends TestCase
 
     public function testPostShowPaginate()
     {
-        $post = factory(Post::class)->states(['active', 'publish', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->commentable()->create();
 
-        $comment = factory(Comment::class, 50)
-            ->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($item) use ($post) {
-                $item->morph()->associate($post)->save();
-            });
+        $comment = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
         $response = $this->get(route('web.post.show', [
             $post->slug,
             'page' => 2,
-            'orderby' => 'created_at|asc'
+            'filter' => [
+                'orderby' => 'created_at|asc'
+            ]
         ]));
 
         $response->assertSee('class="pagination"', false);
@@ -89,12 +77,11 @@ class PostTest extends TestCase
 
     public function testPostPublishScheduled()
     {
-        $post = factory(Post::class)->states(['scheduled', 'with_user', 'commentable'])
-            ->create();
+        $post = Post::makeFactory()->scheduled()->withUser()->commentable()->create();
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => 2
+            'status' => Post::SCHEDULED
         ]);
 
         // Uruchamiamy zadanie crona bezpośrednio, bo przez schedule:run ma ustalony delay
@@ -104,7 +91,7 @@ class PostTest extends TestCase
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => 1
+            'status' => Post::ACTIVE
         ]);
     }
 }

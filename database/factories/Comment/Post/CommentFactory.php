@@ -4,7 +4,6 @@ namespace N1ebieski\ICore\Database\Factories\Comment\Post;
 
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use N1ebieski\ICore\Database\Factories\Comment\CommentFactory as BaseCommentFactory;
 
 class CommentFactory extends BaseCommentFactory
@@ -21,10 +20,10 @@ class CommentFactory extends BaseCommentFactory
     *
     * @return static
     */
-    public function withPost()
+    public function withMorph()
     {
         return $this->for(
-            Post::factory()->active()->commentable()->publish()->withUser(),
+            Post::makeFactory()->active()->commentable()->publish()->withUser(),
             'morph'
         );
     }

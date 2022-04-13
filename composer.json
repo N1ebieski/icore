@@ -20,7 +20,7 @@
         "nesbot/carbon": "^2.29",
         "proengsoft/laravel-jsvalidation": "4.7.1+icore.1",
         "spatie/laravel-directory-cleanup": "^1.4",        
-        "spatie/laravel-permission": "^3.2",
+        "spatie/laravel-permission": "^5.0",
         "spatie/laravel-view-components": "^1.1",
         "spatie/array-to-xml": "^2.0",
         "unikent/tfilecache": "2.0.2+icore",

@@ -7,6 +7,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use N1ebieski\ICore\Models\Socialite as Social;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SocialiteTest extends TestCase
@@ -33,7 +34,6 @@ class SocialiteTest extends TestCase
     {
         $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
 
-        // Get the api user object here
         $abstractUser->shouldReceive('getId')->andReturn($user['id'])
             ->shouldReceive('getEmail')->andReturn($user['email'])
             ->shouldReceive('getName')->andReturn($user['name']);
@@ -42,9 +42,6 @@ class SocialiteTest extends TestCase
         $providerUser->shouldReceive('user')->andReturn($abstractUser);
 
         Socialite::shouldReceive('driver')->once()->with(self::PROVIDER)->andReturn($providerUser);
-
-         // $providerUser = Socialite::driver('facebook')->user();
-         // echo ' sad: ' . $abstractUser->getEmail();
     }
 
     public function testRedirectProvider()
@@ -81,15 +78,13 @@ class SocialiteTest extends TestCase
 
     public function testCallbackAsLoggedUser()
     {
-        $user = factory(User::class)->create();
+        $user = User::makeFactory()->create();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         $response = $this->get(route('auth.socialite.callback', [self::PROVIDER]));
 
         $response->assertRedirect('/');
-
-        Auth::logout();
     }
 
     public function testCallbackWithoutNothing()
@@ -103,7 +98,6 @@ class SocialiteTest extends TestCase
         $response = $this->get(route('auth.socialite.callback', ['provider' => self::PROVIDER]));
 
         $response->assertRedirect('/register');
-        $this->assertFalse(Auth::check());
     }
 
     public function testCallbackWithoutEmail()
@@ -118,7 +112,6 @@ class SocialiteTest extends TestCase
 
         $response->assertRedirect('/register');
         $response->assertSessionHas('warning', trans('icore::auth.warning.no_email', ['provider' => ucfirst(self::PROVIDER)]));
-        $this->assertFalse(Auth::check());
     }
 
     public function testCallbackNoexistUser()
@@ -141,13 +134,11 @@ class SocialiteTest extends TestCase
             'provider_name' => self::PROVIDER,
             'provider_id' => 343242342
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testCallbackExistUserForeignEmail()
     {
-        $socialAccount = factory(User::class)->states('user')->create();
+        $socialAccount = User::makeFactory()->user()->create();
 
         $this->socialiteMock([
             'id' => 343242342,
@@ -159,14 +150,11 @@ class SocialiteTest extends TestCase
 
         $response->assertRedirect('/login');
         $response->assertSessionHas('warning', trans('icore::auth.warning.email_exist', ['provider' => ucfirst(self::PROVIDER)]));
-
-        $this->assertFalse(Auth::check());
     }
 
     public function testCallbackExistUser()
     {
-        $socialAccount = factory(User::class)->states('user')->create();
-        $socialAccount->socialites()->create([
+        Social::makeFactory()->for(User::makeFactory()->user()->create())->create([
             'provider_name' => self::PROVIDER,
             'provider_id' => 343242342
         ]);
@@ -180,36 +168,5 @@ class SocialiteTest extends TestCase
         $response = $this->get(route('auth.socialite.callback', [self::PROVIDER]));
 
         $response->assertRedirect('/');
-
-        $this->assertTrue(Auth::check());
     }
-
-    //
-    //
-    // public function testBasicTest()
-    // {
-    //     // $providerMock = \Mockery::mock('Laravel\Socialite\Contracts\Provider');
-    //     //
-    //     // $providerMock->shouldReceive('redirect')->andReturn(new RedirectResponse($this->socialLoginRedirects['facebook']));
-    //     //
-    //     // Socialite::shouldReceive('driver')->with('facebook')->andReturn(self::PROVIDERMock);
-    //
-    //     //Check that the user is redirected to the Social Platform Login Page
-    //     $loginResponse = $this->call('GET', route('provider', ['provider' => 'facebook']));
-    //
-    //     $loginResponse->assertStatus(302);
-    //
-    //     $redirectLocation = $loginResponse->headers->get('Location');
-    //
-    //     $this->assertStringContainsString(
-    //         $this->socialLoginRedirects['facebook'],
-    //         $redirectLocation,
-    //         sprintf(
-    //             'The Social Login Redirect does not match the expected value for the provider %s. Expected to contain %s but got %s',
-    //             'facebook',
-    //             $this->socialLoginRedirects['facebook'],
-    //             $redirectLocation
-    //         )
-    //     );
-    // }
 }

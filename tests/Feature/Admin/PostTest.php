@@ -23,7 +23,7 @@ class PostTest extends TestCase
 
     public function testPostIndexWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -34,9 +34,9 @@ class PostTest extends TestCase
 
     public function testPostIndexPaginate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->count(50)->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->count(50)->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -61,9 +61,9 @@ class PostTest extends TestCase
 
     public function testPostEditWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -74,7 +74,7 @@ class PostTest extends TestCase
 
     public function testNoexistPostEdit()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -85,9 +85,9 @@ class PostTest extends TestCase
 
     public function testPostEdit()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -108,9 +108,9 @@ class PostTest extends TestCase
 
     public function testPostUpdateWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -121,7 +121,7 @@ class PostTest extends TestCase
 
     public function testNoexistPostUpdate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -132,9 +132,9 @@ class PostTest extends TestCase
 
     public function testPostUpdateValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -144,15 +144,13 @@ class PostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['title']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostUpdate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -168,8 +166,6 @@ class PostTest extends TestCase
             'content' => 'Ten post został zaktualizowany.',
             'title' => 'Post zaktualizowany.',
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostEditFullAsGuest()
@@ -181,9 +177,9 @@ class PostTest extends TestCase
 
     public function testPostEditFullWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -194,7 +190,7 @@ class PostTest extends TestCase
 
     public function testNoexistPostEditFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -205,9 +201,9 @@ class PostTest extends TestCase
 
     public function testPostEditFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -227,9 +223,9 @@ class PostTest extends TestCase
 
     public function testPostUpdateFullWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -240,7 +236,7 @@ class PostTest extends TestCase
 
     public function testNoexistPostUpdateFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -251,9 +247,9 @@ class PostTest extends TestCase
 
     public function testPostUpdateFullValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -263,17 +259,15 @@ class PostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['categories', 'status', 'time_published_at', 'date_published_at']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostUpdateFull()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
-        $category = Category::factory()->active()->create();
+        $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
 
@@ -306,8 +300,6 @@ class PostTest extends TestCase
             'model_id' => $post->id,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post',
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostUpdateStatusAsGuest()
@@ -319,9 +311,9 @@ class PostTest extends TestCase
 
     public function testPostUpdateStatusWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -332,7 +324,7 @@ class PostTest extends TestCase
 
     public function testNoexistPostUpdateStatus()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -343,9 +335,9 @@ class PostTest extends TestCase
 
     public function testPostUpdateStatusValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -354,15 +346,13 @@ class PostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['status']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostUpdateStatus()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -376,8 +366,6 @@ class PostTest extends TestCase
             'id' => $post->id,
             'status' => 0,
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostDestroyAsGuest()
@@ -389,9 +377,9 @@ class PostTest extends TestCase
 
     public function testPostDestroyWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -402,7 +390,7 @@ class PostTest extends TestCase
 
     public function testNoexistPostDestroy()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -413,9 +401,9 @@ class PostTest extends TestCase
 
     public function testPostDestroy()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -430,8 +418,6 @@ class PostTest extends TestCase
         $this->assertDatabaseMissing('posts', [
             'id' => $post->id,
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostDestroyGlobalAsGuest()
@@ -443,7 +429,7 @@ class PostTest extends TestCase
 
     public function testPostDestroyGlobalWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -454,7 +440,7 @@ class PostTest extends TestCase
 
     public function testPostDestroyGlobalValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -468,9 +454,9 @@ class PostTest extends TestCase
 
     public function testPostDestroyGlobal()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $post = Post::factory()->count(10)->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->count(10)->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
@@ -488,8 +474,6 @@ class PostTest extends TestCase
         $deleted = Post::whereIn('id', $select)->get();
 
         $this->assertTrue($deleted->count() === 0);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostCreateAsGuest()
@@ -501,7 +485,7 @@ class PostTest extends TestCase
 
     public function testPostCreateWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -512,7 +496,7 @@ class PostTest extends TestCase
 
     public function testPostCreate()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -531,7 +515,7 @@ class PostTest extends TestCase
 
     public function testPostStoreWithoutPermission()
     {
-        $user = User::factory()->create();
+        $user = User::makeFactory()->create();
 
         Auth::login($user);
 
@@ -542,7 +526,7 @@ class PostTest extends TestCase
 
     public function testPostStoreValidationFail()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
@@ -552,15 +536,13 @@ class PostTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['categories', 'status', 'date_published_at', 'time_published_at']);
-
-        $this->assertTrue(Auth::check());
     }
 
     public function testPostStore()
     {
-        $user = User::factory()->admin()->create();
+        $user = User::makeFactory()->admin()->create();
 
-        $category = Category::factory()->active()->create();
+        $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
 
@@ -594,7 +576,5 @@ class PostTest extends TestCase
             'model_id' => $post->id,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post',
         ]);
-
-        $this->assertTrue(Auth::check());
     }
 }

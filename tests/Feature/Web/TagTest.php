@@ -4,8 +4,8 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use Faker\Factory as Faker;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TagTest extends TestCase
@@ -21,20 +21,20 @@ class TagTest extends TestCase
 
     public function testTagShowPaginate()
     {
-        $tag = Faker::create()->word;
+        $posts = Post::makeFactory()->count(50)->active()->withUser()
+            ->sequence(function ($sequence) {
+                return [
+                    'published_at' => Carbon::now()->addMinutes($sequence->index)
+                ];
+            })
+            ->create();
 
-        $post = factory(Post::class, 50)->states(['active', 'with_user'])
-            ->make()
-            ->each(function ($item, $key) use ($tag) {
-                $item->published_at = Carbon::now()->addMinutes($key);
-                $item->save();
-                $item->tag($tag);
-            });
+        $tag = Tag::makeFactory()->hasAttached($posts, [], 'morphs')->create();
 
-        $response = $this->get(route('web.tag.post.show', [$post[0]->tags->first()->normalized, 'page' => 2]));
+        $response = $this->get(route('web.tag.post.show', [$tag->normalized, 'page' => 2]));
 
         $response->assertViewIs('icore::web.tag.post.show');
         $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$post[0]->tags->first()->name, $post[10]->title], false);
+        $response->assertSeeInOrder([$tag->name, $posts[10]->title], false);
     }
 }
