@@ -46,18 +46,6 @@ class TokenService implements Deletable
     }
 
     /**
-     * Set the value of token
-     *
-     * @return  self
-     */
-    public function setToken(Token $token)
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
      * Undocumented function
      *
      * @param array $attributes

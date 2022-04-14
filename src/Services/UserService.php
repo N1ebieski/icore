@@ -49,23 +49,10 @@ class UserService implements
      */
     public function __construct(User $user, Hasher $hasher, DB $db)
     {
-        $this->setUser($user);
+        $this->user = $user;
 
         $this->hasher = $hasher;
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param User $user
-     * @return static
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**

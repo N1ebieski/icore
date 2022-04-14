@@ -33,22 +33,9 @@ class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
      */
     public function __construct(Tag $tag, DB $db)
     {
-        $this->setTag($tag);
-
-        $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Tag $tag
-     * @return self
-     */
-    public function setTag(Tag $tag)
-    {
         $this->tag = $tag;
 
-        return $this;
+        $this->db = $db;
     }
 
     /**

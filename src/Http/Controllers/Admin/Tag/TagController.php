@@ -21,23 +21,6 @@ use N1ebieski\ICore\Http\Requests\Admin\Tag\DestroyGlobalRequest;
 class TagController
 {
     /**
-     * Undocumented variable
-     *
-     * @var TagService
-     */
-    protected $tagService;
-
-    /**
-     * Undocumented function
-     *
-     * @param TagService $tagService
-     */
-    public function __construct(TagService $tagService)
-    {
-        $this->tagService = $tagService;
-    }
-
-    /**
      * Undocumented function
      *
      * @param Tag $tag
@@ -70,12 +53,13 @@ class TagController
     /**
      * Undocumented function
      *
+     * @param Tag $tag
      * @param StoreRequest $request
      * @return JsonResponse
      */
-    public function store(StoreRequest $request): JsonResponse
+    public function store(Tag $tag, StoreRequest $request): JsonResponse
     {
-        $this->tagService->create($request->validated());
+        $tag->makeService()->create($request->validated());
 
         $request->session()->flash('success', trans('icore::tags.success.store'));
 
@@ -108,7 +92,7 @@ class TagController
      */
     public function update(Tag $tag, UpdateRequest $request): JsonResponse
     {
-        $this->tagService->setTag($tag)->update($request->validated());
+        $tag->makeService()->update($request->validated());
 
         return Response::json([
             'success' => '',
@@ -126,7 +110,7 @@ class TagController
      */
     public function destroy(Tag $tag): JsonResponse
     {
-        $this->tagService->setTag($tag)->delete();
+        $tag->makeService()->delete();
 
         return Response::json(['success' => '']);
     }
@@ -134,12 +118,13 @@ class TagController
     /**
      * Undocumented function
      *
+     * @param Tag $tag
      * @param DestroyGlobalRequest $request
      * @return RedirectResponse
      */
-    public function destroyGlobal(DestroyGlobalRequest $request): RedirectResponse
+    public function destroyGlobal(Tag $tag, DestroyGlobalRequest $request): RedirectResponse
     {
-        $deleted = $this->tagService->deleteGlobal($request->input('select'));
+        $deleted = $tag->makeService()->deleteGlobal($request->input('select'));
 
         return Response::redirectTo(URL::previous())->with(
             'success',

@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models\Tag;
 
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Cache\TagCache;
+use N1ebieski\ICore\Services\TagService;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Repositories\TagRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;

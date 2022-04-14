@@ -75,26 +75,13 @@ class PageService implements
         Auth $auth,
         DB $db
     ) {
-        $this->setPage($page);
+        $this->page = $page;
 
         $this->collect = $collect;
         $this->auth = $auth;
         $this->db = $db;
 
         $this->paginate = (int)$config->get('database.paginate');
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Page $page
-     * @return static
-     */
-    public function setPage(Page $page)
-    {
-        $this->page = $page;
-
-        return $this;
     }
 
     /**

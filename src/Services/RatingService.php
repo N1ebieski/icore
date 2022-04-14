@@ -40,23 +40,10 @@ class RatingService implements Creatable, Updatable, Deletable
      */
     public function __construct(Rating $rating, Auth $auth, DB $db)
     {
-        $this->setRating($rating);
+        $this->rating = $rating;
 
         $this->auth = $auth;
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Rating $rating
-     * @return static
-     */
-    public function setRating(Rating $rating)
-    {
-        $this->rating = $rating;
-
-        return $this;
     }
 
     /**

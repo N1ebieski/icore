@@ -3,8 +3,8 @@
 namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Link;
-use N1ebieski\ICore\Utils\FileUtil;
 use Illuminate\Database\Eloquent\Model;
+use N1ebieski\ICore\Utils\File\FileUtil;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
@@ -37,28 +37,16 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
      * Undocumented function
      *
      * @param Link $link
+     * @param FileUtil $fileUtil
      * @param DB $db
      */
     public function __construct(Link $link, FileUtil $fileUtil, DB $db)
     {
-        $this->setLink($link);
+        $this->link = $link;
 
         $this->fileUtil = $fileUtil;
 
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Link $link
-     * @return static
-     */
-    public function setLink(Link $link)
-    {
-        $this->link = $link;
-
-        return $this;
     }
 
     /**
@@ -72,7 +60,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
             $this->link->fill($attributes);
 
             if (isset($attributes['img'])) {
-                $this->link->img_url = $this->fileUtil->make($this->link->path, $attributes['img'])->upload();
+                $this->link->img_url = $this->fileUtil->makeFromFile($attributes['img'])->upload($this->link->path);
             }
 
             $this->link->save();
@@ -97,14 +85,14 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
 
             if (isset($attributes['delete_img'])) {
                 if ($this->link->img_url !== null) {
-                    $this->fileUtil->make($this->link->img_url)->delete();
+                    $this->fileUtil->delete($this->link->img_url);
                 }
 
                 $this->link->img_url = null;
             }
 
             if (isset($attributes['img'])) {
-                $this->link->img_url = $this->fileUtil->make($this->link->path, $attributes['img'])->upload();
+                $this->link->img_url = $this->fileUtil->makeFromFile($attributes['img'])->upload($this->link->path);
             }
 
             $link = $this->link->save();
@@ -137,7 +125,7 @@ class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
     {
         return $this->db->transaction(function () {
             if ($this->link->img_url !== null) {
-                $this->fileUtil->make($this->link->img_url)->delete();
+                $this->fileUtil->delete($this->link->img_url);
             }
 
             $this->link->categories()->detach();

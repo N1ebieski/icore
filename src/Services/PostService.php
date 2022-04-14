@@ -63,24 +63,11 @@ class PostService implements
         Auth $auth,
         DB $db
     ) {
-        $this->setPost($post);
+        $this->post = $post;
 
         $this->carbon = $carbon;
         $this->auth = $auth;
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Post $post
-     * @return static
-     */
-    public function setPost(Post $post)
-    {
-        $this->post = $post;
-
-        return $this;
     }
 
     /**

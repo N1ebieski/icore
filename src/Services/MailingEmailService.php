@@ -5,9 +5,9 @@ namespace N1ebieski\ICore\Services;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Newsletter;
-use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingEmailService
 {
@@ -59,26 +59,13 @@ class MailingEmailService
         Carbon $carbon,
         DB $db
     ) {
-        $this->setMailingEmail($mailingEmail);
+        $this->mailingEmail = $mailingEmail;
 
         $this->user = $user;
         $this->newsletter = $newsletter;
 
         $this->carbon = $carbon;
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param MailingEmail $mailingEmail
-     * @return static
-     */
-    public function setMailingEmail(MailingEmail $mailingEmail)
-    {
-        $this->mailingEmail = $mailingEmail;
-
-        return $this;
     }
 
     /**

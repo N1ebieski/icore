@@ -51,22 +51,9 @@ class SocialiteService implements Creatable
      */
     public function __construct(Social $socialite, DB $db)
     {
-        $this->setSocialite($socialite);
-
-        $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Social $socialite
-     * @return static
-     */
-    public function setSocialite(Social $socialite)
-    {
         $this->socialite = $socialite;
 
-        return $this;
+        $this->db = $db;
     }
 
     /**

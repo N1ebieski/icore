@@ -39,22 +39,9 @@ class MailingService implements
      */
     public function __construct(Mailing $mailing, DB $db)
     {
-        $this->setMailing($mailing);
-
-        $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Mailing $mailing
-     * @return static
-     */
-    public function setMailing(Mailing $mailing)
-    {
         $this->mailing = $mailing;
 
-        return $this;
+        $this->db = $db;
     }
 
     /**

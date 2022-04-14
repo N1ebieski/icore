@@ -42,23 +42,10 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      */
     public function __construct(Comment $comment, Auth $auth, DB $db)
     {
-        $this->setComment($comment);
+        $this->comment = $comment;
 
         $this->auth = $auth;
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Comment $comment
-     * @return static
-     */
-    public function setComment(Comment $comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
     }
 
     /**

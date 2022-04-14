@@ -28,22 +28,9 @@ class StatService
      */
     public function __construct(Stat $stat, DB $db)
     {
-        $this->setStat($stat);
-
-        $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Stat $stat
-     * @return static
-     */
-    public function setStat(Stat $stat)
-    {
         $this->stat = $stat;
 
-        return $this;
+        $this->db = $db;
     }
 
     /**

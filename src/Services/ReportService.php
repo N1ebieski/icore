@@ -39,23 +39,10 @@ class ReportService implements Creatable
      */
     public function __construct(Report $report, Auth $auth, DB $db)
     {
-        $this->setReport($report);
+        $this->report = $report;
 
         $this->auth = $auth;
         $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Report $report
-     * @return static
-     */
-    public function setReport(Report $report)
-    {
-        $this->report = $report;
-
-        return $this;
     }
 
     /**

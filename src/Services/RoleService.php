@@ -32,22 +32,9 @@ class RoleService implements Creatable, Updatable
      */
     public function __construct(Role $role, DB $db)
     {
-        $this->setRole($role);
-
-        $this->db = $db;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Role $role
-     * @return static
-     */
-    public function setRole(Role $role)
-    {
         $this->role = $role;
 
-        return $this;
+        $this->db = $db;
     }
 
     /**

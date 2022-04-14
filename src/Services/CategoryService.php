@@ -63,25 +63,12 @@ class CategoryService implements
         Collect $collect,
         DB $db
     ) {
-        $this->setCategory($category);
+        $this->category = $category;
 
         $this->collect = $collect;
         $this->db = $db;
 
         $this->paginate = $config->get('database.paginate');
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param Category $category
-     * @return static
-     */
-    public function setCategory(Category $category)
-    {
-        $this->category = $category;
-
-        return $this;
     }
 
     /**
