@@ -36,7 +36,6 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app->register(CommandServiceProvider::class);
 
         Route::middlewareGroup('icore.web', [
-            // 'throttle:60,1',
             \N1ebieski\ICore\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
