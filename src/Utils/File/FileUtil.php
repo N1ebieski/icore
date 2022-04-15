@@ -14,6 +14,12 @@ class FileUtil
     protected $temp_path;
 
     /**
+     * [protected description]
+     * @var string
+     */
+    protected $disk;
+
+    /**
      * Undocumented variable
      *
      * @var Storage
@@ -50,6 +56,7 @@ class FileUtil
 
         $this->file = $file;
 
+        $this->disk = $disk;
         $this->temp_path = $temp_path;
     }
 
@@ -91,9 +98,9 @@ class FileUtil
      */
     public function prepare($paths): string
     {
-        foreach ((array)$paths as $path) {
-            if ($this->filesystem->exists($path)) {
-                return $path;
+        foreach (array_merge((array)$paths, [$this->temp_path]) as $path) {
+            if ($this->filesystem->exists($path . "/" . $this->file->getClientOriginalName())) {
+                return $path . "/" . $this->file->getClientOriginalName();
             }
         }
 
@@ -124,22 +131,20 @@ class FileUtil
      * Undocumented function
      *
      * @param string $path
-     * @return boolean
+     * @return string
      */
-    public function moveFromTemp(string $path): bool
+    public function moveFromTemp(string $path): string
     {
-        if (
-            !$this->filesystem->exists(
-                $this->temp_path . "/" . $this->file->getClientOriginalName()
-            )
-        ) {
+        $tempPath = $this->temp_path . "/" . $this->file->getClientOriginalName();
+        $toPath = $path . "/" . $this->file->getClientOriginalName();
+
+        if (!$this->filesystem->exists($tempPath)) {
             throw new \N1ebieski\ICore\Exceptions\File\NotFoundException();
         }
 
-        return $this->filesystem->move(
-            $this->temp_path . "/" . $this->file->getClientOriginalName(),
-            $path . "/" . $this->file->getClientOriginalName()
-        );
+        $this->filesystem->move($tempPath, $toPath);
+
+        return $toPath;
     }
 
     /**

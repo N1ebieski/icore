@@ -86,6 +86,36 @@ class UsersACLRepository implements ACLRepository
                 'path' => '*',
                 'access' => $this->hasPermission()
             ],
+            [
+                'disk' => 'views',
+                'path' => '/',
+                'access' => $this->hasPermission()
+            ],
+            [
+                'disk' => 'views',
+                'path' => '*',
+                'access' => $this->hasPermission()
+            ],
+            [
+                'disk' => 'lang',
+                'path' => '/',
+                'access' => $this->hasPermission()
+            ],
+            [
+                'disk' => 'lang',
+                'path' => '*',
+                'access' => $this->hasPermission()
+            ],
+            [
+                'disk' => 'css',
+                'path' => '/',
+                'access' => $this->hasPermission()
+            ],
+            [
+                'disk' => 'css',
+                'path' => '*',
+                'access' => $this->hasPermission()
+            ]
         ];
     }
 
