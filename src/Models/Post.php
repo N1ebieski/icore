@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\PostService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PostRepo;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
@@ -193,7 +194,7 @@ class Post extends Model
                 'categories' => function ($query) {
                     $query->withAncestorsExceptSelf();
                 },
-            ])->first() ?? App::abort(404);
+            ])->first() ?? App::abort(HttpResponse::HTTP_NOT_FOUND);
     }
 
     // Overrides

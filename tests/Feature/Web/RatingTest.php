@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Rating\Rating;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -28,7 +29,7 @@ class RatingTest extends TestCase
 
         $response = $this->get(route('web.rating.comment.rate', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testRatingCommentRateValidationFail()

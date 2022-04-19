@@ -7,6 +7,7 @@ use Franzose\ClosureTable\Models\Entity;
 use N1ebieski\ICore\Cache\CategoryCache;
 use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Services\CategoryService;
@@ -223,7 +224,7 @@ class Category extends Entity
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('id', $value)->orWhere('slug', $value)
-            ->WithAncestorsExceptSelf()->first() ?? abort(404);
+            ->WithAncestorsExceptSelf()->first() ?? abort(HttpResponse::HTTP_NOT_FOUND);
     }
 
     // Scopes

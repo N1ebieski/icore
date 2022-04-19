@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -27,7 +28,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('web.report.comment.create', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testReportInactiveCommentCreate()
@@ -40,7 +41,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('web.report.comment.create', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testReportCommentCreate()
@@ -73,7 +74,7 @@ class ReportTest extends TestCase
 
         $response = $this->post(route('web.report.comment.store', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testReportInactiveCommentStore()
@@ -86,7 +87,7 @@ class ReportTest extends TestCase
 
         $response = $this->post(route('web.report.comment.store', [$comment->id]), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testReportCommentStoreValidationFail()

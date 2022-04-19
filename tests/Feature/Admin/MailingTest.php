@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Crons\MailingCron;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use N1ebieski\ICore\Models\MailingEmail\User\MailingEmail;
@@ -33,7 +34,7 @@ class MailingTest extends TestCase
 
         $response = $this->get(route('admin.mailing.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testMailingIndexPaginate()
@@ -73,7 +74,7 @@ class MailingTest extends TestCase
 
         $response = $this->get(route('admin.mailing.edit', [$mailing->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistMailingEdit()
@@ -84,7 +85,7 @@ class MailingTest extends TestCase
 
         $response = $this->get(route('admin.mailing.edit', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testMailingEdit()
@@ -119,7 +120,7 @@ class MailingTest extends TestCase
 
         $response = $this->put(route('admin.mailing.update', [$mailing->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistMailingUpdate()
@@ -130,7 +131,7 @@ class MailingTest extends TestCase
 
         $response = $this->put(route('admin.mailing.update', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testMailingUpdateValidationFail()
@@ -200,7 +201,7 @@ class MailingTest extends TestCase
 
         $response = $this->patch(route('admin.mailing.update_status', [$mailing->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistMailingUpdateStatus()
@@ -211,7 +212,7 @@ class MailingTest extends TestCase
 
         $response = $this->patch(route('admin.mailing.update_status', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testMailingUpdateStatusValidationFail()
@@ -266,7 +267,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.destroy', [$mailing->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistMailingDestroy()
@@ -277,7 +278,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testMailingDestroy()
@@ -326,7 +327,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testMailingDestroyGlobalValidationFail()
@@ -382,7 +383,7 @@ class MailingTest extends TestCase
 
         $response = $this->get(route('admin.mailing.create'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testMailingCreate()
@@ -412,7 +413,7 @@ class MailingTest extends TestCase
 
         $response = $this->post(route('admin.mailing.store'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testMailingStoreValidationFail()
@@ -480,7 +481,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.reset', [$mailing->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistMailingReset()
@@ -491,7 +492,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.reset', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testMailingReset()

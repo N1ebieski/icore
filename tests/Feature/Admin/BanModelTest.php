@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\BanModel\BanModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -29,7 +30,7 @@ class BanModelTest extends TestCase
 
         $response = $this->get(route('admin.banmodel.user.create', [$user2->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanmodelNoexistUserCreate()
@@ -40,7 +41,7 @@ class BanModelTest extends TestCase
 
         $response = $this->get(route('admin.banmodel.user.create', [312312]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testBanmodelUserCreate()
@@ -73,7 +74,7 @@ class BanModelTest extends TestCase
 
         $response = $this->post(route('admin.banmodel.user.store', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testBanmodelUserStoreWithoutPermission()
@@ -86,7 +87,7 @@ class BanModelTest extends TestCase
 
         $response = $this->post(route('admin.banmodel.user.store', [$user2->id]), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanmodelUserStoreValidationFail()
@@ -145,7 +146,7 @@ class BanModelTest extends TestCase
 
         $response = $this->get(route('admin.banmodel.user.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanmodelUserIndexPaginate()
@@ -189,7 +190,7 @@ class BanModelTest extends TestCase
 
         $response = $this->delete(route('admin.banmodel.destroy', [$user2->ban->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistBanmodelDestroy()
@@ -200,7 +201,7 @@ class BanModelTest extends TestCase
 
         $response = $this->delete(route('admin.banmodel.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testBanmodelDestroy()
@@ -239,7 +240,7 @@ class BanModelTest extends TestCase
 
         $response = $this->delete(route('admin.banmodel.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanmodelDestroyGlobalValidationFail()

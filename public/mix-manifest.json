@@ -1,13 +1,13 @@
 {
-    "/js/vendor/icore/admin/admin.js": "/js/vendor/icore/admin/admin.js?id=3533ba1b0534af88e17c",
-    "/js/vendor/icore/vendor/vendor.js": "/js/vendor/icore/vendor/vendor.js?id=6aa4fef1d36c8562e0c8",
-    "/css/vendor/icore/vendor/vendor.css": "/css/vendor/icore/vendor/vendor.css?id=3e94262f9287a68d00eb",
-    "/css/vendor/icore/web/web.css": "/css/vendor/icore/web/web.css?id=14a2663c11fb6f585c4c",
-    "/css/vendor/icore/web/web-dark.css": "/css/vendor/icore/web/web-dark.css?id=7cb95cff3a62b2dba346",
-    "/css/vendor/icore/admin/admin.css": "/css/vendor/icore/admin/admin.css?id=861d2a68db8b071f9f92",
-    "/css/vendor/icore/admin/admin-dark.css": "/css/vendor/icore/admin/admin-dark.css?id=a7364e3d1c839dc18fa5",
-    "/js/vendor/icore/web/web.js": "/js/vendor/icore/web/web.js?id=98f7c89cdf3e12c17ba5",
-    "/js/vendor/icore/web/recaptcha_invisible.js": "/js/vendor/icore/web/recaptcha_invisible.js?id=5a0c44667ce1e41f61b6",
-    "/js/vendor/icore/web/scripts.js": "/js/vendor/icore/web/scripts.js?id=72fa998d7b057f226bb8",
-    "/js/vendor/icore/admin/scripts.js": "/js/vendor/icore/admin/scripts.js?id=17e92ca9dd575a3f1ac6"
+    "/js/vendor/icore/vendor/vendor.js": "/js/vendor/icore/vendor/vendor.js?id=0c4224c596f9fa068ccd433bb9ff3836",
+    "/js/vendor/icore/web/web.js": "/js/vendor/icore/web/web.js?id=d41d8cd98f00b204e9800998ecf8427e",
+    "/js/vendor/icore/admin/admin.js": "/js/vendor/icore/admin/admin.js?id=0429ec0c3aceb5bbee622c6cf596e753",
+    "/css/vendor/icore/vendor/vendor.css": "/css/vendor/icore/vendor/vendor.css?id=4399d5449e5bd23d4c0ce5c1cde21e4a",
+    "/css/vendor/icore/admin/admin-dark.css": "/css/vendor/icore/admin/admin-dark.css?id=da2329eed4ff452a01384abec3406bba",
+    "/css/vendor/icore/admin/admin.css": "/css/vendor/icore/admin/admin.css?id=efdef3ab39ec9f3773014fffa8f78a43",
+    "/css/vendor/icore/web/web-dark.css": "/css/vendor/icore/web/web-dark.css?id=c5003916db797825221d990eb0f9d631",
+    "/css/vendor/icore/web/web.css": "/css/vendor/icore/web/web.css?id=b133625afe13dc2a2a8d635c1b2a8c1e",
+    "/js/vendor/icore/web/recaptcha_invisible.js": "/js/vendor/icore/web/recaptcha_invisible.js?id=5a0c44667ce1e41f61b6520314617151",
+    "/js/vendor/icore/web/scripts.js": "/js/vendor/icore/web/scripts.js?id=5830bfd972adbfc8725dd3ca9262a0a6",
+    "/js/vendor/icore/admin/scripts.js": "/js/vendor/icore/admin/scripts.js?id=609117a8155892636548021081f49a56"
 }

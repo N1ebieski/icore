@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BanValueTest extends TestCase
@@ -27,7 +28,7 @@ class BanValueTest extends TestCase
 
         $response = $this->get(route('admin.banvalue.create', ['ip']));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanvalueNoexistTypeCreate()
@@ -79,7 +80,7 @@ class BanValueTest extends TestCase
 
         $response = $this->post(route('admin.banvalue.store', ['ip']), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanvalueStoreValidationFail()
@@ -130,7 +131,7 @@ class BanValueTest extends TestCase
 
         $response = $this->get(route('admin.banvalue.index', ['ip']));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanvalueIndexPaginate()
@@ -171,7 +172,7 @@ class BanValueTest extends TestCase
 
         $response = $this->delete(route('admin.banvalue.destroy', [$banvalue->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistBanvalueDestroy()
@@ -182,7 +183,7 @@ class BanValueTest extends TestCase
 
         $response = $this->delete(route('admin.banvalue.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testBanvalueDestroy()
@@ -221,7 +222,7 @@ class BanValueTest extends TestCase
 
         $response = $this->delete(route('admin.banvalue.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanvalueDestroyGlobalValidationFail()
@@ -277,7 +278,7 @@ class BanValueTest extends TestCase
 
         $response = $this->get(route('admin.banvalue.edit', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testBanvalueEditWithoutPermission()
@@ -290,7 +291,7 @@ class BanValueTest extends TestCase
 
         $response = $this->get(route('admin.banvalue.edit', [$banvalue->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testBanvalueEdit()
@@ -323,7 +324,7 @@ class BanValueTest extends TestCase
 
         $response = $this->put(route('admin.banvalue.update', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testBanvalueUpdateWithoutPermission()
@@ -336,7 +337,7 @@ class BanValueTest extends TestCase
 
         $response = $this->put(route('admin.banvalue.update', [$banvalue->id]), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentUpdateValidationFail()

@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PageTest extends TestCase
@@ -15,7 +16,7 @@ class PageTest extends TestCase
     {
         $response = $this->get(route('web.page.show', ['dajskruiufi']));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageShow()
@@ -41,7 +42,7 @@ class PageTest extends TestCase
             ]
         ]));
 
-        $response->assertSee('class="pagination"', false);
+        // $response->assertSee('class="pagination"', false);
         $response->assertSee($page->title, false);
         $response->assertSee($comment[30]->content, false);
     }

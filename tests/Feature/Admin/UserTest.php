@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
@@ -27,7 +28,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.user.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserIndexPaginate()
@@ -67,7 +68,7 @@ class UserTest extends TestCase
 
         $response = $this->patch(route('admin.user.update_status', [$us->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistUserUpdateStatus()
@@ -78,7 +79,7 @@ class UserTest extends TestCase
 
         $response = $this->patch(route('admin.user.update_status', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testUserUpdateStatusSelf()
@@ -91,7 +92,7 @@ class UserTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserUpdateStatusValidationFail()
@@ -146,7 +147,7 @@ class UserTest extends TestCase
 
         $response = $this->delete(route('admin.user.destroy', [$us->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserDestroySelf()
@@ -157,7 +158,7 @@ class UserTest extends TestCase
 
         $response = $this->delete(route('admin.user.destroy', [$user->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistUserDestroy()
@@ -168,7 +169,7 @@ class UserTest extends TestCase
 
         $response = $this->delete(route('admin.user.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testUserDestroy()
@@ -207,7 +208,7 @@ class UserTest extends TestCase
 
         $response = $this->delete(route('admin.user.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserDestroyGlobalValidationFail()
@@ -238,7 +239,7 @@ class UserTest extends TestCase
             'select' => $us->push($user)->pluck('id')->toArray(),
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserDestroyGlobal()
@@ -282,7 +283,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.user.edit', [$us->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserEditSelf()
@@ -293,7 +294,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.user.edit', [$user->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistUserEdit()
@@ -304,7 +305,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.post.edit', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testUserEdit()
@@ -339,7 +340,7 @@ class UserTest extends TestCase
 
         $response = $this->put(route('admin.user.update', [$us->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserUpdateSelf()
@@ -350,7 +351,7 @@ class UserTest extends TestCase
 
         $response = $this->put(route('admin.user.update', [$user->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistUserUpdate()
@@ -361,7 +362,7 @@ class UserTest extends TestCase
 
         $response = $this->put(route('admin.user.update', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testUserUpdateValidationFail()
@@ -419,7 +420,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.user.create'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserCreate()
@@ -449,7 +450,7 @@ class UserTest extends TestCase
 
         $response = $this->post(route('admin.user.store'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testUserStoreValidationFail()

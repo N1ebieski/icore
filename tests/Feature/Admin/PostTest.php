@@ -7,6 +7,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -29,7 +30,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPostIndexPaginate()
@@ -69,7 +70,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.edit', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPostEdit()
@@ -80,7 +81,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.edit', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostEdit()
@@ -116,7 +117,7 @@ class PostTest extends TestCase
 
         $response = $this->put(route('admin.post.update', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPostUpdate()
@@ -127,7 +128,7 @@ class PostTest extends TestCase
 
         $response = $this->put(route('admin.post.update', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostUpdateValidationFail()
@@ -185,7 +186,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.edit_full', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPostEditFull()
@@ -196,7 +197,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.edit_full', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostEditFull()
@@ -231,7 +232,7 @@ class PostTest extends TestCase
 
         $response = $this->put(route('admin.post.update_full', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPostUpdateFull()
@@ -242,7 +243,7 @@ class PostTest extends TestCase
 
         $response = $this->put(route('admin.post.update_full', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostUpdateFullValidationFail()
@@ -319,7 +320,7 @@ class PostTest extends TestCase
 
         $response = $this->patch(route('admin.post.update_status', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPostUpdateStatus()
@@ -330,7 +331,7 @@ class PostTest extends TestCase
 
         $response = $this->patch(route('admin.post.update_status', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostUpdateStatusValidationFail()
@@ -385,7 +386,7 @@ class PostTest extends TestCase
 
         $response = $this->delete(route('admin.post.destroy', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPostDestroy()
@@ -396,7 +397,7 @@ class PostTest extends TestCase
 
         $response = $this->delete(route('admin.post.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostDestroy()
@@ -435,7 +436,7 @@ class PostTest extends TestCase
 
         $response = $this->delete(route('admin.post.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPostDestroyGlobalValidationFail()
@@ -491,7 +492,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.create'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPostCreate()
@@ -521,7 +522,7 @@ class PostTest extends TestCase
 
         $response = $this->post(route('admin.post.store'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPostStoreValidationFail()

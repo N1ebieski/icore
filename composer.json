@@ -18,7 +18,7 @@
         "n1ebieski/logic-captcha": "^1.0",
         "nckg/laravel-minify-html": "^1.4",
         "nesbot/carbon": "^2.29",
-        "proengsoft/laravel-jsvalidation": "4.7.1+icore.1",
+        "proengsoft/laravel-jsvalidation": "4.7.1+icore",
         "spatie/laravel-directory-cleanup": "^1.4",        
         "spatie/laravel-permission": "^5.0",
         "spatie/laravel-view-components": "^1.1",

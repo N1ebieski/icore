@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Report\Report;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -33,7 +34,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('admin.report.comment.show', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testReportNoexistCommentShow()
@@ -44,7 +45,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('admin.report.comment.show', [4343434]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testReportCommentShow()
@@ -85,7 +86,7 @@ class ReportTest extends TestCase
 
         $response = $this->delete(route('admin.report.comment.clear', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testReportNoexistCommentClear()
@@ -96,7 +97,7 @@ class ReportTest extends TestCase
 
         $response = $this->delete(route('admin.report.comment.clear', [4343434]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testReportCommentClear()

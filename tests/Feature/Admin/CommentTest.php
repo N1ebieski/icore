@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -28,7 +29,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.post.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentPostIndexPaginate()
@@ -72,7 +73,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.show', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCommentShow()
@@ -83,7 +84,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.show', [4343434]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentShow()
@@ -123,7 +124,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.post.create', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentPostCreateWithoutPermission()
@@ -136,7 +137,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.post.create', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testChildrenCommentPostCreate()
@@ -171,7 +172,7 @@ class CommentTest extends TestCase
 
         $response = $this->post(route('admin.comment.post.store', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentPostStoreWithoutPermission()
@@ -184,7 +185,7 @@ class CommentTest extends TestCase
 
         $response = $this->post(route('admin.comment.post.store', [$post->id]), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testChildrenNoexistCommentPostStore()
@@ -244,7 +245,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.edit', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentEditWithoutPermission()
@@ -259,7 +260,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.edit', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentEdit()
@@ -295,7 +296,7 @@ class CommentTest extends TestCase
 
         $response = $this->put(route('admin.comment.update', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentUpdateWithoutPermission()
@@ -310,7 +311,7 @@ class CommentTest extends TestCase
 
         $response = $this->put(route('admin.comment.update', [$comment->id]), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentUpdateValidationFail()
@@ -372,7 +373,7 @@ class CommentTest extends TestCase
 
         $response = $this->patch(route('admin.comment.update_status', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCommentUpdateStatus()
@@ -383,7 +384,7 @@ class CommentTest extends TestCase
 
         $response = $this->patch(route('admin.comment.update_status', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentUpdateStatusValidationFail()
@@ -444,7 +445,7 @@ class CommentTest extends TestCase
 
         $response = $this->patch(route('admin.comment.update_censored', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCommentUpdateCensored()
@@ -455,7 +456,7 @@ class CommentTest extends TestCase
 
         $response = $this->patch(route('admin.comment.update_censored', [43423424]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentUpdateCensoredValidationFail()
@@ -516,7 +517,7 @@ class CommentTest extends TestCase
 
         $response = $this->delete(route('admin.comment.destroy', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCommentDestroy()
@@ -527,7 +528,7 @@ class CommentTest extends TestCase
 
         $response = $this->delete(route('admin.comment.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentDestroy()
@@ -567,7 +568,7 @@ class CommentTest extends TestCase
 
         $response = $this->delete(route('admin.comment.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentDestroyGlobalValidationFail()

@@ -69,7 +69,7 @@ class PostController
      * @responseField meta object Paging, filtering and sorting information.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Post\PostResource
-     * @apiResourceModel N1ebieski\ICore\Models\Post states=active,publish,with_user with=user
+     * @apiResourceModel N1ebieski\ICore\Models\Post states=active,publish,withUser with=user
      *
      * @param Post $post
      * @param IndexRequest $request

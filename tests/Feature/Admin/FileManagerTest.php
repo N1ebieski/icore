@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FileManagerTest extends TestCase
@@ -17,7 +18,7 @@ class FileManagerTest extends TestCase
     {
         $response = $this->getJson(route('fm.content', ['disk' => 'public']));
 
-        $response->assertStatus(401);
+        $response->assertStatus(HttpResponse::HTTP_UNAUTHORIZED);
     }
 
     public function testFilemanagerWritePublicDiskAsGuest()
@@ -35,7 +36,7 @@ class FileManagerTest extends TestCase
 
         Storage::disk('public')->assertMissing('avatar.jpg');
 
-        $response->assertStatus(401);
+        $response->assertStatus(HttpResponse::HTTP_UNAUTHORIZED);
     }
 
     public function testFilemanagerReadPublicDiskAsUser()
@@ -46,7 +47,7 @@ class FileManagerTest extends TestCase
 
         $response = $this->getJson(route('fm.content', ['disk' => 'public']));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testFilemanagerWritePublicDiskAsUser()
@@ -68,7 +69,7 @@ class FileManagerTest extends TestCase
 
         Storage::disk('public')->assertMissing('avatar.jpg');
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testFilemanagerWritePublicDiskAsAdmin()

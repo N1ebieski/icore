@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 use Carbon\Carbon;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -16,7 +17,7 @@ class CategoryTest extends TestCase
     {
         $response = $this->get(route('web.category.post.show', ['dajskruiufi']));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryShow()

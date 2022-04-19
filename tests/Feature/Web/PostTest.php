@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Crons\PostCron;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -25,7 +26,7 @@ class PostTest extends TestCase
     {
         $response = $this->get(route('web.post.show', ['dajskruiufi']));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPostShow()

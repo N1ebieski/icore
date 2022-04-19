@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TagTest extends TestCase
@@ -16,7 +17,7 @@ class TagTest extends TestCase
     {
         $response = $this->get(route('web.tag.post.show', ['dajskruiufi-2']));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testTagShowPaginate()

@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -18,7 +19,7 @@ class CommentTest extends TestCase
     {
         $response = $this->post(route('web.comment.take', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentTake()
@@ -59,7 +60,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.post.create', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCommentPostCreateAsBannedUser()
@@ -72,7 +73,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
         $response->assertSeeText('you are banned', false);
     }
 
@@ -92,7 +93,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
         $response->assertSeeText('you are banned', false);
     }
 
@@ -106,7 +107,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
         $response->assertSeeText('disabled for this post', false);
     }
 
@@ -139,7 +140,7 @@ class CommentTest extends TestCase
 
         $response = $this->post(route('web.comment.post.store', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testRootCommentPostStoreWithBannedWord()
@@ -185,7 +186,7 @@ class CommentTest extends TestCase
             'g-recaptcha-response' => 'dsadasd'
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
         $response->assertSeeText('disabled for this post', false);
     }
 
@@ -280,7 +281,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.edit', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testForeignCommentEdit()
@@ -295,7 +296,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.edit', [$comment->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentEdit()
@@ -331,7 +332,7 @@ class CommentTest extends TestCase
 
         $response = $this->put(route('web.comment.update', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testForeignCommentUpdate()
@@ -348,7 +349,7 @@ class CommentTest extends TestCase
             'content' => 'Hdsjdhsjdsj'
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCommentUpdateValidationFail()

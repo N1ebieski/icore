@@ -6,49 +6,46 @@ window._ = require('lodash');
  * code may be modified to fit the specific needs of your application.
  */
 
-try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
+window.Popper = require('popper.js').default;
+window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+require('bootstrap');
 
-    require('jscroll');
+require('jscroll');
 
-    require('jquery.cookie');
+require('jquery.cookie');
 
-    require('jquery.easing');
+require('jquery.easing');
 
-    require('trumbowyg');
-    require('trumbowyg/dist/langs/pl.min.js');
-    require('trumbowyg/dist/plugins/colors/trumbowyg.colors.min.js');
-    require('trumbowyg/dist/plugins/history/trumbowyg.history.min.js');
-    require('trumbowyg/dist/plugins/table/trumbowyg.table.min.js');
+require('trumbowyg');
+require('trumbowyg/dist/langs/pl.min.js');
+require('trumbowyg/dist/plugins/colors/trumbowyg.colors.min.js');
+require('trumbowyg/dist/plugins/history/trumbowyg.history.min.js');
+require('trumbowyg/dist/plugins/table/trumbowyg.table.min.js');
 
-    require('jquery-lazy/jquery.lazy.js');
+require('jquery-lazy/jquery.lazy.js');
 
-    require('jquery.tagsinput-revisited/src/jquery.tagsinput-revisited.js');
+require('jquery.tagsinput-revisited/src/jquery.tagsinput-revisited.js');
 
-    require('bootstrap-confirmation2/dist/bootstrap-confirmation.js');
+require('bootstrap-confirmation2/dist/bootstrap-confirmation.js');
 
-    require('bootstrap-select/dist/js/bootstrap-select.min.js');
-    require('bootstrap-select/dist/js/i18n/defaults-pl_PL.min.js');
+require('bootstrap-select/dist/js/bootstrap-select.min.js');
+require('bootstrap-select/dist/js/i18n/defaults-pl_PL.min.js');
 
-    require('ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js');
-    require('ajax-bootstrap-select/dist/js/locale/ajax-bootstrap-select.pl-PL.min.js');
+require('ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js');
+require('ajax-bootstrap-select/dist/js/locale/ajax-bootstrap-select.pl-PL.min.js');
 
-    require('pickadate/lib/picker.js');
-    require('pickadate/lib/picker.date.js');
-    require('pickadate/lib/picker.time.js');
-    //require('pickadate/lib/compressed/translations/pl_PL.js');
+require('pickadate/lib/picker.js');
+require('pickadate/lib/picker.date.js');
+require('pickadate/lib/picker.time.js');
+//require('pickadate/lib/compressed/translations/pl_PL.js');
 
-    require('magnific-popup/dist/jquery.magnific-popup.js');
+require('magnific-popup/dist/jquery.magnific-popup.js');
 
-    require('jquery-googlemap/jquery.googlemap.js');
+require('jquery-googlemap/jquery.googlemap.js');
 
-    require('corejs-typeahead/dist/typeahead.jquery.js');
-    Bloodhound = require('corejs-typeahead/dist/bloodhound.js');
-
-} catch (e) {}
+require('corejs-typeahead/dist/typeahead.jquery.js');
+window.Bloodhound = require('corejs-typeahead/dist/bloodhound.js');
 
 $.ajaxSetup({
     'headers': {

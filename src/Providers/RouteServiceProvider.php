@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -31,22 +32,22 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('post_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\PostCache::class)->rememberBySlug($value)
-                ?? $this->app->abort(404);
+                ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
         Route::bind('page_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\PageCache::class)->rememberBySlug($value)
-                ?? $this->app->abort(404);
+                ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
         Route::bind('category_post_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Models\Category\Post\Category::class)
-                ->makeCache()->rememberBySlug($value) ?? $this->app->abort(404);
+                ->makeCache()->rememberBySlug($value) ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
         Route::bind('tag_cache', function ($value) {
             return $this->app->make(\N1ebieski\ICore\Cache\TagCache::class)->rememberBySlug($value)
-                ?? $this->app->abort(404);
+                ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
         $this->routes(function () {

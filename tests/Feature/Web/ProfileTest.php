@@ -8,6 +8,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Socialite as Social;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -313,7 +314,7 @@ class ProfileTest extends TestCase
 
         $response = $this->delete(route('web.profile.socialite.destroy', ['socialite' => 442342424]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testProfileSocialiteDestroyForeignId()
@@ -330,7 +331,7 @@ class ProfileTest extends TestCase
 
         $response = $this->delete(route('web.profile.socialite.destroy', ['socialite' => $user1->socialites->first()->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testProfileSocialiteDestroyId()

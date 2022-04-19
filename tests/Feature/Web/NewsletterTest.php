@@ -8,6 +8,7 @@ use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Mail;
 use N1ebieski\ICore\Models\Newsletter;
 use N1ebieski\ICore\Models\NewsletterToken;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -85,7 +86,7 @@ class NewsletterTest extends TestCase
             'status' => Newsletter::ACTIVE
         ]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
         $response->assertSeeText('token is invalid', false);
     }
 
@@ -103,7 +104,7 @@ class NewsletterTest extends TestCase
             'status' => Newsletter::ACTIVE
         ]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
         $response->assertSeeText('token period has expired', false);
     }
 

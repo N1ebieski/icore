@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RoleTest extends TestCase
@@ -27,7 +28,7 @@ class RoleTest extends TestCase
 
         $response = $this->get(route('admin.role.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRoleIndexPaginate()
@@ -62,7 +63,7 @@ class RoleTest extends TestCase
 
         $response = $this->delete(route('admin.role.destroy', [$role->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRoleDestroyDefault()
@@ -75,7 +76,7 @@ class RoleTest extends TestCase
 
         $response = $this->delete(route('admin.role.destroy', [$role->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistRoleDestroy()
@@ -86,7 +87,7 @@ class RoleTest extends TestCase
 
         $response = $this->delete(route('admin.role.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testRoleDestroy()
@@ -129,7 +130,7 @@ class RoleTest extends TestCase
 
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRoleEditDefault()
@@ -142,7 +143,7 @@ class RoleTest extends TestCase
 
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistRoleEdit()
@@ -153,7 +154,7 @@ class RoleTest extends TestCase
 
         $response = $this->get(route('admin.role.edit', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testRoleEdit()
@@ -188,7 +189,7 @@ class RoleTest extends TestCase
 
         $response = $this->put(route('admin.role.update', [$role->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRoleUpdateDefault()
@@ -201,7 +202,7 @@ class RoleTest extends TestCase
 
         $response = $this->put(route('admin.role.update', [$role->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistRoleUpdate()
@@ -212,7 +213,7 @@ class RoleTest extends TestCase
 
         $response = $this->put(route('admin.role.update', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testUserUpdateDefaultUserValidationFail()
@@ -291,7 +292,7 @@ class RoleTest extends TestCase
 
         $response = $this->get(route('admin.role.create'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRoleCreate()
@@ -321,7 +322,7 @@ class RoleTest extends TestCase
 
         $response = $this->post(route('admin.role.store'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRoleStoreValidationFail()

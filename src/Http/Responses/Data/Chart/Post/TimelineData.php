@@ -1,20 +1,13 @@
 <?php
 
-namespace N1ebieski\ICore\Http\Responses\Data\Post\Chart;
+namespace N1ebieski\ICore\Http\Responses\Data\Chart\Post;
 
 use Illuminate\Database\Eloquent\Collection;
-use N1ebieski\ICore\Http\Responses\Data\DataInterface;
 use Illuminate\Contracts\Translation\Translator as Lang;
+use N1ebieski\ICore\Http\Responses\Data\Chart\DataInterface;
 
 class TimelineData implements DataInterface
 {
-    /**
-     * Undocumented variable
-     *
-     * @var Collection
-     */
-    protected $collection;
-
     /**
      * Undocumented variable
      *
@@ -35,13 +28,10 @@ class TimelineData implements DataInterface
     /**
      * Undocumented function
      *
-     * @param Collection $collection
      * @param Lang $lang
      */
-    public function __construct(Collection $collection, Lang $lang)
+    public function __construct(Lang $lang)
     {
-        $this->collection = $collection;
-
         $this->lang = $lang;
     }
 
@@ -50,11 +40,11 @@ class TimelineData implements DataInterface
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray(Collection $collection): array
     {
         $data = [];
 
-        $this->collection->each(function ($item) use (&$data) {
+        $collection->each(function ($item) use (&$data) {
             $data[] = [
                 'year' => $item->year,
                 'month' => $item->month,

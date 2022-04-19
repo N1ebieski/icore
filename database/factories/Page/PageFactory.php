@@ -60,7 +60,7 @@ class PageFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Page::WITH_COMMENT
+                'comment' => Page::WITH_COMMENT
             ];
         });
     }

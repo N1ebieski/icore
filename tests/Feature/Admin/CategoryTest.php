@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -27,7 +28,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.post.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCategoryIndexPaginate()
@@ -67,7 +68,7 @@ class CategoryTest extends TestCase
 
         $response = $this->patch(route('admin.category.update_status', [$category->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCategoryUpdateStatus()
@@ -78,7 +79,7 @@ class CategoryTest extends TestCase
 
         $response = $this->patch(route('admin.category.update_status', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryUpdateStatusValidationFail()
@@ -133,7 +134,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.edit', [$category->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCategoryEdit()
@@ -144,7 +145,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.edit', [9999]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryEdit()
@@ -179,7 +180,7 @@ class CategoryTest extends TestCase
 
         $response = $this->put(route('admin.category.update', [$category->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCategoryUpdate()
@@ -190,7 +191,7 @@ class CategoryTest extends TestCase
 
         $response = $this->put(route('admin.category.update', [9999]), []);
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryUpdateValidationFail()
@@ -276,7 +277,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.post.create'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCategoryPostCreate()
@@ -306,7 +307,7 @@ class CategoryTest extends TestCase
 
         $response = $this->post(route('admin.category.post.store'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testRootCategoryPostStore()
@@ -374,7 +375,7 @@ class CategoryTest extends TestCase
 
         $response = $this->post(route('admin.category.post.store_global'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCategoryPostStoreGlobalValidationFail()
@@ -453,7 +454,7 @@ class CategoryTest extends TestCase
 
         $response = $this->delete(route('admin.category.destroy', [$category->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCategoryDestroy()
@@ -464,7 +465,7 @@ class CategoryTest extends TestCase
 
         $response = $this->delete(route('admin.category.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryDestroy()
@@ -503,7 +504,7 @@ class CategoryTest extends TestCase
 
         $response = $this->delete(route('admin.category.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testCategoryDestroyGlobalValidationFail()
@@ -561,7 +562,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.edit_position', [$category->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCategoryEditPosition()
@@ -572,7 +573,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.edit_position', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryEditPosition()
@@ -607,7 +608,7 @@ class CategoryTest extends TestCase
 
         $response = $this->patch(route('admin.category.update_position', [$category->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistCategoryUpdatePosition()
@@ -618,7 +619,7 @@ class CategoryTest extends TestCase
 
         $response = $this->patch(route('admin.category.update_position', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testCategoryUpdatePositionValidationFail()

@@ -93,12 +93,12 @@ class FileUtil
     /**
      * Undocumented function
      *
-     * @param mixed $paths
+     * @param array $paths
      * @return string
      */
-    public function prepare($paths): string
+    public function prepare(array $paths = []): string
     {
-        foreach (array_merge((array)$paths, [$this->temp_path]) as $path) {
+        foreach (array_merge($paths, [$this->temp_path]) as $path) {
             if ($this->filesystem->exists($path . "/" . $this->file->getClientOriginalName())) {
                 return $path . "/" . $this->file->getClientOriginalName();
             }

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Http\Clients\Intelekt\Client;
-use N1ebieski\ICore\Http\Responses\Data\Post\Chart\TimelineData as PostAndPagesTimelineData;
+use N1ebieski\ICore\Http\Responses\Data\Chart\Post\TimelineData as PostAndPagesTimelineData;
 
 class HomeController
 {
@@ -37,9 +37,8 @@ class HomeController
 
         return Response::view('icore::admin.home.index', [
             'posts' => $posts,
-            'countPostsAndPagesByDate' => App::make(PostAndPagesTimelineData::class, [
-                'collection' => $post->makeRepo()->countActiveByDateUnionPages($page->activeByDate())
-            ])->toArray()
+            'countPostsAndPagesByDate' => App::make(PostAndPagesTimelineData::class)
+                ->toArray($post->makeRepo()->countActiveByDateUnionPages($page->activeByDate()))
         ]);
     }
 }

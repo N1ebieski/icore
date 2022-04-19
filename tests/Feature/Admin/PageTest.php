@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PageTest extends TestCase
@@ -27,7 +28,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.index'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPageIndexPaginate()
@@ -62,7 +63,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageEdit()
@@ -73,7 +74,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageEdit()
@@ -108,7 +109,7 @@ class PageTest extends TestCase
 
         $response = $this->put(route('admin.page.update', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageUpdate()
@@ -119,7 +120,7 @@ class PageTest extends TestCase
 
         $response = $this->put(route('admin.page.update', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageUpdateValidationFail()
@@ -177,7 +178,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit_full', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageEditFull()
@@ -188,7 +189,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit_full', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageEditFull()
@@ -223,7 +224,7 @@ class PageTest extends TestCase
 
         $response = $this->put(route('admin.page.update_full', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageUpdateFull()
@@ -234,7 +235,7 @@ class PageTest extends TestCase
 
         $response = $this->put(route('admin.page.update_full', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageUpdateFullValidationFail()
@@ -332,7 +333,7 @@ class PageTest extends TestCase
 
         $response = $this->patch(route('admin.page.update_status', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageUpdateStatus()
@@ -343,7 +344,7 @@ class PageTest extends TestCase
 
         $response = $this->patch(route('admin.page.update_status', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageUpdateStatusValidationFail()
@@ -398,7 +399,7 @@ class PageTest extends TestCase
 
         $response = $this->delete(route('admin.page.destroy', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageDestroy()
@@ -409,7 +410,7 @@ class PageTest extends TestCase
 
         $response = $this->delete(route('admin.page.destroy', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageDestroy()
@@ -448,7 +449,7 @@ class PageTest extends TestCase
 
         $response = $this->delete(route('admin.page.destroy_global'), []);
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPageDestroyGlobalValidationFail()
@@ -504,7 +505,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.create'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPageCreate()
@@ -534,7 +535,7 @@ class PageTest extends TestCase
 
         $response = $this->post(route('admin.page.store'));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testPageStoreValidationFail()
@@ -626,7 +627,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageEditPosition()
@@ -637,7 +638,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit_position', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageEditPosition()
@@ -672,7 +673,7 @@ class PageTest extends TestCase
 
         $response = $this->patch(route('admin.page.update_position', [$page->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
     public function testNoexistPageUpdatePosition()
@@ -683,7 +684,7 @@ class PageTest extends TestCase
 
         $response = $this->patch(route('admin.page.update_position', [2327382]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
     public function testPageUpdatePositionValidationFail()
