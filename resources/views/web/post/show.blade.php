@@ -11,7 +11,7 @@
     ],
     'desc' => [$post->meta_desc],
     'keys' => [$post->tag_list],
-    'index' => (bool)$post->seo_noindex === true ? 'noindex' : 'index',
+    'index' => $post->seo_noindex->isActive() ? 'noindex' : 'index',
     'follow' => (bool)$post->seo_nofollow === true ? 'nofollow' : 'follow',
     'og' => [
         'title' => $post->meta_title,

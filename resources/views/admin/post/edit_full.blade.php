@@ -140,8 +140,8 @@
                             class="custom-control-input" 
                             id="seo_noindex" 
                             name="seo_noindex" 
-                            value="{{ $post::SEO_NOINDEX }}" 
-                            {{ (old('seo_noindex', $post->seo_noindex) == $post::SEO_NOINDEX) ? 'checked' : '' }}
+                            value="{{ $post->seo_noindex::ACTIVE }}" 
+                            {{ $post->seo_noindex::fromString(old('seo_noindex', $post->seo_noindex->getValue()))->isActive() ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_noindex">
                             SEO noindex?
@@ -193,27 +193,27 @@
                         name="status"
                     >
                         <option 
-                            value="{{ $post::ACTIVE }}" 
-                            {{ (old('status', $post->status) == $post::ACTIVE) ? 'selected' : '' }}
+                            value="{{ $post->status::ACTIVE }}" 
+                            {{ $post->status::fromString(old('status', $post->status->getValue()))->isActive() ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.active') }}
                         </option>
                         <option 
-                            value="{{ $post::INACTIVE }}" 
-                            {{ (old('status', $post->status) == $post::INACTIVE) ? 'selected' : '' }}
+                            value="{{ $post->status::INACTIVE }}" 
+                            {{ $post->status::fromString(old('status', $post->status->getValue()))->isInactive() ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.inactive') }}
                         </option>
                         <option 
-                            value="{{ $post::SCHEDULED }}" 
-                            {{ (old('status', $post->status) == $post::SCHEDULED) ? 'selected' : '' }}
+                            value="{{ $post->status::SCHEDULED }}" 
+                            {{ $post->status::fromString(old('status', $post->status->getValue()))->isScheduled() ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.scheduled') }}
                         </option>
                     </select>
                 </div>
                 <div 
-                    class="form-group collapse {{ (old('status', $post->status) != $post::INACTIVE) ? 'show' : '' }}" 
+                    class="form-group collapse {{ !$post->status::fromString(old('status', $post->status->getValue()))->isInactive() ? 'show' : '' }}" 
                     id="collapse-published-at"
                 >
                     <label for="published_at">

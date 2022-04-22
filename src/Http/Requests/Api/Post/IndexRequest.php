@@ -6,6 +6,7 @@ use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 
 class IndexRequest extends FormRequest
@@ -63,9 +64,9 @@ class IndexRequest extends FormRequest
                 'nullable',
                 'integer',
                 Rule::in([
-                    Post::ACTIVE,
-                    optional($this->user())->can('admin.posts.view') ? Post::INACTIVE : null,
-                    optional($this->user())->can('admin.posts.view') ? Post::SCHEDULED : null
+                    Status::ACTIVE,
+                    optional($this->user())->can('admin.posts.view') ? Status::INACTIVE : null,
+                    optional($this->user())->can('admin.posts.view') ? Status::SCHEDULED : null
                 ])
             ],
             'filter.category' => [
@@ -119,11 +120,11 @@ class IndexRequest extends FormRequest
             'filter.status' => [
                 'description' => sprintf(
                     'Must be one of %1$s, %2$s (available only for admin.posts.view) or %3$s (available only for admin.posts.view)',
-                    Post::ACTIVE,
-                    Post::INACTIVE,
-                    Post::SCHEDULED
+                    Status::ACTIVE,
+                    Status::INACTIVE,
+                    Status::SCHEDULED
                 ),
-                'example' => Post::ACTIVE
+                'example' => Status::ACTIVE
             ],
             'filter.category' => [
                 'description' => 'ID of category contains posts.',

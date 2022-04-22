@@ -112,7 +112,7 @@ class StatComponent implements Htmlable
                 ->firstWhere('status', $this->category::ACTIVE),
 
             'countPosts' => $this->post->makeCache()->rememberCountByStatus()
-                ->firstWhere('status', $this->post::ACTIVE),
+                ->firstWhere('status', $this->post->status::ACTIVE),
 
             'countComments' => $this->comment->makeCache()->rememberCountByModelTypeAndStatus()
                 ->where('status', $this->comment::ACTIVE),

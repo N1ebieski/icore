@@ -19,7 +19,9 @@ use N1ebieski\ICore\Repositories\PostRepo;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
+use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -28,6 +30,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 
+/**
+ * @property SeoNoindex $seo_noindex
+ * @property Status $status
+ */
 class Post extends Model
 {
     use Sluggable;
@@ -46,24 +52,6 @@ class Post extends Model
      * [public description]
      * @var int
      */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SCHEDULED = 2;
-
-    /**
-     * [public description]
-     * @var int
-     */
     public const WITH_COMMENT = 1;
 
     /**
@@ -76,18 +64,6 @@ class Post extends Model
      * [public description]
      * @var int
      */
-    public const SEO_NOINDEX = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_INDEX = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
     public const SEO_NOFOLLOW = 1;
 
     /**
@@ -95,12 +71,6 @@ class Post extends Model
      * @var int
      */
     public const SEO_FOLLOW = 0;
-
-    /**
-     * [private description]
-     * @var bool
-     */
-    private $pivotEvent = false;
 
     /**
      * The attributes that are mass assignable.
@@ -136,7 +106,9 @@ class Post extends Model
      * @var array
      */
     protected $attributes = [
-        'comment' => self::ACTIVE,
+        'comment' => self::WITH_COMMENT,
+        'status' => Status::INACTIVE,
+        'seo_noindex' => SeoNoindex::INACTIVE
     ];
 
     /**
@@ -161,9 +133,9 @@ class Post extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'seo_noindex' => 'integer',
+        'seo_noindex' => \N1ebieski\ICore\Casts\Post\SeoNoindexCast::class,
         'seo_nofollow' => 'integer',
-        'status' => 'integer',
+        'status' => \N1ebieski\ICore\Casts\Post\StatusCast::class,
         'comment' => 'integer',
         'published_at' => 'datetime',
         'created_at' => 'datetime',
@@ -442,15 +414,6 @@ class Post extends Model
         return $this->comment === static::WITH_COMMENT;
     }
 
-    /**
-     * [isActive description]
-     * @return bool [description]
-     */
-    public function isActive(): bool
-    {
-        return $this->status === static::ACTIVE;
-    }
-
     // Scopes
 
     /**
@@ -461,8 +424,8 @@ class Post extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where([
-            ['posts.status', '=', static::ACTIVE],
-            ['posts.published_at', '!=', null]
+            ["{$this->getTable()}.status", '=', Status::ACTIVE],
+            ["{$this->getTable()}.published_at", '!=', null]
         ]);
     }
 
@@ -475,8 +438,8 @@ class Post extends Model
     public function scopeScheduled(Builder $query): Builder
     {
         return $query->where([
-            ['posts.status', '=', static::SCHEDULED],
-            ['posts.published_at', '!=', null]
+            ["{$this->getTable()}.status", '=', Status::SCHEDULED],
+            ["{$this->getTable()}.published_at", '!=', null]
         ]);
     }
 

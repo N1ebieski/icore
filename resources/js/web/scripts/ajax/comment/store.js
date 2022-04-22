@@ -31,10 +31,11 @@ $(document).on(
                 if (response.view) {
                     $form.closest('[id^=comment]').after($.sanitize(response.view));
 
-                    let $comment = $form.closest('[id^=comment]').next('div');
+                    let $comment = $form.closest('[id^=comment]').next('div').children();
 
                     $comment.addClass('alert-primary font-italic border-bottom');
-                    setTimeout(function() {
+
+                    setTimeout(function () {
                         $comment.removeClassStartingWith('alert-');
                     }, 5000);
                 }
@@ -52,9 +53,9 @@ $(document).on(
                     $form.find('#content').val('');
                 }
             },
-            error: function(response) {
+            error: function (response) {
                 if (response.responseJSON.errors) {
-                    $.each(response.responseJSON.errors, function(key, value) {
+                    $.each(response.responseJSON.errors, function (key, value) {
                         $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');
                         $form.find('#' + $.escapeSelector(key)).closest('.form-group').addError({
                             id: key,

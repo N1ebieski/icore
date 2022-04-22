@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Database\Factories\Post;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -31,10 +32,10 @@ class PostFactory extends Factory
             'content' => strip_tags($content),
             'seo_title' => $this->faker->randomElement([$this->faker->sentence(5), null]),
             'seo_desc' => $this->faker->text(),
-            'seo_noindex' => rand(Post::INACTIVE, Post::ACTIVE),
-            'seo_nofollow' => rand(Post::INACTIVE, Post::ACTIVE),
-            'status' => rand(Post::INACTIVE, Post::ACTIVE),
-            'comment' => rand(Post::INACTIVE, Post::ACTIVE),
+            'seo_noindex' => rand(Status::INACTIVE, Status::ACTIVE),
+            'seo_nofollow' => rand(Status::INACTIVE, Status::ACTIVE),
+            'status' => rand(Status::INACTIVE, Status::ACTIVE),
+            'comment' => rand(Status::INACTIVE, Status::ACTIVE),
             'published_at' => $this->faker->randomElement([
                 $this->faker->dateTimeThisYear()->format('Y-m-d H:i:s'),
                 null
@@ -85,7 +86,7 @@ class PostFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Post::ACTIVE
+                'status' => Status::ACTIVE
             ];
         });
     }
@@ -141,7 +142,7 @@ class PostFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Post::SCHEDULED,
+                'status' => Status::SCHEDULED,
                 'published_at' => Carbon::now()->format('Y-m-d H:i:s')
             ];
         });

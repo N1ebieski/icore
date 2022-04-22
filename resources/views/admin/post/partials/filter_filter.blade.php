@@ -35,22 +35,22 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $post::ACTIVE }}" 
-            {{ ($filter['status'] === $post::ACTIVE) ? 'selected' : '' }}
+            value="{{ $post->status::ACTIVE }}" 
+            {{ ($filter['status'] === $post->status::ACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::posts.status.'.$post::ACTIVE) }}
+            {{ trans('icore::posts.status.'.$post->status::ACTIVE) }}
         </option>
         <option 
-            value="{{ $post::INACTIVE }}" 
-            {{ ($filter['status'] === $post::INACTIVE) ? 'selected' : '' }}
+            value="{{ $post->status::INACTIVE }}" 
+            {{ ($filter['status'] === $post->status::INACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::posts.status.'.$post::INACTIVE) }}
+            {{ trans('icore::posts.status.'.$post->status::INACTIVE) }}
         </option>
         <option 
-            value="{{ $post::SCHEDULED }}" 
-            {{ ($filter['status'] === $post::SCHEDULED) ? 'selected' : '' }}
+            value="{{ $post->status::SCHEDULED }}" 
+            {{ ($filter['status'] === $post->status::SCHEDULED) ? 'selected' : '' }}
         >
-            {{ trans('icore::posts.status.'.$post::SCHEDULED) }}
+            {{ trans('icore::posts.status.'.$post->status::SCHEDULED) }}
         </option>
     </select>
 </div>

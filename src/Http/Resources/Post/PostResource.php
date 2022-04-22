@@ -44,10 +44,10 @@ class PostResource extends JsonResource
             'meta_title' => $this->meta_title,
             'seo_desc' => $this->seo_desc,
             'meta_desc' => $this->meta_desc,
-            'seo_noindex' => (bool)$this->seo_noindex,
+            'seo_noindex' => $this->seo_noindex->getValue(),
             'seo_nofollow' => (bool)$this->seo_nofolow,
             'status' => [
-                'value' => $this->status,
+                'value' => $this->status->getValue(),
                 'label' => Lang::get("icore::posts.status.{$this->status}")
             ],
             'comment' => (bool)$this->comment,
@@ -65,7 +65,7 @@ class PostResource extends JsonResource
             ),
             'links' => [
                 $this->mergeWhen(
-                    Config::get('icore.routes.web.enabled') === true && $this->status === Post::ACTIVE,
+                    Config::get('icore.routes.web.enabled') === true && $this->status->isActive(),
                     function () {
                         return [
                             'web' => URL::route('web.post.show', [$this->slug])

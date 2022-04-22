@@ -1,13 +1,10 @@
-// Import Custom Variables
+// Custom variables
 @import "variables.scss";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-// // DataTables
-// @import '~datatables.net-bs4/css/dataTables.bootstrap4.css';
-
-// Import Custom SCSS
+// Custom styles
 @import "toasts.scss";
 @import "mixins.scss";
 @import "global.scss";

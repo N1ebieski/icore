@@ -290,7 +290,7 @@ class Comment extends Entity
     {
         return $this->isActive()
             && $this->getRelation('morph') !== null
-            && $this->getRelation('morph')->isActive()
+            && $this->getRelation('morph')->status->isActive()
             && $this->getRelation('morph')->isCommentable();
     }
 

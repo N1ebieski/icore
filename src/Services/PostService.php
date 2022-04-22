@@ -82,7 +82,7 @@ class PostService implements
             $this->post->fill($attributes);
             $this->post->content = $this->post->content_html;
 
-            if ($this->post->status !== Post::INACTIVE) {
+            if (!$this->post->status->isInactive()) {
                 $this->post->published_at =
                     $attributes['date_published_at'] . $attributes['time_published_at'];
             }
@@ -134,7 +134,7 @@ class PostService implements
             $this->post->fill($attributes);
             $this->post->content = $this->post->content_html;
 
-            if ($this->post->status !== Post::INACTIVE) {
+            if (!$this->post->status->isInactive()) {
                 $this->post->published_at =
                     $attributes['date_published_at'] . $attributes['time_published_at'];
             }

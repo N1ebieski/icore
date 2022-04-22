@@ -1,9 +1,10 @@
-// Custom Variables
+// Custom variables
 @import "variables.scss";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Custom styles
 @import "alerts.scss";
 @import "toasts.scss";
 @import "mixins.scss";
@@ -13,5 +14,5 @@
 @import "utilities.scss";
 @import 'map.scss';
 
-//typeahead
+// Typeahead
 @import '../vendor/typeahead/typeahead.scss';

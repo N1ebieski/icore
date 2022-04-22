@@ -78,7 +78,7 @@ button[class^='trumbowyg-'] {
 	color: #ecf0f1;
 }
 
-//scroll-to-top
+// Scroll-to-top
 .scroll-to-top {
     color: $black;
     background: fade-out($gray-100, .5);
@@ -89,5 +89,38 @@ button[class^='trumbowyg-'] {
     background-color: $black !important;
     div input {
         color: $white;
+    }
+}
+
+// Fixes for Dark Boostrap 2.1.0
+.custom-control-label::before {
+    background-color: $black;
+}
+
+.custom-select {
+    background: $black url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5'%3E%3Cpath fill='%23e9ecef' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
+}
+
+li.page-item:not(.active) .page-link:not(:hover) {
+    background-color: $gray-400 !important;
+    color: $black !important;
+}
+
+.page-link {
+    border: 1px solid #dee2e6;
+
+    &:hover {
+        color: #878787;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+}
+
+.dropdown-item {
+    color: $black;
+
+    &:focus, &:hover {
+        color: #16181b;
+        background-color: #f8f9fa;
     }
 }

@@ -290,7 +290,7 @@ class PostRepo
                     ->whereTime('published_at', '<=', $this->carbon->now()->format('H:i:s'));
             })
             ->scheduled()
-            ->update(['status' => Post::ACTIVE]);
+            ->update(['status' => $this->post->status::ACTIVE]);
     }
 
     /**
@@ -360,7 +360,7 @@ class PostRepo
     {
         return $this->post->selectRaw("YEAR(`post`.`created_at`) `year`, MONTH(`post`.`created_at`) `month`, 'posts' AS `type`, COUNT(*) AS `count`")
             ->from("{$this->post->getTable()} AS post")
-            ->where('post.status', $this->post::ACTIVE)
+            ->where('post.status', $this->post->status::ACTIVE)
             ->groupBy('year')
             ->groupBy('month')
             ->unionAll($pages)

@@ -74,21 +74,21 @@
                 @endcan
                 @can('admin.posts.status')
                 <button 
-                    data-status="{{ $post::ACTIVE }}" 
+                    data-status="{{ $post->status::ACTIVE }}" 
                     type="button" 
                     class="btn btn-success status"
                     data-route="{{ route('admin.post.update_status', ['post' => $post->id]) }}"
-                    {{ $post->status == $post::ACTIVE ? 'disabled' : '' }}
+                    {{ $post->status->isActive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-on"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button 
-                    data-status="{{ $post::INACTIVE }}" 
+                    data-status="{{ $post->status::INACTIVE }}" 
                     type="button" 
                     class="btn btn-warning status"
                     data-route="{{ route('admin.post.update_status', ['post' => $post->id]) }}"
-                    {{ $post->status == $post::INACTIVE ? 'disabled' : '' }}
+                    {{ $post->status->isInactive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-off"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>

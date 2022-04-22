@@ -46,7 +46,7 @@ class IncrementView
      */
     public function verify(): bool
     {
-        return $this->event->post->isActive()
+        return $this->event->post->status->isActive()
             && $this->migrationUtil->contains('create_stats_table');
     }
 

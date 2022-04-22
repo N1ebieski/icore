@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 
 return [
     'success' => [
@@ -36,9 +36,9 @@ return [
     'more' => 'pokaż więcej &raquo;',
     'comment' => 'Komentarze włączone',
     'status' => [
-        Post::ACTIVE => 'aktywne',
-        Post::INACTIVE => 'nieaktywne',
-        Post::SCHEDULED => 'zaplanowane',
+        Status::ACTIVE => 'aktywne',
+        Status::INACTIVE => 'nieaktywne',
+        Status::SCHEDULED => 'zaplanowane',
     ],
     'related' => 'Podobne posty',
     'chart' => [

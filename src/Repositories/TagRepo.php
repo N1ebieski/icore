@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Repositories;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TagRepo
 {
@@ -67,7 +67,7 @@ class TagRepo
             ->join('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
             ->join("{$morph->getTable()}", function ($query) use ($morph) {
                 $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
-                    ->where("{$morph->getTable()}.status", $morph::ACTIVE);
+                    ->where("{$morph->getTable()}.status", $morph->status::active());
             })
             ->where('tags_models.model_type', $this->tag->model_type)
             ->when($component['cats'] !== null, function ($query) use ($component) {

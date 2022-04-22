@@ -21,21 +21,22 @@ $(document).on(
                 $form.input.removeClass('is-valid');
                 $form.input.removeClass('is-invalid');
             },
-            complete: function() {
+            complete: function () {
                 $element.loader('hide');
                 $form.input.addClass('is-valid');
             },
-            success: function(response) {
+            success: function (response) {
                 let $comment = $form.closest('[id^=comment]');
 
-                $comment.html($.sanitize($(response.view).html()));
+                $comment.html($.sanitize($(response.view).children().html()));
 
                 $comment.addClass('alert-primary');
+                
                 setTimeout(function () {
                     $comment.removeClassStartingWith('alert-');
                 }, 5000);
             },
-            error: function(response) {
+            error: function (response) {
                 if (response.responseJSON.errors) {
                     $.each(response.responseJSON.errors, function (key, value) {
                         $form.find('#' + $.escapeSelector(key)).addClass('is-invalid');

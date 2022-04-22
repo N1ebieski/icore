@@ -17,7 +17,7 @@ trait HasRealDepth
     {
         $parent = $this->find($this->parent_id);
 
-        return is_int(optional($parent)->real_depth) ? $parent->real_depth + 1 : 1;
+        return is_int(optional($parent)->real_depth) ? $parent->real_depth + 1 : 0;
     }
 
     /**

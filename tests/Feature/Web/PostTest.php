@@ -82,7 +82,7 @@ class PostTest extends TestCase
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => Post::SCHEDULED
+            'status' => $post->status::SCHEDULED
         ]);
 
         // Uruchamiamy zadanie crona bezpośrednio, bo przez schedule:run ma ustalony delay
@@ -92,7 +92,7 @@ class PostTest extends TestCase
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => Post::ACTIVE
+            'status' => $post->status::ACTIVE
         ]);
     }
 }

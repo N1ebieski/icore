@@ -82,7 +82,6 @@ class PostController
     public function edit(Post $post): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.post.edit', [
                 'post' => $post
             ])->render(),
@@ -98,12 +97,9 @@ class PostController
      */
     public function editFull(Post $post): HttpResponse
     {
-        return Response::view(
-            'icore::admin.post.edit_full',
-            App::make(EditFullViewModel::class, [
-                'post' => $post
-            ])
-        );
+        return Response::view('icore::admin.post.edit_full', App::make(EditFullViewModel::class, [
+            'post' => $post
+        ]));
     }
 
     /**
@@ -118,8 +114,7 @@ class PostController
         $post->makeService()->updateStatus($request->only('status'));
 
         return Response::json([
-            'success' => '',
-            'status' => $post->status,
+            'status' => $post->status->getValue(),
             'view' => View::make('icore::admin.post.partials.post', [
                 'post' => $post
             ])->render(),
@@ -135,7 +130,7 @@ class PostController
      */
     public function updateFull(Post $post, UpdateFullRequest $request): RedirectResponse
     {
-        $post->makeService()->updateFull($request->all());
+        $post->makeService()->updateFull($request->validated());
 
         return Response::redirectToRoute('admin.post.edit_full', ['post' => $post->id])
             ->with('success', Lang::get('icore::posts.success.update'));
@@ -153,7 +148,6 @@ class PostController
         $post->makeService()->update($request->only(['title', 'content_html']));
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.post.partials.post', [
                 'post' => $post
             ])->render()
@@ -170,7 +164,7 @@ class PostController
     {
         $post->makeService()->delete();
 
-        return Response::json(['success' => '']);
+        return Response::json([]);
     }
 
     /**

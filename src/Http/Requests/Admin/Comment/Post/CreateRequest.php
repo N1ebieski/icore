@@ -25,7 +25,7 @@ class CreateRequest extends FormRequest
             );
         }
 
-        return $this->post->isActive();
+        return $this->post->status->isActive();
     }
 
     /**

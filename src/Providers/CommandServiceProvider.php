@@ -27,6 +27,7 @@ class CommandServiceProvider extends ServiceProvider
             $this->commands([
                 \N1ebieski\ICore\Console\Commands\RegisterSuperAdminCommand::class,
                 \N1ebieski\ICore\Console\Commands\InstallCommand::class,
+                \N1ebieski\ICore\Console\Commands\Update\UpdateCommand::class,
                 \N1ebieski\ICore\Console\Commands\EnvCommand::class,
                 \N1ebieski\ICore\Console\Commands\EnvTestingCommand::class
             ]);
