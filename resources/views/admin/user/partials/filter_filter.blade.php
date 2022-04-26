@@ -1,5 +1,3 @@
-@inject('user', 'N1ebieski\ICore\Models\User')
-
 @component('icore::admin.partials.modal')
 
 @slot('modal_id', 'filter-modal')
@@ -36,14 +34,14 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $user::ACTIVE }}" 
-            {{ ($filter['status'] === $user::ACTIVE) ? 'selected' : '' }}
+            value="{{ User\Status::ACTIVE }}" 
+            {{ ($filter['status'] === User\Status::ACTIVE) ? 'selected' : '' }}
         >
             {{ trans('icore::filter.active') }}
         </option>
         <option 
-            value="{{ $user::INACTIVE }}" 
-            {{ ($filter['status'] === $user::INACTIVE) ? 'selected' : '' }}
+            value="{{ User\Status::INACTIVE }}" 
+            {{ ($filter['status'] === User\Status::INACTIVE) ? 'selected' : '' }}
         >
             {{ trans('icore::filter.inactive') }}
         </option>

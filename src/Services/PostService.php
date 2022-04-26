@@ -203,18 +203,18 @@ class PostService implements
         return $this->db->transaction(function () use ($ids) {
             $this->post->categories()->newPivotStatement()
                 ->whereIn('model_id', $ids)
-                ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+                ->where('model_type', $this->post->getMorphClass())->delete();
 
             $this->post->tags()->newPivotStatement()
                 ->whereIn('model_id', $ids)
-                ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+                ->where('model_type', $this->post->getMorphClass())->delete();
 
             $this->post->stats()->newPivotStatement()
                 ->whereIn('model_id', $ids)
                 ->where('model_type', $this->post->getMorphClass())->delete();
 
             $this->post->comments()->make()->whereIn('model_id', $ids)
-                ->where('model_type', 'N1ebieski\ICore\Models\Post')->delete();
+                ->where('model_type', $this->post->getMorphClass())->delete();
 
             return $this->post->whereIn('id', $ids)->delete();
         });

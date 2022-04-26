@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -137,7 +138,7 @@ class RoleTest extends TestCase
     {
         $user = User::makeFactory()->superAdmin()->create();
 
-        $role = Role::where('name', 'super-admin')->first();
+        $role = Role::where('name', Name::SUPER_ADMIN)->first();
 
         Auth::login($user);
 
@@ -196,7 +197,7 @@ class RoleTest extends TestCase
     {
         $user = User::makeFactory()->superAdmin()->create();
 
-        $role = Role::whereName('super-admin')->first();
+        $role = Role::where('name', Name::SUPER_ADMIN)->first();
 
         Auth::login($user);
 

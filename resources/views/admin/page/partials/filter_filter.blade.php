@@ -36,14 +36,14 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $page::ACTIVE }}" 
-            {{ ($filter['status'] === $page::ACTIVE) ? 'selected' : '' }}
+            value="{{ Page\Status::ACTIVE }}" 
+            {{ ($filter['status'] === Page\Status::ACTIVE) ? 'selected' : '' }}
         >
             {{ trans('icore::filter.active') }}
         </option>
         <option 
-            value="{{ $page::INACTIVE }}" 
-            {{ ($filter['status'] === $page::INACTIVE) ? 'selected' : '' }}
+            value="{{ Page\Status::INACTIVE }}" 
+            {{ ($filter['status'] === Page\Status::INACTIVE) ? 'selected' : '' }}
         >
             {{ trans('icore::filter.inactive') }}
         </option>

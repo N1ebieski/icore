@@ -12,6 +12,9 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
 
+/**
+ * @property Page $page
+ */
 class StoreRequest extends FormRequest
 {
     use CaptchaExtended;
@@ -39,14 +42,14 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->page->comment === Page::WITHOUT_COMMENT) {
+        if ($this->page->comment->isInactive()) {
             App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
                 'Adding comments has been disabled for this page.'
             );
         }
 
-        return $this->page->status === Page::ACTIVE;
+        return $this->page->status->isActive();
     }
 
     /**

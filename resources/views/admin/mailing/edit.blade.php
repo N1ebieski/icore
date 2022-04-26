@@ -87,27 +87,27 @@
                         aria-controls="collapse-activation-at"
                     >
                         <option 
-                            value="{{ $mailing::ACTIVE }}" 
-                            {{ (old('status', $mailing->status) == $mailing::ACTIVE) ? 'selected' : '' }}
+                            value="{{ Mailing\Status::ACTIVE }}" 
+                            {{ (old('status', $mailing->status->getValue()) == Mailing\Status::ACTIVE) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.active') }}
                         </option>
                         <option 
-                            value="{{ $mailing::INACTIVE }}" 
-                            {{ (old('status', $mailing->status) == $mailing::INACTIVE) ? 'selected' : '' }}
+                            value="{{ Mailing\Status::INACTIVE }}" 
+                            {{ (old('status', $mailing->status->getValue()) == Mailing\Status::INACTIVE) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.inactive') }}
                         </option>
                         <option 
-                            value="{{ $mailing::SCHEDULED }}" 
-                            {{ (old('status', $mailing->status) == $mailing::SCHEDULED) ? 'selected' : '' }}
+                            value="{{ Mailing\Status::SCHEDULED }}" 
+                            {{ (old('status', $mailing->status->getValue()) == Mailing\Status::SCHEDULED) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.scheduled') }}
                         </option>
                     </select>
                 </div>
                 <div 
-                    class="form-group collapse {{ (old('status', $mailing->status) == 2) ? 'show' : '' }}"
+                    class="form-group collapse {{ (old('status', $mailing->status->getValue()) == Mailing\Status::SCHEDULED) ? 'show' : '' }}"
                     id="collapse-activation-at"
                 >
                     <label for="activation_at">

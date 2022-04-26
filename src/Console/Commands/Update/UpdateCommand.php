@@ -81,7 +81,7 @@ class UpdateCommand extends Command
         Storage $storage,
         Lang $lang,
         SchemaFactory $schemaFactory,
-        string $backupPath = 'backup'
+        string $backupPath = 'backup/icore'
     ) {
         parent::__construct();
 

@@ -5,6 +5,8 @@ namespace N1ebieski\ICore\Database\Factories\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\ValueObjects\Role\Name;
+use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
@@ -30,7 +32,7 @@ class UserFactory extends Factory
             'email_verified_at' => Carbon::now(),
             'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm',
             'remember_token' => Str::random(10),
-            'status' => rand(User::INACTIVE, User::ACTIVE)
+            'status' => rand(Status::INACTIVE, Status::ACTIVE)
         ];
     }
 
@@ -43,7 +45,7 @@ class UserFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => User::ACTIVE
+                'status' => Status::ACTIVE
             ];
         });
     }
@@ -70,7 +72,7 @@ class UserFactory extends Factory
     public function user()
     {
         return $this->afterCreating(function (User $user) {
-            $user->assignRole('user');
+            $user->assignRole(Name::USER);
         });
     }
 
@@ -82,7 +84,7 @@ class UserFactory extends Factory
     public function admin()
     {
         return $this->afterCreating(function (User $user) {
-            $user->assignRole('admin');
+            $user->assignRole(Name::ADMIN);
         });
     }
 
@@ -94,7 +96,7 @@ class UserFactory extends Factory
     public function superAdmin()
     {
         return $this->afterCreating(function (User $user) {
-            $user->assignRole('super-admin');
+            $user->assignRole(Name::SUPER_ADMIN);
         });
     }
 
@@ -106,7 +108,7 @@ class UserFactory extends Factory
     public function api()
     {
         return $this->afterCreating(function (User $user) {
-            $user->assignRole('api');
+            $user->assignRole(Name::API);
         });
     }
 

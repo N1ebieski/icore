@@ -88,7 +88,7 @@ class MailingController
     {
         $mailing->makeService()->update($request->all());
 
-        if ($mailing->status == Mailing::ACTIVE) {
+        if ($mailing->status->isActive()) {
             return Response::redirectToRoute('admin.mailing.index')
                 ->with('success', Lang::get('icore::mailings.success.update'));
         }
@@ -109,8 +109,7 @@ class MailingController
         $mailing->makeService()->updateStatus($request->only('status'));
 
         return Response::json([
-            'success' => '',
-            'status' => $mailing->status,
+            'status' => $mailing->status->getValue(),
             'view' => View::make('icore::admin.mailing.partials.mailing', [
                 'mailing' => $mailing->load('emails')
             ])->render()

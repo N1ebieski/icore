@@ -100,21 +100,21 @@
                 @endcan
                 @can('admin.pages.status')
                 <button 
-                    data-status="1" 
+                    data-status="{{ Page\Status::ACTIVE }}" 
                     type="button" 
                     class="btn btn-success status-page"
                     data-route="{{ route('admin.page.update_status', ['page' => $page->id]) }}"
-                    {{ $page->status == $page::ACTIVE ? 'disabled' : '' }}
+                    {{ $page->status->isActive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-on"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button 
-                    data-status="0" 
+                    data-status="{{ Page\Status::INACTIVE }}" 
                     type="button" 
                     class="btn btn-warning status-page"
                     data-route="{{ route('admin.page.update_status', ['page' => $page->id]) }}"
-                    {{ $page->status == $page::INACTIVE ? 'disabled' : '' }}
+                    {{ $page->status->isInactive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-off"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>

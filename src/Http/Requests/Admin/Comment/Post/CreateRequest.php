@@ -18,7 +18,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->post->isCommentable() === Post::WITHOUT_COMMENT) {
+        if ($this->post->comment->isInactive()) {
             App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
                 'Adding comments has been disabled for this post.'

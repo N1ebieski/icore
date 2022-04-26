@@ -19,7 +19,7 @@
                     <li class="mb-3 mt-1">
                         <div class="progress">
                             <div 
-                                class="progress-bar bg-success progress-bar-striped {{ ($mailing->status === $mailing::INPROGRESS) ? 'progress-bar-animated' : '' }}"
+                                class="progress-bar bg-success progress-bar-striped {{ ($mailing->status->isInprogress()) ? 'progress-bar-animated' : '' }}"
                                 role="progressbar" 
                                 style="width: {{ $mailing->progress_success }}%"
                                 aria-valuenow="{{ $mailing->progress_success }}" 
@@ -27,7 +27,7 @@
                                 aria-valuemax="100"
                             ></div>
                             <div 
-                                class="progress-bar bg-danger progress-bar-striped {{ ($mailing->status === $mailing::INPROGRESS) ? 'progress-bar-animated' : '' }}"
+                                class="progress-bar bg-danger progress-bar-striped {{ ($mailing->status->isInprogress()) ? 'progress-bar-animated' : '' }}"
                                 role="progressbar" 
                                 style="width: {{ $mailing->progress_failed }}%"
                                 aria-valuenow="{{ $mailing->progress_failed }}" 
@@ -69,7 +69,7 @@
             <div class="responsive-btn-group">
                 @can('admin.mailings.edit')
                 <a 
-                    class="btn btn-primary align-bottom {{ in_array($mailing->status, [$mailing::ACTIVE, $mailing::INPROGRESS]) ? 'disabled' : '' }}"
+                    class="btn btn-primary align-bottom {{ $mailing->status->isRunning() ? 'disabled' : '' }}"
                     href="{{ route('admin.mailing.edit', [$mailing->id]) }}" 
                     role="button" 
                     target="_blank"
@@ -85,7 +85,7 @@
                     type="button" 
                     class="btn btn-success status"
                     data-route="{{ route('admin.mailing.update_status', [$mailing->id]) }}"
-                    {{ in_array($mailing->status, [$mailing::ACTIVE, $mailing::INPROGRESS]) ? 'disabled' : '' }}
+                    {{ $mailing->status->isRunning() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-on"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
@@ -95,7 +95,7 @@
                     type="button" 
                     class="btn btn-warning status"
                     data-route="{{ route('admin.mailing.update_status', [$mailing->id]) }}"
-                    {{ $mailing->status === $mailing::INACTIVE ? 'disabled' : '' }}
+                    {{ $mailing->status->isInactive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-off"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>

@@ -5,6 +5,9 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Mailing;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property Mailing $mailing
+ */
 class EditRequest extends FormRequest
 {
     /**
@@ -14,7 +17,7 @@ class EditRequest extends FormRequest
      */
     public function authorize()
     {
-        return !in_array($this->mailing->status, [Mailing::ACTIVE, Mailing::INPROGRESS]);
+        return !$this->mailing->status->isRunning();
     }
 
     /**

@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Database\Seeders\Install;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 
 class DefaultRolesAndPermissionsSeeder extends Seeder
 {
@@ -120,21 +121,21 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'api.tokens.delete']);
 
         // create roles and assign created permissions
-        $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdmin = Role::firstOrCreate(['name' => Name::SUPER_ADMIN]);
 
-        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $admin = Role::firstOrCreate(['name' => Name::ADMIN]);
 
         if ($admin->wasRecentlyCreated) {
             $admin->givePermissionTo(['admin.*', 'web.*', 'api.*']);
         }
 
-        $user = Role::firstOrCreate(['name' => 'user']);
+        $user = Role::firstOrCreate(['name' => Name::USER]);
 
         if ($user->wasRecentlyCreated) {
             $user->givePermissionTo(['web.*']);
         }
 
-        $api = Role::firstOrCreate(['name' => 'api']);
+        $api = Role::firstOrCreate(['name' => Name::API]);
 
         if ($api->wasRecentlyCreated) {
             $api->givePermissionTo(['api.*']);

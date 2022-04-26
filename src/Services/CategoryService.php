@@ -176,30 +176,7 @@ class CategoryService implements
     public function delete(): bool
     {
         return $this->db->transaction(function () {
-            $delete = $this->category->delete();
-
-            if ($delete === true) {
-                // Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-                // do it automatically
-                $this->decrement();
-            }
-
-            return $delete;
-        });
-    }
-
-    /**
-     * Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-     * do it automatically
-     * @return bool [description]
-     */
-    private function decrement(): bool
-    {
-        return $this->db->transaction(function () {
-            return $this->category->where([
-                ['parent_id', $this->category->parent_id],
-                ['position', '>', $this->category->position]
-            ])->decrement('position');
+            return $this->category->delete();
         });
     }
 

@@ -69,7 +69,7 @@
         </div>
         @endif
     </div>
-    @if ($link->type === 'link')
+    @if ($link->type->isLink())
     <div class="form-group">
         <div class="custom-control custom-checkbox">
             <input type="hidden" name="home" value="0">

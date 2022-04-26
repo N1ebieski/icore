@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\BanValue;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 
@@ -73,7 +74,7 @@ class BanValueCache
             "banValue.getAllIpsAsString",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                $ips = $this->banValue->whereType('ip')->get();
+                $ips = $this->banValue->where('type', Type::IP)->get();
 
                 return $this->str->escaped($ips->implode('value', '|'));
             }
@@ -90,7 +91,7 @@ class BanValueCache
             "banValue.getAllWordsAsString",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                $words = $this->banValue->whereType('word')->get();
+                $words = $this->banValue->where('type', Type::WORD)->get();
 
                 return $this->str->escaped($words->implode('value', '|'));
             }

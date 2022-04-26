@@ -44,6 +44,19 @@ class ViewServiceProvider extends ServiceProvider
         });
 
         View::composer([
+            Config::get('icore.layout') . '::admin.post.create',
+            Config::get('icore.layout') . '::admin.post.partials.filter_filter',
+        ], function ($view) {
+            $view->with('post', $this->app->make(\N1ebieski\ICore\Models\Post::class));
+        });
+
+        View::composer([
+            Config::get('icore.layout') . '::admin.user.partials.filter_filter',
+        ], function ($view) {
+            $view->with('user', $this->app->make(\N1ebieski\ICore\Models\User::class));
+        });
+
+        View::composer([
             Config::get('icore.layout') . '::web.layouts.layout',
             Config::get('icore.layout') . '::admin.layouts.layout',
             'file-manager::fmButton',

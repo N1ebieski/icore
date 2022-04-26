@@ -65,7 +65,7 @@ class PostController
      */
     public function store(Post $post, StoreRequest $request): RedirectResponse
     {
-        $post->makeService()->create($request->all());
+        $post->makeService()->create($request->validated());
 
         return Response::redirectToRoute('admin.post.index')->with(
             'success',

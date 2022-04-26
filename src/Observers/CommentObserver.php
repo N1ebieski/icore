@@ -59,6 +59,8 @@ class CommentObserver
      */
     public function deleted(Comment $comment)
     {
+        $comment->nextSiblings()->decrement($comment->getPositionColumn());
+
         Cache::tags(['comments', 'comment.' . $comment->poli . '.' . $comment->model_id])->flush();
     }
 

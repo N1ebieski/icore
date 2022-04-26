@@ -21,7 +21,7 @@
         <i class="fas fa-fw fa-unlock-alt"></i>
         <span>{{ trans('icore::roles.route.index') }}</span>
     </div>
-    @role('super-admin')
+    @role(Role\Name::SUPER_ADMIN)
     <div class="ml-auto text-right responsive-btn-group">
         <a 
             href="{{ route('admin.role.create') }}" 

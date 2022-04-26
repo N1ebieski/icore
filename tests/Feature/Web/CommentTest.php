@@ -8,6 +8,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -155,8 +156,8 @@ class CommentTest extends TestCase
 
         Auth::login($user);
 
-        BanValue::create([
-            'type' => 'word',
+        BanValue::makeFactory()->create([
+            'type' => Type::WORD,
             'value' => 'DUPA'
         ]);
 
@@ -166,6 +167,7 @@ class CommentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('content');
+
         $this->assertStringContainsString('DUPA', session('errors')->get('content')[0]);
     }
 

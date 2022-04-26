@@ -8,6 +8,7 @@ use N1ebieski\ICore\Cache\SessionCache;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -112,7 +113,7 @@ class StatComponent implements Htmlable
                 ->firstWhere('status', $this->category::ACTIVE),
 
             'countPosts' => $this->post->makeCache()->rememberCountByStatus()
-                ->firstWhere('status', $this->post->status::ACTIVE),
+                ->firstWhere('status', Status::ACTIVE),
 
             'countComments' => $this->comment->makeCache()->rememberCountByModelTypeAndStatus()
                 ->where('status', $this->comment::ACTIVE),

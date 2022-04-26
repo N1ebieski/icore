@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 
 return [
     'subscribe' => 'Subskrybuj newsletter',
@@ -10,8 +10,8 @@ return [
     'success' => [
         'store' => 'Dziękujemy za subskrypcję. Na podany adres email wysłano wiadomość z linkiem potwierdzającym chęć otrzymywania newslettera.',
         'update_status' => [
-            Newsletter::ACTIVE => 'Pomyślnie aktywowano subskrypcję.',
-            Newsletter::INACTIVE => 'Pomyślnie dezaktywowano subskrypcję.'
+            Status::ACTIVE => 'Pomyślnie aktywowano subskrypcję.',
+            Status::INACTIVE => 'Pomyślnie dezaktywowano subskrypcję.'
         ],
     ],
     'subscribe_confirmation' => 'Potwierdzenie subskrypcji newslettera',

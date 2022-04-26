@@ -56,9 +56,9 @@ class MailingService implements
             $this->mailing->content_html = $attributes['content_html'];
             $this->mailing->content = $this->mailing->content_html;
             $this->mailing->title = $attributes['title'];
-            $this->mailing->status = (int)$attributes['status'];
+            $this->mailing->status = $attributes['status'];
 
-            if ($this->mailing->status === Mailing::SCHEDULED) {
+            if ($this->mailing->status->isScheduled()) {
                 $this->mailing->activation_at =
                     $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }
@@ -86,9 +86,9 @@ class MailingService implements
             $this->mailing->content_html = $attributes['content_html'];
             $this->mailing->content = $this->mailing->content_html;
             $this->mailing->title = $attributes['title'];
-            $this->mailing->status = (int)$attributes['status'];
+            $this->mailing->status = $attributes['status'];
 
-            if ($this->mailing->status === Mailing::SCHEDULED) {
+            if ($this->mailing->status->isScheduled()) {
                 $this->mailing->activation_at =
                     $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }

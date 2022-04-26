@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -478,7 +479,7 @@ class UserTest extends TestCase
         $response = $this->post(route('admin.user.store'), [
             'name' => 'Bungo',
             'email' => 'dasd@fdfdfdf.pl',
-            'roles' => ['user', 'admin'],
+            'roles' => [Name::USER, Name::ADMIN],
             'password' => 'bungoslaw',
             'password_confirmation' => 'bungoslaw'
         ]);

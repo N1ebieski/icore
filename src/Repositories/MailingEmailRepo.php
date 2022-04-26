@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Repositories;
 
 use Closure;
+use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingEmailRepo
@@ -29,7 +30,7 @@ class MailingEmailRepo
      */
     public function markAsSent(): bool
     {
-        return $this->mailingEmail->update(['sent' => MailingEmail::SENT]);
+        return $this->mailingEmail->update(['sent' => Sent::SENT]);
     }
 
     /**
@@ -39,7 +40,7 @@ class MailingEmailRepo
      */
     public function markAsError(): bool
     {
-        return $this->mailingEmail->update(['sent' => MailingEmail::ERROR]);
+        return $this->mailingEmail->update(['sent' => Sent::ERROR]);
     }
 
     /**

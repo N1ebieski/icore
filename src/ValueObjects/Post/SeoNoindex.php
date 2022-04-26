@@ -10,20 +10,20 @@ class SeoNoindex extends ValueObject
      * [public description]
      * @var int
      */
-    public const ACTIVE = true;
+    public const ACTIVE = 1;
 
     /**
      * [public description]
      * @var int
      */
-    public const INACTIVE = false;
+    public const INACTIVE = 0;
 
     /**
      * Undocumented function
      *
-     * @param boolean $value
+     * @param integer $value
      */
-    public function __construct(bool $value)
+    public function __construct(int $value)
     {
         $this->validate($value);
 
@@ -49,7 +49,7 @@ class SeoNoindex extends ValueObject
      * Undocumented function
      *
      * @param string $value
-     * @return static
+     * @return void
      */
     public static function fromString(string $value)
     {
@@ -61,7 +61,7 @@ class SeoNoindex extends ValueObject
             return static::inactive();
         }
 
-        return static::inactive();
+        throw new \InvalidArgumentException("Invalid string value: '{$value}'");
     }
 
     /**

@@ -7,6 +7,7 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -35,7 +36,7 @@ class AuthServiceProvider extends ServiceProvider
         // Implicitly grant "Super Admin" role all permissions
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
         Gate::before(function ($user, $ability) {
-            return ($user->hasRole('super-admin')
+            return ($user->hasRole(Name::SUPER_ADMIN)
                 & !strpos($ability, 'Self')
                 & !strpos($ability, 'Default')) ? true : null;
         });

@@ -49,7 +49,7 @@ class PostController
             'previous' => $postCache->rememberPrevious(),
             'next' => $postCache->rememberNext(),
             'related' => $postCache->rememberRelated(),
-            'comments' => (bool)$post->comment === true ?
+            'comments' => $post->comment->isActive() ?
                 $comment->setRelations(['morph' => $post])
                     ->makeCache()
                     ->rememberRootsByFilter($filter->all())

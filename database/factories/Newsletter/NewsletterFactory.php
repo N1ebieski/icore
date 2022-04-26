@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Database\Factories\Newsletter;
 
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 
 class NewsletterFactory extends Factory
 {
@@ -23,7 +24,7 @@ class NewsletterFactory extends Factory
     {
         return [
             'email' => $this->faker->unique()->safeEmail,
-            'status' => rand(Newsletter::INACTIVE, Newsletter::ACTIVE)
+            'status' => rand(Status::INACTIVE, Status::ACTIVE)
         ];
     }
 
@@ -36,7 +37,7 @@ class NewsletterFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Newsletter::ACTIVE
+                'status' => Status::ACTIVE
             ];
         });
     }
@@ -50,7 +51,7 @@ class NewsletterFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Newsletter::INACTIVE
+                'status' => Status::INACTIVE
             ];
         });
     }

@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\ValueObjects\Post\Status;
+use N1ebieski\ICore\ValueObjects\Post\Comment;
+use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -32,10 +34,10 @@ class PostFactory extends Factory
             'content' => strip_tags($content),
             'seo_title' => $this->faker->randomElement([$this->faker->sentence(5), null]),
             'seo_desc' => $this->faker->text(),
-            'seo_noindex' => rand(Status::INACTIVE, Status::ACTIVE),
-            'seo_nofollow' => rand(Status::INACTIVE, Status::ACTIVE),
+            'seo_noindex' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
+            'seo_nofollow' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'status' => rand(Status::INACTIVE, Status::ACTIVE),
-            'comment' => rand(Status::INACTIVE, Status::ACTIVE),
+            'comment' => rand(Comment::INACTIVE, Comment::ACTIVE),
             'published_at' => $this->faker->randomElement([
                 $this->faker->dateTimeThisYear()->format('Y-m-d H:i:s'),
                 null
@@ -100,7 +102,7 @@ class PostFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'comment' => Post::WITH_COMMENT
+                'comment' => Comment::ACTIVE
             ];
         });
     }
@@ -114,7 +116,7 @@ class PostFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'comment' => Post::WITHOUT_COMMENT
+                'comment' => Comment::INACTIVE
             ];
         });
     }

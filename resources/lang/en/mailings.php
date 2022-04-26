@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Mailing;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 
 return [
     'create' => 'Add mailing',
@@ -23,10 +23,10 @@ return [
     'subscribers' => 'newsletter subscribers',
     'custom' => 'own database of e-mail addresses',
     'status' => [
-        Mailing::ACTIVE => 'active',
-        Mailing::INACTIVE => 'inactive',
-        Mailing::SCHEDULED => 'scheduled',
-        Mailing::INPROGRESS => 'in progress'
+        Status::ACTIVE => 'active',
+        Status::INACTIVE => 'inactive',
+        Status::SCHEDULED => 'scheduled',
+        Status::INPROGRESS => 'in progress'
     ],
     'route' => [
         'index' => 'Mailing',

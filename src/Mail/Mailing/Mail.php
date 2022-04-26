@@ -6,8 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
-use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
 class Mail extends Mailable
@@ -85,7 +85,7 @@ class Mail extends Mailable
                     'cancel' => $this->url->route('web.newsletter.update_status', [
                         $this->mailingEmail->morph->id,
                         'token' => $this->mailingEmail->morph->token->token,
-                        'status' => Newsletter::INACTIVE
+                        'status' => $this->mailingEmail->morph->status::INACTIVE
                     ]),
                 ]);
 

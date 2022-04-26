@@ -13,13 +13,13 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Services\CategoryService;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Repositories\CategoryRepo;
-use N1ebieski\ICore\Models\Traits\HasRealDepth;
-use Franzose\ClosureTable\Extensions\QueryBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
+use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
+use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
 class Category extends Entity
 {
@@ -28,8 +28,9 @@ class Category extends Entity
     use FullTextSearchable;
     use Polymorphic;
     use Carbonable;
-    use HasRealDepth;
     use HasFactory;
+    use HasFixForRealDepthClosureTable;
+    use HasFixForPolymorphicClosureTable;
 
     // Configuration
 
@@ -171,48 +172,6 @@ class Category extends Entity
     }
 
     // Overrides
-
-    /**
-     * Model jest polimorficzny i sprawdzanie rodzeństwa musi się odbywać z użyciem
-     * $this->model_type
-     *
-     * Builds a part of the siblings query.
-     *
-     * @param string|int|array $direction
-     * @param int|bool $parentId
-     * @param string $order
-     * @return QueryBuilder
-     */
-    protected function siblings($direction = '', $parentId = false, $order = 'asc')
-    {
-        $query = parent::siblings($direction, $parentId, $order);
-
-        $query->poliType();
-
-        return $query;
-    }
-
-    /**
-     * Model jest polimorficzny. Trzeba dodać warunek sprawdzający model_type
-     *
-     * @param  bool $parentId [description]
-     * @return [type]            [description]
-     */
-    public function getLastPosition($parentId = false)
-    {
-        $positionColumn = $this->getPositionColumn();
-        $parentIdColumn = $this->getParentIdColumn();
-
-        $parentId = ($parentId === false ? $this->parent_id : $parentId);
-
-        $entity = $this->select($positionColumn)
-            ->where($parentIdColumn, '=', $parentId)
-            ->poliType()
-            ->orderBy($positionColumn, 'desc')
-            ->first();
-
-        return !is_null($entity) ? (int)$entity->position : null;
-    }
 
     /**
      * Retrieve the model for a bound value.

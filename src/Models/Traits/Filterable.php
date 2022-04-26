@@ -5,9 +5,9 @@ namespace N1ebieski\ICore\Models\Traits;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Models\Report\Report;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\ValueObjects\Report\Reported;
 
 trait Filterable
 {
@@ -88,8 +88,10 @@ trait Filterable
      */
     public function scopeFilterReport(Builder $query, int $report = null): ?Builder
     {
-        return $query->when($report === Report::REPORTED, function ($query) {
+        return $query->when($report === Reported::ACTIVE, function ($query) {
             return $query->whereHas('reports');
+        })->when($report === Reported::INACTIVE, function ($query) {
+            return $query->whereDoesntHave('reports');
         });
     }
 

@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\BanValue;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
@@ -18,37 +18,35 @@ class StoreRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->route('type')) {
+            $this->merge([
+                'type' => $this->route('type')
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-        $type = $this->type;
-
         return [
             'type' => 'required|string|in:ip,word',
             'value' => [
                 'required',
                 'string',
-                Rule::unique('bans_values', 'value')->where(function ($query) use ($type) {
-                    $query->where('type', $type);
+                Rule::unique('bans_values', 'value')->where(function ($query) {
+                    $query->where('type', $this->input('type'));
                 })
             ]
         ];
-    }
-
-    /**
-     * Get all of the input and files for the request.
-     *
-     * @param  array|mixed|null  $keys
-     * @return array
-     */
-    public function all($keys = null)
-    {
-        $data = parent::all($keys);
-        $data['type'] = $this->route('type');
-
-        return $data;
     }
 }

@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Repositories;
 
 use N1ebieski\ICore\Models\Role;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -62,7 +63,7 @@ class RoleRepo
      */
     public function getAvailable(): Collection
     {
-        return $this->role->where('name', '<>', 'super-admin')->get();
+        return $this->role->where('name', '<>', Name::SUPER_ADMIN)->get();
     }
 
     /**

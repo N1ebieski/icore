@@ -4,8 +4,6 @@
     'keys' => [trans('icore::posts.route.create')]
 ])
 
-@inject('post', 'N1ebieski\ICore\Models\Post')
-
 @section('breadcrumb')
 <li class="breadcrumb-item">
     <a 
@@ -141,8 +139,8 @@
                             class="custom-control-input" 
                             id="seo_noindex" 
                             name="seo_noindex"
-                            value="{{ $post->seo_noindex::ACTIVE }}" 
-                            {{ $post->seo_noindex::fromString(old('seo_noindex', $post->seo_noindex::INACTIVE))->isActive() ? 'checked' : '' }}
+                            value="{{ Post\SeoNoindex::ACTIVE }}" 
+                            {{ old('seo_noindex') === Post\SeoNoindex::ACTIVE ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_noindex">
                             SEO noindex?
@@ -156,8 +154,8 @@
                             class="custom-control-input" 
                             id="seo_nofollow" 
                             name="seo_nofollow"
-                            value="1" 
-                            {{ (old('seo_nofollow') == $post::SEO_NOFOLLOW) ? 'checked' : '' }}
+                            value="{{ Post\SeoNofollow::ACTIVE }}" 
+                            {{ old('seo_nofollow') == Post\SeoNofollow::ACTIVE ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_nofollow">
                             SEO nofollow?
@@ -166,13 +164,14 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="comment" value="{{ Post\Comment::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="comment" 
                             name="comment"
-                            value="1" 
-                            {{ (old('comment') != $post::WITH_COMMENT) ? '' : 'checked' }}
+                            value="{{ Post\Comment::ACTIVE }}" 
+                            {{ old('comment', Post\Comment::ACTIVE) == Post\Comment::ACTIVE ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="comment">
                             {{ trans('icore::posts.comment') }}?
@@ -192,27 +191,27 @@
                         name="status"
                     >
                         <option 
-                            value="{{ $post->status::ACTIVE }}" 
-                            {{ $post->status::fromString(old('status', $post->status::INACTIVE))->isActive() ? 'selected' : '' }}
+                            value="{{ Post\Status::ACTIVE }}" 
+                            {{ old('status') == Post\Status::ACTIVE ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.active') }}
                         </option>
                         <option 
-                            value="{{ $post->status::INACTIVE }}" 
-                            {{ $post->status::fromString(old('status', $post->status::INACTIVE))->isInactive() ? 'selected' : '' }}
+                            value="{{ Post\Status::INACTIVE }}" 
+                            {{ old('status') == Post\Status::INACTIVE ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.inactive') }}
                         </option>
                         <option 
-                            value="{{ $post->status::SCHEDULED }}" 
-                            {{ $post->status::fromString(old('status', $post->status::INACTIVE))->isScheduled() ? 'selected' : '' }}
+                            value="{{ Post\Status::SCHEDULED }}" 
+                            {{ old('status') == Post\Status::SCHEDULED ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.scheduled') }}
                         </option>
                     </select>
                 </div>
                 <div 
-                    class="form-group collapse {{ !$post->status::fromString(old('status', $post->status::INACTIVE))->isInactive() ? 'show' : '' }}"
+                    class="form-group collapse {{ old('status') != Post\Status::INACTIVE ? 'show' : '' }}"
                     id="collapse-published-at"
                 >
                     <label for="published_at">

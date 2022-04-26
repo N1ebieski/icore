@@ -1,10 +1,10 @@
 <?php
 
-use N1ebieski\ICore\Models\Stat\Stat;
+use N1ebieski\ICore\ValueObjects\Stat\Slug;
 
 return [
-    Stat::CLICK => 'Clicks',
-    Stat::VIEW => 'Views',
+    Slug::CLICK => 'Clicks',
+    Slug::VIEW => 'Views',
     'stats' => 'Statistics',
     'last_activity' => 'Recent activity',
     'user' => [

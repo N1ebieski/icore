@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Crons\MailingCron;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use N1ebieski\ICore\Models\MailingEmail\User\MailingEmail;
@@ -599,7 +600,7 @@ class MailingTest extends TestCase
 
         $this->assertDatabaseHas('mailings', [
             'id' => $mailing->id,
-            'status' => 0
+            'status' => Status::INACTIVE
         ]);
     }
 }

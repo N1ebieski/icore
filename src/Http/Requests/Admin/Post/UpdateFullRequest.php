@@ -42,6 +42,7 @@ class UpdateFullRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
+            'content_html' => 'bail|nullable|string',
             'tags' => 'array|between:0,' . Config::get('icore.post.max_tags'),
             'tags.*' => [
                 'bail',

@@ -11,11 +11,15 @@ use N1ebieski\ICore\Services\MailingService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\MailingRepo;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
 
+/**
+ * @property Status $status
+ */
 class Mailing extends Model
 {
     use FullTextSearchable;
@@ -24,30 +28,6 @@ class Mailing extends Model
     use HasFactory;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SCHEDULED = 2;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INPROGRESS = 3;
 
     /**
     * The attributes that are mass assignable.
@@ -78,7 +58,7 @@ class Mailing extends Model
      * @var array
      */
     protected $attributes = [
-        'status' => self::INACTIVE,
+        'status' => Status::INACTIVE,
     ];
 
     /**
@@ -88,7 +68,7 @@ class Mailing extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'status' => 'integer',
+        'status' => \N1ebieski\ICore\Casts\Mailing\StatusCast::class,
         'activation_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
@@ -205,7 +185,7 @@ class Mailing extends Model
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', static::ACTIVE);
+        return $query->where('status', Status::ACTIVE);
     }
 
     /**
@@ -216,7 +196,7 @@ class Mailing extends Model
      */
     public function scopeProgress(Builder $query): Builder
     {
-        return $query->where('status', static::INPROGRESS);
+        return $query->where('status', Status::INPROGRESS);
     }
 
     /**
@@ -227,7 +207,7 @@ class Mailing extends Model
      */
     public function scopeScheduled(Builder $query): Builder
     {
-        return $query->where('status', static::SCHEDULED);
+        return $query->where('status', Status::SCHEDULED);
     }
 
     // Mutators

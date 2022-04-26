@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 
 class UpdateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->role->isEditNotDefault();
+        return $this->role->name->isEditNotDefault();
     }
 
     /**
@@ -23,9 +24,9 @@ class UpdateRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if ($this->role->name === 'user') {
+        if ($this->role->name->isUser()) {
             $this->merge([
-                'name' => 'user'
+                'name' => Name::USER
             ]);
         }
     }
@@ -46,7 +47,7 @@ class UpdateRequest extends FormRequest
                 'string',
                 'distinct',
                 'exists:permissions,name',
-                $this->role->name === 'user' ?
+                $this->role->name->isUser() ?
                     'regex:/^(web\.|api\.).+/'
                     : null,
                 'no_js_validation'

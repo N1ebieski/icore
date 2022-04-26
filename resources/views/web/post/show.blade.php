@@ -1,7 +1,7 @@
 @extends(config('icore.layout') . '::web.layouts.layout', [
     'title' => [
         $post->meta_title,
-        (bool)$post->comment === true ? 
+        $post->comment->isActive() ? 
             (
                 $comments->currentPage() > 1 ?
                     trans('icore::pagination.page', ['num' => $comments->currentPage()])
@@ -12,7 +12,7 @@
     'desc' => [$post->meta_desc],
     'keys' => [$post->tag_list],
     'index' => $post->seo_noindex->isActive() ? 'noindex' : 'index',
-    'follow' => (bool)$post->seo_nofollow === true ? 'nofollow' : 'follow',
+    'follow' => $post->seo_nofollow->isActive() ? 'nofollow' : 'follow',
     'og' => [
         'title' => $post->meta_title,
         'desc' => $post->meta_desc,
@@ -120,7 +120,7 @@
                     @endforeach
                 </ul>
                 @endif
-                @if ((bool)$post->comment === true)
+                @if ($post->comment->isActive())
                 <h3 class="h5 border-bottom pb-2" id="comments">
                     {{ trans('icore::comments.comments') }}
                 </h3>

@@ -6,6 +6,7 @@ use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\User\Status;
 
 class IndexRequest extends FormRequest
 {
@@ -39,8 +40,8 @@ class IndexRequest extends FormRequest
                 'nullable',
                 'integer',
                 Rule::in([
-                    User::ACTIVE,
-                    optional($this->user())->can('admin.users.view') ? User::INACTIVE : null
+                    Status::ACTIVE,
+                    optional($this->user())->can('admin.users.view') ? Status::INACTIVE : null
                 ])
             ],
             'filter.role' => [
@@ -85,10 +86,10 @@ class IndexRequest extends FormRequest
             'filter.status' => [
                 'description' => sprintf(
                     'Must be one of %1$s or %2$s (available only for admin.users.view)',
-                    User::ACTIVE,
-                    User::INACTIVE
+                    Status::ACTIVE,
+                    Status::INACTIVE
                 ),
-                'example' => User::ACTIVE
+                'example' => Status::ACTIVE
             ],
             'filter.role' => [
                 'example' => '',

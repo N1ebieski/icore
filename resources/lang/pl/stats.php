@@ -1,10 +1,10 @@
 <?php
 
-use N1ebieski\ICore\Models\Stat\Stat;
+use N1ebieski\ICore\ValueObjects\Stat\Slug;
 
 return [
-    Stat::CLICK => 'Kliknięć',
-    Stat::VIEW => 'Wyświetleń',
+    Slug::CLICK => 'Kliknięć',
+    Slug::VIEW => 'Wyświetleń',
     'stats' => 'Statystyki',
     'last_activity' => 'Ostatnia aktywność',
     'user' => [

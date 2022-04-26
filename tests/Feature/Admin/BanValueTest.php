@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BanValueTest extends TestCase
@@ -15,7 +16,7 @@ class BanValueTest extends TestCase
 
     public function testBanvalueCreateAsGuest()
     {
-        $response = $this->get(route('admin.banvalue.create', ['ip']));
+        $response = $this->get(route('admin.banvalue.create', [Type::IP]));
 
         $response->assertRedirect(route('login'));
     }
@@ -26,7 +27,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->get(route('admin.banvalue.create', ['ip']));
+        $response = $this->get(route('admin.banvalue.create', [Type::IP]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
@@ -48,15 +49,15 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->get(route('admin.banvalue.create', ['ip']));
+        $response = $this->get(route('admin.banvalue.create', [Type::IP]));
 
         $response->assertOk()->assertJsonStructure(['success', 'view']);
-        $this->assertStringContainsString(route('admin.banvalue.store', ['ip']), $response->getData()->view);
+        $this->assertStringContainsString(route('admin.banvalue.store', [Type::IP]), $response->getData()->view);
     }
 
     public function testBanvalueStoreAsGuest()
     {
-        $response = $this->post(route('admin.banvalue.store', ['ip']), []);
+        $response = $this->post(route('admin.banvalue.store', [Type::IP]), []);
 
         $response->assertRedirect(route('login'));
     }
@@ -78,7 +79,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->post(route('admin.banvalue.store', ['ip']), []);
+        $response = $this->post(route('admin.banvalue.store', [Type::IP]), []);
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
@@ -91,7 +92,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->post(route('admin.banvalue.store', ['ip']), [
+        $response = $this->post(route('admin.banvalue.store', [Type::IP]), [
             'value' => $banmodel->value,
         ]);
 
@@ -104,7 +105,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->post(route('admin.banvalue.store', ['ip']), [
+        $response = $this->post(route('admin.banvalue.store', [Type::IP]), [
             'value' => '22.222.22.22',
         ]);
 
@@ -118,7 +119,7 @@ class BanValueTest extends TestCase
 
     public function testBanvalueIndexAsGuest()
     {
-        $response = $this->get(route('admin.banvalue.index', ['ip']));
+        $response = $this->get(route('admin.banvalue.index', [Type::IP]));
 
         $response->assertRedirect(route('login'));
     }
@@ -129,7 +130,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->get(route('admin.banvalue.index', ['ip']));
+        $response = $this->get(route('admin.banvalue.index', [Type::IP]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
@@ -143,7 +144,7 @@ class BanValueTest extends TestCase
         $banvalue = BanValue::makeFactory()->count(50)->ip()->create();
 
         $response = $this->get(route('admin.banvalue.index', [
-            'type' => 'ip',
+            'type' => Type::IP,
             'page' => 2,
             'filter' => [
                 'orderby' => 'created_at|desc'
@@ -247,7 +248,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        $this->get(route('admin.banvalue.index', ['ip']));
+        $this->get(route('admin.banvalue.index', [Type::IP]));
 
         $select = collect($banvalue)->pluck('id')->take(5)->toArray();
 
@@ -255,7 +256,7 @@ class BanValueTest extends TestCase
             'select' => $select,
         ]);
 
-        $response->assertRedirect(route('admin.banvalue.index', ['ip']));
+        $response->assertRedirect(route('admin.banvalue.index', [Type::IP]));
         $response->assertSessionHas('success');
 
         $deleted = BanValue::whereIn('id', $select)->count();

@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingEmailService
@@ -115,7 +116,7 @@ class MailingEmailService
                             'model_type' => $user->getMorphClass(),
                             'model_id' => $user->id,
                             'email' => $user->email,
-                            'sent' => MailingEmail::UNSENT,
+                            'sent' => Sent::UNSENT,
                             'created_at' => $this->carbon->now(),
                             'updated_at' => $this->carbon->now()
                         ];
@@ -149,7 +150,7 @@ class MailingEmailService
                             'model_type' => $newsletter->getMorphClass(),
                             'model_id' => $newsletter->id,
                             'email' => $newsletter->email,
-                            'sent' => MailingEmail::UNSENT,
+                            'sent' => Sent::UNSENT,
                             'created_at' => $this->carbon->now(),
                             'updated_at' => $this->carbon->now()
                         ];
@@ -180,7 +181,7 @@ class MailingEmailService
                     'model_type' => null,
                     'model_id' => null,
                     'email' => $item->email,
-                    'sent' => MailingEmail::UNSENT,
+                    'sent' => Sent::UNSENT,
                     'created_at' => $this->carbon->now(),
                     'updated_at' => $this->carbon->now()
                 ];

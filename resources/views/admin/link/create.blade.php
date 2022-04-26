@@ -49,7 +49,7 @@
             </label>
         </div>
     </div>
-    @if ($type === 'link')
+    @if ($type === Link\Type::LINK)
     <div class="form-group">
         <div class="custom-control custom-checkbox">
             <input 

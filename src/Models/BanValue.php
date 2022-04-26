@@ -9,10 +9,14 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\BanValueRepo;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
 
+/**
+ * @property Type $type
+ */
 class BanValue extends Model
 {
     use Filterable;
@@ -52,6 +56,7 @@ class BanValue extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'type' => \N1ebieski\ICore\Casts\Banvalue\TypeCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

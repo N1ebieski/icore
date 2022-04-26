@@ -59,6 +59,8 @@ class CategoryObserver
      */
     public function deleted(Category $category)
     {
+        $category->nextSiblings()->decrement($category->getPositionColumn());
+
         Cache::tags(['categories'])->flush();
     }
 

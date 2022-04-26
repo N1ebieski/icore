@@ -16,9 +16,12 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Repositories\PageRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\HasRealDepth;
+use N1ebieski\ICore\ValueObjects\Page\Status;
+use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
+use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
+use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -27,7 +30,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Page\PageFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
+use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 
+/**
+ * @property SeoNofollow $seo_nofollow
+ * @property SeoNoindex $seo_noindex
+ * @property Status $status
+ * @property Commentable $comment
+ */
 class Page extends Entity
 {
     use Sluggable;
@@ -35,61 +46,13 @@ class Page extends Entity
     use FullTextSearchable;
     use PivotEventTrait;
     use Carbonable;
-    use HasRealDepth;
     use HasFactory;
+    use HasFixForRealDepthClosureTable;
     use Filterable, StatFilterable {
         StatFilterable::scopeFilterOrderBy insteadof Filterable;
     }
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const WITH_COMMENT = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const WITHOUT_COMMENT = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_NOINDEX = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_INDEX = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_NOFOLLOW = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_FOLLOW = 0;
 
     /**
      * Indicates if the model should be timestamped.
@@ -161,10 +124,10 @@ class Page extends Entity
      * @var array
      */
     protected $attributes = [
-        'seo_noindex' => self::SEO_INDEX,
-        'seo_nofollow' => self::SEO_FOLLOW,
-        'status' => self::ACTIVE,
-        'comment' => self::WITHOUT_COMMENT,
+        'seo_noindex' => SeoNoindex::INACTIVE,
+        'seo_nofollow' => SeoNofollow::INACTIVE,
+        'status' => Status::INACTIVE,
+        'comment' => Comment::INACTIVE,
         'icon' => null
     ];
 
@@ -176,10 +139,10 @@ class Page extends Entity
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'seo_noindex' => 'integer',
-        'seo_nofollow' => 'integer',
-        'status' => 'integer',
-        'comment' => 'integer',
+        'seo_noindex' => \N1ebieski\ICore\Casts\Page\SeoNoindexCast::class,
+        'seo_nofollow' => \N1ebieski\ICore\Casts\Page\SeoNofollowCast::class,
+        'status' => \N1ebieski\ICore\Casts\Page\StatusCast::class,
+        'comment' => \N1ebieski\ICore\Casts\Page\CommentCast::class,
         'parent_id' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
@@ -496,24 +459,6 @@ class Page extends Entity
         return preg_match('/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/', $this->content);
     }
 
-    /**
-     * [isCommentable description]
-     * @return bool [description]
-     */
-    public function isCommentable(): bool
-    {
-        return $this->comment === static::WITH_COMMENT;
-    }
-
-    /**
-     * [isActive description]
-     * @return bool [description]
-     */
-    public function isActive(): bool
-    {
-        return $this->status === static::ACTIVE;
-    }
-
     // Scopes
 
     /**
@@ -548,7 +493,7 @@ class Page extends Entity
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', static::ACTIVE);
+        return $query->where('status', Status::ACTIVE);
     }
 
     /**
@@ -598,7 +543,7 @@ class Page extends Entity
     {
         return $query->selectRaw("YEAR(`page`.`created_at`) `year`, MONTH(`page`.`created_at`) `month`, 'pages' AS `type`, COUNT(*) AS `count`")
             ->from("{$this->getTable()} AS page")
-            ->where('page.status', $this::ACTIVE)
+            ->where('page.status', Status::ACTIVE)
             ->groupBy('year')
             ->groupBy('month');
     }

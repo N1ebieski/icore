@@ -6,7 +6,7 @@ namespace N1ebieski\ICore\Models\Traits;
  * Franzose/ClosureTable removes the real depth attribute feature since 6.0 version.
  * That trait restores that feature in combination with Observers.
  */
-trait HasRealDepth
+trait HasFixForRealDepthClosureTable
 {
     /**
      * Undocumented function

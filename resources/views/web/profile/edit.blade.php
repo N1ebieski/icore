@@ -52,8 +52,8 @@
                         class="custom-control-input {{ $isValid('marketing_agreement') }}" 
                         id="marketing_agreement" 
                         name="marketing_agreement" 
-                        value="1"
-                        {{ old('marketing_agreement', $user->marketing) == true ? 'checked' : null }}
+                        value="{{ User\Marketing::ACTIVE }}"
+                        {{ old('marketing_agreement', $user->marketing->getValue()) == User\Marketing::ACTIVE ? 'checked' : null }}
                     >
                     <label class="custom-control-label text-left" for="marketing_agreement">
                         <small>{{ trans('icore::policy.agreement.marketing') }}</small>

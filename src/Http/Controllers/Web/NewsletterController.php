@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Event;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Support\Facades\Response;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Newsletter\UpdateStatusRequest;
 use N1ebieski\ICore\Events\Web\Newsletter\StoreEvent as NewsletterStoreEvent;
@@ -27,7 +28,7 @@ class NewsletterController
     {
         $newsletter = $newsletter->firstOrCreate(
             ['email' => $request->input('email')],
-            ['status' => Newsletter::INACTIVE]
+            ['status' => Status::INACTIVE]
         );
 
         $newsletter->token()->updateOrCreate(
@@ -57,9 +58,9 @@ class NewsletterController
 
         return Response::redirectToRoute('web.home.index')->with(
             'success',
-            $newsletter->status === Newsletter::ACTIVE ?
-                Lang::get('icore::newsletter.success.update_status.' . Newsletter::ACTIVE)
-                : Lang::get('icore::newsletter.success.update_status.' . Newsletter::INACTIVE)
+            $newsletter->status->isActive() ?
+                Lang::get('icore::newsletter.success.update_status.' . Status::ACTIVE)
+                : Lang::get('icore::newsletter.success.update_status.' . Status::INACTIVE)
         );
     }
 }

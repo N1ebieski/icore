@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use N1ebieski\ICore\Models\Stat\Stat;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\ValueObjects\Stat\Slug;
 
 trait StatFilterable
 {
@@ -40,13 +41,18 @@ trait StatFilterable
         $order = explode('|', $orderby);
 
         if (count($order) === 2) {
-            return $query->when(
-                in_array($order[0], Stat::AVAILABLE),
-                function ($query) use ($order) {
-                    $query->withCountStats($order[0]);
-                }
-            )
-            ->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc');
+            try {
+                Slug::fromString($order[0]);
+
+                $available = true;
+            } catch (\InvalidArgumentException $e) {
+                $available = false;
+            }
+
+            return $query->when($available, function ($query) use ($order) {
+                $query->withCountStats($order[0]);
+            })
+            ->orderBy($order[0], $order[1]);
         }
 
         return $query->latest();

@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\Observers;
 
-use Illuminate\Support\Facades\Cache;
 use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Support\Facades\Cache;
 
 class BanValueObserver
 {
@@ -15,7 +15,7 @@ class BanValueObserver
      */
     public function created(BanValue $banValue)
     {
-        Cache::tags(['bans.' . $banValue->type])->flush();
+        Cache::tags(['bans.' . $banValue->type->getValue()])->flush();
     }
 
     /**
@@ -26,7 +26,7 @@ class BanValueObserver
      */
     public function updated(BanValue $banValue)
     {
-        Cache::tags(['bans.' . $banValue->type])->flush();
+        Cache::tags(['bans.' . $banValue->type->getValue()])->flush();
     }
 
     /**
@@ -37,7 +37,7 @@ class BanValueObserver
      */
     public function deleted(BanValue $banValue)
     {
-        Cache::tags(['bans.' . $banValue->type])->flush();
+        Cache::tags(['bans.' . $banValue->type->getValue()])->flush();
     }
 
     /**

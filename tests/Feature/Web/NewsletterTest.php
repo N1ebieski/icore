@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use N1ebieski\ICore\Models\Newsletter;
 use N1ebieski\ICore\Models\NewsletterToken;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -67,7 +68,7 @@ class NewsletterTest extends TestCase
             $this->assertEquals(route('web.newsletter.update_status', [
                 $newsletter->id,
                 'token' => $newsletter->token->token,
-                'status' => Newsletter::ACTIVE
+                'status' => Status::ACTIVE
             ]), $mail->viewData['actionUrl']);
 
             return $mail->hasTo($newsletter->email) && $mail->subject(trans('icore::newsletter.subscribe_confirmation'));
@@ -83,7 +84,7 @@ class NewsletterTest extends TestCase
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
             'token' => 'dasdasd236d7s6d7s',
-            'status' => Newsletter::ACTIVE
+            'status' => Status::ACTIVE
         ]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
@@ -101,7 +102,7 @@ class NewsletterTest extends TestCase
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
             'token' => $newsletter->token->token,
-            'status' => Newsletter::ACTIVE
+            'status' => Status::ACTIVE
         ]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
@@ -117,7 +118,7 @@ class NewsletterTest extends TestCase
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
             'token' => $newsletter->token->token,
-            'status' => Newsletter::ACTIVE
+            'status' => Status::ACTIVE
         ]));
 
         $response->assertRedirect(route('web.home.index'));
@@ -125,7 +126,7 @@ class NewsletterTest extends TestCase
 
         $this->assertDatabaseHas('newsletters', [
             'id' => $newsletter->id,
-            'status' => Newsletter::ACTIVE
+            'status' => Status::ACTIVE
         ]);
     }
 
@@ -138,15 +139,15 @@ class NewsletterTest extends TestCase
         $response = $this->get(route('web.newsletter.update_status', [
             $newsletter->id,
             'token' => $newsletter->token->token,
-            'status' => Newsletter::INACTIVE
+            'status' => Status::INACTIVE
         ]));
 
         $response->assertRedirect(route('web.home.index'));
-        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status.' . Newsletter::INACTIVE)]);
+        $response->assertSessionHas(['success' => trans('icore::newsletter.success.update_status.' . Status::INACTIVE)]);
 
         $this->assertDatabaseHas('newsletters', [
             'id' => $newsletter->id,
-            'status' => Newsletter::INACTIVE
+            'status' => Status::INACTIVE
         ]);
     }
 }

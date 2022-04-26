@@ -55,8 +55,7 @@ class UserController
         $user->makeService()->updateStatus($request->validated());
 
         return Response::json([
-            'success' => '',
-            'status' => $user->status,
+            'status' => $user->status->getValue(),
             'view' => View::make('icore::admin.user.partials.user', [
                 'user' => $user
             ])->render(),

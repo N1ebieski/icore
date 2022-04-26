@@ -17,8 +17,8 @@
         </ul>
         <div class="text-right ml-3">
             <div class="responsive-btn-group">
-                @role('super-admin')
-                @if ($role->isEditNotDefault())
+                @role(Role\Name::SUPER_ADMIN)
+                @if ($role->name->isEditNotDefault())
                 <a 
                     class="btn btn-primary align-bottom" 
                     href="{{ route('admin.role.edit', [$role->id]) }}"
@@ -30,7 +30,7 @@
                     <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
                 </a>
                 @endif
-                @if ($role->isDeleteNotDefault())
+                @if ($role->name->isDeleteNotDefault())
                 <form 
                     action="{{ route('admin.role.destroy', [$role->id]) }}" 
                     method="post"

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\ValueObjects\Page\Status;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
@@ -147,8 +148,8 @@ class PageService implements
             if ($attributes['parent_id'] !== null) {
                 $parent = $this->page->findOrFail($attributes['parent_id']);
                 // If the parent is inactive, the child must inherit this state
-                $this->page->status = $parent->status === Page::INACTIVE ?
-                    Page::INACTIVE : $attributes['status'];
+                $this->page->status = $parent->status->isInactive() ?
+                    Status::INACTIVE : $attributes['status'];
                 $this->page->parent_id = $attributes['parent_id'];
             }
 
@@ -257,12 +258,12 @@ class PageService implements
 
             if ($update === true) {
                 // Deactivates parent page, deactivates all descendants
-                if ((int)$attributes['status'] === Page::INACTIVE) {
+                if ($this->page->status->isInactive()) {
                     $this->page->descendants()->update(['status' => $attributes['status']]);
                 }
 
                 // Activating child page, activates all ancestors
-                if ((int)$attributes['status'] === Page::ACTIVE) {
+                if ($this->page->status->isActive()) {
                     $this->page->ancestors()->update(['status' => $attributes['status']]);
                 }
             }
@@ -296,15 +297,7 @@ class PageService implements
 
             $this->page->stats()->detach();
 
-            $delete = $this->page->delete();
-
-            if ($delete === true) {
-                // Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-                // do it automatically
-                $this->decrement();
-            }
-
-            return $delete;
+            return $this->page->delete();
         });
     }
 
@@ -327,21 +320,6 @@ class PageService implements
             }
 
             return $deleted;
-        });
-    }
-
-    /**
-     * Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-     * do it automatically
-     * @return bool [description]
-     */
-    private function decrement(): bool
-    {
-        return $this->db->transaction(function () {
-            return $this->page->where([
-                ['parent_id', $this->page->parent_id],
-                ['position', '>', $this->page->position]
-            ])->decrement('position');
         });
     }
 }

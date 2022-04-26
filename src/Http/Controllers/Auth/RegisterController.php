@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
@@ -85,11 +87,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'status' => User::ACTIVE,
+            'status' => Status::active(),
             'marketing' => isset($data['marketing_agreement'])
         ]);
 
-        $user->assignRole('user');
+        $user->assignRole(Name::USER);
 
         return $user;
     }

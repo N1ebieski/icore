@@ -9,6 +9,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 
+/**
+ * @property Page $page
+ */
 class StoreRequest extends FormRequest
 {
     /**
@@ -18,7 +21,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->page->isCommentable() === Page::WITHOUT_COMMENT) {
+        if ($this->page->comment->isInactive()) {
             App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
                 'Adding comments has been disabled for this page.'

@@ -13,7 +13,7 @@ class DestroyRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->role->isDeleteNotDefault();
+        return $this->role->name->isDeleteNotDefault();
     }
 
     /**

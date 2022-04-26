@@ -10,6 +10,7 @@ use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use N1ebieski\ICore\Models\BanModel\User\BanModel;
 use N1ebieski\ICore\Filters\Admin\BanModel\User\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\User\IndexRequest;
@@ -44,7 +45,6 @@ class BanModelController implements UserPolymorphic
     public function create(User $user): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.banmodel.user.create', [
                 'model' => $user
             ])->render()
@@ -68,7 +68,7 @@ class BanModelController implements UserPolymorphic
 
         if ($request->has('ip')) {
             $banValue->create([
-                'type' => 'ip',
+                'type' => Type::IP,
                 'value' => $request->input('ip')
             ]);
         }

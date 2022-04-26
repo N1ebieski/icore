@@ -13,7 +13,7 @@ class EditRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->role->isEditNotDefault();
+        return $this->role->name->isEditNotDefault();
     }
 
     /**

@@ -36,28 +36,28 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $mailing::ACTIVE }}" 
-            {{ ($filter['status'] === $mailing::ACTIVE) ? 'selected' : '' }}
+            value="{{ Mailing\Status::ACTIVE }}" 
+            {{ ($filter['status'] === Mailing\Status::ACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::mailings.status.'.$mailing::ACTIVE) }}
+            {{ trans('icore::mailings.status.'.Mailing\Status::ACTIVE) }}
         </option>
         <option 
-            value="{{ $mailing::INACTIVE }}" 
-            {{ ($filter['status'] === $mailing::INACTIVE) ? 'selected' : '' }}
+            value="{{ Mailing\Status::INACTIVE }}" 
+            {{ ($filter['status'] === Mailing\Status::INACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::mailings.status.'.$mailing::INACTIVE) }}
+            {{ trans('icore::mailings.status.'.Mailing\Status::INACTIVE) }}
         </option>
         <option 
-            value="{{ $mailing::SCHEDULED }}" 
-            {{ ($filter['status'] === $mailing::SCHEDULED) ? 'selected' : '' }}
+            value="{{ Mailing\Status::SCHEDULED }}" 
+            {{ ($filter['status'] === Mailing\Status::SCHEDULED) ? 'selected' : '' }}
         >
-            {{ trans('icore::mailings.status.'.$mailing::SCHEDULED) }}
+            {{ trans('icore::mailings.status.'.Mailing\Status::SCHEDULED) }}
         </option>
         <option 
-            value="{{ $mailing::INPROGRESS }}" 
-            {{ ($filter['status'] === $mailing::INPROGRESS) ? 'selected' : '' }}
+            value="{{ Mailing\Status::INPROGRESS }}" 
+            {{ ($filter['status'] === Mailing\Status::INPROGRESS) ? 'selected' : '' }}
         >
-            {{ trans('icore::mailings.status.'.$mailing::INPROGRESS) }}
+            {{ trans('icore::mailings.status.'.Mailing\Status::INPROGRESS) }}
         </option>        
     </select>
 </div>

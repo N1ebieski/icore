@@ -21,18 +21,6 @@ class Report extends Model
     // Configuration
 
     /**
-     * [public description]
-     * @var int
-     */
-    public const REPORTED = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const UNREPORTED = 0;
-
-    /**
      * The attributes that should be cast to native types.
      *
      * @var array

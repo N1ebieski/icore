@@ -4,9 +4,9 @@ namespace N1ebieski\ICore\Http\Requests\Web\Newsletter;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 
 class UpdateStatusRequest extends FormRequest
 {
@@ -22,7 +22,7 @@ class UpdateStatusRequest extends FormRequest
         }
 
         if (
-            (int)$this->input('status') === Newsletter::ACTIVE
+            $this->input('status') == Status::ACTIVE
             && Carbon::parse($this->newsletter->token->updated_at)->lessThan(
                 Carbon::now()->subMinutes(60)
             )

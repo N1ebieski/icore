@@ -7,33 +7,19 @@ use N1ebieski\ICore\Cache\StatCache;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\StatService;
 use N1ebieski\ICore\Repositories\StatRepo;
+use N1ebieski\ICore\ValueObjects\Stat\Slug;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 
+/**
+ * @property Slug $slug
+ */
 class Stat extends Model
 {
     use Polymorphic;
     use Carbonable;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var string
-     */
-    public const CLICK = 'click';
-
-    /**
-     * [public description]
-     * @var string
-     */
-    public const VIEW = 'view';
-
-    /**
-     * [public description]
-     * @var array
-     */
-    public const AVAILABLE = [self::CLICK, self::VIEW];
 
     /**
      * The table associated with the model.
@@ -56,6 +42,7 @@ class Stat extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'slug' => \N1ebieski\ICore\Casts\Stat\SlugCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

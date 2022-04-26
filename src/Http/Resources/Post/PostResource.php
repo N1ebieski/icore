@@ -45,12 +45,12 @@ class PostResource extends JsonResource
             'seo_desc' => $this->seo_desc,
             'meta_desc' => $this->meta_desc,
             'seo_noindex' => $this->seo_noindex->getValue(),
-            'seo_nofollow' => (bool)$this->seo_nofolow,
+            'seo_nofollow' => $this->seo_nofolow->getValue(),
             'status' => [
                 'value' => $this->status->getValue(),
                 'label' => Lang::get("icore::posts.status.{$this->status}")
             ],
-            'comment' => (bool)$this->comment,
+            'comment' => $this->comment->getValue(),
             'first_image' => $this->first_image,
             'published_at' => $this->published_at,
             'created_at' => $this->created_at,

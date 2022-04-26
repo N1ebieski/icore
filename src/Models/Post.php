@@ -20,9 +20,11 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\ValueObjects\Post\Status;
+use N1ebieski\ICore\ValueObjects\Post\Comment;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
+use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
@@ -31,8 +33,10 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 
 /**
+ * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status
+ * @property Comment $comment
  */
 class Post extends Model
 {
@@ -47,30 +51,6 @@ class Post extends Model
     }
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const WITH_COMMENT = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const WITHOUT_COMMENT = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_NOFOLLOW = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SEO_FOLLOW = 0;
 
     /**
      * The attributes that are mass assignable.
@@ -106,9 +86,10 @@ class Post extends Model
      * @var array
      */
     protected $attributes = [
-        'comment' => self::WITH_COMMENT,
+        'comment' => Comment::ACTIVE,
         'status' => Status::INACTIVE,
-        'seo_noindex' => SeoNoindex::INACTIVE
+        'seo_noindex' => SeoNoindex::INACTIVE,
+        'seo_nofollow' => SeoNofollow::INACTIVE
     ];
 
     /**
@@ -134,9 +115,9 @@ class Post extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'seo_noindex' => \N1ebieski\ICore\Casts\Post\SeoNoindexCast::class,
-        'seo_nofollow' => 'integer',
+        'seo_nofollow' => \N1ebieski\ICore\Casts\Post\SeoNofollowCast::class,
         'status' => \N1ebieski\ICore\Casts\Post\StatusCast::class,
-        'comment' => 'integer',
+        'comment' => \N1ebieski\ICore\Casts\Post\CommentCast::class,
         'published_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
@@ -401,17 +382,6 @@ class Post extends Model
         $this->attributes['content'] = !empty($value) ?
             strip_tags(str_replace('[more]', '', $value))
             : null;
-    }
-
-    // Checkers
-
-    /**
-     * [isCommentable description]
-     * @return bool [description]
-     */
-    public function isCommentable(): bool
-    {
-        return $this->comment === static::WITH_COMMENT;
     }
 
     // Scopes

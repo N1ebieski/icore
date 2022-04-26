@@ -125,7 +125,7 @@ class Tag extends Taggable
      */
     public function makeService()
     {
-        return app()->make(TagService::class, ['tag' => $this]);
+        return App::make(TagService::class, ['tag' => $this]);
     }
 
     /**

@@ -8,33 +8,19 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\MailingEmailService;
 use N1ebieski\ICore\Repositories\MailingEmailRepo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\MailingEmail\MailingEmailFactory;
 
+/**
+ * @property Sent $sent
+ */
 class MailingEmail extends Model
 {
     use HasFactory;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const SENT = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const UNSENT = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ERROR = 2;
 
     /**
     * The attributes that are mass assignable.
@@ -56,7 +42,7 @@ class MailingEmail extends Model
      * @var array
      */
     protected $attributes = [
-        'sent' => self::UNSENT,
+        'sent' => Sent::UNSENT,
     ];
 
     /**
@@ -68,7 +54,7 @@ class MailingEmail extends Model
         'id' => 'integer',
         'mailing_id' => 'integer',
         'model_id' => 'integer',
-        'sent' => 'integer',
+        'sent' => \N1ebieski\ICore\Casts\MailingEmail\SentCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -115,7 +101,7 @@ class MailingEmail extends Model
      */
     public function scopeUnsent(Builder $query): Builder
     {
-        return $query->where('sent', static::UNSENT);
+        return $query->where('sent', Sent::UNSENT);
     }
 
     // Factories

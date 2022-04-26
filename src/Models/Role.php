@@ -36,6 +36,7 @@ class Role extends BaseRole
      */
     protected $casts = [
         'id' => 'integer',
+        'name' => \N1ebieski\ICore\Casts\Role\NameCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -48,26 +49,6 @@ class Role extends BaseRole
     protected static function newFactory()
     {
         return \N1ebieski\ICore\Database\Factories\Role\RoleFactory::new();
-    }
-
-    // Checkers
-
-    /**
-     * [isEditDefault description]
-     * @return bool [description]
-     */
-    public function isEditNotDefault(): bool
-    {
-        return !in_array($this->name, ['super-admin', 'admin']);
-    }
-
-    /**
-     * [isDeleteDefault description]
-     * @return bool [description]
-     */
-    public function isDeleteNotDefault(): bool
-    {
-        return !in_array($this->name, ['super-admin', 'admin', 'user', 'api']);
     }
 
     // Factories

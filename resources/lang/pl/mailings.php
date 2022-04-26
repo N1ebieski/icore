@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Mailing;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 
 return [
     'create' => 'Dodaj mailing',
@@ -23,10 +23,10 @@ return [
     'subscribers' => 'subskrybenci newslettera',
     'custom' => 'własna baza adresów email',
     'status' => [
-        Mailing::ACTIVE => 'aktywne',
-        Mailing::INACTIVE => 'nieaktywne',
-        Mailing::SCHEDULED => 'zaplanowane',
-        Mailing::INPROGRESS => 'w realizacji'
+        Status::ACTIVE => 'aktywne',
+        Status::INACTIVE => 'nieaktywne',
+        Status::SCHEDULED => 'zaplanowane',
+        Status::INPROGRESS => 'w realizacji'
     ],
     'route' => [
         'index' => 'Mailing',

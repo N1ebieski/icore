@@ -100,6 +100,8 @@ class PageObserver
      */
     public function deleted(Page $page)
     {
+        $page->nextSiblings()->decrement($page->getPositionColumn());
+
         Cache::tags(['page.' . $page->slug, 'pages'])->flush();
     }
 

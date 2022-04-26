@@ -2,9 +2,13 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\BanValue;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property BanValue $banValue
+ */
 class UpdateRequest extends FormRequest
 {
     /**
@@ -24,14 +28,12 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $type = $this->banValue->type;
-
         return [
             'value' => [
                 'required',
                 'string',
-                Rule::unique('bans_values', 'value')->where(function ($query) use ($type) {
-                    $query->where('type', $type);
+                Rule::unique('bans_values', 'value')->where(function ($query) {
+                    $query->where('type', $this->banValue->type->getValue());
                 })
             ],
         ];

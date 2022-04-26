@@ -6,6 +6,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
+use N1ebieski\ICore\ValueObjects\Role\Name;
+use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Contracts\Translation\Translator as Lang;
 use Illuminate\Contracts\Validation\Factory as Validator;
 
@@ -90,7 +92,7 @@ class RegisterSuperAdminCommand extends Command
     protected function authorize(): bool
     {
         return $this->user->whereHas('roles', function ($query) {
-            $query->where('name', 'super-admin');
+            $query->where('name', Name::SUPER_ADMIN);
         })->count() === 0;
     }
 
@@ -159,10 +161,10 @@ class RegisterSuperAdminCommand extends Command
             'email' => $attributes['email'],
             'password' => $this->hasher->make($attributes['password']),
             'email_verified_at' => $this->carbon->now(),
-            'status' => User::ACTIVE
+            'status' => Status::ACTIVE
         ]);
 
-        $user->assignRole(['super-admin', 'admin', 'user']);
+        $user->assignRole([Name::SUPER_ADMIN, Name::ADMIN, Name::USER]);
 
         $this->info($this->lang->get('icore::superadmin.success.store'));
 

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Translation\Translator as Lang;
 
@@ -66,7 +67,7 @@ class ConfirmationMail extends Mailable
                 'actionUrl' => $this->url->route('web.newsletter.update_status', [
                     $this->newsletter->id,
                     'token' => $this->newsletter->token->token,
-                    'status' => $this->newsletter::ACTIVE
+                    'status' => Status::ACTIVE
                 ]),
                 'actionText' => $this->lang->get('icore::newsletter.subscribe_confirm')
             ]);

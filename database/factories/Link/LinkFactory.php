@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Database\Factories\Link;
 
 use N1ebieski\ICore\Models\Link;
+use N1ebieski\ICore\ValueObjects\Link\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LinkFactory extends Factory
@@ -36,7 +37,7 @@ class LinkFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'type' => 'link',
+                'type' => Type::LINK,
             ];
         });
     }

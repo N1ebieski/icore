@@ -8,6 +8,7 @@ use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Container\Container as App;
@@ -290,7 +291,7 @@ class PostRepo
                     ->whereTime('published_at', '<=', $this->carbon->now()->format('H:i:s'));
             })
             ->scheduled()
-            ->update(['status' => $this->post->status::ACTIVE]);
+            ->update(['status' => Status::ACTIVE]);
     }
 
     /**
@@ -360,7 +361,7 @@ class PostRepo
     {
         return $this->post->selectRaw("YEAR(`post`.`created_at`) `year`, MONTH(`post`.`created_at`) `month`, 'posts' AS `type`, COUNT(*) AS `count`")
             ->from("{$this->post->getTable()} AS post")
-            ->where('post.status', $this->post->status::ACTIVE)
+            ->where('post.status', Status::ACTIVE)
             ->groupBy('year')
             ->groupBy('month')
             ->unionAll($pages)

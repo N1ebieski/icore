@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Listeners\Stat\Post;
 
 use N1ebieski\ICore\Utils\MigrationUtil;
 use N1ebieski\ICore\Models\Stat\Post\Stat;
+use N1ebieski\ICore\ValueObjects\Stat\Slug;
 
 class IncrementView
 {
@@ -65,7 +66,7 @@ class IncrementView
         }
 
         $this->stat->makeCache()
-            ->rememberBySlug($this->stat::VIEW)
+            ->rememberBySlug(Slug::VIEW)
             ->setRelations(['morph' => $this->event->post])
             ->makeService()
             ->increment();

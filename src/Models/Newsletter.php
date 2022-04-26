@@ -6,26 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\NewsletterToken;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Newsletter\NewsletterFactory;
 
+/**
+ * @property Status $status
+ */
 class Newsletter extends Model
 {
     use HasFactory;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
 
     /**
      * The attributes that are mass assignable.
@@ -47,7 +39,7 @@ class Newsletter extends Model
      * @var array
      */
     protected $attributes = [
-        'status' => self::ACTIVE,
+        'status' => Status::ACTIVE,
     ];
 
     /**
@@ -57,7 +49,7 @@ class Newsletter extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'status' => 'integer',
+        'status' => \N1ebieski\ICore\Casts\Newsletter\StatusCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -94,7 +86,7 @@ class Newsletter extends Model
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', static::ACTIVE);
+        return $query->where('status', Status::ACTIVE);
     }
 
     // Factories

@@ -156,14 +156,14 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="seo_noindex" value="0">
+                        <input type="hidden" name="seo_noindex" value="{{ Page\SeoNoindex::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="seo_noindex" 
                             name="seo_noindex"
-                            value="1" 
-                            {{ (old('seo_noindex', $page->seo_noindex) == $page::SEO_NOINDEX) ? 'checked' : '' }}
+                            value="{{ Page\SeoNoindex::ACTIVE }}" 
+                            {{ (old('seo_noindex', $page->seo_noindex->getValue()) == Page\SeoNoindex::ACTIVE) ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_noindex">
                             SEO noindex?
@@ -172,14 +172,14 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="seo_nofollow" value="0">
+                        <input type="hidden" name="seo_nofollow" value="{{ Page\SeoNofollow::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="seo_nofollow" 
                             name="seo_nofollow"
-                            value="1" 
-                            {{ (old('seo_nofollow', $page->seo_nofollow) == $page::SEO_NOFOLLOW) ? 'checked' : '' }}
+                            value="{{ Page\SeoNofollow::ACTIVE }}" 
+                            {{ (old('seo_nofollow', $page->seo_nofollow->getValue()) == Page\SeoNofollow::ACTIVE) ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_nofollow">
                             SEO nofollow?
@@ -188,14 +188,14 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="comment" value="0">
+                        <input type="hidden" name="comment" value="{{ Page\Comment::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="comment" 
                             name="comment"
-                            value="1" 
-                            {{ (old('comment', $page->comment) == $page::WITH_COMMENT) ? 'checked' : '' }}
+                            value="{{ Page\Comment::ACTIVE }}" 
+                            {{ (old('comment', $page->comment->getValue()) == Page\Comment::ACTIVE) ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="comment">
                             {{ trans('icore::pages.comment') }}?
@@ -208,14 +208,14 @@
                     </label>
                     <select class="custom-select" id="status" name="status">
                         <option 
-                            value="{{ $page::ACTIVE }}" 
-                            {{ (old('status', $page->status) == $page::ACTIVE) ? 'selected' : '' }}
+                            value="{{ Page\Status::ACTIVE }}" 
+                            {{ (old('status', $page->status->getValue()) == Page\Status::ACTIVE) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.active') }}
                         </option>
                         <option 
-                            value="{{ $page::INACTIVE }}" 
-                            {{ (old('status', $page->status) == $page::INACTIVE) ? 'selected' : '' }}
+                            value="{{ Page\Status::INACTIVE }}" 
+                            {{ (old('status', $page->status->getValue()) == Page\Status::INACTIVE) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.inactive') }}
                         </option>

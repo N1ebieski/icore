@@ -12,7 +12,6 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
-use N1ebieski\ICore\Models\Traits\HasRealDepth;
 use Franzose\ClosureTable\Extensions\QueryBuilder;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +22,8 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Database\Factories\Comment\CommentFactory;
+use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
+use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
 class Comment extends Entity
 {
@@ -30,7 +31,8 @@ class Comment extends Entity
     use Filterable;
     use Polymorphic;
     use Carbonable;
-    use HasRealDepth;
+    use HasFixForRealDepthClosureTable;
+    use HasFixForPolymorphicClosureTable;
     use HasFactory;
 
     // Configuration
@@ -291,7 +293,7 @@ class Comment extends Entity
         return $this->isActive()
             && $this->getRelation('morph') !== null
             && $this->getRelation('morph')->status->isActive()
-            && $this->getRelation('morph')->isCommentable();
+            && $this->getRelation('morph')->comment->isActive();
     }
 
     // Scopes
@@ -456,50 +458,6 @@ class Comment extends Entity
                 $q->with('user:id,name')->orderBy('created_at', 'asc');
             }
         ]);
-    }
-
-    // Overrides
-
-    /**
-     * Model jest polimorficzny i sprawdzanie rodzeństwa musi się odbywać z użyciem
-     * $this->model_type
-     *
-     * Builds a part of the siblings query.
-     *
-     * @param string|int|array $direction
-     * @param int|bool $parentId
-     * @param string $order
-     * @return QueryBuilder
-     */
-    protected function siblings($direction = '', $parentId = false, $order = 'asc')
-    {
-        $query = parent::siblings($direction, $parentId, $order);
-
-        $query->poli();
-
-        return $query;
-    }
-
-    /**
-     * Model jest polimotficzny. Trzeba dodać warunek sprawdzający model_type
-     *
-     * @param  bool $parentId [description]
-     * @return [type]            [description]
-     */
-    public function getLastPosition($parentId = false)
-    {
-        $positionColumn = $this->getPositionColumn();
-        $parentIdColumn = $this->getParentIdColumn();
-
-        $parentId = ($parentId === false ? $this->parent_id : $parentId);
-
-        $entity = $this->select($positionColumn)
-            ->where($parentIdColumn, '=', $parentId)
-            ->poli()
-            ->orderBy($positionColumn, 'desc')
-            ->first();
-
-        return !is_null($entity) ? (int)$entity->position : null;
     }
 
     // Factories

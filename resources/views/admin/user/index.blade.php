@@ -21,7 +21,7 @@
         <i class="fas fa-fw fa-users"></i>
         <span>{{ trans('icore::users.route.index') }}</span>
     </div>
-    @role('super-admin')
+    @role(Role\Name::SUPER_ADMIN)
     <div class="ml-auto text-right responsive-btn-group">
         <button 
             type="button" 
@@ -48,7 +48,7 @@
     >
         @csrf
         @method('delete')
-        @role('super-admin')
+        @role(Role\Name::SUPER_ADMIN)
         <div class="row my-2">
             <div class="col my-auto">
                 <div class="custom-checkbox custom-control">
@@ -70,7 +70,7 @@
             @endforeach
             @include('icore::admin.partials.pagination', ['items' => $users])
         </div>
-        @role('super-admin')
+        @role(Role\Name::SUPER_ADMIN)
         <div class="select-action rounded">
             <button 
                 type="button"             

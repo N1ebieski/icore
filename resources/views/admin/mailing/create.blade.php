@@ -88,27 +88,27 @@
                         aria-controls="collapse-activation-at"
                     >
                         <option 
-                            value="{{ $mailing::ACTIVE }}" 
-                            {{ (old('status') == $mailing::ACTIVE) ? 'selected' : '' }}
+                            value="{{ Mailing\Status::ACTIVE }}" 
+                            {{ (old('status') == Mailing\Status::ACTIVE) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.active') }}
                         </option>
                         <option 
-                            value="{{ $mailing::INACTIVE }}" 
-                            {{ (!old('status') || old('status') == $mailing::INACTIVE) ? 'selected' : '' }}
+                            value="{{ Mailing\Status::INACTIVE }}" 
+                            {{ (!old('status') || old('status') == Mailing\Status::INACTIVE) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.inactive') }}
                         </option>
                         <option 
-                            value="{{ $mailing::SCHEDULED }}" 
-                            {{ (old('status') == $mailing::SCHEDULED) ? 'selected' : '' }}
+                            value="{{ Mailing\Status::SCHEDULED }}" 
+                            {{ (old('status') == Mailing\Status::SCHEDULED) ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.scheduled') }}
                         </option>
                     </select>
                 </div>
                 <div 
-                    class="form-group collapse {{ (old('status') && old('status') == 2) ? 'show' : '' }}"
+                    class="form-group collapse {{ (old('status') && old('status') == Mailing\Status::SCHEDULED) ? 'show' : '' }}"
                     id="collapse-activation-at"
                 >
                     <label for="activation_at">

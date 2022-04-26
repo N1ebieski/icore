@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\ValueObjects\User\Status;
 
 return [
     'symlink' => 'powiązane',
@@ -14,8 +14,8 @@ return [
         'edit' => 'Edytuj użytkownika'
     ],
     'status' => [
-        User::ACTIVE => 'aktywne',
-        User::INACTIVE => 'nieaktywne'
+        Status::ACTIVE => 'aktywne',
+        Status::INACTIVE => 'nieaktywne'
     ],
     'roles' => 'Typ konta'
 ];

@@ -23,6 +23,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $aliasLoader = \Illuminate\Foundation\AliasLoader::getInstance();
+
+        foreach (glob(__DIR__ . '/../ValueObjects/**/*.php') as $classPath) {
+            if (!preg_match('/ValueObjects\/([A-Za-z\/]+).php/', $classPath, $matches)) {
+                continue;
+            }
+
+            $alias = str_replace('/', '\\', $matches[1]);
+
+            $aliasLoader->alias($alias, 'N1ebieski\\ICore\\ValueObjects\\' . $alias);
+        }
     }
 }

@@ -4,15 +4,14 @@ namespace N1ebieski\ICore\Jobs;
 
 use Throwable;
 use Illuminate\Bus\Queueable;
-use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Container\Container as App;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class SendMailingJob implements ShouldQueue
 {
@@ -68,8 +67,8 @@ class SendMailingJob implements ShouldQueue
         $this->app = $app;
         $this->mailer = $mailer;
 
-        if ($this->mailingEmail->sent === MailingEmail::UNSENT) {
-            if ($this->mailingEmail->mailing->status === Mailing::INPROGRESS) {
+        if ($this->mailingEmail->sent->isUnsent()) {
+            if ($this->mailingEmail->mailing->status->isInprogress()) {
                 $this->mailer->send(
                     $this->app->make(MailingMail::class, ['mailingEmail' => $this->mailingEmail])
                 );

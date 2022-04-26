@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Database\Factories\Mailing;
 
 use N1ebieski\ICore\Models\Mailing;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MailingFactory extends Factory
@@ -27,7 +28,7 @@ class MailingFactory extends Factory
             'title' => $this->faker->sentence(5),
             'content_html' => $content,
             'content' => $content,
-            'status' => Mailing::INACTIVE
+            'status' => Status::INACTIVE
         ];
     }
 
@@ -40,7 +41,7 @@ class MailingFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Mailing::ACTIVE
+                'status' => Status::ACTIVE
             ];
         });
     }

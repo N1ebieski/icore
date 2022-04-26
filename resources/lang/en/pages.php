@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\ValueObjects\Page\Status;
 
 return [
     'success' => [
@@ -39,8 +39,8 @@ return [
     ],
     'author' => 'Author',
     'status' => [
-        Page::ACTIVE => 'active',
-        Page::INACTIVE => 'inactive'
+        Status::ACTIVE => 'active',
+        Status::INACTIVE => 'inactive'
     ],
     'position' => 'Position',
     'pages' => 'Pages',

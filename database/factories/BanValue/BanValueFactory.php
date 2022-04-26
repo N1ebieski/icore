@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Database\Factories\BanValue;
 
 use N1ebieski\ICore\Models\BanValue;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BanValueFactory extends Factory
@@ -35,7 +36,7 @@ class BanValueFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'type' => 'ip',
+                'type' => Type::IP,
                 'value' => $this->faker->ipv4
             ];
         });

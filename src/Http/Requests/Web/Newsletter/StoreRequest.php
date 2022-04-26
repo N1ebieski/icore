@@ -3,8 +3,8 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Newsletter;
 
 use Illuminate\Validation\Rule;
-use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 
 class StoreRequest extends FormRequest
 {
@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
                 'string',
                 'email',
                 Rule::unique('newsletters', 'email')->where(function ($query) {
-                    $query->where('status', Newsletter::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 })
             ],
             'marketing_agreement' => 'bail|accepted'

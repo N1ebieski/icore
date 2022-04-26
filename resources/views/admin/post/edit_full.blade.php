@@ -134,14 +134,14 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="seo_noindex" value="0">
+                        <input type="hidden" name="seo_noindex" value="{{ Post\SeoNoindex::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="seo_noindex" 
                             name="seo_noindex" 
-                            value="{{ $post->seo_noindex::ACTIVE }}" 
-                            {{ $post->seo_noindex::fromString(old('seo_noindex', $post->seo_noindex->getValue()))->isActive() ? 'checked' : '' }}
+                            value="{{ Post\SeoNoindex::ACTIVE }}" 
+                            {{ old('seo_noindex', $post->seo_noindex->getValue()) == Post\SeoNoindex::ACTIVE ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_noindex">
                             SEO noindex?
@@ -150,14 +150,14 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="seo_nofollow" value="0">
+                        <input type="hidden" name="seo_nofollow" value="{{ Post\SeoNofollow::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="seo_nofollow" 
                             name="seo_nofollow" 
-                            value="{{ $post::SEO_NOFOLLOW }}" 
-                            {{ (old('seo_nofollow', $post->seo_nofollow) == $post::SEO_NOFOLLOW) ? 'checked' : '' }}
+                            value="{{ Post\SeoNofollow::ACTIVE }}" 
+                            {{ old('seo_noindex', $post->seo_nofollow->getValue()) == Post\SeoNofollow::ACTIVE ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="seo_nofollow">
                             SEO nofollow?
@@ -166,14 +166,14 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="comment" value="0">
+                        <input type="hidden" name="comment" value="{{ Post\Comment::INACTIVE }}">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
                             id="comment" 
                             name="comment"
-                            value="1" 
-                            {{ (old('comment', $post->comment) == $post::WITH_COMMENT) ? 'checked' : '' }}
+                            value="{{ Post\Comment::ACTIVE }}" 
+                            {{ old('comment', $post->comment->getValue()) == Post\Comment::ACTIVE ? 'checked' : '' }}
                         >
                         <label class="custom-control-label" for="comment">
                             {{ trans('icore::posts.comment') }}?
@@ -193,27 +193,27 @@
                         name="status"
                     >
                         <option 
-                            value="{{ $post->status::ACTIVE }}" 
-                            {{ $post->status::fromString(old('status', $post->status->getValue()))->isActive() ? 'selected' : '' }}
+                            value="{{ Post\Status::ACTIVE }}" 
+                            {{ old('status', $post->status->getValue()) == Post\Status::ACTIVE ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.active') }}
                         </option>
                         <option 
-                            value="{{ $post->status::INACTIVE }}" 
-                            {{ $post->status::fromString(old('status', $post->status->getValue()))->isInactive() ? 'selected' : '' }}
+                            value="{{ Post\Status::INACTIVE }}" 
+                            {{ old('status', $post->status->getValue()) == Post\Status::INACTIVE ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.inactive') }}
                         </option>
                         <option 
-                            value="{{ $post->status::SCHEDULED }}" 
-                            {{ $post->status::fromString(old('status', $post->status->getValue()))->isScheduled() ? 'selected' : '' }}
+                            value="{{ Post\Status::SCHEDULED }}" 
+                            {{ old('status', $post->status->getValue()) == Post\Status::SCHEDULED ? 'selected' : '' }}
                         >
                             {{ trans('icore::filter.scheduled') }}
                         </option>
                     </select>
                 </div>
                 <div 
-                    class="form-group collapse {{ !$post->status::fromString(old('status', $post->status->getValue()))->isInactive() ? 'show' : '' }}" 
+                    class="form-group collapse {{ old('status', $post->status->getValue()) != Post\Status::INACTIVE ? 'show' : '' }}" 
                     id="collapse-published-at"
                 >
                     <label for="published_at">

@@ -55,7 +55,7 @@ class Status extends ValueObject
      * Undocumented function
      *
      * @param string $value
-     * @return static
+     * @return void
      */
     public static function fromString(string $value)
     {
@@ -71,7 +71,7 @@ class Status extends ValueObject
             return static::scheduled();
         }
 
-        return static::inactive();
+        throw new \InvalidArgumentException("Invalid string value: '{$value}'");
     }
 
     /**

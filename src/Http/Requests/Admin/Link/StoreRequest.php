@@ -25,7 +25,23 @@ class StoreRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
+        $this->prepareTypeAttribute();
+
         $this->prepareUrlAttribute();
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareTypeAttribute()
+    {
+        if ($this->route('type')) {
+            $this->merge([
+                'type' => $this->route('type')
+            ]);
+        }
     }
 
     /**
@@ -34,7 +50,7 @@ class StoreRequest extends FormRequest
     protected function prepareUrlAttribute(): void
     {
         if ($this->has('url') && $this->input('url') !== null) {
-            $this->merge(['url' => preg_replace('/(\/)$/', null, $this->input('url'))]);
+            $this->merge(['url' => preg_replace('/(\/)$/', '', $this->input('url'))]);
         }
     }
 
@@ -70,19 +86,5 @@ class StoreRequest extends FormRequest
                 })
             ],
         ];
-    }
-
-    /**
-     * Get all of the input and files for the request.
-     *
-     * @param  array|mixed|null  $keys
-     * @return array
-     */
-    public function all($keys = null)
-    {
-        $data = parent::all($keys);
-        $data['type'] = $this->route('type');
-
-        return $data;
     }
 }

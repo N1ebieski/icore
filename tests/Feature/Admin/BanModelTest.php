@@ -7,6 +7,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\BanModel\BanModel;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BanModelTest extends TestCase
@@ -122,12 +123,12 @@ class BanModelTest extends TestCase
 
         $this->assertDatabaseHas('bans_models', [
             'model_id' => $user2->id,
-            'model_type' => 'N1ebieski\\ICore\\Models\\User'
+            'model_type' => $user2->getMorphClass()
         ]);
 
         $this->assertDatabaseHas('bans_values', [
             'value' => $user2->ip,
-            'type' => 'ip'
+            'type' => Type::IP
         ]);
     }
 

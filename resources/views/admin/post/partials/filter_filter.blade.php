@@ -1,5 +1,3 @@
-@inject('post', 'N1ebieski\ICore\Models\Post')
-
 @component('icore::admin.partials.modal')
 @slot('modal_id', 'filter-modal')
 
@@ -35,22 +33,22 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $post->status::ACTIVE }}" 
-            {{ ($filter['status'] === $post->status::ACTIVE) ? 'selected' : '' }}
+            value="{{ Post\Status::ACTIVE }}" 
+            {{ ($filter['status'] === Post\Status::ACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::posts.status.'.$post->status::ACTIVE) }}
+            {{ trans('icore::posts.status.'.Post\Status::ACTIVE) }}
         </option>
         <option 
-            value="{{ $post->status::INACTIVE }}" 
-            {{ ($filter['status'] === $post->status::INACTIVE) ? 'selected' : '' }}
+            value="{{ Post\Status::INACTIVE }}" 
+            {{ ($filter['status'] === Post\Status::INACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::posts.status.'.$post->status::INACTIVE) }}
+            {{ trans('icore::posts.status.'.Post\Status::INACTIVE) }}
         </option>
         <option 
-            value="{{ $post->status::SCHEDULED }}" 
-            {{ ($filter['status'] === $post->status::SCHEDULED) ? 'selected' : '' }}
+            value="{{ Post\Status::SCHEDULED }}" 
+            {{ ($filter['status'] === Post\Status::SCHEDULED) ? 'selected' : '' }}
         >
-            {{ trans('icore::posts.status.'.$post->status::SCHEDULED) }}
+            {{ trans('icore::posts.status.'.Post\Status::SCHEDULED) }}
         </option>
     </select>
 </div>

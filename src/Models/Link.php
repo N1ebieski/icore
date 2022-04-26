@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\LinkService;
 use N1ebieski\ICore\Repositories\LinkRepo;
+use N1ebieski\ICore\ValueObjects\Link\Type;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Models\Traits\Positionable;
@@ -17,6 +18,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Link\LinkFactory;
 
+/**
+ * @property Type $type
+ */
 class Link extends Model
 {
     use Positionable;
@@ -47,6 +51,7 @@ class Link extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'type' => \N1ebieski\ICore\Casts\Link\TypeCast::class,
         'home' => 'boolean',
         'position' => 'integer',
         'created_at' => 'datetime',

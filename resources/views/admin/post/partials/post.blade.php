@@ -74,7 +74,7 @@
                 @endcan
                 @can('admin.posts.status')
                 <button 
-                    data-status="{{ $post->status::ACTIVE }}" 
+                    data-status="{{ Post\Status::ACTIVE }}" 
                     type="button" 
                     class="btn btn-success status"
                     data-route="{{ route('admin.post.update_status', ['post' => $post->id]) }}"
@@ -84,7 +84,7 @@
                     <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button 
-                    data-status="{{ $post->status::INACTIVE }}" 
+                    data-status="{{ Post\Status::INACTIVE }}" 
                     type="button" 
                     class="btn btn-warning status"
                     data-route="{{ route('admin.post.update_status', ['post' => $post->id]) }}"

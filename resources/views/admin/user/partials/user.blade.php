@@ -4,7 +4,7 @@
     data-id="{{ $user->id }}"
 >
     <div class="col my-auto d-flex justify-content-between">
-        @role('super-admin')
+        @role(Role\Name::SUPER_ADMIN)
         @can('actionSelf', $user)
         <div class="custom-control custom-checkbox">
             <input 
@@ -47,7 +47,7 @@
                     <small>{{ trans('icore::filter.updated_at') }}: {{ $user->updated_at_diff }}</small>
                 </li>
             </ul>
-        @role('super-admin')
+        @role(Role\Name::SUPER_ADMIN)
         @can('actionSelf', $user)
             </label>
         </div>
@@ -55,7 +55,7 @@
         @endrole
         <div class="text-right ml-3">
             <div class="responsive-btn-group">
-                @role('super-admin')
+                @role(Role\Name::SUPER_ADMIN)
                 @can('actionSelf', $user)
                 <button 
                     data-toggle="modal" 
@@ -70,21 +70,21 @@
                 @endcan
                 @can('actionSelf', $user)
                 <button 
-                    data-status="1" 
+                    data-status="{{ User\Status::ACTIVE }}" 
                     type="button" 
                     class="btn btn-success status"
                     data-route="{{ route('admin.user.update_status', ['user' => $user->id]) }}"
-                    {{ $user->status == 1 ? 'disabled' : '' }}
+                    {{ $user->status->isActive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-on"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button 
-                    data-status="0" 
+                    data-status="{{ User\Status::INACTIVE }}" 
                     type="button" 
                     class="btn btn-warning status"
                     data-route="{{ route('admin.user.update_status', ['user' => $user->id]) }}"
-                    {{ $user->status == 0 ? 'disabled' : '' }}
+                    {{ $user->status->isInactive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-off"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>

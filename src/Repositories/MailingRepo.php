@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Repositories;
 
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Mailing;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MailingRepo
@@ -65,7 +66,7 @@ class MailingRepo
                     ->whereTime('activation_at', '<=', $this->carbon->now()->format('H:i:s'));
             })
             ->scheduled()
-            ->update(['status' => Mailing::ACTIVE]);
+            ->update(['status' => Status::ACTIVE]);
     }
 
     /**
@@ -80,7 +81,7 @@ class MailingRepo
                 $query->unsent();
             })
             ->update([
-                'status' => Mailing::INACTIVE,
+                'status' => Status::INACTIVE,
                 'activation_at' => null
             ]);
     }
@@ -96,6 +97,6 @@ class MailingRepo
             ->whereHas('emails', function ($query) {
                 $query->unsent();
             })
-            ->update(['status' => Mailing::INPROGRESS]);
+            ->update(['status' => Status::INPROGRESS]);
     }
 }

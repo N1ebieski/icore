@@ -150,15 +150,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
     public function delete(): bool
     {
         return $this->db->transaction(function () {
-            $delete = $this->comment->delete();
-
-            if ($delete === true) {
-                // Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-                // do it automatically
-                $this->decrement();
-            }
-
-            return $delete;
+            return $this->comment->delete();
         });
     }
 
@@ -187,20 +179,5 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
         });
 
         return $collection;
-    }
-
-    /**
-     * Decrement position of siblings by 1. ClosureTable has a bug and doesn't
-     * do it automatically
-     * @return bool [description]
-     */
-    private function decrement(): bool
-    {
-        return $this->db->transaction(function () {
-            return $this->comment->where([
-                ['parent_id', $this->comment->parent_id],
-                ['position', '>', $this->comment->position]
-            ])->decrement('position');
-        });
     }
 }

@@ -9,6 +9,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 
+/**
+ * @property Page $page
+ */
 class CreateRequest extends FormRequest
 {
     /**
@@ -18,14 +21,14 @@ class CreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->page->comment === Page::WITHOUT_COMMENT) {
+        if ($this->page->comment->isInactive()) {
             App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
                 'Adding comments has been disabled for this page.'
             );
         }
 
-        return $this->page->status === Page::ACTIVE;
+        return $this->page->status->isActive();
     }
 
     protected function prepareForValidation()

@@ -46,7 +46,6 @@ class LinkController
     public function create(string $type, CreateRequest $request): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.link.create', [
                 'type' => $type,
             ])->render()
@@ -63,11 +62,11 @@ class LinkController
      */
     public function store(string $type, Link $link, StoreRequest $request): JsonResponse
     {
-        $link->makeService()->create($request->validated() + ['type' => $type]);
+        $link->makeService()->create($request->validated());
 
         $request->session()->flash('success', Lang::get('icore::links.success.store'));
 
-        return Response::json(['success' => '' ]);
+        return Response::json([]);
     }
 
     /**
@@ -79,7 +78,6 @@ class LinkController
     public function edit(Link $link): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.link.edit', [
                 'link' => $link->loadAncestorsWithoutSelf(),
             ])->render()
@@ -98,7 +96,6 @@ class LinkController
         $link->makeService()->update($request->validated());
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.link.partials.link', [
                 'link' => $link,
             ])->render()
@@ -113,7 +110,6 @@ class LinkController
     public function editPosition(Link $link): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.link.edit_position', [
                 'link' => $link,
                 'siblings_count' => $link->countSiblings()
@@ -132,7 +128,6 @@ class LinkController
         $link->makeService()->updatePosition($request->only('position'));
 
         return Response::json([
-            'success' => '',
             'siblings' => $link->makeRepo()->getSiblingsAsArray()
         ]);
     }
@@ -147,6 +142,6 @@ class LinkController
     {
         $link->makeService()->delete();
 
-        return Response::json(['success' => '']);
+        return Response::json([]);
     }
 }

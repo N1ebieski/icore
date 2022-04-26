@@ -21,7 +21,6 @@ class UserResource extends JsonResource
         parent::__construct($user);
     }
 
-
     /**
      * Transform the resource into an array.
      *
@@ -50,14 +49,14 @@ class UserResource extends JsonResource
                 }
             ),
             'status' => [
-                'value' => $this->status,
+                'value' => $this->status->getValue(),
                 'label' => Lang::get("icore::users.status.{$this->status}")
             ],
             $this->mergeWhen(
                 optional($request->user())->can('view', $this->resource),
                 function () {
                     return [
-                        'marketing' => $this->marketing
+                        'marketing' => $this->marketing->getValue()
                     ];
                 }
             ),

@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Repositories;
 
 use N1ebieski\ICore\Models\Link;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\ValueObjects\Link\Type;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -94,7 +95,7 @@ class LinkRepo
      */
     public function getLinksByComponent(array $component): Collection
     {
-        return $this->link->where('type', 'link')
+        return $this->link->where('type', Type::LINK)
             ->when($component['home'] === true, function ($query) {
                 $query->whereDoesntHave('categories')
                     ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {

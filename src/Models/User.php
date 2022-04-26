@@ -12,8 +12,10 @@ use N1ebieski\ICore\Services\UserService;
 use N1ebieski\ICore\Repositories\UserRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use N1ebieski\ICore\Models\Traits\HasApiTokens;
+use N1ebieski\ICore\ValueObjects\User\Marketing;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -23,6 +25,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use N1ebieski\ICore\Database\Factories\User\UserFactory;
 
+/**
+ * @property Status $status
+ * @property Marketing $marketing
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
@@ -35,36 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const WITHOUT_MARKETING = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const WITH_MARKETING = 1;
-
-    /**
-     * [private description]
-     * @var bool
-     */
-    private $pivotEvent = false;
 
     /**
      * [protected description]
@@ -113,8 +89,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $attributes = [
-        'status' => self::ACTIVE,
-        'marketing' => 0
+        'status' => Status::ACTIVE,
+        'marketing' => Marketing::INACTIVE
     ];
 
     /**
@@ -124,8 +100,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'id' => 'integer',
-        'status' => 'integer',
-        'marketing' => 'integer',
+        'status' => \N1ebieski\ICore\Casts\User\StatusCast::class,
+        'marketing' => \N1ebieski\ICore\Casts\User\MarketingCast::class,
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
@@ -213,7 +189,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeMarketing(Builder $query): Builder
     {
-        return $query->where('marketing', static::WITH_MARKETING);
+        return $query->where('marketing', Marketing::ACTIVE);
     }
 
     /**
@@ -224,7 +200,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', static::ACTIVE);
+        return $query->where('status', Status::ACTIVE);
     }
 
     // Factories

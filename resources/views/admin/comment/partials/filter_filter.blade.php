@@ -89,16 +89,16 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $report::REPORTED }}" 
-            {{ ($filter['report'] === $report::REPORTED) ? 'selected' : '' }}
+            value="{{ Report\Reported::ACTIVE }}" 
+            {{ ($filter['report'] === Report\Reported::ACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::filter.report.'.$report::REPORTED) }}
+            {{ trans('icore::filter.report.'.Report\Reported::ACTIVE) }}
         </option>
         <option 
-            value="{{ $report::UNREPORTED }}" 
-            {{ ($filter['report'] === $report::UNREPORTED) ? 'selected' : '' }}
+            value="{{ Report\Reported::INACTIVE }}" 
+            {{ ($filter['report'] === Report\Reported::INACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::filter.report.'.$report::UNREPORTED) }}
+            {{ trans('icore::filter.report.'.Report\Reported::INACTIVE) }}
         </option>
     </select>
 </div>
