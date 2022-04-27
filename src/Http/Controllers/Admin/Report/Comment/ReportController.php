@@ -21,7 +21,6 @@ class ReportController implements Polymorphic
         $reports = $comment->reports()->with('user:id,name')->get();
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.report.show', [
                 'reports' => $reports,
                 'model' => $comment
@@ -40,9 +39,8 @@ class ReportController implements Polymorphic
         $comment->reports()->delete();
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.comment.partials.comment', [
-                'comment' => $comment->load('morph:id,title')
+                'comment' => $comment->load('morph')
             ])->render()
         ]);
     }

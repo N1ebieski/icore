@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
 
+/**
+ * @property Post $post
+ */
 class StoreRequest extends FormRequest
 {
     use CaptchaExtended;
@@ -90,7 +93,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'integer',
                 Rule::exists('comments', 'id')->where(function ($query) {
-                    $query->where('status', Comment::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 }),
             ]
         ], $this->prepareCaptchaRules());

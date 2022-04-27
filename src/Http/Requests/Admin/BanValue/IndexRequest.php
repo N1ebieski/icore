@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request as BaseRequest;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 
 class IndexRequest extends FormRequest
 {
@@ -54,7 +55,12 @@ class IndexRequest extends FormRequest
             'filter' => 'array|no_js_validation',
             'filter.except' => 'bail|filled|array',
             'filter.except.*' => 'bail|integer',
-            'filter.type' => 'required|string|in:ip,word',
+            'filter.type' => [
+                'bail',
+                'required',
+                'string',
+                Rule::in([Type::IP, Type::WORD])
+            ],
             'filter.search' => 'nullable|string|min:3|max:255',
             'filter.orderby' => [
                 'nullable',

@@ -7,8 +7,11 @@ use N1ebieski\ICore\Models\Post;
 use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
+/**
+ * @property Post $post
+ */
 class CreateRequest extends FormRequest
 {
     /**
@@ -40,7 +43,7 @@ class CreateRequest extends FormRequest
                 'required',
                 'integer',
                 Rule::exists('comments', 'id')->where(function ($query) {
-                    $query->where('status', Comment::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 }),
             ]
         ];

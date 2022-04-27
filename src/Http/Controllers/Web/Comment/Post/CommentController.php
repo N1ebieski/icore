@@ -5,11 +5,12 @@ namespace N1ebieski\ICore\Http\Controllers\Web\Comment\Post;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 use N1ebieski\ICore\Http\Requests\Web\Comment\Post\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Web\Comment\Post\CreateRequest;
 use N1ebieski\ICore\Events\Web\Comment\StoreEvent as CommentStoreEvent;
@@ -27,7 +28,6 @@ class CommentController implements PostPolymorphic
     public function create(Post $post, CreateRequest $request): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::web.comment.create', [
                 'model' => $post,
                 'parent_id' => $request->get('parent_id')
@@ -51,9 +51,9 @@ class CommentController implements PostPolymorphic
         Event::dispatch(App::make(CommentStoreEvent::class, ['comment' => $comment]));
 
         return Response::json([
-            'success' => $comment->status === Comment::ACTIVE ?
-                null : Lang::get('icore::comments.success.store.' . Comment::INACTIVE),
-            'view' => $comment->status === Comment::ACTIVE ?
+            'success' => $comment->status->isActive() ?
+                null : Lang::get('icore::comments.success.store.' . Status::INACTIVE),
+            'view' => $comment->status->isActive() ?
                 View::make('icore::web.comment.partials.comment', [
                     'comment' => $comment
                 ])->render() : null

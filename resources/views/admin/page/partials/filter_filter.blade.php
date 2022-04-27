@@ -1,5 +1,3 @@
-@inject('page', 'N1ebieski\ICore\Models\Page\Page')
-
 @component('icore::admin.partials.modal')
 
 @slot('modal_id', 'filter-modal')

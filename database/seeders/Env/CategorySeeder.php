@@ -5,9 +5,6 @@ namespace N1ebieski\ICore\Database\Seeders\Env;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\Category\Post\Category;
 
-/**
- * [CategorySeeder description]
- */
 class CategorySeeder extends Seeder
 {
     /**
@@ -34,7 +31,7 @@ class CategorySeeder extends Seeder
             }
 
             for ($i = 0; $i < $loop; $i++) {
-                $category = factory(Category::class)->create([
+                $category = Category::makeFactory()->create([
                     'parent_id' => $parent_id
                 ]);
 

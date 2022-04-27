@@ -97,6 +97,11 @@ class Schema700 implements SchemaInterface
                     'type' => 'replace',
                     'search' => '/Page::INACTIVE/',
                     'to' => 'Status::INACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Comment::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
                 ]
             ]
         ],
@@ -171,6 +176,16 @@ class Schema700 implements SchemaInterface
                     'type' => 'replace',
                     'search' => '/\$page->comment\s*={2,3}\s*true/',
                     'to' => '$page->comment->isActive()'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/\(bool\)\$comment->censored\s*={2,3}\s*true/',
+                    'to' => '$comment->censored->isActive()'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/\$comment->censored\s*={2,3}\s*true/',
+                    'to' => '$comment->censored->isActive()'
                 ]
             ]
         ],
@@ -234,6 +249,15 @@ class Schema700 implements SchemaInterface
                 [
                     'type' => 'removeFirst',
                     'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Page\\\Page;\\n*/'
+                ],
+                [
+                    'type' => 'afterFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Comment\\\Comment;/',
+                    'to' => 'use N1ebieski\ICore\ValueObjects\Comment\Status;'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Comment\\\Comment;\\n*/'
                 ]
             ]
         ]

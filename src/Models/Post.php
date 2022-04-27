@@ -20,7 +20,6 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\ValueObjects\Post\Status;
-use N1ebieski\ICore\ValueObjects\Post\Comment;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
@@ -31,6 +30,7 @@ use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
+use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 
 /**
  * @property SeoNofollow $seo_nofollow
@@ -86,7 +86,7 @@ class Post extends Model
      * @var array
      */
     protected $attributes = [
-        'comment' => Comment::ACTIVE,
+        'comment' => Commentable::ACTIVE,
         'status' => Status::INACTIVE,
         'seo_noindex' => SeoNoindex::INACTIVE,
         'seo_nofollow' => SeoNofollow::INACTIVE

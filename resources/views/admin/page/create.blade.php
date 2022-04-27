@@ -4,8 +4,6 @@
     'keys' => [trans('icore::pages.route.create')]
 ])
 
-@inject('page', 'N1ebieski\ICore\Models\Page\Page')
-
 @section('breadcrumb')
 <li class="breadcrumb-item">
     <a 

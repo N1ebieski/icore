@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Link\Type;
 
 class CreateRequest extends FormRequest
 {
@@ -17,6 +19,20 @@ class CreateRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->route('type')) {
+            $this->merge([
+                'type' => $this->route('type')
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -24,15 +40,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'bail|required|string|in:link,backlink',
+            'type' => [
+                'bail',
+                'required',
+                'string',
+                Rule::in([Type::LINK, Type::BACKLINK])
+            ]
         ];
-    }
-
-    public function all($keys = null)
-    {
-        $data = parent::all($keys);
-        $data['type'] = $this->route('type');
-
-        return $data;
     }
 }

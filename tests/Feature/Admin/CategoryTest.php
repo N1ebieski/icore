@@ -109,7 +109,7 @@ class CategoryTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'ancestors', 'descendants']);
+        $response->assertOk()->assertJsonStructure(['ancestors', 'descendants']);
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -158,7 +158,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.edit', [$category->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString(route('admin.category.update', [$category->id]), $response->getData()->view);
         $this->assertStringContainsString($category->name, $response->getData()->view);
     }
@@ -221,7 +221,7 @@ class CategoryTest extends TestCase
             'name' => '<b>Kategoria</b> <script>Testowa</script>'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('Kategoria Testowa', $response->getData()->view);
 
         $this->assertDatabaseHas('categories', [
@@ -246,7 +246,7 @@ class CategoryTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('Kategoria Testowa', $response->getData()->view);
 
         $this->assertDatabaseHas('categories', [
@@ -288,7 +288,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.post.create'));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString(route('admin.category.post.store'), $response->getData()->view);
     }
 
@@ -320,7 +320,7 @@ class CategoryTest extends TestCase
             'name' => '<b>Kategoria</b> <script>OK</script>'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('categories', [
@@ -343,7 +343,7 @@ class CategoryTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
         $response->assertSessionHas('success');
 
         $category = Category::where([
@@ -421,7 +421,7 @@ class CategoryTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
         $response->assertSessionHas('success');
 
         $category = Category::where([
@@ -482,7 +482,7 @@ class CategoryTest extends TestCase
 
         $response = $this->delete(route('admin.category.destroy', [$category->id]), []);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('categories', [
             'id' => $category->id,
@@ -586,7 +586,7 @@ class CategoryTest extends TestCase
 
         $response = $this->get(route('admin.category.edit_position', [$category->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('value="' . $category->position . '"', $response->getData()->view);
         $this->assertStringContainsString(route('admin.category.update_position', [$category->id]), $response->getData()->view);
     }

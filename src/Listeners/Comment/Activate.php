@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Listeners\Comment;
 
 use Illuminate\Contracts\Auth\Guard as Auth;
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
 class Activate
 {
@@ -33,7 +33,7 @@ class Activate
     public function handle($event)
     {
         if ($this->auth->user()->can('web.comments.create')) {
-            $event->comment->update(['status' => Comment::ACTIVE]);
+            $event->comment->update(['status' => Status::ACTIVE]);
         }
     }
 }

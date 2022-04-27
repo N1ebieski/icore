@@ -36,6 +36,10 @@ class CommentCast implements CastsAttributes
             $value = Comment::fromString($value);
         }
 
+        if (is_int($value)) {
+            $value = new Comment($value);
+        }
+
         if (!$value instanceof Comment) {
             throw new \InvalidArgumentException('The given value is not a Comment instance');
         }

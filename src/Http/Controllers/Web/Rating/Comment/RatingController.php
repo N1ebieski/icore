@@ -26,7 +26,6 @@ class RatingController implements CommentPolymorphic
             ->createOrUpdateOrDelete($request->only('rating'));
 
         return Response::json([
-            'success' => '',
             'sum_rating' => (int)$comment->ratings->sum('rating')
         ]);
     }

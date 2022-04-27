@@ -7,9 +7,6 @@ use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 
-/**
- * [CommentsSeeder description]
- */
 class CommentsSeeder extends Seeder
 {
     /**
@@ -40,11 +37,9 @@ class CommentsSeeder extends Seeder
             }
 
             for ($i = 0; $i < $loop; $i++) {
-                $comment = factory(Comment::class)->make();
-                $comment->parent_id = $parent_id;
-                $comment->morph()->associate($post);
-                $comment->user()->associate($users->random()->id);
-                $comment->save();
+                $comment = Comment::makeFactory()->for($post, 'morph')->for($users->random(), 'user')->create([
+                    'parent_id' => $parent_id
+                ]);
 
                 $depth = $comment->real_depth + 1;
 

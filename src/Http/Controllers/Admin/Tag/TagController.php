@@ -45,7 +45,6 @@ class TagController
     public function create(): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.tag.create')->render()
         ]);
     }
@@ -63,7 +62,7 @@ class TagController
 
         $request->session()->flash('success', trans('icore::tags.success.store'));
 
-        return Response::json(['success' => '' ]);
+        return Response::json([]);
     }
 
     /**
@@ -75,7 +74,6 @@ class TagController
     public function edit(Tag $tag): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.tag.edit', [
                 'tag' => $tag,
             ])->render()
@@ -95,7 +93,6 @@ class TagController
         $tag->makeService()->update($request->validated());
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.tag.partials.tag', [
                 'tag' => $tag
             ])->render()
@@ -112,7 +109,7 @@ class TagController
     {
         $tag->makeService()->delete();
 
-        return Response::json(['success' => '']);
+        return Response::json([]);
     }
 
     /**

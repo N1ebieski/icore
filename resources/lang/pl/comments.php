@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
 return [
     'post' => [
@@ -11,7 +11,7 @@ return [
     ],
     'success' => [
         'store' => [
-            Comment::INACTIVE => 'Komentarz został dodany i oczekuje na moderację.'
+            Status::INACTIVE => 'Komentarz został dodany i oczekuje na moderację.'
         ],
         'destroy_global' => 'Pomyślnie usunięto :affected komentarzy wraz z odpowiedziami.',
     ],

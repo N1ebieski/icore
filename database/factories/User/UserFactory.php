@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\ValueObjects\Role\Name;
 use N1ebieski\ICore\ValueObjects\User\Status;
+use N1ebieski\ICore\ValueObjects\User\Marketing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
@@ -59,7 +60,7 @@ class UserFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'marketing' => true
+                'marketing' => Marketing::ACTIVE
             ];
         });
     }

@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\View\Composers\Admin;
 
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\View\Composers\Composer;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
 class SidebarComposer extends Composer
 {
@@ -29,7 +30,7 @@ class SidebarComposer extends Composer
     public function __construct(Comment $comment)
     {
         $this->comments_inactive_count = $comment->makeRepo()->countByModelTypeAndStatus()
-            ->where('status', $comment::INACTIVE);
+            ->where('status', Status::INACTIVE);
 
         $this->comments_reported_count = $comment->makeRepo()->countReportedByModelType();
     }

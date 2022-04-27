@@ -5,6 +5,9 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Comment;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
+use N1ebieski\ICore\ValueObjects\Report\Reported;
+use N1ebieski\ICore\ValueObjects\Comment\Censored;
 
 class IndexRequest extends FormRequest
 {
@@ -33,10 +36,28 @@ class IndexRequest extends FormRequest
             'filter.except' => 'bail|filled|array',
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
-            'filter.status' => 'bail|nullable|integer|in:0,1|no_js_validation',
+            'filter.status' => [
+                'bail',
+                'nullable',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE]),
+                'no_js_validation'
+            ],
             'filter.author' => 'bail|nullable|integer|exists:users,id|no_js_validation',
-            'filter.censored' => 'bail|nullable|integer|in:0,1|no_js_validation',
-            'filter.report' => 'bail|nullable|integer|in:0,1|no_js_validation',
+            'filter.status' => [
+                'bail',
+                'nullable',
+                'integer',
+                Rule::in([Censored::ACTIVE, Censored::INACTIVE]),
+                'no_js_validation'
+            ],
+            'filter.status' => [
+                'bail',
+                'nullable',
+                'integer',
+                Rule::in([Reported::ACTIVE, Reported::INACTIVE]),
+                'no_js_validation'
+            ],
             'filter.orderby' => [
                 'bail',
                 'nullable',

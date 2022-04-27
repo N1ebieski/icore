@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 
 class IndexRequest extends FormRequest
 {
@@ -68,7 +69,13 @@ class IndexRequest extends FormRequest
             'filter.except' => 'bail|filled|array',
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
-            'filter.status' => 'bail|nullable|integer|in:0,1|no_js_validation',
+            'filter.status' => [
+                'bail',
+                'nullable',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE]),
+                'no_js_validation'
+            ],
             'filter.parent' => 'bail|nullable|integer|exists:categories,id|no_js_validation',
             'filter.orderby' => [
                 'bail',

@@ -3,7 +3,6 @@
 namespace N1ebieski\ICore\Http\Requests\Api\User;
 
 use Illuminate\Validation\Rule;
-use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\ValueObjects\User\Status;

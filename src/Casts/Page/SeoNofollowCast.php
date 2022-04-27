@@ -36,6 +36,10 @@ class SeoNofollowCast implements CastsAttributes
             $value = SeoNofollow::fromString($value);
         }
 
+        if (is_int($value)) {
+            $value = new SeoNofollow($value);
+        }
+
         if (!$value instanceof SeoNofollow) {
             throw new \InvalidArgumentException('The given value is not a SeoNofollow instance');
         }

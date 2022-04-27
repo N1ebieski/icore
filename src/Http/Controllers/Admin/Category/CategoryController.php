@@ -55,7 +55,6 @@ class CategoryController implements Polymorphic
     public function create(Category $category, CreateRequest $request): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.category.create', App::make(CreateViewModel::class, [
                 'category' => $category
             ]))->render()
@@ -84,7 +83,7 @@ class CategoryController implements Polymorphic
             )
         );
 
-        return Response::json(['success' => '' ]);
+        return Response::json([]);
     }
 
     /**
@@ -109,7 +108,7 @@ class CategoryController implements Polymorphic
             )
         );
 
-        return Response::json(['success' => '' ]);
+        return Response::json([]);
     }
 
     /**
@@ -122,7 +121,6 @@ class CategoryController implements Polymorphic
     public function edit(Category $category, EditLoad $load): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.category.edit', [
                 'category' => $category
             ])->render()
@@ -141,7 +139,6 @@ class CategoryController implements Polymorphic
         $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.category.partials.category', [
                 // Niezbyt ładny hook, ale trzeba na nowo pobrać ancestory
                 'category' => $category->resolveRouteBinding($category->id),
@@ -160,7 +157,6 @@ class CategoryController implements Polymorphic
         $category->siblings_count = $category->countSiblings() + 1;
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.category.edit_position', [
                 'category' => $category
             ])->render()
@@ -178,7 +174,6 @@ class CategoryController implements Polymorphic
         $category->makeService()->updatePosition($request->only('position'));
 
         return Response::json([
-            'success' => '',
             'siblings' => $category->makeRepo()->getSiblingsAsArray() + [$category->id => $category->position],
         ]);
     }
@@ -197,8 +192,7 @@ class CategoryController implements Polymorphic
         $categoryRepo = $category->makeRepo();
 
         return Response::json([
-            'success' => '',
-            'status' => $category->status,
+            'status' => $category->status->getValue(),
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
             'ancestors' => $categoryRepo->getAncestorsAsArray(),
@@ -220,7 +214,6 @@ class CategoryController implements Polymorphic
         $category->makeService()->delete();
 
         return Response::json([
-            'success' => '',
             'descendants' => $descendants,
         ]);
     }

@@ -48,7 +48,6 @@ class BanValueController
     public function edit(BanValue $banValue): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.banvalue.edit', [
                 'ban' => $banValue,
             ])->render()
@@ -67,7 +66,6 @@ class BanValueController
         $banValue->update($request->only(['value']));
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.banvalue.partials.ban', [
                 'ban' => $banValue,
             ])->render()
@@ -84,7 +82,6 @@ class BanValueController
     public function create(string $type, CreateRequest $request): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.banvalue.create', [
                 'type' => $type,
             ])->render()
@@ -108,7 +105,7 @@ class BanValueController
 
         $request->session()->flash('success', Lang::get('icore::bans.value.success.store'));
 
-        return Response::json(['success' => '' ]);
+        return Response::json([]);
     }
 
     /**
@@ -121,7 +118,7 @@ class BanValueController
     {
         $banValue->delete();
 
-        return Response::json(['success' => '']);
+        return Response::json([]);
     }
 
     /**

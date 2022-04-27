@@ -1,6 +1,6 @@
 <?php
 
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
 return [
     'post' => [
@@ -11,7 +11,7 @@ return [
     ],
     'success' => [
         'store' => [
-            Comment::INACTIVE => 'A comment has been added and awaits approval.'
+            Status::INACTIVE => 'A comment has been added and awaits approval.'
         ],
         'destroy_global' => 'Successfully deleted :affected comments along with answers.',
     ],

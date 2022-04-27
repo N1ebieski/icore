@@ -3,11 +3,15 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Comment\Post;
 
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\Models\Post;
 use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
+/**
+ * @property Post $post
+ */
 class StoreRequest extends FormRequest
 {
     /**
@@ -40,7 +44,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'integer',
                 Rule::exists('comments', 'id')->where(function ($query) {
-                    $query->where('status', Comment::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 }),
             ]
         ];

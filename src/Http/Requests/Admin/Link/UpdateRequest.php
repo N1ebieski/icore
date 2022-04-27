@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 
 class UpdateRequest extends FormRequest
 {
@@ -66,7 +66,7 @@ class UpdateRequest extends FormRequest
                 'integer',
                 'distinct',
                 Rule::exists('categories', 'id')->where(function ($query) {
-                    $query->where('status', Category::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 })
             ],
         ];

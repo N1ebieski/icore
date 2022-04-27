@@ -87,7 +87,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit', [$page->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString($page->content, $response->getData()->view);
         $this->assertStringContainsString(route('admin.page.update', [$page->id]), $response->getData()->view);
     }
@@ -152,7 +152,7 @@ class PageTest extends TestCase
             'content_html' => 'Ten page został zaktualizowany.'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString('Ten page został zaktualizowany.', $response->getData()->view);
         $this->assertDatabaseHas('pages', [
@@ -374,7 +374,7 @@ class PageTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'ancestors', 'descendants']);
+        $response->assertOk()->assertJsonStructure(['ancestors', 'descendants']);
 
         $this->assertDatabaseHas('pages', [
             'id' => $page->id,
@@ -427,7 +427,7 @@ class PageTest extends TestCase
 
         $response = $this->delete(route('admin.page.destroy', [$page->id]), []);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('pages', [
             'id' => $page->id,
@@ -651,7 +651,7 @@ class PageTest extends TestCase
 
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('value="' . $page->position . '"', $response->getData()->view);
         $this->assertStringContainsString(route('admin.page.update_position', [$page->id]), $response->getData()->view);
     }

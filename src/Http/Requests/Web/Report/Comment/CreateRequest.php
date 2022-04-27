@@ -5,6 +5,9 @@ namespace N1ebieski\ICore\Http\Requests\Web\Report\Comment;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Comment\Comment;
 
+/**
+ * @property Comment $comment
+ */
 class CreateRequest extends FormRequest
 {
     /**
@@ -14,7 +17,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->comment->status === Comment::ACTIVE;
+        return $this->comment->status->isActive();
     }
 
     /**

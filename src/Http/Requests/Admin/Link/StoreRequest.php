@@ -4,7 +4,8 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\ValueObjects\Link\Type;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 
 class StoreRequest extends FormRequest
 {
@@ -62,7 +63,12 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'bail|required|string|in:link,backlink',
+            'type' => [
+                'bail',
+                'required',
+                'string',
+                Rule::in([Type::LINK, Type::BACKLINK])
+            ],
             'name' => 'bail|required|string|between:3,255',
             'url' => [
                 'bail',
@@ -82,7 +88,7 @@ class StoreRequest extends FormRequest
                 'integer',
                 'distinct',
                 Rule::exists('categories', 'id')->where(function ($query) {
-                    $query->where('status', Category::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 })
             ],
         ];

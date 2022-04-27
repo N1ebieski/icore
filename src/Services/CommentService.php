@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
@@ -128,12 +129,12 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
 
             if ($update === true) {
                 // Deactivates parent comment, deactivates all descendants
-                if ((int)$attributes['status'] === Comment::INACTIVE) {
+                if ($attributes['status'] == Status::INACTIVE) {
                     $this->comment->descendants()->update(['status' => $attributes['status']]);
                 }
 
                 // Activating child comment, activates all ancestors
-                if ((int)$attributes['status'] === Comment::ACTIVE) {
+                if ($attributes['status'] == Status::ACTIVE) {
                     $this->comment->ancestors()->update(['status' => $attributes['status']]);
                 }
             }
@@ -151,6 +152,28 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
     {
         return $this->db->transaction(function () {
             return $this->comment->delete();
+        });
+    }
+
+    /**
+     * [deleteGlobal description]
+     * @param  array $ids [description]
+     * @return int        [description]
+     */
+    public function deleteGlobal(array $ids): int
+    {
+        return $this->db->transaction(function () use ($ids) {
+            $deleted = 0;
+
+            foreach ($ids as $id) {
+                if ($c = $this->comment->find($id)) {
+                    $c->makeService()->delete();
+
+                    $deleted += 1;
+                }
+            }
+
+            return $deleted;
         });
     }
 

@@ -8,10 +8,12 @@ use N1ebieski\ICore\Cache\SessionCache;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;
+use N1ebieski\ICore\ValueObjects\Post\Status as PostStatus;
+use N1ebieski\ICore\ValueObjects\Comment\Status as CommentStatus;
+use N1ebieski\ICore\ValueObjects\Category\Status as CategoryStatus;
 
 class StatComponent implements Htmlable
 {
@@ -110,13 +112,13 @@ class StatComponent implements Htmlable
     {
         return $this->view->make('icore::web.components.stat', [
             'countCategories' => $this->category->makeCache()->rememberCountByStatus()
-                ->firstWhere('status', $this->category::ACTIVE),
+                ->firstWhere('status', CategoryStatus::ACTIVE),
 
             'countPosts' => $this->post->makeCache()->rememberCountByStatus()
-                ->firstWhere('status', Status::ACTIVE),
+                ->firstWhere('status', PostStatus::ACTIVE),
 
             'countComments' => $this->comment->makeCache()->rememberCountByModelTypeAndStatus()
-                ->where('status', $this->comment::ACTIVE),
+                ->where('status', CommentStatus::ACTIVE),
 
             'lastActivity' => $this->post->makeCache()->rememberLastActivity(),
 

@@ -8,6 +8,7 @@ use N1ebieski\ICore\Crons\PostCron;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -82,7 +83,7 @@ class PostTest extends TestCase
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => Post\Status::SCHEDULED
+            'status' => Status::SCHEDULED
         ]);
 
         // Uruchamiamy zadanie crona bezpośrednio, bo przez schedule:run ma ustalony delay
@@ -92,7 +93,7 @@ class PostTest extends TestCase
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => Post\Status::ACTIVE
+            'status' => Status::ACTIVE
         ]);
     }
 }

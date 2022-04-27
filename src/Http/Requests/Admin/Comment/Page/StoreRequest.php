@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Comment\Page\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 
 /**
  * @property Page $page
@@ -44,7 +44,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'integer',
                 Rule::exists('comments', 'id')->where(function ($query) {
-                    $query->where('status', Comment::ACTIVE);
+                    $query->where('status', Status::ACTIVE);
                 }),
             ]
         ];

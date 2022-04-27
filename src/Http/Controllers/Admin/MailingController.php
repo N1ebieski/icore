@@ -127,7 +127,6 @@ class MailingController
         $mailing->makeService()->reset();
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.mailing.partials.mailing', [
                 'mailing' => $mailing
             ])->render()

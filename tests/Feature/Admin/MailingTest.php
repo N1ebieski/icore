@@ -243,7 +243,7 @@ class MailingTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('mailings', [
             'id' => $mailing->id,
@@ -302,7 +302,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.destroy', [$mailing->id]), []);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('mailings', [
             'id' => $mailing->id,
@@ -518,7 +518,7 @@ class MailingTest extends TestCase
 
         $response = $this->delete(route('admin.mailing.reset', [$mailing->id]), []);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseHas('mailings', [
             'id' => $mailing->id,

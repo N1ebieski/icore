@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Database\Factories\Comment;
 
-use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CommentFactory extends Factory
@@ -28,7 +28,7 @@ class CommentFactory extends Factory
         return [
             'content_html' => $content,
             'content' => $content,
-            'status' => rand(Comment::INACTIVE, Comment::ACTIVE)
+            'status' => rand(Status::INACTIVE, Status::ACTIVE)
         ];
     }
 
@@ -41,7 +41,7 @@ class CommentFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Comment::ACTIVE
+                'status' => Status::ACTIVE
             ];
         });
     }
@@ -55,7 +55,7 @@ class CommentFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Comment::INACTIVE
+                'status' => Status::INACTIVE
             ];
         });
     }

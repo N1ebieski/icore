@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\BanModel\User\BanModel;
 
-/**
- * [BansSeeder description]
- */
 class BansSeeder extends Seeder
 {
     /**

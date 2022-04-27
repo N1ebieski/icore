@@ -88,7 +88,6 @@ class PageController
         $page->siblings_count = $page->countSiblings() + 1;
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.page.edit_position', [
                 'page' => $page
             ])->render()
@@ -106,7 +105,6 @@ class PageController
         $page->makeService()->updatePosition($request->only('position'));
 
         return Response::json([
-            'success' => '',
             'siblings' => $page->makeRepo()->getSiblingsAsArray() + [$page->id => $page->position]
         ]);
     }
@@ -119,7 +117,6 @@ class PageController
     public function edit(Page $page): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.page.edit', ['page' => $page])->render()
         ]);
     }
@@ -150,7 +147,6 @@ class PageController
         $page->makeService()->update($request->only(['title', 'content_html']));
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.page.partials.page', [
                 'page' => $page->loadAncestorsExceptSelf()
             ])->render()
@@ -184,8 +180,7 @@ class PageController
         $pageRepo = $page->makeRepo();
 
         return Response::json([
-            'success' => '',
-            'status' => $page->status,
+            'status' => $page->status->getValue(),
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
             'ancestors' => $pageRepo->getAncestorsAsArray(),
@@ -206,7 +201,6 @@ class PageController
         $page->makeService()->delete();
 
         return Response::json([
-            'success' => '',
             'descendants' => $descendants
         ]);
     }

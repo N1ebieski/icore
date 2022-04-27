@@ -16,6 +16,11 @@ class StoreGlobalRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         if (!$this->has('parent_id') || $this->get('parent_id') == 0) {

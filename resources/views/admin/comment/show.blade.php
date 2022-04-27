@@ -52,11 +52,11 @@
             @endif
         </div>
         <div class="font-weight-bold">
-            @if ($comment->censored == true)
+            @if ($comment->censored->isActive())
             <em>
             @endif
             {!! $comment->content_as_html !!}
-            @if ($comment->censored == true)
+            @if ($comment->censored->isActive())
             </em
             >@endif
         </div>

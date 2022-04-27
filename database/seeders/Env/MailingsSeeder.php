@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Database\Seeders\Env;
 
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
-use Faker\Factory as Faker;
 
-/**
- * [MailingsSeeder description]
- */
 class MailingsSeeder extends Seeder
 {
     /**
@@ -22,7 +19,7 @@ class MailingsSeeder extends Seeder
     {
         $users = User::all();
 
-        factory(Mailing::class, 2)->create()
+        Mailing::makeFactory()->count(2)->create()
             ->each(function ($m) use ($users) {
 
                 /**
@@ -50,7 +47,6 @@ class MailingsSeeder extends Seeder
 
                 for ($i = 0; $i < 50; $i++) {
                     $models_email[] = $email = MailingEmail::make();
-                    //$email->mailing()->associate($m);
                     $email->email = Faker::create()->unique()->safeEmail;
                 }
 

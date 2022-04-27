@@ -123,7 +123,7 @@ class UserTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('users', [
             'id' => $us->id,
@@ -187,7 +187,7 @@ class UserTest extends TestCase
 
         $response = $this->delete(route('admin.user.destroy', [$us->id]), []);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('users', [
             'id' => $us->id,
@@ -319,7 +319,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.user.edit', [$us->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString($us->name, $response->getData()->view);
         $this->assertStringContainsString(route('admin.user.update', [$us->id]), $response->getData()->view);
     }
@@ -396,7 +396,7 @@ class UserTest extends TestCase
             'roles' => ['user']
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('email@bungoslawa.pl', $response->getData()->view);
 
         $this->assertDatabaseHas('users', [
@@ -432,7 +432,7 @@ class UserTest extends TestCase
 
         $response = $this->get(route('admin.user.create'));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString(route('admin.user.store'), $response->getData()->view);
     }
 
@@ -484,7 +484,7 @@ class UserTest extends TestCase
             'password_confirmation' => 'bungoslaw'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
         $response->assertSessionHas('success');
 
         $us = User::where([

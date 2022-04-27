@@ -94,7 +94,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('admin.post.edit', [$post->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString($post->content, $response->getData()->view);
         $this->assertStringContainsString(route('admin.post.update', [$post->id]), $response->getData()->view);
@@ -160,7 +160,7 @@ class PostTest extends TestCase
             'content_html' => 'Ten post został zaktualizowany.'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('Ten post został zaktualizowany.', $response->getData()->view);
 
         $this->assertDatabaseHas('posts', [
@@ -361,7 +361,7 @@ class PostTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
@@ -414,7 +414,7 @@ class PostTest extends TestCase
 
         $response = $this->delete(route('admin.post.destroy', [$post->id]), []);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('posts', [
             'id' => $post->id,

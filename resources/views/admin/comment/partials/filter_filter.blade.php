@@ -1,6 +1,3 @@
-@inject('comment', 'N1ebieski\ICore\Models\Comment\Comment')
-@inject('report', 'N1ebieski\ICore\Models\Report\Comment\Report')
-
 @component('icore::admin.partials.modal')
 
 @slot('modal_id', 'filter-modal')
@@ -37,16 +34,16 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $comment::ACTIVE }}" 
-            {{ ($filter['status'] === $comment::ACTIVE) ? 'selected' : '' }}
+            value="{{ Comment\Status::ACTIVE }}" 
+            {{ ($filter['status'] === Comment\Status::ACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::filter.status.'.$comment::ACTIVE) }}
+            {{ trans('icore::filter.status.'.Comment\Status::ACTIVE) }}
         </option>
         <option 
-            value="{{ $comment::INACTIVE }}" 
-            {{ ($filter['status'] === $comment::INACTIVE) ? 'selected' : '' }}
+            value="{{ Comment\Status::INACTIVE }}" 
+            {{ ($filter['status'] === Comment\Status::INACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::filter.status.'.$comment::INACTIVE) }}
+            {{ trans('icore::filter.status.'.Comment\Status::INACTIVE) }}
         </option>
     </select>
 </div>
@@ -63,16 +60,16 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $comment::CENSORED }}" 
-            {{ ($filter['censored'] === $comment::CENSORED) ? 'selected' : '' }}
+            value="{{ Comment\Censored::ACTIVE }}" 
+            {{ ($filter['censored'] === Comment\Censored::ACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::filter.censored.'.$comment::CENSORED) }}
+            {{ trans('icore::filter.censored.'.Comment\Censored::ACTIVE) }}
         </option>
         <option 
-            value="{{ $comment::UNCENSORED }}" 
-            {{ ($filter['censored'] === $comment::UNCENSORED) ? 'selected' : '' }}
+            value="{{ Comment\Censored::INACTIVE }}" 
+            {{ ($filter['censored'] === Comment\Censored::INACTIVE) ? 'selected' : '' }}
         >
-            {{ trans('icore::filter.censored.'.$comment::UNCENSORED) }}
+            {{ trans('icore::filter.censored.'.Comment\Censored::INACTIVE) }}
         </option>
     </select>
 </div>

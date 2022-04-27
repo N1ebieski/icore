@@ -12,8 +12,9 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\CommentRepo;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
-use Franzose\ClosureTable\Extensions\QueryBuilder;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
+use N1ebieski\ICore\ValueObjects\Comment\Censored;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,10 @@ use N1ebieski\ICore\Database\Factories\Comment\CommentFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
+/**
+ * @property Status $status
+ * @property Censored $censored
+ */
 class Comment extends Entity
 {
     use FullTextSearchable;
@@ -36,30 +41,6 @@ class Comment extends Entity
     use HasFactory;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const CENSORED = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const UNCENSORED = 0;
 
     /**
      * Indicates if the model should be timestamped.
@@ -102,8 +83,8 @@ class Comment extends Entity
      * @var array
      */
     protected $attributes = [
-        'status' => self::INACTIVE,
-        'censored' => self::UNCENSORED
+        'status' => Status::INACTIVE,
+        'censored' => Censored::INACTIVE
     ];
 
     /**
@@ -116,8 +97,8 @@ class Comment extends Entity
         'user_id' => 'integer',
         'model_id' => 'integer',
         'parent_id' => 'integer',
-        'status' => 'integer',
-        'censored' => 'integer',
+        'status' => \N1ebieski\ICore\Casts\Comment\StatusCast::class,
+        'censored' => \N1ebieski\ICore\Casts\Comment\CensoredCast::class,
         'position' => 'integer',
         'real_depth' => 'integer',
         'created_at' => 'datetime',
@@ -276,21 +257,12 @@ class Comment extends Entity
     // Checkers
 
     /**
-     * [isActive description]
-     * @return bool [description]
-     */
-    public function isActive(): bool
-    {
-        return $this->status === static::ACTIVE;
-    }
-
-    /**
      * [isCommentable description]
      * @return bool [description]
      */
     public function isCommentable(): bool
     {
-        return $this->isActive()
+        return $this->status->isActive()
             && $this->getRelation('morph') !== null
             && $this->getRelation('morph')->status->isActive()
             && $this->getRelation('morph')->comment->isActive();
@@ -399,7 +371,7 @@ class Comment extends Entity
      */
     public function scopeUncensored(Builder $query): Builder
     {
-        return $query->where('censored', static::UNCENSORED);
+        return $query->where('censored', Censored::INACTIVE);
     }
 
     /**
@@ -409,7 +381,7 @@ class Comment extends Entity
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', static::ACTIVE);
+        return $query->where('status', Status::ACTIVE);
     }
 
     /**
@@ -429,7 +401,7 @@ class Comment extends Entity
      */
     public function scopeInactive(Builder $query): Builder
     {
-        return $query->where('status', static::INACTIVE);
+        return $query->where('status', Status::INACTIVE);
     }
 
     // Loads

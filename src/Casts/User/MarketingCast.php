@@ -36,6 +36,10 @@ class MarketingCast implements CastsAttributes
             $value = Marketing::fromString($value);
         }
 
+        if (is_int($value)) {
+            $value = new Marketing($value);
+        }
+
         if (!$value instanceof Marketing) {
             throw new \InvalidArgumentException('The given value is not a Marketing instance');
         }

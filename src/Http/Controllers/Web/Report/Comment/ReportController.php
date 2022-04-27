@@ -24,7 +24,6 @@ class ReportController implements CommentPolymorphic
     public function create(Comment $comment, CreateRequest $request): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::web.report.create', [
                 'model' => $comment
             ])->render()

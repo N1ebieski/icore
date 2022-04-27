@@ -5,9 +5,26 @@ namespace N1ebieski\ICore\Http\Requests\Admin\BanModel\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
+use N1ebieski\ICore\Models\BanModel\User\BanModel;
 
 class StoreRequest extends FormRequest
 {
+    /**
+     * @var BanModel
+     */
+    protected $banModel;
+
+    /**
+     * Constructor.
+     * @param BanModel $banModel
+     */
+    public function __construct(BanModel $banModel)
+    {
+        parent::__construct();
+
+        $this->banModel = $banModel;
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -32,7 +49,7 @@ class StoreRequest extends FormRequest
                 'required_without_all:ip',
                 'exists:users,id',
                 Rule::unique('bans_models', 'model_id')->where(function ($query) {
-                    $query->where('model_type', \N1ebieski\ICore\Models\User::class);
+                    $query->where('model_type', $this->banModel->model_type);
                 })
             ],
             'ip' => [

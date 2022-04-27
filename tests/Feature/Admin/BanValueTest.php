@@ -51,7 +51,7 @@ class BanValueTest extends TestCase
 
         $response = $this->get(route('admin.banvalue.create', [Type::IP]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString(route('admin.banvalue.store', [Type::IP]), $response->getData()->view);
     }
 
@@ -109,7 +109,7 @@ class BanValueTest extends TestCase
             'value' => '22.222.22.22',
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
         $response->assertSessionHas(['success' => trans('icore::bans.value.success.store')]);
 
         $this->assertDatabaseHas('bans_values', [
@@ -201,7 +201,7 @@ class BanValueTest extends TestCase
 
         $response = $this->delete(route('admin.banvalue.destroy', [$banvalue->id]));
 
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('bans_values', [
             'id' => $banvalue->id,
@@ -305,7 +305,7 @@ class BanValueTest extends TestCase
 
         $response = $this->get(route('admin.banvalue.edit', [$banvalue->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString(route('admin.banvalue.update', [$banvalue->id]), $response->getData()->view);
         $this->assertStringContainsString($banvalue->value, $response->getData()->view);
     }
@@ -369,7 +369,7 @@ class BanValueTest extends TestCase
             'value' => $new_ip
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString($new_ip, $response->getData()->view);
 
         $this->assertDatabaseHas('bans_values', [

@@ -36,6 +36,10 @@ class SeoNoindexCast implements CastsAttributes
             $value = SeoNoindex::fromString($value);
         }
 
+        if (is_int($value)) {
+            $value = new SeoNoindex($value);
+        }
+
         if (!$value instanceof SeoNoindex) {
             throw new \InvalidArgumentException('The given value is not a SeoNoindex instance');
         }

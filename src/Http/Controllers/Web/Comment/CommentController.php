@@ -24,7 +24,6 @@ class CommentController implements Polymorphic
     public function edit(Comment $comment, EditRequest $request): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::web.comment.edit', [
                 'comment' => $comment
             ])->render()
@@ -43,7 +42,6 @@ class CommentController implements Polymorphic
         $comment->makeService()->update($request->only('content'));
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::web.comment.partials.comment', [
                 'comment' => $comment,
                 'post_id' => $comment->model_id
@@ -62,7 +60,6 @@ class CommentController implements Polymorphic
     public function take(Comment $comment, TakeRequest $request, TakeFilter $filter): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::web.comment.take', [
                 'comments' => $comment->makeService()
                     ->paginateChildrensByFilter($filter->all()),

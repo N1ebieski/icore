@@ -36,6 +36,10 @@ class SentCast implements CastsAttributes
             $value = Sent::fromString($value);
         }
 
+        if (is_int($value)) {
+            $value = new Sent($value);
+        }
+
         if (!$value instanceof Sent) {
             throw new \InvalidArgumentException('The given value is not a Status instance');
         }

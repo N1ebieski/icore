@@ -86,21 +86,21 @@
                 @endcan
                 @can('admin.categories.status')
                 <button 
-                    data-status="1" 
+                    data-status="{{ Category\Status::ACTIVE }}" 
                     type="button" 
                     class="btn btn-success status-category"
                     data-route="{{ route('admin.category.update_status', ['category' => $category->id]) }}"
-                    {{ $category->status == 1 ? 'disabled' : '' }}
+                    {{ $category->status->isActive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-on"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                 </button>
                 <button 
-                    data-status="0" 
+                    data-status="{{ Category\Status::INACTIVE }}" 
                     type="button" 
                     class="btn btn-warning status-category"
                     data-route="{{ route('admin.category.update_status', ['category' => $category->id]) }}"
-                    {{ $category->status == 0 ? 'disabled' : '' }}
+                    {{ $category->status->isInactive() ? 'disabled' : '' }}
                 >
                     <i class="fas fa-toggle-off"></i>
                     <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>

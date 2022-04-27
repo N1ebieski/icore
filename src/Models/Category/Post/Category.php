@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Models\Category\Post;
 
+use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Models\Category\Category as BaseCategory;
 use N1ebieski\ICore\Database\Factories\Category\Post\CategoryFactory;
@@ -17,7 +18,7 @@ class Category extends BaseCategory
      */
     protected $attributes = [
         'model_type' => \N1ebieski\ICore\Models\Post::class,
-        'status' => self::ACTIVE,
+        'status' => Status::ACTIVE
     ];
 
     /**

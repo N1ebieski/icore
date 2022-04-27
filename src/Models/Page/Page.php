@@ -127,7 +127,7 @@ class Page extends Entity
         'seo_noindex' => SeoNoindex::INACTIVE,
         'seo_nofollow' => SeoNofollow::INACTIVE,
         'status' => Status::INACTIVE,
-        'comment' => Comment::INACTIVE,
+        'comment' => Commentable::INACTIVE,
         'icon' => null
     ];
 

@@ -4,9 +4,6 @@ namespace N1ebieski\ICore\Database\Seeders\Env;
 
 use Illuminate\Database\Seeder;
 
-/**
- * [DatabaseSeeder description]
- */
 class EnvSeeder extends Seeder
 {
     /**

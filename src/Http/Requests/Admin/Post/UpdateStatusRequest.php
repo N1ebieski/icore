@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 
 class UpdateStatusRequest extends FormRequest
 {
@@ -24,7 +26,12 @@ class UpdateStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => 'required|integer|in:0,1'
+            'status' => [
+                'bail',
+                'required',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE])
+            ],
         ];
     }
 }

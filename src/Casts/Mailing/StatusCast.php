@@ -36,6 +36,10 @@ class StatusCast implements CastsAttributes
             $value = Status::fromString($value);
         }
 
+        if (is_int($value)) {
+            $value = new Status($value);
+        }
+
         if (!$value instanceof Status) {
             throw new \InvalidArgumentException('The given value is not a Status instance');
         }

@@ -2,8 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Page;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Page\Status;
 
 class StoreRequest extends FormRequest
 {
@@ -66,7 +68,12 @@ class StoreRequest extends FormRequest
             'seo_noindex' => 'boolean',
             'seo_nofollow' => 'boolean',
             'comment' => 'boolean',
-            'status' => 'required|in:0,1',
+            'status' => [
+                'bail',
+                'required',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE])
+            ],
             'parent_id' => 'nullable|integer|exists:pages,id|no_js_validation'
         ];
     }

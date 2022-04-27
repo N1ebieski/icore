@@ -13,6 +13,7 @@ use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Services\CategoryService;
 use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Repositories\CategoryRepo;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,9 @@ use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
+/**
+ * @property Category $category
+ */
 class Category extends Entity
 {
     use Sluggable;
@@ -33,18 +37,6 @@ class Category extends Entity
     use HasFixForPolymorphicClosureTable;
 
     // Configuration
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const ACTIVE = 1;
-
-    /**
-     * [public description]
-     * @var int
-     */
-    public const INACTIVE = 0;
 
     /**
      * Indicates if the model should be timestamped.
@@ -88,7 +80,7 @@ class Category extends Entity
      */
     protected $casts = [
         'id' => 'integer',
-        'status' => 'integer',
+        'status' => \N1ebieski\ICore\Casts\Category\StatusCast::class,
         'parent_id' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
@@ -116,7 +108,7 @@ class Category extends Entity
      * @var array
      */
     protected $attributes = [
-        'status' => self::ACTIVE,
+        'status' => Status::ACTIVE,
     ];
 
     /**
@@ -240,7 +232,7 @@ class Category extends Entity
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where("{$this->getTable()}.status", static::ACTIVE);
+        return $query->where("{$this->getTable()}.status", Status::ACTIVE);
     }
 
     /**

@@ -2,13 +2,10 @@
 
 namespace N1ebieski\ICore\Database\Seeders\Env;
 
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\Tag\Tag;
-use Faker\Factory as Faker;
 
-/**
- * [TagsSeeder description]
- */
 class TagsSeeder extends Seeder
 {
     /**
@@ -19,8 +16,10 @@ class TagsSeeder extends Seeder
     public function run()
     {
         for ($i = 0; $i < 20000; $i++) {
-            $tag = Tag::make();
-            $tag->name = Faker::create()->sentence(rand(1, 3));
+            $tag = Tag::makeFactory()->make([
+                'name' => Faker::create()->sentence(rand(1, 3))
+            ]);
+
             $tags_model[] = $tag->attributesToArray();
         }
 

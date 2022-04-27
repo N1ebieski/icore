@@ -40,7 +40,7 @@ class CommentTest extends TestCase
             ]
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString(route('web.comment.take', [$parent->id]), $response->getData()->view);
         $this->assertStringContainsString($comment[9]->content, $response->getData()->view);
@@ -122,7 +122,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.post.create', [$post->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString(route('web.comment.post.store', [$post->id]), $response->getData()->view);
     }
 
@@ -209,7 +209,7 @@ class CommentTest extends TestCase
             'g-recaptcha-response' => 'dsadasd'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
         $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
 
         $this->assertDatabaseHas('comments', [
@@ -256,7 +256,7 @@ class CommentTest extends TestCase
             'g-recaptcha-response' => 'dsadasd'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
 
@@ -313,7 +313,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('web.comment.edit', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString(route('web.comment.update', [$comment->id]), $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
@@ -385,7 +385,7 @@ class CommentTest extends TestCase
             'content' => '<b>Komentarz</b> został zaktualizowany. <script>dsadad</script>'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
 

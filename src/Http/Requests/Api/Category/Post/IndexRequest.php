@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Requests\Api\Category\Post;
 
 use Illuminate\Validation\Rule;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Http\Requests\Api\Category\IndexRequest as BaseIndexRequest;
 
@@ -37,13 +38,13 @@ class IndexRequest extends BaseIndexRequest
                 'bail',
                 'nullable',
                 'integer',
-                Rule::exists('categories', 'id')
+                Rule::exists($this->category->getTable(), $this->category->getKeyName())
                     ->where(function ($query) {
                         $query->where('model_type', $this->category->model_type)
                             ->when(
                                 !optional($this->user())->can('admin.categories.view'),
                                 function ($query) {
-                                    $query->where('status', Category::ACTIVE);
+                                    $query->where('status', Status::ACTIVE);
                                 }
                             );
                     })

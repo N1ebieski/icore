@@ -103,7 +103,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.show', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString($parent->content, $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
@@ -152,7 +152,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.post.create', [$post->id, 'parent_id' => $parent->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString(route('admin.comment.post.store', [$post->id]), $response->getData()->view);
     }
@@ -219,7 +219,7 @@ class CommentTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
         $this->assertDatabaseHas('comments', [
@@ -275,7 +275,7 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.edit', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString(route('admin.comment.update', [$comment->id]), $response->getData()->view);
         $this->assertStringContainsString($comment->content, $response->getData()->view);
@@ -345,7 +345,7 @@ class CommentTest extends TestCase
             'content' => '<b>Komentarz</b> został zaktualizowany. <script>dsadad</script>'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
         $this->assertDatabaseHas('comments', [
@@ -418,7 +418,7 @@ class CommentTest extends TestCase
             'status' => 0,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'ancestors', 'descendants']);
+        $response->assertOk()->assertJsonStructure(['ancestors', 'descendants']);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
@@ -490,7 +490,7 @@ class CommentTest extends TestCase
             'censored' => 1,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
@@ -546,7 +546,7 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->delete(route('admin.comment.destroy', [$comment->id]), []);
-        $response->assertOk()->assertJsonStructure(['success']);
+        $response->assertOk();
 
         $this->assertDatabaseMissing('comments', [
             'id' => $comment->id,

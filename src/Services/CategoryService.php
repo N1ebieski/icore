@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 use N1ebieski\ICore\Services\Interfaces\Creatable;
 use N1ebieski\ICore\Services\Interfaces\Deletable;
 use N1ebieski\ICore\Services\Interfaces\Updatable;
@@ -214,12 +215,12 @@ class CategoryService implements
 
             if ($update === true) {
                 // Deactivates parent category, deactivates all descendants
-                if ($attributes['status'] == Category::INACTIVE) {
+                if ($attributes['status'] == Status::INACTIVE) {
                     $this->category->descendants()->update(['status' => $attributes['status']]);
                 }
 
                 // Activating child category, activates all ancestors
-                if ($attributes['status'] == Category::ACTIVE) {
+                if ($attributes['status'] == Status::ACTIVE) {
                     $this->category->ancestors()->update(['status' => $attributes['status']]);
                 }
             }

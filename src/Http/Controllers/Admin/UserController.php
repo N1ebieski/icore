@@ -106,7 +106,6 @@ class UserController
         $roles = $role->makeRepo()->getAvailable();
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.user.edit', compact('user', 'roles'))->render()
         ]);
     }
@@ -123,7 +122,6 @@ class UserController
         $user->makeService()->update($request->validated());
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.user.partials.user', [
                 'user' => $user
             ])->render(),
@@ -141,7 +139,6 @@ class UserController
         $roles = $role->makeRepo()->getAvailable();
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.user.create', [
                 'roles' => $roles
             ])->render()
@@ -161,6 +158,6 @@ class UserController
 
         $request->session()->flash('success', Lang::get('icore::users.success.store'));
 
-        return Response::json(['success' => '']);
+        return Response::json([]);
     }
 }

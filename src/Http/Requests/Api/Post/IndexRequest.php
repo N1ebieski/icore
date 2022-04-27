@@ -79,7 +79,7 @@ class IndexRequest extends FormRequest
                             ->when(
                                 !optional($this->user())->can('admin.posts.view'),
                                 function ($query) {
-                                    $query->where('status', Category::ACTIVE);
+                                    $query->where('status', Status::ACTIVE);
                                 }
                             );
                     })

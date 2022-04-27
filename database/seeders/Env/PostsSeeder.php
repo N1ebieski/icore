@@ -2,15 +2,12 @@
 
 namespace N1ebieski\ICore\Database\Seeders\Env;
 
-use Illuminate\Database\Seeder;
-use N1ebieski\ICore\Models\User;
-use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Models\Category\Post\Category;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\Category\Post\Category;
 
-/**
- * [PostsSeeder description]
- */
 class PostsSeeder extends Seeder
 {
     /**
@@ -22,14 +19,14 @@ class PostsSeeder extends Seeder
     {
         $categories = Category::get(['id'])->pluck('id')->toArray();
 
-        factory(User::class, 100)->states('user')->create()
+        User::makeFactory()->count(100)->user()->create()
             ->each(function ($u) use ($categories) {
                 for ($i = 0; $i < rand(0, 5); $i++) {
                     $post = $u->posts()
                         ->save(
                             rand(0, 1) === 1 ?
-                                factory(Post::class)->states('image')->make()
-                                : factory(Post::class)->make()
+                                Post::makeFactory()->image()->make()
+                                : Post::makeFactory()->make()
                         );
                     $post->tag(Faker::create()->words(rand(1, 5)));
                     shuffle($categories);

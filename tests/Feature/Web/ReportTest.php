@@ -54,7 +54,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('web.report.comment.create', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString(route('web.report.comment.store', [$comment->id]), $response->getData()->view);
     }

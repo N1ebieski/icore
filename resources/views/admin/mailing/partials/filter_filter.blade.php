@@ -1,5 +1,3 @@
-@inject('mailing', 'N1ebieski\ICore\Models\Mailing')
-
 @component('icore::admin.partials.modal')
 
 @slot('modal_id', 'filter-modal')

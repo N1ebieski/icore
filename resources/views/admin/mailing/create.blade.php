@@ -4,8 +4,6 @@
     'keys' => [trans('icore::mailings.route.create')]
 ])
 
-@inject('mailing', 'N1ebieski\ICore\Models\Mailing')
-
 @section('breadcrumb')
 <li class="breadcrumb-item">
     <a 

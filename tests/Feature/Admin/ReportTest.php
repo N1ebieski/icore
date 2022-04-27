@@ -62,7 +62,7 @@ class ReportTest extends TestCase
 
         $response = $this->get(route('admin.report.comment.show', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertStringContainsString($report[6]->content, $response->getData()->view);
     }
@@ -114,7 +114,7 @@ class ReportTest extends TestCase
 
         $response = $this->delete(route('admin.report.comment.clear', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['success', 'view']);
+        $response->assertOk()->assertJsonStructure(['view']);
 
         $deleted = Report::whereIn('id', collect($report)->pluck('id')->toArray())->count();
 

@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\BanValue;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 
 class CreateRequest extends FormRequest
 {
@@ -17,6 +19,20 @@ class CreateRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->route('type')) {
+            $this->merge([
+                'type' => $this->route('type')
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -24,21 +40,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required|string|in:ip,word'
+            'type' => [
+                'bail',
+                'required',
+                'string',
+                Rule::in([Type::IP, Type::WORD])
+            ]
         ];
-    }
-
-    /**
-     * Get all of the input and files for the request.
-     *
-     * @param  array|mixed|null  $keys
-     * @return array
-     */
-    public function all($keys = null)
-    {
-        $data = parent::all($keys);
-        $data['type'] = $this->route('type');
-
-        return $data;
     }
 }

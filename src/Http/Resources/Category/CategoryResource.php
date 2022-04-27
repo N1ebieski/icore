@@ -33,7 +33,7 @@ class CategoryResource extends JsonResource
             'slug' => $this->slug,
             'icon' => $this->icon,
             'status' => [
-                'value' => $this->status,
+                'value' => $this->status->getValue(),
                 'label' => Lang::get("icore::filter.status.{$this->status}")
             ],
             'real_depth' => $this->real_depth,

@@ -45,11 +45,11 @@
                     </li>
                     @endif
                     <li>
-                        @if ($comment->censored == true)
+                        @if ($comment->censored->isActive())
                         <em>
                         @endif
                         {!! $comment->content_as_html !!}
-                        @if ($comment->censored == true)
+                        @if ($comment->censored->isActive())
                         </em>
                         @endif
                     </li>
@@ -119,21 +119,21 @@
                 @can('admin.comments.status')
                 <div class="btn-group-vertical">
                     <button 
-                        data-status="1" 
+                        data-status="{{ Comment\Status::ACTIVE }}" 
                         type="button" 
                         class="btn btn-success status-comment"
                         data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
-                        {{ $comment->status == 1 ? 'disabled' : '' }}
+                        {{ $comment->status->isActive() ? 'disabled' : '' }}
                     >
                         <i class="fas fa-toggle-on"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.active') }}</span>
                     </button>
                     <button 
-                        data-censored="0" 
+                        data-censored="{{ Comment\Censored::INACTIVE }}" 
                         type="button" 
                         class="btn btn-success censore-comment"
                         data-route="{{ route('admin.comment.update_censored', ['comment' => $comment->id]) }}"
-                        {{ $comment->censored == 0 ? 'disabled' : '' }}
+                        {{ $comment->censored->isInactive() ? 'disabled' : '' }}
                     >
                         <i class="far fa-eye"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.uncensored') }}</span>
@@ -141,21 +141,21 @@
                 </div>
                 <div class="btn-group-vertical">
                     <button 
-                        data-status="0" 
+                        data-status="{{ Comment\Status::INACTIVE }}" 
                         type="button" 
                         class="btn btn-warning status-comment"
                         data-route="{{ route('admin.comment.update_status', ['comment' => $comment->id]) }}"
-                        {{ $comment->status == 0 ? 'disabled' : '' }}
+                        {{ $comment->status->isInactive() ? 'disabled' : '' }}
                     >
                         <i class="fas fa-toggle-off"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.inactive') }}</span>
                     </button>
                     <button 
-                        data-censored="1" 
+                        data-censored="{{ Comment\Censored::ACTIVE }}" 
                         type="button" 
                         class="btn btn-warning censore-comment"
                         data-route="{{ route('admin.comment.update_censored', ['comment' => $comment->id]) }}"
-                        {{ $comment->censored == 1 ? 'disabled' : '' }}
+                        {{ $comment->censored->isActive() ? 'disabled' : '' }}
                     >
                         <i class="far fa-eye-slash"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.censored') }}</span>

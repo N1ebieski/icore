@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Database\Factories\Category;
 
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoryFactory extends Factory
@@ -23,7 +24,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => ucfirst($this->faker->word),
-            'status' => rand(Category::INACTIVE, Category::ACTIVE)
+            'status' => rand(Status::INACTIVE, Status::ACTIVE)
         ];
     }
 
@@ -36,7 +37,7 @@ class CategoryFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'status' => Category::ACTIVE
+                'status' => Status::ACTIVE
             ];
         });
     }

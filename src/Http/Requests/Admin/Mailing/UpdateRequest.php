@@ -2,8 +2,10 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Mailing;
 
+use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 
 /**
  * @property Mailing $mailing
@@ -29,13 +31,27 @@ class UpdateRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'status' => 'required|in:0,1,2|no_js_validation',
+            'status' => [
+                'bail',
+                'required',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE, Status::SCHEDULED]),
+                'no_js_validation'
+            ],
             'users' => 'in:true,false|no_js_validation',
             'newsletter' => 'in:true,false|no_js_validation',
             'emails' => 'in:true,false|no_js_validation',
             'emails_json' => 'nullable|required_if:emails,true|json',
-            'date_activation_at' => 'required_if:status,2|date|no_js_validation',
-            'time_activation_at' => 'required_if:status,2|date_format:"H:i"|no_js_validation'
+            'date_activation_at' => [
+                'required_if:status,' . Status::SCHEDULED,
+                'date',
+                'no_js_validation'
+            ],
+            'time_activation_at' => [
+                'required_if:status,' . Status::SCHEDULED,
+                'date_format:"H:i"',
+                'no_js_validation'
+            ]
         ];
     }
 }

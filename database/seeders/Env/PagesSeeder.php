@@ -3,12 +3,9 @@
 namespace N1ebieski\ICore\Database\Seeders\Env;
 
 use Illuminate\Database\Seeder;
-use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\Page\Page;
 
-/**
- * [PagesSeeder description]
- */
 class PagesSeeder extends Seeder
 {
     /**
@@ -37,9 +34,8 @@ class PagesSeeder extends Seeder
             }
 
             for ($i = 0; $i < $loop; $i++) {
-                $page = factory(Page::class)->create([
-                    'parent_id' => $parent_id,
-                    'user_id' => $user->id
+                $page = Page::makeFactory()->for($user)->create([
+                    'parent_id' => $parent_id
                 ]);
 
                 $depth = $page->real_depth + 1;

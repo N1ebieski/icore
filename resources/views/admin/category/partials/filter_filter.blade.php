@@ -1,5 +1,3 @@
-@inject('category', 'N1ebieski\ICore\Models\Category\Category')
-
 @component('icore::admin.partials.modal')
 
 @slot('modal_id', 'filter-modal')
@@ -36,14 +34,14 @@
             {{ trans('icore::filter.default') }}
         </option>
         <option 
-            value="{{ $category::ACTIVE }}" 
-            {{ ($filter['status'] === $category::ACTIVE) ? 'selected' : '' }}
+            value="{{ Category\Status::ACTIVE }}" 
+            {{ ($filter['status'] === Category\Status::ACTIVE) ? 'selected' : '' }}
         >
             {{ trans('icore::filter.active') }}
         </option>
         <option 
-            value="{{ $category::INACTIVE }}" 
-            {{ ($filter['status'] === $category::INACTIVE) ? 'selected' : '' }}
+            value="{{ Category\Status::INACTIVE }}" 
+            {{ ($filter['status'] === Category\Status::INACTIVE) ? 'selected' : '' }}
         >
             {{ trans('icore::filter.inactive') }}
         </option>

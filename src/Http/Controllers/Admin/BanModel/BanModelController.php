@@ -20,7 +20,7 @@ class BanModelController implements Polymorphic
     {
         $banModel->delete();
 
-        return response()->json(['success' => '']);
+        return response()->json([]);
     }
 
     /**

@@ -21,7 +21,7 @@
                 @endif
             </div>
             <div>
-                @if ($comment->censored == true)
+                @if ($comment->censored->isActive())
                 <em>{{ trans('icore::comments.censored') }}</em>
                 @else
                 {!! $comment->content_as_html !!}

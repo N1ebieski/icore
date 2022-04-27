@@ -48,7 +48,6 @@ class CommentController implements Polymorphic
     public function show(Comment $comment): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.comment.show', [
                 'comment' => $comment->loadAncestorsAndChildrens()
             ])->render()
@@ -64,7 +63,6 @@ class CommentController implements Polymorphic
     public function edit(Comment $comment): JsonResponse
     {
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.comment.edit', [
                 'comment' => $comment
             ])->render()
@@ -83,7 +81,6 @@ class CommentController implements Polymorphic
         $comment->makeService()->update($request->only('content'));
 
         return Response::json([
-            'success' => '',
             'view' => View::make('icore::admin.comment.partials.comment', [
                 'comment' => $comment->loadAllRels()
             ])->render()
@@ -102,8 +99,7 @@ class CommentController implements Polymorphic
         $comment->update($request->only('censored'));
 
         return Response::json([
-            'success' => '',
-            'censored' => $comment->censored,
+            'censored' => $comment->censored->getValue(),
             'view' => View::make('icore::admin.comment.partials.comment', [
                 'comment' => $comment->loadAllRels()
             ])->render()
@@ -124,8 +120,7 @@ class CommentController implements Polymorphic
         $commentRepo = $comment->makeRepo();
 
         return Response::json([
-            'success' => '',
-            'status' => $comment->status,
+            'status' => $comment->status->getValue(),
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
             'ancestors' => $commentRepo->getAncestorsAsArray(),
@@ -147,7 +142,6 @@ class CommentController implements Polymorphic
         $comment->makeService()->delete();
 
         return Response::json([
-            'success' => '',
             'descendants' => $descendants,
         ]);
     }
@@ -161,16 +155,7 @@ class CommentController implements Polymorphic
      */
     public function destroyGlobal(Comment $comment, DestroyGlobalRequest $request): RedirectResponse
     {
-        $deleted = 0;
-        // Antywzorzec, ale nie mialem wyboru, bo ClosureTable nie zmienia pozycji
-        // rodzeństwa o 1 podczas usuwania i trzeba to robić ręcznie po każdym usunięciu
-        foreach ($ids = $request->get('select') as $id) {
-            if ($c = $comment->find($id)) {
-                $c->makeService()->delete();
-
-                $deleted += 1;
-            }
-        }
+        $deleted = $comment->makeService()->deleteGlobal($request->input('select'));
 
         return Response::redirectTo(URL::previous())->with(
             'success',

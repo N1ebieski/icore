@@ -6,6 +6,7 @@ use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\User\Status;
 
 class IndexRequest extends FormRequest
 {
@@ -50,7 +51,13 @@ class IndexRequest extends FormRequest
             'filter.except' => 'bail|filled|array',
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
-            'filter.status' => 'bail|nullable|integer|in:0,1|no_js_validation',
+            'filter.status' => [
+                'bail',
+                'nullable',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE]),
+                'no_js_validation'
+            ],
             'filter.role' => [
                 'bail',
                 'nullable',

@@ -4,6 +4,7 @@ namespace N1ebieski\ICore\Http\Requests\Admin\BanValue;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
 
 class StoreRequest extends FormRequest
 {
@@ -39,7 +40,12 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required|string|in:ip,word',
+            'type' => [
+                'bail',
+                'required',
+                'string',
+                Rule::in([Type::IP, Type::WORD])
+            ],
             'value' => [
                 'required',
                 'string',

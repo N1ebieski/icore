@@ -14,6 +14,6 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 5000)->states(['user', 'marketing', 'active'])->create();
+        User::makeFactory()->count(5000)->user()->marketing()->active()->create();
     }
 }

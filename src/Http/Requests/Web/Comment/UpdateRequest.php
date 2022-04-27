@@ -7,6 +7,9 @@ use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Comment\Comment;
 
+/**
+ * @property Comment $comment
+ */
 class UpdateRequest extends FormRequest
 {
     /**
@@ -32,7 +35,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->comment->status === Comment::ACTIVE;
+        return $this->comment->status->isActive();
     }
 
     /**

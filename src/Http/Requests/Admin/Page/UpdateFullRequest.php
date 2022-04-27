@@ -5,6 +5,7 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Page;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\Page\Status;
 
 class UpdateFullRequest extends FormRequest
 {
@@ -67,7 +68,12 @@ class UpdateFullRequest extends FormRequest
             'seo_noindex' => 'boolean',
             'seo_nofollow' => 'boolean',
             'comment' => 'boolean',
-            'status' => 'required|in:0,1',
+            'status' => [
+                'bail',
+                'required',
+                'integer',
+                Rule::in([Status::ACTIVE, Status::INACTIVE])
+            ],
             'user' => 'bail|required|integer|exists:users,id|no_js_validation',
             'parent_id' => [
                 'nullable',

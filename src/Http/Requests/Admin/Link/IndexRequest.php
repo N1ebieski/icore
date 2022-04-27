@@ -2,9 +2,11 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Link;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request as BaseRequest;
+use N1ebieski\ICore\ValueObjects\Link\Type;
 
 class IndexRequest extends FormRequest
 {
@@ -48,7 +50,12 @@ class IndexRequest extends FormRequest
         return [
             'page' => 'integer',
             'filter' => 'bail|array',
-            'filter.type' => 'bail|required|string|in:link,backlink',
+            'filter.type' => [
+                'bail',
+                'required',
+                'string',
+                Rule::in([Type::LINK, Type::BACKLINK])
+            ],
             'filter.except' => 'bail|filled|array',
             'filter.except.*' => 'bail|integer'
         ];

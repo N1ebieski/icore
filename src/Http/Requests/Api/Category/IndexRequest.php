@@ -6,6 +6,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 
 class IndexRequest extends FormRequest
 {
@@ -73,9 +74,10 @@ class IndexRequest extends FormRequest
                 'bail',
                 'nullable',
                 'integer',
-                'in:1' . (
-                    optional($this->user())->can('admin.categories.view') ? ',0' : null
-                )
+                Rule::in([
+                    Status::ACTIVE,
+                    optional($this->user())->can('admin.categories.view') ? Status::INACTIVE : null
+                ])
             ],
             'filter.parent' => [
                 'bail',
@@ -85,7 +87,7 @@ class IndexRequest extends FormRequest
                     $query->when(
                         !optional($this->user())->can('admin.categories.view'),
                         function ($query) {
-                            $query->where('status', Category::ACTIVE);
+                            $query->where('status', Status::ACTIVE);
                         }
                     );
                 })
@@ -126,10 +128,10 @@ class IndexRequest extends FormRequest
             'filter.status' => [
                 'description' => sprintf(
                     'Must be one of %1$s or %2$s (available only for admin.categories.view)',
-                    Category::ACTIVE,
-                    Category::INACTIVE
+                    Status::ACTIVE,
+                    Status::INACTIVE
                 ),
-                'example' => Category::ACTIVE
+                'example' => Status::ACTIVE
             ],
             'filter.parent' => [
                 'description' => 'ID of category parent. If 0, shows only roots.',

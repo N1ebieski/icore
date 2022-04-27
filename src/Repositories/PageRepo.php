@@ -8,6 +8,7 @@ use N1ebieski\ICore\Utils\MigrationUtil;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 
@@ -211,7 +212,7 @@ class PageRepo
     {
         return $this->page->comments()->where([
                 ['comments.parent_id', null],
-                ['comments.status', Comment::ACTIVE]
+                ['comments.status', Status::ACTIVE]
             ])
             ->withAllRels($filter['orderby'])
             ->filterCommentsOrderBy($filter['orderby'])
