@@ -85,7 +85,7 @@
                     @if ($count = $comments_inactive_count->where('model', $type)->first())
                     <span>
                         <a 
-                            href="{{ route("admin.comment.{$type}.index", ['filter[status]' => 0]) }}"
+                            href="{{ route("admin.comment.{$type}.index", ['filter[status]' => Comment\Status::INACTIVE]) }}"
                             class="badge badge-warning"
                         >
                             {{ $count->count }}
@@ -95,7 +95,7 @@
                     @if ($count = $comments_reported_count->where('model', $type)->first())
                     <span>
                         <a 
-                            href="{{ route("admin.comment.{$type}.index", ['filter[report]' => 1]) }}"
+                            href="{{ route("admin.comment.{$type}.index", ['filter[report]' => Report\Reported::ACTIVE]) }}"
                             class="badge badge-danger"
                         >
                             {{ $count->count }}

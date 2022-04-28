@@ -33,7 +33,7 @@ class TypeCast implements CastsAttributes
     public function set($model, string $key, $value, array $attributes): Type
     {
         if (is_string($value)) {
-            $value = Type::fromString($value);
+            $value = new Type($value);
         }
 
         if (!$value instanceof Type) {

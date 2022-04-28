@@ -15,99 +15,6 @@ class Schema700 implements SchemaInterface
         [
             'paths' => [
                 'views' => [
-                    'vendor/icore/web',
-                    'vendor/icore/mails'
-                ],
-                'lang' => [
-                    'vendor/icore'
-                ]
-            ],
-            'actions' => [
-                [
-                    'type' => 'replace',
-                    'search' => '/Post::ACTIVE/',
-                    'to' => 'Status::ACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Post::INACTIVE/',
-                    'to' => 'Status::INACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Post::SCHEDULED/',
-                    'to' => 'Status::SCHEDULED'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/User::ACTIVE/',
-                    'to' => 'Status::ACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/User::INACTIVE/',
-                    'to' => 'Status::INACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Newsletter::ACTIVE/',
-                    'to' => 'Status::ACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Newsletter::INACTIVE/',
-                    'to' => 'Status::INACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Mailing::ACTIVE/',
-                    'to' => 'Status::ACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Mailing::INACTIVE/',
-                    'to' => 'Status::INACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Mailing::SCHEDULED/',
-                    'to' => 'Status::SCHEDULED'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Mailing::INPROGRESS/',
-                    'to' => 'Status::INPROGRESS'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Stat::CLICK/',
-                    'to' => 'Slug::CLICK'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Stat::VIEW/',
-                    'to' => 'Slug::VIEW'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Page::ACTIVE/',
-                    'to' => 'Status::ACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Page::INACTIVE/',
-                    'to' => 'Status::INACTIVE'
-                ],
-                [
-                    'type' => 'replace',
-                    'search' => '/Comment::INACTIVE/',
-                    'to' => 'Status::INACTIVE'
-                ]
-            ]
-        ],
-        [
-            'paths' => [
-                'views' => [
                     'vendor/icore/web'
                 ]
             ],
@@ -196,6 +103,86 @@ class Schema700 implements SchemaInterface
                 ]
             ],
             'actions' => [
+                [
+                    'type' => 'replace',
+                    'search' => '/Post::ACTIVE/',
+                    'to' => 'Status::ACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Post::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Post::SCHEDULED/',
+                    'to' => 'Status::SCHEDULED'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/User::ACTIVE/',
+                    'to' => 'Status::ACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/User::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Newsletter::ACTIVE/',
+                    'to' => 'Status::ACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Newsletter::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Mailing::ACTIVE/',
+                    'to' => 'Status::ACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Mailing::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Mailing::SCHEDULED/',
+                    'to' => 'Status::SCHEDULED'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Mailing::INPROGRESS/',
+                    'to' => 'Status::INPROGRESS'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Stat::CLICK/',
+                    'to' => 'Slug::CLICK'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Stat::VIEW/',
+                    'to' => 'Slug::VIEW'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Page::ACTIVE/',
+                    'to' => 'Status::ACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Page::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
+                ],
+                [
+                    'type' => 'replace',
+                    'search' => '/Comment::INACTIVE/',
+                    'to' => 'Status::INACTIVE'
+                ],
                 [
                     'type' => 'afterFirst',
                     'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Post;/',

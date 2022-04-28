@@ -33,55 +33,16 @@ class Type extends ValueObject
     /**
      * Undocumented function
      *
-     * @param boolean $value
+     * @param string $value
      * @return void
      */
-    protected function validate(bool $value): void
+    protected function validate(string $value): void
     {
         $in = [self::LINK, self::BACKLINK];
 
         if (!in_array($value, $in)) {
             throw new \InvalidArgumentException("The given value must be in: " . implode(', ', $in));
         }
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param string $value
-     * @return void
-     */
-    public static function fromString(string $value)
-    {
-        if (in_array($value, ['link', self::LINK])) {
-            return static::link();
-        }
-
-        if (in_array($value, ['backlink', self::BACKLINK])) {
-            return static::backlink();
-        }
-
-        throw new \InvalidArgumentException("Invalid string value: '{$value}'");
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return static
-     */
-    public static function link()
-    {
-        return new static(self::LINK);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return static
-     */
-    public static function backlink()
-    {
-        return new static(self::BACKLINK);
     }
 
     /**

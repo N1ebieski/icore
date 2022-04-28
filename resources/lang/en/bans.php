@@ -1,5 +1,7 @@
 <?php
 
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
+
 return [
     'success' => [
         'destroy_global' => 'Successfully removed :affected banes from the blacklist.'
@@ -13,13 +15,13 @@ return [
         'success' => [
             'store' => 'Successfully added value to the blacklist.'
         ],
-        'ip' => [
+        Type::IP => [
             'ip' => 'IP address',
             'route' => [
                 'index' => 'Banned IP addresses'
             ],
         ],
-        'word' => [
+        Type::WORD => [
             'route' => [
                 'index' => 'Banned words'
             ]

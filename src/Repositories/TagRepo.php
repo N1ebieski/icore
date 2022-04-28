@@ -67,7 +67,7 @@ class TagRepo
             ->join('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
             ->join("{$morph->getTable()}", function ($query) use ($morph) {
                 $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
-                    ->where("{$morph->getTable()}.status", $morph->status::active());
+                    ->where("{$morph->getTable()}.status", $morph->status::ACTIVE);
             })
             ->where('tags_models.model_type', $this->tag->model_type)
             ->when($component['cats'] !== null, function ($query) use ($component) {

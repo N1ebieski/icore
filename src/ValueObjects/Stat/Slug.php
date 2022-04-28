@@ -48,39 +48,10 @@ class Slug extends ValueObject
     /**
      * Undocumented function
      *
-     * @param string $value
-     * @return void
+     * @return array
      */
-    public static function fromString(string $value)
+    public static function getAvailable(): array
     {
-        if (in_array($value, ['click', self::CLICK])) {
-            return static::click();
-        }
-
-        if (in_array($value, ['view', self::VIEW])) {
-            return static::view();
-        }
-
-        throw new \InvalidArgumentException("Invalid string value: '{$value}'");
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return static
-     */
-    public static function click()
-    {
-        return new static(self::CLICK);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return static
-     */
-    public static function view()
-    {
-        return new static(self::VIEW);
+        return [self::CLICK, self::VIEW];
     }
 }

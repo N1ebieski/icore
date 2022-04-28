@@ -1,5 +1,7 @@
 <?php
 
+use N1ebieski\ICore\ValueObjects\BanValue\Type;
+
 return [
     'success' => [
         'destroy_global' => 'Pomyślnie usunięto z czarnej listy :affected zbanowanych.'
@@ -13,13 +15,13 @@ return [
         'success' => [
             'store' => 'Pomyślnie dodano wartość na czarną listę.'
         ],
-        'ip' => [
+        Type::IP => [
             'ip' => 'Adres IP',
             'route' => [
                 'index' => 'Zbanowane adresy IP'
             ],
         ],
-        'word' => [
+        Type::WORD => [
             'route' => [
                 'index' => 'Zbanowane słowa'
             ]

@@ -112,13 +112,13 @@ class StatComponent implements Htmlable
     {
         return $this->view->make('icore::web.components.stat', [
             'countCategories' => $this->category->makeCache()->rememberCountByStatus()
-                ->firstWhere('status', CategoryStatus::ACTIVE),
+                ->firstWhere('status', CategoryStatus::active()),
 
             'countPosts' => $this->post->makeCache()->rememberCountByStatus()
-                ->firstWhere('status', PostStatus::ACTIVE),
+                ->firstWhere('status', PostStatus::active()),
 
             'countComments' => $this->comment->makeCache()->rememberCountByModelTypeAndStatus()
-                ->where('status', CommentStatus::ACTIVE),
+                ->where('status', CommentStatus::active()),
 
             'lastActivity' => $this->post->makeCache()->rememberLastActivity(),
 

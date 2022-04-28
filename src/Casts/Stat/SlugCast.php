@@ -33,7 +33,7 @@ class SlugCast implements CastsAttributes
     public function set($model, string $key, $value, array $attributes): Slug
     {
         if (is_string($value)) {
-            $value = Slug::fromString($value);
+            $value = new Slug($value);
         }
 
         if (!$value instanceof Slug) {
