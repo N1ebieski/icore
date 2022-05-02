@@ -189,17 +189,9 @@ class Schema700 implements SchemaInterface
                     'to' => 'use N1ebieski\ICore\ValueObjects\Post\Status;'
                 ],
                 [
-                    'type' => 'removeFirst',
-                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Post;\\n*/'
-                ],
-                [
                     'type' => 'afterFirst',
                     'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\User;/',
                     'to' => 'use N1ebieski\ICore\ValueObjects\User\Status;'
-                ],
-                [
-                    'type' => 'removeFirst',
-                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\User;\\n*/'
                 ],
                 [
                     'type' => 'afterFirst',
@@ -207,17 +199,9 @@ class Schema700 implements SchemaInterface
                     'to' => 'use N1ebieski\ICore\ValueObjects\Newsletter\Status;'
                 ],
                 [
-                    'type' => 'removeFirst',
-                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Newsletter;\\n*/'
-                ],
-                [
                     'type' => 'afterFirst',
                     'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Mailing;/',
                     'to' => 'use N1ebieski\ICore\ValueObjects\Mailing\Status;'
-                ],
-                [
-                    'type' => 'removeFirst',
-                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Mailing;\\n*/'
                 ],
                 [
                     'type' => 'afterFirst',
@@ -225,22 +209,38 @@ class Schema700 implements SchemaInterface
                     'to' => 'use N1ebieski\ICore\ValueObjects\Stat\Slug;'
                 ],
                 [
-                    'type' => 'removeFirst',
-                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Stat\\\Stat;\\n*/'
-                ],
-                [
                     'type' => 'afterFirst',
                     'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Page\\\Page;/',
                     'to' => 'use N1ebieski\ICore\ValueObjects\Page\Status;'
                 ],
                 [
-                    'type' => 'removeFirst',
-                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Page\\\Page;\\n*/'
-                ],
-                [
                     'type' => 'afterFirst',
                     'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Comment\\\Comment;/',
                     'to' => 'use N1ebieski\ICore\ValueObjects\Comment\Status;'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Post;\\n*/'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\User;\\n*/'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Newsletter;\\n*/'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Mailing;\\n*/'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Stat\\\Stat;\\n*/'
+                ],
+                [
+                    'type' => 'removeFirst',
+                    'search' => '/use\s*N1ebieski\\\ICore\\\Models\\\Page\\\Page;\\n*/'
                 ],
                 [
                     'type' => 'removeFirst',

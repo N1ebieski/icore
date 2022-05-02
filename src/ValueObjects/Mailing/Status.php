@@ -65,19 +65,19 @@ class Status extends ValueObject
      */
     public static function fromString(string $value)
     {
-        if (in_array($value, ['active', self::ACTIVE])) {
+        if (in_array($value, ['active', (string)self::ACTIVE])) {
             return static::active();
         }
 
-        if (in_array($value, ['inactive', self::INACTIVE])) {
+        if (in_array($value, ['inactive', (string)self::INACTIVE])) {
             return static::inactive();
         }
 
-        if (in_array($value, ['scheduled', self::SCHEDULED])) {
+        if (in_array($value, ['scheduled', (string)self::SCHEDULED])) {
             return static::scheduled();
         }
 
-        if (in_array($value, ['inprogress', self::INPROGRESS])) {
+        if (in_array($value, ['inprogress', (string)self::INPROGRESS])) {
             return static::inprogress();
         }
 

@@ -39,16 +39,6 @@ class Tag extends Taggable
      */
     public $searchable = ['name'];
 
-    // /**
-    //  * Get the route key for the model.
-    //  *
-    //  * @return string
-    //  */
-    // public function getRouteKeyName()
-    // {
-    //     return 'normalized';
-    // }
-
     /**
      * The attributes that should be cast to native types.
      *

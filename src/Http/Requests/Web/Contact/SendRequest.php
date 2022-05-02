@@ -20,16 +20,6 @@ class SendRequest extends FormRequest
     }
 
     /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return array_merge([], $this->prepareCaptchaAttributes());
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array

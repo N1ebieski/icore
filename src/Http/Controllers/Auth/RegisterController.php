@@ -70,8 +70,6 @@ class RegisterController extends Controller
         return Validator::make(
             $data,
             array_merge($register->rules(), $this->prepareCaptchaRules()),
-            [],
-            $this->prepareCaptchaAttributes()
         );
     }
 

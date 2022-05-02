@@ -17,7 +17,6 @@ use N1ebieski\ICore\Repositories\PageRepo;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\ValueObjects\Page\Status;
-use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\Models\Traits\StatFilterable;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;

@@ -343,7 +343,7 @@ class Post extends Model
         return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [
                 $this->slug,
                 '#more'
-            ]) . '">' . Lang::get('icore::posts.more') . '</a></p>' : $this->replacement_content_html;
+            ]) . '" class="more">' . Lang::get('icore::posts.more') . '</a></p>' : $this->replacement_content_html;
     }
 
     /**

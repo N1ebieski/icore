@@ -59,15 +59,15 @@ class Sent extends ValueObject
      */
     public static function fromString(string $value)
     {
-        if (in_array($value, ['sent', self::SENT])) {
+        if (in_array($value, ['sent', (string)self::SENT])) {
             return static::sent();
         }
 
-        if (in_array($value, ['unsent', self::UNSENT])) {
+        if (in_array($value, ['unsent', (string)self::UNSENT])) {
             return static::unsent();
         }
 
-        if (in_array($value, ['error', self::ERROR])) {
+        if (in_array($value, ['error', (string)self::ERROR])) {
             return static::error();
         }
 

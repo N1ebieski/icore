@@ -7,7 +7,7 @@ abstract class ValueObject
     /**
      * Undocumented variable
      *
-     * @var int
+     * @var mixed
      */
     protected $value;
 
@@ -24,7 +24,7 @@ abstract class ValueObject
     /**
      * Get undocumented variable
      *
-     * @return  int
+     * @return mixed
      */
     public function getValue()
     {
@@ -34,7 +34,7 @@ abstract class ValueObject
     /**
      * Undocumented function
      *
-     * @param self $value
+     * @param static $value
      * @return boolean
      */
     public function isEquals(self $value): bool

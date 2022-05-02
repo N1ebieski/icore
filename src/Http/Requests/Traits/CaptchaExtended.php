@@ -86,20 +86,4 @@ trait CaptchaExtended
             ]
         ];
     }
-
-    /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    protected function prepareCaptchaAttributes(): array
-    {
-        // if (Config::get('icore.captcha.driver') === 'recaptcha_v2') {
-        //     return [
-        //         'g-recaptcha-response' => 'captcha'
-        //     ];
-        // }
-
-        return [];
-    }
 }
