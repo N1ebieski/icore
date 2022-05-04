@@ -22,7 +22,6 @@ class PostResource extends JsonResource
         parent::__construct($post);
     }
 
-
     /**
      * Transform the resource into an array.
      *
@@ -45,7 +44,7 @@ class PostResource extends JsonResource
             'seo_desc' => $this->seo_desc,
             'meta_desc' => $this->meta_desc,
             'seo_noindex' => $this->seo_noindex->getValue(),
-            'seo_nofollow' => $this->seo_nofolow->getValue(),
+            'seo_nofollow' => $this->seo_nofollow->getValue(),
             'status' => [
                 'value' => $this->status->getValue(),
                 'label' => Lang::get("icore::posts.status.{$this->status}")

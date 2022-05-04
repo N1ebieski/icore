@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Http\Clients\Intelekt\Client;
+use N1ebieski\ICore\Http\Clients\Intelekt\Post\PostClient;
 use N1ebieski\ICore\Http\Responses\Data\Chart\Post\TimelineData as PostAndPagesTimelineData;
 
 class HomeController
@@ -21,16 +20,14 @@ class HomeController
      * @param Client $client
      * @return HttpResponse
      */
-    public function index(Post $post, Page $page, Client $client): HttpResponse
+    public function index(Post $post, Page $page, PostClient $client): HttpResponse
     {
         try {
-            $posts = Collect::make($client->post('/api/posts/index', [
-                'filter' => [
-                    'status' => 1,
-                    'orderby' => 'created_at|desc',
-                    'search' => 'icore'
-                ]
-            ])->data);
+            $posts = $client->index(['filter' => [
+                'status' => 1,
+                'orderby' => 'created_at|desc',
+                'search' => 'icore',
+            ]])->data;
         } catch (\N1ebieski\ICore\Exceptions\Client\TransferException $e) {
             $posts = null;
         }

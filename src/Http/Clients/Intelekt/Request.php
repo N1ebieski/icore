@@ -2,9 +2,9 @@
 
 namespace N1ebieski\ICore\Http\Clients\Intelekt;
 
-use N1ebieski\ICore\Http\Clients\Client as BaseClient;
+use N1ebieski\ICore\Http\Clients\Request as BaseRequest;
 
-class Client extends BaseClient
+abstract class Request extends BaseRequest
 {
     /**
      * Undocumented variable
@@ -24,17 +24,4 @@ class Client extends BaseClient
             'Accept' => 'application/json',
         ]
     ];
-
-    /**
-     * Undocumented function
-     *
-     * @param string $url
-     * @return static
-     */
-    protected function setUrl(string $url)
-    {
-        $this->url = $this->host . $url;
-
-        return $this;
-    }
 }

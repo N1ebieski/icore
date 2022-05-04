@@ -3,9 +3,8 @@
 namespace N1ebieski\ICore\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use N1ebieski\ICore\Http\Clients\RecaptchaV2\Client;
-use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
+use N1ebieski\ICore\Http\Clients\Recaptcha\Invisible\RecaptchaClient;
 
 class RecaptchaInvisibleRule implements Rule
 {
@@ -19,37 +18,20 @@ class RecaptchaInvisibleRule implements Rule
     /**
      * Undocumented variable
      *
-     * @var Client
+     * @var RecaptchaClient
      */
     protected $client;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $secretKey;
 
     /**
      * Undocumented function
      *
      * @param Lang $lang
-     * @param Config $config
-     * @param Client $client
+     * @param RecaptchaClient $client
      */
-    public function __construct(Lang $lang, Config $config, Client $client)
+    public function __construct(Lang $lang, RecaptchaClient $client)
     {
         $this->lang = $lang;
         $this->client = $client;
-
-        $this->secretKey = $config->get('services.recaptcha_invisible.secret_key');
     }
 
     /**
@@ -75,15 +57,12 @@ class RecaptchaInvisibleRule implements Rule
     public function passes($attribute, $value)
     {
         try {
-            $this->client->post('/recaptcha/api/siteverify', [
-                'secret' => $this->secretKey,
-                'response' => $value
-            ]);
+            $response = $this->client->verify(['response' => $value]);
         } catch (\Exception $e) {
             return false;
         }
 
-        return $this->client->getContents()->success;
+        return $response->success;
     }
 
     /**
