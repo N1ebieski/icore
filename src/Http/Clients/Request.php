@@ -56,7 +56,6 @@ abstract class Request
     }
 
     /**
-     * Undocumented function
      *
      * @param string $key
      * @param mixed $value
@@ -71,6 +70,16 @@ abstract class Request
         if (method_exists($this, $setterName)) {
             $this->{$setterName}($value);
         }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return object|array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
     }
 
     /**
@@ -140,4 +149,15 @@ abstract class Request
 
         return false;
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get(string $name)
+    {
+        return $this->get($name);
+    }    
 }

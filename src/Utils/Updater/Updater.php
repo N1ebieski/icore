@@ -139,7 +139,8 @@ class Updater
                                     continue;
                                 }
 
-                                $contents = $this->actionFactory->makeAction($action)($contents, $matches->toArray());
+                                $contents = $this->actionFactory->makeAction($action)
+                                    ->handle($contents, $matches->toArray());
                             }
                         }
 

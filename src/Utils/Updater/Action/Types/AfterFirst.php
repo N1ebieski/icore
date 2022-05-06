@@ -41,7 +41,7 @@ class AfterFirst implements ActionInterface
      * @param array $matches
      * @return string
      */
-    public function __invoke(string $contents, array $matches): string
+    public function handle(string $contents, array $matches): string
     {
         return $this->str->of($contents)->replace($matches[0], $matches[0] . "\n" . $this->action['to']);
     }

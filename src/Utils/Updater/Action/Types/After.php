@@ -41,7 +41,7 @@ class After implements ActionInterface
      * @param array $matches
      * @return string
      */
-    public function __invoke(string $contents, array $matches): string
+    public function handle(string $contents, array $matches): string
     {
         foreach ($matches as $match) {
             $contents = $this->str->of($contents)->replace($match, $match . "\n" . $this->action['to']);

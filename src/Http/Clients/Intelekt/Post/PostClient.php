@@ -33,12 +33,15 @@ class PostClient
      */
     public function index(array $parameters): IndexResponse
     {
+        /**
+         * @var IndexRequest
+         */
         $request = $this->app->make(IndexRequest::class, [
             'parameters' => $parameters
         ]);
 
         return $this->app->make(IndexResponse::class, [
-            'parameters' => json_decode($request()->getBody())
+            'parameters' => json_decode($request->makeRequest()->getBody())
         ]);
     }
 }

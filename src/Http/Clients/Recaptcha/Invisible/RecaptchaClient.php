@@ -43,6 +43,9 @@ class RecaptchaClient
      */
     public function verify(array $parameters): VerifyResponse
     {
+        /**
+         * @var VerifyRequest
+         */
         $request = $this->app->make(VerifyRequest::class, [
             'parameters' => array_merge(
                 [
@@ -53,7 +56,7 @@ class RecaptchaClient
         ]);
 
         return $this->app->make(VerifyResponse::class, [
-            'parameters' => json_decode($request()->getBody())
+            'parameters' => json_decode($request->makeRequest()->getBody())
         ]);
     }
 }

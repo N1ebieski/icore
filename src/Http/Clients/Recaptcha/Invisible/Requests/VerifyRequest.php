@@ -19,7 +19,7 @@ class VerifyRequest extends Request
      *
      * @return ResponseInterface
      */
-    public function __invoke(): ResponseInterface
+    public function makeRequest(): ResponseInterface
     {
         try {
             $response = $this->client->request(

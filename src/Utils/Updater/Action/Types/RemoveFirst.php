@@ -41,7 +41,7 @@ class RemoveFirst implements ActionInterface
      * @param array $matches
      * @return string
      */
-    public function __invoke(string $contents, array $matches): string
+    public function handle(string $contents, array $matches): string
     {
         return $this->str->of($contents)->remove($matches[0]);
     }
