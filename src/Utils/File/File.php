@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Utils\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
-class FileUtil
+class File
 {
     /**
      * [protected description]

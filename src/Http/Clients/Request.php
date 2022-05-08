@@ -159,5 +159,5 @@ abstract class Request
     public function __get(string $name)
     {
         return $this->get($name);
-    }    
+    }
 }
