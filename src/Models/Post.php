@@ -26,10 +26,10 @@ use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 
 /**
@@ -42,7 +42,7 @@ class Post extends Model
 {
     use Sluggable;
     use Taggable;
-    use FullTextSearchable;
+    use HasFullTextSearchable;
     use PivotEventTrait;
     use Carbonable;
     use HasFactory;

@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 
-trait Polymorphic
+trait HasPolymorphic
 {
     // Scopes
 

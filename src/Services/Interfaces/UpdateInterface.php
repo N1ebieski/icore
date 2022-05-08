@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\Services\Interfaces;
 
-interface StatusUpdatable
+interface UpdateInterface
 {
     /**
-     * [updateStatus description]
+     * [update description]
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function updateStatus(array $attributes): bool;
+    public function update(array $attributes): bool;
 }

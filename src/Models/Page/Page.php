@@ -24,10 +24,10 @@ use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Page\PageFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
@@ -42,7 +42,7 @@ class Page extends Entity
 {
     use Sluggable;
     use Taggable;
-    use FullTextSearchable;
+    use HasFullTextSearchable;
     use PivotEventTrait;
     use Carbonable;
     use HasFactory;

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 
-trait FullTextSearchable
+trait HasFullTextSearchable
 {
     /**
      * Search term

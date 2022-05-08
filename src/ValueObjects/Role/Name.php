@@ -51,6 +51,16 @@ class Name extends ValueObject
     }
 
     /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function isApi(): bool
+    {
+        return $this->value === self::API;
+    }
+
+    /**
      * [isEditDefault description]
      * @return bool [description]
      */

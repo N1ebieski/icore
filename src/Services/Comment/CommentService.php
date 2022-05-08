@@ -1,19 +1,19 @@
 <?php
 
-namespace N1ebieski\ICore\Services;
+namespace N1ebieski\ICore\Services\Comment;
 
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 
-class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
+class CommentService implements CreateInterface, UpdateInterface, StatusUpdateInterface, DeleteInterface
 {
     /**
      * Comment model
@@ -183,7 +183,7 @@ class CommentService implements Creatable, Updatable, StatusUpdatable, Deletable
      * @param LengthAwarePaginator $collection
      * @return LengthAwarePaginator
      */
-    protected static function paginateChildrens(LengthAwarePaginator $collection): LengthAwarePaginator
+    protected function paginateChildrens(LengthAwarePaginator $collection): LengthAwarePaginator
     {
         $collection->map(function ($item) {
             $item->setRelation(

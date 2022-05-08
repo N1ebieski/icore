@@ -9,14 +9,14 @@ use N1ebieski\ICore\Services\StatService;
 use N1ebieski\ICore\Repositories\StatRepo;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
 use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 
 /**
  * @property Slug $slug
  */
 class Stat extends Model
 {
-    use Polymorphic;
+    use HasPolymorphic;
     use Carbonable;
 
     // Configuration

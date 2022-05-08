@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
 class BanModel extends Model
 {
     use Filterable;
-    use FullTextSearchable;
-    use Polymorphic;
+    use HasFullTextSearchable;
+    use HasPolymorphic;
     use Carbonable;
 
     // Configuration

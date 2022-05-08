@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\Services\Interfaces;
 
-interface Updatable
+interface FullUpdateInterface
 {
     /**
-     * [update description]
+     * [updateFull description]
      * @param  array $attributes [description]
      * @return bool              [description]
      */
-    public function update(array $attributes): bool;
+    public function updateFull(array $attributes): bool;
 }

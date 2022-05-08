@@ -7,20 +7,20 @@ use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Cache\CommentCache;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\CommentService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\CommentRepo;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
+use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
 use N1ebieski\ICore\ValueObjects\Comment\Censored;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use N1ebieski\ICore\Services\Comment\CommentService;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Database\Factories\Comment\CommentFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
@@ -32,9 +32,9 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  */
 class Comment extends Entity
 {
-    use FullTextSearchable;
+    use HasFullTextSearchable;
     use Filterable;
-    use Polymorphic;
+    use HasPolymorphic;
     use Carbonable;
     use HasFixForRealDepthClosureTable;
     use HasFixForPolymorphicClosureTable;

@@ -5,7 +5,7 @@ namespace N1ebieski\ICore\Models\Rating;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\RatingService;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +13,7 @@ use N1ebieski\ICore\Database\Factories\Rating\RatingFactory;
 
 class Rating extends Model
 {
-    use Polymorphic;
+    use HasPolymorphic;
     use HasFactory;
 
     // Configuration

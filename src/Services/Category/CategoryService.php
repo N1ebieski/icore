@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Services;
+namespace N1ebieski\ICore\Services\Category;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -8,22 +8,27 @@ use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Category\Status;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
+/**
+ *
+ *
+ * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ */
 class CategoryService implements
-    Creatable,
-    Updatable,
-    StatusUpdatable,
-    PositionUpdatable,
-    Deletable,
-    GlobalDeletable
+    CreateInterface,
+    UpdateInterface,
+    StatusUpdateInterface,
+    PositionUpdateInterface,
+    DeleteInterface,
+    GlobalDeleteInterface
 {
     /**
      * Model
@@ -45,12 +50,6 @@ class CategoryService implements
     protected $db;
 
     /**
-     * Config
-     * @var int
-     */
-    protected $paginate;
-
-    /**
      * Undocumented function
      *
      * @param Category $category
@@ -68,8 +67,7 @@ class CategoryService implements
 
         $this->collect = $collect;
         $this->db = $db;
-
-        $this->paginate = $config->get('database.paginate');
+        $this->config = $config;
     }
 
     /**
@@ -106,7 +104,7 @@ class CategoryService implements
     {
         return $this->getAsFlatTree()
             ->whereNotIn('id', $filter['except'])
-            ->paginate($filter['paginate'] ?? $this->paginate);
+            ->paginate($filter['paginate'] ?? $this->config->get('database.paginate'));
     }
 
     /**

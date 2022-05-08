@@ -5,12 +5,18 @@ namespace N1ebieski\ICore\Models;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Services\RoleService;
 use N1ebieski\ICore\Repositories\RoleRepo;
+use N1ebieski\ICore\ValueObjects\Role\Name;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Spatie\Permission\Models\Role as BaseRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Role\RoleFactory;
 
+/**
+ *
+ * @property Name $name
+ * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ */
 class Role extends BaseRole
 {
     use Carbonable;

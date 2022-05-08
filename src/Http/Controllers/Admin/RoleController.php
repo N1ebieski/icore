@@ -15,6 +15,10 @@ use N1ebieski\ICore\Http\Requests\Admin\Role\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Role\DestroyRequest;
 
+/**
+ *
+ * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ */
 class RoleController
 {
     /**
@@ -63,15 +67,15 @@ class RoleController
     }
 
     /**
-     * Show the form for editing the specified resource.
      *
-     * @param  Role       $role       [description]
-     * @param  EditRequest $request   [description]
-     * @return HttpResponse           [description]
+     * @param Role $role
+     * @param Permission $permission
+     * @param EditRequest $request
+     * @return HttpResponse
      */
-    public function edit(Role $role, EditRequest $request): HttpResponse
+    public function edit(Role $role, Permission $permission, EditRequest $request): HttpResponse
     {
-        $permissions = $role->makeService()->getPermissionsByRole();
+        $permissions = $permission->makeRepo()->getByRole($role);
 
         return Response::view('icore::admin.role.edit', [
             'role' => $role,

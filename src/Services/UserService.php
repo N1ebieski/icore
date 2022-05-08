@@ -6,18 +6,18 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 
 class UserService implements
-    Creatable,
-    Updatable,
-    StatusUpdatable,
-    Deletable,
-    GlobalDeletable
+    CreateInterface,
+    UpdateInterface,
+    StatusUpdateInterface,
+    DeleteInterface,
+    GlobalDeleteInterface
 {
     /**
      * Undocumented variable

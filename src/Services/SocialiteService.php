@@ -4,13 +4,12 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Models\Socialite as Social;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
 use Laravel\Socialite\Contracts\User as ProviderUser;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
 
-class SocialiteService implements Creatable
+class SocialiteService implements CreateInterface
 {
     /**
      * [private description]
@@ -146,7 +145,7 @@ class SocialiteService implements Creatable
      */
     public function create(array $attributes): Model
     {
-        return $this->db->transaction(function () use ($attributes) {
+        return $this->db->transaction(function () {
             return $this->socialiteUser->socialites()->create([
                 'provider_id'   => $this->providerUser->getId(),
                 'provider_name' => $this->provider,

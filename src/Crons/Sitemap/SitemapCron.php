@@ -44,10 +44,7 @@ class SitemapCron
     public function __invoke(): void
     {
         foreach ($this->builders as $builder) {
-            $this->app->make(Director::class, [
-                'builder' => $this->app->make($builder)
-            ])
-            ->build();
+            $this->app->make(Director::class)->build($this->app->make($builder));
         }
     }
 }

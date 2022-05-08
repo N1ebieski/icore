@@ -7,20 +7,20 @@ use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\FullUpdatable;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\FullUpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 
 class PostService implements
-    Creatable,
-    Updatable,
-    FullUpdatable,
-    StatusUpdatable,
-    Deletable,
-    GlobalDeletable
+    CreateInterface,
+    UpdateInterface,
+    FullUpdateInterface,
+    StatusUpdateInterface,
+    DeleteInterface,
+    GlobalDeleteInterface
 {
     /**
      * [private description]

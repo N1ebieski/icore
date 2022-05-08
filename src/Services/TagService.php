@@ -5,12 +5,12 @@ namespace N1ebieski\ICore\Services;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
 
-class TagService implements Creatable, Updatable, Deletable, GlobalDeletable
+class TagService implements CreateInterface, UpdateInterface, DeleteInterface, GlobalDeleteInterface
 {
     /**
      * [private description]

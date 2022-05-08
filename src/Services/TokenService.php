@@ -3,11 +3,11 @@
 namespace N1ebieski\ICore\Services;
 
 use Illuminate\Contracts\Auth\Guard as Auth;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
 use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
 use N1ebieski\ICore\Models\Token\PersonalAccessToken as Token;
 
-class TokenService implements Deletable
+class TokenService implements DeleteInterface
 {
     /**
      * Undocumented variable

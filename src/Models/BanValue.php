@@ -10,8 +10,8 @@ use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
 
 /**
@@ -20,7 +20,7 @@ use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
 class BanValue extends Model
 {
     use Filterable;
-    use FullTextSearchable;
+    use HasFullTextSearchable;
     use Carbonable;
     use HasFactory;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace N1ebieski\ICore\Services;
+namespace N1ebieski\ICore\Services\MailingEmail;
 
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;

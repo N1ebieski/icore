@@ -1,17 +1,17 @@
 <?php
 
-namespace N1ebieski\ICore\Services;
+namespace N1ebieski\ICore\Services\Link;
 
 use N1ebieski\ICore\Models\Link;
 use N1ebieski\ICore\Utils\File\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
-class LinkService implements Creatable, Updatable, PositionUpdatable, Deletable
+class LinkService implements CreateInterface, UpdateInterface, PositionUpdateInterface, DeleteInterface
 {
     /**
      * Model

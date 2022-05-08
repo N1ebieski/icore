@@ -9,7 +9,7 @@ use N1ebieski\ICore\Services\TokenService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Laravel\Sanctum\PersonalAccessToken as BasePersonalAccessToken;
 
 class PersonalAccessToken extends BasePersonalAccessToken
@@ -17,7 +17,7 @@ class PersonalAccessToken extends BasePersonalAccessToken
     use Filterable;
     use Carbonable;
     use WildcardAbilities;
-    use FullTextSearchable;
+    use HasFullTextSearchable;
 
     // Configration
 

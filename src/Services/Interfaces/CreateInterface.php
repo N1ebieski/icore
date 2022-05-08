@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Services\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
 
-interface Creatable
+interface CreateInterface
 {
     /**
      * [create description]

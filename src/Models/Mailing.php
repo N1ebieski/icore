@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\App;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\MailingService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Repositories\MailingRepo;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Services\Mailing\MailingService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
 
 /**
@@ -22,7 +22,7 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  */
 class Mailing extends Model
 {
-    use FullTextSearchable;
+    use HasFullTextSearchable;
     use Filterable;
     use Carbonable;
     use HasFactory;

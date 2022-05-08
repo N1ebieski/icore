@@ -10,13 +10,13 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\Carbonable;
 use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Services\CategoryService;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
 use N1ebieski\ICore\Repositories\CategoryRepo;
+use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Services\Category\CategoryService;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
@@ -29,8 +29,8 @@ class Category extends Entity
 {
     use Sluggable;
     use Filterable;
-    use FullTextSearchable;
-    use Polymorphic;
+    use HasFullTextSearchable;
+    use HasPolymorphic;
     use Carbonable;
     use HasFactory;
     use HasFixForRealDepthClosureTable;

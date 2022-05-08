@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Report\Report;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
 
-class ReportService implements Creatable
+class ReportService implements CreateInterface
 {
     /**
      * [private description]

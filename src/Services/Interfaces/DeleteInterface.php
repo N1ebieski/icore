@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Interfaces;
 
-interface Deletable
+interface DeleteInterface
 {
     /**
      * [delete description]

@@ -9,24 +9,24 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\Interfaces\FullUpdatable;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeletable;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdatable;
+use N1ebieski\ICore\Services\Interfaces\FullUpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
+use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
 class PageService implements
-    Creatable,
-    Updatable,
-    FullUpdatable,
-    StatusUpdatable,
-    PositionUpdatable,
-    Deletable,
-    GlobalDeletable
+    CreateInterface,
+    UpdateInterface,
+    FullUpdateInterface,
+    StatusUpdateInterface,
+    PositionUpdateInterface,
+    DeleteInterface,
+    GlobalDeleteInterface
 {
     /**
      * [protected description]

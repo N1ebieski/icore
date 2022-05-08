@@ -7,40 +7,23 @@ use N1ebieski\ICore\Crons\Sitemap\Builder\Builder;
 class Director
 {
     /**
-     * Undocumented variable
-     *
-     * @var Builder
-     */
-    protected $builder;
-
-    /**
-     * Undocumented function
-     *
-     * @param Builder $builder
-     */
-    public function __construct(Builder $builder)
-    {
-        $this->builder = $builder;
-    }
-
-    /**
      * Undocumented function
      *
      * @return void
      */
-    public function build(): void
+    public function build(Builder $builder): void
     {
-        $this->builder->chunkCollection(function ($collection) {
-            $this->builder->setCollection($collection);
+        $builder->chunkCollection(function ($collection) use ($builder) {
+            $builder->setCollection($collection);
 
-            $this->builder->addToSitemap();
+            $builder->addToSitemap();
 
-            if ($this->builder->isMaxItems()) {
-                $this->builder->prepareSitemap();
+            if ($builder->isMaxItems()) {
+                $builder->prepareSitemap();
 
-                $this->builder->putSitemap();
+                $builder->putSitemap();
 
-                $this->builder->nullSitemap();
+                $builder->nullSitemap();
             }
         });
     }

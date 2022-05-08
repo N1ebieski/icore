@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Rating\Rating;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Deletable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 
-class RatingService implements Creatable, Updatable, Deletable
+class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
 {
     /**
      * [private description]

@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Interfaces;
 
-interface GlobalDeletable
+interface GlobalDeleteInterface
 {
     /**
      * [deleteGlobal description]

@@ -4,12 +4,15 @@ namespace N1ebieski\ICore\Services;
 
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\Creatable;
-use N1ebieski\ICore\Services\Interfaces\Updatable;
+use N1ebieski\ICore\Services\Interfaces\CreateInterface;
+use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 
-class RoleService implements Creatable, Updatable
+/**
+ *
+ * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ */
+class RoleService implements CreateInterface, UpdateInterface
 {
     /**
      * Model
@@ -35,27 +38,6 @@ class RoleService implements Creatable, Updatable
         $this->role = $role;
 
         $this->db = $db;
-    }
-
-    /**
-     * [getPermissionsByRole description]
-     * @return Collection [description]
-     */
-    public function getPermissionsByRole(): Collection
-    {
-        switch ($this->role->name) {
-            case 'user':
-                return $this->role->permissions()->make()->makeRepo()
-                    ->getUserWithRole($this->role->id);
-
-            case 'api':
-                return $this->role->permissions()->make()->makeRepo()
-                    ->getApiWithRole($this->role->id);
-
-            default:
-                return $this->role->permissions()->make()->makeRepo()
-                    ->getWithRole($this->role->id);
-        }
     }
 
     /**

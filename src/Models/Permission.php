@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Repositories\PermissionRepo;
 use Spatie\Permission\Models\Permission as BasePermission;
 
+/**
+ *
+ * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ */
 class Permission extends BasePermission
 {
     // Configuration

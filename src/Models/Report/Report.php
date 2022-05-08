@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Services\ReportService;
 use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Polymorphic;
+use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +14,7 @@ use N1ebieski\ICore\Database\Factories\Report\ReportFactory;
 
 class Report extends Model
 {
-    use Polymorphic;
+    use HasPolymorphic;
     use Carbonable;
     use HasFactory;
 

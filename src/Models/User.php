@@ -20,10 +20,10 @@ use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use N1ebieski\ICore\Database\Factories\User\UserFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
 /**
  * @property Status $status
@@ -34,7 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use Notifiable;
     use HasRoles;
-    use FullTextSearchable;
+    use HasFullTextSearchable;
     use Filterable;
     use Carbonable;
     use PivotEventTrait;
