@@ -163,21 +163,6 @@ class Category extends Entity
         return $this->childrens()->withRecursiveAllRels();
     }
 
-    // Overrides
-
-    /**
-     * Retrieve the model for a bound value.
-     *
-     * @param  mixed  $value
-     * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function resolveRouteBinding($value, $field = null)
-    {
-        return $this->where('id', $value)->orWhere('slug', $value)
-            ->WithAncestorsExceptSelf()->first() ?? abort(HttpResponse::HTTP_NOT_FOUND);
-    }
-
     // Scopes
 
     /**

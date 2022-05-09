@@ -38,8 +38,12 @@ class PostController
      * @param  ShowFilter  $filter  [description]
      * @return HttpResponse                 [description]
      */
-    public function show(Post $post, Comment $comment, ShowRequest $request, ShowFilter $filter): HttpResponse
-    {
+    public function show(
+        Post $post,
+        Comment $comment,
+        ShowRequest $request,
+        ShowFilter $filter
+    ): HttpResponse {
         $postCache = $post->makeCache();
 
         Event::dispatch(App::make(PostShowEvent::class, ['post' => $post]));

@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Cache\Post\PostCache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentTaggable\Taggable;
+use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Cache\Post\PostCache;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Services\Post\PostService;
 use N1ebieski\ICore\Repositories\Post\PostRepo;
@@ -131,23 +131,6 @@ class Post extends Model
     protected static function newFactory()
     {
         return \N1ebieski\ICore\Database\Factories\Post\PostFactory::new();
-    }
-
-    /**
-     * Retrieve the model for a bound value.
-     *
-     * @param  mixed  $value
-     * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function resolveRouteBinding($value, $field = null)
-    {
-        return $this->where('id', $value)
-            ->with([
-                'categories' => function ($query) {
-                    $query->withAncestorsExceptSelf();
-                },
-            ])->first() ?? App::abort(HttpResponse::HTTP_NOT_FOUND);
     }
 
     // Overrides
@@ -410,6 +393,24 @@ class Post extends Model
         return $query->where([
             ["{$this->getTable()}.status", '=', Status::SCHEDULED],
             ["{$this->getTable()}.published_at", '!=', null]
+        ]);
+    }
+
+    // Loads
+
+    /**
+     *
+     * @return static
+     */
+    public function loadAllRels()
+    {
+        return $this->load([
+            'categories' => function ($query) {
+                $query->withAncestorsExceptSelf();
+            },
+            'user',
+            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+            'stats' : null
         ]);
     }
 

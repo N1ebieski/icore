@@ -140,8 +140,7 @@ class CategoryController implements Polymorphic
 
         return Response::json([
             'view' => View::make('icore::admin.category.partials.category', [
-                // Niezbyt ładny hook, ale trzeba na nowo pobrać ancestory
-                'category' => $category->resolveRouteBinding($category->id),
+                'category' => $category->loadAncestorsExceptSelf(),
                 'show_ancestors' => true
             ])->render()
         ]);
