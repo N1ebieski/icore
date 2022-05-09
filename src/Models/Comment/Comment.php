@@ -4,12 +4,11 @@ namespace N1ebieski\ICore\Models\Comment;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Cache\CommentCache;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Repositories\CommentRepo;
+use N1ebieski\ICore\Cache\Comment\CommentCache;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\Models\Comment\CommentClosure;
@@ -19,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use N1ebieski\ICore\Services\Comment\CommentService;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use N1ebieski\ICore\Repositories\Comment\CommentRepo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,9 +33,9 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 class Comment extends Entity
 {
     use HasFullTextSearchable;
-    use Filterable;
+    use HasFilterable;
     use HasPolymorphic;
-    use Carbonable;
+    use HasCarbonable;
     use HasFixForRealDepthClosureTable;
     use HasFixForPolymorphicClosureTable;
     use HasFactory;

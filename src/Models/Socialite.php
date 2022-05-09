@@ -4,16 +4,16 @@ namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Services\SocialiteService;
-use N1ebieski\ICore\Repositories\SocialiteRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Services\Socialite\SocialiteService;
+use N1ebieski\ICore\Repositories\Socialite\SocialiteRepo;
 use N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory;
 
 class Socialite extends Model
 {
-    use Carbonable;
+    use HasCarbonable;
     use HasFactory;
 
     // Configuration

@@ -4,10 +4,10 @@ namespace N1ebieski\ICore\View\Components;
 
 use Illuminate\View\View;
 use N1ebieski\ICore\Models\Post;
-use N1ebieski\ICore\Cache\SessionCache;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Cache\Session\SessionCache;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;

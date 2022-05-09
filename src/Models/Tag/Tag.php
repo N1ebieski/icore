@@ -3,12 +3,12 @@
 namespace N1ebieski\ICore\Models\Tag;
 
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Cache\TagCache;
-use N1ebieski\ICore\Services\TagService;
+use N1ebieski\ICore\Cache\Tag\TagCache;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Repositories\TagRepo;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Services\Tag\TagService;
+use N1ebieski\ICore\Repositories\Tag\TagRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,8 +19,8 @@ class Tag extends Taggable
 {
     use HasFullTextSearchable;
     use HasPolymorphic;
-    use Filterable;
-    use Carbonable;
+    use HasFilterable;
+    use HasCarbonable;
     use HasFactory;
 
     // Configuration

@@ -3,16 +3,16 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Cache\LinkCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Repositories\LinkRepo;
+use N1ebieski\ICore\Cache\Link\LinkCache;
 use N1ebieski\ICore\ValueObjects\Link\Type;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\Services\Link\LinkService;
-use N1ebieski\ICore\Models\Traits\Positionable;
+use N1ebieski\ICore\Repositories\Link\LinkRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
+use N1ebieski\ICore\Models\Traits\HasPositionable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -23,9 +23,9 @@ use N1ebieski\ICore\Database\Factories\Link\LinkFactory;
  */
 class Link extends Model
 {
-    use Positionable;
-    use Carbonable;
-    use Filterable;
+    use HasPositionable;
+    use HasCarbonable;
+    use HasFilterable;
     use HasFactory;
 
     // Configuration

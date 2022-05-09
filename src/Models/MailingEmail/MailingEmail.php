@@ -5,12 +5,12 @@ namespace N1ebieski\ICore\Models\MailingEmail;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Repositories\MailingEmailRepo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\MailingEmail\MailingEmailService;
+use N1ebieski\ICore\Repositories\MailingEmail\MailingEmailRepo;
 use N1ebieski\ICore\Database\Factories\MailingEmail\MailingEmailFactory;
 
 /**

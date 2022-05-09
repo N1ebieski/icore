@@ -4,18 +4,18 @@ namespace N1ebieski\ICore\Models\BanModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
 class BanModel extends Model
 {
-    use Filterable;
+    use HasFilterable;
     use HasFullTextSearchable;
     use HasPolymorphic;
-    use Carbonable;
+    use HasCarbonable;
 
     // Configuration
 

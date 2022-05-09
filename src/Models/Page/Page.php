@@ -7,21 +7,21 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Cache\PageCache;
 use Cviebrock\EloquentTaggable\Taggable;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\PageService;
+use N1ebieski\ICore\Cache\Page\PageCache;
 use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Repositories\PageRepo;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\ValueObjects\Page\Status;
-use N1ebieski\ICore\Models\Traits\StatFilterable;
+use N1ebieski\ICore\Services\Page\PageService;
+use N1ebieski\ICore\Repositories\Page\PageRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use N1ebieski\ICore\Models\Traits\HasStatFilterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,11 +44,11 @@ class Page extends Entity
     use Taggable;
     use HasFullTextSearchable;
     use PivotEventTrait;
-    use Carbonable;
+    use HasCarbonable;
     use HasFactory;
     use HasFixForRealDepthClosureTable;
-    use Filterable, StatFilterable {
-        StatFilterable::scopeFilterOrderBy insteadof Filterable;
+    use HasFilterable, HasStatFilterable {
+        HasStatFilterable::scopeFilterOrderBy insteadof HasFilterable;
     }
 
     // Configuration

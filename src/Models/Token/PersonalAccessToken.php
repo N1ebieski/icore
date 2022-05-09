@@ -5,18 +5,18 @@ namespace N1ebieski\ICore\Models\Token;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\TokenService;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Services\Token\TokenService;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Laravel\Sanctum\PersonalAccessToken as BasePersonalAccessToken;
 
 class PersonalAccessToken extends BasePersonalAccessToken
 {
-    use Filterable;
-    use Carbonable;
-    use WildcardAbilities;
+    use HasFilterable;
+    use HasCarbonable;
+    use HasWildcardAbilities;
     use HasFullTextSearchable;
 
     // Configration

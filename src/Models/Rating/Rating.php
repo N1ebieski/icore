@@ -4,8 +4,8 @@ namespace N1ebieski\ICore\Models\Rating;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Services\RatingService;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
+use N1ebieski\ICore\Services\Rating\RatingService;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

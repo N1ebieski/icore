@@ -3,12 +3,12 @@
 namespace N1ebieski\ICore\Models\Stat;
 
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Cache\StatCache;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Services\StatService;
-use N1ebieski\ICore\Repositories\StatRepo;
+use N1ebieski\ICore\Cache\Stat\StatCache;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
-use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Services\Stat\StatService;
+use N1ebieski\ICore\Repositories\Stat\StatRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 
 /**
@@ -17,7 +17,7 @@ use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 class Stat extends Model
 {
     use HasPolymorphic;
-    use Carbonable;
+    use HasCarbonable;
 
     // Configuration
 

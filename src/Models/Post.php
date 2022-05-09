@@ -8,22 +8,22 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Cache\PostCache;
+use N1ebieski\ICore\Cache\Post\PostCache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentTaggable\Taggable;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\PostService;
 use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Repositories\PostRepo;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
 use N1ebieski\ICore\ValueObjects\Post\Status;
-use N1ebieski\ICore\Models\Traits\StatFilterable;
+use N1ebieski\ICore\Services\Post\PostService;
+use N1ebieski\ICore\Repositories\Post\PostRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
+use N1ebieski\ICore\Models\Traits\HasStatFilterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,10 +44,10 @@ class Post extends Model
     use Taggable;
     use HasFullTextSearchable;
     use PivotEventTrait;
-    use Carbonable;
+    use HasCarbonable;
     use HasFactory;
-    use Filterable, StatFilterable {
-        StatFilterable::scopeFilterOrderBy insteadof Filterable;
+    use HasFilterable, HasStatFilterable {
+        HasStatFilterable::scopeFilterOrderBy insteadof HasFilterable;
     }
 
     // Configuration

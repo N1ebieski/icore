@@ -4,13 +4,13 @@ namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Cache\BanValueCache;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Repositories\BanValueRepo;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
+use N1ebieski\ICore\Cache\BanValue\BanValueCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use N1ebieski\ICore\Repositories\BanValue\BanValueRepo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
 
@@ -19,9 +19,9 @@ use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
  */
 class BanValue extends Model
 {
-    use Filterable;
+    use HasFilterable;
     use HasFullTextSearchable;
-    use Carbonable;
+    use HasCarbonable;
     use HasFactory;
 
     // Configuration

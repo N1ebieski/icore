@@ -4,17 +4,17 @@ namespace N1ebieski\ICore\Models;
 
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Cache\UserCache;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\UserService;
-use N1ebieski\ICore\Repositories\UserRepo;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Cache\User\UserCache;
 use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use N1ebieski\ICore\Services\User\UserService;
 use N1ebieski\ICore\Models\Traits\HasApiTokens;
+use N1ebieski\ICore\Repositories\User\UserRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\User\Marketing;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,8 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use HasRoles;
     use HasFullTextSearchable;
-    use Filterable;
-    use Carbonable;
+    use HasFilterable;
+    use HasCarbonable;
     use PivotEventTrait;
     use HasFactory;
 

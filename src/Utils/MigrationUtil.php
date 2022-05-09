@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Utils;
 
 use Illuminate\Support\Str;
-use N1ebieski\ICore\Cache\MigrationCache;
+use N1ebieski\ICore\Cache\Migration\MigrationCache;
 
 class MigrationUtil
 {

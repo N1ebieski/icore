@@ -4,18 +4,18 @@ namespace N1ebieski\ICore\Models\Category;
 
 use Illuminate\Support\Facades\App;
 use Franzose\ClosureTable\Models\Entity;
-use N1ebieski\ICore\Cache\CategoryCache;
 use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Repositories\CategoryRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
+use N1ebieski\ICore\Cache\Category\CategoryCache;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\Category\CategoryService;
+use N1ebieski\ICore\Repositories\Category\CategoryRepo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
@@ -28,10 +28,10 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 class Category extends Entity
 {
     use Sluggable;
-    use Filterable;
+    use HasFilterable;
     use HasFullTextSearchable;
     use HasPolymorphic;
-    use Carbonable;
+    use HasCarbonable;
     use HasFactory;
     use HasFixForRealDepthClosureTable;
     use HasFixForPolymorphicClosureTable;

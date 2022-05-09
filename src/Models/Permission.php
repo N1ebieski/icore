@@ -3,7 +3,7 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Repositories\PermissionRepo;
+use N1ebieski\ICore\Repositories\Permission\PermissionRepo;
 use Spatie\Permission\Models\Permission as BasePermission;
 
 /**

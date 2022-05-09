@@ -11,12 +11,12 @@ use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
+use N1ebieski\ICore\Http\Requests\Traits\HasCaptcha;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
 
 class RegisterController extends Controller
 {
-    use CaptchaExtended;
+    use HasCaptcha;
 
     /*
     |--------------------------------------------------------------------------

@@ -51,6 +51,13 @@ abstract class Builder
     /**
      * Undocumented variable
      *
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * Undocumented variable
+     *
      * @var Collection
      */
     protected $collection;
@@ -97,13 +104,6 @@ abstract class Builder
     protected $iterator = 0;
 
     /**
-     * Undocumented variable
-     *
-     * @var int
-     */
-    protected $paginate;
-
-    /**
      * Undocumented function
      *
      * @param ArrayToXml $arrayToXml
@@ -126,8 +126,8 @@ abstract class Builder
         $this->carbon = $carbon;
         $this->storage = $storage;
         $this->collect = $collect;
+        $this->config = $config;
 
-        $this->paginate = $config->get('database.paginate');
         $this->nullSitemap();
     }
 
@@ -152,7 +152,7 @@ abstract class Builder
      */
     protected function countPages(int $count): int
     {
-        $pages = ceil($count / $this->paginate);
+        $pages = ceil($count / $this->config->get('database.paginate'));
 
         return $pages > 0 ? $pages : 1;
     }

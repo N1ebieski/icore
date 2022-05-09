@@ -3,12 +3,12 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Services\RoleService;
-use N1ebieski\ICore\Repositories\RoleRepo;
 use N1ebieski\ICore\ValueObjects\Role\Name;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Services\Role\RoleService;
 use Spatie\Permission\Models\Role as BaseRole;
+use N1ebieski\ICore\Repositories\Role\RoleRepo;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Role\RoleFactory;
 
@@ -19,8 +19,8 @@ use N1ebieski\ICore\Database\Factories\Role\RoleFactory;
  */
 class Role extends BaseRole
 {
-    use Carbonable;
-    use Filterable;
+    use HasCarbonable;
+    use HasFilterable;
     use HasFactory;
 
     // Configuration

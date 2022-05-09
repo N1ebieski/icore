@@ -10,14 +10,14 @@ use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
-use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
+use N1ebieski\ICore\Http\Requests\Traits\HasCaptcha;
 
 /**
  * @property Post $post
  */
 class StoreRequest extends FormRequest
 {
-    use CaptchaExtended;
+    use HasCaptcha;
 
     /**
      * [private description]

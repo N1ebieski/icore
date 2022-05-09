@@ -31,12 +31,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         Route::bind('post_cache', function ($value) {
-            return $this->app->make(\N1ebieski\ICore\Cache\PostCache::class)->rememberBySlug($value)
+            return $this->app->make(\N1ebieski\ICore\Cache\Post\PostCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
         Route::bind('page_cache', function ($value) {
-            return $this->app->make(\N1ebieski\ICore\Cache\PageCache::class)->rememberBySlug($value)
+            return $this->app->make(\N1ebieski\ICore\Cache\Page\PageCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
@@ -46,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('tag_cache', function ($value) {
-            return $this->app->make(\N1ebieski\ICore\Cache\TagCache::class)->rememberBySlug($value)
+            return $this->app->make(\N1ebieski\ICore\Cache\Tag\TagCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 

@@ -3,11 +3,11 @@
 namespace N1ebieski\ICore\Http\Requests\Web\Contact;
 
 use Illuminate\Foundation\Http\FormRequest;
-use N1ebieski\ICore\Http\Requests\Traits\CaptchaExtended;
+use N1ebieski\ICore\Http\Requests\Traits\HasCaptcha;
 
 class SendRequest extends FormRequest
 {
-    use CaptchaExtended;
+    use HasCaptcha;
 
     /**
      * Determine if the user is authorized to make this request.

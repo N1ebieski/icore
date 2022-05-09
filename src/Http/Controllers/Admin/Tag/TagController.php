@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
-use N1ebieski\ICore\Services\TagService;
+use N1ebieski\ICore\Services\Tag\TagService;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Filters\Admin\Tag\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Tag\IndexRequest;
