@@ -41,6 +41,16 @@ class Name extends ValueObject
     }
 
     /**
+    * Undocumented function
+    *
+    * @return array
+    */
+    public static function getDefault(): array
+    {
+        return [self::SUPER_ADMIN, self::ADMIN, self::USER, self::API];
+    }
+
+    /**
      * Undocumented function
      *
      * @return boolean
@@ -64,6 +74,15 @@ class Name extends ValueObject
      * [isEditDefault description]
      * @return bool [description]
      */
+    public function isDefault(): bool
+    {
+        return in_array($this->value, self::getDefault());
+    }
+
+    /**
+     * [isEditDefault description]
+     * @return bool [description]
+     */
     public function isEditNotDefault(): bool
     {
         return !in_array($this->value, [self::SUPER_ADMIN, self::ADMIN]);
@@ -75,6 +94,6 @@ class Name extends ValueObject
      */
     public function isDeleteNotDefault(): bool
     {
-        return !in_array($this->value, [self::SUPER_ADMIN, self::ADMIN, self::USER, self::API]);
+        return !in_array($this->value, self::getDefault());
     }
 }

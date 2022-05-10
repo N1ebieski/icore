@@ -29,6 +29,12 @@ class UpdateRequest extends FormRequest
                 'name' => Name::USER
             ]);
         }
+
+        if ($this->role->name->isApi()) {
+            $this->merge([
+                'name' => Name::API
+            ]);
+        }
     }
 
     /**
@@ -49,6 +55,9 @@ class UpdateRequest extends FormRequest
                 'exists:permissions,name',
                 $this->role->name->isUser() ?
                     'regex:/^(web\.|api\.).+/'
+                    : null,
+                $this->role->name->isApi() ?
+                    'regex:/^(api\.).+/'
                     : null,
                 'no_js_validation'
             ]

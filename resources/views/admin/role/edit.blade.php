@@ -70,7 +70,7 @@
                         name="name"
                         id="name" 
                         class="form-control {{ $isValid('name') }}"
-                        {{ $role->name->isUser() ? 'disabled' : null }}
+                        {{ $role->name->isDefault() ? 'disabled' : null }}
                     >
                     @includeWhen($errors->has('name'), 'icore::admin.partials.errors', ['name' => 'name'])
                 </div>
