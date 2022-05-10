@@ -10,9 +10,40 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">
-    {{ trans('icore::pages.route.index') }}
+<li 
+    class="breadcrumb-item {{ !optional($filter['parent'])->id ? 'active' : null }}"
+    @if (!optional($filter['parent'])->id)
+    aria-current="page"
+    @endif    
+>
+    @if (optional($filter['parent'])->id)
+    <a 
+        href="{{ route('admin.page.index') }}"
+        title="{{ trans('icore::pages.route.index') }}"
+    >
+    @endif
+        {{ trans('icore::pages.route.index') }}
+    @if (optional($filter['parent'])->id)
+    </a>
+    @endif
 </li>
+@if (optional($filter['parent'])->id)
+@if ($filter['parent']->ancestors->isNotEmpty())
+@foreach ($filter['parent']->ancestors as $ancestor)
+<li class="breadcrumb-item">
+    <a 
+        href="{{ route('admin.page.index', ['filter[parent]' => $ancestor->id]) }}"
+        title="{{ $ancestor->title }}"
+    >
+        {{ $ancestor->title }}
+    </a>
+</li>
+@endforeach
+@endif
+<li class="breadcrumb-item active" aria-current="page">
+    {{ $filter['parent']->title }}
+</li>
+@endif
 @endsection
 
 @section('content')

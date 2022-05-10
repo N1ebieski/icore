@@ -2,8 +2,10 @@
 
 namespace N1ebieski\ICore\Filters\Admin\Page;
 
+use Illuminate\Http\Request;
 use N1ebieski\ICore\Filters\Filter;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Filters\Traits\HasExcept;
 use N1ebieski\ICore\Filters\Traits\HasParent;
 use N1ebieski\ICore\Filters\Traits\HasSearch;
@@ -21,6 +23,25 @@ class IndexFilter extends Filter
     use HasPaginate;
 
     /**
+     * @var Page
+     */
+    protected $page;
+
+    /**
+     *
+     * @param Request $request
+     * @param Collect $collect
+     * @param Page $page
+     * @return void
+     */
+    public function __construct(Request $request, Collect $collect, Page $page)
+    {
+        $this->page = $page;
+
+        parent::__construct($request, $collect);
+    }
+
+    /**
      * [setParent description]
      * @param Page $page [description]
      */
@@ -34,10 +55,14 @@ class IndexFilter extends Filter
     /**
      * [findParent description]
      * @param  int|null $id [description]
-     * @return Page       [description]
+     * @return Page|null       [description]
      */
-    public function findParent(int $id = null): Page
+    public function findParent(int $id = null): ?Page
     {
-        return Page::find($id, ['id', 'title']);
+        return $id !== null ?
+            $this->page->withAncestorsExceptSelf()
+                ->where($this->page->getKeyName(), $id)
+                ->first()
+            : null;
     }
 }

@@ -13,9 +13,40 @@
 <li class="breadcrumb-item">
     {{ trans('icore::categories.route.index') }}
 </li>
-<li class="breadcrumb-item active" aria-current="page">
-    {{ trans("icore::categories.{$model->poli}.{$model->poli}") }}
+<li 
+    class="breadcrumb-item {{ !optional($filter['parent'])->id ? 'active' : null }}" 
+    @if (!optional($filter['parent'])->id)
+    aria-current="page"
+    @endif
+>
+    @if (optional($filter['parent'])->id)
+    <a 
+        href="{{ route("admin.category.{$model->poli}.index") }}"
+        title="{{ trans("icore::categories.{$model->poli}.{$model->poli}") }}"
+    >
+    @endif
+        {{ trans("icore::categories.{$model->poli}.{$model->poli}") }}
+    @if (optional($filter['parent'])->id)
+    </a>
+    @endif
 </li>
+@if (optional($filter['parent'])->id)
+@if ($filter['parent']->ancestors->isNotEmpty())
+@foreach ($filter['parent']->ancestors as $ancestor)
+<li class="breadcrumb-item">
+    <a 
+        href="{{ route("admin.category.{$model->poli}.index", ['filter[parent]' => $ancestor->id]) }}"
+        title="{{ $ancestor->name }}"
+    >
+        {{ $ancestor->name }}
+    </a>
+</li>
+@endforeach
+@endif
+<li class="breadcrumb-item active" aria-current="page">
+    {{ $filter['parent']->name }}
+</li>
+@endif
 @endsection
 
 @section('content')

@@ -2,21 +2,21 @@
 
 namespace N1ebieski\ICore\Console\Commands\Update;
 
+use InvalidArgumentException;
 use Illuminate\Console\Command;
-use N1ebieski\ICore\Utils\Updater\Updater;
-use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use Symfony\Component\Console\Exception\LogicException;
 use Illuminate\Contracts\Translation\Translator as Lang;
+use Symfony\Component\Console\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
 
-class UpdateCommand extends Command
+/**
+ *
+ * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ */
+class RollbackCommand extends Command
 {
-    /**
-     * [protected description]
-     * @var App
-     */
-    protected $app;
-
     /**
      * [protected description]
      * @var Config
@@ -33,16 +33,16 @@ class UpdateCommand extends Command
     /**
      * Undocumented variable
      *
-     * @var Lang
+     * @var Filesystem
      */
-    protected $lang;
+    protected $filesystem;
 
     /**
      * Undocumented variable
      *
-     * @var SchemaFactory
+     * @var Lang
      */
-    protected $schemaFactory;
+    protected $lang;
 
     /**
      * Undocumented variable
@@ -56,41 +56,40 @@ class UpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'icore:update {version : The version to which the application files will be updated}';
+    protected $signature = 'icore:update:rollback {version : The version to which the application files will be restored}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'iCore application updater.';
+    protected $description = 'iCore application updater rollback.';
 
     /**
-     * Undocumented function
      *
-     * @param App $app
      * @param Config $config
      * @param Storage $storage
+     * @param Filesystem $filesystem
      * @param Lang $lang
-     * @param SchemaFactory $schemaFactory
      * @param string $backup_path
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ExceptionInvalidArgumentException
+     * @throws LogicException
      */
     public function __construct(
-        App $app,
         Config $config,
         Storage $storage,
+        Filesystem $filesystem,
         Lang $lang,
-        SchemaFactory $schemaFactory,
         string $backup_path = 'backup/vendor/icore'
     ) {
         parent::__construct();
 
-        $this->app = $app;
         $this->config = $config;
         $this->storage = $storage;
         $this->lang = $lang;
-
-        $this->schemaFactory = $schemaFactory;
+        $this->filesystem = $filesystem;
 
         $this->backup_path = $backup_path;
     }
@@ -112,7 +111,7 @@ class UpdateCommand extends Command
      */
     protected function confirmation(): void
     {
-        $this->info($this->lang->get('icore::update.update'));
+        $this->info($this->lang->get('icore::update.rollback'));
 
         if (!$this->confirm($this->lang->get('icore::update.confirm'))) {
             exit;
@@ -128,8 +127,8 @@ class UpdateCommand extends Command
     {
         $this->line($this->lang->get('icore::update.validate.backup'));
 
-        if ($this->storage->disk('local')->exists($this->getFullBackupPath())) {
-            $this->error($this->lang->get('icore::update.errors.backup.exists'));
+        if (!$this->storage->disk('local')->exists($this->getFullBackupPath())) {
+            $this->error($this->lang->get('icore::update.errors.backup.no_exists'));
 
             exit;
         }
@@ -142,45 +141,18 @@ class UpdateCommand extends Command
      *
      * @return void
      */
-    protected function backup(): void
+    protected function rollback(): void
     {
-        $this->line($this->lang->get('icore::update.backup'));
+        $this->line($this->lang->get('icore::update.rollback_files'));
 
-        try {
-            $updater = $this->app->make(Updater::class, [
-                'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
-            ]);
+        $this->filesystem->copyDirectory(
+            storage_path('app') . '/' . $this->getFullBackupPath(),
+            resource_path()
+        );
 
-            $updater->backup($this->getFullBackupPath());
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
-
-            exit;
-        }
-
-        $this->info('OK');
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    protected function update(): void
-    {
-        $this->line($this->lang->get('icore::update.update_files'));
-
-        try {
-            $updater = $this->app->make(Updater::class, [
-                'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
-            ]);
-
-            $updater->update();
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
-
-            exit;
-        }
+        $this->filesystem->deleteDirectory(
+            storage_path('app') . '/' . $this->getFullBackupPath()
+        );
 
         $this->info('OK');
     }
@@ -192,9 +164,9 @@ class UpdateCommand extends Command
      */
     public function handle()
     {
-        $bar = $this->output->createProgressBar(3);
+        $bar = $this->output->createProgressBar(2);
 
-        $this->line("iCore updater");
+        $this->line("iCore updater rollback");
         $this->line("Author: Mariusz Wysokiński");
         $this->line("Version: {$this->config->get('icore.version')}");
         $this->line("\n");
@@ -206,11 +178,7 @@ class UpdateCommand extends Command
         $this->line("\n");
         $bar->advance();
         $this->line("\n");
-        $this->backup();
-        $this->line("\n");
-        $bar->advance();
-        $this->line("\n");
-        $this->update();
+        $this->rollback();
         $this->line("\n");
         $bar->finish();
     }

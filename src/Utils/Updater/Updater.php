@@ -73,8 +73,6 @@ class Updater
         $this->collect = $collect;
 
         $this->actionFactory = $actionFactory;
-
-        $this->filesystem = $filesystem;
     }
 
     /**
