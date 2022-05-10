@@ -84,6 +84,7 @@ class UpdateFullRequest extends FormRequest
                         ['model_type', $this->category->model_type]
                     ]);
                 }),
+                'no_js_validation'
             ],
             'user' => 'bail|required|integer|exists:users,id',
             'seo_title' => 'max:255',

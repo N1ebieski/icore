@@ -84,6 +84,7 @@ class StoreRequest extends FormRequest
                         ['model_type', $this->category->model_type]
                     ]);
                 }),
+                'no_js_validation'
             ],
             'seo_title' => 'max:255',
             'seo_desc' => 'max:255',
