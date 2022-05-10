@@ -156,7 +156,7 @@ class CategoryService implements
 
             if (isset($attributes['clear'])) {
                 if ((bool)$attributes['clear'] === true) {
-                    $this->category->newQuery()->delete();
+                    $this->category->newQuery()->poliType()->delete();
                     $parent_id = null;
                 }
             }
