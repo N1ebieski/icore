@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\Utils\Traits;
 
-trait Decorator
+trait HasDecorator
 {
     /**
      * Undocumented variable
