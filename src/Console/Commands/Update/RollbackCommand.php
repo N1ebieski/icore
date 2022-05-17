@@ -147,7 +147,7 @@ class RollbackCommand extends Command
 
         $this->filesystem->copyDirectory(
             storage_path('app') . '/' . $this->getFullBackupPath(),
-            resource_path()
+            base_path()
         );
 
         $this->filesystem->deleteDirectory(

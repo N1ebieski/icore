@@ -14,9 +14,7 @@ class Schema700 implements SchemaInterface
     public $pattern = [
         [
             'paths' => [
-                'views' => [
-                    'vendor/icore/web'
-                ]
+                'resources/views/vendor/icore/web'
             ],
             'actions' => [
                 [
@@ -98,9 +96,7 @@ class Schema700 implements SchemaInterface
         ],
         [
             'paths' => [
-                'lang' => [
-                    'vendor/icore'
-                ]
+                'resources/lang/vendor/icore'
             ],
             'actions' => [
                 [
