@@ -30,7 +30,7 @@ class SidebarComposer extends Composer
     public function __construct(Comment $comment)
     {
         $this->comments_inactive_count = $comment->makeRepo()->countByModelTypeAndStatus()
-            ->where('status', Status::INACTIVE);
+            ->where('status', Status::inactive());
 
         $this->comments_reported_count = $comment->makeRepo()->countReportedByModelType();
     }

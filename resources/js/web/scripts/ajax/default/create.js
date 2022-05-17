@@ -11,6 +11,11 @@ $(document).on(
         $modal.footer = $($element.data('target')).find('.modal-footer');
         $modal.content = $($element.data('target')).find('.modal-content');
 
+        $modal.on('show.bs.modal', function () {
+            $(this).find('.modal-body').empty();
+            $(this).find('.modal-footer').empty();
+        });
+
         $modal.on('hidden.bs.modal', function () {
             $(this).find('.modal-body').empty();
             $(this).find('.modal-footer').empty();
