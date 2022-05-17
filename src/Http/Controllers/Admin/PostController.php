@@ -111,7 +111,7 @@ class PostController
      */
     public function updateStatus(Post $post, UpdateStatusRequest $request): JsonResponse
     {
-        $post->makeService()->updateStatus($request->only('status'));
+        $post->makeService()->updateStatus($request->input('status'));
 
         return Response::json([
             'status' => $post->status->getValue(),

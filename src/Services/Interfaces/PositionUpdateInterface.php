@@ -5,9 +5,9 @@ namespace N1ebieski\ICore\Services\Interfaces;
 interface PositionUpdateInterface
 {
     /**
-     * [updatePosition description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * 
+     * @param int $position 
+     * @return bool 
      */
-    public function updatePosition(array $attributes): bool;
+    public function updatePosition(int $position): bool;
 }

@@ -125,7 +125,7 @@ class LinkController
      */
     public function updatePosition(Link $link, UpdatePositionRequest $request): JsonResponse
     {
-        $link->makeService()->updatePosition($request->only('position'));
+        $link->makeService()->updatePosition($request->input('position'));
 
         return Response::json([
             'siblings' => $link->makeRepo()->getSiblingsAsArray()

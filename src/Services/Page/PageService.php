@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Page;
 
+use Throwable;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -246,24 +247,25 @@ class PageService implements
     }
 
     /**
-     * [updateStatus description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param int $status
+     * @return bool
+     * @throws Throwable
      */
-    public function updateStatus(array $attributes): bool
+    public function updateStatus(int $status): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            $update = $this->page->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($status) {
+            $update = $this->page->update(['status' => $status]);
 
             if ($update === true) {
                 // Deactivates parent page, deactivates all descendants
                 if ($this->page->status->isInactive()) {
-                    $this->page->descendants()->update(['status' => $attributes['status']]);
+                    $this->page->descendants()->update(['status' => $status]);
                 }
 
                 // Activating child page, activates all ancestors
                 if ($this->page->status->isActive()) {
-                    $this->page->ancestors()->update(['status' => $attributes['status']]);
+                    $this->page->ancestors()->update(['status' => $status]);
                 }
             }
 
@@ -272,14 +274,15 @@ class PageService implements
     }
 
     /**
-     * [updatePosition description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param int $position
+     * @return bool
+     * @throws Throwable
      */
-    public function updatePosition(array $attributes): bool
+    public function updatePosition(int $position): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            return $this->page->update(['position' => $attributes['position']]);
+        return $this->db->transaction(function () use ($position) {
+            return $this->page->update(['position' => $position]);
         });
     }
 

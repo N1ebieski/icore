@@ -102,7 +102,7 @@ class PageController
      */
     public function updatePosition(Page $page, UpdatePositionRequest $request): JsonResponse
     {
-        $page->makeService()->updatePosition($request->only('position'));
+        $page->makeService()->updatePosition($request->input('position'));
 
         return Response::json([
             'siblings' => $page->makeRepo()->getSiblingsAsArray() + [$page->id => $page->position]
@@ -175,7 +175,7 @@ class PageController
      */
     public function updateStatus(Page $page, UpdateStatusRequest $request): JsonResponse
     {
-        $page->makeService()->updateStatus($request->only('status'));
+        $page->makeService()->updateStatus($request->input('status'));
 
         $pageRepo = $page->makeRepo();
 

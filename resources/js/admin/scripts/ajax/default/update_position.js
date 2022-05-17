@@ -21,7 +21,7 @@ $(document).on(
                 $element.loader('hide');
             },
             success: function (response) {
-                $('.modal').modal('hide');
+                $form.closest('.modal').modal('hide');
 
                 $.each(response.siblings, function (key, value) {
                     let $rowSibling = $('#row' + key);

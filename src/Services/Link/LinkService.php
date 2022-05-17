@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Link;
 
+use Throwable;
 use N1ebieski\ICore\Models\Link;
 use N1ebieski\ICore\Utils\File\File;
 use Illuminate\Database\Eloquent\Model;
@@ -106,14 +107,15 @@ class LinkService implements CreateInterface, UpdateInterface, PositionUpdateInt
     }
 
     /**
-     * [updatePosition description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param int $position
+     * @return bool
+     * @throws Throwable
      */
-    public function updatePosition(array $attributes): bool
+    public function updatePosition(int $position): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            return $this->link->update(['position' => (int)$attributes['position']]);
+        return $this->db->transaction(function () use ($position) {
+            return $this->link->update(['position' => $position]);
         });
     }
 

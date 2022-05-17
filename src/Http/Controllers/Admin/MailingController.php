@@ -106,7 +106,7 @@ class MailingController
      */
     public function updateStatus(Mailing $mailing, UpdateStatusRequest $request): JsonResponse
     {
-        $mailing->makeService()->updateStatus($request->only('status'));
+        $mailing->makeService()->updateStatus($request->input('status'));
 
         return Response::json([
             'status' => $mailing->status->getValue(),

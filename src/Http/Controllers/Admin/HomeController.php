@@ -8,17 +8,18 @@ use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Clients\Intelekt\Post\PostClient;
-use N1ebieski\ICore\Http\Responses\Data\Chart\Post\TimelineData as PostAndPagesTimelineData;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use N1ebieski\ICore\Http\Responses\Data\Chart\Post\TimelineData as PostsAndPagesTimelineData;
 
 class HomeController
 {
     /**
-     * Undocumented function
      *
      * @param Post $post
      * @param Page $page
-     * @param Client $client
+     * @param PostClient $client
      * @return HttpResponse
+     * @throws BindingResolutionException
      */
     public function index(Post $post, Page $page, PostClient $client): HttpResponse
     {
@@ -34,7 +35,7 @@ class HomeController
 
         return Response::view('icore::admin.home.index', [
             'posts' => $posts,
-            'countPostsAndPagesByDate' => App::make(PostAndPagesTimelineData::class)
+            'countPostsAndPagesByDate' => App::make(PostsAndPagesTimelineData::class)
                 ->toArray($post->makeRepo()->countActiveByDateUnionPages($page->activeByDate()))
         ]);
     }

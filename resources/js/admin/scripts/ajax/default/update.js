@@ -39,7 +39,7 @@ $(document).on(
                     $row.removeClassStartingWith('alert-');
                 }, 5000);
                 
-                $('.modal').modal('hide');
+                $form.closest('.modal').modal('hide');
             },
             error: function (response) {
                 if (response.responseJSON.errors) {

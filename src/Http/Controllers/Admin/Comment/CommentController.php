@@ -115,7 +115,7 @@ class CommentController implements Polymorphic
      */
     public function updateStatus(Comment $comment, UpdateStatusRequest $request): JsonResponse
     {
-        $comment->makeService()->updateStatus($request->only('status'));
+        $comment->makeService()->updateStatus($request->input('status'));
 
         $commentRepo = $comment->makeRepo();
 

@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\User;
 
+use Throwable;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -101,17 +102,15 @@ class UserService implements
     }
 
     /**
-     * Undocumented function
      *
-     * @param array $attributes
-     * @return boolean
+     * @param int $status
+     * @return bool
+     * @throws Throwable
      */
-    public function updateStatus(array $attributes): bool
+    public function updateStatus(int $status): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            return $this->user->update([
-                'status' => $attributes['status']
-            ]);
+        return $this->db->transaction(function () use ($status) {
+            return $this->user->update(['status' => $status]);
         });
     }
 

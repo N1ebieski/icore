@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Mailing;
 
+use Throwable;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
@@ -105,15 +106,15 @@ class MailingService implements
     }
 
     /**
-     * Update Status attribute the specified Mailing in storage.
      *
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * @param int $status
+     * @return bool
+     * @throws Throwable
      */
-    public function updateStatus(array $attributes): bool
+    public function updateStatus(int $status): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            return $this->mailing->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($status) {
+            return $this->mailing->update(['status' => $status]);
         });
     }
 

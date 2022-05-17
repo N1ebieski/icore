@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Post;
 
+use Throwable;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Model;
@@ -104,15 +105,15 @@ class PostService implements
     }
 
     /**
-     * Update Status attribute the specified Post in storage.
      *
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * @param int $attributes
+     * @return bool
+     * @throws Throwable
      */
-    public function updateStatus(array $attributes): bool
+    public function updateStatus(int $status): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            $this->post->status = $attributes['status'];
+        return $this->db->transaction(function () use ($status) {
+            $this->post->status = $status;
 
             if ($this->post->published_at === null) {
                 $this->post->published_at = $this->carbon->now();

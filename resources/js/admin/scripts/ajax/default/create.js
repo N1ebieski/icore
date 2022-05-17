@@ -6,14 +6,15 @@ $(document).on(
 
         let $element = $(this);
 
-        let $modal = {
-            body: $($element.data('target')).find('.modal-body'),
-            footer: $($element.data('target')).find('.modal-footer'),
-            content: $($element.data('target')).find('.modal-content')
-        };
+        let $modal = $($element.data('target'));
+        $modal.body = $($element.data('target')).find('.modal-body');
+        $modal.footer = $($element.data('target')).find('.modal-footer');
+        $modal.content = $($element.data('target')).find('.modal-content');
 
-        $modal.body.empty();
-        $modal.footer.empty();
+        $modal.on('hidden.bs.modal', function () {
+            $(this).find('.modal-body').empty();
+            $(this).find('.modal-footer').empty();
+        });
 
         $.ajax({
             url: $element.data('route'),

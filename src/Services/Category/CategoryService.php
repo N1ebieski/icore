@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Category;
 
+use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
@@ -202,24 +203,25 @@ class CategoryService implements
     }
 
     /**
-     * [updateStatus description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param int $status
+     * @return bool
+     * @throws Throwable
      */
-    public function updateStatus(array $attributes): bool
+    public function updateStatus(int $status): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            $update = $this->category->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($status) {
+            $update = $this->category->update(['status' => $status]);
 
             if ($update === true) {
                 // Deactivates parent category, deactivates all descendants
-                if ($attributes['status'] == Status::INACTIVE) {
-                    $this->category->descendants()->update(['status' => $attributes['status']]);
+                if ($status == Status::INACTIVE) {
+                    $this->category->descendants()->update(['status' => $status]);
                 }
 
                 // Activating child category, activates all ancestors
-                if ($attributes['status'] == Status::ACTIVE) {
-                    $this->category->ancestors()->update(['status' => $attributes['status']]);
+                if ($status == Status::ACTIVE) {
+                    $this->category->ancestors()->update(['status' => $status]);
                 }
             }
 
@@ -228,14 +230,15 @@ class CategoryService implements
     }
 
     /**
-     * [updatePosition description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param int $position
+     * @return bool
+     * @throws Throwable
      */
-    public function updatePosition(array $attributes): bool
+    public function updatePosition(int $position): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            return $this->category->update(['position' => $attributes['position']]);
+        return $this->db->transaction(function () use ($position) {
+            return $this->category->update(['position' => $position]);
         });
     }
 

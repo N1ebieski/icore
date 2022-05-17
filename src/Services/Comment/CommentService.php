@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Services\Comment;
 
+use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -117,25 +118,25 @@ class CommentService implements CreateInterface, UpdateInterface, StatusUpdateIn
     }
 
     /**
-     * Zmienia status komentarza i jego przodkom/potomkom
      *
-     * @param  array $attributes
+     * @param int $status
      * @return bool
+     * @throws Throwable
      */
-    public function updateStatus(array $attributes): bool
+    public function updateStatus(int $status): bool
     {
-        return $this->db->transaction(function () use ($attributes) {
-            $update = $this->comment->update(['status' => $attributes['status']]);
+        return $this->db->transaction(function () use ($status) {
+            $update = $this->comment->update(['status' => $status]);
 
             if ($update === true) {
                 // Deactivates parent comment, deactivates all descendants
-                if ($attributes['status'] == Status::INACTIVE) {
-                    $this->comment->descendants()->update(['status' => $attributes['status']]);
+                if ($status == Status::INACTIVE) {
+                    $this->comment->descendants()->update(['status' => $status]);
                 }
 
                 // Activating child comment, activates all ancestors
-                if ($attributes['status'] == Status::ACTIVE) {
-                    $this->comment->ancestors()->update(['status' => $attributes['status']]);
+                if ($status == Status::ACTIVE) {
+                    $this->comment->ancestors()->update(['status' => $status]);
                 }
             }
 

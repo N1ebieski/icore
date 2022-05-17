@@ -170,7 +170,7 @@ class CategoryController implements Polymorphic
      */
     public function updatePosition(Category $category, UpdatePositionRequest $request): JsonResponse
     {
-        $category->makeService()->updatePosition($request->only('position'));
+        $category->makeService()->updatePosition($request->input('position'));
 
         return Response::json([
             'siblings' => $category->makeRepo()->getSiblingsAsArray() + [$category->id => $category->position],
@@ -186,7 +186,7 @@ class CategoryController implements Polymorphic
      */
     public function updateStatus(Category $category, UpdateStatusRequest $request): JsonResponse
     {
-        $category->makeService()->updateStatus($request->only('status'));
+        $category->makeService()->updateStatus($request->input('status'));
 
         $categoryRepo = $category->makeRepo();
 

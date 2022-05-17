@@ -52,7 +52,7 @@ class UserController
      */
     public function updateStatus(User $user, UpdateStatusRequest $request): JsonResponse
     {
-        $user->makeService()->updateStatus($request->validated());
+        $user->makeService()->updateStatus($request->input('status'));
 
         return Response::json([
             'status' => $user->status->getValue(),
