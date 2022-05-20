@@ -9,7 +9,7 @@ class ICoreServiceProvider extends ServiceProvider
 {
     /**
      * [public description]
-     * @var string
+     * @var  string
      */
     public const VERSION = "7.0.0-alpha.2";
 
