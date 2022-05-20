@@ -11,6 +11,7 @@ use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use N1ebieski\ICore\ValueObjects\User\Marketing;
 use N1ebieski\ICore\Http\Requests\Traits\HasCaptcha;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
 
@@ -86,7 +87,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'status' => Status::active(),
-            'marketing' => isset($data['marketing_agreement'])
+            'marketing' => $data['marketing_agreement'] ?? Marketing::inactive()
         ]);
 
         $user->assignRole(Name::USER);
