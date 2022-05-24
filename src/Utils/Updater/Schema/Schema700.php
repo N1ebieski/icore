@@ -14,8 +14,7 @@ class Schema700 implements SchemaInterface
     public $pattern = [
         [
             'paths' => [
-                'resources/views/vendor/icore/web/partials/nav.blade.php',
-                'resources/views/vendor/icore/admin/partials/nav.blade.php'
+                'resources/views/vendor/icore/web/partials/nav.blade.php'
             ],
             'actions' => [
                 [
