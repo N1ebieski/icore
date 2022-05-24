@@ -13,10 +13,9 @@ return [
     |
     */
 
-    'password' => 'Hasło musi mieć przynajmniej osiem znaków i zgadzać się z potwierdzeniem.',
     'reset' => 'Hasło zostało zresetowane!',
-    'throttled' => 'Proszę zaczekać zanim spróbujesz ponownie.',
     'sent' => 'Wiadomość z linkiem do zmiany hasła została wysłana!',
+    'throttled' => 'Proszę zaczekać zanim spróbujesz ponownie.',
     'token' => 'Token resetowania hasła jest nieprawidłowy.',
     'user' => 'Nie znaleziono użytkownika z takim adresem e-mail.',
 
