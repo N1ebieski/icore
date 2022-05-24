@@ -14,6 +14,31 @@ class Schema700 implements SchemaInterface
     public $pattern = [
         [
             'paths' => [
+                'resources/views/vendor/icore/web/partials/nav.blade.php',
+                'resources/views/vendor/icore/admin/partials/nav.blade.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'replace',
+                    'search' => '/<a[^<]*?route\(\'logout\'\)[\s\S]*?<\/a>/',
+                    'to' => <<<EOD
+<form 
+                            class="d-inline" 
+                            method="POST" 
+                            action="{{ route('logout') }}"
+                        >
+                            @csrf
+
+                            <button type="submit" class="btn btn-link dropdown-item">
+                                {{ trans('icore::auth.route.logout') }}
+                            </button>
+                        </form>
+EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
                 'resources/views/vendor/icore/web'
             ],
             'actions' => [
@@ -93,8 +118,8 @@ class Schema700 implements SchemaInterface
                     'to' => '$comment->censored->isActive()'
                 ]
             ]
-        ],
-        [
+            ],
+            [
             'paths' => [
                 'resources/lang/vendor/icore'
             ],
