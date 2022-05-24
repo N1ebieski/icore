@@ -6,7 +6,7 @@ use N1ebieski\ICore\Http\Controllers\Auth\LoginController;
 use N1ebieski\ICore\Http\Controllers\Auth\SocialiteController;
 
 Route::group(['namespace' => 'N1ebieski\ICore\Http\Controllers'], function () {
-    Auth::routes(['verify' => true]);
+    Auth::routes(['verify' => true, 'logout' => false]);
 });
 
 Route::get('logout', [LoginController::class, 'logout'])
