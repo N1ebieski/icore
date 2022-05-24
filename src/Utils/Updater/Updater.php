@@ -95,6 +95,14 @@ class Updater
                     storage_path('app') . '/' . $backupFullPath
                 );
             } else {
+                if (!$this->filesystem->isDirectory(dirname(storage_path('app') . '/' . $backupFullPath))) {
+                    $this->filesystem->makeDirectory(
+                        dirname(storage_path('app') . '/' . $backupFullPath),
+                        0755,
+                        true
+                    );
+                }
+
                 $this->filesystem->copy(
                     base_path($schemaPath),
                     storage_path('app') . '/' . $backupFullPath
