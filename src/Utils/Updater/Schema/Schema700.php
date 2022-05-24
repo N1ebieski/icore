@@ -14,6 +14,48 @@ class Schema700 implements SchemaInterface
     public $pattern = [
         [
             'paths' => [
+                'config/file-manager.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'replace',
+                    'search' => '/\'diskList\'\s*=>\s*\[.*?\],/',
+                    'to' => <<<EOD
+'diskList' => ['public', 'css', 'views', 'lang'],
+EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
+                'config/filesystems.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'afterFirst',
+                    'search' => '/\'public\'\s*=>\s*\[[\s\S]*?\],/',
+                    'to' => <<<EOD
+
+        'views' => [
+            'driver' => 'local',
+            'root' => resource_path('views')
+        ],
+
+        'css' => [
+            'driver' => 'local',
+            'root' => public_path('css/custom')
+        ],
+
+        'lang' => [
+            'driver' => 'local',
+            'root' => resource_path('lang')
+        ],
+EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
                 'resources/views/vendor/icore/web/partials/nav.blade.php'
             ],
             'actions' => [
