@@ -7,9 +7,8 @@ $(document).on('ready.n1ebieski/icore/web/recaptcha_invisible@init', function ()
 });
 
 $(document).on('click.n1ebieski/icore/web/recaptcha_invisible@captcha', 'button', function (e) {
-    e.preventDefault();
-
     if ($(this).hasClass('captcha')) {
+        e.preventDefault();
         e.stopImmediatePropagation();
 
         let $form;
@@ -22,14 +21,14 @@ $(document).on('click.n1ebieski/icore/web/recaptcha_invisible@captcha', 'button'
             $form = $(this).closest('form');
         }
 
-        let valid = !!$.prototype.valid ? $form.valid() : true;
+        let valid = $.prototype.valid ? $form.valid() : true;
 
         if (valid) {
             $(this).removeClass('captcha');
 
             grecaptcha.execute($(this).data('widgetid'));    
-        }            
-    }
+        }
 
-    return;
+        return;
+    }
 });
