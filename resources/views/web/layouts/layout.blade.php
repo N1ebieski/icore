@@ -20,6 +20,7 @@
 
     <link rel="canonical" href="{{ $getUrl }}">
     <link rel="icon" href="{{ asset('svg/vendor/icore/logo.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ asset('images/vendor/icore/logo.png') }}">      
     <link href="{{ asset(mix('css/vendor/icore/vendor/vendor.css')) }}" rel="stylesheet">
     <link href="{{ asset(mix($getStylesheet())) }}" rel="stylesheet">
     <link href="{{ asset($getStylesheet('css/custom')) }}" rel="stylesheet">
