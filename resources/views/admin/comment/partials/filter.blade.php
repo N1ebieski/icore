@@ -48,7 +48,7 @@
                 <a 
                     href="#" 
                     class="badge badge-primary filter-option" 
-                    data-name="filter[report"
+                    data-name="filter[report]"
                 >
                     <span>{{ trans('icore::filter.report.label') }}: {{ trans("icore::filter.report.{$filter['report']}") }}</span>
                     <span aria-hidden="true">&times;</span>
