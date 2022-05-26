@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\User\Marketing;
 use N1ebieski\ICore\Filters\Web\Profile\TokensFilter;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use N1ebieski\ICore\Http\Requests\Web\Profile\TokensRequest;
@@ -96,7 +97,7 @@ class ProfileController
     {
         Auth::user()->update([
             'name' => $request->input('name'),
-            'marketing' => $request->input('marketing_agreement')
+            'marketing' => $request->input('marketing_agreement') ?? Marketing::inactive()
         ]);
 
         return Response::redirectToRoute('web.profile.edit')->with(
