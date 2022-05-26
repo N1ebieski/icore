@@ -1,12 +1,12 @@
 @if (session()->has('success'))
 <div 
-    class="toast" 
+    class="toast bg-success" 
     role="alert" 
     aria-live="assertive" 
     aria-atomic="true" 
     data-delay="20000" 
 >
-    <div class="toast-header bg-success">
+    <div class="toast-header">
         <strong class="mr-auto">{{ session()->get('success') }}</strong>
         <button 
             type="button" 

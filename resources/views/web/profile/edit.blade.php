@@ -47,6 +47,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <div class="custom-control custom-checkbox">
+                    <input type="hidden" name="marketing_agreement" value="{{ User\Marketing::INACTIVE }}">
                     <input 
                         type="checkbox" 
                         class="custom-control-input {{ $isValid('marketing_agreement') }}" 
