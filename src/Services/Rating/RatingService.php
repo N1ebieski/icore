@@ -57,7 +57,7 @@ class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
     public function createOrUpdateOrDelete(array $attributes)
     {
         return $this->db->transaction(function () use ($attributes) {
-            if ($this->findByUser()) {
+            if ($this->rating->exists) {
                 if ($this->rating->rating === (int)$attributes['rating']) {
                     $rating = $this->delete();
                 } else {
@@ -116,19 +116,5 @@ class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
                 'rating' => $attributes['rating']
             ]);
         });
-    }
-
-    /**
-     * Wyszukuje zapisaną wcześniej ocenę danego usera. W zależności od tego
-     * wykonana zostanie akcja (dodanie nowej, edytowanie istniejącej, usunięcie)
-     *
-     * @return Rating|null
-     */
-    protected function findByUser(): ?Rating
-    {
-        $rating = $this->rating->morph->makeRepo()
-            ->firstRatingByUser($this->auth->user()->id);
-
-        return $rating instanceof Rating ? $this->rating = $rating : null;
     }
 }

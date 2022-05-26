@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Repositories\Comment;
 
+use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Rating\Rating;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
@@ -96,13 +97,13 @@ class CommentRepo
     }
 
     /**
-     * [firstRatingByUser description]
-     * @param  int    $id [description]
-     * @return Rating|null     [description]
+     *
+     * @param User $user
+     * @return null|Rating
      */
-    public function firstRatingByUser(int $id): ?Rating
+    public function firstRatingByUser(User $user): ?Rating
     {
-        return $this->comment->ratings()->where('user_id', $id)->first();
+        return $this->comment->ratings()->where('user_id', $user->id)->first();
     }
 
     /**

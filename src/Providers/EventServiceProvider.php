@@ -46,6 +46,8 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
+        \N1ebieski\ICore\models\Rating\Comment\Rating::observe(\N1ebieski\ICore\Observers\Rating\Comment\RatingObserver::class);
+
         \N1ebieski\ICore\Models\User::observe(\N1ebieski\ICore\Observers\UserObserver::class);
 
         \N1ebieski\ICore\Models\Post::observe(\N1ebieski\ICore\Observers\PostObserver::class);

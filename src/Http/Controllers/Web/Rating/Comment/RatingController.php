@@ -21,9 +21,10 @@ class RatingController implements CommentPolymorphic
      */
     public function rate(Rating $rating, Comment $comment, RateRequest $request): JsonResponse
     {
-        $rating->setRelations(['morph' => $comment])
-            ->makeService()
-            ->createOrUpdateOrDelete($request->only('rating'));
+        $rating = $comment->makeRepo()->firstRatingByUser($request->user())
+            ?? $rating->setRelations(['morph' => $comment]);
+
+        $rating->makeService()->createOrUpdateOrDelete($request->only('rating'));
 
         return Response::json([
             'sum_rating' => (int)$comment->ratings->sum('rating')
