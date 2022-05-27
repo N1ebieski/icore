@@ -2,29 +2,27 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Rating\Comment;
 
+use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\Comment\Comment;
-use N1ebieski\ICore\Models\Rating\Comment\Rating;
+use N1ebieski\ICore\Loads\Web\Rating\Comment\RateLoad;
 use N1ebieski\ICore\Http\Requests\Web\Rating\Comment\RateRequest;
-use N1ebieski\ICore\Http\Controllers\Web\Rating\Comment\Polymorphic as CommentPolymorphic;
+use N1ebieski\ICore\Http\Controllers\Web\Rating\Comment\Polymorphic;
 
-class RatingController implements CommentPolymorphic
+class RatingController implements Polymorphic
 {
     /**
-     * Add/Update or Delete Rate of specified Comment
      *
-     * @param  Rating        $rating
-     * @param  Comment       $comment       [description]
-     * @param  RateRequest   $request       [description]
-     * @return JsonResponse                 [description]
+     * @param Comment $comment
+     * @param RateLoad $load
+     * @param RateRequest $request
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function rate(Rating $rating, Comment $comment, RateRequest $request): JsonResponse
+    public function rate(Comment $comment, RateLoad $load, RateRequest $request): JsonResponse
     {
-        $rating = $comment->makeRepo()->firstRatingByUser($request->user())
-            ?? $rating->setRelations(['morph' => $comment]);
-
-        $rating->makeService()->createOrUpdateOrDelete($request->only('rating'));
+        $load->getRating()->makeService()->createOrUpdateOrDelete($request->only('rating'));
 
         return Response::json([
             'sum_rating' => (int)$comment->ratings->sum('rating')
