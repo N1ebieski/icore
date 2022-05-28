@@ -56,7 +56,7 @@
                 <div>
                     {!! $page->no_more_content_html !!}
                 </div>
-                @if ((bool)$page->comment === true)
+                @if ($page->comment->isActive())
                 <h3 class="h5 border-bottom pb-2" id="comments">
                     {{ trans('icore::comments.comments') }}
                 </h3>
