@@ -125,7 +125,7 @@
                                             >
                                                 <small>
                                                     {!! trans('icore::policy.agreement.privacy', [
-                                                        'privacy' => route('web.page.show', [Str::slug(trans('icore::policy.privacy'))])
+                                                        'privacy' => route('web.page.show', [str_slug(trans('icore::policy.privacy'))])
                                                     ]) !!}
                                                 </small>
                                             </label>
