@@ -41,7 +41,7 @@ class PageController
 
         return Response::view('icore::web.page.show', [
             'page' => $page->makeCache()->rememberLoadSiblingsAndRecursiveChildrens(),
-            'comments' => (bool)$page->comment === true ?
+            'comments' => $page->comment->isActive() ?
                 $comment->setRelations(['morph' => $page])
                     ->makeCache()
                     ->rememberRootsByFilter($filter->all())
