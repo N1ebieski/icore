@@ -1,4 +1,4 @@
-# iCore
+# iCore 
 
 Mini blog application based on modern Laravel framework. Good platform to expand into any website, business cards or SEO backend. Full responsiveness in Bootstrap technology, convenient interface, open code for modifications, free updates.
 
