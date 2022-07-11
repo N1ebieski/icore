@@ -56,7 +56,7 @@ class BanValue extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'type' => \N1ebieski\ICore\Casts\Banvalue\TypeCast::class,
+        'type' => \N1ebieski\ICore\Casts\BanValue\TypeCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

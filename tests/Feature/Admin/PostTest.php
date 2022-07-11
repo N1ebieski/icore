@@ -37,7 +37,16 @@ class PostTest extends TestCase
     {
         $user = User::makeFactory()->admin()->create();
 
-        $post = Post::makeFactory()->count(50)->active()->publish()->withUser()->create();
+        $post = Post::makeFactory()->count(50)
+            ->sequence(function ($sequence) {
+                return [
+                    'created_at' => Carbon::now()->addSecond($sequence->index)
+                ];
+            })
+            ->active()
+            ->publish()
+            ->withUser()
+            ->create();
 
         Auth::login($user);
 

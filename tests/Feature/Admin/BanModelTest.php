@@ -165,7 +165,7 @@ class BanModelTest extends TestCase
         $response = $this->get(route('admin.banmodel.user.index', [
             'page' => 2,
             'filter' => [
-                'orderby' => 'bans_models.created_at|desc'
+                'orderby' => 'bans_models.created_at|asc'
             ]
         ]));
 
