@@ -97,7 +97,7 @@ class PostRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->post->selectRaw('`posts`.*')
+        return $this->post->selectRaw("`{$this->post->getTable()}`.*")
             ->with(['tags', 'user'])
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])

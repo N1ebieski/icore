@@ -54,7 +54,7 @@ class PageRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->page->selectRaw('`pages`.*')
+        return $this->page->selectRaw("`{$this->page->getTable()}`.*")
             ->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])

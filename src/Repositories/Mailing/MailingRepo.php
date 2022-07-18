@@ -42,7 +42,8 @@ class MailingRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->mailing->filterSearch($filter['search'])
+        return $this->mailing->selectRaw("`{$this->mailing->getTable()}`.*")
+            ->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->when($filter['orderby'] === null, function ($query) use ($filter) {

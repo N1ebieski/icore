@@ -41,7 +41,8 @@ class UserRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->user->filterSearch($filter['search'])
+        return $this->user->selectRaw("`{$this->user->getTable()}`.*")
+            ->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->when(
                 $filter['status'] === null && !optional($this->auth->user())->can('admin.users.view'),
@@ -79,7 +80,13 @@ class UserRepo
      */
     public function paginateTokensByFilter(array $filter): LengthAwarePaginator
     {
+        /**
+         * @var \N1ebieski\ICore\Models\Token\PersonalAccessToken $token
+         */
+        $token = $this->user->tokens()->make();
+
         return $this->user->tokens()
+            ->selectRaw("`{$token->getTable()}`.*")
             ->whereJsonDoesntContain('abilities', 'refresh')
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])

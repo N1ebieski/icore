@@ -64,7 +64,8 @@ class CategoryRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->category->filterSearch($filter['search'])
+        return $this->category->selectRaw("`{$this->category->getTable()}`.*")
+            ->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->when(
                 $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),

@@ -29,7 +29,8 @@ class BanValueRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->banValue->filterType($filter['type'])
+        return $this->banValue->selectRaw("`{$this->banValue->getTable()}`.*")
+            ->filterType($filter['type'])
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->when($filter['orderby'] === null, function ($query) use ($filter) {

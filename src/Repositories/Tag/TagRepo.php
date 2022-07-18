@@ -40,7 +40,7 @@ class TagRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->tag->selectRaw('`tags`.*')
+        return $this->tag->selectRaw("`{$this->tag->getTable()}`.*")
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->when(strpos($filter['orderby'], 'sum') !== false, function ($query) {

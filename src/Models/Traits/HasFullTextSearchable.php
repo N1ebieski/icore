@@ -157,8 +157,7 @@ trait HasFullTextSearchable
         $this->splitMatches();
 
         return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->selectRaw("`{$this->getTable()}`.*")
-                ->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [$this->search()]);
+            $query->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [$this->search()]);
 
             $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
                 foreach ($this->searchable as $column) {

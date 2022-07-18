@@ -32,7 +32,8 @@ class CommentRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->comment->poliType()
+        return $this->comment->selectRaw("`{$this->comment->getTable()}`.*")
+            ->poliType()
             ->filterExcept($filter['except'])
             ->when($filter['search'] !== null, function ($query) use ($filter) {
                 $query->filterSearch($filter['search'])
