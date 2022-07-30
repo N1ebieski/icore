@@ -247,9 +247,11 @@ class PostRepo
      */
     public function paginateBySearch(string $name): LengthAwarePaginator
     {
-        return $this->post->with('user:id,name')
+        return $this->post->selectRaw("`{$this->post->getTable()}`.*")
+            ->with('user:id,name')
             ->from(
-                $this->post->search($name)
+                $this->post->selectRaw("`{$this->post->getTable()}`.*")
+                    ->search($name)
                     ->when($tag = $this->post->tags()->make()->findByName($name), function ($query) use ($tag) {
                         $query->unionAll(
                             $this->post->selectRaw('`posts`.*, 0 AS `title_relevance`, 0 AS `content_relevance`')
