@@ -138,7 +138,11 @@ trait HasFullTextSearchable
      */
     protected function columns(): string
     {
-        return implode(',', $this->searchable);
+        $columns = array_map(function (string $column) {
+            return '`' . $column . '`';
+        }, $this->searchable);
+
+        return implode(',', $columns);
     }
 
     /**
@@ -161,7 +165,7 @@ trait HasFullTextSearchable
 
             $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
                 foreach ($this->searchable as $column) {
-                    $query->selectRaw("MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`", [$this->search()]);
+                    $query->selectRaw("MATCH (`{$column}`) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`", [$this->search()]);
                 }
             });
         });
