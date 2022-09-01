@@ -75,10 +75,10 @@ class FooterComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         $pages = $this->page->makeCache()->rememberWithRecursiveChildrensByComponent([
             'pattern' => $this->pattern !== null ?
@@ -91,6 +91,6 @@ class FooterComponent implements Htmlable
             'cols' => $this->pattern ?: (int)ceil($pages->count() / $this->cols),
             'pattern' => $this->pattern,
             'maxDepth' => $this->maxDepth
-        ]);
+        ])->render();
     }
 }

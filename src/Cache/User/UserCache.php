@@ -91,14 +91,14 @@ class UserCache
     public function rememberByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-            $users = $this->getByFilter($this->request->input('page'));
+            $users = $this->getByFilter();
         }
 
-        if (!isset($users) || !$users) {
+        if (!isset($users)) {
             $users = $this->user->makeRepo()->paginateByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-                $this->putByFilter($users, $this->request->input('page'));
+                $this->putByFilter($users);
             }
         }
 

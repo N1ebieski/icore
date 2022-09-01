@@ -18,11 +18,6 @@ use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
 use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
-/**
- *
- *
- * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
- */
 class CategoryService implements
     CreateInterface,
     UpdateInterface,
@@ -36,6 +31,12 @@ class CategoryService implements
      * @var Category
      */
     protected $category;
+
+    /**
+     *
+     * @var Config
+     */
+    protected $config;
 
     /**
      * [private description]
@@ -131,6 +132,9 @@ class CategoryService implements
             $this->category->icon = $attributes['icon'] ?? null;
 
             if ($attributes['parent_id'] !== null) {
+                /**
+                 * @var Category $parent
+                 */
                 $parent = $this->category->findOrFail($attributes['parent_id']);
 
                 $this->category->status = $parent->status;
@@ -152,19 +156,26 @@ class CategoryService implements
     {
         return $this->db->transaction(function () use ($attributes) {
             if ($attributes['parent_id'] !== null) {
-                $parent_id = $this->category->find($attributes['parent_id']);
+                /**
+                 * @var Category $parent
+                 */
+                $parent = $this->category->find($attributes['parent_id']);
             }
 
             if (isset($attributes['clear'])) {
                 if ((bool)$attributes['clear'] === true) {
+                    /**
+                     * @phpstan-ignore-next-line
+                     */
                     $this->category->newQuery()->poliType()->delete();
-                    $parent_id = null;
+
+                    $parent = null;
                 }
             }
 
             return $this->category->createFromArray(
                 json_decode($attributes['names'], true),
-                $parent_id ?? null
+                $parent ?? null
             );
         });
     }
@@ -191,7 +202,7 @@ class CategoryService implements
             $deleted = 0;
 
             foreach ($ids as $id) {
-                if ($c = $this->category->find($id)) {
+                if (($c = $this->category->find($id)) instanceof Category) {
                     $c->makeService()->delete();
 
                     $deleted += 1;
@@ -286,16 +297,19 @@ class CategoryService implements
     public function moveToParent(int $parent_id): void
     {
         $this->db->transaction(function () use ($parent_id) {
-            if ($parent = $this->category->findOrFail($parent_id)) {
-                // In the case of changing the parent, we must prophylactically
-                // change the status of the category (and descendants) to the same
-                // as the parent to avoid the situation where the subcategory
-                // is active and the parent is not.
-                $this->category->update(['status' => $parent->status]);
-                $this->category->descendants()->update(['status' => $parent->status]);
+            /**
+             * @var Category $parent
+             */
+            $parent = $this->category->findOrFail($parent_id);
 
-                $this->category->moveTo(0, $parent_id);
-            }
+            // In the case of changing the parent, we must prophylactically
+            // change the status of the category (and descendants) to the same
+            // as the parent to avoid the situation where the subcategory
+            // is active and the parent is not.
+            $this->category->update(['status' => $parent->status]);
+            $this->category->descendants()->update(['status' => $parent->status]);
+
+            $this->category->moveTo(0, $parent_id);
         });
     }
 }

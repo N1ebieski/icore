@@ -59,7 +59,7 @@ class PageCache
 
     /**
      * [rememberWithChildrensByComponent description]
-     * @param  array     $component [description]
+     * @param  array<string, string>     $component [description]
      * @return Collection            [description]
      */
     public function rememberWithChildrensByComponent(array $component): Collection

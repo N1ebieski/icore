@@ -39,9 +39,15 @@ abstract class Filter
      */
     public function setFilters(array $attributes): self
     {
-        foreach (class_uses(static::class) as $filter) {
-            $filterName = $this->makeFilterName($filter);
-            $methodName = $this->makeMethodName($filterName);
+        $filters = class_uses(static::class);
+
+        if ($filters === false) {
+            return $this;
+        }
+
+        foreach ($filters as $filter) {
+            $filterName = $this->filterName($filter);
+            $methodName = $this->methodName($filterName);
 
             if (method_exists($this, $methodName)) {
                 $this->$methodName(
@@ -56,21 +62,21 @@ abstract class Filter
     }
 
     /**
-     * [makeMethodName description]
+     * [methodName description]
      * @param  string $value [description]
      * @return string        [description]
      */
-    protected function makeMethodName(string $value): string
+    protected function methodName(string $value): string
     {
         return 'filter' . ucfirst($value);
     }
 
     /**
-     * [makeFilterName description]
+     * [filterName description]
      * @param  string $value [description]
      * @return string        [description]
      */
-    protected function makeFilterName(string $value): string
+    protected function filterName(string $value): string
     {
         return strtolower(str_replace('Has', '', class_basename($value)));
     }

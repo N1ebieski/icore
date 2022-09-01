@@ -5,8 +5,9 @@ namespace N1ebieski\ICore\Filters\Traits;
 trait HasOrderBy
 {
     /**
-     * [filterOrderBy description]
-     * @param string|null $value [description]
+     * 
+     * @param string|null $value 
+     * @return void 
      */
     public function filterOrderBy(string $value = null): void
     {

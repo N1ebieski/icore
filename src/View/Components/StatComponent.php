@@ -104,11 +104,10 @@ class StatComponent implements Htmlable
     }
 
     /**
-     * Undocumented function
      *
-     * @return View
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.stat', [
             'countCategories' => $this->category->makeCache()->rememberCountByStatus()
@@ -125,6 +124,6 @@ class StatComponent implements Htmlable
             'countUsers' => $this->verifySession() ?
                 $this->sessionCache->rememberCountByType()
                 : null
-        ]);
+        ])->render();
     }
 }

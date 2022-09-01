@@ -36,10 +36,14 @@ class ArchiveComponent implements Htmlable
         $this->view = $view;
     }
 
-    public function toHtml(): View
+    /**
+     *
+     * @return string
+     */
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.archive.post.archive', [
             'archives' => $this->post->makeCache()->rememberArchives()
-        ]);
+        ])->render();
     }
 }

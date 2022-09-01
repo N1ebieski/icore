@@ -5,8 +5,9 @@ namespace N1ebieski\ICore\Filters\Traits;
 trait HasCensored
 {
     /**
-     * [filterCensored description]
-     * @param int|null $value [description]
+     *
+     * @param int|null $value
+     * @return void
      */
     public function filterCensored(int $value = null): void
     {

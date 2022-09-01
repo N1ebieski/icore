@@ -112,12 +112,16 @@ class LayoutComposer extends Composer
      */
     public function getTheme(): ?string
     {
-        switch ((string)$this->request->cookie('theme_toggle')) {
-            case 'dark':
-                return 'dark';
+        $themeToggle = $this->request->cookie('theme_toggle');
 
-            case 'light':
-                return '';
+        if (is_string($themeToggle)) {
+            switch ($themeToggle) {
+                case 'dark':
+                    return 'dark';
+
+                case 'light':
+                    return '';
+            }
         }
 
         return $this->config->get('icore.theme');
@@ -132,7 +136,10 @@ class LayoutComposer extends Composer
     {
         $path = '/' . $assets . '/web/web';
 
-        if ($this->str->startsWith(parse_url($this->url->current(), PHP_URL_PATH), '/admin')) {
+        if (
+            is_string($url = parse_url($this->url->current(), PHP_URL_PATH))
+            && $this->str->startsWith($url, '/admin')
+        ) {
             $path = '/' . $assets . '/admin/admin';
         }
 

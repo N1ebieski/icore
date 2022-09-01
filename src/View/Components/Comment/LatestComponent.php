@@ -46,15 +46,15 @@ class LatestComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.comment.latest', [
             'comments' => $this->comment->makeCache()->rememberLatestByComponent([
                 'limit' => $this->limit,
             ])
-        ]);
+        ])->render();
     }
 }

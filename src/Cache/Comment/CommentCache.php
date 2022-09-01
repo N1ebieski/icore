@@ -78,20 +78,20 @@ class CommentCache
 
     /**
      * [rememberRootsByFilter description]
-     * @param  array               $filter [description]
+     * @param  array<string, string> $filter [description]
      * @return LengthAwarePaginator         [description]
      */
     public function rememberRootsByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems()) {
-            $comments = $this->getRootsByFilter($this->request->input('page'));
+            $comments = $this->getRootsByFilter();
         }
 
-        if (!isset($comments) || !$comments) {
+        if (!isset($comments)) {
             $comments = $this->comment->makeService()->getRootsByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems()) {
-                $this->putRootsByFilter($comments, $this->request->input('page'));
+                $this->putRootsByFilter($comments);
             }
         }
 

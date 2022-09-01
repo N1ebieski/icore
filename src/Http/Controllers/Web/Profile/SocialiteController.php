@@ -17,8 +17,9 @@ class SocialiteController
      * Hook replacing the provider in config
      *
      * @param string $provider [description]
+     * @return void
      */
-    private static function configRedirect(string $provider)
+    private static function configRedirect(string $provider): void
     {
         // Troche partyzantka, ale musze tak zrobic bo Socialite dla Twittera nie daje
         // zdefiniowac innego callbacku przez metode redirectUrl

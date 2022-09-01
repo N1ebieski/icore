@@ -77,7 +77,7 @@ class PostBuilder extends Builder
      * Undocumented function
      *
      * @param Closure $closure
-     * @return void
+     * @return bool
      */
     public function chunkCollection(Closure $closure): bool
     {

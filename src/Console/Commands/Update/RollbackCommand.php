@@ -95,12 +95,17 @@ class RollbackCommand extends Command
     }
 
     /**
-     * Undocumented function
      *
      * @return string
+     * @throws ExceptionInvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function getFullBackupPath(): string
     {
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
+
         return $this->backup_path . '/' . str_replace('.', '', $this->argument('version'));
     }
 

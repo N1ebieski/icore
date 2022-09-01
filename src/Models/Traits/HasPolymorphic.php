@@ -28,6 +28,9 @@ trait HasPolymorphic
     public function scopePoli(Builder $query): ?Builder
     {
         return $query->when($this->model_id !== null, function ($query) {
+            /**
+             * @phpstan-ignore-next-line
+             */
             $query->poliType()->where("{$this->getTable()}.model_id", $this->model_id);
         });
     }

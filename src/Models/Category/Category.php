@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\App;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Cache\Category\CategoryCache;
@@ -23,6 +22,8 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
 /**
+ * @property int $real_depth
+ * @property Status $status
  * @property Category $category
  */
 class Category extends Entity
@@ -55,14 +56,15 @@ class Category extends Entity
     /**
      * ClosureTable model instance.
      *
-     * @var CategoryClosure
+     * @var string
+     * @phpstan-ignore-next-line
      */
     protected $closure = 'N1ebieski\ICore\Models\Category\CategoryClosure';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = ['name', 'icon', 'status'];
 
@@ -160,6 +162,9 @@ class Category extends Entity
      */
     public function childrensRecursiveWithAllRels(): HasMany
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return $this->childrens()->withRecursiveAllRels();
     }
 
@@ -234,9 +239,9 @@ class Category extends Entity
 
     /**
      * [getRealPositionAttribute description]
-     * @return string [description]
+     * @return int [description]
      */
-    public function getRealPositionAttribute(): string
+    public function getRealPositionAttribute(): int
     {
         return $this->position + 1;
     }

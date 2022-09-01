@@ -4,8 +4,11 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -13,15 +16,18 @@ class PageTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testPageIndexAsGuest()
+    public function testPageIndexAsGuest(): void
     {
         $response = $this->get(route('admin.page.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageIndexWithoutPermission()
+    public function testPageIndexWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -31,10 +37,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPageIndexPaginate()
+    public function testPageIndexPaginate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Collection<Page>
+         */
         $page = Page::makeFactory()->count(50)->active()->withUser()->create();
 
         Auth::login($user);
@@ -46,17 +58,23 @@ class PageTest extends TestCase
         $response->assertSeeInOrder([$page[30]->title, $page[30]->shortContent], false);
     }
 
-    public function testPageEditAsGuest()
+    public function testPageEditAsGuest(): void
     {
         $response = $this->get(route('admin.page.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageEditWithoutPermission()
+    public function testPageEditWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -66,8 +84,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageEdit()
+    public function testNoexistPageEdit(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -77,10 +98,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageEdit()
+    public function testPageEdit(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -88,21 +115,36 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.edit', [$page->id]));
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString($page->content, $response->getData()->view);
-        $this->assertStringContainsString(route('admin.page.update', [$page->id]), $response->getData()->view);
+
+        /**
+         * @var JsonResponse
+         */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString($page->content, $baseResponse->getData()->view);
+        $this->assertStringContainsString(
+            URL::route('admin.page.update', [$page->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testPageUpdateAsGuest()
+    public function testPageUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.page.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageUpdateWithoutPermission()
+    public function testPageUpdateWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -112,8 +154,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageUpdate()
+    public function testNoexistPageUpdate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -123,10 +168,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageUpdateValidationFail()
+    public function testPageUpdateValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -139,10 +190,16 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['title']);
     }
 
-    public function testPageUpdate()
+    public function testPageUpdate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -154,24 +211,39 @@ class PageTest extends TestCase
 
         $response->assertOk()->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString('Ten page został zaktualizowany.', $response->getData()->view);
+        /**
+         * @var JsonResponse
+         */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'Ten page został zaktualizowany.',
+            $baseResponse->getData()->view
+        );
+
         $this->assertDatabaseHas('pages', [
             'content' => 'Ten page został zaktualizowany.',
             'title' => 'Page zaktualizowany.',
         ]);
     }
 
-    public function testPageEditFullAsGuest()
+    public function testPageEditFullAsGuest(): void
     {
         $response = $this->get(route('admin.page.edit_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageEditFullWithoutPermission()
+    public function testPageEditFullWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -181,8 +253,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageEditFull()
+    public function testNoexistPageEditFull(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -192,10 +267,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageEditFull()
+    public function testPageEditFull(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -203,21 +284,28 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.edit_full', [$page->id]));
 
         $response->assertOk()->assertViewIs('icore::admin.page.edit_full');
+
         $response->assertSeeInOrder([$page->title, $page->content], false);
         $response->assertSee(route('admin.page.update_full', [$page->id]), false);
     }
 
-    public function testPageUpdateFullAsGuest()
+    public function testPageUpdateFullAsGuest(): void
     {
         $response = $this->put(route('admin.page.update_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageUpdateFullWithoutPermission()
+    public function testPageUpdateFullWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -227,8 +315,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageUpdateFull()
+    public function testNoexistPageUpdateFull(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -238,10 +329,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageUpdateFullValidationFail()
+    public function testPageUpdateFullValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -255,10 +352,16 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['title', 'status']);
     }
 
-    public function testRootPageUpdateFull()
+    public function testRootPageUpdateFull(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -280,12 +383,21 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function testChildrenPageUpdateFull()
+    public function testChildrenPageUpdateFull(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $parent = Page::makeFactory()->active()->withUser()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -316,17 +428,23 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function testPageUpdateStatusAsGuest()
+    public function testPageUpdateStatusAsGuest(): void
     {
         $response = $this->patch(route('admin.page.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageUpdateStatusWithoutPermission()
+    public function testPageUpdateStatusWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -336,8 +454,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageUpdateStatus()
+    public function testNoexistPageUpdateStatus(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -347,10 +468,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageUpdateStatusValidationFail()
+    public function testPageUpdateStatusValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -362,10 +489,16 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function testPageUpdateStatus()
+    public function testPageUpdateStatus(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -382,17 +515,23 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function testPageDestroyAsGuest()
+    public function testPageDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.page.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageDestroyWithoutPermission()
+    public function testPageDestroyWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -402,8 +541,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageDestroy()
+    public function testNoexistPageDestroy(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -413,10 +555,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageDestroy()
+    public function testPageDestroy(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -434,15 +582,18 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function testPageDestroyGlobalAsGuest()
+    public function testPageDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.page.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageDestroyGlobalWithoutPermission()
+    public function testPageDestroyGlobalWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -452,8 +603,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPageDestroyGlobalValidationFail()
+    public function testPageDestroyGlobalValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -466,10 +620,16 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testPageDestroyGlobal()
+    public function testPageDestroyGlobal(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->count(10)->active()->withUser()->create();
 
         Auth::login($user);
@@ -490,15 +650,18 @@ class PageTest extends TestCase
         $this->assertTrue($deleted->count() === 0);
     }
 
-    public function testPageCreateAsGuest()
+    public function testPageCreateAsGuest(): void
     {
         $response = $this->get(route('admin.page.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageCreateWithoutPermission()
+    public function testPageCreateWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -508,8 +671,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPageCreate()
+    public function testPageCreate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -520,15 +686,18 @@ class PageTest extends TestCase
         $response->assertSee(route('admin.page.store'), false);
     }
 
-    public function testPageStoreAsGuest()
+    public function testPageStoreAsGuest(): void
     {
         $response = $this->post(route('admin.page.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageStoreWithoutPermission()
+    public function testPageStoreWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -538,8 +707,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPageStoreValidationFail()
+    public function testPageStoreValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -553,8 +725,11 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['title', 'status']);
     }
 
-    public function testRootPageStore()
+    public function testRootPageStore(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -577,10 +752,16 @@ class PageTest extends TestCase
         $this->assertTrue($page->exists());
     }
 
-    public function testChildrenPageStore()
+    public function testChildrenPageStore(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $parent = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -610,17 +791,23 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function testPageEditPositionAsGuest()
+    public function testPageEditPositionAsGuest(): void
     {
         $response = $this->get(route('admin.page.edit_position', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageEditPositionWithoutPermission()
+    public function testPageEditPositionWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -630,8 +817,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageEditPosition()
+    public function testNoexistPageEditPosition(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -641,10 +831,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageEditPosition()
+    public function testPageEditPosition(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -652,21 +848,39 @@ class PageTest extends TestCase
         $response = $this->get(route('admin.page.edit_position', [$page->id]));
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString('value="' . $page->position . '"', $response->getData()->view);
-        $this->assertStringContainsString(route('admin.page.update_position', [$page->id]), $response->getData()->view);
+
+        /**
+         * @var JsonResponse
+         */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'value="' . $page->position . '"',
+            $baseResponse->getData()->view
+        );
+        $this->assertStringContainsString(
+            URL::route('admin.page.update_position', [$page->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testPageUpdatePositionAsGuest()
+    public function testPageUpdatePositionAsGuest(): void
     {
         $response = $this->patch(route('admin.page.update_position', [2323]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPageUpdatePositionWithoutPermission()
+    public function testPageUpdatePositionWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -676,8 +890,11 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPageUpdatePosition()
+    public function testNoexistPageUpdatePosition(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -687,10 +904,16 @@ class PageTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPageUpdatePositionValidationFail()
+    public function testPageUpdatePositionValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Page
+         */
         $page = Page::makeFactory()->active()->withUser()->create();
 
         Auth::login($user);
@@ -702,10 +925,16 @@ class PageTest extends TestCase
         $response->assertSessionHasErrors(['position']);
     }
 
-    public function testPageUpdatePosition()
+    public function testPageUpdatePosition(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var Collection<Page>
+         */
         $page = Page::makeFactory()->count(3)->active()->withUser()->create();
 
         $this->assertDatabaseHas('pages', [

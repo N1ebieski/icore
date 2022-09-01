@@ -69,10 +69,10 @@ class CommentComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.comment.comment', [
             'comments' => $this->comment->makeCache()->rememberByComponent([
@@ -80,6 +80,6 @@ class CommentComponent implements Htmlable
                 'max_content' => $this->max_content,
                 'orderby' => $this->orderby
             ])
-        ]);
+        ])->render();
     }
 }

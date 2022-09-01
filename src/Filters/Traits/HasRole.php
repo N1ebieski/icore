@@ -18,8 +18,9 @@ trait HasRole
     }
 
     /**
-     * [filterRole description]
-     * @param int|null $id [description]
+     *
+     * @param int|null $id
+     * @return void
      */
     public function filterRole(int $id = null): void
     {

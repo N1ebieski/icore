@@ -26,6 +26,12 @@ class PostCache
     protected $cache;
 
     /**
+     *
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Undocumented variable
      *
      * @var Carbon
@@ -182,9 +188,11 @@ class PostCache
                 $posts = $this->post->makeRepo()->getArchives();
 
                 $posts->map(function ($item) {
-                    $item->month_localized = $this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}")
+                    $item->month_localized = optional($this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}"))
                         ->locale($this->config->get('app.locale'))
                         ->isoFormat('MMMM');
+
+                    return $item;
                 });
 
                 return $posts;
@@ -248,14 +256,14 @@ class PostCache
     public function rememberByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-            $posts = $this->getByFilter($this->request->input('page'));
+            $posts = $this->getByFilter();
         }
 
-        if (!isset($posts) || !$posts) {
+        if (!isset($posts)) {
             $posts = $this->post->makeRepo()->paginateByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-                $this->putByFilter($posts, $this->request->input('page'));
+                $this->putByFilter($posts);
             }
         }
 

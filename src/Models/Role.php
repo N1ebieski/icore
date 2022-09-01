@@ -2,6 +2,7 @@
 
 namespace N1ebieski\ICore\Models;
 
+use DateTime;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\ValueObjects\Role\Name;
 use N1ebieski\ICore\Services\Role\RoleService;
@@ -13,9 +14,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Role\RoleFactory;
 
 /**
- *
+ * @property int $id
  * @property Name $name
- * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
  */
 class Role extends BaseRole
 {
@@ -28,7 +30,7 @@ class Role extends BaseRole
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'name',
@@ -38,7 +40,7 @@ class Role extends BaseRole
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',

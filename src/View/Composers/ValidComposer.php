@@ -2,8 +2,8 @@
 
 namespace N1ebieski\ICore\View\Composers;
 
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Session\Session;
 use N1ebieski\ICore\View\Composers\Composer;
 
 class ValidComposer extends Composer
@@ -38,6 +38,9 @@ class ValidComposer extends Composer
      */
     public function isValid(string $name): ?string
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         if ($this->session->has('errors')) {
             if ($this->session->get('errors')->has($name)) {
                 return 'is-invalid';

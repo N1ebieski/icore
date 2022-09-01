@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * Franzose/ClosureTable does not have include polymorphic models.
  * That trait adds that feature.
- *
- * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
  */
 trait HasFixForPolymorphicClosureTable
 {

@@ -50,15 +50,15 @@ class MapComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.map.map', [
             'containerClass' => $this->container_class,
             'zoom' => $this->zoom,
             'addressMarker' => json_encode($this->address_marker)
-        ]);
+        ])->render();
     }
 }

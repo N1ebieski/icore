@@ -37,10 +37,10 @@ class TagComponent extends BaseTagComponent
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.tag.post.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([
@@ -48,6 +48,6 @@ class TagComponent extends BaseTagComponent
                 'cats' => $this->cats
             ]),
             'colors' => $this->colors
-        ]);
+        ])->render();
     }
 }

@@ -38,8 +38,8 @@ class MacroServiceProvider extends ServiceProvider
         Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
             return new LengthAwarePaginator(
-                $this->forPage($page, $perPage),
-                $total ?: $this->count(),
+                $this->forPage($page, $perPage), // @phpstan-ignore-line
+                $total ?: $this->count(), // @phpstan-ignore-line
                 $perPage,
                 $page,
                 [
@@ -50,6 +50,7 @@ class MacroServiceProvider extends ServiceProvider
         });
 
         Collection::macro('flattenRelation', function (string $relation) {
+            /** @phpstan-ignore-next-line */
             $result = $this->make([]);
 
             $closure = function ($collection) use (&$closure, &$result, $relation) {
@@ -71,12 +72,14 @@ class MacroServiceProvider extends ServiceProvider
         });
 
         Collection::macro('isEmptyItems', function () {
+            /** @phpstan-ignore-next-line */
             return $this->every(function ($value, $key) {
                 return strlen($value) === 0;
             });
         });
 
         Collection::macro('isNullItems', function () {
+            /** @phpstan-ignore-next-line */
             return $this->every(function ($value, $key) {
                 if (is_array($value)) {
                     return Collection::make($value)->isNullItems();

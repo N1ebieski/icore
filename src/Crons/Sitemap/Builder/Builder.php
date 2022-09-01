@@ -5,12 +5,16 @@ namespace N1ebieski\ICore\Crons\Sitemap\Builder;
 use Closure;
 use Illuminate\Support\Carbon;
 use Spatie\ArrayToXml\ArrayToXml;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
+/**
+ * @property string $route
+ * @property string $changefreq
+ * @property string $priority
+ */
 abstract class Builder
 {
     /**
@@ -58,16 +62,22 @@ abstract class Builder
     /**
      * Undocumented variable
      *
-     * @var Collection
+     * @var Collect
      */
     protected $collection;
 
     /**
      * Undocumented variable
      *
-     * @var Collect|string
+     * @var Collect
      */
     protected $sitemap;
+
+    /**
+     *
+     * @var string
+     */
+    protected $contents;
 
     /**
      * Undocumented variable
@@ -135,9 +145,9 @@ abstract class Builder
      * Undocumented function
      *
      * @param Collect $collection
-     * @return void
+     * @return self
      */
-    public function setCollection(Collect $collection)
+    public function setCollection(Collect $collection): self
     {
         $this->collection = $collection;
 
@@ -152,7 +162,7 @@ abstract class Builder
      */
     protected function countPages(int $count): int
     {
-        $pages = ceil($count / $this->config->get('database.paginate'));
+        $pages = (int)ceil($count / $this->config->get('database.paginate'));
 
         return $pages > 0 ? $pages : 1;
     }
@@ -188,7 +198,10 @@ abstract class Builder
     {
         $this->iterator++;
 
-        return $this->storage->disk('public')->put($this->path . '/sitemap-' . $this->iterator . '.xml', $this->sitemap);
+        return $this->storage->disk('public')->put(
+            $this->path . '/sitemap-' . $this->iterator . '.xml',
+            $this->contents
+        );
     }
 
     /**
@@ -204,11 +217,11 @@ abstract class Builder
     /**
      * Undocumented function
      *
-     * @return string
+     * @return void
      */
-    public function prepareSitemap(): string
+    public function prepareSitemapContents(): void
     {
-        return $this->sitemap = $this->arrayToXml->convert(
+        $this->contents = $this->arrayToXml->convert(
             [
                 $this->childElementName => $this->sitemap->toArray()
             ],

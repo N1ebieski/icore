@@ -5,6 +5,9 @@ namespace N1ebieski\ICore\Http\Resources\Socialite;
 use N1ebieski\ICore\Models\Socialite;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Socialite
+ */
 class SocialiteResource extends JsonResource
 {
     /**

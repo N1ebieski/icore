@@ -8,7 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class OptionalAuthSanctum
 {
-    public function handle(Request $request, Closure $next)
+    /**
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next): mixed
     {
         if ($request->bearerToken()) {
             $user = Auth::guard('sanctum')->user();

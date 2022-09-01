@@ -102,6 +102,10 @@ class UpdateCommand extends Command
      */
     protected function getFullBackupPath(): string
     {
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
+
         return $this->backup_path . '/' . str_replace('.', '', $this->argument('version'));
     }
 
@@ -146,6 +150,10 @@ class UpdateCommand extends Command
     {
         $this->line($this->lang->get('icore::update.backup'));
 
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
+
         try {
             $updater = $this->app->make(Updater::class, [
                 'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
@@ -169,6 +177,10 @@ class UpdateCommand extends Command
     protected function update(): void
     {
         $this->line($this->lang->get('icore::update.update_files'));
+
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
 
         try {
             $updater = $this->app->make(Updater::class, [

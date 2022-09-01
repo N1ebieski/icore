@@ -144,20 +144,20 @@ class CategoryCache
     /**
      * Undocumented function
      *
-     * @param array $filter
+     * @param array<string, string> $filter
      * @return LengthAwarePaginator
      */
     public function rememberByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-            $categories = $this->getByFilter($this->request->input('page'));
+            $categories = $this->getByFilter();
         }
 
-        if (!isset($categories) || !$categories) {
+        if (!isset($categories)) {
             $categories = $this->category->makeRepo()->paginateByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-                $this->putByFilter($categories, $this->request->input('page'));
+                $this->putByFilter($categories);
             }
         }
 

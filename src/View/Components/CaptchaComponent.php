@@ -44,27 +44,28 @@ class CaptchaComponent implements Htmlable
     }
 
     /**
-     * Undocumented function
-     *
-     * @return View|void
+     * 
+     * @return string 
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         switch ($this->config->get('icore.captcha.driver')) {
             case 'recaptcha_invisible':
                 return $this->view->make('icore::web.components.captcha.recaptcha_invisible', [
                     'site_key' => $this->config->get('services.recaptcha_invisible.site_key')
-                ]);
+                ])->render();
 
             case 'recaptcha_v2':
                 return $this->view->make('icore::web.components.captcha.recaptcha_v2', [
                     'site_key' => $this->config->get('services.recaptcha_v2.site_key')
-                ]);
+                ])->render();
 
             case 'logic_captcha':
                 return $this->view->make('icore::web.components.captcha.logic_captcha', [
                     'id' => $this->id
-                ]);
+                ])->render();
         }
+
+        return '';
     }
 }

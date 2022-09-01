@@ -4,10 +4,10 @@ namespace N1ebieski\ICore\Http\Requests\Api\Post;
 
 use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\ValueObjects\Post\Status;
-use N1ebieski\ICore\Models\Category\Post\Category;
 
 class IndexRequest extends FormRequest
 {
@@ -33,7 +33,7 @@ class IndexRequest extends FormRequest
         /**
          * @var Post
          */
-        $post = Post::make();
+        $post = App::make(Post::class);
 
         return [
             'page' => [

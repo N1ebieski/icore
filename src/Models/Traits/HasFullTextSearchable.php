@@ -88,10 +88,9 @@ trait HasFullTextSearchable
     }
 
     /**
-     * Undocumented function
      *
-     * @param string $term
-     * @return boolean
+     * @param string $match
+     * @return bool
      */
     protected function isContainsSymbol(string $match): bool
     {

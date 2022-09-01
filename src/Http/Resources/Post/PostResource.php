@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Resources\Json\JsonResource;
 use N1ebieski\ICore\Http\Resources\User\UserResource;
 
+/**
+ * @mixin Post
+ */
 class PostResource extends JsonResource
 {
     /**

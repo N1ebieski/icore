@@ -70,16 +70,16 @@ class CategoryRepo
             ->when(
                 $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),
                 function ($query) {
-                    $query->active();
+                    return $query->active();
                 },
                 function ($query) use ($filter) {
-                    $query->filterStatus($filter['status']);
+                    return $query->filterStatus($filter['status']);
                 }
             )
             ->poliType()
             ->filterParent($filter['parent'])
             ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->withAncestorsExceptSelf()
@@ -92,6 +92,9 @@ class CategoryRepo
      */
     public function getAsTree(): Collection
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return  $this->category->poliType()
             ->orderBy('position', 'asc')
             ->get()
@@ -104,18 +107,20 @@ class CategoryRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return $this->category->whereNotIn(
             'id',
-            $this->category->find($this->category->id)
-                    ->descendants()
-                    ->get(['id'])
-                    ->pluck('id')
-                    ->toArray()
+            $this->category->descendants()
+                ->get(['id'])
+                ->pluck('id')
+                ->toArray()
         )
-            ->poliType()
-            ->orderBy('position', 'asc')
-            ->get()
-            ->toTree();
+        ->poliType()
+        ->orderBy('position', 'asc')
+        ->get()
+        ->toTree();
     }
 
     /**
@@ -164,6 +169,10 @@ class CategoryRepo
      */
     public function paginatePosts(): LengthAwarePaginator
     {
+        if (!method_exists($this->category, 'morphs')) {
+            throw new \Exception('Entity must be polimorphic.');
+        }
+
         return $this->category->morphs()
             ->active()
             ->with('user')
@@ -219,7 +228,7 @@ class CategoryRepo
      * Undocumented function
      *
      * @param Closure $closure
-     * @return boolean
+     * @return bool
      */
     public function chunkActiveWithModelsCount(Closure $closure): bool
     {

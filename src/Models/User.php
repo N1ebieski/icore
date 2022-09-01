@@ -26,6 +26,7 @@ use N1ebieski\ICore\Database\Factories\User\UserFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
 /**
+ * @property string $name
  * @property Status $status
  * @property Marketing $marketing
  */
@@ -51,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'name',
@@ -66,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<string>
      */
     protected $hidden = [
         'password', 'remember_token', 'ip', 'email'
@@ -75,7 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The columns of the full text index
      *
-     * @var array
+     * @var array<string>
      */
     public $searchable = [
         'name',
@@ -86,7 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, int>
      */
     protected $attributes = [
         'status' => Status::ACTIVE,
@@ -96,7 +97,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',
@@ -176,7 +177,10 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeFilterRole(Builder $query, Role $role = null): ?Builder
     {
-        return $query->when($role !== null, function ($query) use ($role) {
+        return $query->when($role !== null, function (Builder $query) use ($role) {
+            /**
+             * @phpstan-ignore-next-line
+             */
             $query->role($role->name);
         });
     }

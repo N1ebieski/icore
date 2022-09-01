@@ -54,7 +54,7 @@ class LinkCache
 
     /**
      * [rememberLinksByComponent description]
-     * @param  array      $component [description]
+     * @param  array<string, string>      $component [description]
      * @return Collection            [description]
      */
     public function rememberLinksByComponent(array $component): Collection

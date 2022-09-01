@@ -5,8 +5,9 @@ namespace N1ebieski\ICore\Filters\Traits;
 trait HasType
 {
     /**
-     * [filterType description]
-     * @param string|null $value [description]
+     *
+     * @param string|null $value
+     * @return void
      */
     public function filterType(string $value = null): void
     {

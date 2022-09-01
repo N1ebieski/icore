@@ -18,21 +18,21 @@ trait HasCategory
     }
 
     /**
-     * [filterCategory description]
-     * @param  int|null $id [description]
-     * @return Category|0     [description]
+     *
+     * @param int|null $id
+     * @return void
      */
-    public function filterCategory(int $id = null)
+    public function filterCategory(int $id = null): void
     {
         $this->parameters['category'] = null;
 
         if ($id === 0) {
-            return $this->parameters['category'] = 0;
+            $this->parameters['category'] = 0;
         }
 
         if ($id !== null) {
             if ($category = $this->findCategory($id)) {
-                return $this->setCategory($category);
+                $this->setCategory($category);
             }
         }
     }

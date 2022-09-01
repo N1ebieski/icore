@@ -274,9 +274,9 @@ class PostRepo
 
     /**
      * [updateActivateScheduled description]
-     * @return bool              [description]
+     * @return int              [description]
      */
-    public function activateScheduled(): bool
+    public function activateScheduled(): int
     {
         return $this->post
             ->whereDate('published_at', '<', $this->carbon->now()->format('Y-m-d'))

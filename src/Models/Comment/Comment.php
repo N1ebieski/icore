@@ -27,8 +27,11 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
 /**
+ * @property int $real_depth
+ * @property string $poli
  * @property Status $status
  * @property Censored $censored
+ * @property Entity $morph
  */
 class Comment extends Entity
 {
@@ -59,14 +62,15 @@ class Comment extends Entity
     /**
      * ClosureTable model instance.
      *
-     * @var CommentClosure
+     * @var string
+     * @phpstan-ignore-next-line
      */
     protected $closure = 'N1ebieski\ICore\Models\Comment\CommentClosure';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = ['content_html', 'status', 'censored'];
 
@@ -290,10 +294,10 @@ class Comment extends Entity
     /**
      * [scopeFilterCensored description]
      * @param  Builder $query    [description]
-     * @param  [type]  $censored [description]
+     * @param  int|null  $censored [description]
      * @return Builder|null           [description]
      */
-    public function scopeFilterCensored(Builder $query, $censored = null)
+    public function scopeFilterCensored(Builder $query, int $censored = null)
     {
         $query->when($censored !== null, function ($query) use ($censored) {
             return $query->where('censored', $censored);
@@ -335,6 +339,9 @@ class Comment extends Entity
      */
     public function scopeWithAllRels(Builder $query, string $orderby = null): Builder
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return $query->withSumRating()
             ->with([
                 'user:id,name',

@@ -33,6 +33,7 @@ use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 
 /**
+ * @property int $real_depth
  * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status

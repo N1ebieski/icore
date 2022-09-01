@@ -23,10 +23,11 @@ class IndexFilter extends Filter
     use HasPaginate;
 
     /**
-     * [setParent description]
-     * @param Category $category [description]
+     *
+     * @param Category $category
+     * @return IndexFilter
      */
-    public function setParent(Category $category)
+    public function setParent(Category $category): self
     {
         $this->parameters['parent'] = $category;
 

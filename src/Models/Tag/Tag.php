@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Tag\TagFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
+/**
+ * @property int $tag_id
+ * 
+ */
 class Tag extends Taggable
 {
     use HasFullTextSearchable;

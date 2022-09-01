@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\Console\Commands\Update;
 
+use Exception;
 use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Utils\Updater\Schema\Interfaces\SchemaInterface;
 
 class SchemaFactory
@@ -42,10 +44,11 @@ class SchemaFactory
     }
 
     /**
-     * Undocumented function
      *
-     * @param array $action
+     * @param string $version
      * @return SchemaInterface
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function makeSchema(string $version): SchemaInterface
     {

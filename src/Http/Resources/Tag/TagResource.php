@@ -5,6 +5,9 @@ namespace N1ebieski\ICore\Http\Resources\Tag;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Tag
+ */
 class TagResource extends JsonResource
 {
     /**

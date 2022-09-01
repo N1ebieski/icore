@@ -42,9 +42,15 @@ class CreateViewModel extends ViewModel
      */
     public function parent(): ?Category
     {
-        if ($this->request->input('parent_id') !== null) {
-            return $this->category->find($this->request->input('parent_id'))
-                ->loadAncestorsExceptSelf();
+        $id = $this->request->input('parent_id');
+
+        if (!is_null($id)) {
+            /**
+             * @var Category|null
+             */
+            $category = $this->category->find($id);
+
+            return optional($category)->loadAncestorsExceptSelf();
         }
 
         return null;

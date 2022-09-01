@@ -7,6 +7,11 @@ use N1ebieski\ICore\Models\Tag\Tag as BaseTag;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Tag\Post\TagFactory;
 
+/**
+ * @property string $name
+ * @property string $normalized
+ *
+ */
 class Tag extends BaseTag
 {
     // Configuration

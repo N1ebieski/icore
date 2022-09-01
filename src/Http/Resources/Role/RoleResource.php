@@ -5,6 +5,9 @@ namespace N1ebieski\ICore\Http\Resources\Role;
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Role
+ */
 class RoleResource extends JsonResource
 {
     /**

@@ -19,7 +19,7 @@ class Director
             $builder->addToSitemap();
 
             if ($builder->isMaxItems()) {
-                $builder->prepareSitemap();
+                $builder->prepareSitemapContents();
 
                 $builder->putSitemap();
 

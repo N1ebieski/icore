@@ -41,6 +41,12 @@ class EditFullViewModel extends ViewModel
     protected $config;
 
     /**
+     *
+     * @var Request
+     */
+    private $request;
+
+    /**
      * Undocumented function
      *
      * @param Category $category
@@ -91,7 +97,7 @@ class EditFullViewModel extends ViewModel
      */
     public function categoriesSelection(): Collection
     {
-        if ($this->request->old('categories')) {
+        if (is_array($this->request->old('categories'))) {
             return $this->category->makeRepo()->getByIds($this->request->old('categories'));
         }
 
@@ -107,7 +113,10 @@ class EditFullViewModel extends ViewModel
     {
         $userId = $this->request->old('user');
 
-        if ($userId !== null) {
+        if (!is_null($userId)) {
+            /**
+             * @var User|null
+             */
             return $this->user->find($userId);
         }
 

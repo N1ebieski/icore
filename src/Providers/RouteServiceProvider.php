@@ -12,13 +12,13 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
+    // /**
+    //  * This namespace is applied to your controller routes.
+    //  *
+    //  * In addition, it is set as the URL generator's root namespace.
+    //  *
+    //  * @var string
+    //  */
     // protected $namespace = 'N1ebieski\ICore\Http\Controllers';
 
     /**
@@ -26,7 +26,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->configureRateLimiting();
 
@@ -75,14 +75,14 @@ class RouteServiceProvider extends ServiceProvider
         $router = Route::middleware('icore.web')
             ->prefix(Config::get('icore.routes.auth.prefix'));
 
-        $router->group(function ($router) {
+        $router->group(function () {
             if (!file_exists(base_path('routes') . '/vendor/icore/auth.php')) {
                 require(__DIR__ . '/../../routes/auth.php');
             }
         });
 
         $router->namespace(Config::get('icore.routes.auth.namespace', $this->namespace))
-            ->group(function ($router) {
+            ->group(function () {
                 if (file_exists($filename = base_path('routes') . '/vendor/icore/auth.php')) {
                     require($filename);
                 }
@@ -106,8 +106,10 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix(Config::get('icore.routes.web.prefix'))
             ->as('web.');
 
-        $router->group(function ($router) {
-            foreach (glob(__DIR__ . '/../../routes/web/*.php') as $filename) {
+        $router->group(function () {
+            $filenames = glob(__DIR__ . '/../../routes/web/*.php') ?: [];
+
+            foreach ($filenames as $filename) {
                 if (!file_exists(base_path('routes') . '/vendor/icore/web/' . basename($filename))) {
                     require($filename);
                 }
@@ -115,8 +117,10 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $router->namespace(Config::get('icore.routes.web.namespace', $this->namespace . '\Web'))
-            ->group(function ($router) {
-                foreach (glob(base_path('routes') . '/vendor/icore/web/*.php') as $filename) {
+            ->group(function () {
+                $filenames = glob(base_path('routes') . '/vendor/icore/web/*.php') ?: [];
+
+                foreach ($filenames as $filename) {
                     require($filename);
                 }
             });
@@ -139,8 +143,10 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix(Config::get('icore.routes.api.prefix', 'api'))
             ->as('api.');
 
-        $router->group(function ($router) {
-            foreach (glob(__DIR__ . '/../../routes/api/*.php') as $filename) {
+        $router->group(function () {
+            $filenames = glob(__DIR__ . '/../../routes/api/*.php') ?: [];
+
+            foreach ($filenames as $filename) {
                 if (!file_exists(base_path('routes') . '/vendor/icore/api/' . basename($filename))) {
                     require($filename);
                 }
@@ -148,8 +154,10 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $router->namespace(Config::get('icore.routes.api.namespace', $this->namespace . '\Api'))
-            ->group(function ($router) {
-                foreach (glob(base_path('routes') . '/vendor/icore/api/*.php') as $filename) {
+            ->group(function () {
+                $filenames = glob(base_path('routes') . '/vendor/icore/api/*.php') ?: [];
+
+                foreach ($filenames as $filename) {
                     require($filename);
                 }
             });
@@ -177,8 +185,10 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix(Config::get('icore.routes.admin.prefix', 'admin'))
             ->as('admin.');
 
-        $router->group(function ($router) {
-            foreach (glob(__DIR__ . '/../../routes/admin/*.php') as $filename) {
+        $router->group(function () {
+            $filenames = glob(__DIR__ . '/../../routes/admin/*.php') ?: [];
+
+            foreach ($filenames as $filename) {
                 if (!file_exists(base_path('routes') . '/vendor/icore/admin/' . basename($filename))) {
                     require($filename);
                 }
@@ -186,8 +196,10 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $router->namespace(Config::get('icore.routes.admin.namespace', $this->namespace . '\Admin'))
-            ->group(function ($router) {
-                foreach (glob(base_path('routes') . '/vendor/icore/admin/*.php') as $filename) {
+            ->group(function () {
+                $filenames = glob(base_path('routes') . '/vendor/icore/admin/*.php') ?: [];
+
+                foreach ($filenames as $filename) {
                     require($filename);
                 }
             });

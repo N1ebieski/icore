@@ -29,23 +29,17 @@ class CommentComponent extends BaseCommentComponent
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
-        // dd($this->comment->makeRepo()->getByComponent([
-        //     'limit' => $this->limit,
-        //     'max_content' => $this->max_content,
-        //     'orderby' => $this->orderby
-        // ]));
-
         return $this->view->make('icore::web.components.comment.post.comment', [
             'comments' => $this->comment->makeCache()->rememberByComponent([
                 'limit' => $this->limit,
                 'max_content' => $this->max_content,
                 'orderby' => $this->orderby
             ])
-        ]);
+        ])->render();
     }
 }

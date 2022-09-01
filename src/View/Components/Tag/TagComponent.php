@@ -55,16 +55,16 @@ class TagComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     * 
+     * @return string 
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.tag.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([
                 'limit' => $this->limit,
             ]),
             'colors' => $this->colors
-        ]);
+        ])->render();
     }
 }

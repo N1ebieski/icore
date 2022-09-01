@@ -18,8 +18,9 @@ trait HasAuthor
     }
 
     /**
-     * [filterAuthor description]
-     * @param int|null $id [description]
+     *
+     * @param int|null $id
+     * @return void
      */
     public function filterAuthor(int $id = null): void
     {

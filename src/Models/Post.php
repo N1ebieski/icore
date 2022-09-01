@@ -33,10 +33,11 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 
 /**
+ * @property string $title
  * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status
- * @property Comment $comment
+ * @property Commentable $comment
  */
 class Post extends Model
 {
@@ -55,7 +56,7 @@ class Post extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'title',
@@ -323,10 +324,15 @@ class Post extends Model
     {
         $cut = explode('<p>[more]</p>', $this->replacement_content_html);
 
+        /**
+         * @var string
+         */
+        $lang = Lang::get('icore::posts.more');
+
         return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [
                 $this->slug,
                 '#more'
-            ]) . '" class="more">' . Lang::get('icore::posts.more') . '</a></p>' : $this->replacement_content_html;
+            ]) . '" class="more">' . $lang . '</a></p>' : $this->replacement_content_html;
     }
 
     /**

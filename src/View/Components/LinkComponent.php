@@ -78,10 +78,10 @@ class LinkComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.link', [
             'links' => $this->link->makeCache()->rememberLinksByComponent([
@@ -89,6 +89,6 @@ class LinkComponent implements Htmlable
                 'cats' => $this->collect->make($this->cats)->flatten()->toArray(),
                 'limit' => $this->limit
             ])
-        ]);
+        ])->render();
     }
 }

@@ -25,6 +25,12 @@ class CreateViewModel extends ViewModel
     protected $config;
 
     /**
+     *
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * [__construct description]
      *
      * @param   Category  $category  [$category description]
@@ -66,7 +72,7 @@ class CreateViewModel extends ViewModel
      */
     public function categoriesSelection(): ?Collection
     {
-        if ($this->request->old('categories')) {
+        if (is_array($this->request->old('categories'))) {
             return $this->category->makeRepo()->getByIds($this->request->old('categories'));
         }
 

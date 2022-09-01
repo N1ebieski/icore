@@ -84,9 +84,9 @@ class SitemapBuilder extends Builder
      * Undocumented function
      *
      * @param Collect $collection
-     * @return void
+     * @return self
      */
-    public function setCollection(Collect $collection)
+    public function setCollection(Collect $collection): self
     {
         $this->collection = $collection;
 
@@ -112,7 +112,7 @@ class SitemapBuilder extends Builder
      * Undocumented function
      *
      * @param Closure $closure
-     * @return void
+     * @return bool
      */
     public function chunkCollection(Closure $closure): bool
     {

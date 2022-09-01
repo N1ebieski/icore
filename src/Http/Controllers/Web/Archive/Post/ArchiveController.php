@@ -26,6 +26,9 @@ class ArchiveController implements Polymorphic
         return Response::view('icore::web.archive.post.show', [
             'posts' => $post->makeCache()->rememeberArchiveByDate($month, $year),
             'month' => $month,
+            /**
+             * @phpstan-ignore-next-line
+             */
             'month_localized' => Carbon::createFromFormat('d/m/Y', "1/{$month}/{$year}")
                 ->locale(Config::get('app.locale'))
                 ->isoFormat('MMMM'),

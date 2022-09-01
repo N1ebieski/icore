@@ -44,6 +44,9 @@ class CommentController implements PagePolymorphic
      */
     public function store(Page $page, Comment $comment, StoreRequest $request): JsonResponse
     {
+        /**
+         * @var Comment
+         */
         $comment = $comment->setRelations(['morph' => $page])
             ->makeService()
             ->create($request->only(['content', 'parent_id']));

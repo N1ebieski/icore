@@ -6,8 +6,8 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Pagination\LengthAwarePaginator;
 use N1ebieski\ICore\ValueObjects\Report\Reported;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 trait HasFilterable
 {
@@ -20,6 +20,9 @@ trait HasFilterable
     public function scopeFilterSearch(Builder $query, string $search = null): ?Builder
     {
         return $query->when($search !== null, function ($query) use ($search) {
+            /**
+             * @phpstan-ignore-next-line
+             */
             return $query->search($search);
         });
     }
@@ -53,12 +56,14 @@ trait HasFilterable
      *
      * @param Builder $query
      * @param string $search
-     * @param string $orderby
      * @return Builder
      */
     public function scopeFilterOrderBySearch(Builder $query, string $search = null): Builder
     {
         return $query->when($search !== null, function ($query) use ($search) {
+            /**
+             * @phpstan-ignore-next-line
+             */
             return $query->orderBySearch($search);
         });
     }

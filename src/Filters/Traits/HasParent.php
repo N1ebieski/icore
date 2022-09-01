@@ -5,20 +5,21 @@ namespace N1ebieski\ICore\Filters\Traits;
 trait HasParent
 {
     /**
-     * [filterParent description]
-     * @param  int|null $id [description]
+     *
+     * @param int|null $id
+     * @return void
      */
-    public function filterParent(int $id = null)
+    public function filterParent(int $id = null): void
     {
         $this->parameters['parent'] = null;
 
         if ($id === 0) {
-            return $this->parameters['parent'] = 0;
+            $this->parameters['parent'] = 0;
         }
 
         if ($id !== null) {
             if ($parent = $this->findParent($id)) {
-                return $this->setParent($parent);
+                $this->setParent($parent);
             }
         }
     }

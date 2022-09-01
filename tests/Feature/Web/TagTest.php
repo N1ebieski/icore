@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -13,15 +14,18 @@ class TagTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testNoexistTagShow()
+    public function testNoexistTagShow(): void
     {
         $response = $this->get(route('web.tag.post.show', ['dajskruiufi-2']));
 
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testTagShowPaginate()
+    public function testTagShowPaginate(): void
     {
+        /**
+         * @var Collection<Post> $posts
+         */
         $posts = Post::makeFactory()->count(50)->active()->withUser()
             ->sequence(function ($sequence) {
                 return [
@@ -30,6 +34,9 @@ class TagTest extends TestCase
             })
             ->create();
 
+        /**
+         * @var Tag $tag
+         */
         $tag = Tag::makeFactory()->hasAttached($posts, [], 'morphs')->create();
 
         $response = $this->get(route('web.tag.post.show', [$tag->normalized, 'page' => 2]));

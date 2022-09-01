@@ -29,7 +29,7 @@ class CustomException extends Exception
     /**
      * Report the exception.
      *
-     * @return void
+     * @return bool
      */
     public function report()
     {
@@ -37,9 +37,9 @@ class CustomException extends Exception
     }
 
     /**
-     * Render the exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
+     * @return bool
      */
     public function render(Request $request)
     {
@@ -47,6 +47,6 @@ class CustomException extends Exception
             return false;
         }
 
-        return App::abort($this->getCode(), $this->getMessage());
+        App::abort($this->getCode(), $this->getMessage());
     }
 }

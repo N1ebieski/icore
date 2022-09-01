@@ -2,11 +2,11 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
+use Franzose\ClosureTable\Models\Entity;
+
 /**
  * Franzose/ClosureTable removes the real depth attribute feature since 6.0 version.
  * That trait restores that feature in combination with Observers.
- *
- * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
  */
 trait HasFixForRealDepthClosureTable
 {
@@ -17,6 +17,9 @@ trait HasFixForRealDepthClosureTable
      */
     public function getNextRealDepth(): int
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         $parent = $this->find($this->parent_id);
 
         return is_int(optional($parent)->real_depth) ? $parent->real_depth + 1 : 0;

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Category
+ */
 class CategoryResource extends JsonResource
 {
     /**

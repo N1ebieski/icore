@@ -4,6 +4,9 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Mockery;
 use Tests\TestCase;
+use RuntimeException;
+use Mockery\MockInterface;
+use InvalidArgumentException;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -19,71 +22,90 @@ class ProfileTest extends TestCase
 
     private const PROVIDER = 'facebook';
 
-    protected static function socialiteMock(array $user)
+    /**
+     *
+     * @param array<string> $user
+     * @return void
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     */
+    protected static function socialiteMock(array $user): void
     {
+        /**
+         * @var MockInterface
+         */
         $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
 
+        /** @phpstan-ignore-next-line */
         $abstractUser->shouldReceive('getId')->andReturn($user['id'])
             ->shouldReceive('getEmail')->andReturn($user['email'])
             ->shouldReceive('getName')->andReturn($user['name']);
 
+        /**
+         * @var MockInterface
+         */
         $providerUser = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+
+        /** @phpstan-ignore-next-line */
         $providerUser->shouldReceive('user')->andReturn($abstractUser);
 
         Socialite::shouldReceive('driver')->once()->with(self::PROVIDER)->andReturn($providerUser);
     }
 
-    public function testProfileEditGuestUser()
+    public function testProfileEditGuestUser(): void
     {
         $response = $this->get(route('web.profile.edit'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileUpdateGuestUser()
+    public function testProfileUpdateGuestUser(): void
     {
         $response = $this->put(route('web.profile.update'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileEditSocialiteGuestUser()
+    public function testProfileEditSocialiteGuestUser(): void
     {
         $response = $this->get(route('web.profile.socialites'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileRedirectPasswordGuestUser()
+    public function testProfileRedirectPasswordGuestUser(): void
     {
         $response = $this->get(route('web.profile.redirect_password'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileUpdateEmailGuestUser()
+    public function testProfileUpdateEmailGuestUser(): void
     {
         $response = $this->patch(route('web.profile.update_email'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileSocialiteRedirectGuestUser()
+    public function testProfileSocialiteRedirectGuestUser(): void
     {
         $response = $this->get(route('web.profile.socialite.redirect', ['provider' => 'facebook']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileSocialiteCallbackGuestUser()
+    public function testProfileSocialiteCallbackGuestUser(): void
     {
         $response = $this->get(route('web.profile.socialite.callback', ['provider' => 'facebook']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileEditSocialite()
+    public function testProfileEditSocialite(): void
     {
+        /**
+         * @var User $user
+         */
         $user = User::makeFactory()->user()->create();
 
         Social::makeFactory()->for($user)->create([
@@ -284,8 +306,11 @@ class ProfileTest extends TestCase
         $response->assertSessionHasErrors('name');
     }
 
-    public function testProfileUpdate()
+    public function testProfileUpdate(): void
     {
+        /**
+         * @var User $user
+         */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -325,6 +350,9 @@ class ProfileTest extends TestCase
             'provider_name' => self::PROVIDER
         ]);
 
+        /**
+         * @var User $user
+         */
         $user2 = User::makeFactory()->create();
 
         Auth::login($user2);

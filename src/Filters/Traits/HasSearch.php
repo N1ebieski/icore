@@ -5,8 +5,9 @@ namespace N1ebieski\ICore\Filters\Traits;
 trait HasSearch
 {
     /**
-     * [filterSearch description]
-     * @param string|null $value [description]
+     *
+     * @param string|null $value
+     * @return void
      */
     public function filterSearch(string $value = null): void
     {

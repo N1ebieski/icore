@@ -56,16 +56,16 @@ class MenuComponent implements Htmlable
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return string
      */
-    public function toHtml(): View
+    public function toHtml(): string
     {
         return $this->view->make('icore::web.components.page.menu', [
             'pages' => $this->page->makeCache()->rememberWithChildrensByComponent([
                 'limit' => $this->limit,
                 'pattern' => $this->pattern
             ])
-        ]);
+        ])->render();
     }
 }

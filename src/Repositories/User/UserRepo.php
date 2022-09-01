@@ -4,7 +4,7 @@ namespace N1ebieski\ICore\Repositories\User;
 
 use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserRepo
 {

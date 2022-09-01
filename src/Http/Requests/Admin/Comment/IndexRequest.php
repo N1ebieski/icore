@@ -36,21 +36,7 @@ class IndexRequest extends FormRequest
             'filter.except' => 'bail|filled|array',
             'filter.except.*' => 'bail|integer',
             'filter.search' => 'bail|nullable|string|min:3|max:255',
-            'filter.status' => [
-                'bail',
-                'nullable',
-                'integer',
-                Rule::in([Status::ACTIVE, Status::INACTIVE]),
-                'no_js_validation'
-            ],
             'filter.author' => 'bail|nullable|integer|exists:users,id|no_js_validation',
-            'filter.status' => [
-                'bail',
-                'nullable',
-                'integer',
-                Rule::in([Censored::ACTIVE, Censored::INACTIVE]),
-                'no_js_validation'
-            ],
             'filter.status' => [
                 'bail',
                 'nullable',

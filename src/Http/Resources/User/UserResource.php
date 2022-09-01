@@ -9,6 +9,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use N1ebieski\ICore\Http\Resources\Role\RoleResource;
 use N1ebieski\ICore\Http\Resources\Socialite\SocialiteResource;
 
+/**
+ * @mixin User
+ */
 class UserResource extends JsonResource
 {
     /**

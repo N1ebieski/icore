@@ -69,7 +69,7 @@ class CommentRepo
      */
     public function getAncestorsAsArray(): array
     {
-        return $this->comment->ancestors()->get(['id'])->pluck('id')->toArray();
+        return $this->comment->ancestors()->pluck('id')->toArray();
     }
 
     /**
@@ -78,7 +78,7 @@ class CommentRepo
      */
     public function getDescendantsAsArray(): array
     {
-        return $this->comment->descendants()->get(['id'])->pluck('id')->toArray();
+        return $this->comment->descendants()->pluck('id')->toArray();
     }
 
     /**
@@ -88,10 +88,10 @@ class CommentRepo
      */
     public function paginateChildrensByFilter(array $filter): LengthAwarePaginator
     {
+        /** @var LengthAwarePaginator<Comment> */
         return $this->comment->childrens()
             ->active()
             ->withAllRels($filter['orderby'])
-            // Filtrujemy wcześniejsze komentarze, aby na froncie nie pojawiły się duplikaty
             ->filterExcept($filter['except'])
             ->filterCommentsOrderBy($filter['orderby'])
             ->filterPaginate(5);
@@ -146,9 +146,9 @@ class CommentRepo
             })
             ->with(['morph', 'user'])
             ->when($component['orderby'] === 'rand', function ($query) {
-                $query->inRandomOrder();
+                return $query->inRandomOrder();
             }, function ($query) use ($component) {
-                $query->filterOrderBy($component['orderby']);
+                return $query->filterOrderBy($component['orderby']);
             })
             ->limit($component['limit'])
             ->get()

@@ -68,7 +68,10 @@ class EditFullViewModel extends ViewModel
     {
         $userId = $this->request->old('user');
 
-        if ($userId !== null) {
+        if (!is_null($userId)) {
+            /**
+             * @var User|null
+             */
             return $this->user->find($userId);
         }
 

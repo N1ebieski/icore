@@ -57,7 +57,7 @@ class CategoryBuilder extends Builder
      * @param Storage $storage
      * @param Config $config
      * @param Collect $collect
-     * @param Page $page
+     * @param Category $category
      */
     public function __construct(
         ArrayToXml $arrayToXml,
@@ -74,10 +74,9 @@ class CategoryBuilder extends Builder
     }
 
     /**
-     * Undocumented function
      *
      * @param Closure $closure
-     * @return void
+     * @return bool
      */
     public function chunkCollection(Closure $closure): bool
     {

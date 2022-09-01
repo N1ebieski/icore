@@ -5,8 +5,9 @@ namespace N1ebieski\ICore\Filters\Traits;
 trait HasReport
 {
     /**
-     * [filterReport description]
-     * @param int|null $value [description]
+     *
+     * @param int|null $value
+     * @return void
      */
     public function filterReport(int $value = null): void
     {

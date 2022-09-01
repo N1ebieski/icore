@@ -55,20 +55,20 @@ class Sent extends ValueObject
      * Undocumented function
      *
      * @param string $value
-     * @return void
+     * @return self
      */
-    public static function fromString(string $value)
+    public static function fromString(string $value): self
     {
         if (in_array($value, ['sent', (string)self::SENT])) {
-            return static::sent();
+            return self::sent();
         }
 
         if (in_array($value, ['unsent', (string)self::UNSENT])) {
-            return static::unsent();
+            return self::unsent();
         }
 
         if (in_array($value, ['error', (string)self::ERROR])) {
-            return static::error();
+            return self::error();
         }
 
         throw new \InvalidArgumentException("Invalid string value: '{$value}'");
@@ -77,31 +77,31 @@ class Sent extends ValueObject
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public static function sent()
+    public static function sent(): self
     {
-        return new static(self::SENT);
+        return new self(self::SENT);
     }
 
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public static function unsent()
+    public static function unsent(): self
     {
-        return new static(self::UNSENT);
+        return new self(self::UNSENT);
     }
 
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public static function error()
+    public static function error(): self
     {
-        return new static(self::ERROR);
+        return new self(self::ERROR);
     }
 
     /**
