@@ -1,84 +1,57 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Components\Page;
 
-use Illuminate\View\View;
+use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class FooterComponent implements Htmlable
+class FooterComponent extends Component
 {
     /**
-     * Model
-     * @var Page
-     */
-    protected $page;
-
-    /**
-     * Undocumented variable
      *
-     * @var ViewFactory
-     */
-    protected $view;
-
-    /**
-     * [private description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Pattern by cols and pages IDs example [[18, 19, 32], [45], [3, 1]]]
-     * means 3 cols, first with pages 18 id, 19 id etc.
-     * @var array|null
-     */
-    protected $pattern;
-
-    /**
-     * Number of columns
-     * @var int
-     */
-    protected $cols;
-
-    /**
-     * Undocumented variable
-     *
-     * @var int|null
-     */
-    protected $maxDepth;
-
-    /**
-     * [__construct description]
-     * @param Page  $page [description]
-     * @param Collect $collect [description]
-     * @param array|null $pattern  [description]
-     * @param int $cols [description]
+     * @param Page $page
+     * @param Collect $collect
+     * @param ViewFactory $view
+     * @param null|array $pattern
+     * @param int $cols
+     * @param null|int $maxDepth
+     * @return void
      */
     public function __construct(
-        Page $page,
-        Collect $collect,
-        ViewFactory $view,
-        array $pattern = null,
-        int $cols = 3,
-        int $maxDepth = null
+        protected Page $page,
+        protected Collect $collect,
+        protected ViewFactory $view,
+        protected ?array $pattern = null,
+        protected int $cols = 3,
+        protected ?int $maxDepth = null
     ) {
-        $this->page = $page;
-
-        $this->collect = $collect;
-        $this->view = $view;
-
-        $this->pattern = $pattern;
-        $this->cols = $cols;
-        $this->maxDepth = $maxDepth;
+        //
     }
 
     /**
      *
-     * @return string
+     * @return View
      */
-    public function toHtml(): string
+    public function render(): View
     {
         $pages = $this->page->makeCache()->rememberWithRecursiveChildrensByComponent([
             'pattern' => $this->pattern !== null ?
@@ -91,6 +64,6 @@ class FooterComponent implements Htmlable
             'cols' => $this->pattern ?: (int)ceil($pages->count() / $this->cols),
             'pattern' => $this->pattern,
             'maxDepth' => $this->maxDepth
-        ])->render();
+        ]);
     }
 }

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
@@ -16,20 +32,13 @@ use N1ebieski\ICore\Http\Controllers\Auth\RegisterController as BaseRegisterCont
 class RegisterController
 {
     /**
-     * Undocumented variable
-     *
-     * @var BaseRegisterController
-     */
-    protected $decorated;
-
-    /**
      * Undocumented function
      *
      * @param BaseRegisterController $decorated
      */
-    public function __construct(BaseRegisterController $decorated)
+    public function __construct(protected BaseRegisterController $decorated)
     {
-        $this->decorated = $decorated;
+        //
     }
 
     /**
@@ -46,17 +55,6 @@ class RegisterController
      * @bodyParam privacy_agreement boolean required Acceptance of privacy policy Example: true
      * @bodyParam contact_agreement boolean required Acceptance of receiving e-mail system notifications Example: true
      * @bodyParam marketing_agreement boolean Acceptance of receiving marketing information notifications Example: true
-     *
-     * @responseField id int
-     * @responseField name string
-     * @responseField ip string (available only for admin.users.view).
-     * @responseField email string (available only for admin.users.view or owner).
-     * @responseField status object Contains int value and string label
-     * @responseField marketing object Email marketing consent, contains int value and string label (available only for admin.users.view or owner).
-     * @responseField created_at string
-     * @responseField updated_at string
-     * @responseField roles object[] Contains relationships Roles.
-     * @responseField socialites object[] Contains relationships Socialites (available only for admin.users.view or owner).
      *
      * @apiResource N1ebieski\ICore\Http\Resources\User\UserResource
      * @apiResourceModel N1ebieski\ICore\Models\User states=active,user with=roles

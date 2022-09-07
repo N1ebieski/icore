@@ -1,64 +1,56 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Components\Map;
 
-use Illuminate\View\View;
-use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class MapComponent implements Htmlable
+class MapComponent extends Component
 {
     /**
-     * Undocumented variable
      *
-     * @var ViewFactory
+     * @param ViewFactory $view
+     * @param string $containerClass
+     * @param int $zoom
+     * @param null|array $addressMarker
+     * @return void
      */
-    protected $view;
-
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $container_class;
-
-    /**
-     * Undocumented variable
-     *
-     * @var int
-     */
-    protected $zoom;
-
-    /**
-     * Undocumented variable
-     *
-     * @var array|null
-     */
-    protected $address_marker;
-
     public function __construct(
-        ViewFactory $view,
-        string $container_class = 'map',
-        int $zoom = 15,
-        array $address_marker = null
+        protected ViewFactory $view,
+        protected string $containerClass = 'map',
+        protected int $zoom = 15,
+        protected ?array $addressMarker = null
     ) {
-        $this->view = $view;
-
-        $this->container_class = $container_class;
-        $this->zoom = $zoom;
-        $this->address_marker = $address_marker;
+        //
     }
 
     /**
      *
-     * @return string
+     * @return View
      */
-    public function toHtml(): string
+    public function render(): View
     {
         return $this->view->make('icore::web.components.map.map', [
-            'containerClass' => $this->container_class,
+            'containerClass' => $this->containerClass,
             'zoom' => $this->zoom,
-            'addressMarker' => json_encode($this->address_marker)
-        ])->render();
+            'addressMarker' => json_encode($this->addressMarker)
+        ]);
     }
 }

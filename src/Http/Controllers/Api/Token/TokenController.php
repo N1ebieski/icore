@@ -65,8 +65,6 @@ class TokenController
      *
      * @authenticated
      *
-     * @urlParam token integer required The token ID. No-example
-     *
      * @return JsonResponse
      */
     public function destroy(Token $token): JsonResponse

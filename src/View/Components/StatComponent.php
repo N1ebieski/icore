@@ -1,11 +1,27 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Components;
 
-use Illuminate\View\View;
+use Illuminate\View\Component;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Utils\MigrationUtil;
-use Illuminate\Contracts\Support\Htmlable;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Cache\Session\SessionCache;
 use N1ebieski\ICore\Models\Category\Post\Category;
@@ -15,57 +31,8 @@ use N1ebieski\ICore\ValueObjects\Post\Status as PostStatus;
 use N1ebieski\ICore\ValueObjects\Comment\Status as CommentStatus;
 use N1ebieski\ICore\ValueObjects\Category\Status as CategoryStatus;
 
-class StatComponent implements Htmlable
+class StatComponent extends Component
 {
-    /**
-     * Undocumented variable
-     *
-     * @var Post
-     */
-    protected $post;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Comment
-     */
-    protected $comment;
-
-    /**
-     * Undocumented variable
-     *
-     * @var SessionCache
-     */
-    protected $sessionCache;
-
-    /**
-     * Undocumented variable
-     *
-     * @var MigrationUtil
-     */
-    protected $migrationUtil;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var ViewFactory
-     */
-    protected $view;
-
     /**
      * Undocumented function
      *
@@ -78,25 +45,21 @@ class StatComponent implements Htmlable
      * @param ViewFactory $view
      */
     public function __construct(
-        Post $post,
-        Category $category,
-        Comment $comment,
-        SessionCache $sessionCache,
-        MigrationUtil $migrationUtil,
-        Config $config,
-        ViewFactory $view
+        protected Post $post,
+        protected Category $category,
+        protected Comment $comment,
+        protected SessionCache $sessionCache,
+        protected MigrationUtil $migrationUtil,
+        protected Config $config,
+        protected ViewFactory $view
     ) {
-        $this->post = $post;
-        $this->category = $category;
-        $this->comment = $comment;
-
-        $this->sessionCache = $sessionCache;
-
-        $this->config = $config;
-        $this->migrationUtil = $migrationUtil;
-        $this->view = $view;
+        //
     }
 
+    /**
+     *
+     * @return bool
+     */
     protected function verifySession(): bool
     {
         return $this->migrationUtil->contains('create_sessions_table')
@@ -105,9 +68,9 @@ class StatComponent implements Htmlable
 
     /**
      *
-     * @return string
+     * @return View
      */
-    public function toHtml(): string
+    public function render(): View
     {
         return $this->view->make('icore::web.components.stat', [
             'countCategories' => $this->category->makeCache()->rememberCountByStatus()
@@ -124,6 +87,6 @@ class StatComponent implements Htmlable
             'countUsers' => $this->verifySession() ?
                 $this->sessionCache->rememberCountByType()
                 : null
-        ])->render();
+        ]);
     }
 }

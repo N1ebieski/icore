@@ -2,7 +2,7 @@
 
 namespace N1ebieski\ICore\View\Components\Tag\Post;
 
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use N1ebieski\ICore\View\Components\Tag\TagComponent as BaseTagComponent;
@@ -10,37 +10,29 @@ use N1ebieski\ICore\View\Components\Tag\TagComponent as BaseTagComponent;
 class TagComponent extends BaseTagComponent
 {
     /**
-     * Undocumented variable
-     *
-     * @var array|null
-     */
-    protected $cats;
-
-    /**
-     * Undocumented function
      *
      * @param Tag $tag
-     * @param integer $limit
-     * @param array $cats
-     * @param array $colors
+     * @param ViewFactory $view
+     * @param int $limit
+     * @param null|array $colors
+     * @param null|array $cats
+     * @return void
      */
     public function __construct(
         Tag $tag,
         ViewFactory $view,
         int $limit = 25,
-        array $colors = null,
-        array $cats = null
+        ?array $colors = null,
+        protected ?array $cats = null
     ) {
         parent::__construct($tag, $view, $limit, $colors);
-
-        $this->cats = $cats;
     }
 
     /**
      *
-     * @return string
+     * @return View
      */
-    public function toHtml(): string
+    public function render(): View
     {
         return $this->view->make('icore::web.components.tag.post.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([
@@ -48,6 +40,6 @@ class TagComponent extends BaseTagComponent
                 'cats' => $this->cats
             ]),
             'colors' => $this->colors
-        ])->render();
+        ]);
     }
 }

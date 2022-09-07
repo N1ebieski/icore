@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Api\Category;
 
 use Illuminate\Http\JsonResponse;
@@ -20,17 +36,6 @@ class CategoryController implements Polymorphic
      * Index of all categories
      *
      * @bodyParam filter.status int Must be one of 1 or 0 (available only for admin.categories.view). Example: 1
-     *
-     * @responseField id int
-     * @responseField name string
-     * @responseField slug string
-     * @responseField icon string Class of icon.
-     * @responseField status object Contains int value and string label.
-     * @responseField real_depth int Level of hierarchy.
-     * @responseField created_at string
-     * @responseField updated_at string
-     * @responseField ancestors object[] Contains relationship Category ancestors (parent and higher).
-     * @responseField meta object Paging, filtering and sorting information.
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Category\CategoryResource
      * @apiResourceModel N1ebieski\ICore\Models\Category\Category states=active,sentence

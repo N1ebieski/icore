@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Cache\BanValue;
 
 use Illuminate\Support\Str;
@@ -12,36 +28,6 @@ use Illuminate\Contracts\Config\Repository as Config;
 class BanValueCache
 {
     /**
-     * [private description]
-     * @var BanValue
-     */
-    protected $banValue;
-
-    /**
-     * [protected description]
-     * @var Cache
-     */
-    protected $cache;
-
-    /**
-     * [protected description]
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * [protected description]
-     * @var Carbon
-     */
-    protected $carbon;
-
-    /**
-     * [private description]
-     * @var Str
-     */
-    protected $str;
-
-    /**
      * [__construct description]
      * @param BanValue $banValue [description]
      * @param Cache    $cache    [description]
@@ -50,18 +36,13 @@ class BanValueCache
      * @param Carbon   $carbon   [description]
      */
     public function __construct(
-        BanValue $banValue,
-        Cache $cache,
-        Config $config,
-        Str $str,
-        Carbon $carbon
+        protected BanValue $banValue,
+        protected Cache $cache,
+        protected Config $config,
+        protected Str $str,
+        protected Carbon $carbon
     ) {
-        $this->banValue = $banValue;
-
-        $this->cache = $cache;
-        $this->config = $config;
-        $this->str = $str;
-        $this->carbon = $carbon;
+        //
     }
 
     /**

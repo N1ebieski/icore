@@ -22,9 +22,9 @@
                         class="border border-right-0 form-control-lg" 
                         id="typeahead" 
                         data-route="{{ route('api.tag.index') }}"
-                        placeholder="{{ trans('icore::search.search') }}" 
+                        placeholder="{{ trans('icore::search.search') }}"
                         name="search"
-                        autocomplete="off"                        
+                        autocomplete="off"
                     >
                     <input type="hidden" name="source" value="post">
                     <span class="input-group-append">
@@ -39,10 +39,14 @@
                 </div>
             </form>
             <div class="text-white d-block mt-5">
-                @render('icore::tag.post.tagComponent', [
+                @render('icore::tag.post.tag-component', [
                     'limit' => 25,
                     'colors' => ['text-white']
                 ])
+                <!-- <x-icore::tag.post.tag-component
+                    limit="25"
+                    :colors="['text-white']"
+                /> -->
             </div>
         </div>
     </div>

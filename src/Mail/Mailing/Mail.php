@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Mail\Mailing;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Contracts\Translation\Translator as Lang;
@@ -16,26 +31,6 @@ class Mail extends Mailable
     use SerializesModels;
 
     /**
-     * [public description]
-     * @var MailingEmail
-     */
-    public $mailingEmail;
-
-    /**
-     * Undocumented variable
-     *
-     * @var URL
-     */
-    protected $url;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Lang
-     */
-    protected $lang;
-
-    /**
      * Undocumented function
      *
      * @param MailingEmail $mailingEmail
@@ -43,14 +38,11 @@ class Mail extends Mailable
      * @param Lang $lang
      */
     public function __construct(
-        MailingEmail $mailingEmail,
-        URL $url,
-        Lang $lang
+        protected MailingEmail $mailingEmail,
+        protected URL $url,
+        protected Lang $lang
     ) {
-        $this->mailingEmail = $mailingEmail;
-
-        $this->url = $url;
-        $this->lang = $lang;
+        //
     }
 
     /**
@@ -74,23 +66,22 @@ class Mail extends Mailable
      */
     private function subcopy(): ?string
     {
-        switch ($this->mailingEmail->model_type) {
-            case \N1ebieski\ICore\Models\User::class:
-                return $this->lang->get('icore::newsletter.subcopy.user', [
+        return match ($this->mailingEmail->model_type) {
+            \N1ebieski\ICore\Models\User::class =>
+                $this->lang->get('icore::newsletter.subcopy.user', [
                     'cancel' => $this->url->route('web.profile.edit')
-                ]);
+                ]),
 
-            case \N1ebieski\ICore\Models\Newsletter::class:
-                return $this->lang->get('icore::newsletter.subcopy.subscribe', [
+            \N1ebieski\ICore\Models\Newsletter::class =>
+                $this->lang->get('icore::newsletter.subcopy.subscribe', [
                     'cancel' => $this->url->route('web.newsletter.update_status', [
                         $this->mailingEmail->morph->id,
                         'token' => $this->mailingEmail->morph->token->token,
                         'status' => $this->mailingEmail->morph->status::INACTIVE
                     ]),
-                ]);
+                ]),
 
-            default:
-                return null;
-        }
+            default => null
+        };
     }
 }

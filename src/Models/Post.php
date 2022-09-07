@@ -211,7 +211,7 @@ class Post extends Model
      */
     public function getModelTypeAttribute(): string
     {
-        return get_class($this);
+        return $this::class;
     }
 
     /**

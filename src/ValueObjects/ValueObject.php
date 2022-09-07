@@ -2,7 +2,9 @@
 
 namespace N1ebieski\ICore\ValueObjects;
 
-abstract class ValueObject
+use Stringable;
+
+abstract class ValueObject implements Stringable
 {
     /**
      * Undocumented variable

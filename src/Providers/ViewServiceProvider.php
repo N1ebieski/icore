@@ -43,18 +43,46 @@ class ViewServiceProvider extends ServiceProvider
             return '<?php $__env->stopPush(); endif; ?>';
         });
 
+        Blade::componentNamespace('N1ebieski\\ICore\\View\\Components', 'icore');
+
+        $bladeCompiler = new \Illuminate\View\Compilers\BladeCompiler(
+            $this->app->make(\Illuminate\Filesystem\Filesystem::class),
+            Config::get('view.compiled')
+        );
+        $bladeCompiler->componentNamespace('N1ebieski\\ICore\\View\\Components', 'icore');
+
+        /** @var \N1ebieski\ICore\View\Directives\RenderDirective */
+        $renderDirective = $this->app->make(\N1ebieski\ICore\View\Directives\RenderDirective::class, [
+            'bladeCompiler' => $bladeCompiler
+        ]);
+
+        Blade::directive('render', $renderDirective);
+
+        /** @var \N1ebieski\ICore\View\Composers\LayoutComposer */
+        $layoutComposer = $this->app->make(\N1ebieski\ICore\View\Composers\LayoutComposer::class);
+
         View::composer([
             Config::get('icore.layout') . '::web.layouts.layout',
             Config::get('icore.layout') . '::admin.layouts.layout',
             'file-manager::fmButton',
-        ], \N1ebieski\ICore\View\Composers\LayoutComposer::class);
+        ], $layoutComposer::class);
 
-        View::composer('*', \N1ebieski\ICore\View\Composers\ActiveComposer::class);
-        View::composer('*', \N1ebieski\ICore\View\Composers\ValidComposer::class);
+        /** @var \N1ebieski\ICore\View\Composers\ActiveComposer */
+        $activeComposer = $this->app->make(\N1ebieski\ICore\View\Composers\ActiveComposer::class);
+
+        View::composer('*', $activeComposer::class);
+
+        /** @var \N1ebieski\ICore\View\Composers\ValidComposer */
+        $validComposer = $this->app->make(\N1ebieski\ICore\View\Composers\ValidComposer::class);
+
+        View::composer('*', $validComposer::class);
+
+        /** @var \N1ebieski\ICore\View\Composers\Admin\SidebarComposer */
+        $sidebarComposer = $this->app->make(\N1ebieski\ICore\View\Composers\Admin\SidebarComposer::class);
 
         View::composer(
             Config::get('icore.layout') . '::admin.partials.sidebar',
-            \N1ebieski\ICore\View\Composers\Admin\SidebarComposer::class
+            $sidebarComposer::class
         );
     }
 }

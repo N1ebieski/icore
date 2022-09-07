@@ -1,40 +1,30 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Crons;
 
 use Carbon\Carbon;
-use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use N1ebieski\ICore\Jobs\SendMailingJob;
 use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingCron
 {
-    /**
-     * [private description]
-     * @var MailingEmail
-     */
-    protected $mailingEmail;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Carbon
-     */
-    protected $carbon;
-
-    /**
-     * [private description]
-     * @var SendMailingJob
-     */
-    protected $sendMailingJob;
-
     /**
      * Undocumented variable
      *
@@ -51,19 +41,12 @@ class MailingCron
      * @param SendMailingJob $sendMailingJob
      */
     public function __construct(
-        MailingEmail $mailingEmail,
-        Config $config,
-        Carbon $carbon,
-        SendMailingJob $sendMailingJob
+        protected MailingEmail $mailingEmail,
+        protected Config $config,
+        protected Carbon $carbon,
+        protected SendMailingJob $sendMailingJob
     ) {
-        $this->mailingEmail = $mailingEmail;
-
-        $this->carbon = $carbon;
-        $this->config = $config;
-
         $this->setDelay($this->carbon->now());
-
-        $this->sendMailingJob = $sendMailingJob;
     }
 
     /**

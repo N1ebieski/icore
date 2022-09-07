@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Console\Commands\Update;
 
 use InvalidArgumentException;
@@ -11,46 +27,8 @@ use Symfony\Component\Console\Exception\LogicException;
 use Illuminate\Contracts\Translation\Translator as Lang;
 use Symfony\Component\Console\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
 
-/**
- *
- * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
- */
 class RollbackCommand extends Command
 {
-    /**
-     * [protected description]
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Storage
-     */
-    protected $storage;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Lang
-     */
-    protected $lang;
-
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $backup_path;
-
     /**
      * The name and signature of the console command.
      *
@@ -78,20 +56,13 @@ class RollbackCommand extends Command
      * @throws LogicException
      */
     public function __construct(
-        Config $config,
-        Storage $storage,
-        Filesystem $filesystem,
-        Lang $lang,
-        string $backup_path = 'backup/vendor/icore'
+        protected Config $config,
+        protected Storage $storage,
+        protected Filesystem $filesystem,
+        protected Lang $lang,
+        protected string $backup_path = 'backup/vendor/icore'
     ) {
         parent::__construct();
-
-        $this->config = $config;
-        $this->storage = $storage;
-        $this->lang = $lang;
-        $this->filesystem = $filesystem;
-
-        $this->backup_path = $backup_path;
     }
 
     /**
@@ -175,16 +146,27 @@ class RollbackCommand extends Command
         $this->line("Author: Mariusz Wysokiński");
         $this->line("Version: {$this->config->get('icore.version')}");
         $this->line("\n");
+
         $this->confirmation();
+
         $this->line("\n");
+
         $bar->start();
+
         $this->line("\n");
+
         $this->validateBackup();
+
         $this->line("\n");
+
         $bar->advance();
+
         $this->line("\n");
+
         $this->rollback();
+
         $this->line("\n");
+
         $bar->finish();
     }
 }

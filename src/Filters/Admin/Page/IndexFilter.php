@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Filters\Admin\Page;
 
 use Illuminate\Http\Request;
@@ -23,29 +39,28 @@ class IndexFilter extends Filter
     use HasPaginate;
 
     /**
-     * @var Page
-     */
-    protected $page;
-
-    /**
      *
      * @param Request $request
      * @param Collect $collect
      * @param Page $page
      * @return void
      */
-    public function __construct(Request $request, Collect $collect, Page $page)
-    {
+    public function __construct(
+        Request $request,
+        Collect $collect,
+        protected Page $page
+    ) {
         $this->page = $page;
 
         parent::__construct($request, $collect);
     }
 
     /**
-     * [setParent description]
-     * @param Page $page [description]
+     *
+     * @param Page $page
+     * @return IndexFilter
      */
-    public function setParent(Page $page)
+    public function setParent(Page $page): self
     {
         $this->parameters['parent'] = $page;
 
@@ -53,16 +68,14 @@ class IndexFilter extends Filter
     }
 
     /**
-     * [findParent description]
-     * @param  int|null $id [description]
-     * @return Page|null       [description]
+     *
+     * @param int $id
+     * @return null|Page
      */
-    public function findParent(int $id = null): ?Page
+    public function findParent(int $id): ?Page
     {
-        return $id !== null ?
-            $this->page->withAncestorsExceptSelf()
-                ->where($this->page->getKeyName(), $id)
-                ->first()
-            : null;
+        return $this->page->withAncestorsExceptSelf()
+            ->where($this->page->getKeyName(), $id)
+            ->first();
     }
 }

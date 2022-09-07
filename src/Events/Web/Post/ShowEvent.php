@@ -6,18 +6,13 @@ use N1ebieski\ICore\Models\Post;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use N1ebieski\ICore\Events\Inerfaces\PostEventInterface;
 
-class ShowEvent
+class ShowEvent implements PostEventInterface
 {
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
-
-    /**
-     * [public description]
-     * @var Post
-     */
-    public $post;
 
     /**
      * Create a new event instance.
@@ -25,8 +20,8 @@ class ShowEvent
      * @param Post         $post    [description]
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct(public Post $post)
     {
-        $this->post = $post;
+        //
     }
 }

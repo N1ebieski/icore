@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Filters;
 
 use Illuminate\Http\Request;
@@ -8,16 +24,10 @@ use Illuminate\Support\Collection as Collect;
 abstract class Filter
 {
     /**
-     * [protected description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
      * [public description]
      * @var array
      */
-    public $parameters;
+    public array $parameters;
 
     /**
      * Undocumented function
@@ -25,10 +35,8 @@ abstract class Filter
      * @param Request $request
      * @param Collect $collect
      */
-    public function __construct(Request $request, Collect $collect)
+    public function __construct(Request $request, protected Collect $collect)
     {
-        $this->collect = $collect;
-
         $this->setFilters((array)$request->input('filter'));
     }
 
@@ -91,11 +99,10 @@ abstract class Filter
     }
 
     /**
-     * [get description]
-     * @param  string $parameter [description]
-     * @return mixed             [description]
+     * @param string $parameter
+     * @return mixed
      */
-    public function get(string $parameter)
+    public function get(string $parameter): mixed
     {
         return $this->parameters[$parameter] ?? null;
     }

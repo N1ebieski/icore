@@ -25,7 +25,7 @@ class ICoreServiceProvider extends ServiceProvider
         $this->app->register(\Unikent\Cache\TaggableFileCacheServiceProvider::class);
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
 
-        $this->app->register(LicenseServiceProvider::class);
+        // $this->app->register(LicenseServiceProvider::class);
         $this->app->register(AppServiceProvider::class);
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);

@@ -64,7 +64,6 @@
                             id="content_html_trumbowyg" 
                             class="form-control {{ $isValid('content_html') }}"
                             rows="10" 
-                            id="content_html" 
                             data-lang="{{ config('app.locale') }}"
                         >{{ old('content_html', $post->content_html) }}</textarea>
                     </div>

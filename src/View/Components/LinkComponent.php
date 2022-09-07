@@ -1,87 +1,58 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Components;
 
-use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\View\Component;
 use N1ebieski\ICore\Models\Link;
-use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class LinkComponent implements Htmlable
+class LinkComponent extends Component
 {
     /**
-     * [private description]
-     * @var Link
-     */
-    protected $link;
-
-    /**
-     * Undocumented variable
-     *
-     * @var ViewFactory
-     */
-    protected $view;
-
-    /**
-     * [private description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * Number of columns
-     * @var int
-     */
-    protected $limit;
-
-    /**
-     * [protected description]
-     * @var array|null
-     */
-    protected $cats;
-
-    /**
-     * Undocumented function
      *
      * @param Link $link
      * @param ViewFactory $view
      * @param Collect $collect
      * @param Request $request
-     * @param integer $limit
-     * @param array $cats
+     * @param int $limit
+     * @param null|array $cats
+     * @return void
      */
     public function __construct(
-        Link $link,
-        ViewFactory $view,
-        Collect $collect,
-        Request $request,
-        int $limit = 5,
-        array $cats = null
+        protected Link $link,
+        protected ViewFactory $view,
+        protected Collect $collect,
+        protected Request $request,
+        protected int $limit = 5,
+        protected ?array $cats = null
     ) {
-        $this->link = $link;
-
-        $this->view = $view;
-        $this->collect = $collect;
-        $this->request = $request;
-
-        $this->limit = $limit;
-        $this->cats = $cats;
+        //
     }
 
     /**
      *
-     * @return string
+     * @return View
      */
-    public function toHtml(): string
+    public function render(): View
     {
         return $this->view->make('icore::web.components.link', [
             'links' => $this->link->makeCache()->rememberLinksByComponent([
@@ -89,6 +60,6 @@ class LinkComponent implements Htmlable
                 'cats' => $this->collect->make($this->cats)->flatten()->toArray(),
                 'limit' => $this->limit
             ])
-        ])->render();
+        ]);
     }
 }

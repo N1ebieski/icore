@@ -134,7 +134,7 @@ trait HasFilterable
      * @param  array|null  $except [description]
      * @return Builder|null         [description]
      */
-    public function scopeFilterExcept(Builder $query, array $except = null)
+    public function scopeFilterExcept(Builder $query, array $except = null): ?Builder
     {
         return $query->when($except !== null, function ($query) use ($except) {
             $query->whereNotIn("{$this->getTable()}.{$this->getKeyName()}", $except);

@@ -301,7 +301,7 @@ class Page extends Entity
      */
     public function getModelTypeAttribute(): string
     {
-        return get_class($this);
+        return $this::class;
     }
 
     /**

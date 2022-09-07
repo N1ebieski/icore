@@ -1,71 +1,71 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Components;
 
-use Illuminate\View\View;
-use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Exceptions\CustomException;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class CaptchaComponent implements Htmlable
+class CaptchaComponent extends Component
 {
     /**
-     * Undocumented variable
-     *
-     * @var ViewFactory
-     */
-    protected $view;
-
-    /**
-     * [private description]
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * [private description]
-     * @var int|null
-     */
-    protected $id;
-
-    /**
-     * Undocumented function
      *
      * @param ViewFactory $view
      * @param Config $config
-     * @param integer $id
+     * @param null|int $id
+     * @return void
      */
-    public function __construct(ViewFactory $view, Config $config, int $id = null)
-    {
-        $this->view = $view;
-        $this->config = $config;
-
-        $this->id = $id;
+    public function __construct(
+        protected ViewFactory $view,
+        protected Config $config,
+        protected ?int $id = null
+    ) {
+        //
     }
 
     /**
-     * 
-     * @return string 
+     *
+     * @return View
+     * @throws CustomException
      */
-    public function toHtml(): string
+    public function render(): View
     {
-        switch ($this->config->get('icore.captcha.driver')) {
-            case 'recaptcha_invisible':
-                return $this->view->make('icore::web.components.captcha.recaptcha_invisible', [
-                    'site_key' => $this->config->get('services.recaptcha_invisible.site_key')
-                ])->render();
+        return match ($this->config->get('icore.captcha.driver')) {
+            'recaptcha_invisible' => $this->view->make('icore::web.components.captcha.recaptcha_invisible', [
+                'site_key' => $this->config->get('services.recaptcha_invisible.site_key')
+            ]),
 
-            case 'recaptcha_v2':
-                return $this->view->make('icore::web.components.captcha.recaptcha_v2', [
-                    'site_key' => $this->config->get('services.recaptcha_v2.site_key')
-                ])->render();
+            'recaptcha_v2' => $this->view->make('icore::web.components.captcha.recaptcha_v2', [
+                'site_key' => $this->config->get('services.recaptcha_v2.site_key')
+            ]),
 
-            case 'logic_captcha':
-                return $this->view->make('icore::web.components.captcha.logic_captcha', [
-                    'id' => $this->id
-                ])->render();
-        }
+            'logic_captcha' => $this->view->make('icore::web.components.captcha.logic_captcha', [
+                'id' => $this->id
+            ]),
 
-        return '';
+            default => throw new CustomException(
+                "Captcha driver \"{$this->config->get('icore.captcha.driver')}\" was not found",
+                HttpResponse::HTTP_FORBIDDEN
+            )
+        };
     }
 }
