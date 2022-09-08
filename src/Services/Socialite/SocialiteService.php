@@ -2,28 +2,14 @@
 
 namespace N1ebieski\ICore\Services\Socialite;
 
+use Throwable;
 use N1ebieski\ICore\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\Models\Socialite as Social;
 use Laravel\Socialite\Contracts\User as ProviderUser;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
 
-class SocialiteService implements CreateInterface
+class SocialiteService
 {
-    /**
-     * [private description]
-     * @var Social
-     */
-    protected $socialite;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Zwraca dane usera z Socialite
      * @var ProviderUser
@@ -48,18 +34,19 @@ class SocialiteService implements CreateInterface
      * @param Social $socialite
      * @param DB $db
      */
-    public function __construct(Social $socialite, DB $db)
-    {
-        $this->socialite = $socialite;
-
-        $this->db = $db;
+    public function __construct(
+        protected Social $socialite,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
-     * [setSocialiteUser description]
-     * @param User $socialiteUser [description]
+     *
+     * @param User $socialiteUser
+     * @return SocialiteService
      */
-    public function setSocialiteUser(User $socialiteUser)
+    public function setSocialiteUser(User $socialiteUser): self
     {
         $this->socialiteUser = $socialiteUser;
 
@@ -139,11 +126,12 @@ class SocialiteService implements CreateInterface
     }
 
     /**
-     * Tworzy powiazanie usera z socialite
-     * @param  array  $attributes
-     * @return Model
+     *
+     * @param array $attributes
+     * @return Social
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Social
     {
         return $this->db->transaction(function () {
             return $this->socialiteUser->socialites()->create([

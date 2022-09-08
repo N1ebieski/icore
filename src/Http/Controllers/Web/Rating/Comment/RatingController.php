@@ -38,7 +38,12 @@ class RatingController implements Polymorphic
      */
     public function rate(Comment $comment, RateLoad $load, RateRequest $request): JsonResponse
     {
-        $load->getRating()->makeService()->createOrUpdateOrDelete($request->only('rating'));
+        $load->getRating()->makeService()->createOrUpdateOrDelete(
+            $request->safe()->merge([
+                'morph' => $comment,
+                'user' => $request->user()
+            ])->toArray()
+        );
 
         return Response::json([
             'sum_rating' => (int)$comment->ratings->sum('rating')

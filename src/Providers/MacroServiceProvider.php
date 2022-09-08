@@ -1,24 +1,29 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Providers;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class MacroServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
     /**
      * Bootstrap services.
      *
@@ -26,87 +31,34 @@ class MacroServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /**
-         * Paginate a standard Laravel Collection.
-         *
-         * @param int $perPage
-         * @param int $total
-         * @param int $page
-         * @param string $pageName
-         * @return array
-         */
-        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
-            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
-            return new LengthAwarePaginator(
-                $this->forPage($page, $perPage), // @phpstan-ignore-line
-                $total ?: $this->count(), // @phpstan-ignore-line
-                $perPage,
-                $page,
-                [
-                    'path' => LengthAwarePaginator::resolveCurrentPath(),
-                    'pageName' => $pageName,
-                ]
-            );
-        });
+        /** @var \N1ebieski\ICore\Macros\Collection\Paginate */
+        $paginate = $this->app->make(\N1ebieski\ICore\Macros\Collection\Paginate::class);
 
-        Collection::macro('flattenRelation', function (string $relation) {
-            /** @phpstan-ignore-next-line */
-            $result = $this->make([]);
+        Collection::macro('paginate', $paginate());
 
-            $closure = function ($collection) use (&$closure, &$result, $relation) {
-                $collection->each(function ($item) use (&$closure, &$result, $relation) {
-                    $value = clone $item;
-                    unset($value->{$relation});
+        /** @var \N1ebieski\ICore\Macros\Collection\FlattenRelation */
+        $flattenRelation = $this->app->make(\N1ebieski\ICore\Macros\Collection\FlattenRelation::class);
 
-                    $result->push($value);
+        Collection::macro('flattenRelation', $flattenRelation());
 
-                    if ($item->relationLoaded($relation)) {
-                        $closure($item->{$relation});
-                    }
-                });
-            };
+        /** @var \N1ebieski\ICore\Macros\Collection\IsEmptyItems */
+        $isEmptyItems = $this->app->make(\N1ebieski\ICore\Macros\Collection\IsEmptyItems::class);
 
-            $closure($this);
+        Collection::macro('isEmptyItems', $isEmptyItems());
 
-            return $result->filter();
-        });
+        /** @var \N1ebieski\ICore\Macros\Collection\IsNullItems */
+        $isNullItems = $this->app->make(\N1ebieski\ICore\Macros\Collection\IsNullItems::class);
 
-        Collection::macro('isEmptyItems', function () {
-            /** @phpstan-ignore-next-line */
-            return $this->every(function ($value, $key) {
-                return strlen($value) === 0;
-            });
-        });
+        Collection::macro('isNullItems', $isNullItems());
 
-        Collection::macro('isNullItems', function () {
-            /** @phpstan-ignore-next-line */
-            return $this->every(function ($value, $key) {
-                if (is_array($value)) {
-                    return Collection::make($value)->isNullItems();
-                }
+        /** @var \N1ebieski\ICore\Macros\Str\RandomColor */
+        $randomColor = $this->app->make(\N1ebieski\ICore\Macros\Str\RandomColor::class);
 
-                return $value === null;
-            });
-        });
+        Str::macro('randomColor', $randomColor());
 
-        Str::macro('randomColor', function (string $value) {
-            $hash = md5('color' . $value);
+        /** @var \N1ebieski\ICore\Macros\Str\Escaped */
+        $escaped = $this->app->make(\N1ebieski\ICore\Macros\Str\Escaped::class);
 
-            $rgb = [
-                hexdec(substr($hash, 0, 2)),
-                hexdec(substr($hash, 2, 2)),
-                hexdec(substr($hash, 4, 2))
-            ];
-
-            return 'rgb(' . implode(', ', $rgb) . ')';
-        });
-
-        Str::macro('escaped', function ($value) {
-            $value = str_replace('*', '', $value);
-            $value = preg_quote($value, '/');
-            $value = str_replace('\|', '|', $value);
-
-            return $value;
-        });
+        Str::macro('escaped', $escaped());
     }
 }

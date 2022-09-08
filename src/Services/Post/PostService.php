@@ -1,83 +1,52 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Post;
 
 use Throwable;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\FullUpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 
-class PostService implements
-    CreateInterface,
-    UpdateInterface,
-    FullUpdateInterface,
-    StatusUpdateInterface,
-    DeleteInterface,
-    GlobalDeleteInterface
+class PostService
 {
-    /**
-     * [private description]
-     * @var Post
-     */
-    protected $post;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Carbon
-     */
-    protected $carbon;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
      * @param Post $post
      * @param Carbon $carbon
-     * @param Auth $auth
      * @param DB $db
      */
     public function __construct(
-        Post $post,
-        Carbon $carbon,
-        Auth $auth,
-        DB $db
+        protected Post $post,
+        protected Carbon $carbon,
+        protected DB $db
     ) {
-        $this->post = $post;
-
-        $this->carbon = $carbon;
-        $this->auth = $auth;
-        $this->db = $db;
+        //
     }
 
     /**
-     * Store a newly created Post in storage.
      *
-     * @param  array $attributes [description]
-     * @return Model              [description]
+     * @param array $attributes
+     * @return Post
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Post
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
@@ -88,7 +57,7 @@ class PostService implements
                     $attributes['date_published_at'] . $attributes['time_published_at'];
             }
 
-            $this->post->user()->associate($this->auth->user());
+            $this->post->user()->associate($attributes['user']);
 
             $this->post->save();
 
@@ -124,12 +93,12 @@ class PostService implements
     }
 
     /**
-     * Full-Update the specified Post in storage.
      *
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * @param array $attributes
+     * @return Post
+     * @throws Throwable
      */
-    public function updateFull(array $attributes): bool
+    public function updateFull(array $attributes): Post
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
@@ -152,7 +121,9 @@ class PostService implements
                 $this->post->categories()->sync($attributes['categories'] ?? []);
             }
 
-            return $this->post->save();
+            $this->post->save();
+
+            return $this->post;
         });
     }
 

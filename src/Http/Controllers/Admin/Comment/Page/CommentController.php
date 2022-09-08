@@ -85,9 +85,12 @@ class CommentController implements Polymorphic
      */
     public function store(Page $page, Comment $comment, StoreRequest $request): JsonResponse
     {
-        $comment = $comment->setRelations(['morph' => $page])
-            ->makeService()
-            ->create($request->only(['content', 'parent_id']));
+        $comment = $comment->makeService()->create(
+            $request->safe()->merge([
+                'morph' => $page,
+                'user' => $request->user()
+            ])->toArray()
+        );
 
         Event::dispatch(App::make(CommentStoreEvent::class, ['comment' => $comment]));
 

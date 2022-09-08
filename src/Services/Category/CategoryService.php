@@ -1,56 +1,34 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Category;
 
 use Throwable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
-class CategoryService implements
-    CreateInterface,
-    UpdateInterface,
-    StatusUpdateInterface,
-    PositionUpdateInterface,
-    DeleteInterface,
-    GlobalDeleteInterface
+class CategoryService
 {
-    /**
-     * Model
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * [private description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
@@ -60,16 +38,12 @@ class CategoryService implements
      * @param DB $db
      */
     public function __construct(
-        Category $category,
-        Config $config,
-        Collect $collect,
-        DB $db
+        protected Category $category,
+        protected Config $config,
+        protected Collect $collect,
+        protected DB $db
     ) {
-        $this->category = $category;
-
-        $this->collect = $collect;
-        $this->db = $db;
-        $this->config = $config;
+        //
     }
 
     /**
@@ -121,11 +95,12 @@ class CategoryService implements
     }
 
     /**
-     * [create description]
-     * @param  array $attributes [description]
-     * @return Model             [description]
+     *
+     * @param array $attributes
+     * @return Category
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->category->name = $attributes['name'];
@@ -254,14 +229,15 @@ class CategoryService implements
     }
 
     /**
-     * [update description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param array $attributes
+     * @return Category
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
-            $update = $this->category->update([
+            $this->category->update([
                 'name' => $attributes['name'],
                 'icon' => $attributes['icon'] ?? null
             ]);
@@ -274,29 +250,33 @@ class CategoryService implements
                 }
             }
 
-            return $update;
+            return $this->category;
         });
     }
 
     /**
-     * [moveToRoot description]
-     * @return void [description]
+     *
+     * @return bool
+     * @throws Throwable
      */
-    public function moveToRoot(): void
+    public function moveToRoot(): bool
     {
-        $this->db->transaction(function () {
+        return $this->db->transaction(function () {
             $this->category->makeRoot(0);
+
+            return true;
         });
     }
 
     /**
-     * [moveToParent description]
-     * @param  int    $parent_id [description]
-     * @return void            [description]
+     *
+     * @param int $parent_id
+     * @return bool
+     * @throws Throwable
      */
-    public function moveToParent(int $parent_id): void
+    public function moveToParent(int $parent_id): bool
     {
-        $this->db->transaction(function () use ($parent_id) {
+        return $this->db->transaction(function () use ($parent_id) {
             /**
              * @var Category $parent
              */
@@ -310,6 +290,8 @@ class CategoryService implements
             $this->category->descendants()->update(['status' => $parent->status]);
 
             $this->category->moveTo(0, $parent_id);
+
+            return true;
         });
     }
 }

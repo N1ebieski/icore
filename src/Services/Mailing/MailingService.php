@@ -1,57 +1,50 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Mailing;
 
 use Throwable;
 use N1ebieski\ICore\Models\Mailing;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
+use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
-class MailingService implements
-    CreateInterface,
-    UpdateInterface,
-    StatusUpdateInterface,
-    DeleteInterface,
-    GlobalDeleteInterface
+class MailingService
 {
-    /**
-     * [private description]
-     * @var Mailing
-     */
-    protected $mailing;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
      * @param Mailing $mailing
      * @param DB $db
      */
-    public function __construct(Mailing $mailing, DB $db)
-    {
-        $this->mailing = $mailing;
-
-        $this->db = $db;
+    public function __construct(
+        protected Mailing $mailing,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
-     * Store a newly created Mailing in storage.
      *
-     * @param  array  $attributes [description]
-     * @return Mailing             [description]
+     * @param array $attributes
+     * @return Mailing
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Mailing
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->mailing->content_html = $attributes['content_html'];
@@ -66,22 +59,24 @@ class MailingService implements
 
             $this->mailing->save();
 
-            $this->mailing->emails()->make()
-                ->setRelations(['mailing' => $this->mailing])
-                ->makeService()
-                ->createGlobal($attributes);
+            $attributes['mailing'] = $this->mailing->id;
+
+            /** @var MailingEmail */
+            $mailingEmail = $this->mailing->emails()->make();
+
+            $mailingEmail->makeService()->createGlobal($attributes);
 
             return $this->mailing;
         });
     }
 
     /**
-     * Update the specified Mailing in storage.
      *
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * @param array $attributes
+     * @return Mailing
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Mailing
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->mailing->content_html = $attributes['content_html'];
@@ -95,13 +90,17 @@ class MailingService implements
             }
 
             if ($this->mailing->emails->count() === 0) {
-                $this->mailing->emails()->make()
-                    ->setRelations(['mailing' => $this->mailing])
-                    ->makeService()
-                    ->createGlobal($attributes);
+                $attributes['mailing'] = $this->mailing->id;
+
+                /** @var MailingEmail */
+                $mailingEmail = $this->mailing->emails()->make();
+    
+                $mailingEmail->makeService()->createGlobal($attributes);
             }
 
-            return $this->mailing->save();
+            $this->mailing->save();
+
+            return $this->mailing;
         });
     }
 
@@ -119,12 +118,14 @@ class MailingService implements
     }
 
     /**
-     * Reset all Recipients of Mailing in storage.
+     *
+     * @return int
+     * @throws Throwable
      */
-    public function reset(): void
+    public function reset(): int
     {
-        $this->db->transaction(function () {
-            $this->mailing->emails()->make()
+        return $this->db->transaction(function () {
+            return $this->mailing->emails()->make()
                 ->setRelations(['mailing' => $this->mailing])
                 ->makeService()
                 ->clear();

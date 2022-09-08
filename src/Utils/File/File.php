@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Utils\File;
 
 use Illuminate\Http\UploadedFile;
@@ -9,25 +25,6 @@ use Illuminate\Contracts\Filesystem\Factory as Storage;
 class File
 {
     /**
-     * [protected description]
-     * @var string
-     */
-    protected $temp_path;
-
-    /**
-     * [protected description]
-     * @var string
-     */
-    protected $disk;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Storage
-     */
-    protected $storage;
-
-    /**
      * Undocumented variable
      *
      * @var \Illuminate\Contracts\Filesystem\Filesystem
@@ -35,30 +32,20 @@ class File
     protected $filesystem;
 
     /**
-     * [$file description]
-     * @var UploadedFile|null
-     */
-    protected $file;
-
-    /**
-     * Undocumented function
      *
      * @param Storage $storage
      * @param UploadedFile|null $file
+     * @param string $disk
+     * @param string $temp_path
+     * @return void
      */
     public function __construct(
-        Storage $storage,
-        UploadedFile $file = null,
-        string $disk = 'public',
-        string $temp_path = 'vendor/icore/temp'
+        protected Storage $storage,
+        protected ?UploadedFile $file = null,
+        protected string $disk = 'public',
+        protected string $temp_path = 'vendor/icore/temp'
     ) {
-        $this->storage = $storage;
         $this->filesystem = $storage->disk($disk);
-
-        $this->file = $file;
-
-        $this->disk = $disk;
-        $this->temp_path = $temp_path;
     }
 
     /**

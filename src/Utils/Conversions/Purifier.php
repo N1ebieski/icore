@@ -8,13 +8,12 @@ use N1ebieski\ICore\Utils\Conversions\Interfaces\Handler;
 class Purifier implements Handler
 {
     /**
-     * Undocumented function
      *
-     * @param [type] $value
+     * @param mixed $value
      * @param Closure $next
-     * @return void
+     * @return mixed
      */
-    public function handle($value, Closure $next)
+    public function handle($value, Closure $next): mixed
     {
         return $next(\Mews\Purifier\Facades\Purifier::clean($value));
     }

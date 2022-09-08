@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Loads\Admin\Category;
 
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Models\Category\Category;
 
 class EditLoad
 {
@@ -28,15 +29,16 @@ class EditLoad
      */
     public function __construct(Request $request)
     {
+        /** @var Category */
         $category = $request->route('category');
 
+        /** @var Category|null */
         $parent = $category->getParent();
 
         if ($parent !== null) {
             $parent->loadAncestorsExceptSelf();
         }
 
-        $category->setRelations(['parent' => $parent])
-            ->with('descendants');
+        $category->setRelations(['parent' => $parent])->with('descendants');
     }
 }

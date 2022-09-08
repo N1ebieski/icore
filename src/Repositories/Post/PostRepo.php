@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Repositories\Post;
 
 use Closure;
@@ -17,40 +33,6 @@ use Illuminate\Contracts\Config\Repository as Config;
 class PostRepo
 {
     /**
-     * [private description]
-     * @var Post
-     */
-    protected $post;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Carbon
-     */
-    protected $carbon;
-
-    /**
-     * Undocumented variable
-     *
-     * @var App
-     */
-    protected $app;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
      * Undocumented function
      *
      * @param Post $post
@@ -60,18 +42,13 @@ class PostRepo
      * @param Auth $auth
      */
     public function __construct(
-        Post $post,
-        Config $config,
-        Carbon $carbon,
-        App $app,
-        Auth $auth
+        protected Post $post,
+        protected Config $config,
+        protected Carbon $carbon,
+        protected App $app,
+        protected Auth $auth
     ) {
-        $this->post = $post;
-
-        $this->config = $config;
-        $this->carbon = $carbon;
-        $this->app = $app;
-        $this->auth = $auth;
+        //
     }
 
     /**

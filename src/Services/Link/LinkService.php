@@ -1,39 +1,30 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Link;
 
 use Throwable;
 use N1ebieski\ICore\Models\Link;
 use N1ebieski\ICore\Utils\File\File;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
-class LinkService implements CreateInterface, UpdateInterface, PositionUpdateInterface, DeleteInterface
+class LinkService
 {
-    /**
-     * Model
-     * @var Link
-     */
-    protected $link;
-
-    /**
-     * Undocumented variable
-     *
-     * @var File
-     */
-    protected $file;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
@@ -41,21 +32,21 @@ class LinkService implements CreateInterface, UpdateInterface, PositionUpdateInt
      * @param File $file
      * @param DB $db
      */
-    public function __construct(Link $link, File $file, DB $db)
-    {
-        $this->link = $link;
-
-        $this->file = $file;
-
-        $this->db = $db;
+    public function __construct(
+        protected Link $link,
+        protected File $file,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
-     * [create description]
-     * @param  array $attributes [description]
-     * @return Model             [description]
+     *
+     * @param array $attributes
+     * @return Link
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Link
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->link->fill($attributes);
@@ -75,11 +66,12 @@ class LinkService implements CreateInterface, UpdateInterface, PositionUpdateInt
     }
 
     /**
-     * [update description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param array $attributes
+     * @return Link
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Link
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->link->fill($attributes);
@@ -96,13 +88,13 @@ class LinkService implements CreateInterface, UpdateInterface, PositionUpdateInt
                 $this->link->img_url = $this->file->makeFromFile($attributes['img'])->upload($this->link->path);
             }
 
-            $link = $this->link->save();
+            $this->link->save();
 
             if (array_key_exists('categories', $attributes)) {
                 $this->link->categories()->sync($attributes['categories'] ?? []);
             }
 
-            return $link;
+            return $this->link;
         });
     }
 

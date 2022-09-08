@@ -80,7 +80,9 @@ class PageController
      */
     public function store(Page $page, StoreRequest $request): RedirectResponse
     {
-        $page->makeService()->create($request->all());
+        $page->makeService()->create(
+            $request->safe()->merge(['user' => $request->user()])->toArray()
+        );
 
         return Response::redirectToRoute('admin.page.index')->with(
             'success',
@@ -160,7 +162,7 @@ class PageController
      */
     public function update(Page $page, UpdateRequest $request): JsonResponse
     {
-        $page->makeService()->update($request->only(['title', 'content_html']));
+        $page->makeService()->update($request->validated());
 
         return Response::json([
             'view' => View::make('icore::admin.page.partials.page', [
@@ -177,7 +179,7 @@ class PageController
      */
     public function updateFull(Page $page, UpdateFullRequest $request): RedirectResponse
     {
-        $page->makeService()->updateFull($request->all());
+        $page->makeService()->updateFull($request->validated());
 
         return Response::redirectToRoute('admin.page.edit_full', [$page->id])
             ->with('success', Lang::get('icore::pages.success.update'));

@@ -1,35 +1,29 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Token;
 
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
 use N1ebieski\ICore\Models\Token\PersonalAccessToken as Token;
 
-class TokenService implements DeleteInterface
+class TokenService
 {
-    /**
-     * Undocumented variable
-     *
-     * @var Token
-     */
-    protected $token;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Config
-     */
-    protected $config;
-
     /**
      * Undocumented function
      *
@@ -37,12 +31,12 @@ class TokenService implements DeleteInterface
      * @param Auth $auth
      * @param Config $config
      */
-    public function __construct(Token $token, Auth $auth, Config $config)
-    {
-        $this->token = $token;
-
-        $this->auth = $auth;
-        $this->config = $config;
+    public function __construct(
+        protected Token $token,
+        protected Auth $auth,
+        protected Config $config
+    ) {
+        //
     }
 
     /**

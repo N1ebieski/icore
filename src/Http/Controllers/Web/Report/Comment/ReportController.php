@@ -56,9 +56,12 @@ class ReportController implements CommentPolymorphic
      */
     public function store(Comment $comment, Report $report, StoreRequest $request): JsonResponse
     {
-        $report->setRelations(['morph' => $comment])
-            ->makeService()
-            ->create($request->only('content'));
+        $report->makeService()->create(
+            $request->safe()->merge([
+                'morph' => $comment,
+                'user' => $request->user()
+            ])->toArray()
+        );
 
         return Response::json([
             'success' => Lang::get('icore::reports.success.store')

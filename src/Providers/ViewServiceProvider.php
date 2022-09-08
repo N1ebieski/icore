@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Providers;
 
 use Illuminate\Pagination\Paginator;
@@ -11,16 +27,6 @@ use Illuminate\Support\ServiceProvider;
 class ViewServiceProvider extends ServiceProvider
 {
     /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
      * Bootstrap services.
      *
      * @return void
@@ -29,26 +35,25 @@ class ViewServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        Blade::directive('pushonce', function ($expression) {
-            $domain = explode('.', trim(substr($expression, 1, -1)));
-
-            $push_name = $domain[0];
-            $push_sub = $domain[1];
-            $isDisplayed = '__pushonce_' . $push_name . '_' . $push_sub;
-
-            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; \$__env->startPush('{$push_name}'); ?>";
-        });
-
-        Blade::directive('endpushonce', function ($expression) {
-            return '<?php $__env->stopPush(); endif; ?>';
-        });
-
         Blade::componentNamespace('N1ebieski\\ICore\\View\\Components', 'icore');
+
+        // Directives
+
+        /** @var \N1ebieski\ICore\View\Directives\PushOnceDirective */
+        $pushOnceDirective = $this->app->make(\N1ebieski\ICore\View\Directives\PushOnceDirective::class);
+
+        Blade::directive('pushonce', $pushOnceDirective);
+
+        /** @var \N1ebieski\ICore\View\Directives\EndPushOnceDirective */
+        $endPushOnceDirective = $this->app->make(\N1ebieski\ICore\View\Directives\EndPushOnceDirective::class);
+
+        Blade::directive('endpushonce', $endPushOnceDirective);
 
         $bladeCompiler = new \Illuminate\View\Compilers\BladeCompiler(
             $this->app->make(\Illuminate\Filesystem\Filesystem::class),
             Config::get('view.compiled')
         );
+
         $bladeCompiler->componentNamespace('N1ebieski\\ICore\\View\\Components', 'icore');
 
         /** @var \N1ebieski\ICore\View\Directives\RenderDirective */
@@ -60,6 +65,8 @@ class ViewServiceProvider extends ServiceProvider
 
         /** @var \N1ebieski\ICore\View\Composers\LayoutComposer */
         $layoutComposer = $this->app->make(\N1ebieski\ICore\View\Composers\LayoutComposer::class);
+
+        // Composers
 
         View::composer([
             Config::get('icore.layout') . '::web.layouts.layout',

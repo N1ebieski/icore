@@ -3,6 +3,8 @@
 namespace N1ebieski\ICore\Utils\Conversions;
 
 use Closure;
+use DOMDocument;
+use DOMException;
 use Illuminate\Support\Str;
 use N1ebieski\ICore\Utils\DOMDocumentAdapter;
 use N1ebieski\ICore\Utils\Conversions\Interfaces\Handler;
@@ -10,41 +12,28 @@ use N1ebieski\ICore\Utils\Conversions\Interfaces\Handler;
 class Lightbox implements Handler
 {
     /**
-     * Undocumented variable
-     *
-     * @var DOMDocumentAdapter
-     */
-    private $dom;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Str
-     */
-    private $str;
-
-    /**
      * Undocumented function
      *
      * @param DOMDocumentAdapter $dom
      * @param Str $str
      */
-    public function __construct(DOMDocumentAdapter $dom, Str $str)
-    {
-        $this->dom = $dom;
-
-        $this->str = $str;
+    public function __construct(
+        protected DOMDocumentAdapter $dom,
+        protected Str $str
+    ) {
+        //
     }
 
     /**
-     * Undocumented function
      *
-     * @param [type] $value
+     * @param mixed $value
      * @param Closure $next
-     * @return void
+     * @return mixed
+     * @throws DOMException
      */
-    public function handle($value, Closure $next)
+    public function handle($value, Closure $next): mixed
     {
+        /** @var DOMDocument */
         $dom = $this->dom->loadHTML($value);
 
         $galleryId = (string)$this->str->uuid();

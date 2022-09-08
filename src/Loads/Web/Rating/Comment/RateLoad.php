@@ -37,8 +37,7 @@ class RateLoad
          */
         $comment = $request->route('comment');
 
-        $this->rating = $comment->makeRepo()->firstRatingByUser($request->user())
-            ?? $rating->setRelations(['morph' => $comment]);
+        $this->rating = $comment->makeRepo()->firstRatingByUser($request->user()) ?? $rating;
     }
 
     /**
