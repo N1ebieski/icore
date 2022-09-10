@@ -23,6 +23,7 @@ use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Crons\PostCron;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
@@ -54,7 +55,7 @@ class PostTest extends TestCase
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->hasAttached($category)->create();
 
-        /** @var array<Tag> */
+        /** @var Collection<Tag> */
         $tags = Tag::makeFactory()->hasAttached($post, [], 'morphs')->count(5)->create();
 
         $response = $this->get(route('web.post.show', [$post->slug]));
@@ -62,6 +63,7 @@ class PostTest extends TestCase
         $response->assertSee($post->title, false)
             ->assertSee($category->name, false)
             ->assertSee($post->user->name, false)
+            // @phpstan-ignore-next-line
             ->assertSee($tags[0]->name, false);
     }
 
@@ -70,12 +72,14 @@ class PostTest extends TestCase
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->notCommentable()->create();
 
-        /** @var array<Comment> */
+        /** @var Collection<Comment> */
         $comments = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
         $response = $this->get(route('web.post.show', [$post->slug]));
 
-        $response->assertDontSee($comments[1]->content)->assertSee($post->title, false);
+        // @phpstan-ignore-next-line
+        $response->assertDontSee($comments[1]->content)
+            ->assertSee($post->title, false);
     }
 
     public function testPostShowPaginate(): void
@@ -83,7 +87,7 @@ class PostTest extends TestCase
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->commentable()->create();
 
-        /** @var array<Comment> */
+        /** @var Collection<Comment>|array<Comment> */
         $comments = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
         $response = $this->get(route('web.post.show', [

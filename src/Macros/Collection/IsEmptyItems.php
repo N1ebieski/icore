@@ -31,6 +31,10 @@ class IsEmptyItems extends Collection
     {
         return function () {
             return $this->every(function ($value, $key) {
+                if (is_null($value)) {
+                    return true;
+                }
+
                 return strlen($value) === 0;
             });
         };

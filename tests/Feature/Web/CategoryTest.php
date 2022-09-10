@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 use Tests\TestCase;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -52,7 +53,7 @@ class CategoryTest extends TestCase
         /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
-        /** @var array<Post> */
+        /** @var Collection<Post>|array<Post> */
         $posts = Post::makeFactory()->count(50)->active()->withUser()->hasAttached($category)
             ->sequence(function (Sequence $sequence) {
                 return [

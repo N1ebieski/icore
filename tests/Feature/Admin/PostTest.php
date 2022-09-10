@@ -59,7 +59,7 @@ class PostTest extends TestCase
         /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        /** @var array<Post> */
+        /** @var Collection<Post>|array<Post> */
         $posts = Post::makeFactory()->count(50)
             ->sequence(function (Sequence $sequence) {
                 return [

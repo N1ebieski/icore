@@ -23,6 +23,7 @@ use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\ValueObjects\Role\Name;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -54,7 +55,7 @@ class RoleTest extends TestCase
         /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        /** @var array<Role> */
+        /** @var Collection<Role>|array<Role> */
         $roles = Role::makeFactory()->count(50)->create();
 
         Auth::login($user);

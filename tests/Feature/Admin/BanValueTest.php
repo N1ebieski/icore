@@ -23,6 +23,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -176,7 +177,7 @@ class BanValueTest extends TestCase
 
         Auth::login($user);
 
-        /** @var array<BanValue> */
+        /** @var Collection<BanValue>|array<BanValue> */
         $banvalue = BanValue::makeFactory()->count(50)->ip()->create();
 
         $response = $this->get(route('admin.banvalue.index', [

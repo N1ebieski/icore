@@ -59,7 +59,7 @@ class UserTest extends TestCase
         /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        /** @var array<User> */
+        /** @var Collection<User>|array<User> */
         $users = User::makeFactory()->count(50)
             ->sequence(function (Sequence $sequence) {
                 return [

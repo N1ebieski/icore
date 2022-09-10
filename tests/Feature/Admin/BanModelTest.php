@@ -6,6 +6,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\BanModel\BanModel;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
@@ -209,7 +210,7 @@ class BanModelTest extends TestCase
         Auth::login($user);
 
         /**
-         * @var array<User>
+         * @var Collection<User>|array<User>
          */
         $users = User::makeFactory()->count(50)->create();
 

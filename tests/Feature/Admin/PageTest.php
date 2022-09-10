@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -60,7 +61,7 @@ class PageTest extends TestCase
         $user = User::makeFactory()->admin()->create();
 
         /**
-         * @var array<Page>
+         * @var Collection<Page>|array<Page>
          */
         $pages = Page::makeFactory()->count(50)->active()->withUser()->create();
 
@@ -950,33 +951,33 @@ class PageTest extends TestCase
         $user = User::makeFactory()->admin()->create();
 
         /**
-         * @var array<Page>
+         * @var Collection<Page>|array<Page>
          */
-        $page = Page::makeFactory()->count(3)->active()->withUser()->create();
+        $pages = Page::makeFactory()->count(3)->active()->withUser()->create();
 
         $this->assertDatabaseHas('pages', [
-            'id' => $page[0]->id,
+            'id' => $pages[0]->id,
             'position' => 0
         ]);
 
         $this->assertDatabaseHas('pages', [
-            'id' => $page[2]->id,
+            'id' => $pages[2]->id,
             'position' => 2
         ]);
 
         Auth::login($user);
 
-        $this->patch(route('admin.page.update_position', [$page[2]->id]), [
+        $this->patch(route('admin.page.update_position', [$pages[2]->id]), [
             'position' => 0
         ]);
 
         $this->assertDatabaseHas('pages', [
-            'id' => $page[2]->id,
+            'id' => $pages[2]->id,
             'position' => 0
         ]);
 
         $this->assertDatabaseHas('pages', [
-            'id' => $page[0]->id,
+            'id' => $pages[0]->id,
             'position' => 1
         ]);
     }

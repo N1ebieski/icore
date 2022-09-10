@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Tests\Feature\Web;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -50,7 +51,7 @@ class PageTest extends TestCase
         /** @var Page */
         $page = Page::makeFactory()->active()->commentable()->withUser()->create();
 
-        /** @var array<Comment> */
+        /** @var Collection<Comment>|array<Comment> */
         $comments = Comment::makeFactory()->count(50)->active()->withUser()->for($page, 'morph')->create();
 
         $response = $this->get(route('web.page.show', [
@@ -63,6 +64,6 @@ class PageTest extends TestCase
 
         $response->assertSee('class="pagination"', false)
             ->assertSee($page->title, false)
-            ->assertSee($comments[30]->content ?? '', false);
+            ->assertSee($comments[30]->content, false);
     }
 }

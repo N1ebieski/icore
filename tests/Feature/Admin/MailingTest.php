@@ -62,7 +62,7 @@ class MailingTest extends TestCase
         /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        /** @var array<Mailing> */
+        /** @var Collection<Mailing>|array<Mailing> */
         $mailings = Mailing::makeFactory()->count(50)->create();
 
         Auth::login($user);

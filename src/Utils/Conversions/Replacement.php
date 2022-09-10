@@ -47,10 +47,10 @@ class Replacement implements Handler
     {
         $replacement = $this->collect->make($this->replacement);
 
-        return str_replace(
+        return $next(str_replace(
             $replacement->keys()->toArray(),
             $replacement->values()->toArray(),
-            $next($value)
-        );
+            $value
+        ));
     }
 }

@@ -25,6 +25,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\BanValue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
@@ -49,7 +50,7 @@ class CommentTest extends TestCase
         /** @var Comment */
         $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        /** @var array<Comment> */
+        /** @var Collection<Comment>|array<Comment> */
         $comments = Comment::makeFactory()->count(15)->active()->withUser()->for($post, 'morph')->create([
             'parent_id' => $parent->id
         ]);
@@ -72,7 +73,7 @@ class CommentTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            $comments[9]->content ?? '',
+            $comments[9]->content,
             $baseResponse->getData()->view
         );
     }

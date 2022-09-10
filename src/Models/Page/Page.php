@@ -481,7 +481,7 @@ class Page extends Entity
      */
     public function getContentHtmlAttribute(): string
     {
-        return Purifier::clean($this->attributes['content_html']);
+        return Purifier::clean($this->attributes['content_html'] ?? '');
     }
 
     /**
@@ -510,7 +510,7 @@ class Page extends Entity
     public function getReplacementContentAttribute(): string
     {
         return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-            ->handle($this->content, function ($value) {
+            ->handle($this->content ?? '', function ($value) {
                 return $value;
             });
     }
@@ -532,7 +532,7 @@ class Page extends Entity
     public function getReplacementContentHtmlAttribute(): string
     {
         return App::make(Pipeline::class)
-            ->send($this->content_html)
+            ->send($this->content_html ?? '')
             ->through([
                 \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
                 \N1ebieski\ICore\Utils\Conversions\Replacement::class

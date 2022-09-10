@@ -47,9 +47,9 @@ class BanValueCache
 
     /**
      * [rememberAllIpsAsString description]
-     * @return string|null [description]
+     * @return string [description]
      */
-    public function rememberAllIpsAsString(): ?string
+    public function rememberAllIpsAsString(): string
     {
         return $this->cache->tags('bans.ip')->remember(
             "banValue.getAllIpsAsString",

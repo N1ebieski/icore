@@ -22,6 +22,7 @@ use Tests\TestCase;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Carbon\Carbon as CarbonFormat;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -45,7 +46,7 @@ class ArchiveTest extends TestCase
 
     public function testArchiveShowPaginate(): void
     {
-        /** @var array<Post> */
+        /** @var Collection<Post>|array<Post> */
         $posts = Post::makeFactory()->count(50)->active()->withUser()
             ->sequence(function (Sequence $sequence) {
                 /** @var CarbonFormat */

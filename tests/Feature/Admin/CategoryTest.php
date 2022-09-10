@@ -22,6 +22,7 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
@@ -55,7 +56,7 @@ class CategoryTest extends TestCase
         /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        /** @var array<Category> */
+        /** @var Collection<Category>|array<Category> */
         $categories = Category::makeFactory()->count(50)->active()->create();
 
         Auth::login($user);
@@ -763,7 +764,7 @@ class CategoryTest extends TestCase
         /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        /** @var array<Category> */
+        /** @var Collection<Category>|array<Category> */
         $categories = Category::makeFactory()->count(3)->active()->create();
 
         $this->assertDatabaseHas('categories', [

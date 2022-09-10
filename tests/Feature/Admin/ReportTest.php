@@ -81,7 +81,7 @@ class ReportTest extends TestCase
         /** @var User */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
-        /** @var array<Report> */
+        /** @var Collection<Report>|array<Report> */
         $reports = Report::makeFactory()->count(10)->withUser()->for($comment, 'morph')->create();
 
         Auth::login($user);

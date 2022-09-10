@@ -62,7 +62,7 @@ class CommentTest extends TestCase
         /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        /** @var array<Comment> */
+        /** @var Collection<Comment>|array<Comment> */
         $comments = Comment::makeFactory()->count(50)
             ->sequence(function (Sequence $sequence) {
                 return [
