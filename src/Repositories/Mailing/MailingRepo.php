@@ -18,26 +18,20 @@
 
 namespace N1ebieski\ICore\Repositories\Mailing;
 
-use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Mailing;
-use N1ebieski\ICore\ValueObjects\Mailing\Status;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MailingRepo
 {
     /**
-     * Undocumented function
      *
      * @param Mailing $mailing
-     * @param Carbon $carbon
+     * @return void
      */
-    public function __construct(
-        protected Mailing $mailing,
-        protected Carbon $carbon
-    ) {
-        $this->mailing = $mailing;
-
-        $this->carbon = $carbon;
+    public function __construct(protected Mailing $mailing)
+    {
+        //
     }
 
     /**
@@ -47,62 +41,16 @@ class MailingRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->mailing->selectRaw("`{$this->mailing->getTable()}`.*")
+        return $this->mailing->newQuery()
+            ->selectRaw("`{$this->mailing->getTable()}`.*")
             ->filterSearch($filter['search'])
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(is_null($filter['orderby']), function (Builder|Mailing $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->with('emails')
             ->filterPaginate($filter['paginate']);
-    }
-
-    /**
-     * [activateScheduled description]
-     * @return bool              [description]
-     */
-    public function activateScheduled(): bool
-    {
-        return $this->mailing
-            ->whereDate('activation_at', '<', $this->carbon->now()->format('Y-m-d'))
-            ->orWhere(function ($query) {
-                $query->whereDate('activation_at', '=', $this->carbon->now()->format('Y-m-d'))
-                    ->whereTime('activation_at', '<=', $this->carbon->now()->format('H:i:s'));
-            })
-            ->scheduled()
-            ->update(['status' => Status::ACTIVE]);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return boolean
-     */
-    public function deactivateCompleted(): bool
-    {
-        return $this->mailing->progress()
-            ->whereDoesntHave('emails', function ($query) {
-                $query->unsent();
-            })
-            ->update([
-                'status' => Status::INACTIVE,
-                'activation_at' => null
-            ]);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return boolean
-     */
-    public function progressActivated(): bool
-    {
-        return $this->mailing->active()
-            ->whereHas('emails', function ($query) {
-                $query->unsent();
-            })
-            ->update(['status' => Status::INPROGRESS]);
     }
 }

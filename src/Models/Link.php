@@ -35,7 +35,49 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Link\LinkFactory;
 
 /**
+ * N1ebieski\ICore\Models\Link
+ *
  * @property Type $type
+ * @property int $id
+ * @property string $url
+ * @property string $name
+ * @property string|null $img_url
+ * @property bool $home
+ * @property int $position
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Category\Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read string $created_at_diff
+ * @property-read string|null $img_url_from_storage
+ * @property-read string $link_as_html
+ * @property-read string $updated_at_diff
+ * @property-read \Illuminate\Database\Eloquent\Collection|Link[] $siblings
+ * @property-read int|null $siblings_count
+ * @method static \N1ebieski\ICore\Database\Factories\Link\LinkFactory factory(...$parameters)
+ * @method static Builder|Link filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
+ * @method static Builder|Link filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
+ * @method static Builder|Link filterExcept(?array $except = null)
+ * @method static Builder|Link filterOrderBy(?string $orderby = null)
+ * @method static Builder|Link filterOrderBySearch(?string $search = null)
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator filterPaginate(?int $paginate = null)
+ * @method static Builder|Link filterReport(?int $report = null)
+ * @method static Builder|Link filterSearch(?string $search = null)
+ * @method static Builder|Link filterStatus(?int $status = null)
+ * @method static Builder|Link filterType(?string $type = null)
+ * @method static Builder|Link newModelQuery()
+ * @method static Builder|Link newQuery()
+ * @method static Builder|Link query()
+ * @method static Builder|Link whereCreatedAt($value)
+ * @method static Builder|Link whereHome($value)
+ * @method static Builder|Link whereId($value)
+ * @method static Builder|Link whereImgUrl($value)
+ * @method static Builder|Link whereName($value)
+ * @method static Builder|Link wherePosition($value)
+ * @method static Builder|Link whereType($value)
+ * @method static Builder|Link whereUpdatedAt($value)
+ * @method static Builder|Link whereUrl($value)
+ * @mixin \Eloquent
  */
 class Link extends Model
 {

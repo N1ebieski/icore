@@ -31,9 +31,9 @@ class CommentPolicy
      *
      * @param User $current_user
      * @param Comment $comment
-     * @return void
+     * @return bool
      */
-    public function update(User $current_user, Comment $comment)
+    public function update(User $current_user, Comment $comment): bool
     {
         return $current_user->id === $comment->user_id;
     }

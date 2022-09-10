@@ -18,12 +18,12 @@
 
 namespace N1ebieski\ICore\View\Components\Comment;
 
-use Illuminate\Support\Composer;
+use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class LatestComponent extends Composer
+class LatestComponent extends Component
 {
     /**
      * Undocumented function
@@ -47,7 +47,7 @@ class LatestComponent extends Composer
     public function render(): View
     {
         return $this->view->make('icore::web.components.comment.latest', [
-            'comments' => $this->comment->makeCache()->rememberLatestByComponent([
+            'comments' => $this->comment->makeCache()->rememberByComponent([
                 'limit' => $this->limit,
             ])
         ]);

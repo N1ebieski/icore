@@ -19,12 +19,19 @@
 namespace N1ebieski\ICore\Crons;
 
 use Carbon\Carbon;
+use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\Jobs\SendMailingJob;
 use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingCron
 {
+    /**
+     *
+     * @var Mailing
+     */
+    protected $mailing;
+
     /**
      * Undocumented variable
      *
@@ -47,6 +54,8 @@ class MailingCron
         protected SendMailingJob $sendMailingJob
     ) {
         $this->setDelay($this->carbon->now());
+
+        $this->mailing = $this->mailingEmail->mailing()->make();
     }
 
     /**
@@ -104,7 +113,7 @@ class MailingCron
      */
     protected function activateScheduled(): void
     {
-        $this->mailingEmail->mailing()->make()->makeRepo()->activateScheduled();
+        $this->mailing->makeService()->activateScheduled();
     }
 
     /**
@@ -114,7 +123,7 @@ class MailingCron
      */
     protected function progressActivated(): void
     {
-        $this->mailingEmail->mailing()->make()->makeRepo()->progressActivated();
+        $this->mailing->makeService()->progressActivated();
     }
 
     /**
@@ -124,6 +133,6 @@ class MailingCron
      */
     protected function deactivateCompleted(): void
     {
-        $this->mailingEmail->mailing()->make()->makeRepo()->deactivateCompleted();
+        $this->mailing->makeService()->deactivateCompleted();
     }
 }

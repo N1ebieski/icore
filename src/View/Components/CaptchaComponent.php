@@ -49,6 +49,10 @@ class CaptchaComponent extends Component
      */
     public function render(): View
     {
+        if (empty($this->config->get('icore.captcha.driver'))) {
+            return $this->view->make('icore::web.components.captcha.no_captcha');
+        }
+
         return match ($this->config->get('icore.captcha.driver')) {
             'recaptcha_invisible' => $this->view->make('icore::web.components.captcha.recaptcha_invisible', [
                 'site_key' => $this->config->get('services.recaptcha_invisible.site_key')

@@ -52,7 +52,8 @@ class LinkService
             $this->link->fill($attributes);
 
             if (isset($attributes['img'])) {
-                $this->link->img_url = $this->file->makeFromFile($attributes['img'])->upload($this->link->path);
+                $this->link->img_url = $this->file->makeFromFile($attributes['img'])
+                    ->upload($this->link->path) ?: null;
             }
 
             $this->link->save();
@@ -85,7 +86,8 @@ class LinkService
             }
 
             if (isset($attributes['img'])) {
-                $this->link->img_url = $this->file->makeFromFile($attributes['img'])->upload($this->link->path);
+                $this->link->img_url = $this->file->makeFromFile($attributes['img'])
+                    ->upload($this->link->path) ?: null;
             }
 
             $this->link->save();

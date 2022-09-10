@@ -30,9 +30,9 @@ class UserPolicy
      *
      * @param User $authUser
      * @param User $user
-     * @return void
+     * @return bool
      */
-    public function view(User $authUser, User $user)
+    public function view(User $authUser, User $user): bool
     {
         return $authUser->can('admin.users.view')
             || $authUser->id === $user->id;
@@ -43,9 +43,9 @@ class UserPolicy
      *
      * @param User $authUser
      * @param User $user
-     * @return void
+     * @return bool
      */
-    public function actionSelf(User $authUser, User $user)
+    public function actionSelf(User $authUser, User $user): bool
     {
         return $authUser->id !== $user->id;
     }

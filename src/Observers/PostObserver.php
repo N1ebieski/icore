@@ -52,37 +52,35 @@ class PostObserver
     }
 
     /**
-     * Undocumented function
      *
      * @param Post $post
-     * @param [type] $relationName
-     * @param [type] $pivotIds
-     * @param [type] $pivotIdsAttributes
+     * @param mixed $relationName
+     * @param mixed $pivotIds
+     * @param mixed $pivotIdsAttributes
      * @return void
      */
     public function pivotAttached(Post $post, $relationName, $pivotIds, $pivotIdsAttributes)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
             $this->updated($post);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 
     /**
-     * Undocumented function
      *
      * @param Post $post
-     * @param [type] $relationName
-     * @param [type] $pivotIds
+     * @param mixed $relationName
+     * @param mixed $pivotIds
      * @return void
      */
     public function pivotDetached(Post $post, $relationName, $pivotIds)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['categories', 'tags'])) {
             $this->updated($post);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 

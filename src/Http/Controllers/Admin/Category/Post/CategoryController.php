@@ -32,9 +32,9 @@ use N1ebieski\ICore\Http\Controllers\Admin\Category\CategoryController as BaseCa
 class CategoryController implements Polymorphic
 {
     /**
-     * Undocumented function
      *
-     * @param BaseCategoryController $controller
+     * @param BaseCategoryController $decorated
+     * @return void
      */
     public function __construct(protected BaseCategoryController $decorated)
     {

@@ -19,9 +19,12 @@
 namespace N1ebieski\ICore\Http\Requests\Auth\Register;
 
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Http\Requests\Traits\HasCaptcha;
 
 class StoreRequest extends FormRequest
 {
+    use HasCaptcha;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -39,7 +42,7 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        return array_merge([
             'name' => [
                 'required',
                 'alpha_dash',
@@ -62,6 +65,6 @@ class StoreRequest extends FormRequest
             'privacy_agreement' => 'bail|accepted',
             'contact_agreement' => 'bail|accepted',
             'marketing_agreement' => 'bail|nullable|boolean'
-        ];
+        ], $this->prepareCaptchaRules());
     }
 }

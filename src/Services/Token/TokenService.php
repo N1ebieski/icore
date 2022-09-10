@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Services\Token;
 
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Models\Token\PersonalAccessToken;
 use N1ebieski\ICore\Models\Token\PersonalAccessToken as Token;
 
 class TokenService
@@ -52,16 +53,22 @@ class TokenService
          */
         $user = $this->token->tokenable ?? $this->auth->user();
 
-        $accessToken = $user->createToken($attributes['name'], $attributes['abilities'], $attributes['expiration']);
+        $newAccessToken = $user->createToken($attributes['name'], $attributes['abilities'], $attributes['expiration']);
 
         if (array_key_exists('refresh', $attributes) && $attributes['refresh'] === true) {
-            $refreshToken = $user->createToken($attributes['name'], ['refresh'], $this->config->get('sanctum.refresh_expiration'));
+            $newRefreshToken = $user->createToken($attributes['name'], ['refresh'], $this->config->get('sanctum.refresh_expiration'));
 
-            $accessToken->accessToken->symlink()->associate($refreshToken->accessToken)->save();
-            $refreshToken->accessToken->symlink()->associate($accessToken->accessToken)->save();
+            /** @var PersonalAccessToken */
+            $accessToken = $newAccessToken->accessToken;
+
+            /** @var PersonalAccessToken */
+            $refreshToken = $newRefreshToken->accessToken;
+
+            $accessToken->symlink()->associate($refreshToken)->save();
+            $refreshToken->symlink()->associate($accessToken)->save();
         }
 
-        return [$accessToken, $refreshToken ?? null];
+        return [$newAccessToken, $newRefreshToken ?? null];
     }
 
     /**

@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Tag;
 
+use DateTime;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Cache\Tag\TagCache;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,8 +33,41 @@ use N1ebieski\ICore\Database\Factories\Tag\TagFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
 /**
- * @property int $tag_id
+ * N1ebieski\ICore\Models\Tag\Tag
  *
+ * @property int $tag_id
+ * @property string $name
+ * @property string $normalized
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string $poli
+ * @property-read string $updated_at_diff
+ * @method static Builder|Tag byName(string $value)
+ * @method static \N1ebieski\ICore\Database\Factories\Tag\TagFactory factory(...$parameters)
+ * @method static Builder|Tag filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
+ * @method static Builder|Tag filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
+ * @method static Builder|Tag filterExcept(?array $except = null)
+ * @method static Builder|Tag filterOrderBy(?string $orderby = null)
+ * @method static Builder|Tag filterOrderBySearch(?string $search = null)
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator filterPaginate(?int $paginate = null)
+ * @method static Builder|Tag filterReport(?int $report = null)
+ * @method static Builder|Tag filterSearch(?string $search = null)
+ * @method static Builder|Tag filterStatus(?int $status = null)
+ * @method static Builder|Tag newModelQuery()
+ * @method static Builder|Tag newQuery()
+ * @method static Builder|Tag orderBySearch(string $term)
+ * @method static Builder|Tag poli()
+ * @method static Builder|Tag poliType()
+ * @method static Builder|Tag query()
+ * @method static Builder|Tag search(string $term)
+ * @method static Builder|Tag whereCreatedAt($value)
+ * @method static Builder|Tag whereName($value)
+ * @method static Builder|Tag whereNormalized($value)
+ * @method static Builder|Tag whereTagId($value)
+ * @method static Builder|Tag whereUpdatedAt($value)
+ * @method static Builder|Tag withCountSum()
+ * @mixin \Eloquent
  */
 class Tag extends Taggable
 {
@@ -83,26 +117,24 @@ class Tag extends Taggable
     // Scopes
 
     /**
-     * Undocumented function
      *
      * @param Builder $query
      * @param string $search
-     * @param string $orderby
      * @return Builder
      */
     public function scopeFilterOrderBySearch(Builder $query, string $search = null): Builder
     {
-        return $query->when($search !== null, function ($query) use ($search) {
+        return $query->when($search !== null, function ($query) {
             return $query->orderByRaw('LENGTH(name) ASC');
         });
     }
 
     /**
-     * [scopeWithSum description]
+     * [scopeWithCountSum description]
      * @param  Builder $query [description]
      * @return Builder        [description]
      */
-    public function scopeWithSum(Builder $query): Builder
+    public function scopeWithCountSum(Builder $query): Builder
     {
         return $query->selectRaw('COUNT(`tags`.`tag_id`) AS `sum`')
             ->leftJoin('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')

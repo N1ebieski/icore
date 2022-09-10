@@ -141,7 +141,7 @@ trait HasFullTextSearchable
      *
      * @return string
      */
-    protected function search(): string
+    protected function getSearchAsString(): string
     {
         return implode(' ', (array)$this->search[$this->className()]);
     }
@@ -151,7 +151,7 @@ trait HasFullTextSearchable
      *
      * @return string
      */
-    protected function columns(): string
+    protected function getColumnsAsString(): string
     {
         return implode(',', $this->searchable);
     }
@@ -172,13 +172,22 @@ trait HasFullTextSearchable
         $this->splitMatches();
 
         return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [$this->search()]);
+            $query->whereRaw(
+                "MATCH ({$this->getColumnsAsString()}) AGAINST (? IN BOOLEAN MODE)",
+                [$this->getSearchAsString()]
+            );
 
-            $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
-                foreach ($this->searchable as $column) {
-                    $query->selectRaw("MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`", [$this->search()]);
+            $query->when(
+                App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
+                function ($query) {
+                    foreach ($this->searchable as $column) {
+                        $query->selectRaw(
+                            "MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
+                            [$this->getSearchAsString()]
+                        );
+                    }
                 }
-            });
+            );
         });
     }
 
@@ -199,11 +208,14 @@ trait HasFullTextSearchable
         $this->splitMatches();
 
         return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
-                foreach ($this->searchable as $column) {
-                    $query->orderBy("{$column}_relevance", 'desc');
+            $query->when(
+                App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
+                function ($query) {
+                    foreach ($this->searchable as $column) {
+                        $query->orderBy("{$column}_relevance", 'desc');
+                    }
                 }
-            });
+            );
         });
     }
 }

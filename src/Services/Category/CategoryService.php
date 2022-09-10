@@ -139,9 +139,6 @@ class CategoryService
 
             if (isset($attributes['clear'])) {
                 if ((bool)$attributes['clear'] === true) {
-                    /**
-                     * @phpstan-ignore-next-line
-                     */
                     $this->category->newQuery()->poliType()->delete();
 
                     $parent = null;

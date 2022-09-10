@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Listeners\Comment;
 
 use Illuminate\Contracts\Auth\Guard as Auth;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
+use N1ebieski\ICore\Events\Inerfaces\CommentEventInterface;
 
 class Activate
 {
@@ -36,7 +37,7 @@ class Activate
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param  CommentEventInterface  $event
      * @return void
      */
     public function handle($event)

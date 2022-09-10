@@ -44,7 +44,7 @@ class TagComponent extends Component
 
     /**
      *
-     * @return string
+     * @return View
      */
     public function render(): View
     {

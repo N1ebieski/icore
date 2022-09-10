@@ -19,16 +19,22 @@
 namespace N1ebieski\ICore\Repositories\Post;
 
 use Closure;
-use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\Tag\Post\Tag;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\ValueObjects\Post\Status;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PostRepo
 {
@@ -37,14 +43,12 @@ class PostRepo
      *
      * @param Post $post
      * @param Config $config
-     * @param Carbon $carbon
      * @param App $app
      * @param Auth $auth
      */
     public function __construct(
         protected Post $post,
         protected Config $config,
-        protected Carbon $carbon,
         protected App $app,
         protected Auth $auth
     ) {
@@ -58,8 +62,11 @@ class PostRepo
      */
     public function paginateCommentsByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->post->comments()
-            ->active()
+        /** @var Comment */
+        $comments = $this->post->comments();
+
+        // @phpstan-ignore-next-line
+        return $comments->active()
             ->root()
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
@@ -74,24 +81,25 @@ class PostRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->post->selectRaw("`{$this->post->getTable()}`.*")
-            ->with(['tags', 'user'])
-            ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
+        return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
             ->when(
-                $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),
-                function ($query) {
-                    $query->active();
+                is_null($filter['status']) && !$this->auth->user()?->can('admin.categories.view'),
+                function (Builder|Post $query) {
+                    return $query->active();
                 },
-                function ($query) use ($filter) {
-                    $query->filterStatus($filter['status']);
+                function (Builder|Post $query) use ($filter) {
+                    return $query->filterStatus($filter['status']);
                 }
             )
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->filterExcept($filter['except'])
+            ->filterSearch($filter['search'])
+            ->filterCategory($filter['category'])
+            ->when(is_null($filter['orderby']), function (Builder|Post $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
-            ->filterCategory($filter['category'])
+            ->with(['tags', 'user'])
             ->filterPaginate($filter['paginate']);
     }
 
@@ -100,21 +108,22 @@ class PostRepo
      * @param  string $slug [description]
      * @return Post|null       [description]
      */
-    public function firstBySlug(string $slug)
+    public function firstBySlug(string $slug): ?Post
     {
-        return $this->post->where('slug', $slug)
+        return $this->post->newQuery()
+            ->where('slug', $slug)
             ->active()
             ->with([
-                'categories' => function ($query) {
-                    $query->withAncestorsExceptSelf()->active();
+                'categories' => function (MorphToMany|Builder|Category $query) {
+                    return $query->withAncestorsExceptSelf()->active();
                 },
                 'user',
                 'tags'
             ])
             ->when(
                 $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
-                function ($query) {
-                    $query->with('stats');
+                function (Builder $query) {
+                    return $query->with('stats');
                 }
             )
             ->first();
@@ -124,9 +133,10 @@ class PostRepo
      * [firstPrevious description]
      * @return Post|null [description]
      */
-    public function firstPrevious()
+    public function firstPrevious(): ?Post
     {
-        return $this->post->active()
+        return $this->post->newQuery()
+            ->active()
             ->where('id', '<', $this->post->id)
             ->orderBy('id', 'desc')
             ->first(['slug', 'title']);
@@ -136,24 +146,27 @@ class PostRepo
      * [firstNext description]
      * @return Post|null [description]
      */
-    public function firstNext()
+    public function firstNext(): ?Post
     {
-        return $this->post->active()
+        return $this->post->newQuery()
+            ->active()
             ->where('id', '>', $this->post->id)
             ->orderBy('id')
             ->first(['slug', 'title']);
     }
 
     /**
-     * [getRelated description]
-     * @param  int $limit [description]
-     * @return Post|null         [description]
+     *
+     * @param int $limit
+     * @return Collection
+     * @throws InvalidArgumentException
      */
-    public function getRelated(int $limit = 5)
+    public function getRelated(int $limit = 5): Collection
     {
-        return $this->post->active()
+        return $this->post->newQuery()
+            ->active()
             ->withAnyTags($this->post->tagList)
-            ->where('posts.id', '<>', $this->post->id)
+            ->where("{$this->post->getTable()}.{$this->post->getKeyName()}", '<>', $this->post->id)
             ->limit($limit)
             ->inRandomOrder()
             ->get();
@@ -166,13 +179,14 @@ class PostRepo
      */
     public function paginateArchiveByDate(array $date): LengthAwarePaginator
     {
-        return $this->post->with('user:id,name')
+        return $this->post->newQuery()
             ->active()
             ->whereRaw(
                 'MONTH(published_at) = ? and YEAR(published_at) = ?',
                 [(int)$date['month'], (int)$date['year']]
             )
             ->orderBy('published_at', 'desc')
+            ->with('user:id,name')
             ->paginate($this->config->get('database.paginate'));
     }
 
@@ -182,8 +196,9 @@ class PostRepo
      */
     public function getArchives(): Collection
     {
-        return $this->post->active()
+        return $this->post->newQuery()
             ->selectRaw('YEAR(published_at) year, MONTH(published_at) month, COUNT(*) posts_count')
+            ->active()
             ->groupBy('year')
             ->groupBy('month')
             ->orderBy('year', 'desc')
@@ -198,10 +213,11 @@ class PostRepo
      */
     public function paginateByTag(string $tag): LengthAwarePaginator
     {
-        return $this->post->withAllTags($tag)
-            ->with('user:id,name')
+        return $this->post->newQuery()
+            ->withAllTags($tag)
             ->active()
             ->orderBy('published_at', 'desc')
+            ->with('user:id,name')
             ->paginate($this->config->get('database.paginate'));
     }
 
@@ -211,9 +227,10 @@ class PostRepo
      */
     public function paginateLatest(): LengthAwarePaginator
     {
-        return $this->post->with('user:id,name')
+        return $this->post->newQuery()
             ->active()
             ->orderBy('published_at', 'desc')
+            ->with('user:id,name')
             ->paginate($this->config->get('database.paginate'));
     }
 
@@ -224,45 +241,37 @@ class PostRepo
      */
     public function paginateBySearch(string $name): LengthAwarePaginator
     {
-        return $this->post->selectRaw("`{$this->post->getTable()}`.*")
-            ->with('user:id,name')
+        /** @var Tag */
+        $tag = $this->post->tags()->make();
+
+        return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
             ->from(
                 $this->post->selectRaw("`{$this->post->getTable()}`.*")
                     ->search($name)
-                    ->when($tag = $this->post->tags()->make()->findByName($name), function ($query) use ($tag) {
-                        $query->unionAll(
-                            $this->post->selectRaw('`posts`.*, 0 AS `title_relevance`, 0 AS `content_relevance`')
-                                ->join('tags_models', function ($query) use ($tag) {
-                                    $query->on('posts.id', '=', 'tags_models.model_id')
+                    // @phpstan-ignore-next-line
+                    ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
+                        // @phpstan-ignore-next-line
+                        return $query->unionAll(
+                            $this->post->newQuery()
+                                ->selectRaw('`posts`.*, 0 AS `title_relevance`, 0 AS `content_relevance`')
+                                ->join('tags_models', function (JoinClause $query) use ($tag) {
+                                    return $query->on('posts.id', '=', 'tags_models.model_id')
                                         ->where('tags_models.model_type', $this->post->getMorphClass())
                                         ->where('tags_models.tag_id', $tag->tag_id);
                                 })
                                 ->groupBy('posts.id')
+                                ->getQuery()
                         );
                     }),
                 'posts'
             )
-            ->groupBy('posts.id')
             ->active()
+            ->groupBy('posts.id')
             ->orderBySearch($name)
             ->orderBy('published_at', 'desc')
+            ->with('user:id,name')
             ->paginate($this->config->get('database.paginate'));
-    }
-
-    /**
-     * [updateActivateScheduled description]
-     * @return int              [description]
-     */
-    public function activateScheduled(): int
-    {
-        return $this->post
-            ->whereDate('published_at', '<', $this->carbon->now()->format('Y-m-d'))
-            ->orWhere(function ($query) {
-                $query->whereDate('published_at', '=', $this->carbon->now()->format('Y-m-d'))
-                    ->whereTime('published_at', '<=', $this->carbon->now()->format('H:i:s'));
-            })
-            ->scheduled()
-            ->update(['status' => Status::ACTIVE]);
     }
 
     /**
@@ -273,8 +282,9 @@ class PostRepo
      */
     public function chunkActiveWithModelsCount(Closure $callback): bool
     {
-        return $this->post->active()
-            ->withCount(['comments AS models_count' => function ($query) {
+        return $this->post->newQuery()
+            ->active()
+            ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
                 $query->root()->active();
             }])
             ->chunk(1000, $callback);
@@ -287,7 +297,8 @@ class PostRepo
      */
     public function countByStatus(): Collection
     {
-        return $this->post->selectRaw("`status`, COUNT(`id`) AS `count`")
+        return $this->post->newQuery()
+            ->selectRaw("`status`, COUNT(`id`) AS `count`")
             ->groupBy('status')
             ->get();
     }
@@ -300,9 +311,10 @@ class PostRepo
     public function getLastActivity(): ?string
     {
         return optional(
-            $this->post->active()
-            ->orderBy('published_at', 'desc')
-            ->first('published_at')
+            $this->post->newQuery()
+                ->active()
+                ->orderBy('published_at', 'desc')
+                ->first('published_at')
         )
         ->published_at;
     }
@@ -314,11 +326,12 @@ class PostRepo
      */
     public function getLatestForHome(): Collection
     {
-        return $this->post->active()
+        return $this->post->newQuery()
+            ->active()
             ->latest()
-            ->with(['user', 'categories', 'tags'])
             ->orderBy('published_at', 'desc')
             ->limit($this->config->get('icore.home.max'))
+            ->with(['user', 'categories', 'tags'])
             ->get();
     }
 
@@ -330,12 +343,13 @@ class PostRepo
      */
     public function countActiveByDateUnionPages(Builder $pages = null): Collection
     {
-        return $this->post->selectRaw("YEAR(`post`.`created_at`) `year`, MONTH(`post`.`created_at`) `month`, 'posts' AS `type`, COUNT(*) AS `count`")
+        return $this->post->newQuery()
+            ->selectRaw("YEAR(`post`.`created_at`) `year`, MONTH(`post`.`created_at`) `month`, 'posts' AS `type`, COUNT(*) AS `count`")
             ->from("{$this->post->getTable()} AS post")
             ->where('post.status', Status::ACTIVE)
             ->groupBy('year')
             ->groupBy('month')
-            ->unionAll($pages)
+            ->unionAll($pages->getQuery())
             ->orderBy('year')
             ->orderBy('month')
             ->get();

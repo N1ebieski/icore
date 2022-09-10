@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -36,14 +37,21 @@ class UserTest extends TestCase
     {
         $user = User::makeFactory()->admin()->create();
 
-        $us = User::makeFactory()->count(50)->active()->create();
+        $us = User::makeFactory()->count(50)
+            ->sequence(function ($sequence) {
+                return [
+                    'created_at' => Carbon::now()->addSecond($sequence->index)
+                ];
+            })
+            ->active()
+            ->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.user.index', [
             'page' => 2,
             'filter' => [
-                'orderby' => 'created_at|desc'
+                'orderby' => 'created_at|asc'
             ]
         ]));
 

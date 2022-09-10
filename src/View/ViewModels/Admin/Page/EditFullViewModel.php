@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\ViewModels\Admin\Page;
 
 use Illuminate\Http\Request;
@@ -11,27 +27,6 @@ use Illuminate\Database\Eloquent\Collection;
 class EditFullViewModel extends ViewModel
 {
     /**
-     * Undocumented variable
-     *
-     * @var Page
-     */
-    public $page;
-
-    /**
-     * Undocumented variable
-     *
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * Undocumented function
      *
      * @param Page $page
@@ -39,14 +34,11 @@ class EditFullViewModel extends ViewModel
      * @param Request $request
      */
     public function __construct(
-        Page $page,
-        User $user,
-        Request $request
+        public Page $page,
+        protected User $user,
+        protected Request $request
     ) {
-        $this->page = $page;
-        $this->user = $user;
-
-        $this->request = $request;
+        //
     }
 
     /**

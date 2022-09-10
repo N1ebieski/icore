@@ -63,6 +63,6 @@ class DOMDocumentAdapter
         $this->decorated->removeChild($this->decorated->doctype);
 
         // remove <html><body></body></html>
-        return substr(trim($this->decorated->saveHtml($this->decorated->documentElement)), 12, -14);
+        return substr(trim($this->decorated->saveHtml($this->decorated->documentElement) ?: ''), 12, -14);
     }
 }

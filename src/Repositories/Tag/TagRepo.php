@@ -19,6 +19,8 @@
 namespace N1ebieski\ICore\Repositories\Tag;
 
 use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -40,7 +42,7 @@ class TagRepo
      */
     public function firstBySlug(string $slug): ?Tag
     {
-        return $this->tag->whereNormalized($slug)->first();
+        return $this->tag->newQuery()->whereNormalized($slug)->first();
     }
 
     /**
@@ -50,14 +52,15 @@ class TagRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->tag->selectRaw("`{$this->tag->getTable()}`.*")
+        return $this->tag->newQuery()
+            ->selectRaw("`{$this->tag->getTable()}`.*")
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
-            ->when(strpos($filter['orderby'], 'sum') !== false, function ($query) {
-                $query->withSum();
+            ->when(strpos($filter['orderby'], 'sum') !== false, function (Builder|Tag $query) {
+                return $query->withCountSum();
             })
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(is_null($filter['orderby']), function (Builder|Tag $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);
@@ -71,18 +74,25 @@ class TagRepo
      */
     public function getPopularByComponent(array $component): Collection
     {
+        if (!method_exists($this->tag, 'morphs')) {
+            throw new \Exception('Entity must be polymorphic.');
+        }
+
         $morph = $this->tag->morphs()->make();
 
-        return $this->tag->selectRaw('`tags`.*, COUNT(`tags`.`tag_id`) AS taggable_count')
+        return $this->tag->newQuery()
+            ->selectRaw('`tags`.*, COUNT(`tags`.`tag_id`) AS taggable_count')
             ->join('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
-            ->join("{$morph->getTable()}", function ($query) use ($morph) {
-                $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
+            ->join("{$morph->getTable()}", function (JoinClause $query) use ($morph) {
+                return $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
                     ->where("{$morph->getTable()}.status", $morph->status::ACTIVE);
             })
+            // @phpstan-ignore-next-line
             ->where('tags_models.model_type', $this->tag->model_type)
-            ->when($component['cats'] !== null, function ($query) use ($component) {
-                $query->join('categories_models', function ($query) use ($component) {
-                    $query->on('tags_models.model_id', '=', 'categories_models.model_id')
+            ->when($component['cats'] !== null, function (Builder $query) use ($component) {
+                return $query->join('categories_models', function (JoinClause $query) use ($component) {
+                    return $query->on('tags_models.model_id', '=', 'categories_models.model_id')
+                        // @phpstan-ignore-next-line
                         ->where('categories_models.model_type', $this->tag->model_type)
                         ->whereIn('categories_models.category_id', $component['cats']);
                 });

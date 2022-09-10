@@ -21,6 +21,30 @@ namespace N1ebieski\ICore\Models\Stat\Page;
 use N1ebieski\ICore\Models\Stat\Stat as BaseStat;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+/**
+ * N1ebieski\ICore\Models\Stat\Page\Stat
+ *
+ * @property int $id
+ * @property \N1ebieski\ICore\ValueObjects\Stat\Slug $slug
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string $model_type
+ * @property-read string $poli
+ * @property-read string $updated_at_diff
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Page\Page[] $morphs
+ * @property-read int|null $morphs_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat poli()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat poliType()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Stat extends BaseStat
 {
     // Configuration

@@ -23,6 +23,7 @@ use Illuminate\Support\Collection as Collect;
 
 /**
  * @property object<data> $parameters
+ * @property array $data
  *
  */
 class IndexResponse extends Response

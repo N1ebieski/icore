@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Support;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
@@ -42,9 +43,9 @@ abstract class ServiceProvider extends BaseServiceProvider
     protected function mergeConfigFrom($path, $key)
     {
         if (! ($this->app instanceof CachesConfiguration && $this->app->configurationIsCached())) {
-            $this->app['config']->set($key, $this->mergeConfigs(
+            Config::set($key, $this->mergeConfigs(
                 require $path,
-                $this->app['config']->get($key, [])
+                Config::get($key, [])
             ));
         }
     }

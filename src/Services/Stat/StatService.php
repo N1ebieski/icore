@@ -44,6 +44,7 @@ class StatService
     public function increment(): bool
     {
         return $this->db->transaction(function () {
+            // @phpstan-ignore-next-line
             $this->stat->morph
                 ->stats()
                 ->syncWithoutDetaching([

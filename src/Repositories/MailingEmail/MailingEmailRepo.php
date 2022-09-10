@@ -19,7 +19,8 @@
 namespace N1ebieski\ICore\Repositories\MailingEmail;
 
 use Closure;
-use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
+use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 
 class MailingEmailRepo
@@ -36,35 +37,16 @@ class MailingEmailRepo
     /**
      * Undocumented function
      *
-     * @return boolean
-     */
-    public function markAsSent(): bool
-    {
-        return $this->mailingEmail->update(['sent' => Sent::SENT]);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return boolean
-     */
-    public function markAsError(): bool
-    {
-        return $this->mailingEmail->update(['sent' => Sent::ERROR]);
-    }
-
-    /**
-     * Undocumented function
-     *
      * @param integer $chunk
      * @param Closure $callback
      * @return boolean
      */
     public function chunkUnsentHasActiveMailing(int $chunk, Closure $callback): bool
     {
-        return $this->mailingEmail->unsent()
-            ->whereHas('mailing', function ($query) {
-                $query->active();
+        return $this->mailingEmail->newQuery()
+            ->unsent()
+            ->whereHas('mailing', function (Builder|Mailing $query) {
+                return $query->active();
             })
             ->orderBy('mailing_id', 'asc')
             ->chunk($chunk, $callback);
@@ -77,6 +59,6 @@ class MailingEmailRepo
      */
     public function firstByLatestId(): ?MailingEmail
     {
-        return $this->mailingEmail->latest('id')->first();
+        return $this->mailingEmail->newQuery()->latest('id')->first();
     }
 }

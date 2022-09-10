@@ -49,11 +49,91 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 
 /**
+ * N1ebieski\ICore\Models\Post
+ *
  * @property string $title
  * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status
  * @property Commentable $comment
+ * @property int $id
+ * @property string $slug
+ * @property int $user_id
+ * @property string $content_html
+ * @property string|null $content
+ * @property string|null $seo_title
+ * @property string|null $seo_desc
+ * @property \Illuminate\Support\Carbon|null $published_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Category\Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Comment\Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read string $created_at_diff
+ * @property-read string|null $first_image
+ * @property-read string $less_content_html
+ * @property-read string $meta_desc
+ * @property-read string $meta_title
+ * @property-read string $model_type
+ * @property-read string $no_more_content_html
+ * @property-read string $poli_self
+ * @property-read string $published_at_diff
+ * @property-read string $replacement_content
+ * @property-read string $replacement_content_html
+ * @property-read string $short_content
+ * @property-read array $tag_array
+ * @property-read array $tag_array_normalized
+ * @property-read string $tag_list
+ * @property-read string $tag_list_normalized
+ * @property-read string $updated_at_diff
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Stat\Post\Stat[] $stats
+ * @property-read int|null $stats_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @method static Builder|Post active()
+ * @method static \N1ebieski\ICore\Database\Factories\Post\PostFactory factory(...$parameters)
+ * @method static Builder|Post filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
+ * @method static Builder|Post filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
+ * @method static Builder|Post filterExcept(?array $except = null)
+ * @method static Builder|Post filterOrderBy(?string $orderby = null)
+ * @method static Builder|Post filterOrderBySearch(?string $search = null)
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator filterPaginate(?int $paginate = null)
+ * @method static Builder|Post filterReport(?int $report = null)
+ * @method static Builder|Post filterSearch(?string $search = null)
+ * @method static Builder|Post filterStatus(?int $status = null)
+ * @method static Builder|Post findSimilarSlugs(string $attribute, array $config, string $slug)
+ * @method static Builder|Post isNotTagged()
+ * @method static Builder|Post isTagged()
+ * @method static Builder|Post newModelQuery()
+ * @method static Builder|Post newQuery()
+ * @method static Builder|Post orderBySearch(string $term)
+ * @method static Builder|Post query()
+ * @method static Builder|Post scheduled()
+ * @method static Builder|Post search(string $term)
+ * @method static Builder|Post whereComment($value)
+ * @method static Builder|Post whereContent($value)
+ * @method static Builder|Post whereContentHtml($value)
+ * @method static Builder|Post whereCreatedAt($value)
+ * @method static Builder|Post whereId($value)
+ * @method static Builder|Post wherePublishedAt($value)
+ * @method static Builder|Post whereSeoDesc($value)
+ * @method static Builder|Post whereSeoNofollow($value)
+ * @method static Builder|Post whereSeoNoindex($value)
+ * @method static Builder|Post whereSeoTitle($value)
+ * @method static Builder|Post whereSlug($value)
+ * @method static Builder|Post whereStatus($value)
+ * @method static Builder|Post whereTitle($value)
+ * @method static Builder|Post whereUpdatedAt($value)
+ * @method static Builder|Post whereUserId($value)
+ * @method static Builder|Post withAllTags($tags)
+ * @method static Builder|Post withAnyTags($tags)
+ * @method static Builder|Post withCountStats(string $stat)
+ * @method static Builder|Post withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ * @method static Builder|Post withoutAllTags($tags, bool $includeUntagged = false)
+ * @method static Builder|Post withoutAnyTags($tags, bool $includeUntagged = false)
+ * @mixin \Eloquent
  */
 class Post extends Model
 {

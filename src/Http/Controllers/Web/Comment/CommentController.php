@@ -70,7 +70,7 @@ class CommentController implements Polymorphic
      *
      * @param Comment $comment
      * @param TakeRequest $request
-     * @param TakeFilter $filer
+     * @param TakeFilter $filter
      * @return JsonResponse
      */
     public function take(Comment $comment, TakeRequest $request, TakeFilter $filter): JsonResponse

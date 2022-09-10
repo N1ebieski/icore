@@ -46,7 +46,7 @@ class UpdateCensoredRequest extends FormRequest
                 'bail',
                 'required',
                 'integer',
-                Rule::in(Censored::ACTIVE, Censored::INACTIVE)
+                Rule::in([Censored::ACTIVE, Censored::INACTIVE])
             ]
         ];
     }

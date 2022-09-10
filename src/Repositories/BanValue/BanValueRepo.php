@@ -19,7 +19,8 @@
 namespace N1ebieski\ICore\Repositories\BanValue;
 
 use N1ebieski\ICore\Models\BanValue;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class BanValueRepo
 {
@@ -39,12 +40,13 @@ class BanValueRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->banValue->selectRaw("`{$this->banValue->getTable()}`.*")
+        return $this->banValue->newQuery()
+            ->selectRaw("`{$this->banValue->getTable()}`.*")
             ->filterType($filter['type'])
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when($filter['orderby'] === null, function (Builder|BanValue $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);

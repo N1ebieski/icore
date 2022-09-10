@@ -19,11 +19,14 @@
 namespace N1ebieski\ICore\Repositories\Category;
 
 use Closure;
+use InvalidArgumentException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 
 class CategoryRepo
 {
@@ -61,21 +64,22 @@ class CategoryRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->category->selectRaw("`{$this->category->getTable()}`.*")
-            ->filterSearch($filter['search'])
-            ->filterExcept($filter['except'])
+        return $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
             ->when(
-                $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),
-                function ($query) {
+                is_null($filter['status']) && !$this->auth->user()?->can('admin.categories.view'),
+                function (Builder|Category $query) {
                     return $query->active();
                 },
-                function ($query) use ($filter) {
+                function (Builder|Category $query) use ($filter) {
                     return $query->filterStatus($filter['status']);
                 }
             )
             ->poliType()
+            ->filterSearch($filter['search'])
+            ->filterExcept($filter['except'])
             ->filterParent($filter['parent'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
+            ->when(is_null($filter['orderby']), function (Builder|Category $query) use ($filter) {
                 return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
@@ -89,13 +93,13 @@ class CategoryRepo
      */
     public function getAsTree(): Collection
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
-        return  $this->category->poliType()
+        /** @var ClosureTableCollection */
+        $categories = $this->category->newQuery()
+            ->poliType()
             ->orderBy('position', 'asc')
-            ->get()
-            ->toTree();
+            ->get();
+
+        return $categories->toTree();
     }
 
     /**
@@ -104,30 +108,26 @@ class CategoryRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
-        return $this->category->whereNotIn(
-            'id',
-            $this->category->descendants()
-                ->get(['id'])
-                ->pluck('id')
-                ->toArray()
-        )
-        ->poliType()
-        ->orderBy('position', 'asc')
-        ->get()
-        ->toTree();
+        /** @var ClosureTableCollection */
+        $categories = $this->category->newQuery()
+            ->whereNotIn('id', $this->category->descendants()->pluck('id')->toArray())
+            ->poliType()
+            ->orderBy('position', 'asc')
+            ->get();
+
+        return $categories->toTree();
     }
 
     /**
-     * [getBySearch description]
-     * @param  string     $name [description]
-     * @return Collection|null       [description]
+     *
+     * @param string $name
+     * @return Collection
+     * @throws InvalidArgumentException
      */
-    public function getBySearch(string $name)
+    public function getBySearch(string $name): Collection
     {
-        return $this->category->withAncestorsExceptSelf()
+        return $this->category->newQuery()
+            ->withAncestorsExceptSelf()
             ->search($name)
             ->active()
             ->poliType()
@@ -142,10 +142,7 @@ class CategoryRepo
      */
     public function getAncestorsAsArray(): array
     {
-        return $this->category->ancestors()
-            ->get(['id'])
-            ->pluck('id')
-            ->toArray();
+        return $this->category->ancestors()->pluck('id')->toArray();
     }
 
     /**
@@ -154,10 +151,7 @@ class CategoryRepo
      */
     public function getDescendantsAsArray(): array
     {
-        return $this->category->descendants()
-            ->get(['id'])
-            ->pluck('id')
-            ->toArray();
+        return $this->category->descendants()->pluck('id')->toArray();
     }
 
     /**
@@ -167,7 +161,7 @@ class CategoryRepo
     public function paginatePosts(): LengthAwarePaginator
     {
         if (!method_exists($this->category, 'morphs')) {
-            throw new \Exception('Entity must be polimorphic.');
+            throw new \Exception('Entity must be polymorphic.');
         }
 
         return $this->category->morphs()
@@ -183,10 +177,11 @@ class CategoryRepo
      */
     public function getWithRecursiveChildrens(): Collection
     {
-        return $this->category->withRecursiveAllRels()
+        return $this->category->newQuery()
+            ->withRecursiveAllRels()
             ->withCount([
                 'morphs' => function ($query) {
-                    $query->active();
+                    return $query->active();
                 }
             ])
             ->poliType()
@@ -201,9 +196,10 @@ class CategoryRepo
      * @param  string $slug [description]
      * @return Category|null       [description]
      */
-    public function firstBySlug(string $slug)
+    public function firstBySlug(string $slug): ?Category
     {
-        return $this->category->where('slug', $slug)
+        return $this->category->newQuery()
+            ->where('slug', $slug)
             ->poliType()
             ->active()
             ->withAncestorsExceptSelf()
@@ -229,7 +225,8 @@ class CategoryRepo
      */
     public function chunkActiveWithModelsCount(Closure $closure): bool
     {
-        return $this->category->active()
+        return $this->category->newQuery()
+            ->active()
             ->poliType()
             ->withCount(['morphs AS models_count' => function ($query) {
                 $query->active();
@@ -244,8 +241,9 @@ class CategoryRepo
      */
     public function countByStatus(): Collection
     {
-        return $this->category->poliType()
+        return $this->category->newQuery()
             ->selectRaw("`status`, COUNT(`id`) AS `count`")
+            ->poliType()
             ->groupBy('status')
             ->get();
     }

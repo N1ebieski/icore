@@ -19,7 +19,9 @@
 namespace N1ebieski\ICore\Repositories\User;
 
 use N1ebieski\ICore\Models\User;
-use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
+use N1ebieski\ICore\Models\Token\PersonalAccessToken;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserRepo
@@ -44,21 +46,22 @@ class UserRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->user->selectRaw("`{$this->user->getTable()}`.*")
-            ->filterSearch($filter['search'])
-            ->filterExcept($filter['except'])
+        return $this->user->newQuery()
+            ->selectRaw("`{$this->user->getTable()}`.*")
             ->when(
-                $filter['status'] === null && !optional($this->auth->user())->can('admin.users.view'),
-                function ($query) {
-                    $query->active();
+                is_null($filter['status']) && !$this->auth->user()?->can('admin.users.view'),
+                function (Builder|User $query) {
+                    return $query->active();
                 },
-                function ($query) use ($filter) {
-                    $query->filterStatus($filter['status']);
+                function (Builder|User $query) use ($filter) {
+                    return $query->filterStatus($filter['status']);
                 }
             )
+            ->filterSearch($filter['search'])
+            ->filterExcept($filter['except'])
             ->filterRole($filter['role'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(is_null($filter['orderby']), function (Builder|User $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->with(['roles', 'socialites'])
@@ -83,19 +86,21 @@ class UserRepo
      */
     public function paginateTokensByFilter(array $filter): LengthAwarePaginator
     {
-        /**
-         * @var \N1ebieski\ICore\Models\Token\PersonalAccessToken $token
-         */
-        $token = $this->user->tokens()->make();
+        /** @var Builder|PersonalAccessToken */
+        $tokens = $this->user->tokens();
 
-        return $this->user->tokens()
-            ->selectRaw("`{$token->getTable()}`.*")
+        /**
+         * @var PersonalAccessToken $token
+         */
+        $token = $tokens->make();
+
+        return $tokens->selectRaw("`{$token->getTable()}`.*")
             ->whereJsonDoesntContain('abilities', 'refresh')
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when($filter['orderby'] === null, function (Builder|PersonalAccessToken $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);

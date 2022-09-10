@@ -27,6 +27,30 @@ use N1ebieski\ICore\Services\Socialite\SocialiteService;
 use N1ebieski\ICore\Repositories\Socialite\SocialiteRepo;
 use N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory;
 
+/**
+ * N1ebieski\ICore\Models\Socialite
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $provider_name
+ * @property string|null $provider_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string $updated_at_diff
+ * @property-read \N1ebieski\ICore\Models\User $user
+ * @method static \N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereProviderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereProviderName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Socialite extends Model
 {
     use HasCarbonable;

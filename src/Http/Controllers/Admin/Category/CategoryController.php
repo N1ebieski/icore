@@ -86,14 +86,22 @@ class CategoryController implements Polymorphic
      */
     public function store(Category $category, StoreRequest $request): JsonResponse
     {
-        $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
+        $category->makeService()->create($request->validated());
+
+        $parent = null;
+
+        if (!is_null($request->input('parent_id'))) {
+            /** @var Category|null */
+            $parent = $category->find($request->input('parent_id'));
+        }
 
         $request->session()->flash(
             'success',
+            // @phpstan-ignore-next-line
             Lang::get('icore::categories.success.store') . (
-                $request->input('parent_id') !== null ?
+                !is_null($request->input('parent_id')) ?
                     Lang::get('icore::categories.success.store_parent', [
-                        'parent' => $category->find($request->input('parent_id'))->name
+                        'parent' => $parent?->name
                     ])
                     : null
             )
@@ -111,14 +119,20 @@ class CategoryController implements Polymorphic
      */
     public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse
     {
-        $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
+        $category->makeService()->createGlobal($request->validated());
+
+        if (!is_null($request->input('parent_id'))) {
+            /** @var Category|null */
+            $parent = $category->find($request->input('parent_id'));
+        }
 
         $request->session()->flash(
             'success',
+            // @phpstan-ignore-next-line
             Lang::get('icore::categories.success.store_global') . (
-                $request->input('parent_id') !== null ?
+                !is_null($request->input('parent_id')) ?
                     Lang::get('icore::categories.success.store_parent', [
-                        'parent' => $category->find($request->input('parent_id'))->name
+                        'parent' => $parent?->name
                     ])
                     : null
             )

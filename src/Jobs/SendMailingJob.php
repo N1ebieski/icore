@@ -83,7 +83,7 @@ class SendMailingJob implements ShouldQueue
                     $this->app->make(MailingMail::class, ['mailingEmail' => $this->mailingEmail])
                 );
 
-                $this->mailingEmail->makeRepo()->markAsSent();
+                $this->mailingEmail->makeService()->markAsSent();
             }
         }
     }
@@ -96,6 +96,6 @@ class SendMailingJob implements ShouldQueue
      */
     public function failed(Throwable $exception)
     {
-        $this->mailingEmail->makeRepo()->markAsError();
+        $this->mailingEmail->makeService()->markAsError();
     }
 }

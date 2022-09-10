@@ -183,7 +183,7 @@
 
                             <div class="form-group row mb-0">
                                 <div class="col-lg-6 offset-lg-4">
-                                    @render('icore::captchaComponent')
+                                    <x-icore::captcha-component />
                                     <button type="submit" class="btn btn-primary">
                                         {{ trans('icore::auth.register') }}
                                     </button>

@@ -42,9 +42,70 @@ use N1ebieski\ICore\Database\Factories\User\UserFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 
 /**
+ * N1ebieski\ICore\Models\User
+ *
  * @property string $name
  * @property Status $status
  * @property Marketing $marketing
+ * @method \N1ebieski\ICore\Models\Token\PersonalAccessToken currentAccessToken()
+ * @property int $id
+ * @property string|null $ip
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string|null $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \N1ebieski\ICore\Models\BanModel\BanModel|null $ban
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\MailingEmail\MailingEmail[] $emails
+ * @property-read int|null $emails_count
+ * @property-read string $created_at_diff
+ * @property-read string $short_name
+ * @property-read string $updated_at_diff
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Post[] $posts
+ * @property-read int|null $posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Role[] $roles
+ * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Socialite[] $socialites
+ * @property-read int|null $socialites_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Token\PersonalAccessToken[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static Builder|User active()
+ * @method static \N1ebieski\ICore\Database\Factories\User\UserFactory factory(...$parameters)
+ * @method static Builder|User filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
+ * @method static Builder|User filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
+ * @method static Builder|User filterExcept(?array $except = null)
+ * @method static Builder|User filterOrderBy(?string $orderby = null)
+ * @method static Builder|User filterOrderBySearch(?string $search = null)
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator filterPaginate(?int $paginate = null)
+ * @method static Builder|User filterReport(?int $report = null)
+ * @method static Builder|User filterRole(?\N1ebieski\ICore\Models\Role $role = null)
+ * @method static Builder|User filterSearch(?string $search = null)
+ * @method static Builder|User filterStatus(?int $status = null)
+ * @method static Builder|User marketing()
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User orderBySearch(string $term)
+ * @method static Builder|User permission($permissions)
+ * @method static Builder|User query()
+ * @method static Builder|User role($roles, $guard = null)
+ * @method static Builder|User search(string $term)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereEmailVerifiedAt($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereIp($value)
+ * @method static Builder|User whereMarketing($value)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereRememberToken($value)
+ * @method static Builder|User whereStatus($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

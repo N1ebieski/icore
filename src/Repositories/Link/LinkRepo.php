@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Repositories\Link;
 
 use N1ebieski\ICore\Models\Link;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Link\Type;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -49,7 +50,8 @@ class LinkRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->link->where('type', $filter['type'])
+        return $this->link->newQuery()
+            ->where('type', $filter['type'])
             ->filterExcept($filter['except'])
             ->orderBy('position', 'asc')
             ->paginate($this->config->get('database.paginate'));
@@ -62,13 +64,15 @@ class LinkRepo
      */
     public function getAvailableBacklinksByCats(array $ids): Collection
     {
-        return $this->link->where('type', 'backlink')
-            ->where(function ($query) use ($ids) {
-                $query->whereDoesntHave('categories')
-                    ->orWhereHas('categories', function ($query) use ($ids) {
-                        $query->whereIn('id', array_values($ids));
+        return $this->link->newQuery()
+            ->where('type', 'backlink')
+            ->where(function (Builder $query) use ($ids) {
+                return $query->whereDoesntHave('categories')
+                    ->orWhereHas('categories', function (Builder $query) use ($ids) {
+                        return $query->whereIn('id', array_values($ids));
                     });
-            })->orderBy('position', 'asc')
+            })
+            ->orderBy('position', 'asc')
             ->get();
     }
 
@@ -88,22 +92,23 @@ class LinkRepo
      */
     public function getLinksByComponent(array $component): Collection
     {
-        return $this->link->where('type', Type::LINK)
-            ->when($component['home'] === true, function ($query) {
+        return $this->link->newQuery()
+            ->where('type', Type::LINK)
+            ->when($component['home'] === true, function (Builder $query) {
                 return $query->whereDoesntHave('categories')
-                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {
+                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
                         return $query->orWhere('home', true);
                     });
-            }, function ($query) {
-                return $query->where(function ($query) {
+            }, function (Builder $query) {
+                return $query->where(function (Builder $query) {
                     return $query->whereDoesntHave('categories')
-                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {
+                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
                             return $query->where('home', false);
                         });
                 });
             })
-            ->when($component['cats'] !== null, function ($query) use ($component) {
-                return $query->orWhereHas('categories', function ($query) use ($component) {
+            ->when($component['cats'] !== null, function (Builder $query) use ($component) {
+                return $query->orWhereHas('categories', function (Builder $query) use ($component) {
                     return $query->whereIn('id', $component['cats']);
                 });
             })

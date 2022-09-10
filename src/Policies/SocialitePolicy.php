@@ -31,9 +31,9 @@ class SocialitePolicy
      *
      * @param User $current_user
      * @param Socialite $socialite
-     * @return void
+     * @return bool
      */
-    public function delete(User $current_user, Socialite $socialite)
+    public function delete(User $current_user, Socialite $socialite): bool
     {
         return $current_user->id === $socialite->user_id;
     }

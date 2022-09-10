@@ -27,8 +27,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Newsletter\NewsletterFactory;
 
 /**
+ * N1ebieski\ICore\Models\Newsletter
+ *
  * @property Status $status
  * @property NewsletterToken $token
+ * @property int $id
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static Builder|Newsletter active()
+ * @method static \N1ebieski\ICore\Database\Factories\Newsletter\NewsletterFactory factory(...$parameters)
+ * @method static Builder|Newsletter newModelQuery()
+ * @method static Builder|Newsletter newQuery()
+ * @method static Builder|Newsletter query()
+ * @method static Builder|Newsletter whereCreatedAt($value)
+ * @method static Builder|Newsletter whereEmail($value)
+ * @method static Builder|Newsletter whereId($value)
+ * @method static Builder|Newsletter whereStatus($value)
+ * @method static Builder|Newsletter whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Newsletter extends Model
 {

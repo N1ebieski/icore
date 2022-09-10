@@ -19,21 +19,28 @@
 namespace N1ebieski\ICore\Services\Mailing;
 
 use Throwable;
+use RuntimeException;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 
 class MailingService
 {
     /**
-     * Undocumented function
      *
      * @param Mailing $mailing
      * @param DB $db
+     * @param Carbon $carbon
+     * @return void
      */
     public function __construct(
         protected Mailing $mailing,
-        protected DB $db
+        protected DB $db,
+        protected Carbon $carbon
     ) {
         //
     }
@@ -53,6 +60,7 @@ class MailingService
             $this->mailing->status = $attributes['status'];
 
             if ($this->mailing->status->isScheduled()) {
+                // @phpstan-ignore-next-line
                 $this->mailing->activation_at =
                     $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }
@@ -85,6 +93,7 @@ class MailingService
             $this->mailing->status = $attributes['status'];
 
             if ($this->mailing->status->isScheduled()) {
+                // @phpstan-ignore-next-line
                 $this->mailing->activation_at =
                     $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }
@@ -94,7 +103,7 @@ class MailingService
 
                 /** @var MailingEmail */
                 $mailingEmail = $this->mailing->emails()->make();
-    
+
                 $mailingEmail->makeService()->createGlobal($attributes);
             }
 
@@ -154,6 +163,63 @@ class MailingService
     {
         return $this->db->transaction(function () use ($ids) {
             return $this->mailing->whereIn('id', $ids)->delete();
+        });
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function activateScheduled(): int
+    {
+        return $this->db->transaction(function () {
+            return $this->mailing->newQuery()
+                ->whereDate('activation_at', '<', $this->carbon->now()->format('Y-m-d'))
+                ->orWhere(function (Builder $query) {
+                    return $query->whereDate('activation_at', '=', $this->carbon->now()->format('Y-m-d'))
+                        ->whereTime('activation_at', '<=', $this->carbon->now()->format('H:i:s'));
+                })
+                ->scheduled()
+                ->update(['status' => Status::ACTIVE]);
+        });
+    }
+
+    /**
+     *
+     * @return int
+     * @throws RuntimeException
+     * @throws MassAssignmentException
+     */
+    public function deactivateCompleted(): int
+    {
+        return $this->db->transaction(function () {
+            return $this->mailing->newQuery()
+                ->progress()
+                ->whereDoesntHave('emails', function ($query) {
+                    return $query->unsent();
+                })
+                ->update([
+                    'status' => Status::INACTIVE,
+                    'activation_at' => null
+                ]);
+        });
+    }
+
+    /**
+     *
+     * @return int
+     * @throws RuntimeException
+     * @throws MassAssignmentException
+     */
+    public function progressActivated(): int
+    {
+        return $this->db->transaction(function () {
+            return $this->mailing->newQuery()
+                ->active()
+                ->whereHas('emails', function ($query) {
+                    return $query->unsent();
+                })
+                ->update(['status' => Status::INPROGRESS]);
         });
     }
 }

@@ -39,7 +39,8 @@ class SocialiteRepo
      */
     public function firstByProvider(string $name, string $id): ?Socialite
     {
-        return $this->socialite->where('provider_name', $name)
+        return $this->socialite->newQuery()
+            ->where('provider_name', $name)
             ->where('provider_id', $id)
             ->first();
     }

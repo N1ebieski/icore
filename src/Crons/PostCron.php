@@ -46,6 +46,6 @@ class PostCron
      */
     private function publicateScheduled(): int
     {
-        return $this->post->makeRepo()->activateScheduled();
+        return $this->post->makeService()->activateScheduled();
     }
 }

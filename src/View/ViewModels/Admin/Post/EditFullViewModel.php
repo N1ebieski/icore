@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\ViewModels\Admin\Post;
 
 use Illuminate\Http\Request;
@@ -13,61 +29,22 @@ use Illuminate\Contracts\Config\Repository as Config;
 class EditFullViewModel extends ViewModel
 {
     /**
-     * [$category description]
      *
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     * [$post description]
-     *
-     * @var Post
-     */
-    public $post;
-
-    /**
-     * Undocumented variable
-     *
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * [$config description]
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     *
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * Undocumented function
-     *
-     * @param Category $category
      * @param Post $post
+     * @param Category $category
      * @param User $user
      * @param Config $config
      * @param Request $request
+     * @return void
      */
     public function __construct(
-        Category $category,
-        Post $post,
-        User $user,
-        Config $config,
-        Request $request
+        public Post $post,
+        protected Category $category,
+        protected User $user,
+        protected Config $config,
+        protected Request $request
     ) {
-        $this->category = $category;
-        $this->post = $post;
-        $this->user = $user;
-
-        $this->config = $config;
-        $this->request = $request;
+        //
     }
 
     /**

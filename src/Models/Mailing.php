@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\App;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Exceptions\InvalidFormatException;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
@@ -34,7 +35,53 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
 
 /**
+ * N1ebieski\ICore\Models\Mailing
+ *
  * @property Status $status
+ * @property int $id
+ * @property string $title
+ * @property string $content_html
+ * @property string|null $content
+ * @property \Illuminate\Support\Carbon|null $activation_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\MailingEmail\MailingEmail[] $emails
+ * @property-read int|null $emails_count
+ * @property-read string $activation_at_diff
+ * @property-read string $created_at_diff
+ * @property-read int|null $progress_failed
+ * @property-read int|null $progress_success
+ * @property-read string $replacement_content
+ * @property-read string $replacement_content_html
+ * @property-read string $short_content
+ * @property-read string $updated_at_diff
+ * @method static Builder|Mailing active()
+ * @method static \N1ebieski\ICore\Database\Factories\Mailing\MailingFactory factory(...$parameters)
+ * @method static Builder|Mailing filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
+ * @method static Builder|Mailing filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
+ * @method static Builder|Mailing filterExcept(?array $except = null)
+ * @method static Builder|Mailing filterOrderBy(?string $orderby = null)
+ * @method static Builder|Mailing filterOrderBySearch(?string $search = null)
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator filterPaginate(?int $paginate = null)
+ * @method static Builder|Mailing filterReport(?int $report = null)
+ * @method static Builder|Mailing filterSearch(?string $search = null)
+ * @method static Builder|Mailing filterStatus(?int $status = null)
+ * @method static Builder|Mailing newModelQuery()
+ * @method static Builder|Mailing newQuery()
+ * @method static Builder|Mailing orderBySearch(string $term)
+ * @method static Builder|Mailing progress()
+ * @method static Builder|Mailing query()
+ * @method static Builder|Mailing scheduled()
+ * @method static Builder|Mailing search(string $term)
+ * @method static Builder|Mailing whereActivationAt($value)
+ * @method static Builder|Mailing whereContent($value)
+ * @method static Builder|Mailing whereContentHtml($value)
+ * @method static Builder|Mailing whereCreatedAt($value)
+ * @method static Builder|Mailing whereId($value)
+ * @method static Builder|Mailing whereStatus($value)
+ * @method static Builder|Mailing whereTitle($value)
+ * @method static Builder|Mailing whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Mailing extends Model
 {
@@ -229,10 +276,12 @@ class Mailing extends Model
     // Mutators
 
     /**
-     * [setActivationAtAttribute description]
-     * @param [type] $value [description]
+     *
+     * @param null|string $value
+     * @return void
+     * @throws InvalidFormatException
      */
-    public function setActivationAtAttribute($value): void
+    public function setActivationAtAttribute(?string $value): void
     {
         if ($value === null) {
             $this->attributes['activation_at'] = null;
@@ -243,10 +292,11 @@ class Mailing extends Model
     }
 
     /**
-     * [setContentAttribute description]
-     * @param [type] $value [description]
+     *
+     * @param null|string $value
+     * @return void
      */
-    public function setContentAttribute($value): void
+    public function setContentAttribute(?string $value): void
     {
         $this->attributes['content'] = !empty($value) ?
             strip_tags(str_replace('[more]', '', $value))

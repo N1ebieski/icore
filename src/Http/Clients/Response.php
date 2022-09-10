@@ -39,6 +39,7 @@ abstract class Response
      */
     protected function setParameters($parameters, array $names = [])
     {
+        // @phpstan-ignore-next-line
         foreach ($parameters as $key => $value) {
             if (!is_array($value) || !$this->isContainsStringKey($value)) {
                 $this->set(implode('.', array_merge($names, [$key])), $value);

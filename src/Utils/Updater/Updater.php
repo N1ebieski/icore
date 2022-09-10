@@ -110,14 +110,14 @@ class Updater
                     foreach ($pattern['actions'] as $action) {
                         $contents = $this->str->of($contents);
 
-                        if ($matches = $contents->matchAll($action['search'])) {
-                            if ($matches->isEmpty()) {
-                                continue;
-                            }
+                        $matches = $contents->matchAll($action['search']);
 
-                            $contents = $this->actionFactory->makeAction($action)
-                                ->handle($contents, $matches->toArray());
+                        if ($matches->isEmpty()) {
+                            continue;
                         }
+
+                        $contents = $this->actionFactory->makeAction($action)
+                            ->handle($contents, $matches->toArray());
                     }
 
                     $this->filesystem->put($filename, $contents);

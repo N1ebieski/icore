@@ -19,10 +19,12 @@
 namespace N1ebieski\ICore\Repositories\Comment;
 
 use N1ebieski\ICore\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use N1ebieski\ICore\Models\Rating\Rating;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CommentRepo
 {
@@ -42,30 +44,31 @@ class CommentRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->comment->selectRaw("`{$this->comment->getTable()}`.*")
-            ->poliType()
-            ->filterExcept($filter['except'])
-            ->when($filter['search'] !== null, function ($query) use ($filter) {
-                $query->filterSearch($filter['search'])
-                    ->when(array_key_exists('user', $this->comment->search), function ($query) {
+        return $this->comment->newQuery()
+            ->selectRaw("`{$this->comment->getTable()}`.*")
+            ->when(!is_null($filter['search']), function (Builder|Comment $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when(array_key_exists('user', $this->comment->search), function (Builder $query) {
                         $user = $this->comment->user()->make();
 
                         $columns = implode(',', $user->searchable);
 
-                        $query->leftJoin('users', function ($query) {
-                            $query->on('users.id', '=', 'comments.user_id');
+                        return $query->leftJoin('users', function (JoinClause $query) {
+                            return $query->on('users.id', '=', 'comments.user_id');
                         })
                         ->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", [
                             $this->comment->search['user']
                         ]);
                     });
             })
+            ->poliType()
+            ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->filterCensored($filter['censored'])
             ->filterReport($filter['report'])
             ->filterAuthor($filter['author'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(is_null($filter['orderby']), function ($query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->with(['morph', 'user'])
@@ -98,9 +101,11 @@ class CommentRepo
      */
     public function paginateChildrensByFilter(array $filter): LengthAwarePaginator
     {
-        /** @var LengthAwarePaginator<Comment> */
-        return $this->comment->childrens()
-            ->active()
+        /** @var Comment */
+        $childrens = $this->comment->childrens();
+
+        // @phpstan-ignore-next-line
+        return $childrens->active()
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
             ->filterCommentsOrderBy($filter['orderby'])
@@ -149,25 +154,26 @@ class CommentRepo
      */
     public function getByComponent(array $component): Collection
     {
-        return $this->comment->active()
+        return $this->comment->newQuery()
+            ->active()
             ->uncensored()
             ->whereHasMorph('morph', [$this->comment->model_type], function ($query) {
-                $query->active();
+                return $query->active();
             })
-            ->with(['morph', 'user'])
-            ->when($component['orderby'] === 'rand', function ($query) {
+            ->when($component['orderby'] === 'rand', function (Builder|Comment $query) {
                 return $query->inRandomOrder();
-            }, function ($query) use ($component) {
+            }, function (Builder|Comment $query) use ($component) {
                 return $query->filterOrderBy($component['orderby']);
             })
             ->limit($component['limit'])
+            ->with(['morph', 'user'])
             ->get()
-            ->map(function ($item) use ($component) {
+            ->map(function (Comment $comment) use ($component) {
                 if ($component['max_content'] !== null) {
-                    $item->content = mb_substr($item->content, 0, $component['max_content']) . '...';
+                    $comment->content = mb_substr($comment->content, 0, $component['max_content']) . '...';
                 }
 
-                return $item;
+                return $comment;
             });
     }
 }

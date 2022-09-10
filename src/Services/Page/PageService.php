@@ -92,6 +92,7 @@ class PageService
             $this->page->user()->associate($attributes['user']);
 
             if ($attributes['parent_id'] !== null) {
+                /** @var Page */
                 $parent = $this->page->findOrFail($attributes['parent_id']);
                 // If the parent is inactive, the child must inherit this state
                 $this->page->status = $parent->status->isInactive() ?
@@ -187,18 +188,19 @@ class PageService
     public function moveToParent(int $parent_id): bool
     {
         return $this->db->transaction(function () use ($parent_id) {
-            if ($parent = $this->page->findOrFail($parent_id)) {
-                // In the case of changing the parent, we must prophylactically
-                // change the status of the category (and descendants) to the same
-                // as the parent to avoid the situation where the subcategory
-                // is active and the parent is not.
-                $this->page->update(['status' => $parent->status]);
-                $this->page->descendants()->update(['status' => $parent->status]);
+            /** @var Page */
+            $parent = $this->page->findOrFail($parent_id);
 
-                $this->page->moveTo(0, $parent_id);
+            // In the case of changing the parent, we must prophylactically
+            // change the status of the category (and descendants) to the same
+            // as the parent to avoid the situation where the subcategory
+            // is active and the parent is not.
+            $this->page->update(['status' => $parent->status]);
+            $this->page->descendants()->update(['status' => $parent->status]);
 
-                return true;
-            }
+            $this->page->moveTo(0, $parent_id);
+
+            return true;
         });
     }
 
@@ -270,7 +272,10 @@ class PageService
             $deleted = 0;
 
             foreach ($ids as $id) {
-                if ($p = $this->page->find($id)) {
+                /** @var Page|null */
+                $p = $this->page->find($id);
+
+                if (!is_null($p)) {
                     $p->makeService()->delete();
 
                     $deleted += 1;

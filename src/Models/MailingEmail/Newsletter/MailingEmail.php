@@ -20,6 +20,35 @@ namespace N1ebieski\ICore\Models\MailingEmail\Newsletter;
 
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail as BaseMailingEmail;
 
+/**
+ * N1ebieski\ICore\Models\MailingEmail\Newsletter\MailingEmail
+ *
+ * @property int $id
+ * @property int $mailing_id
+ * @property string $model_type
+ * @property int|null $model_id
+ * @property string $email
+ * @property \N1ebieski\ICore\ValueObjects\MailingEmail\Sent $sent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $poli
+ * @property-read \N1ebieski\ICore\Models\Mailing $mailing
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $morph
+ * @method static \N1ebieski\ICore\Database\Factories\MailingEmail\MailingEmailFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail query()
+ * @method static Builder|MailingEmail unsent()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereMailingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereSent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class MailingEmail extends BaseMailingEmail
 {
     // Configuration

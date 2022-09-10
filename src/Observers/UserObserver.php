@@ -52,37 +52,35 @@ class UserObserver
     }
 
     /**
-     * Undocumented function
      *
      * @param User $user
-     * @param [type] $relationName
-     * @param [type] $pivotIds
-     * @param [type] $pivotIdsAttributes
+     * @param mixed $relationName
+     * @param mixed $pivotIds
+     * @param mixed $pivotIdsAttributes
      * @return void
      */
     public function pivotAttached(User $user, $relationName, $pivotIds, $pivotIdsAttributes)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
             $this->updated($user);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 
     /**
-     * Undocumented function
      *
      * @param User $user
-     * @param [type] $relationName
-     * @param [type] $pivotIds
+     * @param mixed $relationName
+     * @param mixed $pivotIds
      * @return void
      */
     public function pivotDetached(User $user, $relationName, $pivotIds)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['roles', 'socialites'])) {
             $this->updated($user);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 

@@ -32,12 +32,13 @@ class RateLoad
      */
     public function __construct(Request $request, protected Rating $rating)
     {
-        /**
-         * @var Comment
-         */
+        /** @var Comment */
         $comment = $request->route('comment');
 
-        $this->rating = $comment->makeRepo()->firstRatingByUser($request->user()) ?? $rating;
+        /** @var Rating|null */
+        $commentRating = $comment->makeRepo()->firstRatingByUser($request->user());
+
+        $this->rating = $commentRating ?? $rating;
     }
 
     /**

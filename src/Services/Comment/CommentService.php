@@ -48,8 +48,8 @@ class CommentService
     public function getRootsByFilter(array $filter): LengthAwarePaginator
     {
         return $this->paginateChildrens(
-            $this->comment->morph->makeRepo()
-                ->paginateCommentsByFilter($filter)
+            // @phpstan-ignore-next-line
+            $this->comment->morph->makeRepo()->paginateCommentsByFilter($filter)
         );
     }
 
@@ -158,7 +158,10 @@ class CommentService
             $deleted = 0;
 
             foreach ($ids as $id) {
-                if ($c = $this->comment->find($id)) {
+                /** @var Comment|null */
+                $c = $this->comment->find($id);
+
+                if (!is_null($c)) {
                     $c->makeService()->delete();
 
                     $deleted += 1;

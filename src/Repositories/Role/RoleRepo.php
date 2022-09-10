@@ -21,8 +21,8 @@ namespace N1ebieski\ICore\Repositories\Role;
 use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\ValueObjects\Role\Name;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RoleRepo
 {
@@ -45,8 +45,9 @@ class RoleRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->role->orderBy('id', 'asc')
+        return $this->role->newQuery()
             ->filterExcept($filter['except'])
+            ->orderBy('id', 'asc')
             ->paginate($this->config->get('database.paginate'));
     }
 
@@ -56,9 +57,7 @@ class RoleRepo
      */
     public function getAvailableNamesAsArray(): array
     {
-        return $this->getAvailable()
-            ->pluck('name')
-            ->toArray();
+        return $this->getAvailable()->pluck('name')->toArray();
     }
 
     /**
@@ -67,7 +66,7 @@ class RoleRepo
      */
     public function getAvailable(): Collection
     {
-        return $this->role->where('name', '<>', Name::SUPER_ADMIN)->get();
+        return $this->role->newQuery()->where('name', '<>', Name::SUPER_ADMIN)->get();
     }
 
     /**
@@ -76,6 +75,6 @@ class RoleRepo
      */
     public function getIdsAsArray(): array
     {
-        return $this->role->get('id')->pluck('id')->toArray();
+        return $this->role->newQuery()->pluck('id')->toArray();
     }
 }

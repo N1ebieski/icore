@@ -19,7 +19,7 @@
 namespace N1ebieski\ICore\Observers\Rating\Comment;
 
 use Illuminate\Support\Facades\Cache;
-use N1ebieski\ICore\Models\Rating\Rating;
+use N1ebieski\ICore\Models\Rating\Comment\Rating;
 
 class RatingObserver
 {

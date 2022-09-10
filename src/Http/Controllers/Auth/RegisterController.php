@@ -12,13 +12,10 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use N1ebieski\ICore\ValueObjects\User\Marketing;
-use N1ebieski\ICore\Http\Requests\Traits\HasCaptcha;
 use N1ebieski\ICore\Http\Requests\Auth\Register\StoreRequest;
 
 class RegisterController extends Controller
 {
-    use HasCaptcha;
-
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -70,7 +67,7 @@ class RegisterController extends Controller
 
         return Validator::make(
             $data,
-            array_merge($register->rules(), $this->prepareCaptchaRules()),
+            $register->rules(),
         );
     }
 

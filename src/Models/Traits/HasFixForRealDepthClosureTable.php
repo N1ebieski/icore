@@ -31,12 +31,11 @@ trait HasFixForRealDepthClosureTable
      */
     public function getNextRealDepth(): int
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
+        // @phpstan-ignore-next-line
         $parent = $this->find($this->parent_id);
 
-        return is_int(optional($parent)->real_depth) ? $parent->real_depth + 1 : 0;
+        // @phpstan-ignore-next-line
+        return is_int($parent?->real_depth) ? $parent->real_depth + 1 : 0;
     }
 
     /**

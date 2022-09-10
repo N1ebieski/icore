@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Composers;
 
 use Illuminate\View\View;
@@ -12,42 +28,19 @@ use Illuminate\Contracts\Routing\UrlGenerator as Url;
 class LayoutComposer extends Composer
 {
     /**
-     * [private description]
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * [private description]
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * [private description]
-     * @var Str
-     */
-    protected $str;
-
-    /**
-     * [private description]
-     * @var Url
-     */
-    protected $url;
-
-    /**
      * [__construct description]
      * @param Request $request [description]
      * @param Config  $config  [description]
      * @param Str     $str     [description]
      * @param Url     $url     [description]
      */
-    public function __construct(Request $request, Config $config, Str $str, Url $url)
-    {
-        $this->request = $request;
-        $this->config = $config;
-        $this->str = $str;
-        $this->url = $url;
+    public function __construct(
+        protected Request $request,
+        protected Config $config,
+        protected Str $str,
+        protected Url $url
+    ) {
+        //
     }
 
     /**

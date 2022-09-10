@@ -25,8 +25,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\NewsletterToken\NewsletterTokenFactory;
 
 /**
- * @property string $token
+ * N1ebieski\ICore\Models\NewsletterToken
  *
+ * @property string $token
+ * @property int $id
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Newsletter $newsletter
+ * @method static \N1ebieski\ICore\Database\Factories\NewsletterToken\NewsletterTokenFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken query()
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsletterToken whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class NewsletterToken extends Model
 {

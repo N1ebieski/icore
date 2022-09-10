@@ -18,6 +18,10 @@
 
 namespace N1ebieski\ICore\Utils\Updater\Schema\Interfaces;
 
+/**
+ * @property array $pattern
+ *
+ */
 interface SchemaInterface
 {
     //

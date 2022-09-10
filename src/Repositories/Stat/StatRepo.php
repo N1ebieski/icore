@@ -36,8 +36,8 @@ class StatRepo
      * @param  string $slug [description]
      * @return Stat|null       [description]
      */
-    public function firstBySlug(string $slug)
+    public function firstBySlug(string $slug): ?Stat
     {
-        return $this->stat->where('slug', $slug)->first();
+        return $this->stat->newQuery()->where('slug', $slug)->first();
     }
 }

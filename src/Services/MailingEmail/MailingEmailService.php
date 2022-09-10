@@ -160,6 +160,8 @@ class MailingEmailService
         $this->db->transaction(function () use ($attributes) {
             $id = $this->makeLastId() + 1;
 
+            $values = [];
+
             foreach ($attributes['recipients'] as $recipient) {
                 // Create attributes manually, no within model because multiple
                 // models may be huge performance impact
@@ -173,9 +175,9 @@ class MailingEmailService
                     'created_at' => $this->carbon->now(),
                     'updated_at' => $this->carbon->now()
                 ];
-
-                $this->mailingEmail->newQuery()->insertOrIgnore($values);
             }
+
+            $this->mailingEmail->newQuery()->insertOrIgnore($values);
         });
     }
 
@@ -189,6 +191,30 @@ class MailingEmailService
             return $this->mailingEmail
                 ->where('mailing_id', $this->mailingEmail->mailing->id)
                 ->delete();
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function markAsSent(): bool
+    {
+        return $this->db->transaction(function () {
+            return $this->mailingEmail->update(['sent' => Sent::SENT]);
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function markAsError(): bool
+    {
+        return $this->db->transaction(function () {
+            return $this->mailingEmail->update(['sent' => Sent::ERROR]);
         });
     }
 

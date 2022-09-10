@@ -21,7 +21,9 @@ namespace N1ebieski\ICore\Repositories\Permission;
 use InvalidArgumentException;
 use N1ebieski\ICore\Models\Role;
 use N1ebieski\ICore\Models\Permission;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PermissionRepo
 {
@@ -43,16 +45,16 @@ class PermissionRepo
     public function getByRole(Role $role): Collection
     {
         return $this->permission->with([
-                'roles' => function ($query) use ($role) {
-                    $query->where('id', $role->id);
+                'roles' => function (BelongsToMany $query) use ($role) {
+                    return $query->where('id', $role->id);
                 }
             ])
-            ->when($role->name->isUser(), function ($query) {
-                $query->where('name', 'like', 'web.%')
+            ->when($role->name->isUser(), function (Builder $query) {
+                return $query->where('name', 'like', 'web.%')
                     ->orWhere('name', 'like', 'api.%');
             })
-            ->when($role->name->isApi(), function ($query) {
-                $query->where('name', 'like', 'api.%');
+            ->when($role->name->isApi(), function (Builder $query) {
+                return $query->where('name', 'like', 'api.%');
             })
             ->orderBy('name', 'asc')
             ->get();

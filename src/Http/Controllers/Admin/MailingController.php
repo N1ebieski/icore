@@ -77,7 +77,9 @@ class MailingController
 
         return Response::redirectToRoute('admin.mailing.index')->with(
             'success',
-            Lang::get('icore::mailings.success.store', ['recipients' => $mailing->total])
+            Lang::get('icore::mailings.success.store', [
+                'recipients' => $mailing->emails()->count()
+            ])
         );
     }
 

@@ -58,15 +58,15 @@ class PostBuilder extends Builder
     protected $changefreq = 'daily';
 
     /**
-     * Undocumented function
-     *
-     * @param ArrayToXml $arrayToXml
-     * @param URL $url
-     * @param Carbon $carbon
-     * @param Storage $storage
-     * @param Config $config
-     * @param Collect $collect
-     * @param Page $page
+     * 
+     * @param ArrayToXml $arrayToXml 
+     * @param URL $url 
+     * @param Carbon $carbon 
+     * @param Storage $storage 
+     * @param Config $config 
+     * @param Collect $collect 
+     * @param Post $post 
+     * @return void 
      */
     public function __construct(
         ArrayToXml $arrayToXml,

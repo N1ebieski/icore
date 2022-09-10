@@ -27,6 +27,7 @@ use N1ebieski\ICore\Http\Resources\Socialite\SocialiteResource;
 
 /**
  * @mixin User
+ * @property int|null $depth
  */
 class UserResource extends JsonResource
 {

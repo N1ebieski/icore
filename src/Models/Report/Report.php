@@ -28,6 +28,36 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Report\ReportFactory;
 
+/**
+ * N1ebieski\ICore\Models\Report\Report
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $model_id
+ * @property string $model_type
+ * @property string $content
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string $poli
+ * @property-read string $updated_at_diff
+ * @property-read Model|\Eloquent $morph
+ * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @method static \N1ebieski\ICore\Database\Factories\Report\ReportFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report poli()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report poliType()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Report extends Model
 {
     use HasPolymorphic;

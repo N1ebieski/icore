@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 use Illuminate\Support\Facades\Route;
 use N1ebieski\ICore\Http\Controllers\Admin\PageController;
 
@@ -8,41 +24,41 @@ Route::match(['post', 'get'], 'pages/index', [PageController::class, 'index'])
     ->middleware('permission:admin.pages.view');
 
 Route::get('pages/{page}/edit', [PageController::class, 'edit'])
-    ->middleware('permission:admin.pages.edit')
     ->name('page.edit')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.edit');
 Route::put('pages/{page}', [PageController::class, 'update'])
     ->name('page.update')
-    ->middleware('permission:admin.pages.edit')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.edit');
 
 Route::get('pages/{page}/edit/full', [PageController::class, 'editFull'])
     ->name('page.edit_full')
-    ->middleware('permission:admin.pages.edit')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.edit');
 Route::put('pages/{page}/full', [PageController::class, 'updateFull'])
     ->name('page.update_full')
-    ->middleware('permission:admin.pages.edit')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.edit');
 
 Route::get('pages/{page}/edit/position', [PageController::class, 'editPosition'])
-    ->middleware('permission:admin.pages.edit')
     ->name('page.edit_position')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.edit');
 Route::patch('pages/{page}/position', [PageController::class, 'updatePosition'])
     ->name('page.update_position')
-    ->middleware('permission:admin.pages.edit')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.edit');
 
 Route::patch('pages/{page}', [PageController::class, 'updateStatus'])
     ->name('page.update_status')
-    ->middleware('permission:admin.pages.status')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.status');
 
 Route::delete('pages/{page}', [PageController::class, 'destroy'])
-    ->middleware('permission:admin.pages.delete')
     ->name('page.destroy')
-    ->where('page', '[0-9]+');
+    ->where('page', '[0-9]+')
+    ->middleware('permission:admin.pages.delete');
 Route::delete('pages', [PageController::class, 'destroyGlobal'])
     ->name('page.destroy_global')
     ->middleware('permission:admin.pages.delete');

@@ -16,16 +16,15 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-return [
-    'created_at' => 'Dodano',
-    'author' => 'Autor',
-    'reason' => 'Powód zgłoszenia',
-    'route' => [
-        'show' => 'Raporty',
-        'create' => 'Raportuj'
-    ],
-    'success' => [
-        'store' => 'Raport został zgłoszony moderacji. Dziękujemy.'
-    ],
-    'log_to_report' => 'Zaloguj się, by zaraportować'
-];
+namespace N1ebieski\ICore\Events\Inerfaces;
+
+use N1ebieski\ICore\Models\Comment\Comment;
+
+/**
+ * @property Comment $comment
+ *
+ */
+interface CommentEventInterface
+{
+    //
+}

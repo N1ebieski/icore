@@ -28,7 +28,25 @@ use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 
 /**
+ * N1ebieski\ICore\Models\Stat\Stat
+ *
  * @property Slug $slug
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string $poli
+ * @property-read string $updated_at_diff
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat poli()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat poliType()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stat whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Stat extends Model
 {

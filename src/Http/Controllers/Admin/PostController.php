@@ -42,13 +42,11 @@ use N1ebieski\ICore\Http\Requests\Admin\Post\DestroyGlobalRequest;
 class PostController
 {
     /**
-     * Display a listing of the Post.
      *
      * @param Post $post
-     * @param  Category        $category        [description]
-     * @param  IndexRequest    $request         [description]
-     * @param  IndexFilter     $filter          [description]
-     * @return HttpResponse                     [description]
+     * @param IndexRequest $request
+     * @param IndexFilter $filter
+     * @return HttpResponse
      */
     public function index(Post $post, IndexRequest $request, IndexFilter $filter): HttpResponse
     {

@@ -84,12 +84,18 @@ class PageController
             $request->safe()->merge(['user' => $request->user()])->toArray()
         );
 
+        if (!is_null($request->input('parent_id'))) {
+            /** @var Page|null */
+            $parent = $page->find($request->input('parent_id'));
+        }
+
         return Response::redirectToRoute('admin.page.index')->with(
             'success',
+            // @phpstan-ignore-next-line
             Lang::get('icore::pages.success.store') . (
-                $request->input('parent_id') !== null ?
+                !is_null($request->input('parent_id')) ?
                     Lang::get('icore::pages.success.store_parent', [
-                        'parent' => $page->find($request->input('parent_id'))->title
+                        'parent' => $parent?->title
                     ])
                     : null
             )

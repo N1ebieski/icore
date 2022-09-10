@@ -74,37 +74,35 @@ class PageObserver
     }
 
     /**
-     * Undocumented function
      *
      * @param Page $page
-     * @param [type] $relationName
-     * @param [type] $pivotIds
-     * @param [type] $pivotIdsAttributes
+     * @param mixed $relationName
+     * @param mixed $pivotIds
+     * @param mixed $pivotIdsAttributes
      * @return void
      */
     public function pivotAttached(Page $page, $relationName, $pivotIds, $pivotIdsAttributes)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['tags'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['tags'])) {
             $this->updated($page);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 
     /**
-     * Undocumented function
      *
      * @param Page $page
-     * @param [type] $relationName
-     * @param [type] $pivotIds
+     * @param mixed $relationName
+     * @param mixed $pivotIds
      * @return void
      */
     public function pivotDetached(Page $page, $relationName, $pivotIds)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['tags'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['tags'])) {
             $this->updated($page);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 

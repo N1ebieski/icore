@@ -66,22 +66,26 @@ class Mail extends Mailable
      */
     private function subcopy(): ?string
     {
-        return match ($this->mailingEmail->model_type) {
-            \N1ebieski\ICore\Models\User::class =>
-                $this->lang->get('icore::newsletter.subcopy.user', [
+        switch ($this->mailingEmail->model_type) {
+            case \N1ebieski\ICore\Models\User::class:
+                return $this->lang->get('icore::newsletter.subcopy.user', [
                     'cancel' => $this->url->route('web.profile.edit')
-                ]),
+                ]);
 
-            \N1ebieski\ICore\Models\Newsletter::class =>
-                $this->lang->get('icore::newsletter.subcopy.subscribe', [
+            case \N1ebieski\ICore\Models\Newsletter::class:
+                /** @var \N1ebieski\ICore\Models\Newsletter */
+                $morph = $this->mailingEmail->morph;
+
+                return $this->lang->get('icore::newsletter.subcopy.subscribe', [
                     'cancel' => $this->url->route('web.newsletter.update_status', [
-                        $this->mailingEmail->morph->id,
-                        'token' => $this->mailingEmail->morph->token->token,
-                        'status' => $this->mailingEmail->morph->status::INACTIVE
+                        $morph->id,
+                        'token' => $morph->token->token,
+                        'status' => $morph->status::INACTIVE
                     ]),
-                ]),
+                ]);
 
-            default => null
-        };
+            default:
+                return null;
+        }
     }
 }

@@ -22,6 +22,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\NewAccessToken;
 use Laravel\Sanctum\HasApiTokens as BaseHasApiTokens;
+use N1ebieski\ICore\Models\Token\PersonalAccessToken;
 
 trait HasApiTokens
 {
@@ -37,6 +38,7 @@ trait HasApiTokens
      */
     public function createToken(string $name, array $abilities = ['*'], int $expireMinutes = null)
     {
+        /** @var PersonalAccessToken */
         $token = $this->tokens()->create([
             'name' => $name,
             'token' => hash('sha256', $plainTextToken = Str::random(40)),

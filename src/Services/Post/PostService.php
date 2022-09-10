@@ -19,8 +19,10 @@
 namespace N1ebieski\ICore\Services\Post;
 
 use Throwable;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use Illuminate\Database\DatabaseManager as DB;
 
 class PostService
@@ -53,6 +55,7 @@ class PostService
             $this->post->content = $this->post->content_html;
 
             if (!$this->post->status->isInactive()) {
+                // @phpstan-ignore-next-line
                 $this->post->published_at =
                     $attributes['date_published_at'] . $attributes['time_published_at'];
             }
@@ -75,13 +78,14 @@ class PostService
 
     /**
      *
-     * @param int $attributes
+     * @param int $status
      * @return bool
      * @throws Throwable
      */
     public function updateStatus(int $status): bool
     {
         return $this->db->transaction(function () use ($status) {
+            // @phpstan-ignore-next-line
             $this->post->status = $status;
 
             if ($this->post->published_at === null) {
@@ -105,6 +109,7 @@ class PostService
             $this->post->content = $this->post->content_html;
 
             if (!$this->post->status->isInactive()) {
+                // @phpstan-ignore-next-line
                 $this->post->published_at =
                     $attributes['date_published_at'] . $attributes['time_published_at'];
             }
@@ -141,6 +146,24 @@ class PostService
             $this->post->content = $this->post->content_html;
 
             return $this->post->save();
+        });
+    }
+
+    /**
+     * [updateActivateScheduled description]
+     * @return int              [description]
+     */
+    public function activateScheduled(): int
+    {
+        return $this->db->transaction(function () {
+            return $this->post->newQuery()
+                ->whereDate('published_at', '<', $this->carbon->now()->format('Y-m-d'))
+                ->orWhere(function (Builder $query) {
+                    $query->whereDate('published_at', '=', $this->carbon->now()->format('Y-m-d'))
+                        ->whereTime('published_at', '<=', $this->carbon->now()->format('H:i:s'));
+                })
+                ->scheduled()
+                ->update(['status' => Status::ACTIVE]);
         });
     }
 

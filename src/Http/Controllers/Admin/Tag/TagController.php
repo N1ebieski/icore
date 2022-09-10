@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Admin\Tag;
 
+use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\URL;
 use N1ebieski\ICore\Models\Tag\Tag;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Services\Tag\TagService;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Validation\ValidationException;
 use N1ebieski\ICore\Filters\Admin\Tag\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Tag\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Tag\StoreRequest;
@@ -97,12 +99,12 @@ class TagController
     }
 
     /**
-     * Undocumented function
      *
      * @param Tag $tag
-     * @param TagService $tagService
      * @param UpdateRequest $request
      * @return JsonResponse
+     * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Tag $tag, UpdateRequest $request): JsonResponse
     {
