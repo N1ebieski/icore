@@ -73,9 +73,9 @@ class TokenService
 
     /**
      * [delete description]
-     * @return bool [description]
+     * @return bool|null [description]
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         $this->token->symlink()->delete();
 

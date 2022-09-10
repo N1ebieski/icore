@@ -18,7 +18,7 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Profile;
 
-use Illuminate\Support\Facades\Auth;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Foundation\Http\FormRequest;
@@ -46,10 +46,17 @@ class UpdateEmailRequest extends FormRequest
         // alercie, zamiast pojedynczych bledow pod inputami
         $this->session()->flash('alertErrors', 1);
 
+        /** @var User */
+        $user = $this->user();
+
         return [
             'email' => 'required|email|string|max:255|unique:users,email',
-            'password_confirmation' => [ function ($attribute, $value, $fail) {
-                if (!Hash::check($value, Auth::user()->password)) {
+            'password_confirmation' => [ function ($attribute, $value, $fail) use ($user) {
+                if (is_null($user->password)) {
+                    throw new \Exception('Password cannot be null');
+                }
+
+                if (!Hash::check($value, $user->password)) {
                     return $fail(Lang::get('icore::passwords.confirmation'));
                 }
             } , 'required', 'no_js_validation']

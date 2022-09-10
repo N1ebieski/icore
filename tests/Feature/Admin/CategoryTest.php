@@ -1,11 +1,29 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\Category\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -13,15 +31,16 @@ class CategoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testCategoryIndexAsGuest()
+    public function testCategoryIndexAsGuest(): void
     {
         $response = $this->get(route('admin.category.post.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryIndexWithoutPermission()
+    public function testCategoryIndexWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -31,11 +50,13 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCategoryIndexPaginate()
+    public function testCategoryIndexPaginate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $category = Category::makeFactory()->count(50)->active()->create();
+        /** @var array<Category> */
+        $categories = Category::makeFactory()->count(50)->active()->create();
 
         Auth::login($user);
 
@@ -48,20 +69,22 @@ class CategoryTest extends TestCase
 
         $response->assertViewIs('icore::admin.category.index');
         $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$category[30]->title, $category[30]->shortContent], false);
+        $response->assertSeeInOrder([$categories[30]->name], false);
     }
 
-    public function testCategoryUpdateStatusAsGuest()
+    public function testCategoryUpdateStatusAsGuest(): void
     {
         $response = $this->patch(route('admin.category.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryUpdateStatusWithoutPermission()
+    public function testCategoryUpdateStatusWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -71,8 +94,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCategoryUpdateStatus()
+    public function testNoexistCategoryUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -82,10 +106,12 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCategoryUpdateStatusValidationFail()
+    public function testCategoryUpdateStatusValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -97,37 +123,42 @@ class CategoryTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function testCategoryUpdateStatus()
+    public function testCategoryUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
 
         $response = $this->patch(route('admin.category.update_status', [$category->id]), [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['ancestors', 'descendants']);
+        $response->assertOk();
+        $response->assertJsonStructure(['ancestors', 'descendants']);
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 
-    public function testCategoryEditAsGuest()
+    public function testCategoryEditAsGuest(): void
     {
         $response = $this->get(route('admin.category.edit', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryEditWithoutPermission()
+    public function testCategoryEditWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -137,8 +168,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCategoryEdit()
+    public function testNoexistCategoryEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -148,32 +180,47 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCategoryEdit()
+    public function testCategoryEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.category.edit', [$category->id]));
 
-        $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString(route('admin.category.update', [$category->id]), $response->getData()->view);
-        $this->assertStringContainsString($category->name, $response->getData()->view);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            route('admin.category.update', [$category->id]),
+            $baseResponse->getData()->view
+        );
+        $this->assertStringContainsString(
+            $category->name,
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testCategoryUpdateAsGuest()
+    public function testCategoryUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.category.update', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryUpdateWithoutPermission()
+    public function testCategoryUpdateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -183,8 +230,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCategoryUpdate()
+    public function testNoexistCategoryUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -194,10 +242,12 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCategoryUpdateValidationFail()
+    public function testCategoryUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -209,10 +259,12 @@ class CategoryTest extends TestCase
         $response->assertSessionHasErrors(['name']);
     }
 
-    public function testRootCategoryUpdate()
+    public function testRootCategoryUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -221,8 +273,16 @@ class CategoryTest extends TestCase
             'name' => '<b>Kategoria</b> <script>Testowa</script>'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString('Kategoria Testowa', $response->getData()->view);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'Kategoria Testowa',
+            $baseResponse->getData()->view
+        );
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -231,12 +291,15 @@ class CategoryTest extends TestCase
         ]);
     }
 
-    public function testChildrenCategoryUpdate()
+    public function testChildrenCategoryUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $parent = Category::makeFactory()->active()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -246,8 +309,16 @@ class CategoryTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString('Kategoria Testowa', $response->getData()->view);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'Kategoria Testowa',
+            $baseResponse->getData()->view
+        );
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -262,15 +333,16 @@ class CategoryTest extends TestCase
         ]);
     }
 
-    public function testCategoryPostCreateAsGuest()
+    public function testCategoryPostCreateAsGuest(): void
     {
         $response = $this->get(route('admin.category.post.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryCreateWithoutPermission()
+    public function testCategoryCreateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -280,27 +352,37 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCategoryPostCreate()
+    public function testCategoryPostCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.category.post.create'));
 
-        $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString(route('admin.category.post.store'), $response->getData()->view);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            route('admin.category.post.store'),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testCategoryPostStoreAsGuest()
+    public function testCategoryPostStoreAsGuest(): void
     {
         $response = $this->post(route('admin.category.post.store'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryPostStoreWithoutPermission()
+    public function testCategoryPostStoreWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -310,8 +392,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRootCategoryPostStore()
+    public function testRootCategoryPostStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -330,10 +413,12 @@ class CategoryTest extends TestCase
         ]);
     }
 
-    public function testChildrenCategoryPostStore()
+    public function testChildrenCategoryPostStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $parent = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -346,29 +431,31 @@ class CategoryTest extends TestCase
         $response->assertOk();
         $response->assertSessionHas('success');
 
+        /** @var Category|null */
         $category = Category::where([
             ['name', 'Kategoria OK'],
             ['parent_id', $parent->id]
         ])->first();
 
-        $this->assertTrue($category->exists());
+        $this->assertTrue(!is_null($category) && $category->exists());
 
         $this->assertDatabaseHas('categories_closure', [
-            'descendant' => $category->id,
+            'descendant' => $category?->id,
             'ancestor' => $parent->id,
             'depth' => 1
         ]);
     }
 
-    public function testCategoryPostStoreGlobalAsGuest()
+    public function testCategoryPostStoreGlobalAsGuest(): void
     {
         $response = $this->post(route('admin.category.post.store_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryPostStoreGlobalWithoutPermission()
+    public function testCategoryPostStoreGlobalWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -378,8 +465,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCategoryPostStoreGlobalValidationFail()
+    public function testCategoryPostStoreGlobalValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -391,10 +479,12 @@ class CategoryTest extends TestCase
         $response->assertSessionHasErrors(['names']);
     }
 
-    public function testCategoryPostStoreGlobal()
+    public function testCategoryPostStoreGlobal(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $parent = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -424,30 +514,33 @@ class CategoryTest extends TestCase
         $response->assertOk();
         $response->assertSessionHas('success');
 
+        /** @var Category|null */
         $category = Category::where([
             ['name', 'Dziecko 1']
         ])->first();
 
-        $this->assertTrue($category->exists());
+        $this->assertTrue(!is_null($category) && $category->exists());
 
         $this->assertDatabaseHas('categories_closure', [
-            'descendant' => $category->id,
+            'descendant' => $category?->id,
             'ancestor' => $parent->id,
             'depth' => 2
         ]);
     }
 
-    public function testCategoryDestroyAsGuest()
+    public function testCategoryDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.category.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryDestroyWithoutPermission()
+    public function testCategoryDestroyWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -457,8 +550,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCategoryDestroy()
+    public function testNoexistCategoryDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -468,10 +562,12 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCategoryDestroy()
+    public function testCategoryDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -489,15 +585,16 @@ class CategoryTest extends TestCase
         ]);
     }
 
-    public function testCategoryDestroyGlobalAsGuest()
+    public function testCategoryDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.category.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryDestroyGlobalWithoutPermission()
+    public function testCategoryDestroyGlobalWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -507,8 +604,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCategoryDestroyGlobalValidationFail()
+    public function testCategoryDestroyGlobalValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -521,10 +619,12 @@ class CategoryTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testCategoryDestroyGlobal()
+    public function testCategoryDestroyGlobal(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->count(10)->active()->create();
 
         Auth::login($user);
@@ -545,17 +645,19 @@ class CategoryTest extends TestCase
         $this->assertTrue($deleted->count() === 0);
     }
 
-    public function testCategoryEditPositionAsGuest()
+    public function testCategoryEditPositionAsGuest(): void
     {
         $response = $this->get(route('admin.category.edit_position', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryEditPositionWithoutPermission()
+    public function testCategoryEditPositionWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -565,8 +667,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCategoryEditPosition()
+    public function testNoexistCategoryEditPosition(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -576,32 +679,47 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCategoryEditPosition()
+    public function testCategoryEditPosition(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.category.edit_position', [$category->id]));
 
-        $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString('value="' . $category->position . '"', $response->getData()->view);
-        $this->assertStringContainsString(route('admin.category.update_position', [$category->id]), $response->getData()->view);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'value="' . $category->position . '"',
+            $baseResponse->getData()->view
+        );
+        $this->assertStringContainsString(
+            route('admin.category.update_position', [$category->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testCategoryUpdatePositionAsGuest()
+    public function testCategoryUpdatePositionAsGuest(): void
     {
         $response = $this->patch(route('admin.category.update_position', [2323]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCategoryUpdatePositionWithoutPermission()
+    public function testCategoryUpdatePositionWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -611,8 +729,9 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCategoryUpdatePosition()
+    public function testNoexistCategoryUpdatePosition(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -622,10 +741,12 @@ class CategoryTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCategoryUpdatePositionValidationFail()
+    public function testCategoryUpdatePositionValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -637,35 +758,37 @@ class CategoryTest extends TestCase
         $response->assertSessionHasErrors(['position']);
     }
 
-    public function testCategoryUpdatePosition()
+    public function testCategoryUpdatePosition(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $category = Category::makeFactory()->count(3)->active()->create();
+        /** @var array<Category> */
+        $categories = Category::makeFactory()->count(3)->active()->create();
 
         $this->assertDatabaseHas('categories', [
-            'id' => $category[0]->id,
+            'id' => $categories[0]->id,
             'position' => 0
         ]);
 
         $this->assertDatabaseHas('categories', [
-            'id' => $category[2]->id,
+            'id' => $categories[2]->id,
             'position' => 2
         ]);
 
         Auth::login($user);
 
-        $response = $this->patch(route('admin.category.update_position', [$category[2]->id]), [
+        $this->patch(route('admin.category.update_position', [$categories[2]->id]), [
             'position' => 0
         ]);
 
         $this->assertDatabaseHas('categories', [
-            'id' => $category[2]->id,
+            'id' => $categories[2]->id,
             'position' => 0
         ]);
 
         $this->assertDatabaseHas('categories', [
-            'id' => $category[0]->id,
+            'id' => $categories[0]->id,
             'position' => 1
         ]);
     }

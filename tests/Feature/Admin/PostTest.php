@@ -1,29 +1,50 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Carbon\Carbon;
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PostTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testPostIndexAsGuest()
+    public function testPostIndexAsGuest(): void
     {
         $response = $this->get(route('admin.post.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostIndexWithoutPermission()
+    public function testPostIndexWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -33,14 +54,16 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPostIndexPaginate()
+    public function testPostIndexPaginate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $post = Post::makeFactory()->count(50)
-            ->sequence(function ($sequence) {
+        /** @var array<Post> */
+        $posts = Post::makeFactory()->count(50)
+            ->sequence(function (Sequence $sequence) {
                 return [
-                    'created_at' => Carbon::now()->addSecond($sequence->index)
+                    'created_at' => Carbon::now()->addSeconds($sequence->index)
                 ];
             })
             ->active()
@@ -57,22 +80,24 @@ class PostTest extends TestCase
             ]
         ]));
 
-        $response->assertViewIs('icore::admin.post.index');
-        $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$post[30]->title, $post[30]->shortContent], false);
+        $response->assertViewIs('icore::admin.post.index')
+            ->assertSee('class="pagination"', false)
+            ->assertSeeInOrder([$posts[30]->title, $posts[30]->shortContent], false);
     }
 
-    public function testPostEditAsGuest()
+    public function testPostEditAsGuest(): void
     {
         $response = $this->get(route('admin.post.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostEditWithoutPermission()
+    public function testPostEditWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -82,8 +107,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPostEdit()
+    public function testNoexistPostEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -93,10 +119,12 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPostEdit()
+    public function testPostEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -105,21 +133,32 @@ class PostTest extends TestCase
 
         $response->assertOk()->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString($post->content, $response->getData()->view);
-        $this->assertStringContainsString(route('admin.post.update', [$post->id]), $response->getData()->view);
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            $post->content ?? '',
+            $baseResponse->getData()->view
+        );
+        $this->assertStringContainsString(
+            route('admin.post.update', [$post->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testPostUpdateAsGuest()
+    public function testPostUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.post.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostUpdateWithoutPermission()
+    public function testPostUpdateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -129,8 +168,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPostUpdate()
+    public function testNoexistPostUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -140,10 +180,12 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPostUpdateValidationFail()
+    public function testPostUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -156,10 +198,12 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['title']);
     }
 
-    public function testPostUpdate()
+    public function testPostUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -170,7 +214,14 @@ class PostTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString('Ten post został zaktualizowany.', $response->getData()->view);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'Ten post został zaktualizowany.',
+            $baseResponse->getData()->view
+        );
 
         $this->assertDatabaseHas('posts', [
             'content' => 'Ten post został zaktualizowany.',
@@ -178,17 +229,19 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function testPostEditFullAsGuest()
+    public function testPostEditFullAsGuest(): void
     {
         $response = $this->get(route('admin.post.edit_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostEditFullWithoutPermission()
+    public function testPostEditFullWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -198,8 +251,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPostEditFull()
+    public function testNoexistPostEditFull(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -209,32 +263,37 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPostEditFull()
+    public function testPostEditFull(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.post.edit_full', [$post->id]));
 
-        $response->assertOk()->assertViewIs('icore::admin.post.edit_full');
-        $response->assertSeeInOrder([$post->title, $post->content], false);
-        $response->assertSee(route('admin.post.update_full', [$post->id]), false);
+        $response->assertOk()
+            ->assertViewIs('icore::admin.post.edit_full')
+            ->assertSeeInOrder([$post->title, $post->content], false)
+            ->assertSee(route('admin.post.update_full', [$post->id]), false);
     }
 
-    public function testPostUpdateFullAsGuest()
+    public function testPostUpdateFullAsGuest(): void
     {
         $response = $this->put(route('admin.post.update_full', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostUpdateFullWithoutPermission()
+    public function testPostUpdateFullWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -244,8 +303,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPostUpdateFull()
+    public function testNoexistPostUpdateFull(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -255,10 +315,12 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPostUpdateFullValidationFail()
+    public function testPostUpdateFullValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -271,12 +333,15 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['categories', 'status', 'time_published_at', 'date_published_at']);
     }
 
-    public function testPostUpdateFull()
+    public function testPostUpdateFull(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -287,7 +352,7 @@ class PostTest extends TestCase
             'title' => 'Post zaktualizowany.',
             'content_html' => 'Ten post został zaktualizowany.',
             'tags' => 'test1, test2, test3',
-            'status' => 1,
+            'status' => Status::ACTIVE,
             'date_published_at' => Carbon::now()->format('Y-m-d'),
             'time_published_at' => Carbon::now()->format('H:i')
         ]);
@@ -312,17 +377,19 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function testPostUpdateStatusAsGuest()
+    public function testPostUpdateStatusAsGuest(): void
     {
         $response = $this->patch(route('admin.post.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostUpdateStatusWithoutPermission()
+    public function testPostUpdateStatusWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -332,8 +399,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPostUpdateStatus()
+    public function testNoexistPostUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -343,10 +411,12 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPostUpdateStatusValidationFail()
+    public function testPostUpdateStatusValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -358,37 +428,41 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function testPostUpdateStatus()
+    public function testPostUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
         $response = $this->patch(route('admin.post.update_status', [$post->id]), [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
 
         $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 
-    public function testPostDestroyAsGuest()
+    public function testPostDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.post.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostDestroyWithoutPermission()
+    public function testPostDestroyWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -398,8 +472,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistPostDestroy()
+    public function testNoexistPostDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -409,10 +484,12 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testPostDestroy()
+    public function testPostDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -430,15 +507,16 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function testPostDestroyGlobalAsGuest()
+    public function testPostDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.post.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostDestroyGlobalWithoutPermission()
+    public function testPostDestroyGlobalWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -448,8 +526,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPostDestroyGlobalValidationFail()
+    public function testPostDestroyGlobalValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -462,17 +541,19 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testPostDestroyGlobal()
+    public function testPostDestroyGlobal(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $post = Post::makeFactory()->count(10)->active()->publish()->withUser()->create();
+        /** @var Collection<Post> */
+        $posts = Post::makeFactory()->count(10)->active()->publish()->withUser()->create();
 
         Auth::login($user);
 
         $this->get(route('admin.post.index'));
 
-        $select = collect($post)->pluck('id')->take(5)->toArray();
+        $select = collect($posts)->pluck('id')->take(5)->toArray();
 
         $response = $this->delete(route('admin.post.destroy_global'), [
             'select' => $select,
@@ -486,15 +567,16 @@ class PostTest extends TestCase
         $this->assertTrue($deleted->count() === 0);
     }
 
-    public function testPostCreateAsGuest()
+    public function testPostCreateAsGuest(): void
     {
         $response = $this->get(route('admin.post.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostCreateWithoutPermission()
+    public function testPostCreateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -504,27 +586,30 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPostCreate()
+    public function testPostCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.post.create'));
 
-        $response->assertOk()->assertViewIs('icore::admin.post.create');
-        $response->assertSee(route('admin.post.store'), false);
+        $response->assertOk()
+            ->assertViewIs('icore::admin.post.create')
+            ->assertSee(route('admin.post.store'), false);
     }
 
-    public function testPostStoreAsGuest()
+    public function testPostStoreAsGuest(): void
     {
         $response = $this->post(route('admin.post.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testPostStoreWithoutPermission()
+    public function testPostStoreWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -534,8 +619,9 @@ class PostTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testPostStoreValidationFail()
+    public function testPostStoreValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -548,10 +634,12 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['categories', 'status', 'date_published_at', 'time_published_at']);
     }
 
-    public function testPostStore()
+    public function testPostStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         Auth::login($user);
@@ -561,7 +649,7 @@ class PostTest extends TestCase
             'title' => 'Post dodany.',
             'content_html' => 'Ten post został dodany.',
             'tags' => 'test1, test2, test3',
-            'status' => 1,
+            'status' => Status::ACTIVE,
             'date_published_at' => Carbon::now()->format('Y-m-d'),
             'time_published_at' => Carbon::now()->format('H:i')
         ]);
@@ -569,22 +657,23 @@ class PostTest extends TestCase
         $response->assertRedirect(route('admin.post.index'));
         $response->assertSessionHas('success');
 
+        /** @var Post|null */
         $post = Post::where([
             ['content', 'Ten post został dodany.'],
             ['title', 'Post dodany.']
         ])->first();
 
-        $this->assertTrue($post->exists());
+        $this->assertTrue(!is_null($post) && $post->exists());
 
         $this->assertDatabaseHas('categories_models', [
-            'model_id' => $post->id,
-            'model_type' => 'N1ebieski\\ICore\\Models\\Post',
+            'model_id' => $post?->id,
+            'model_type' => $post?->getMorphClass(),
             'category_id' => $category->id
         ]);
 
         $this->assertDatabaseHas('tags_models', [
-            'model_id' => $post->id,
-            'model_type' => 'N1ebieski\\ICore\\Models\\Post',
+            'model_id' => $post?->id,
+            'model_type' => $post?->getMorphClass(),
         ]);
     }
 }

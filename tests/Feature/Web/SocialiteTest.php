@@ -1,9 +1,26 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Mockery;
 use Tests\TestCase;
+use Mockery\MockInterface;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -14,8 +31,15 @@ class SocialiteTest extends TestCase
 {
     use DatabaseTransactions;
 
+    /**
+     * @var string
+     */
     private const PROVIDER = 'facebook';
 
+    /**
+     *
+     * @var array
+     */
     public $socialLoginRedirects;
 
     protected function setUp(): void
@@ -30,30 +54,34 @@ class SocialiteTest extends TestCase
         ];
     }
 
-    protected static function socialiteMock(array $user)
+    protected static function socialiteMock(array $user): void
     {
+        /** @var MockInterface */
         $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
 
-        $abstractUser->shouldReceive('getId')->andReturn($user['id'])
-            ->shouldReceive('getEmail')->andReturn($user['email'])
-            ->shouldReceive('getName')->andReturn($user['name']);
+        $abstractUser->shouldReceive('getId')->andReturn($user['id']);
+        $abstractUser->shouldReceive('getEmail')->andReturn($user['email']);
+        $abstractUser->shouldReceive('getName')->andReturn($user['name']);
 
+        /** @var MockInterface */
         $providerUser = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+
         $providerUser->shouldReceive('user')->andReturn($abstractUser);
 
         Socialite::shouldReceive('driver')->once()->with(self::PROVIDER)->andReturn($providerUser);
     }
 
-    public function testRedirectProvider()
+    public function testRedirectProvider(): void
     {
         $providers = ['twitter', 'facebook'];
 
         foreach ($providers as $provider) {
-            //Check that the user is redirected to the Social Platform Login Page
+            // Check that the user is redirected to the Social Platform Login Page
             $loginResponse = $this->get(route('auth.socialite.redirect', ['provider' => $provider]));
 
             $loginResponse->assertStatus(302);
 
+            /** @var string */
             $redirectLocation = $loginResponse->headers->get('Location');
 
             $this->assertStringContainsString(
@@ -69,15 +97,16 @@ class SocialiteTest extends TestCase
         }
     }
 
-    public function testInvalidProvider()
+    public function testInvalidProvider(): void
     {
         $response = $this->get(route('auth.socialite.callback', ['invalid-provider']));
 
         $response->assertRedirect('/login');
     }
 
-    public function testCallbackAsLoggedUser()
+    public function testCallbackAsLoggedUser(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -87,7 +116,7 @@ class SocialiteTest extends TestCase
         $response->assertRedirect('/');
     }
 
-    public function testCallbackWithoutNothing()
+    public function testCallbackWithoutNothing(): void
     {
         $this->socialiteMock([
             'id' => '',
@@ -100,7 +129,7 @@ class SocialiteTest extends TestCase
         $response->assertRedirect('/register');
     }
 
-    public function testCallbackWithoutEmail()
+    public function testCallbackWithoutEmail(): void
     {
         $this->socialiteMock([
             'id' => 343242342,
@@ -114,7 +143,7 @@ class SocialiteTest extends TestCase
         $response->assertSessionHas('warning', trans('icore::auth.warning.no_email', ['provider' => ucfirst(self::PROVIDER)]));
     }
 
-    public function testCallbackNoexistUser()
+    public function testCallbackNoexistUser(): void
     {
         $this->socialiteMock([
             'id' => 343242342,
@@ -126,18 +155,21 @@ class SocialiteTest extends TestCase
 
         $response->assertRedirect('/');
 
-        $user_exist = User::where('email', 'sasasdas@sdasdasd.com')->first();
-        $this->assertTrue(!empty($user_exist));
+        /** @var User|null */
+        $userExist = User::where('email', 'sasasdas@sdasdasd.com')->first();
+
+        $this->assertTrue(!empty($userExist));
 
         $this->assertDatabaseHas('socialites', [
-            'user_id' => $user_exist->id,
+            'user_id' => $userExist?->id,
             'provider_name' => self::PROVIDER,
             'provider_id' => 343242342
         ]);
     }
 
-    public function testCallbackExistUserForeignEmail()
+    public function testCallbackExistUserForeignEmail(): void
     {
+        /** @var User */
         $socialAccount = User::makeFactory()->user()->create();
 
         $this->socialiteMock([
@@ -152,9 +184,12 @@ class SocialiteTest extends TestCase
         $response->assertSessionHas('warning', trans('icore::auth.warning.email_exist', ['provider' => ucfirst(self::PROVIDER)]));
     }
 
-    public function testCallbackExistUser()
+    public function testCallbackExistUser(): void
     {
-        Social::makeFactory()->for(User::makeFactory()->user()->create())->create([
+        /** @var User */
+        $user = User::makeFactory()->user()->create();
+
+        Social::makeFactory()->for($user)->create([
             'provider_name' => self::PROVIDER,
             'provider_id' => 343242342
         ]);

@@ -101,11 +101,11 @@ class UserService
     }
 
     /**
-     * Undocumented function
      *
-     * @return boolean
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             $this->user->ban()->delete();

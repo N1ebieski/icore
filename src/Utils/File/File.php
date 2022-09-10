@@ -34,14 +34,14 @@ class File
     /**
      *
      * @param Storage $storage
-     * @param UploadedFile|null $file
+     * @param UploadedFile $file
      * @param string $disk
      * @param string $temp_path
      * @return void
      */
     public function __construct(
         protected Storage $storage,
-        protected ?UploadedFile $file = null,
+        protected UploadedFile $file,
         protected string $disk = 'public',
         protected string $temp_path = 'vendor/icore/temp'
     ) {

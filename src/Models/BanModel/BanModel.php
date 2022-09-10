@@ -116,12 +116,17 @@ class BanModel extends Model
      */
     public function scopeFilterOrderBy(Builder $query, string $orderby = null): Builder
     {
-        $order = explode('|', $orderby);
+        return $query->when(!is_null($orderby), function (Builder $query) use ($orderby) {
+            // @phpstan-ignore-next-line
+            $order = explode('|', $orderby);
 
-        if (count($order) == 2) {
-            return $query->orderBy($order[0], $order[1])->orderBy('bans_models.id', 'asc');
-        }
+            if (count($order) === 2) {
+                return $query->orderBy($order[0], $order[1])->orderBy('bans_models.id', 'asc');
+            }
 
-        return $query->latest('bans_models.created_at');
+            return $query->latest('bans_models.created_at');
+        }, function (Builder $query) {
+            return $query->latest('bans_models.created_at');
+        });
     }
 }

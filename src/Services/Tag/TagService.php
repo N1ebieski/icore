@@ -66,10 +66,11 @@ class TagService
     }
 
     /**
-     * [delete description]
-     * @return bool [description]
+     *
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             return $this->tag->delete();

@@ -18,7 +18,7 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Profile;
 
-use Illuminate\Support\Facades\Auth;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
@@ -40,12 +40,15 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
+        /** @var User */
+        $user = $this->user();
+
         return [
             'name' => [
                 'required',
                 'alpha_dash',
                 'max:255',
-                'unique:users,name, ' . Auth::user()->id
+                'unique:users,name, ' . $user->id
             ],
             'marketing_agreement' => 'bail|nullable|boolean'
         ];

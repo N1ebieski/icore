@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Http\Resources\Post;
 
 use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
@@ -100,8 +101,11 @@ class PostResource extends JsonResource
             $this->mergeWhen(
                 $this->relationLoaded('user'),
                 function () {
+                    /** @var User */
+                    $user = $this->user;
+
                     return [
-                        'user' => App::make(UserResource::class, ['user' => $this->user->setAttribute('depth', 1)])
+                        'user' => App::make(UserResource::class, ['user' => $user->setAttribute('depth', 1)])
                     ];
                 }
             ),

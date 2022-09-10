@@ -60,6 +60,7 @@ class DOMDocumentAdapter
     public function saveHTML()
     {
         // remove <!DOCTYPE
+        // @phpstan-ignore-next-line
         $this->decorated->removeChild($this->decorated->doctype);
 
         // remove <html><body></body></html>

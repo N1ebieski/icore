@@ -136,13 +136,13 @@ class UsersACLRepository implements ACLRepository
     protected function hasPermission(): int
     {
         if (
-            $this->auth->user()->can('admin.filemanager.read')
+            $this->auth->user()?->can('admin.filemanager.read')
             && $this->auth->user()->can('admin.filemanager.write')
         ) {
             return self::ACCESS_READ_WRITE;
         }
 
-        if ($this->auth->user()->can('admin.filemanager.read')) {
+        if ($this->auth->user()?->can('admin.filemanager.read')) {
             return self::ACCESS_READ;
         }
 

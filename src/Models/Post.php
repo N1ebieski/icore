@@ -91,7 +91,7 @@ use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
  * @property-read int|null $stats_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
  * @property-read int|null $tags_count
- * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @property-read \N1ebieski\ICore\Models\User $user
  * @method static Builder|Post active()
  * @method static \N1ebieski\ICore\Database\Factories\Post\PostFactory factory(...$parameters)
  * @method static Builder|Post filterAuthor(?\N1ebieski\ICore\Models\User $author = null)

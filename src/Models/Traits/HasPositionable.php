@@ -48,10 +48,10 @@ trait HasPositionable
     public function decrementSiblings(int $from = null, int $to = null): bool
     {
         return $this->siblings()
-            ->when($from !== null, function ($query) use ($from) {
+            ->when(!is_null($from), function ($query) use ($from) {
                 $query->where('position', '>', $from);
             })
-            ->when($to !== null, function ($query) use ($to) {
+            ->when(!is_null($to), function ($query) use ($to) {
                 $query->where('position', '<=', $to);
             })
             ->where('id', '<>', $this->id)
@@ -67,10 +67,10 @@ trait HasPositionable
     public function incrementSiblings(int $from = null, int $to = null): bool
     {
         return $this->siblings()
-            ->when($from !== null, function ($query) use ($from) {
+            ->when(!is_null($from), function ($query) use ($from) {
                 $query->where('position', '>=', $from);
             })
-            ->when($to !== null, function ($query) use ($to) {
+            ->when(!is_null($to), function ($query) use ($to) {
                 $query->where('position', '<', $to);
             })
             ->where('id', '<>', $this->id)
@@ -96,6 +96,6 @@ trait HasPositionable
             ->orderBy('position', 'desc')
             ->first('position');
 
-        return is_int(optional($last)->position) ? $last->position + 1 : 0;
+        return is_int($last?->position) ? $last->position + 1 : 0;
     }
 }

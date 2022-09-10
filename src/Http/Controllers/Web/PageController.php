@@ -50,6 +50,7 @@ class PageController
 
         if ($page->isRedirect()) {
             return Response::redirectTo(
+                // @phpstan-ignore-next-line
                 html_entity_decode($page->content),
                 HttpResponse::HTTP_MOVED_PERMANENTLY
             );

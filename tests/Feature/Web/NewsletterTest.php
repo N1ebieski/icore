@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Carbon\Carbon;
@@ -17,8 +33,9 @@ class NewsletterTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testNewsletterStoreValidationFail()
+    public function testNewsletterStoreValidationFail(): void
     {
+        /** @var Newsletter */
         $newsletter = Newsletter::makeFactory()->active()->create();
 
         $response1 = $this->post(route('web.newsletter.store'), [
@@ -33,7 +50,7 @@ class NewsletterTest extends TestCase
         $response2->assertSessionHasErrors(['email']);
     }
 
-    public function testNewsletterStore()
+    public function testNewsletterStore(): void
     {
         $response = $this->post(route('web.newsletter.store'), [
             'email' => Faker::create()->unique()->safeEmail,
@@ -45,10 +62,11 @@ class NewsletterTest extends TestCase
         ]);
     }
 
-    public function testNewsletterStoreExistStatus0()
+    public function testNewsletterStoreExistStatus0(): void
     {
         Mail::fake();
 
+        /** @var Newsletter */
         $newsletter = Newsletter::makeFactory()->inactive()->create();
 
         Mail::assertNothingSent();
@@ -62,7 +80,7 @@ class NewsletterTest extends TestCase
             'success' => trans('icore::newsletter.success.store')
         ]);
 
-        Mail::assertSent(ConfirmationMail::class, function ($mail) use ($newsletter) {
+        Mail::assertSent(ConfirmationMail::class, function (ConfirmationMail $mail) use ($newsletter) {
             $mail->build();
 
             $this->assertEquals(route('web.newsletter.update_status', [
@@ -71,12 +89,13 @@ class NewsletterTest extends TestCase
                 'status' => Status::ACTIVE
             ]), $mail->viewData['actionUrl']);
 
-            return $mail->hasTo($newsletter->email) && $mail->subject(trans('icore::newsletter.subscribe_confirmation'));
+            return $mail->hasTo($newsletter->email);
         });
     }
 
-    public function testNewsletterUpdateStatusWithInvalidToken()
+    public function testNewsletterUpdateStatusWithInvalidToken(): void
     {
+        /** @var Newsletter */
         $newsletter = Newsletter::makeFactory()->inactive()->create();
 
         NewsletterToken::makeFactory()->for($newsletter)->create();
@@ -91,8 +110,9 @@ class NewsletterTest extends TestCase
         $response->assertSeeText('token is invalid', false);
     }
 
-    public function testNewsletterUpdateStatusWithExpiredToken()
+    public function testNewsletterUpdateStatusWithExpiredToken(): void
     {
+        /** @var Newsletter */
         $newsletter = Newsletter::makeFactory()->inactive()->create();
 
         NewsletterToken::makeFactory()->for($newsletter)->create([
@@ -109,8 +129,9 @@ class NewsletterTest extends TestCase
         $response->assertSeeText('token period has expired', false);
     }
 
-    public function testNewsletterUpdateStatus1()
+    public function testNewsletterUpdateStatus1(): void
     {
+        /** @var Newsletter */
         $newsletter = Newsletter::makeFactory()->inactive()->create();
 
         NewsletterToken::makeFactory()->for($newsletter)->create();
@@ -130,8 +151,9 @@ class NewsletterTest extends TestCase
         ]);
     }
 
-    public function testNewsletterUpdateStatus0()
+    public function testNewsletterUpdateStatus0(): void
     {
+        /** @var Newsletter */
         $newsletter = Newsletter::makeFactory()->active()->create();
 
         NewsletterToken::makeFactory()->for($newsletter)->create();

@@ -64,9 +64,9 @@ class BanValueCache
 
     /**
      * [rememberAllWordsAsString description]
-     * @return string|null [description]
+     * @return string [description]
      */
-    public function rememberAllWordsAsString(): ?string
+    public function rememberAllWordsAsString(): string
     {
         return $this->cache->tags('bans.word')->remember(
             "banValue.getAllWordsAsString",

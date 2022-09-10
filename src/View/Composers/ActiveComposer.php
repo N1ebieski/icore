@@ -90,7 +90,7 @@ class ActiveComposer extends Composer
             /** @var Route */
             $route = $this->request->route();
 
-            if ($this->str->contains($route->getName(), $string)) {
+            if ($this->str->contains($route->getName() ?? '', $string)) {
                 return $output;
             }
         }

@@ -619,7 +619,7 @@ class Page extends Entity
      */
     public function isRedirect(): bool
     {
-        return (bool)preg_match('/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/', $this->content);
+        return (bool)preg_match('/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/', $this->content ?? '');
     }
 
     // Scopes

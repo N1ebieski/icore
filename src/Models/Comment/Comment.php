@@ -382,7 +382,9 @@ class Comment extends Entity
      */
     public function setContentAttribute(string $value): void
     {
-        $this->attributes['content'] = strip_tags(preg_replace('/\s+/', ' ', str_replace(['\n', '\r'], '', $value)));
+        $this->attributes['content'] = strip_tags(
+            preg_replace('/\s+/', ' ', str_replace(['\n', '\r'], '', $value)) ?? ''
+        );
     }
 
     // Checkers
@@ -409,13 +411,18 @@ class Comment extends Entity
      */
     public function scopeFilterCommentsOrderBy(Builder $query, string $orderby = null): Builder
     {
-        $order = explode('|', $orderby);
+        return $query->when(!is_null($orderby), function (Builder $query) use ($orderby) {
+            // @phpstan-ignore-next-line
+            $order = explode('|', $orderby);
 
-        if (count($order) == 2) {
-            return $query->orderBy($order[0], $order[1])->orderBy('id', 'asc');
-        }
+            if (count($order) === 2) {
+                return $query->orderBy($order[0], $order[1])->orderBy($this->getKeyName(), 'asc');
+            }
 
-        return $query->oldest();
+            return $query->oldest();
+        }, function (Builder $query) {
+            return $query->oldest();
+        });
     }
 
     /**

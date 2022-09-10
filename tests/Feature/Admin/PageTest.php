@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
@@ -8,7 +24,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -45,9 +60,9 @@ class PageTest extends TestCase
         $user = User::makeFactory()->admin()->create();
 
         /**
-         * @var Collection<Page>
+         * @var array<Page>
          */
-        $page = Page::makeFactory()->count(50)->active()->withUser()->create();
+        $pages = Page::makeFactory()->count(50)->active()->withUser()->create();
 
         Auth::login($user);
 
@@ -55,7 +70,7 @@ class PageTest extends TestCase
 
         $response->assertViewIs('icore::admin.page.index');
         $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$page[30]->title, $page[30]->shortContent], false);
+        $response->assertSeeInOrder([$pages[30]->title, $pages[30]->shortContent], false);
     }
 
     public function testPageEditAsGuest(): void
@@ -121,7 +136,7 @@ class PageTest extends TestCase
          */
         $baseResponse = $response->baseResponse;
 
-        $this->assertStringContainsString($page->content, $baseResponse->getData()->view);
+        $this->assertStringContainsString($page->content ?? '', $baseResponse->getData()->view);
         $this->assertStringContainsString(
             URL::route('admin.page.update', [$page->id]),
             $baseResponse->getData()->view
@@ -743,13 +758,14 @@ class PageTest extends TestCase
         $response->assertRedirect(route('admin.page.index'));
         $response->assertSessionHas('success');
 
+        /** @var Page|null */
         $page = Page::where([
             ['content', 'Ten page został dodany.'],
             ['title', 'Page dodany.'],
             ['parent_id', null]
         ])->first();
 
-        $this->assertTrue($page->exists());
+        $this->assertTrue(!is_null($page) && $page->exists());
     }
 
     public function testChildrenPageStore(): void
@@ -776,16 +792,17 @@ class PageTest extends TestCase
         $response->assertRedirect(route('admin.page.index'));
         $response->assertSessionHas('success');
 
+        /** @var Page|null */
         $page = Page::where([
             ['content', 'Ten page został dodany.'],
             ['title', 'Page dodany.'],
             ['parent_id', $parent->id]
         ])->first();
 
-        $this->assertTrue($page->exists());
+        $this->assertTrue(!is_null($page) && $page->exists());
 
         $this->assertDatabaseHas('pages_closure', [
-            'descendant' => $page->id,
+            'descendant' => $page?->id,
             'ancestor' => $parent->id,
             'depth' => 1
         ]);
@@ -933,7 +950,7 @@ class PageTest extends TestCase
         $user = User::makeFactory()->admin()->create();
 
         /**
-         * @var Collection<Page>
+         * @var array<Page>
          */
         $page = Page::makeFactory()->count(3)->active()->withUser()->create();
 
@@ -949,7 +966,7 @@ class PageTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->patch(route('admin.page.update_position', [$page[2]->id]), [
+        $this->patch(route('admin.page.update_position', [$page[2]->id]), [
             'position' => 0
         ]);
 

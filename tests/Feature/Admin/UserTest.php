@@ -1,29 +1,50 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use N1ebieski\ICore\ValueObjects\Role\Name;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\ValueObjects\User\Status;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testUserIndexAsGuest()
+    public function testUserIndexAsGuest(): void
     {
         $response = $this->get(route('admin.user.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserIndexWithoutPermission()
+    public function testUserIndexWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -33,14 +54,16 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserIndexPaginate()
+    public function testUserIndexPaginate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $us = User::makeFactory()->count(50)
-            ->sequence(function ($sequence) {
+        /** @var array<User> */
+        $users = User::makeFactory()->count(50)
+            ->sequence(function (Sequence $sequence) {
                 return [
-                    'created_at' => Carbon::now()->addSecond($sequence->index)
+                    'created_at' => Carbon::now()->addSeconds($sequence->index)
                 ];
             })
             ->active()
@@ -55,22 +78,24 @@ class UserTest extends TestCase
             ]
         ]));
 
-        $response->assertViewIs('icore::admin.user.index');
-        $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$us[30]->name, $us[30]->email], false);
+        $response->assertViewIs('icore::admin.user.index')
+            ->assertSee('class="pagination"', false)
+            ->assertSeeInOrder([$users[30]->name, $users[30]->email], false);
     }
 
-    public function testUserUpdateStatusAsGuest()
+    public function testUserUpdateStatusAsGuest(): void
     {
         $response = $this->patch(route('admin.user.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserUpdateStatusWithoutPermission()
+    public function testUserUpdateStatusWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -80,8 +105,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistUserUpdateStatus()
+    public function testNoexistUserUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -91,23 +117,26 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testUserUpdateStatusSelf()
+    public function testUserUpdateStatusSelf(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
 
         $response = $this->patch(route('admin.user.update_status', [$user->id]), [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserUpdateStatusValidationFail()
+    public function testUserUpdateStatusValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -119,37 +148,41 @@ class UserTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function testUserUpdateStatus()
+    public function testUserUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
 
         $response = $this->patch(route('admin.user.update_status', [$us->id]), [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
 
         $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('users', [
             'id' => $us->id,
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 
-    public function testUserDestroyAsGuest()
+    public function testUserDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.user.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserDestroyWithoutPermission()
+    public function testUserDestroyWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -159,8 +192,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserDestroySelf()
+    public function testUserDestroySelf(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -170,8 +204,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistUserDestroy()
+    public function testNoexistUserDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -181,10 +216,12 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testUserDestroy()
+    public function testUserDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -202,15 +239,16 @@ class UserTest extends TestCase
         ]);
     }
 
-    public function testUserDestroyGlobalAsGuest()
+    public function testUserDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.user.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserDestroyGlobalWithoutPermission()
+    public function testUserDestroyGlobalWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -220,8 +258,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserDestroyGlobalValidationFail()
+    public function testUserDestroyGlobalValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -234,34 +273,38 @@ class UserTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testUserDestroyGlobalWithSelf()
+    public function testUserDestroyGlobalWithSelf(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
-        $us = User::makeFactory()->count(10)->active()->user()->create();
+        /** @var Collection<User> */
+        $users = User::makeFactory()->count(10)->active()->user()->create();
 
         Auth::login($user);
 
         $this->get(route('admin.user.index'));
 
         $response = $this->delete(route('admin.user.destroy_global'), [
-            'select' => $us->push($user)->pluck('id')->toArray(),
+            'select' => $users->push($user)->pluck('id')->toArray(),
         ]);
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserDestroyGlobal()
+    public function testUserDestroyGlobal(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
-        $us = User::makeFactory()->count(10)->active()->user()->create();
+        /** @var Collection<User> */
+        $users = User::makeFactory()->count(10)->active()->user()->create();
 
         Auth::login($user);
 
         $this->get(route('admin.user.index'));
 
-        $select = collect($us)->pluck('id')->toArray();
+        $select = collect($users)->pluck('id')->toArray();
 
         $response = $this->delete(route('admin.user.destroy_global'), [
             'select' => $select,
@@ -275,17 +318,19 @@ class UserTest extends TestCase
         $this->assertTrue($deleted === 0);
     }
 
-    public function testUserEditAsGuest()
+    public function testUserEditAsGuest(): void
     {
         $response = $this->get(route('admin.user.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserEditWithoutPermission()
+    public function testUserEditWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -295,8 +340,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserEditSelf()
+    public function testUserEditSelf(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -306,8 +352,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistUserEdit()
+    public function testNoexistUserEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -317,10 +364,12 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testUserEdit()
+    public function testUserEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -328,21 +377,33 @@ class UserTest extends TestCase
         $response = $this->get(route('admin.user.edit', [$us->id]));
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString($us->name, $response->getData()->view);
-        $this->assertStringContainsString(route('admin.user.update', [$us->id]), $response->getData()->view);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            $us->name,
+            $baseResponse->getData()->view
+        );
+        $this->assertStringContainsString(
+            route('admin.user.update', [$us->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testUserUpdateAsGuest()
+    public function testUserUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.user.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserUpdateWithoutPermission()
+    public function testUserUpdateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -352,8 +413,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserUpdateSelf()
+    public function testUserUpdateSelf(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -363,8 +425,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistUserUpdate()
+    public function testNoexistUserUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -374,10 +437,12 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testUserUpdateValidationFail()
+    public function testUserUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -390,10 +455,12 @@ class UserTest extends TestCase
         $response->assertSessionHasErrors(['name', 'email']);
     }
 
-    public function testUserUpdate()
+    public function testUserUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var User */
         $us = User::makeFactory()->active()->user()->create();
 
         Auth::login($user);
@@ -405,7 +472,14 @@ class UserTest extends TestCase
         ]);
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString('email@bungoslawa.pl', $response->getData()->view);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'email@bungoslawa.pl',
+            $baseResponse->getData()->view
+        );
 
         $this->assertDatabaseHas('users', [
             'id' => $us->id,
@@ -414,15 +488,16 @@ class UserTest extends TestCase
         ]);
     }
 
-    public function testUserCreateAsGuest()
+    public function testUserCreateAsGuest(): void
     {
         $response = $this->get(route('admin.user.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserCreateWithoutPermission()
+    public function testUserCreateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -432,8 +507,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserCreate()
+    public function testUserCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -441,18 +517,26 @@ class UserTest extends TestCase
         $response = $this->get(route('admin.user.create'));
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString(route('admin.user.store'), $response->getData()->view);
+
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            route('admin.user.store'),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testUserStoreAsGuest()
+    public function testUserStoreAsGuest(): void
     {
         $response = $this->post(route('admin.user.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testUserStoreWithoutPermission()
+    public function testUserStoreWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -462,8 +546,9 @@ class UserTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testUserStoreValidationFail()
+    public function testUserStoreValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -476,8 +561,9 @@ class UserTest extends TestCase
         $response->assertSessionHasErrors(['name', 'email', 'roles']);
     }
 
-    public function testUserStore()
+    public function testUserStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -492,9 +578,9 @@ class UserTest extends TestCase
             'password_confirmation' => 'bungoslaw'
         ]);
 
-        $response->assertOk();
-        $response->assertSessionHas('success');
+        $response->assertOk()->assertSessionHas('success');
 
+        /** @var User */
         $us = User::where([
             ['name', 'Bungo'],
             ['email', 'dasd@fdfdfdf.pl']
@@ -504,7 +590,7 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('roles_models', [
             'model_id' => $us->id,
-            'model_type' => 'N1ebieski\\ICore\\Models\\User',
+            'model_type' => $us->getMorphClass(),
         ]);
     }
 }

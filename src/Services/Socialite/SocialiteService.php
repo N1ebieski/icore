@@ -24,7 +24,7 @@ class SocialiteService
 
     /**
      * Zautentykowany user
-     * @var User
+     * @var User|null
      */
     protected $socialiteUser;
 
@@ -39,18 +39,6 @@ class SocialiteService
         protected DB $db
     ) {
         //
-    }
-
-    /**
-     *
-     * @param User $socialiteUser
-     * @return SocialiteService
-     */
-    public function setSocialiteUser(User $socialiteUser): self
-    {
-        $this->socialiteUser = $socialiteUser;
-
-        return $this;
     }
 
     /**
@@ -119,7 +107,11 @@ class SocialiteService
             $this->socialiteUser->sendEmailVerificationNotification();
 
             // Tworzymy mu jeszcze powiazanie z Socialite
-            $this->create([]);
+            $this->create([
+                'provider_id'   => $this->providerUser->getId(),
+                'provider_name' => $this->provider,
+                'user' => $this->socialiteUser
+            ]);
 
             return $this->socialiteUser;
         });
@@ -133,11 +125,14 @@ class SocialiteService
      */
     public function create(array $attributes): Social
     {
-        return $this->db->transaction(function () {
-            return $this->socialiteUser->socialites()->create([
-                'provider_id'   => $this->providerUser->getId(),
-                'provider_name' => $this->provider,
-            ]);
+        return $this->db->transaction(function () use ($attributes) {
+            $this->socialite->fill($attributes);
+
+            $this->socialite->user()->associate($attributes['user']);
+
+            $this->socialite->save();
+
+            return $this->socialite;
         });
     }
 }

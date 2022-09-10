@@ -249,7 +249,6 @@ class PostRepo
             ->from(
                 $this->post->selectRaw("`{$this->post->getTable()}`.*")
                     ->search($name)
-                    // @phpstan-ignore-next-line
                     ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
                         // @phpstan-ignore-next-line
                         return $query->unionAll(
@@ -258,6 +257,7 @@ class PostRepo
                                 ->join('tags_models', function (JoinClause $query) use ($tag) {
                                     return $query->on('posts.id', '=', 'tags_models.model_id')
                                         ->where('tags_models.model_type', $this->post->getMorphClass())
+                                        // @phpstan-ignore-next-line
                                         ->where('tags_models.tag_id', $tag->tag_id);
                                 })
                                 ->groupBy('posts.id')
@@ -349,7 +349,10 @@ class PostRepo
             ->where('post.status', Status::ACTIVE)
             ->groupBy('year')
             ->groupBy('month')
-            ->unionAll($pages->getQuery())
+            ->when(!is_null($pages), function (Builder $query) use ($pages) {
+                // @phpstan-ignore-next-line
+                return $query->unionAll($pages->getQuery());
+            })
             ->orderBy('year')
             ->orderBy('month')
             ->get();

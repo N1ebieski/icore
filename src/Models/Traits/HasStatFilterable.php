@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
 
 trait HasStatFilterable
@@ -35,11 +36,11 @@ trait HasStatFilterable
     public function scopeWithCountStats(Builder $query, string $stat): Builder
     {
         return $query->selectRaw("`stats_values`.`value` as `{$stat}`")
-            ->leftJoin('stats_values', function ($query) use ($stat) {
-                $query->on("{$this->getTable()}.id", '=', 'stats_values.model_id')
+            ->leftJoin('stats_values', function (JoinClause $query) use ($stat) {
+                return $query->on("{$this->getTable()}.id", '=', 'stats_values.model_id')
                     ->where('stats_values.model_type', $this->getMorphClass())
-                    ->join('stats', function ($query) use ($stat) {
-                        $query->on('stats_values.stat_id', '=', 'stats.id')
+                    ->join('stats', function (JoinClause $query) use ($stat) {
+                        return $query->on('stats_values.stat_id', '=', 'stats.id')
                             ->where('stats.slug', $stat);
                     });
             });
@@ -53,19 +54,24 @@ trait HasStatFilterable
      */
     public function scopeFilterOrderBy(Builder $query, string $orderby = null): Builder
     {
-        $order = explode('|', $orderby);
+        return $query->when(!is_null($orderby), function (Builder $query) use ($orderby) {
+            // @phpstan-ignore-next-line
+            $order = explode('|', $orderby);
 
-        if (count($order) === 2) {
-            return $query->when(
-                in_array($order[0], Slug::getAvailable()),
-                function ($query) use ($order) {
-                    // @phpstan-ignore-next-line
-                    $query->withCountStats($order[0]);
-                }
-            )
-            ->orderBy($order[0] ?: 'updated_at', $order[1] ?: 'desc');
-        }
+            if (count($order) === 2) {
+                return $query->when(
+                    in_array($order[0], Slug::getAvailable()),
+                    function ($query) use ($order) {
+                        // @phpstan-ignore-next-line
+                        return $query->withCountStats($order[0]);
+                    }
+                )
+                ->orderBy($order[0], $order[1]);
+            }
 
-        return $query->latest();
+            return $query->latest();
+        }, function (Builder $query) {
+            return $query->latest();
+        });
     }
 }

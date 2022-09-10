@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
@@ -14,15 +30,16 @@ class RoleTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testRoleIndexAsGuest()
+    public function testRoleIndexAsGuest(): void
     {
         $response = $this->get(route('admin.role.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRoleIndexWithoutPermission()
+    public function testRoleIndexWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -32,32 +49,36 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRoleIndexPaginate()
+    public function testRoleIndexPaginate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $role = Role::makeFactory()->count(50)->create();
+        /** @var array<Role> */
+        $roles = Role::makeFactory()->count(50)->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.role.index', ['page' => 2]));
 
-        $response->assertViewIs('icore::admin.role.index');
-        $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$role[30]->name], false);
+        $response->assertViewIs('icore::admin.role.index')
+            ->assertSee('class="pagination"', false)
+            ->assertSeeInOrder([$roles[30]->name], false);
     }
 
-    public function testRoleDestroyAsGuest()
+    public function testRoleDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.role.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRoleDestroyWithoutPermission()
+    public function testRoleDestroyWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
@@ -67,10 +88,12 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRoleDestroyDefault()
+    public function testRoleDestroyDefault(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::whereName('user')->first();
 
         Auth::login($user);
@@ -80,8 +103,9 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistRoleDestroy()
+    public function testNoexistRoleDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -91,10 +115,12 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testRoleDestroy()
+    public function testRoleDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
@@ -114,17 +140,19 @@ class RoleTest extends TestCase
         ]);
     }
 
-    public function testRoleEditAsGuest()
+    public function testRoleEditAsGuest(): void
     {
         $response = $this->get(route('admin.role.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRoleEditWithoutPermission()
+    public function testRoleEditWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
@@ -134,10 +162,12 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRoleEditDefault()
+    public function testRoleEditDefault(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::where('name', Name::SUPER_ADMIN)->first();
 
         Auth::login($user);
@@ -147,8 +177,9 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistRoleEdit()
+    public function testNoexistRoleEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -158,32 +189,37 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testRoleEdit()
+    public function testRoleEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.role.edit', [$role->id]));
 
-        $response->assertOk()->assertViewIs('icore::admin.role.edit');
-        $response->assertSee($role->name, false);
-        $response->assertSee(route('admin.role.update', [$role->id]), false);
+        $response->assertOk()
+            ->assertViewIs('icore::admin.role.edit')
+            ->assertSee($role->name, false)
+            ->assertSee(route('admin.role.update', [$role->id]), false);
     }
 
-    public function testRoleUpdateAsGuest()
+    public function testRoleUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.role.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRoleUpdateWithoutPermission()
+    public function testRoleUpdateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
@@ -193,10 +229,12 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRoleUpdateDefault()
+    public function testRoleUpdateDefault(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::where('name', Name::SUPER_ADMIN)->first();
 
         Auth::login($user);
@@ -206,8 +244,9 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistRoleUpdate()
+    public function testNoexistRoleUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -217,10 +256,12 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testUserUpdateDefaultUserValidationFail()
+    public function testUserUpdateDefaultUserValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::where('name', 'user')->first();
 
         Auth::login($user);
@@ -233,10 +274,12 @@ class RoleTest extends TestCase
         $response->assertSessionHasErrors(['perm.3627']);
     }
 
-    public function testRoleUpdateValidationFail()
+    public function testRoleUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
@@ -249,10 +292,12 @@ class RoleTest extends TestCase
         $response->assertSessionHasErrors(['name', 'perm.467']);
     }
 
-    public function testRoleUpdate()
+    public function testRoleUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
+        /** @var Role */
         $role = Role::makeFactory()->create();
 
         Auth::login($user);
@@ -278,15 +323,16 @@ class RoleTest extends TestCase
         ]);
     }
 
-    public function testRoleCreateAsGuest()
+    public function testRoleCreateAsGuest(): void
     {
         $response = $this->get(route('admin.role.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRoleCreateWithoutPermission()
+    public function testRoleCreateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -296,8 +342,9 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRoleCreate()
+    public function testRoleCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -308,15 +355,16 @@ class RoleTest extends TestCase
         $response->assertSee(route('admin.role.store'), false);
     }
 
-    public function testRoleStoreAsGuest()
+    public function testRoleStoreAsGuest(): void
     {
         $response = $this->post(route('admin.role.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRoleStoreWithoutPermission()
+    public function testRoleStoreWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -326,8 +374,9 @@ class RoleTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testRoleStoreValidationFail()
+    public function testRoleStoreValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -340,8 +389,9 @@ class RoleTest extends TestCase
         $response->assertSessionHasErrors(['name', 'perm.467']);
     }
 
-    public function testRoleStore()
+    public function testRoleStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superAdmin()->create();
 
         Auth::login($user);
@@ -354,10 +404,10 @@ class RoleTest extends TestCase
             ]
         ]);
 
-        $response->assertRedirect(route('admin.role.index'));
-        $response->assertSessionHas('success');
+        $response->assertRedirect(route('admin.role.index'))->assertSessionHas('success');
 
-        $role = Role::whereName('Bungo')->first();
+        /** @var Role */
+        $role = Role::where('name', 'Bungo')->first();
 
         $this->assertTrue($role->exists());
 

@@ -6,7 +6,6 @@ use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\BanModel\BanModel;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
@@ -210,7 +209,7 @@ class BanModelTest extends TestCase
         Auth::login($user);
 
         /**
-         * @var Collection<User>
+         * @var array<User>
          */
         $users = User::makeFactory()->count(50)->create();
 
@@ -251,7 +250,10 @@ class BanModelTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->delete(route('admin.banmodel.destroy', [$user2->ban->id]));
+        /** @var BanModel */
+        $ban = $user2->ban;
+
+        $response = $this->delete(route('admin.banmodel.destroy', [$ban->id]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
@@ -284,16 +286,19 @@ class BanModelTest extends TestCase
 
         Auth::login($user);
 
+        /** @var BanModel */
+        $ban = $user2->ban;
+
         $this->assertDatabaseHas('bans_models', [
-            'id' => $user2->ban->id,
+            'id' => $ban->id,
         ]);
 
-        $response = $this->delete(route('admin.banmodel.destroy', [$user2->ban->id]), []);
+        $response = $this->delete(route('admin.banmodel.destroy', [$ban->id]), []);
 
         $response->assertOk();
 
         $this->assertDatabaseMissing('bans_models', [
-            'id' => $user2->ban->id,
+            'id' => $ban->id,
         ]);
     }
 

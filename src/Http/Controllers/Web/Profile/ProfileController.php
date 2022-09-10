@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Profile;
 
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\RedirectResponse;
@@ -58,7 +59,7 @@ class ProfileController
     public function socialites(): HttpResponse
     {
         return Response::view('icore::web.profile.socialites', [
-            'user' => Auth::user()->load('socialites')
+            'user' => Auth::user()?->load('socialites')
         ]);
     }
 
@@ -70,7 +71,10 @@ class ProfileController
      */
     public function redirectPassword(Request $request): RedirectResponse
     {
-        $request->request->add(['email' => Auth::user()->email]);
+        /** @var User */
+        $user = $request->user();
+
+        $request->request->add(['email' => $user->email]);
 
         $this->sendResetLinkEmail($request);
 
@@ -90,12 +94,15 @@ class ProfileController
      */
     public function updateEmail(UpdateEmailRequest $request): RedirectResponse
     {
-        Auth::user()->update([
+        /** @var User */
+        $user = $request->user();
+
+        $user->update([
             'email' => $request->get('email'),
             'email_verified_at' => null
         ]);
 
-        Auth::user()->sendEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         return Response::redirectToRoute('web.profile.edit')->with(
             'success',
@@ -111,7 +118,10 @@ class ProfileController
      */
     public function update(UpdateRequest $request): RedirectResponse
     {
-        Auth::user()->update([
+        /** @var User */
+        $user = $request->user();
+
+        $user->update([
             'name' => $request->input('name'),
             'marketing' => $request->input('marketing_agreement') ?? Marketing::inactive()
         ]);
@@ -131,9 +141,7 @@ class ProfileController
      */
     public function tokens(TokensRequest $request, TokensFilter $filter): HttpResponse
     {
-        /**
-         * @var \N1ebieski\ICore\Models\User
-         */
+        /** @var \N1ebieski\ICore\Models\User */
         $user = $request->user();
 
         return Response::view('icore::web.profile.tokens', [

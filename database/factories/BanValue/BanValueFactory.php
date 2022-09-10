@@ -27,7 +27,7 @@ class BanValueFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<BanValue>
      */
     protected $model = BanValue::class;
 

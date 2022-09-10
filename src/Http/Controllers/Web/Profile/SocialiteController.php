@@ -89,7 +89,11 @@ class SocialiteController
             );
         }
 
-        $socialiteService->setSocialiteUser(Auth::user())->create([]);
+        $socialiteService->create([
+            'provider_id' => $providerUser->getId(),
+            'provider_name' => $provider,
+            'user' => Auth::user()
+        ]);
 
         return Response::redirectToRoute('web.profile.socialites')->with(
             'success',

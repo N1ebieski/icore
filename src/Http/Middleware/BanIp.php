@@ -45,7 +45,7 @@ class BanIp
     {
         $bans = $this->banValue->makeCache()->rememberAllIpsAsString();
 
-        if (!empty($bans) && preg_match('/^(' . $bans . ')/i', $request->ip())) {
+        if (!empty($bans) && preg_match('/^(' . $bans . ')/i', $request->ip() ?? '')) {
             return App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
                 'You cannot perform this action because you are banned.'

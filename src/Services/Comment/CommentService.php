@@ -136,11 +136,11 @@ class CommentService
     }
 
     /**
-     * Usuwa Komentarz wraz ze zmianą pozycji pozostałych
      *
-     * @return bool
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             return $this->comment->delete();

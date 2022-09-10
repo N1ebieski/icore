@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Listeners\User;
 
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Auth\Guard as Auth;
 
 class RefreshIp
@@ -41,7 +42,10 @@ class RefreshIp
      */
     public function handle($event)
     {
-        $this->auth->user()->update([
+        /** @var User */
+        $user = $this->auth->user();
+
+        $user->update([
             'ip' => $this->request->ip()
         ]);
     }

@@ -34,6 +34,7 @@ class BanUser
      */
     public function handle($request, Closure $next)
     {
+        // @phpstan-ignore-next-line
         if (Auth::check() && Auth::user()->ban) {
             return App::abort(
                 HttpResponse::HTTP_FORBIDDEN,
