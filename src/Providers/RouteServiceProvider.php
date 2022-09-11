@@ -46,22 +46,22 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
-        Route::bind('post_cache', function ($value) {
+        Route::bind('post_cache', function (string $value) {
             return $this->app->make(\N1ebieski\ICore\Cache\Post\PostCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
-        Route::bind('page_cache', function ($value) {
+        Route::bind('page_cache', function (string $value) {
             return $this->app->make(\N1ebieski\ICore\Cache\Page\PageCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
-        Route::bind('category_post_cache', function ($value) {
+        Route::bind('category_post_cache', function (string $value) {
             return $this->app->make(\N1ebieski\ICore\Models\Category\Post\Category::class)
                 ->makeCache()->rememberBySlug($value) ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
 
-        Route::bind('tag_cache', function ($value) {
+        Route::bind('tag_cache', function (string $value) {
             return $this->app->make(\N1ebieski\ICore\Cache\Tag\TagCache::class)->rememberBySlug($value)
                 ?? $this->app->abort(HttpResponse::HTTP_NOT_FOUND);
         });
