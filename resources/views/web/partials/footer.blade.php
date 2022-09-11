@@ -10,7 +10,7 @@
             @if (app('router')->has('web.newsletter.store'))
             <hr class="clearfix w-100 d-md-none">
             <div class="col-md mx-auto">
-                <a-icore::newsletter-component />
+                <x-icore::newsletter-component />
             </div>
             @endif
             <hr class="clearfix w-100 d-md-none">
