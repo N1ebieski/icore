@@ -18,12 +18,12 @@
 
 namespace N1ebieski\ICore\View\Components\Comment\Post;
 
+use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use N1ebieski\ICore\View\Components\Comment\CommentComponent as BaseCommentComponent;
 
-class CommentComponent extends BaseCommentComponent
+class CommentComponent extends Component
 {
     /**
      *
@@ -35,13 +35,13 @@ class CommentComponent extends BaseCommentComponent
      * @return void
      */
     public function __construct(
-        Comment $comment,
-        ViewFactory $view,
-        int $limit = 5,
-        ?int $maxContent = null,
-        string $orderby = 'created_at|desc'
+        protected Comment $comment,
+        protected ViewFactory $view,
+        protected int $limit = 5,
+        protected ?int $maxContent = null,
+        protected string $orderby = 'created_at|desc'
     ) {
-        parent::__construct($comment, $view, $limit, $maxContent, $orderby);
+        //
     }
 
     /**

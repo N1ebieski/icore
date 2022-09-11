@@ -2,12 +2,12 @@
 
 namespace N1ebieski\ICore\View\Components\Tag\Post;
 
+use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use N1ebieski\ICore\View\Components\Tag\TagComponent as BaseTagComponent;
 
-class TagComponent extends BaseTagComponent
+class TagComponent extends Component
 {
     /**
      *
@@ -19,13 +19,13 @@ class TagComponent extends BaseTagComponent
      * @return void
      */
     public function __construct(
-        Tag $tag,
-        ViewFactory $view,
-        int $limit = 25,
-        ?array $colors = null,
+        protected Tag $tag,
+        protected ViewFactory $view,
+        protected int $limit = 25,
+        protected ?array $colors = null,
         protected ?array $cats = null
     ) {
-        parent::__construct($tag, $view, $limit, $colors);
+        //
     }
 
     /**
