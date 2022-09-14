@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\BanModel\User;
 
+use Illuminate\Database\Query\JoinClause;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use N1ebieski\ICore\Models\BanModel\BanModel as BaseBanModel;
@@ -110,9 +111,9 @@ class BanModel extends BaseBanModel
         // @phpstan-ignore-next-line
         return $this->newQuery()
             ->select('users.id as id_user', 'users.*', 'bans_models.*', 'bans_models.id as id_ban')
-            ->leftJoin('users', function ($query) {
-                $query->on('bans_models.model_id', '=', 'users.id');
-                $query->where('bans_models.model_type', '=', 'N1ebieski\ICore\Models\User');
+            ->leftJoin('users', function (JoinClause $query) {
+                return $query->on('bans_models.model_id', '=', 'users.id')
+                    ->where('bans_models.model_type', '=', $this->model_type);
             })
             ->filterExcept($filter['except'])
             ->filterSearch($filter['search'])

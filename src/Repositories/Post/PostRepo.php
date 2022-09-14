@@ -247,7 +247,8 @@ class PostRepo
         return $this->post->newQuery()
             ->selectRaw("`{$this->post->getTable()}`.*")
             ->from(
-                $this->post->selectRaw("`{$this->post->getTable()}`.*")
+                $this->post->newQuery()
+                    ->selectRaw("`{$this->post->getTable()}`.*")
                     ->search($name)
                     ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
                         // @phpstan-ignore-next-line

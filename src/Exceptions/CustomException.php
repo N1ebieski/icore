@@ -45,7 +45,7 @@ class CustomException extends Exception
     /**
      * Report the exception.
      *
-     * @return bool
+     * @return bool|void
      */
     public function report()
     {
@@ -55,7 +55,7 @@ class CustomException extends Exception
     /**
      *
      * @param Request $request
-     * @return bool
+     * @return bool|void
      */
     public function render(Request $request)
     {
