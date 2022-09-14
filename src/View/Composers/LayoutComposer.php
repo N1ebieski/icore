@@ -107,17 +107,12 @@ class LayoutComposer extends Composer
     {
         $themeToggle = $this->request->cookie('theme_toggle');
 
-        if (is_string($themeToggle)) {
-            switch ($themeToggle) {
-                case 'dark':
-                    return 'dark';
+        return match ($themeToggle) {
+            'dark' => 'dark',
+            'light' => '',
 
-                case 'light':
-                    return '';
-            }
-        }
-
-        return $this->config->get('icore.theme');
+            default => $this->config->get('icore.theme')
+        };
     }
 
     /**
