@@ -98,8 +98,9 @@ class RenderDirective
 
         return json_decode('{' . $this->str->of($expressionParts[1])
             ->trim()
-            ->replaceMatches('/=>\s*(.*?)(,\s*\'|\s*\]$)/', '=> "$1"$2')
+            ->replaceMatches('/=>\s*([\S\s]*?)(,\n\'|\s+\]$(?!\n+))/', '=> "$1"$2')
             ->replaceMatches('/\'(.*?)\'\s*=>/', '"$1" =>')
+            ->replaceMatches('/\s+/', '')
             ->replace('=>', ':')
             ->substr(1, -1) . '}', true);
     }
