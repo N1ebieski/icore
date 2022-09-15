@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Services\MailingEmail;
 use Throwable;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
@@ -94,12 +95,15 @@ class MailingEmailService
 
                     $values = [];
 
-                    $users->each(function (User $user) use ($attributes, &$values, &$id) {
+                    /** @var Mailing */
+                    $mailing = $attributes['mailing'];
+
+                    $users->each(function (User $user) use ($mailing, &$values, &$id) {
                         // Create attributes manually, no within model because multiple
                         // models may be huge performance impact
                         $values[] = [
                             'id' => $id++,
-                            'mailing_id' => $attributes['mailing'],
+                            'mailing_id' => $mailing->id,
                             'model_type' => $user->getMorphClass(),
                             'model_id' => $user->id,
                             'email' => $user->email,
@@ -129,12 +133,15 @@ class MailingEmailService
 
                     $values = [];
 
-                    $newsletters->each(function (Newsletter $newsletter) use ($attributes, &$values, &$id) {
+                    /** @var Mailing */
+                    $mailing = $attributes['mailing'];
+
+                    $newsletters->each(function (Newsletter $newsletter) use ($mailing, &$values, &$id) {
                         // Create attributes manually, no within model because multiple
                         // models may be huge performance impact
                         $values[] = [
                             'id' => $id++,
-                            'mailing_id' => $attributes['mailing'],
+                            'mailing_id' => $mailing->id,
                             'model_type' => $newsletter->getMorphClass(),
                             'model_id' => $newsletter->id,
                             'email' => $newsletter->email,
@@ -162,12 +169,15 @@ class MailingEmailService
 
             $values = [];
 
+            /** @var Mailing */
+            $mailing = $attributes['mailing'];
+
             foreach ($attributes['recipients'] as $recipient) {
                 // Create attributes manually, no within model because multiple
                 // models may be huge performance impact
                 $values[] = [
                     'id' => $id++,
-                    'mailing_id' => $attributes['mailing'],
+                    'mailing_id' => $mailing->id,
                     'model_type' => null,
                     'model_id' => null,
                     'email' => $recipient->email,
@@ -182,15 +192,15 @@ class MailingEmailService
     }
 
     /**
-     * [clear description]
-     * @return int [description]
+     *
+     * @param Mailing $mailing
+     * @return int
+     * @throws Throwable
      */
-    public function clear(): int
+    public function clear(Mailing $mailing): int
     {
-        return $this->db->transaction(function () {
-            return $this->mailingEmail
-                ->where('mailing_id', $this->mailingEmail->mailing->id)
-                ->delete();
+        return $this->db->transaction(function () use ($mailing) {
+            return $this->mailingEmail->where('mailing_id', $mailing->id)->delete();
         });
     }
 

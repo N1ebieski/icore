@@ -67,12 +67,12 @@ class MailingService
 
             $this->mailing->save();
 
-            $attributes['mailing'] = $this->mailing->id;
-
             /** @var MailingEmail */
             $mailingEmail = $this->mailing->emails()->make();
 
-            $mailingEmail->makeService()->createGlobal($attributes);
+            $mailingEmail->makeService()->createGlobal(array_merge([
+                'mailing' => $this->mailing
+            ], $attributes));
 
             return $this->mailing;
         });
@@ -99,12 +99,12 @@ class MailingService
             }
 
             if ($this->mailing->emails->count() === 0) {
-                $attributes['mailing'] = $this->mailing->id;
-
                 /** @var MailingEmail */
                 $mailingEmail = $this->mailing->emails()->make();
 
-                $mailingEmail->makeService()->createGlobal($attributes);
+                $mailingEmail->makeService()->createGlobal(array_merge([
+                    'mailing' => $this->mailing
+                ], $attributes));
             }
 
             $this->mailing->save();
@@ -134,10 +134,10 @@ class MailingService
     public function reset(): int
     {
         return $this->db->transaction(function () {
-            return $this->mailing->emails()->make()
-                ->setRelations(['mailing' => $this->mailing])
-                ->makeService()
-                ->clear();
+            /** @var MailingEmail */
+            $mailingEmail = $this->mailing->emails()->make();
+
+            return $mailingEmail->makeService()->clear($this->mailing);
         });
     }
 
