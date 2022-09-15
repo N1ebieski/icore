@@ -216,7 +216,7 @@ class MailingService
         return $this->db->transaction(function () {
             return $this->mailing->newQuery()
                 ->active()
-                ->whereHas('emails', function ($query) {
+                ->whereHas('emails', function (Builder|MailingEmail $query) {
                     return $query->unsent();
                 })
                 ->update(['status' => Status::INPROGRESS]);

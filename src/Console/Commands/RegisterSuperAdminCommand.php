@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Role\Name;
 use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Contracts\Translation\Translator as Lang;
@@ -65,7 +66,7 @@ class RegisterSuperAdminCommand extends Command
      */
     protected function authorize(): bool
     {
-        return $this->user->whereHas('roles', function ($query) {
+        return $this->user->whereHas('roles', function (Builder $query) {
             $query->where('name', Name::SUPER_ADMIN);
         })->count() === 0;
     }
