@@ -46,7 +46,7 @@
         <label class="col-lg-3 col-form-label text-lg-left d-none d-lg-block"></label>
         <div class="col-lg-6">
             <div class="form-group">
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control custom-switch">
                     <input type="hidden" name="marketing_agreement" value="{{ User\Marketing::INACTIVE }}">
                     <input 
                         type="checkbox" 

@@ -214,7 +214,7 @@ class PostRepo
     public function paginateByTag(string $tag): LengthAwarePaginator
     {
         return $this->post->newQuery()
-            ->withAllTags($tag)
+            ->withAnyTags($tag)
             ->active()
             ->orderBy('published_at', 'desc')
             ->with('user:id,name')

@@ -133,7 +133,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input 
                             type="checkbox" 
                             class="custom-control-input" 
@@ -163,7 +163,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="comment" value="{{ Post\Comment::INACTIVE }}">
                         <input 
                             type="checkbox" 

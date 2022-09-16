@@ -132,7 +132,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="seo_noindex" value="{{ Post\SeoNoindex::INACTIVE }}">
                         <input 
                             type="checkbox" 
@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="seo_nofollow" value="{{ Post\SeoNofollow::INACTIVE }}">
                         <input 
                             type="checkbox" 
@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="comment" value="{{ Post\Comment::INACTIVE }}">
                         <input 
                             type="checkbox" 

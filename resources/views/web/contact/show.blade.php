@@ -58,7 +58,7 @@
                     @includeWhen($errors->has('content'), 'icore::web.partials.errors', ['name' => 'content'])
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input 
                             type="checkbox" 
                             class="custom-control-input {{ $isValid('contact_agreement') }}" 
