@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Database\Seeders\Env;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 
 class CommentsSeeder extends Seeder
@@ -33,7 +34,11 @@ class CommentsSeeder extends Seeder
     public function run()
     {
         //$posts = Post::inRandomOrder()->limit(100)->get();
+
+        /** @var Post */
         $post = Post::first();
+
+        /** @var Collection<User> */
         $users = User::all();
 
         $pattern = [
@@ -53,6 +58,7 @@ class CommentsSeeder extends Seeder
             }
 
             for ($i = 0; $i < $loop; $i++) {
+                /** @var Comment */
                 $comment = Comment::makeFactory()->for($post, 'morph')->for($users->random(), 'user')->create([
                     'parent_id' => $parent_id
                 ]);

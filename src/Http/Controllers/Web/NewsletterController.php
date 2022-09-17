@@ -42,6 +42,7 @@ class NewsletterController
      */
     public function store(Newsletter $newsletter, StoreRequest $request): JsonResponse
     {
+        /** @var Newsletter */
         $newsletter = $newsletter->firstOrCreate(
             ['email' => $request->input('email')],
             ['status' => Status::INACTIVE]

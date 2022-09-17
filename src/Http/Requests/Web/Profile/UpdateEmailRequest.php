@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Http\Requests\Web\Profile;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEmailRequest extends FormRequest
@@ -44,7 +45,7 @@ class UpdateEmailRequest extends FormRequest
     {
         // Dodaje globalna flage zeby bledy pojawialy sie wylacznie w gornym
         // alercie, zamiast pojedynczych bledow pod inputami
-        $this->session()->flash('alertErrors', 1);
+        Request::session()->flash('alertErrors', 1);
 
         /** @var User */
         $user = $this->user();

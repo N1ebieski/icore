@@ -44,8 +44,10 @@ class MailingsSeeder extends Seeder
                  * insertujemy do modelu
                  */
 
+                $models_model = [];
+
                 foreach ($users as $user) {
-                    $email = MailingEmail::make();
+                    $email = new MailingEmail();
                     $email->email = $user->email;
                     $email->morph()->associate($user);
                     $email->mailing()->associate($m);
@@ -62,7 +64,7 @@ class MailingsSeeder extends Seeder
                  */
 
                 for ($i = 0; $i < 50; $i++) {
-                    $models_email[] = $email = MailingEmail::make();
+                    $models_email[] = $email = new MailingEmail();
                     $email->email = Faker::create()->unique()->safeEmail;
                 }
 

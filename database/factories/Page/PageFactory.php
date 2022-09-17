@@ -31,7 +31,7 @@ class PageFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Page>
      */
     protected $model = Page::class;
 

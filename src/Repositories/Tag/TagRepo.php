@@ -74,10 +74,7 @@ class TagRepo
      */
     public function getPopularByComponent(array $component): Collection
     {
-        if (!method_exists($this->tag, 'morphs')) {
-            throw new \Exception('Entity must be polymorphic.');
-        }
-
+        /** @var mixed */
         $morph = $this->tag->morphs()->make();
 
         return $this->tag->newQuery()
@@ -87,13 +84,11 @@ class TagRepo
                 return $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
                     ->where("{$morph->getTable()}.status", $morph->status::ACTIVE);
             })
-            // @phpstan-ignore-next-line
-            ->where('tags_models.model_type', $this->tag->model_type)
-            ->when($component['cats'] !== null, function (Builder $query) use ($component) {
-                return $query->join('categories_models', function (JoinClause $query) use ($component) {
+            ->where('tags_models.model_type', $morph->getMorphClass())
+            ->when($component['cats'] !== null, function (Builder $query) use ($morph, $component) {
+                return $query->join('categories_models', function (JoinClause $query) use ($morph, $component) {
                     return $query->on('tags_models.model_id', '=', 'categories_models.model_id')
-                        // @phpstan-ignore-next-line
-                        ->where('categories_models.model_type', $this->tag->model_type)
+                        ->where('categories_models.model_type', $morph->getMorphClass())
                         ->whereIn('categories_models.category_id', $component['cats']);
                 });
             })

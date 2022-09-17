@@ -31,7 +31,7 @@ class UserFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<User>
      */
     protected $model = User::class;
 
@@ -56,9 +56,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function active()
+    public function active(): self
     {
         return $this->state(function () {
             return [
@@ -70,9 +70,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function marketing()
+    public function marketing(): self
     {
         return $this->state(function () {
             return [
@@ -84,9 +84,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function user()
+    public function user(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::USER);
@@ -96,9 +96,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function admin()
+    public function admin(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::ADMIN);
@@ -108,9 +108,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function superAdmin()
+    public function superAdmin(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::SUPER_ADMIN);
@@ -120,9 +120,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function api()
+    public function api(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::API);
@@ -132,9 +132,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function banUser()
+    public function banUser(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->ban()->create();

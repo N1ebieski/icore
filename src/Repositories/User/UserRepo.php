@@ -94,6 +94,7 @@ class UserRepo
          */
         $token = $tokens->make();
 
+        // @phpstan-ignore-next-line
         return $tokens->selectRaw("`{$token->getTable()}`.*")
             ->whereJsonDoesntContain('abilities', 'refresh')
             ->filterExcept($filter['except'])

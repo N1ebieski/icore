@@ -24,6 +24,7 @@ use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -138,9 +139,9 @@ class PageRepo
     /**
      * [getWithChildrensByComponent description]
      * @param  array      $component [description]
-     * @return Collection            [description]
+     * @return Collect            [description]
      */
-    public function getWithChildrensByComponent(array $component): Collection
+    public function getWithChildrensByComponent(array $component): Collect
     {
         return $this->page->newQuery()
             ->active()
@@ -158,6 +159,7 @@ class PageRepo
                     ->orderBy('position', 'asc');
             })
             ->get()
+            // @phpstan-ignore-next-line
             ->map(function (Page $page) {
                 if ($page->childrens->isNotEmpty()) {
                     // @phpstan-ignore-next-line

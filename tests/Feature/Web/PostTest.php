@@ -63,7 +63,6 @@ class PostTest extends TestCase
         $response->assertSee($post->title, false)
             ->assertSee($category->name, false)
             ->assertSee($post->user->name, false)
-            // @phpstan-ignore-next-line
             ->assertSee($tags[0]->name, false);
     }
 
@@ -77,9 +76,7 @@ class PostTest extends TestCase
 
         $response = $this->get(route('web.post.show', [$post->slug]));
 
-        // @phpstan-ignore-next-line
-        $response->assertDontSee($comments[1]->content)
-            ->assertSee($post->title, false);
+        $response->assertDontSee($comments[1]->content)->assertSee($post->title, false);
     }
 
     public function testPostShowPaginate(): void

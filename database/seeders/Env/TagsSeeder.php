@@ -32,6 +32,7 @@ class TagsSeeder extends Seeder
     public function run()
     {
         for ($i = 0; $i < 20000; $i++) {
+            /** @var Tag */
             $tag = Tag::makeFactory()->make([
                 'name' => Faker::create()->sentence(rand(1, 3))
             ]);

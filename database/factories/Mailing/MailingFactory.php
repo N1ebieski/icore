@@ -27,7 +27,7 @@ class MailingFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Mailing>
      */
     protected $model = Mailing::class;
 

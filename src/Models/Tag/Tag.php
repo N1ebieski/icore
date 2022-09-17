@@ -43,6 +43,7 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
  * @property-read string $created_at_diff
  * @property-read string $poli
  * @property-read string $updated_at_diff
+ * @method static \Illuminate\Database\Eloquent\Relations\MorphToMany|Builder morphs()
  * @method static Builder|Tag byName(string $value)
  * @method static \N1ebieski\ICore\Database\Factories\Tag\TagFactory factory(...$parameters)
  * @method static Builder|Tag filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
@@ -96,7 +97,7 @@ class Tag extends Taggable
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'tag_id' => 'integer',

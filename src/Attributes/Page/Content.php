@@ -16,30 +16,35 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Database\Factories\NewsletterToken;
+namespace N1ebieski\ICore\Attributes\Page;
 
-use Illuminate\Support\Str;
-use N1ebieski\ICore\Models\NewsletterToken;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class NewsletterTokenFactory extends Factory
+class Content
 {
     /**
-     * The name of the factory's corresponding model.
      *
-     * @var class-string<NewsletterToken>
+     * @param Page $page
+     * @return void
      */
-    protected $model = NewsletterToken::class;
+    public function __construct(protected Page $page)
+    {
+        //
+    }
 
     /**
-     * Define the model's default state.
      *
-     * @return array
+     * @return Attribute
      */
-    public function definition(): array
+    public function __invoke(): Attribute
     {
-        return [
-            'token' => Str::random(30)
-        ];
+        return new Attribute(
+            set: function ($value): ?string {
+                return !empty($value) ?
+                    strip_tags(str_replace('[more]', '', $value))
+                    : null;
+            }
+        );
     }
 }

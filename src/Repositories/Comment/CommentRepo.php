@@ -24,6 +24,7 @@ use Illuminate\Database\Query\JoinClause;
 use N1ebieski\ICore\Models\Rating\Rating;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CommentRepo
@@ -150,9 +151,9 @@ class CommentRepo
      * Undocumented function
      *
      * @param array $component
-     * @return Collection
+     * @return Collect
      */
-    public function getByComponent(array $component): Collection
+    public function getByComponent(array $component): Collect
     {
         return $this->comment->newQuery()
             ->active()
@@ -168,6 +169,7 @@ class CommentRepo
             ->limit($component['limit'])
             ->with(['morph', 'user'])
             ->get()
+            // @phpstan-ignore-next-line
             ->map(function (Comment $comment) use ($component) {
                 if ($component['max_content'] !== null) {
                     $comment->content = mb_substr($comment->content, 0, $component['max_content']) . '...';

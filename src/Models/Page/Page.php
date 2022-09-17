@@ -21,7 +21,6 @@ namespace N1ebieski\ICore\Models\Page;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
-use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
 use Cviebrock\EloquentTaggable\Taggable;
 use Franzose\ClosureTable\Models\Entity;
@@ -34,6 +33,7 @@ use N1ebieski\ICore\Services\Page\PageService;
 use N1ebieski\ICore\Repositories\Page\PageRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
@@ -296,7 +296,7 @@ class Page extends Entity
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',
@@ -455,159 +455,154 @@ class Page extends Entity
         );
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getModelTypeAttribute description]
-     * @return string [description]
-     */
-    public function getModelTypeAttribute(): string
-    {
-        return $this::class;
-    }
-
-    /**
-     * [getPoliAttribute description]
-     * @return string [description]
-     */
-    public function getPoliSelfAttribute(): string
-    {
-        return 'page';
-    }
-
-    /**
-     * [getContentHtmlAttribute description]
-     * @return string [description]
-     */
-    public function getContentHtmlAttribute(): string
-    {
-        return Purifier::clean($this->attributes['content_html'] ?? '');
-    }
-
-    /**
-     * [getMetaTitleAttribute description]
-     * @return string [description]
-     */
-    public function getMetaTitleAttribute(): string
-    {
-        return (!empty($this->attributes['seo_title'])) ? $this->attributes['seo_title'] : $this->title;
-    }
-
-    /**
-     * [getMetaDescAttribute description]
-     * @return string [description]
-     */
-    public function getMetaDescAttribute(): string
-    {
-        return (!empty($this->attributes['seo_desc'])) ? $this->attributes['seo_desc'] : $this->shortContent;
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getReplacementContentAttribute(): string
+    public function modelType(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-            ->handle($this->content ?? '', function ($value) {
-                return $value;
-            });
+        return new Attribute(fn (): string => $this::class);
     }
 
     /**
-     * Short content used in the listing
-     * @return string [description]
-     */
-    public function getShortContentAttribute(): string
-    {
-        return e(mb_substr(strip_tags($this->replacement_content), 0, 500), false);
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getReplacementContentHtmlAttribute(): string
+    public function poliSelf(): Attribute
     {
-        return App::make(Pipeline::class)
-            ->send($this->content_html ?? '')
-            ->through([
-                \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
-                \N1ebieski\ICore\Utils\Conversions\Replacement::class
-            ])
-            ->thenReturn();
+        return new Attribute(fn (): string => 'page');
     }
 
     /**
-     * Full content without more link
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getNoMoreContentHtmlAttribute(): string
+    public function contentHtml(): Attribute
     {
-        return str_replace(
-            '<p>[more]</p>',
-            '<span id="more" class="hashtag"></span>',
-            $this->replacement_content_html
-        );
+        return App::make(\N1ebieski\ICore\Attributes\Page\ContentHtml::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * Content to the point of more link
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getLessContentHtmlAttribute(): string
+    public function metaTitle(): Attribute
     {
-        $cut = explode('<p>[more]</p>', $this->replacement_content_html);
-
-        // @phpstan-ignore-next-line
-        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.page.show', [
-                'page' => $this->slug,
-                '#more'
-            ]) . '">' . Lang::get('icore::pages.more') . '</a>' : $this->replacement_content_html;
+        return App::make(\N1ebieski\ICore\Attributes\Page\MetaTitle::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * [getRealPositionAttribute description]
-     * @return int [description]
+     *
+     * @return Attribute
      */
-    public function getRealPositionAttribute(): int
+    public function metaDesc(): Attribute
     {
-        return $this->position + 1;
+        return App::make(\N1ebieski\ICore\Attributes\Page\MetaDesc::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * [getShortNameAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getShortTitleAttribute(): string
+    public function replacementContent(): Attribute
     {
-        return (strlen($this->title) > 20) ? substr($this->title, 0, 20) : $this->title;
+        return App::make(\N1ebieski\ICore\Attributes\Page\ReplacementContent::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * [getFirstImageAttribute description]
-     * @return string|null [description]
+     *
+     * @return Attribute
      */
-    public function getFirstImageAttribute(): ?string
+    public function shortContent(): Attribute
     {
-        preg_match('/<img.+src=[\'|"](.*?)[\'|"]/', $this->content_html, $image);
-
-        return $image[1] ?? null;
+        return App::make(\N1ebieski\ICore\Attributes\Page\ShortContent::class, [
+            'page' => $this
+        ])();
     }
 
-    // Mutators
+    /**
+     *
+     * @return Attribute
+     */
+    public function replacementContentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\ReplacementContentHtml::class, [
+            'page' => $this
+        ])();
+    }
 
     /**
-     * [setContentAttribute description]
-     * @param string $value [description]
+     *
+     * @return Attribute
      */
-    public function setContentAttribute($value): void
+    public function noMoreContentHtml(): Attribute
     {
-        $this->attributes['content'] = !empty($value) ?
-            strip_tags(str_replace('[more]', '', $value))
-            : null;
+        return App::make(\N1ebieski\ICore\Attributes\Page\NoMoreContentHtml::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function lessContentHtmlAttribute(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\LessContentHtml::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function realPosition(): Attribute
+    {
+        return new Attribute(fn (): int => $this->position + 1);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function shortTitle(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\ShortTitle::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function firstImage(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\FirstImage::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function content(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\Content::class, [
+            'page' => $this
+        ])();
     }
 
     // Checkers

@@ -27,7 +27,7 @@ class LinkFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Link>
      */
     protected $model = Link::class;
 

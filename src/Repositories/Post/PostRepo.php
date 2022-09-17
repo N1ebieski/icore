@@ -110,6 +110,7 @@ class PostRepo
      */
     public function firstBySlug(string $slug): ?Post
     {
+        // @phpstan-ignore-next-line
         return $this->post->newQuery()
             ->where('slug', $slug)
             ->active()
@@ -264,7 +265,7 @@ class PostRepo
                                 ->groupBy('posts.id')
                                 ->getQuery()
                         );
-                    }),
+                    })->getQuery(),
                 'posts'
             )
             ->active()

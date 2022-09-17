@@ -27,7 +27,7 @@ class SocialiteFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Socialite>
      */
     protected $model = Socialite::class;
 

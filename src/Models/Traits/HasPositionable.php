@@ -43,9 +43,9 @@ trait HasPositionable
      * [decrementSiblings description]
      * @param  int|null $from [description]
      * @param  int|null $to   [description]
-     * @return bool         [description]
+     * @return int         [description]
      */
-    public function decrementSiblings(int $from = null, int $to = null): bool
+    public function decrementSiblings(int $from = null, int $to = null): int
     {
         return $this->siblings()
             ->when(!is_null($from), function ($query) use ($from) {
@@ -62,9 +62,9 @@ trait HasPositionable
      * [incrementSiblings description]
      * @param  int|null $from [description]
      * @param  int|null $to   [description]
-     * @return bool         [description]
+     * @return int         [description]
      */
-    public function incrementSiblings(int $from = null, int $to = null): bool
+    public function incrementSiblings(int $from = null, int $to = null): int
     {
         return $this->siblings()
             ->when(!is_null($from), function ($query) use ($from) {

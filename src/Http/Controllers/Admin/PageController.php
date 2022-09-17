@@ -152,12 +152,9 @@ class PageController
      */
     public function editFull(Page $page): HttpResponse
     {
-        return Response::view(
-            'icore::admin.page.edit_full',
-            App::make(EditFullViewModel::class, [
-                'page' => $page
-            ])
-        );
+        return Response::view('icore::admin.page.edit_full', App::make(EditFullViewModel::class, [
+            'page' => $page
+        ]));
     }
 
     /**

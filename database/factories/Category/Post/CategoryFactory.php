@@ -26,7 +26,7 @@ class CategoryFactory extends BaseCategoryFactory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Category>
      */
     protected $model = Category::class;
 }

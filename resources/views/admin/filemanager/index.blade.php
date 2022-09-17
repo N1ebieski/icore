@@ -17,23 +17,16 @@
         <span>{{ trans('icore::filemanager.route.index') }}</span>
     </div>
 </h1>
-<div style="height: 1000px;">
-    <div id="fm"></div>
-</div>
+<div id="fm" style="height: 1000px;"></div>
 
 @push('style')
-<link 
-    rel="stylesheet" 
-    href="{{ asset('css/vendor/file-manager/file-manager.css') }}"
->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{{ asset('css/vendor/file-manager/file-manager.css') }}">
 @endpush
 
 @push('script')
-<script 
-    type="text/javascript"
-    src="{{ asset('js/vendor/file-manager/file-manager.js') }}"
-    defer
-></script>
+<script type="text/javascript" src="{{ asset('js/vendor/file-manager/file-manager.js') }}" defer></script>
 @endpush
 
 @endsection

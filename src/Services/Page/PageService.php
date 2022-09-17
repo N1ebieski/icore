@@ -139,7 +139,7 @@ class PageService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill(
-                $this->collect->make($attributes)->except('parent_id')->toArray()
+                $this->collect->make($attributes)->except(['parent_id'])->toArray()
             );
             $this->page->content = $this->page->content_html;
 

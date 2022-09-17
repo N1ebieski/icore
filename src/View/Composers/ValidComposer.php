@@ -43,9 +43,6 @@ class ValidComposer extends Composer
      */
     public function isValid(string $name): ?string
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
         if ($this->session->has('errors')) {
             if ($this->session->get('errors')->has($name)) {
                 return 'is-invalid';

@@ -20,11 +20,14 @@ namespace N1ebieski\ICore\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
+use Symfony\Component\Mailer\Mailer;
 use GuzzleHttp\Client as GuzzleClient;
+use Symfony\Component\Mailer\Transport;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Translation\Translator as Lang;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
 
 class InstallCommand extends Command
 {
@@ -117,16 +120,22 @@ class InstallCommand extends Command
         $this->line($this->lang->get('icore::install.validate.connection_mail'));
 
         try {
-            $transport = new \Swift_SmtpTransport(
-                $this->config->get('mail.host'),
-                $this->config->get('mail.port'),
-                $this->config->get('mail.encryption')
-            );
-            $transport->setUsername($this->config->get('mail.username'));
-            $transport->setPassword($this->config->get('mail.password'));
+            // $transport = Transport::fromDsn(
+            //     "smtp://{$this->config->get('mail.username')}:{$this->config->get('mail.password')}@{$this->config->get('mail.host')}:{$this->config->get('mail.port')}/?encryption={$this->config->get('mail.encryption')}"
+            // );
 
-            $mailer = new \Swift_Mailer($transport);
-            $mailer->getTransport()->start();
+            // $mailer = new Mailer($transport);
+            // $mailer->getTransport
+            // $transport = new \Swift_SmtpTransport(
+            //     $this->config->get('mail.host'),
+            //     $this->config->get('mail.port'),
+            //     $this->config->get('mail.encryption')
+            // );
+            // $transport->setUsername($this->config->get('mail.username'));
+            // $transport->setPassword($this->config->get('mail.password'));
+
+            // $mailer = new \Swift_Mailer($transport);
+            // $mailer->getTransport()->start();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
             exit;

@@ -148,17 +148,17 @@ class PostCache
 
     /**
      * [rememberArchives description]
-     * @return Collection [description]
+     * @return Collect [description]
      */
-    public function rememberArchives(): Collection
+    public function rememberArchives(): Collect
     {
         return $this->cache->tags(['posts'])->remember(
             'post.getArchives',
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                $posts = $this->post->makeRepo()->getArchives();
+                $posts = $this->post->makeRepo()->getArchives()->toBase();
 
-                $posts->map(function ($item) {
+                $posts->map(function (mixed $item) {
                     $item->month_localized = optional($this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}"))
                         ->locale($this->config->get('app.locale'))
                         ->isoFormat('MMMM');

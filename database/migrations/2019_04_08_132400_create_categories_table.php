@@ -24,7 +24,7 @@ use Illuminate\Database\Migrations\Migration;
 // phpcs:ignore
 class CreateCategoriesTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -85,7 +85,7 @@ class CreateCategoriesTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::table('categories_closure', function (Blueprint $table) {
             Schema::dropIfExists('categories_closure');

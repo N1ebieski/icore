@@ -26,12 +26,16 @@ use N1ebieski\ICore\ValueObjects\Post\Comment;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @property \Faker\Generator&\Mmo\Faker\PicsumProvider $faker
+ *
+ */
 class PostFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Post>
      */
     protected $model = Post::class;
 
@@ -69,9 +73,9 @@ class PostFactory extends Factory
     public function image()
     {
         return $this->state(function () {
-            $content = $this->faker->text(2000);
-
             $this->faker->addProvider(new \Mmo\Faker\PicsumProvider($this->faker));
+
+            $content = $this->faker->text(2000);
 
             $split = explode('. ', $content);
             $rands = (array)array_rand(array_slice($split, 0, array_key_last($split) - 5), rand(1, 3));

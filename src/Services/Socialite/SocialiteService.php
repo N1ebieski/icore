@@ -115,6 +115,7 @@ class SocialiteService
         // Jesli nie, tworzymy go
         return $this->db->transaction(function () {
             /** @var User */
+            // @phpstan-ignore-next-line
             $this->socialiteUser = $this->socialite->user()->create([
                 'name' => str_replace(' ', '_', $this->providerUser->getName()),
                 'email' => $this->providerUser->getEmail(),

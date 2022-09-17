@@ -160,10 +160,6 @@ class CategoryRepo
      */
     public function paginatePosts(): LengthAwarePaginator
     {
-        if (!method_exists($this->category, 'morphs')) {
-            throw new \Exception('Entity must be polymorphic.');
-        }
-
         return $this->category->morphs()
             ->active()
             ->with('user')

@@ -38,30 +38,26 @@ class ScheduleServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->booted(function () {
-            $this->schedule = $this->app->make(Schedule::class);
+        $this->schedule = $this->app->make(Schedule::class);
 
+        $this->app->booted(function () {
             $this->callClearCacheSchedule();
 
             $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
                 ->name('MailingCron')
-                ->everyThirtyMinutes()
-                ->runInBackground();
+                ->everyThirtyMinutes();
 
             $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
                 ->name('PostCron')
-                ->everyThirtyMinutes()
-                ->runInBackground();
+                ->everyThirtyMinutes();
 
             $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
                 ->name('SitemapCron')
-                ->daily()
-                ->runInBackground();
+                ->daily();
 
             $this->schedule->command('clean:directories')
                 ->name('CleanDirectories')
-                ->hourly()
-                ->runInBackground();
+                ->hourly();
         });
     }
 

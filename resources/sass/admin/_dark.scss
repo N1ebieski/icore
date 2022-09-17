@@ -131,6 +131,10 @@ button[class^='trumbowyg-'] {
     color: $black !important;    
 }
 
+.fm-table td {
+    border-bottom-width: 0;
+}
+
 .fm-tree .fm-tree-disk {
     background-color: $background !important;    
 }

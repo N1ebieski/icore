@@ -26,7 +26,7 @@ class RatingFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Rating>
      */
     protected $model = Rating::class;
 

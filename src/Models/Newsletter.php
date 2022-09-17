@@ -63,7 +63,7 @@ class Newsletter extends Model
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = ['email'];
 
@@ -79,7 +79,7 @@ class Newsletter extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',

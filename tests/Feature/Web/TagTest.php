@@ -50,7 +50,6 @@ class TagTest extends TestCase
             ->create();
 
         /** @var Tag $tag */
-        // @phpstan-ignore-next-line
         $tag = Tag::makeFactory()->hasAttached($posts, [], 'morphs')->create();
 
         $response = $this->get(route('web.tag.post.show', [$tag->normalized, 'page' => 2]));

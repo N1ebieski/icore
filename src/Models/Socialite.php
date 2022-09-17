@@ -70,7 +70,7 @@ class Socialite extends Model
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $hidden = ['provider_id'];
 

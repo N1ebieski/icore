@@ -47,6 +47,7 @@ class CategorySeeder extends Seeder
             }
 
             for ($i = 0; $i < $loop; $i++) {
+                /** @var Category */
                 $category = Category::makeFactory()->create([
                     'parent_id' => $parent_id
                 ]);

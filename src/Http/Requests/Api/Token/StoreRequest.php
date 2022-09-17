@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Http\Requests\Api\Token;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 use N1ebieski\ICore\Models\Token\PersonalAccessToken as Token;
 
 class StoreRequest extends FormRequest
@@ -59,19 +60,21 @@ class StoreRequest extends FormRequest
     }
 
     /**
-     * Undocumented function
      *
+     * @param string|null $key
+     * @param mixed $default
      * @return array
+     * @throws ValidationException
      */
-    public function validated(): array
+    public function validated($key = null, $default = null): array
     {
         if ($this->input('expiration') !== null) {
-            return array_merge(parent::validated(), [
+            return array_merge(parent::validated($key, $default), [
                 'expiration' => $this->input('expiration')
             ]);
         }
 
-        return parent::validated();
+        return parent::validated($key, $default);
     }
 
     /**

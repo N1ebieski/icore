@@ -31,6 +31,7 @@ class PagesSeeder extends Seeder
      */
     public function run()
     {
+        /** @var User */
         $user = User::first();
 
         $pattern = [
@@ -50,6 +51,7 @@ class PagesSeeder extends Seeder
             }
 
             for ($i = 0; $i < $loop; $i++) {
+                /** @var Page */
                 $page = Page::makeFactory()->for($user)->create([
                     'parent_id' => $parent_id
                 ]);

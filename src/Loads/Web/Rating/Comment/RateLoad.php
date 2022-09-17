@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Loads\Web\Rating\Comment;
 
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Models\Rating\Comment\Rating;
 
@@ -35,8 +36,11 @@ class RateLoad
         /** @var Comment */
         $comment = $request->route('comment');
 
+        /** @var User */
+        $user = $request->user();
+
         /** @var Rating|null */
-        $commentRating = $comment->makeRepo()->firstRatingByUser($request->user());
+        $commentRating = $comment->makeRepo()->firstRatingByUser($user);
 
         $this->rating = $commentRating ?? $rating;
     }

@@ -38,6 +38,10 @@
     border: 0;
     margin-left: 2px;
     margin-right: 20px;
+
+    &:focus {
+        outline: none;      
+    }
 }
 
 .navbar-expand .navbar-toggler {

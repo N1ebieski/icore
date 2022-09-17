@@ -74,7 +74,7 @@ class ProfileController
         /** @var User */
         $user = $request->user();
 
-        $request->request->add(['email' => $user->email]);
+        $request->merge(['email' => $user->email]);
 
         $this->sendResetLinkEmail($request);
 

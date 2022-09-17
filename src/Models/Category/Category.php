@@ -69,6 +69,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property-read Category|null $parent
  * @method static Builder|Category active()
  * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Relations\MorphToMany|Builder morphs()
  * @method static Builder|Entity ancestors()
  * @method static Builder|Entity ancestorsOf($id)
  * @method static Builder|Entity ancestorsWithSelf()
@@ -198,7 +199,7 @@ class Category extends Entity
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',

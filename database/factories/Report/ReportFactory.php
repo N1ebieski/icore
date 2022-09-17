@@ -27,7 +27,7 @@ class ReportFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Report>
      */
     protected $model = Report::class;
 
