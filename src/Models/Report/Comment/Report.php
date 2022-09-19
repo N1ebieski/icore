@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Report\Comment;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\Report\Report as BaseReport;
 
 /**
@@ -52,14 +53,14 @@ use N1ebieski\ICore\Models\Report\Report as BaseReport;
  */
 class Report extends BaseReport
 {
-    // Accessors
+    // Attributes
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        return 'comment';
+        return new Attribute(fn (): string => 'comment');
     }
 }

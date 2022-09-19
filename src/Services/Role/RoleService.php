@@ -20,7 +20,6 @@ namespace N1ebieski\ICore\Services\Role;
 
 use Throwable;
 use N1ebieski\ICore\Models\Role;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
 
 class RoleService

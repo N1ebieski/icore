@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Listeners\Comment;
 
+use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
 use N1ebieski\ICore\Events\Inerfaces\CommentEventInterface;
@@ -42,7 +43,10 @@ class Activate
      */
     public function handle($event)
     {
-        if ($this->auth->user()?->can('web.comments.create')) {
+        /** @var User */
+        $user = $this->auth->user();
+
+        if ($user->can('web.comments.create')) {
             $event->comment->update(['status' => Status::ACTIVE]);
         }
     }

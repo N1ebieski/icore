@@ -84,7 +84,6 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $descendants
  * @property-read int|null $descendants_count
  * @property-read string $created_at_diff
- * @property-read string|null $first_image
  * @property-read string $less_content_html
  * @property-read string $meta_desc
  * @property-read string $meta_title
@@ -198,6 +197,8 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @method static Builder|Page withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static Builder|Page withoutAllTags($tags, bool $includeUntagged = false)
  * @method static Builder|Page withoutAnyTags($tags, bool $includeUntagged = false)
+ * @property-read string $less_content_html_attribute
+ * @property-read string|null $first_image
  * @mixin \Eloquent
  */
 class Page extends Entity

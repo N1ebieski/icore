@@ -32,6 +32,7 @@ use N1ebieski\ICore\Repositories\User\UserRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\User\Marketing;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use N1ebieski\ICore\Database\Factories\User\UserFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * N1ebieski\ICore\Models\User
@@ -112,7 +114,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use Notifiable;
     use HasRoles;
-    use HasFullTextSearchable;
+    // use HasFullTextSearchable;
     use HasFilterable;
     use HasCarbonable;
     use PivotEventTrait;
@@ -233,15 +235,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphMany(\N1ebieski\ICore\Models\MailingEmail\MailingEmail::class, 'model');
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getShortNameAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getShortNameAttribute(): string
+    public function shortName(): Attribute
     {
-        return (strlen($this->name) > 20) ? substr($this->name, 0, 20) . '...' : $this->name;
+        return App::make(\N1ebieski\ICore\Attributes\User\ShortName::class, [
+            'user' => $this
+        ])();
     }
 
     // Scopes

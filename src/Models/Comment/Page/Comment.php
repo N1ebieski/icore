@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Comment\Page;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\Comment\Comment as BaseComment;
 
 /**
@@ -163,24 +164,23 @@ class Comment extends BaseComment
         return \N1ebieski\ICore\Database\Factories\Comment\Post\CommentFactory::new();
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getModelTypeAttribute(): string
+    public function modelType(): Attribute
     {
-        return \N1ebieski\ICore\Models\Page\Page::class;
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\Page\Page::class);
     }
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        return 'page';
+        return new Attribute(fn (): string => 'page');
     }
 }

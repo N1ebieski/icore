@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Stat\Page;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\Stat\Stat as BaseStat;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -59,24 +60,24 @@ class Stat extends BaseStat
         return \N1ebieski\ICore\Models\Stat\Stat::class;
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function modelType(): Attribute
     {
-        return 'page';
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\Page\Page::class);
     }
 
     /**
-     * [getModelTypeAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getModelTypeAttribute()
+    public function poli(): Attribute
     {
-        return \N1ebieski\ICore\Models\Page\Page::class;
+        return new Attribute(fn (): string => 'page');
     }
 
     // Relations

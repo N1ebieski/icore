@@ -81,7 +81,7 @@ class SocialiteController
         }
 
         try {
-            $authUser = $socialite->makeService()->findOrCreateUser($providerUser, $provider);
+            $user = $socialite->makeService()->findOrCreateUser($providerUser, $provider);
         } catch (\N1ebieski\ICore\Exceptions\Socialite\NoEmailException $e) {
             return Response::redirectToRoute('register')->with(
                 'warning',
@@ -94,7 +94,7 @@ class SocialiteController
             );
         }
 
-        Auth::login($authUser, true);
+        Auth::login($user, true);
 
         return Response::redirectToRoute('web.home.index');
     }

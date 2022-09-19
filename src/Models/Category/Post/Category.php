@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Category\Post;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Models\Category\Category as BaseCategory;
@@ -179,15 +180,15 @@ class Category extends BaseCategory
         return $this->morphedByMany(\N1ebieski\ICore\Models\Post::class, 'model', 'categories_models', 'category_id');
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        return 'post';
+        return new Attribute(fn (): string => 'post');
     }
 
     // Factories

@@ -18,16 +18,17 @@
 
 namespace N1ebieski\ICore\Console\Commands;
 
+use InvalidArgumentException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
-use Symfony\Component\Mailer\Mailer;
+use Illuminate\Contracts\Mail\Mailer;
 use GuzzleHttp\Client as GuzzleClient;
-use Symfony\Component\Mailer\Transport;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
+use Symfony\Component\Console\Exception\LogicException;
 use Illuminate\Contracts\Translation\Translator as Lang;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
+use Symfony\Component\Console\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
 
 class InstallCommand extends Command
 {
@@ -46,18 +47,23 @@ class InstallCommand extends Command
     protected $description = 'iCore application installer.';
 
     /**
-     * Undocumented function
      *
      * @param Composer $composer
      * @param Config $config
+     * @param Mailer $mailer
      * @param Lang $lang
      * @param Validator $validator
      * @param DB $db
      * @param GuzzleClient $guzzle
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ExceptionInvalidArgumentException
+     * @throws LogicException
      */
     public function __construct(
         protected Composer $composer,
         protected Config $config,
+        protected Mailer $mailer,
         protected Lang $lang,
         protected Validator $validator,
         protected DB $db,
@@ -100,6 +106,7 @@ class InstallCommand extends Command
 
         if ($validator->fails()) {
             $this->error($validator->errors()->first());
+
             exit;
         }
 
@@ -113,31 +120,17 @@ class InstallCommand extends Command
      */
     protected function validateConnectionMail(): void
     {
-        if ($this->config->get('mail.driver') !== 'smtp') {
-            return;
-        }
-
         $this->line($this->lang->get('icore::install.validate.connection_mail'));
 
         try {
-            // $transport = Transport::fromDsn(
-            //     "smtp://{$this->config->get('mail.username')}:{$this->config->get('mail.password')}@{$this->config->get('mail.host')}:{$this->config->get('mail.port')}/?encryption={$this->config->get('mail.encryption')}"
-            // );
-
-            // $mailer = new Mailer($transport);
-            // $mailer->getTransport
-            // $transport = new \Swift_SmtpTransport(
-            //     $this->config->get('mail.host'),
-            //     $this->config->get('mail.port'),
-            //     $this->config->get('mail.encryption')
-            // );
-            // $transport->setUsername($this->config->get('mail.username'));
-            // $transport->setPassword($this->config->get('mail.password'));
-
-            // $mailer = new \Swift_Mailer($transport);
-            // $mailer->getTransport()->start();
+            $this->mailer->raw('Test', function ($message) {
+                $message
+                    ->to($this->config->get('mail.from.address'))
+                    ->subject('Test');
+            });
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             exit;
         }
 
@@ -157,6 +150,7 @@ class InstallCommand extends Command
             $this->db->getPdo();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             exit;
         }
 
@@ -181,6 +175,7 @@ class InstallCommand extends Command
             ]);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->error(json_decode($e->getResponse()->getBody())->message);
+
             exit;
         } catch (\Exception $e) {
             //

@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Comment\Post;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\Comment\Comment as BaseComment;
 use N1ebieski\ICore\Database\Factories\Comment\Post\CommentFactory;
 
@@ -164,24 +165,24 @@ class Comment extends BaseComment
         return \N1ebieski\ICore\Database\Factories\Comment\Post\CommentFactory::new();
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function modelType(): Attribute
     {
-        return 'post';
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\Post::class);
     }
 
     /**
-     * [getModelTypeAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getModelTypeAttribute(): string
+    public function poli(): Attribute
     {
-        return \N1ebieski\ICore\Models\Post::class;
+        return new Attribute(fn (): string => 'post');
     }
 
     // Factories

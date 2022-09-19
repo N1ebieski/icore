@@ -36,6 +36,7 @@ use N1ebieski\ICore\Services\Post\PostService;
 use N1ebieski\ICore\Repositories\Post\PostRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
@@ -47,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * N1ebieski\ICore\Models\Post
@@ -299,174 +301,168 @@ class Post extends Model
         )->withPivot('value');
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getModelTypeAttribute description]
-     * @return string [description]
-     */
-    public function getModelTypeAttribute(): string
-    {
-        return $this::class;
-    }
-
-    /**
-     * [getPoliAttribute description]
-     * @return string [description]
-     */
-    public function getPoliSelfAttribute(): string
-    {
-        return 'post';
-    }
-
-    /**
-     * [getPublishedAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getPublishedAtDiffAttribute(): string
-    {
-        return ($this->published_at != null) ?
-            Carbon::parse($this->published_at)->diffForHumans(['parts' => 2])
-            : '';
-    }
-
-    /**
-     * [getContentHtmlAttribute description]
-     * @return string [description]
-     */
-    public function getContentHtmlAttribute(): string
-    {
-        return Purifier::clean($this->attributes['content_html'] ?? '');
-    }
-
-    /**
-     * [getMetaTitleAttribute description]
-     * @return string [description]
-     */
-    public function getMetaTitleAttribute(): string
-    {
-        return (!empty($this->attributes['seo_title'])) ? $this->attributes['seo_title'] : $this->title;
-    }
-
-    /**
-     * [getMetaDescAttribute description]
-     * @return string [description]
-     */
-    public function getMetaDescAttribute(): string
-    {
-        return (!empty($this->attributes['seo_desc'])) ? $this->attributes['seo_desc'] : $this->shortContent;
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getReplacementContentAttribute(): string
+    public function modelType(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-            ->handle($this->content ?? '', function ($value) {
-                return $value;
-            });
+        return new Attribute(fn (): string => $this::class);
     }
 
     /**
-     * Short content used in the listing
-     * @return string [description]
-     */
-    public function getShortContentAttribute(): string
-    {
-        return mb_substr(
-            e(strip_tags($this->replacement_content), false),
-            0,
-            Config::get('icore.post.short_content')
-        );
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getReplacementContentHtmlAttribute(): string
+    public function poliSelf(): Attribute
     {
-        return App::make(Pipeline::class)
-            ->send($this->content_html ?? '')
-            ->through([
-                \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
-                \N1ebieski\ICore\Utils\Conversions\Replacement::class
-            ])
-            ->thenReturn();
+        return new Attribute(fn (): string => 'post');
     }
 
     /**
-     * Full content without more link
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getNoMoreContentHtmlAttribute(): string
+    public function publishedAtDiff(): Attribute
     {
-        return str_replace(
-            '<p>[more]</p>',
-            '<span id="more" class="hashtag"></span>',
-            $this->replacement_content_html
-        );
+        return App::make(\N1ebieski\ICore\Attributes\Post\PublishedAtDiff::class, [
+            'post' => $this
+        ])();
     }
 
     /**
-     * Content to the point of more link
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getLessContentHtmlAttribute(): string
+    public function contentHtml(): Attribute
     {
-        $cut = explode('<p>[more]</p>', $this->replacement_content_html);
-
-        /**
-         * @var string
-         */
-        $lang = Lang::get('icore::posts.more');
-
-        return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [
-                $this->slug,
-                '#more'
-            ]) . '" class="more">' . $lang . '</a></p>' : $this->replacement_content_html;
+        return App::make(\N1ebieski\ICore\Attributes\Post\ContentHtml::class, [
+            'post' => $this
+        ])();
     }
 
     /**
-     * [getFirstImageAttribute description]
-     * @return string|null [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getFirstImageAttribute(): ?string
+    public function metaTitle(): Attribute
     {
-        preg_match('/<img.+src=(?:\'|")(.*?)(?:\'|")/', $this->content_html, $image);
-
-        return $image[1] ?? null;
-    }
-
-    // Mutators
-
-    /**
-     * [setPublishedAtAttribute description]
-     * @param string|null $value [description]
-     */
-    public function setPublishedAtAttribute(string $value = null): void
-    {
-        if ($value === null) {
-            $this->attributes['published_at'] = null;
-            return;
-        }
-
-        $this->attributes['published_at'] = Carbon::parse($value)->format('Y-m-d H:i:s');
+        return App::make(\N1ebieski\ICore\Attributes\Post\MetaTitle::class, [
+            'post' => $this
+        ])();
     }
 
     /**
-     * [setContentAttribute description]
-     * @param string $value [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function setContentAttribute(string $value): void
+    public function metaDesc(): Attribute
     {
-        $this->attributes['content'] = !empty($value) ?
-            strip_tags(str_replace('[more]', '', $value))
-            : null;
+        return App::make(\N1ebieski\ICore\Attributes\Post\MetaDesc::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function replacementContent(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\ReplacementContent::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function shortContent(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\ShortContent::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function replacementContentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\ReplacementContentHtml::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function noMoreContentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\NoMoreContentHtml::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function lessContentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\LessContentHtml::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function firstImage(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\FirstImage::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function publishedAt(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\PublishedAt::class, [
+            'post' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function content(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Post\Content::class, [
+            'post' => $this
+        ])();
     }
 
     // Scopes
@@ -512,7 +508,7 @@ class Post extends Model
             },
             'user',
             App::make(MigrationUtil::class)->contains('create_stats_table') ?
-            'stats' : null
+                'stats' : null
         ]);
     }
 

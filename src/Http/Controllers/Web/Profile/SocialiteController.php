@@ -80,9 +80,10 @@ class SocialiteController
         }
 
         $socialiteService = $socialite->makeService();
-        $authUser = $socialiteService->findUser($providerUser, $provider);
 
-        if (!is_null($authUser)) {
+        $user = $socialiteService->findUser($providerUser, $provider);
+
+        if (!is_null($user)) {
             return Response::redirectToRoute('web.profile.socialites')->with(
                 'danger',
                 Lang::get('icore::profile.error.symlink_exist', ['provider' => ucfirst($provider)])

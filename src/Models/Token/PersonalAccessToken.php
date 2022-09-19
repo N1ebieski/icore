@@ -24,8 +24,10 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Services\Token\TokenService;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Laravel\Sanctum\PersonalAccessToken as BasePersonalAccessToken;
 
 /**
@@ -165,12 +167,15 @@ class PersonalAccessToken extends BasePersonalAccessToken
     // Accessors
 
     /**
-     * [getExpiredAtDiffAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getExpiredAtDiffAttribute(): string
+    public function expiredAtDiff(): Attribute
     {
-        return Carbon::parse($this->expired_at)->diffForHumans(['parts' => 2]);
+        return App::make(\N1ebieski\ICore\Attributes\Token\ExpiredAtDiff::class, [
+            'token' => $this
+        ])();
     }
 
     // Factories

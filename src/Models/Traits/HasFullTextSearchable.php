@@ -171,21 +171,22 @@ trait HasFullTextSearchable
         $this->splitExactMatches();
         $this->splitMatches();
 
-        return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->whereRaw(
+        return $query->when(array_key_exists($this->className(), $this->search), function (Builder $query) {
+            return $query->whereRaw(
                 "MATCH ({$this->getColumnsAsString()}) AGAINST (? IN BOOLEAN MODE)",
                 [$this->getSearchAsString()]
-            );
-
-            $query->when(
+            )
+            ->when(
                 App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
-                function ($query) {
+                function (Builder $query) {
                     foreach ($this->searchable as $column) {
                         $query->selectRaw(
                             "MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
                             [$this->getSearchAsString()]
                         );
                     }
+
+                    return $query;
                 }
             );
         });
@@ -207,13 +208,15 @@ trait HasFullTextSearchable
         $this->splitExactMatches();
         $this->splitMatches();
 
-        return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->when(
+        return $query->when(array_key_exists($this->className(), $this->search), function (Builder $query) {
+            return $query->when(
                 App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
-                function ($query) {
+                function (Builder $query) {
                     foreach ($this->searchable as $column) {
                         $query->orderBy("{$column}_relevance", 'desc');
                     }
+
+                    return $query;
                 }
             );
         });

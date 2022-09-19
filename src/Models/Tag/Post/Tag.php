@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Models\Tag\Post;
 
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\Tag\Tag as BaseTag;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Tag\Post\TagFactory;
 
@@ -91,25 +92,24 @@ class Tag extends BaseTag
         return $this->morphedByMany(\N1ebieski\ICore\Models\Post::class, 'model', $table, 'tag_id');
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getModelTypeAttribute(): string
+    public function modelType(): Attribute
     {
-        return \N1ebieski\ICore\Models\Post::class;
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\Post::class);
     }
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        return 'post';
+        return new Attribute(fn (): string => 'post');
     }
 
     // Factories

@@ -20,7 +20,6 @@ namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Link\LinkCache;
 use N1ebieski\ICore\ValueObjects\Link\Type;
@@ -28,11 +27,13 @@ use N1ebieski\ICore\Services\Link\LinkService;
 use N1ebieski\ICore\Repositories\Link\LinkRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\Traits\HasPositionable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Link\LinkFactory;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * N1ebieski\ICore\Models\Link
@@ -176,34 +177,30 @@ class Link extends Model
         });
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getImgUrlFromStorageAttribute description]
-     * @return string|null [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getImgUrlFromStorageAttribute(): ?string
+    public function imgUrlFromStorage(): Attribute
     {
-        return $this->img_url !== null ? url('/') . Storage::url($this->img_url) : null;
+        return App::make(\N1ebieski\ICore\Attributes\Link\ImgUrlFromStorage::class, [
+            'link' => $this
+        ])();
     }
 
     /**
-     * [getBacklinkAsHtmlAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getLinkAsHtmlAttribute(): string
+    public function linkAsHtml(): Attribute
     {
-        $output = '<a href="' . e($this->url) . '" title="' . e($this->name) . '">';
-
-        if ($this->img_url !== null) {
-            $output .= '<img src="' . e($this->img_url_from_storage) . '" alt="' . e($this->name) . '" class="img-fluid">';
-        } else {
-            $output .= e($this->name);
-        }
-
-        $output .= '</a>';
-
-        return $output;
+        return App::make(\N1ebieski\ICore\Attributes\Link\LinkAsHtml::class, [
+            'link' => $this
+        ])();
     }
 
     // Loads

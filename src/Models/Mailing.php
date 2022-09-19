@@ -27,11 +27,13 @@ use Carbon\Exceptions\InvalidFormatException;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Services\Mailing\MailingService;
 use N1ebieski\ICore\Repositories\Mailing\MailingRepo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
 
 /**
@@ -159,83 +161,90 @@ class Mailing extends Model
         return $this->hasMany(\N1ebieski\ICore\Models\MailingEmail\MailingEmail::class);
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getProgressSuccessAttribute description]
-     * @return int|null [description]
-     */
-    public function getProgressSuccessAttribute(): ?int
-    {
-        return ($this->emails->isNotEmpty()) ?
-            (int)round(($this->emails->where('sent', 1)->count() / $this->emails->count()) * 100, 0)
-            : null;
-    }
-
-    /**
-     * [getProgressFailedAttribute description]
-     * @return int|null [description]
-     */
-    public function getProgressFailedAttribute(): ?int
-    {
-        return ($this->emails->isNotEmpty()) ?
-            (int)round(($this->emails->where('sent', 2)->count() / $this->emails->count()) * 100, 0)
-            : null;
-    }
-
-    /**
-     * [getActivationAtDiffAttribute description]
-     * @return string [description]
-     */
-    public function getActivationAtDiffAttribute(): string
-    {
-        return ($this->activation_at != null) ?
-            Carbon::parse($this->activation_at)->diffForHumans(['parts' => 2])
-            : '';
-    }
-
-    /**
-     * [getContentHtmlAttribute description]
-     * @return string [description]
-     */
-    public function getContentHtmlAttribute(): string
-    {
-         return Purifier::clean($this->attributes['content_html']);
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getReplacementContentHtmlAttribute(): string
+    public function progressSuccess(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-            ->handle($this->content_html, function ($value) {
-                return $value;
-            });
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ProgressSuccess::class, [
+            'mailing' => $this
+        ])();
     }
 
     /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getReplacementContentAttribute(): string
+    public function progressFailed(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-            ->handle($this->content, function ($value) {
-                return $value;
-            });
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ProgressFailed::class, [
+            'mailing' => $this
+        ])();
     }
 
     /**
-     * [getShortContentAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getShortContentAttribute(): string
+    public function activationAtDiff(): Attribute
     {
-        return mb_substr(strip_tags($this->replacement_content), 0, 300);
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ActivationAtDiff::class, [
+            'mailing' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function contentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ContentHtml::class, [
+            'mailing' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function replacementContentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ReplacementContentHtml::class, [
+            'mailing' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function replacementContent(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ReplacementContent::class, [
+            'mailing' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function shortContent(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ShortContent::class, [
+            'mailing' => $this
+        ])();
     }
 
     // Scopes

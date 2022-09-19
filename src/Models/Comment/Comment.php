@@ -26,6 +26,7 @@ use N1ebieski\ICore\Cache\Comment\CommentCache;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\ValueObjects\Comment\Censored;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,6 +38,7 @@ use N1ebieski\ICore\Repositories\Comment\CommentRepo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\Comment\CommentFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
@@ -336,55 +338,57 @@ class Comment extends Entity
     // Accessors
 
     /**
-     * [getTypeAttribute description]
-     * @return string [description]
-     */
-    public function getTypeAttribute(): string
-    {
-         return \N1ebieski\ICore\Models\Comment\Comment::class;
-    }
-
-    /**
-     * [getContentHtmlAttribute description]
-     * @return string [description]
-     */
-    public function getContentHtmlAttribute(): string
-    {
-         return strip_tags($this->attributes['content_html']);
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getContentAsHtmlAttribute(): string
+    public function type(): Attribute
     {
-        return nl2br(e($this->content_html, false));
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\Comment\Comment::class);
     }
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
-     */
-    public function getPoliSelfAttribute(): string
-    {
-        return 'comment';
-    }
-
-    // Mutators
-
-    /**
-     * Undocumented function
      *
-     * @param string $value
-     * @return void
+     * @return Attribute
      */
-    public function setContentAttribute(string $value): void
+    public function poliSelf(): Attribute
     {
-        $this->attributes['content'] = strip_tags(
-            preg_replace('/\s+/', ' ', str_replace(['\n', '\r'], '', $value)) ?? ''
-        );
+        return new Attribute(fn (): string => 'comment');
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function contentHtml(): Attribute
+    {
+         return App::make(\N1ebieski\ICore\Attributes\Comment\ContentHtml::class, [
+            'comment' => $this
+         ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function contentAsHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Comment\ContentAsHtml::class, [
+            'comment' => $this
+         ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function content(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Comment\Content::class, [
+            'comment' => $this
+         ])();
     }
 
     // Checkers

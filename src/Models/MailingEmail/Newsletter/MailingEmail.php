@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\MailingEmail\Newsletter;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail as BaseMailingEmail;
 
 /**
@@ -63,24 +64,23 @@ class MailingEmail extends BaseMailingEmail
         return \N1ebieski\ICore\Models\MailingEmail\MailingEmail::class;
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getModelTypeAttribute(): string
+    public function modelType(): Attribute
     {
-        return \N1ebieski\ICore\Models\Newsletter::class;
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\Newsletter::class);
     }
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        return 'newsletter';
+        return new Attribute(fn (): string => 'newsletter');
     }
 }

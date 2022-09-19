@@ -18,7 +18,10 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 trait HasPolymorphic
 {
@@ -49,16 +52,15 @@ trait HasPolymorphic
         });
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        $type = substr($this->model_type, strrpos($this->model_type, "\\") + 1);
-
-        return strtolower($type);
+        return App::make(\N1ebieski\ICore\Attributes\Poli::class, ['model' => $this])();
     }
 }

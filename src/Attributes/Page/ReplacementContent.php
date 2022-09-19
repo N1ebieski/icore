@@ -42,9 +42,9 @@ class ReplacementContent
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function ($value, $attributes): string {
+            get: function (): string {
                 return App::make(Replacement::class)
-                    ->handle($attributes['content'] ?? '', function ($value) {
+                    ->handle($this->page->content ?? '', function ($value) {
                         return $value;
                     });
             }

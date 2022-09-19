@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Cache\Category\CategoryCache;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\ValueObjects\Category\Status;
@@ -356,15 +357,15 @@ class Category extends Entity
         return $query->where("{$this->getTable()}.parent_id", null);
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getRealPositionAttribute description]
-     * @return int [description]
+     *
+     * @return Attribute
      */
-    public function getRealPositionAttribute(): int
+    public function realPosition(): Attribute
     {
-        return $this->position + 1;
+        return new Attribute(fn (): int => $this->position + 1);
     }
 
     // Loads
