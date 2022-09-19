@@ -44,9 +44,9 @@ class NameCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return Name
+     * @return string
      */
-    public function set($model, string $key, $value, array $attributes): Name
+    public function set($model, string $key, $value, array $attributes): string
     {
         if (is_string($value)) {
             $value = new Name($value);
@@ -56,6 +56,6 @@ class NameCast implements CastsAttributes
             throw new \InvalidArgumentException('The given value is not a Name instance');
         }
 
-        return $value;
+        return $value->getValue();
     }
 }

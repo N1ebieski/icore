@@ -44,9 +44,9 @@ class SeoNoindexCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return SeoNoindex
+     * @return int
      */
-    public function set($model, string $key, $value, array $attributes): SeoNoindex
+    public function set($model, string $key, $value, array $attributes): int
     {
         if (is_string($value)) {
             $value = SeoNoindex::fromString($value);
@@ -60,6 +60,6 @@ class SeoNoindexCast implements CastsAttributes
             throw new \InvalidArgumentException('The given value is not a SeoNoindex instance');
         }
 
-        return $value;
+        return $value->getValue();
     }
 }

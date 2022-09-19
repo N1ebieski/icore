@@ -44,9 +44,9 @@ class CommentCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return Comment
+     * @return int
      */
-    public function set($model, string $key, $value, array $attributes): Comment
+    public function set($model, string $key, $value, array $attributes): int
     {
         if (is_string($value)) {
             $value = Comment::fromString($value);
@@ -60,6 +60,6 @@ class CommentCast implements CastsAttributes
             throw new \InvalidArgumentException('The given value is not a Comment instance');
         }
 
-        return $value;
+        return $value->getValue();
     }
 }

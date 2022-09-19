@@ -44,9 +44,9 @@ class MarketingCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return Marketing
+     * @return int
      */
-    public function set($model, string $key, $value, array $attributes): Marketing
+    public function set($model, string $key, $value, array $attributes): int
     {
         if (is_string($value)) {
             $value = Marketing::fromString($value);
@@ -60,6 +60,6 @@ class MarketingCast implements CastsAttributes
             throw new \InvalidArgumentException('The given value is not a Marketing instance');
         }
 
-        return $value;
+        return $value->getValue();
     }
 }

@@ -44,9 +44,9 @@ class SeoNofollowCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return SeoNofollow
+     * @return int
      */
-    public function set($model, string $key, $value, array $attributes): SeoNofollow
+    public function set($model, string $key, $value, array $attributes): int
     {
         if (is_string($value)) {
             $value = SeoNofollow::fromString($value);
@@ -60,6 +60,6 @@ class SeoNofollowCast implements CastsAttributes
             throw new \InvalidArgumentException('The given value is not a SeoNofollow instance');
         }
 
-        return $value;
+        return $value->getValue();
     }
 }

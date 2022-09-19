@@ -44,9 +44,9 @@ class CensoredCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return Censored
+     * @return int
      */
-    public function set($model, string $key, $value, array $attributes): Censored
+    public function set($model, string $key, $value, array $attributes): int
     {
         if (is_string($value)) {
             $value = Censored::fromString($value);
@@ -60,6 +60,6 @@ class CensoredCast implements CastsAttributes
             throw new \InvalidArgumentException('The given value is not a Censored instance');
         }
 
-        return $value;
+        return $value->getValue();
     }
 }
