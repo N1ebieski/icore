@@ -114,7 +114,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use Notifiable;
     use HasRoles;
-    // use HasFullTextSearchable;
+    use HasFullTextSearchable;
     use HasFilterable;
     use HasCarbonable;
     use PivotEventTrait;
