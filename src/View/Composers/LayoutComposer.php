@@ -126,7 +126,7 @@ class LayoutComposer extends Composer
 
         if (
             is_string($url = parse_url($this->url->current(), PHP_URL_PATH))
-            && $this->str->startsWith($url, '/admin')
+            && $this->str->startsWith($url, '/' . $this->config->get('icore.routes.admin.prefix'))
         ) {
             $path = '/' . $assets . '/admin/admin';
         }

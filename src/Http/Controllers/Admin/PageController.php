@@ -202,6 +202,9 @@ class PageController
 
         return Response::json([
             'status' => $page->status->getValue(),
+            'view' => View::make('icore::admin.page.partials.page', [
+                'page' => $page
+            ])->render(),            
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
             'ancestors' => $pageRepo->getAncestorsAsArray(),

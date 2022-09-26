@@ -47,12 +47,27 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
-                <h1 class="h4 border-bottom pb-2">
-                    @if (!empty($page->icon))
-                    <i class="{{ $page->icon }}"></i>
-                    @endif
-                    <span>{{ $page->title }}</span>
-                </h1>
+                <div class="d-flex justify-content-between">
+                    <h1 class="h4 border-bottom pb-2">
+                        @if (!empty($page->icon))
+                        <i class="{{ $page->icon }}"></i>
+                        @endif
+                        <span>{{ $page->title }}</span>
+                    </h1>
+                    @can ('admin.pages.view')
+                    <div>
+                        <a
+                            href="{{ route('admin.page.index', ['filter[search]' => 'id:"' . $page->id . '"']) }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ trans('icore::pages.route.index') }}"
+                            class="badge badge-primary"
+                        >
+                            {{ trans('icore::default.admin') }}
+                        </a>
+                    </div>
+                    @endcan
+                </div>
                 <div>
                     {!! $page->no_more_content_html !!}
                 </div>

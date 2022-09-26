@@ -93,7 +93,18 @@ class PostRepo
                 }
             )
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
+            ->when(!is_null($filter['search']), function (Builder|Post $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.posts.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->post->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->post->getTable()}.{$attr}", $this->post->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->filterCategory($filter['category'])
             ->when(is_null($filter['orderby']), function (Builder|Post $query) use ($filter) {
                 return $query->filterOrderBySearch($filter['search']);

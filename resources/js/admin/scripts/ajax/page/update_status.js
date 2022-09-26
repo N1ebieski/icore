@@ -40,6 +40,8 @@ $(document).on(
             success: function (response) {
                 $element.loader('hide');
 
+                $row.html($.sanitize($(response.view).html()));
+
                 if (response.status == 1) {
                     $row.btnGroup.removeClass('disabled');
                     $row.btn1.prop('disabled', true);

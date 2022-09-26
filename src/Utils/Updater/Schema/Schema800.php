@@ -47,6 +47,102 @@ class Schema800 implements SchemaInterface
                     'to' => 'custom-switch'
                 ]
             ]
+        ],
+        [
+            'paths' => [
+                'resources/views/vendor/icore/web/page/show.blade.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'beforeFirst',
+                    'search' => '/<h1.*?>/',
+                    'to' => '<div class="d-flex justify-content-between">'
+                ],
+                [
+                    'type' => 'afterFirst',
+                    'search' => '/<\/h1>/',
+                    'to' => <<<EOD
+                    @can ('admin.pages.view')
+                    <div>
+                        <a
+                            href="{{ route('admin.page.index', ['filter[search]' => 'id:"' . \$page->id . '"']) }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ trans('icore::pages.route.index') }}"
+                            class="badge badge-primary"
+                        >
+                            {{ trans('icore::default.admin') }}
+                        </a>
+                    </div>
+                    @endcan
+                </div>                    
+EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
+                'resources/views/vendor/icore/web/post/show.blade.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'beforeFirst',
+                    'search' => '/<h1.*?>/',
+                    'to' => '<div class="d-flex justify-content-between">'
+                ],
+                [
+                    'type' => 'afterFirst',
+                    'search' => '/<\/h1>/',
+                    'to' => <<<EOD
+                    @can ('admin.posts.view')
+                    <div>
+                        <a
+                            href="{{ route('admin.post.index', ['filter[search]' => 'id:"' . \$post->id . '"']) }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ trans('icore::posts.route.index') }}"
+                            class="badge badge-primary"
+                        >
+                            {{ trans('icore::default.admin') }}
+                        </a>
+                    </div>
+                    @endcan
+                </div>                    
+EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
+                'resources/views/vendor/icore/web/post/partials/post.blade.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'beforeFirst',
+                    'search' => '/<h2.*?>/',
+                    'to' => '<div class="d-flex justify-content-between">'
+                ],
+                [
+                    'type' => 'afterFirst',
+                    'search' => '/<\/h2>/',
+                    'to' => <<<EOD
+                    @can ('admin.posts.view')
+                    <div>
+                        <a
+                            href="{{ route('admin.post.index', ['filter[search]' => 'id:"' . \$post->id . '"']) }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ trans('icore::posts.route.index') }}"
+                            class="badge badge-primary"
+                        >
+                            {{ trans('icore::default.admin') }}
+                        </a>
+                    </div>
+                    @endcan
+                </div>                    
+EOD
+                ]
+            ]
         ]
     ];
 }

@@ -54,5 +54,7 @@ return [
     'open' => 'Otwórz',
     'close' => 'Zamknij',
     'current_option' => 'Aktualny wybór',
-    'all' => 'Razem'
+    'all' => 'Razem',
+    'admin' => 'admin',
+    'web' => 'web'
 ];

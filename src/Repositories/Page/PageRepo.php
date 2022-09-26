@@ -23,6 +23,7 @@ use InvalidArgumentException;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
@@ -37,15 +38,17 @@ use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 class PageRepo
 {
     /**
-     * Undocumented function
      *
      * @param Page $page
      * @param Config $config
+     * @param Auth $auth
      * @param App $app
+     * @return void
      */
     public function __construct(
         protected Page $page,
         protected Config $config,
+        protected Auth $auth,
         protected App $app
     ) {
         //
@@ -60,7 +63,18 @@ class PageRepo
     {
         return $this->page->newQuery()
             ->selectRaw("`{$this->page->getTable()}`.*")
-            ->filterSearch($filter['search'])
+            ->when(!is_null($filter['search']), function (Builder|Page $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.pages.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->page->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->page->getTable()}.{$attr}", $this->page->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->filterParent($filter['parent'])
