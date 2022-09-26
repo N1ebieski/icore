@@ -15,9 +15,11 @@
             <small class="mr-auto">
                 {{ trans('icore::reports.created_at') }}: {{ $report->created_at_diff }}
             </small>
+            @if (!is_null($report->user))
             <small class="ml-auto">
-                {{ trans('icore::reports.created_at') }}: {{ $report->user->name }}
+                {{ trans('icore::reports.author') }}: {{ $report->user->name }}
             </small>
+            @endif
         </div>
         <div>
             {{ $report->content }}
