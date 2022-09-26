@@ -46,6 +46,12 @@ $(document).on(
             success: function (response) {
                 $form.closest('.modal').modal('hide');
                 
+                if (response.redirect.length) {
+                    window.location.replace(response.redirect);
+
+                    return;
+                }
+
                 window.location.reload();
             },
             error: function (response) {

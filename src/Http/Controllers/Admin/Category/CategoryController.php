@@ -107,7 +107,14 @@ class CategoryController implements Polymorphic
             )
         );
 
-        return Response::json([]);
+        return Response::json([
+            'redirect' => URL::route("admin.category.{$category->poli}.index", [
+                'filter' => [
+                    'parent' => $parent?->id,
+                    'search' => "id:\"{$category->id}\""
+                ]
+            ])
+        ]);
     }
 
     /**

@@ -76,7 +76,18 @@ class CategoryRepo
                 }
             )
             ->poliType()
-            ->filterSearch($filter['search'])
+            ->when(!is_null($filter['search']), function (Builder|Category $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.categories.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->category->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->category->getTable()}.{$attr}", $this->category->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->filterExcept($filter['except'])
             ->filterParent($filter['parent'])
             ->when(is_null($filter['orderby']), function (Builder|Category $query) use ($filter) {
