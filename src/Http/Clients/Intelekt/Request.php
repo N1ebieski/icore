@@ -39,6 +39,6 @@ abstract class Request extends BaseRequest
         'headers' => [
             'Accept' => 'application/json',
         ],
-        'timeout' => 2
+        'timeout' => 5
     ];
 }
