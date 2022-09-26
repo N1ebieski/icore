@@ -37,7 +37,10 @@ return [
         'show' => 'Kategoria: :category'
     ],
     'name' => 'Nazwa',
-    'names_json' => 'Nazwy kategorii w formacie JSON',
+    'names_json' => [
+        'label' => 'Nazwy kategorii w formacie JSON lub TXT',
+        'tooltip' => 'W przypadku TXT kategorie wpisuj od nowej linii'
+    ],
     'clear' => 'Usuń wszystkie dotychczasowe kategorie przed importem?',
     'parent_id' => 'Kategoria nadrzędna',
     'null' => 'Brak',

@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class StoreGlobalRequest extends FormRequest
 {
@@ -39,9 +40,35 @@ class StoreGlobalRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
+        $this->prepareNamesAttribute();
+
         if (!$this->has('parent_id') || $this->get('parent_id') == 0) {
             $this->merge([
                 'parent_id' => null
+            ]);
+        }
+    }
+
+    /**
+     *
+     * @return void
+     * @throws BadRequestException
+     */
+    protected function prepareNamesAttribute(): void
+    {
+        if ($this->has('names') && preg_match('/^\[[\s\S]*\]$/', $this->get('names')) === 0) {
+            $names = explode("\r\n", $this->get('names'));
+
+            $namesToJson = [];
+
+            foreach ($names as $name) {
+                $namesToJson[] = [
+                    'name' => $name
+                ];
+            }
+
+            $this->merge([
+                'names' => json_encode($namesToJson)
             ]);
         }
     }

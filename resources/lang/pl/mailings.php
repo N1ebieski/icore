@@ -24,7 +24,10 @@ return [
     'confirm' => 'Czy na pewno chcesz zresetować mailing? Spowoduje to usunięcie wszystkich dotychczasowych odbiorców i pozwoli zdefiniować ich ponownie w oknie edycji.',
     'title' => 'Temat wiadomości',
     'content' => 'Treść wiadomości',
-    'emails_json' => 'Lista adresów email w formacie JSON',
+    'emails_json' => [
+        'label' => 'Lista adresów email w formacie JSON lub TXT',
+        'tooltip' => 'W przypadku TXT adresy wpisuj od nowej linii'
+    ],
     'success' => [
         'store' => 'Mailing dla :recipients odbiorców został dodany.',
         'update' => 'Mailing został zmieniony.',

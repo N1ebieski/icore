@@ -204,7 +204,13 @@
                 >
                     <div class="form-group">
                         <label for="emails_json">
-                            {{ trans('icore::mailings.emails_json') }}
+                            <span>{{ trans('icore::mailings.emails_json') }}</span>
+                            <i 
+                                data-toggle="tooltip" 
+                                data-placement="top"
+                                title="{{ trans('icore::mailings.emails_json.tooltip') }}" 
+                                class="far fa-question-circle"
+                            ></i>                             
                         </label>
                         <textarea 
                             name="emails_json" 

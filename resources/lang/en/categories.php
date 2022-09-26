@@ -37,6 +37,10 @@ return [
         'show' => 'Category: :category'
     ],
     'name' => 'Name',
+    'names_json' => [
+        'label' => 'Category names in JSON or TXT format',
+        'tooltip' => 'For TXT format, categories type from a new line'
+    ],    
     'names_json' => 'Category names in JSON format',
     'clear' => 'Delete all existing categories before import?',
     'parent_id' => 'Parent category',

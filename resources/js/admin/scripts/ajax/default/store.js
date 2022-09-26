@@ -46,7 +46,7 @@ $(document).on(
             success: function (response) {
                 $form.closest('.modal').modal('hide');
                 
-                if (response.redirect.length) {
+                if (response.redirect) {
                     window.location.replace(response.redirect);
 
                     return;

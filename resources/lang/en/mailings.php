@@ -24,7 +24,10 @@ return [
     'confirm' => 'Are you sure you want to reset the mailing? This will remove all existing ecipients and allow you to define them again on the edit page.',
     'title' => 'Title',
     'content' => 'Content',
-    'emails_json' => 'List of e-mail addresses in JSON format',
+    'emails_json' => [
+        'label' => 'List of e-mail addresses in JSON or TXT format',
+        'tooltip' => 'For TXT format, emails type from a new line'
+    ],
     'success' => [
         'store' => 'Mailing for :recipients recipients has been added.',
         'update' => 'Mailing has changed.',
