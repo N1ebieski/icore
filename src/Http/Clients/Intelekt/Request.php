@@ -38,6 +38,7 @@ abstract class Request extends BaseRequest
         'verify' => false,
         'headers' => [
             'Accept' => 'application/json',
-        ]
+        ],
+        'timeout' => 2
     ];
 }
