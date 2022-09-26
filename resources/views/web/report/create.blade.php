@@ -18,8 +18,11 @@
         <label for="content">
             {{ trans('icore::reports.reason') }}
         </label>
-        <input type="text" value="" name="content" class="form-control" id="content">
+        <input type="text" value="" name="content" class="form-control" id="content">    
     </div>
+    <x-icore::captcha-component    
+        id="1000"
+    />        
 </form>
 @endslot
 

@@ -47,6 +47,6 @@ class AfterFirst implements ActionInterface
      */
     public function handle(string $contents, array $matches): string
     {
-        return $this->str->of($contents)->replace($matches[0], $matches[0] . "\n" . $this->action['to']);
+        return $this->str->of($contents)->replaceFirst($matches[0], $matches[0] . "\n" . $this->action['to']);
     }
 }

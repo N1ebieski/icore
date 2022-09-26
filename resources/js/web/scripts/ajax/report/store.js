@@ -39,6 +39,8 @@ $(document).on(
             },
             complete: function () {
                 $element.loader('hide');
+                $form.find('.captcha').recaptcha();
+                $form.find('.captcha').captcha();                
                 $form.input.addClass('is-valid');
             },
             success: function (response) {

@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Utils\Updater\Action\Types;
 use Illuminate\Support\Str;
 use N1ebieski\ICore\Utils\Updater\Action\Types\Interfaces\ActionInterface;
 
-class BeforeFirst implements ActionInterface
+class AfterLast implements ActionInterface
 {
     /**
      * Undocumented function
@@ -47,6 +47,6 @@ class BeforeFirst implements ActionInterface
      */
     public function handle(string $contents, array $matches): string
     {
-        return $this->str->of($contents)->replaceFirst($matches[0], $this->action['to'] . "\n" . $matches[0]);
+        return $this->str->of($contents)->replaceLast($matches[0], $matches[0] . "\n" . $this->action['to']);
     }
 }

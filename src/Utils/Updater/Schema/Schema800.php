@@ -77,6 +77,18 @@ class Schema800 implements SchemaInterface
                     @endcan
                 </div>                    
 EOD
+                ],
+                [
+                    'type' => 'afterLast',
+                    'search' => '/@endsection/',
+                    'to' => <<<EOD
+
+@if (!empty(config('icore.captcha.driver')))
+@php
+app(\N1ebieski\ICore\View\Components\CaptchaComponent::class)->render()->render();
+@endphp
+@endif
+EOD
                 ]
             ]
         ],
@@ -108,6 +120,18 @@ EOD
                     </div>
                     @endcan
                 </div>                    
+EOD
+                ],
+                [
+                    'type' => 'afterLast',
+                    'search' => '/@endsection/',
+                    'to' => <<<EOD
+
+@if (!empty(config('icore.captcha.driver')))
+@php
+app(\N1ebieski\ICore\View\Components\CaptchaComponent::class)->render()->render();
+@endphp
+@endif                    
 EOD
                 ]
             ]
@@ -141,6 +165,49 @@ EOD
                     @endcan
                 </div>                    
 EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
+                'resources/views/vendor/icore/web/comment/partials/comment.blade.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'replaceMatches',
+                    'search' => '/@auth([^}]*?<a[^>]*?data-route="{{\s*route\(\'web\.report\.comment\.create\',\s*\[\$comment->id\]\)\s*}}"[\s\S]*?)@endauth/',
+                    'to' => '$1'
+                ]
+            ]
+        ],
+        [
+            'paths' => [
+                'resources/views/vendor/icore/web/report/create.blade.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'beforeFirst',
+                    'search' => '/<\/form>\s*@endslot/',
+                    'to' => <<<EOD
+    <x-icore::captcha-component    
+        id="1000"
+    />
+EOD
+                ]
+            ]
+        ],
+        [
+            'paths' => [
+                'routes/vendor/icore/web/reports.php'
+            ],
+            'actions' => [
+                [
+                    'type' => 'remove',
+                    'search' => '/Route::group\(\[\'middleware\'\s*=>\s*\'auth\'\],\s*function\s*\(\)\s*{/',
+                ],
+                [
+                    'type' => 'remove',
+                    'search' => '/}\);/',
                 ]
             ]
         ]

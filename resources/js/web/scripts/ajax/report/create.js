@@ -39,6 +39,7 @@ $(document).on(
             },
             complete: function () {
                 $modal.content.find('.loader-absolute').remove();
+                $modal.content.find('.captcha').recaptcha();
             },
             success: function (response) {
                 $modal.content.html($.sanitize($(response.view).find('.modal-content').html()));

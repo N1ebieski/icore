@@ -87,7 +87,6 @@
                     </a>
                     @endauth
                 </small>
-                @auth
                 <small class="ml-auto">
                     <a 
                         class="create-report" 
@@ -100,7 +99,6 @@
                         {{ trans('icore::comments.report') }}
                     </a>
                 </small>
-                @endauth
             </div>
         </div>
     </div>
