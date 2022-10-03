@@ -109,8 +109,20 @@ class UserRepo
         return $tokens->selectRaw("`{$token->getTable()}`.*")
             ->whereJsonDoesntContain('abilities', 'refresh')
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
+            ->when(!is_null($filter['search']), function (Builder|PersonalAccessToken $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->where(function (Builder $query) {
+                        /** @var PersonalAccessToken */
+                        $token = $query->getModel();
+
+                        foreach ([$token->getKeyName()] as $attr) {
+                            return $query->when(array_key_exists($attr, $token->search), function (Builder $query) use ($attr, $token) {
+                                return $query->where("{$token->getTable()}.{$attr}", $token->search[$attr]);
+                            });
+                        }
+                    });
+            })
             ->when($filter['orderby'] === null, function (Builder|PersonalAccessToken $query) use ($filter) {
                 return $query->filterOrderBySearch($filter['search']);
             })

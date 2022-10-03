@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Token;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
@@ -61,7 +62,13 @@ class TokenController
         $request->session()->flash('success', Lang::get('icore::tokens.success.store'));
         $request->session()->flash('accessToken', $accessToken->plainTextToken);
 
-        return Response::json([], HttpResponse::HTTP_CREATED);
+        return Response::json([
+            'redirect' => URL::route('web.profile.tokens', [
+                'filter' => [
+                    'search' => "id:\"{$accessToken->id}\""
+                ]
+            ])
+        ], HttpResponse::HTTP_CREATED);
     }
 
     /**
