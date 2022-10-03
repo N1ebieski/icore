@@ -76,11 +76,17 @@ class TagController
      */
     public function store(Tag $tag, StoreRequest $request): JsonResponse
     {
-        $tag->makeService()->create($request->validated());
+        $tag = $tag->makeService()->create($request->validated());
 
         $request->session()->flash('success', trans('icore::tags.success.store'));
 
-        return Response::json([]);
+        return Response::json([
+            'redirect' => URL::route('admin.tag.index', [
+                'filter' => [
+                    'search' => "{$tag->getKeyName()}:\"{$tag->getKey()}\""
+                ]
+            ])
+        ]);
     }
 
     /**

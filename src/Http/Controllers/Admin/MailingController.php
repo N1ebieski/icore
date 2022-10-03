@@ -75,12 +75,17 @@ class MailingController
     {
         $mailing = $mailing->makeService()->create($request->all());
 
-        return Response::redirectToRoute('admin.mailing.index')->with(
-            'success',
-            Lang::get('icore::mailings.success.store', [
-                'recipients' => $mailing->emails()->count()
+        return Response::redirectToRoute('admin.mailing.index', [
+                'filter' => [
+                    'search' => "id:\"{$mailing->id}\""
+                ]
             ])
-        );
+            ->with(
+                'success',
+                Lang::get('icore::mailings.success.store', [
+                    'recipients' => $mailing->emails()->count()
+                ])
+            );
     }
 
     /**

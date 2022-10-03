@@ -20,16 +20,21 @@ namespace N1ebieski\ICore\Repositories\BanValue;
 
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class BanValueRepo
 {
     /**
-     * [__construct description]
-     * @param BanValue $banValue [description]
+     *
+     * @param BanValue $banValue
+     * @param Auth $auth
+     * @return void
      */
-    public function __construct(protected BanValue $banValue)
-    {
+    public function __construct(
+        protected BanValue $banValue,
+        protected Auth $auth
+    ) {
         //
     }
 
@@ -44,7 +49,18 @@ class BanValueRepo
             ->selectRaw("`{$this->banValue->getTable()}`.*")
             ->filterType($filter['type'])
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
+            ->when(!is_null($filter['search']), function (Builder|BanValue $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.bans.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->banValue->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->banValue->getTable()}.{$attr}", $this->banValue->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->when($filter['orderby'] === null, function (Builder|BanValue $query) use ($filter) {
                 return $query->filterOrderBySearch($filter['search']);
             })

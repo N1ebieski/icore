@@ -83,7 +83,12 @@ class PostController
             $request->safe()->merge(['user' => $request->user()])->toArray()
         );
 
-        return Response::redirectToRoute('admin.post.index')->with(
+        return Response::redirectToRoute('admin.post.index', [
+            'filter' => [
+                'search' => 'id:"' . $post->id . '"'
+            ]
+        ])
+        ->with(
             'success',
             Lang::get('icore::posts.success.store')
         );

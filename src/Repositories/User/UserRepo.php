@@ -57,7 +57,18 @@ class UserRepo
                     return $query->filterStatus($filter['status']);
                 }
             )
-            ->filterSearch($filter['search'])
+            ->when(!is_null($filter['search']), function (Builder|User $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.users.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->user->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->user->getTable()}.{$attr}", $this->user->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->filterExcept($filter['except'])
             ->filterRole($filter['role'])
             ->when(is_null($filter['orderby']), function (Builder|User $query) use ($filter) {

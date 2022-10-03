@@ -89,7 +89,12 @@ class PageController
             $parent = $page->find($request->input('parent_id'));
         }
 
-        return Response::redirectToRoute('admin.page.index')->with(
+        return Response::redirectToRoute('admin.page.index', [
+            'filter' => [
+                'search' => 'id:"' . $page->id . '"'
+            ]
+        ])
+        ->with(
             'success',
             // @phpstan-ignore-next-line
             Lang::get('icore::pages.success.store') . (
@@ -204,7 +209,7 @@ class PageController
             'status' => $page->status->getValue(),
             'view' => View::make('icore::admin.page.partials.page', [
                 'page' => $page
-            ])->render(),            
+            ])->render(),
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
             'ancestors' => $pageRepo->getAncestorsAsArray(),

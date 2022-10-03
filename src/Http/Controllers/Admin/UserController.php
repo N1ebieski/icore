@@ -170,10 +170,16 @@ class UserController
      */
     public function store(User $user, StoreRequest $request): JsonResponse
     {
-        $user->makeService()->create($request->validated());
+        $user = $user->makeService()->create($request->validated());
 
         $request->session()->flash('success', Lang::get('icore::users.success.store'));
 
-        return Response::json([]);
+        return Response::json([
+            'redirect' => URL::route("admin.user.index", [
+                'filter' => [
+                    'search' => "id:\"{$user->id}\""
+                ]
+            ])
+        ]);
     }
 }

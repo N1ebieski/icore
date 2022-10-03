@@ -114,14 +114,21 @@ class BanValueController
      */
     public function store(string $type, BanValue $banValue, StoreRequest $request): JsonResponse
     {
-        $banValue->create([
+        $banValue = $banValue->create([
             'type' => $type,
             'value' => $request->get('value')
         ]);
 
         $request->session()->flash('success', Lang::get('icore::bans.value.success.store'));
 
-        return Response::json([]);
+        return Response::json([
+            'redirect' => URL::route("admin.banvalue.index", [
+                'type' => $type,
+                'filter' => [
+                    'search' => "id:\"{$banValue->id}\""
+                ]
+            ])
+        ]);
     }
 
     /**

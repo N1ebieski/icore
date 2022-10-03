@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Repositories\Tag;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -30,8 +31,10 @@ class TagRepo
      * [__construct description]
      * @param Tag $tag [description]
      */
-    public function __construct(protected Tag $tag)
-    {
+    public function __construct(
+        protected Tag $tag,
+        protected Auth $auth
+    ) {
         //
     }
 
@@ -55,7 +58,18 @@ class TagRepo
         return $this->tag->newQuery()
             ->selectRaw("`{$this->tag->getTable()}`.*")
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
+            ->when(!is_null($filter['search']), function (Builder|Tag $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.tags.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach ([$this->tag->getKeyName()] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->tag->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->tag->getTable()}.{$attr}", $this->tag->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->when(strpos($filter['orderby'], 'sum') !== false, function (Builder|Tag $query) {
                 return $query->withCountSum();
             })
