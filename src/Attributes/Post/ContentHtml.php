@@ -26,12 +26,12 @@ class ContentHtml
 {
     /**
      *
-     * @param Post $Post
+     * @param Post $post
      * @param Purifier $purifier
      * @return void
      */
     public function __construct(
-        protected Post $Post,
+        protected Post $post,
         protected Purifier $purifier
     ) {
         //
