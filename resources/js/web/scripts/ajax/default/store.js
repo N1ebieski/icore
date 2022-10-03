@@ -46,6 +46,12 @@ $(document).on(
             success: function () {
                 $('.modal').modal('hide');
                 
+                if (response.redirect) {
+                    window.location.replace(response.redirect);
+
+                    return;
+                }
+
                 window.location.reload();
             },
             error: function (response) {
