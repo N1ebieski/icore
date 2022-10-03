@@ -57,15 +57,15 @@ class TokenController
      */
     public function store(Token $token, StoreRequest $request): JsonResponse
     {
-        [$accessToken, $refreshToken] = $token->makeService()->create($request->validated());
+        [$newAccessToken, $newRefreshToken] = $token->makeService()->create($request->validated());
 
         $request->session()->flash('success', Lang::get('icore::tokens.success.store'));
-        $request->session()->flash('accessToken', $accessToken->plainTextToken);
+        $request->session()->flash('accessToken', $newAccessToken->plainTextToken);
 
         return Response::json([
             'redirect' => URL::route('web.profile.tokens', [
                 'filter' => [
-                    'search' => "id:\"{$accessToken->id}\""
+                    'search' => "id:\"{$newAccessToken->accessToken->id}\""
                 ]
             ])
         ], HttpResponse::HTTP_CREATED);
