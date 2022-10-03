@@ -43,7 +43,7 @@ $(document).on(
                 $element.loader('hide');
                 $form.input.addClass('is-valid');
             },
-            success: function () {
+            success: function (response) {
                 $('.modal').modal('hide');
                 
                 if (response.redirect) {
