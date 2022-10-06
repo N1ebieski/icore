@@ -18,6 +18,8 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Mailing\Traits;
 
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+
 trait HasEmailsJson
 {
     /**
@@ -33,14 +35,20 @@ trait HasEmailsJson
             $emailsToJson = [];
 
             foreach ($emails as $email) {
+                if (empty($email)) {
+                    continue;
+                }
+
                 $emailsToJson[] = [
                     'email' => $email
                 ];
             }
 
-            $this->merge([
-                'emails_json' => json_encode($emailsToJson)
-            ]);
+            if (count($emailsToJson) > 0) {
+                $this->merge([
+                    'emails_json' => json_encode($emailsToJson)
+                ]);
+            }
         }
-    }    
+    }
 }

@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CategoryTest extends TestCase
@@ -57,14 +59,22 @@ class CategoryTest extends TestCase
         $user = User::makeFactory()->admin()->create();
 
         /** @var Collection<Category>|array<Category> */
-        $categories = Category::makeFactory()->count(50)->active()->create();
+        $categories = Category::makeFactory()->count(50)
+            ->sequence(function (Sequence $sequence) {
+                return [
+                    'created_at' => Carbon::now()->addSeconds($sequence->index)
+                ];
+            })        
+            ->active()
+            ->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.category.post.index', [
+            'page' => 2,
             'filter' => [
                 'parent' => 0,
-                'orderby' => 'created_at|desc'
+                'orderby' => 'created_at|asc'
             ]
         ]));
 

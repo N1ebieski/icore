@@ -654,7 +654,6 @@ class PostTest extends TestCase
             'time_published_at' => Carbon::now()->format('H:i')
         ]);
 
-        $response->assertRedirect(route('admin.post.index'));
         $response->assertSessionHas('success');
 
         /** @var Post|null */
@@ -664,6 +663,12 @@ class PostTest extends TestCase
         ])->first();
 
         $this->assertTrue(!is_null($post) && $post->exists());
+
+        $response->assertRedirect(route('admin.post.index', [
+            'filter' => [
+                'search' => "id:\"{$post->id}\""
+            ]
+        ]));
 
         $this->assertDatabaseHas('categories_models', [
             'model_id' => $post?->id,

@@ -204,7 +204,7 @@
                 >
                     <div class="form-group">
                         <label for="emails_json">
-                            <span>{{ trans('icore::mailings.emails_json') }}</span>
+                            <span>{{ trans('icore::mailings.emails_json.label') }}</span>
                             <i 
                                 data-toggle="tooltip" 
                                 data-placement="top"

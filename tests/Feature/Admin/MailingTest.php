@@ -484,7 +484,7 @@ class MailingTest extends TestCase
             'title' => '',
             'emails' => 'true',
             'status' => Status::INACTIVE,
-            'emails_json' => 'dasdad',
+            'emails_json' => '',
             'content_html' => 'Ten post został zaktualizowany.'
         ]);
 
@@ -506,7 +506,6 @@ class MailingTest extends TestCase
             'emails_json' => '[{"email": "dasds@dsdada.pl"}]'
         ]);
 
-        $response->assertRedirect(route('admin.mailing.index'));
         $response->assertSessionHas('success');
 
         /** @var Mailing|null */
@@ -516,6 +515,12 @@ class MailingTest extends TestCase
         ])->first();
 
         $this->assertTrue(!is_null($mailing) && $mailing->exists());
+
+        $response->assertRedirect(route('admin.mailing.index', [
+            'filter' => [
+                'search' => "id:\"{$mailing->id}\""
+            ]
+        ]));
 
         $this->assertDatabaseHas('mailings_emails', [
             'email' => 'dasds@dsdada.pl',

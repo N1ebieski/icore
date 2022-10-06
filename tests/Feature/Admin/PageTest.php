@@ -756,7 +756,6 @@ class PageTest extends TestCase
             'status' => 1,
         ]);
 
-        $response->assertRedirect(route('admin.page.index'));
         $response->assertSessionHas('success');
 
         /** @var Page|null */
@@ -767,6 +766,12 @@ class PageTest extends TestCase
         ])->first();
 
         $this->assertTrue(!is_null($page) && $page->exists());
+
+        $response->assertRedirect(route('admin.page.index', [
+            'filter' => [
+                'search' => "id:\"{$page->id}\""
+            ]
+        ]));        
     }
 
     public function testChildrenPageStore(): void
@@ -790,7 +795,6 @@ class PageTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertRedirect(route('admin.page.index'));
         $response->assertSessionHas('success');
 
         /** @var Page|null */
@@ -801,6 +805,12 @@ class PageTest extends TestCase
         ])->first();
 
         $this->assertTrue(!is_null($page) && $page->exists());
+
+        $response->assertRedirect(route('admin.page.index', [
+            'filter' => [
+                'search' => "id:\"{$page->id}\""
+            ]
+        ]));
 
         $this->assertDatabaseHas('pages_closure', [
             'descendant' => $page?->id,

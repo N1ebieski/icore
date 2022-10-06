@@ -38,9 +38,12 @@ class ICoreServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ .  '/../../config/icore.php', 'icore');
 
+        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'icore');
+
         $this->app->register(\Unikent\Cache\TaggableFileCacheServiceProvider::class);
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
 
+        // @phpstan-ignore-next-line
         $this->app->register(LicenseServiceProvider::class);
         $this->app->register(AppServiceProvider::class);
         $this->app->register(AuthServiceProvider::class);
@@ -95,8 +98,6 @@ class ICoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'icore');
-
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'icore');
 
         $this->publishes([

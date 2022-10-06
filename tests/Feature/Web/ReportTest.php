@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
+use Mockery\MockInterface;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -29,13 +30,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ReportTest extends TestCase
 {
     use DatabaseTransactions;
-
-    public function testReportCommentCreateAsGuest(): void
-    {
-        $response = $this->get(route('web.report.comment.create', [99]));
-
-        $response->assertRedirect(route('login'));
-    }
 
     public function testReportNoexistCommentCreate(): void
     {
@@ -84,13 +78,6 @@ class ReportTest extends TestCase
         $this->assertStringContainsString(route('web.report.comment.store', [$comment->id]), $baseResponse->getData()->view);
     }
 
-    public function testReportCommentStoreAsGuest(): void
-    {
-        $response = $this->post(route('web.report.comment.store', [99]), []);
-
-        $response->assertRedirect(route('login'));
-    }
-
     public function testReportNoexistCommentStore(): void
     {
         /** @var User */
@@ -135,8 +122,38 @@ class ReportTest extends TestCase
         $response->assertSessionHasErrors(['content']);
     }
 
-    public function testReportCommentStore(): void
+    public function testReportCommentStoreAsGuest(): void
     {
+        $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function (MockInterface $mock) {
+            $mock->shouldReceive('passes')->once()->andReturn(true);
+        });
+
+        /** @var Comment */
+        $comment = Comment::makeFactory()->active()->withUser()->withMorph()->create();
+
+        $response = $this->post(route('web.report.comment.store', [$comment->id]), [
+            'content' => 'Ten <b>komentarz</b> jest zły. <script>Usunąć!</script>',
+            'g-recaptcha-response' => 'dsadasd'
+        ]);
+
+        $response->assertOk()->assertJson([
+            'success' => trans('icore::reports.success.store')
+        ]);
+
+        $this->assertDatabaseHas('reports', [
+            'user_id' => null,
+            'model_id' => $comment->id,
+            'model_type' => $comment->getMorphClass(),
+            'content' => 'Ten komentarz jest zły. Usunąć!'
+        ]);
+    }
+
+    public function testReportCommentStoreAsUser(): void
+    {
+        $this->mock(\N1ebieski\ICore\Rules\RecaptchaV2Rule::class, function (MockInterface $mock) {
+            $mock->shouldReceive('passes')->once()->andReturn(true);
+        });
+
         /** @var User */
         $user = User::makeFactory()->user()->create();
 
@@ -146,7 +163,8 @@ class ReportTest extends TestCase
         Auth::login($user);
 
         $response = $this->post(route('web.report.comment.store', [$comment->id]), [
-            'content' => 'Ten <b>komentarz</b> jest zły. <script>Usunąć!</script>'
+            'content' => 'Ten <b>komentarz</b> jest zły. <script>Usunąć!</script>',
+            'g-recaptcha-response' => 'dsadasd'
         ]);
 
         $response->assertOk()->assertJson([
@@ -154,6 +172,7 @@ class ReportTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('reports', [
+            'user_id' => $user->id,
             'model_id' => $comment->id,
             'model_type' => $comment->getMorphClass(),
             'content' => 'Ten komentarz jest zły. Usunąć!'

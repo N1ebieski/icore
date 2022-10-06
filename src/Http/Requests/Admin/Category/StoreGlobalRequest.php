@@ -62,14 +62,20 @@ class StoreGlobalRequest extends FormRequest
             $namesToJson = [];
 
             foreach ($names as $name) {
+                if (empty($name)) {
+                    continue;
+                }
+
                 $namesToJson[] = [
                     'name' => $name
                 ];
             }
 
-            $this->merge([
-                'names' => json_encode($namesToJson)
-            ]);
+            if (count($namesToJson) > 0) {
+                $this->merge([
+                    'names' => json_encode($namesToJson)
+                ]);
+            }
         }
     }
 
