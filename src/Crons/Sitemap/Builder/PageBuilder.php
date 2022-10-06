@@ -35,13 +35,13 @@ class PageBuilder extends Builder
      *
      * @var string
      */
-    protected $route = 'web.page.show';
+    public $route = 'web.page.show';
 
     /**
-     * [protected description]
+     * [public description]
      * @var string
      */
-    protected $path = 'vendor/icore/sitemap/pages';
+    public $path = 'vendor/icore/sitemap/pages';
 
     /**
      * Undocumented variable
@@ -88,6 +88,9 @@ class PageBuilder extends Builder
      */
     public function chunkCollection(Closure $closure): bool
     {
-        return $this->page->makeRepo()->chunkActiveWithModelsCount($closure);
+        return $this->page->makeRepo()->chunkActiveWithModelsCount(
+            $this->config->get('icore.sitemap.limit'),
+            $closure
+        );
     }
 }

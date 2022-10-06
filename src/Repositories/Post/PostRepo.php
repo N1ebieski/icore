@@ -288,19 +288,20 @@ class PostRepo
     }
 
     /**
-     * Undocumented function
      *
+     * @param int $chunk
      * @param Closure $callback
-     * @return boolean
+     * @return bool
+     * @throws InvalidArgumentException
      */
-    public function chunkActiveWithModelsCount(Closure $callback): bool
+    public function chunkActiveWithModelsCount(int $chunk, Closure $callback): bool
     {
         return $this->post->newQuery()
             ->active()
             ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
                 $query->root()->active();
             }])
-            ->chunk(1000, $callback);
+            ->chunk($chunk, $callback);
     }
 
     /**

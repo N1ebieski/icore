@@ -54,13 +54,6 @@ abstract class Builder
     protected $contents;
 
     /**
-     * Undocumented variable
-     *
-     * @var int
-     */
-    protected $maxItems = 10000;
-
-    /**
      * [protected description]
      * @var string
      */
@@ -210,7 +203,8 @@ abstract class Builder
      */
     public function isMaxItems(): bool
     {
-        return $this->sitemap->count() >= $this->maxItems || $this->collection->count() < 1000;
+        return $this->sitemap->count() >= $this->config->get('icore.sitemap.max_items')
+            || $this->collection->count() < $this->config->get('icore.sitemap.limit');
     }
 
     abstract public function chunkCollection(Closure $closure): bool;

@@ -250,12 +250,13 @@ class PageRepo
     }
 
     /**
-     * Undocumented function
      *
+     * @param int $chunk
      * @param Closure $callback
-     * @return boolean
+     * @return bool
+     * @throws InvalidArgumentException
      */
-    public function chunkActiveWithModelsCount(Closure $callback): bool
+    public function chunkActiveWithModelsCount(int $chunk, Closure $callback): bool
     {
         return $this->page->newQuery()
             ->active()
@@ -263,6 +264,6 @@ class PageRepo
             ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
                 return $query->root()->active();
             }])
-            ->chunk(1000, $callback);
+            ->chunk($chunk, $callback);
     }
 }

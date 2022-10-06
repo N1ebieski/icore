@@ -225,12 +225,13 @@ class CategoryRepo
     }
 
     /**
-     * Undocumented function
      *
+     * @param int $chunk
      * @param Closure $closure
      * @return bool
+     * @throws InvalidArgumentException
      */
-    public function chunkActiveWithModelsCount(Closure $closure): bool
+    public function chunkActiveWithModelsCount(int $chunk, Closure $closure): bool
     {
         return $this->category->newQuery()
             ->active()
@@ -238,7 +239,7 @@ class CategoryRepo
             ->withCount(['morphs AS models_count' => function ($query) {
                 $query->active();
             }])
-            ->chunk(1000, $closure);
+            ->chunk($chunk, $closure);
     }
 
     /**

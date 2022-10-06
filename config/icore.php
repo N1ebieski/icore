@@ -75,5 +75,10 @@ return [
 
     'home' => [
         'max' => (int)env('ICORE_HOME_MAX', 10)
+    ],
+
+    'sitemap' => [
+        'limit' => (int)env('ICORE_SITEMAP_LIMIT', 1000),
+        'max_items' => (int)env('ICORE_SITEMAP_MAX_ITEMS', 10000)
     ]
 ];

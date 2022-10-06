@@ -31,10 +31,10 @@ use Illuminate\Contracts\Filesystem\Factory as Storage;
 class SitemapBuilder extends Builder
 {
     /**
-     * [protected description]
+     * [public description]
      * @var string
      */
-    protected $path = 'vendor/icore/sitemap';
+    public $path = 'vendor/icore/sitemap';
 
     /**
      * Undocumented variable
@@ -146,6 +146,6 @@ class SitemapBuilder extends Builder
      */
     public function putSitemap(): bool
     {
-        return $this->storage->disk('public')->put($this->path . '/sitemap.xml', $this->sitemap);
+        return $this->storage->disk('public')->put($this->path . '/sitemap.xml', $this->contents);
     }
 }

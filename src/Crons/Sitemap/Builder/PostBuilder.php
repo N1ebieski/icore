@@ -35,13 +35,13 @@ class PostBuilder extends Builder
      *
      * @var string
      */
-    protected $route = 'web.post.show';
+    public $route = 'web.post.show';
 
     /**
-     * [protected description]
+     * [public description]
      * @var string
      */
-    protected $path = 'vendor/icore/sitemap/posts';
+    public $path = 'vendor/icore/sitemap/posts';
 
     /**
      * Undocumented variable
@@ -58,15 +58,15 @@ class PostBuilder extends Builder
     protected $changefreq = 'daily';
 
     /**
-     * 
-     * @param ArrayToXml $arrayToXml 
-     * @param URL $url 
-     * @param Carbon $carbon 
-     * @param Storage $storage 
-     * @param Config $config 
-     * @param Collect $collect 
-     * @param Post $post 
-     * @return void 
+     *
+     * @param ArrayToXml $arrayToXml
+     * @param URL $url
+     * @param Carbon $carbon
+     * @param Storage $storage
+     * @param Config $config
+     * @param Collect $collect
+     * @param Post $post
+     * @return void
      */
     public function __construct(
         ArrayToXml $arrayToXml,
@@ -88,6 +88,9 @@ class PostBuilder extends Builder
      */
     public function chunkCollection(Closure $closure): bool
     {
-        return $this->post->makeRepo()->chunkActiveWithModelsCount($closure);
+        return $this->post->makeRepo()->chunkActiveWithModelsCount(
+            $this->config->get('icore.sitemap.limit'),
+            $closure
+        );
     }
 }
