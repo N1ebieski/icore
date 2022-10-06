@@ -66,8 +66,8 @@ class SitemapTest extends TestCase
                 function () {
                     return Category::makeFactory()->active()->count(100)->create();
                 },
-                function (Builder $builder, mixed $model) {
-                    return URL::route($builder->route, [$model->slug]);
+                function (Builder $builder, Category $category) {
+                    return URL::route($builder->route, [$category->slug]);
                 }
             ],
             [
@@ -75,8 +75,8 @@ class SitemapTest extends TestCase
                 function () {
                     return Page::makeFactory()->active()->count(100)->create();
                 },
-                function (Builder $builder, mixed $model) {
-                    return URL::route($builder->route, [$model->slug]);
+                function (Builder $builder, Page $page) {
+                    return URL::route($builder->route, [$page->slug]);
                 }
             ],
             [
@@ -84,8 +84,8 @@ class SitemapTest extends TestCase
                 function () {
                     return Post::makeFactory()->active()->publish()->count(100)->create();
                 },
-                function (Builder $builder, mixed $model) {
-                    return URL::route($builder->route, [$model->slug]);
+                function (Builder $builder, Post $post) {
+                    return URL::route($builder->route, [$post->slug]);
                 }
             ],
         ];
