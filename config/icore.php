@@ -28,19 +28,19 @@ return [
 
     'routes' => [
         'auth' => [
-            'prefix' => null,
+            'prefix' => env('ICORE_ROUTES_AUTH_PREFIX', null),
             'enabled' => true
         ],
         'web' => [
-            'prefix' => null,
+            'prefix' => env('ICORE_ROUTES_WEB_PREFIX', null),
             'enabled' => true
         ],
         'admin' => [
-            'prefix' => 'admin',
+            'prefix' => env('ICORE_ROUTES_ADMIN_PREFIX', 'admin'),
             'enabled' => true
         ],
         'api' => [
-            'prefix' => 'api',
+            'prefix' => env('ICORE_ROUTES_API_PREFIX', 'api'),
             'enabled' => true
         ]
     ],
