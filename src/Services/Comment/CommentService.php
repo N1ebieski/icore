@@ -1,53 +1,42 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Comment;
 
 use Throwable;
-use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\Comment\Comment;
-use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 
-class CommentService implements CreateInterface, UpdateInterface, StatusUpdateInterface, DeleteInterface
+class CommentService
 {
-    /**
-     * Comment model
-     * @var Comment
-     */
-    protected $comment;
-
-    /**
-     * [private description]
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
      * @param Comment $comment
-     * @param Auth $auth
      * @param DB $db
      */
-    public function __construct(Comment $comment, Auth $auth, DB $db)
-    {
-        $this->comment = $comment;
-
-        $this->auth = $auth;
-        $this->db = $db;
+    public function __construct(
+        protected Comment $comment,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
@@ -59,8 +48,8 @@ class CommentService implements CreateInterface, UpdateInterface, StatusUpdateIn
     public function getRootsByFilter(array $filter): LengthAwarePaginator
     {
         return $this->paginateChildrens(
-            $this->comment->morph->makeRepo()
-                ->paginateCommentsByFilter($filter)
+            // @phpstan-ignore-next-line
+            $this->comment->morph->makeRepo()->paginateCommentsByFilter($filter)
         );
     }
 
@@ -79,19 +68,19 @@ class CommentService implements CreateInterface, UpdateInterface, StatusUpdateIn
     }
 
     /**
-     * Tworzy nowy komentarz powiązany z modelem
      *
-     * @param  array $attributes
-     * @return Model
+     * @param array $attributes
+     * @return Comment
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Comment
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->comment->content_html = $attributes['content'];
             $this->comment->content = $this->comment->content_html;
 
-            $this->comment->user()->associate($this->auth->user());
-            $this->comment->morph()->associate($this->comment->morph);
+            $this->comment->user()->associate($attributes['user']);
+            $this->comment->morph()->associate($attributes['morph']);
 
             $this->comment->parent_id = $attributes['parent_id'] ?? null;
 
@@ -102,18 +91,20 @@ class CommentService implements CreateInterface, UpdateInterface, StatusUpdateIn
     }
 
     /**
-     * Edytuje istniejący komentarz
      *
-     * @param  array $attributes
-     * @return bool
+     * @param array $attributes
+     * @return Comment
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Comment
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->comment->content_html = $attributes['content'];
             $this->comment->content = $this->comment->content_html;
 
-            return $this->comment->save();
+            $this->comment->save();
+
+            return $this->comment;
         });
     }
 
@@ -145,11 +136,11 @@ class CommentService implements CreateInterface, UpdateInterface, StatusUpdateIn
     }
 
     /**
-     * Usuwa Komentarz wraz ze zmianą pozycji pozostałych
      *
-     * @return bool
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             return $this->comment->delete();
@@ -167,7 +158,10 @@ class CommentService implements CreateInterface, UpdateInterface, StatusUpdateIn
             $deleted = 0;
 
             foreach ($ids as $id) {
-                if ($c = $this->comment->find($id)) {
+                /** @var Comment|null */
+                $c = $this->comment->find($id);
+
+                if (!is_null($c)) {
                     $c->makeService()->delete();
 
                     $deleted += 1;

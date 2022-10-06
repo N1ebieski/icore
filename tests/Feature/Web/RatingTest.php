@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Tests\TestCase;
@@ -14,15 +30,16 @@ class RatingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testRatingCommentRateAsGuest()
+    public function testRatingCommentRateAsGuest(): void
     {
         $response = $this->get(route('web.rating.comment.rate', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testRatingNoexistCommentRate()
+    public function testRatingNoexistCommentRate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -32,10 +49,12 @@ class RatingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testRatingCommentRateValidationFail()
+    public function testRatingCommentRateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->withMorph()->create();
 
         Auth::login($user);
@@ -45,10 +64,12 @@ class RatingTest extends TestCase
         $response->assertSessionHasErrors(['rating']);
     }
 
-    public function testRatingCommentRateCreate()
+    public function testRatingCommentRateCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withMorph()->for($user)->create();
 
         Auth::login($user);
@@ -62,12 +83,15 @@ class RatingTest extends TestCase
         ]);
     }
 
-    public function testRatingCommentRateDelete()
+    public function testRatingCommentRateDelete(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->withMorph()->create();
 
+        /** @var Rating */
         $rating = Rating::makeFactory()->one()->for($user)->for($comment, 'morph')->create();
 
         $this->assertDatabaseHas('ratings', [
@@ -83,12 +107,15 @@ class RatingTest extends TestCase
         ]);
     }
 
-    public function testRatingCommentRateUpdate()
+    public function testRatingCommentRateUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->withMorph()->create();
 
+        /** @var Rating */
         $rating = Rating::makeFactory()->one()->for($user)->for($comment, 'morph')->create();
 
         $this->assertDatabaseHas('ratings', [

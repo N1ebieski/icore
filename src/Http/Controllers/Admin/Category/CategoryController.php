@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
 use Illuminate\Http\JsonResponse;
@@ -70,20 +86,35 @@ class CategoryController implements Polymorphic
      */
     public function store(Category $category, StoreRequest $request): JsonResponse
     {
-        $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
+        $category->makeService()->create($request->validated());
+
+        $parent = null;
+
+        if (!is_null($request->input('parent_id'))) {
+            /** @var Category|null */
+            $parent = $category->find($request->input('parent_id'));
+        }
 
         $request->session()->flash(
             'success',
+            // @phpstan-ignore-next-line
             Lang::get('icore::categories.success.store') . (
-                $request->input('parent_id') !== null ?
+                !is_null($request->input('parent_id')) ?
                     Lang::get('icore::categories.success.store_parent', [
-                        'parent' => $category->find($request->input('parent_id'))->name
+                        'parent' => $parent?->name
                     ])
                     : null
             )
         );
 
-        return Response::json([]);
+        return Response::json([
+            'redirect' => URL::route("admin.category.{$category->poli}.index", [
+                'filter' => [
+                    'parent' => $parent?->id,
+                    'search' => "id:\"{$category->id}\""
+                ]
+            ])
+        ]);
     }
 
     /**
@@ -95,14 +126,20 @@ class CategoryController implements Polymorphic
      */
     public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse
     {
-        $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
+        $category->makeService()->createGlobal($request->validated());
+
+        if (!is_null($request->input('parent_id'))) {
+            /** @var Category|null */
+            $parent = $category->find($request->input('parent_id'));
+        }
 
         $request->session()->flash(
             'success',
+            // @phpstan-ignore-next-line
             Lang::get('icore::categories.success.store_global') . (
-                $request->input('parent_id') !== null ?
+                !is_null($request->input('parent_id')) ?
                     Lang::get('icore::categories.success.store_parent', [
-                        'parent' => $category->find($request->input('parent_id'))->name
+                        'parent' => $parent?->name
                     ])
                     : null
             )

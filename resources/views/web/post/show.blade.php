@@ -39,9 +39,24 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
-                <h1 class="h4 border-bottom pb-2">
-                    {{ $post->title }}
-                </h1>
+                <div class="d-flex justify-content-between">
+                    <h1 class="h4 border-bottom pb-2">
+                        {{ $post->title }}
+                    </h1>
+                    @can ('admin.posts.view')
+                    <div>
+                        <a
+                            href="{{ route('admin.post.index', ['filter[search]' => 'id:"' . $post->id . '"']) }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ trans('icore::posts.route.index') }}"
+                            class="badge badge-primary"
+                        >
+                            {{ trans('icore::default.admin') }}
+                        </a>
+                    </div>
+                    @endcan
+                </div>
                 <div class="d-flex mb-2">
                     <small class="mr-auto">
                         {{ trans('icore::posts.published_at_diff') }}: {{ $post->published_at_diff }}
@@ -189,3 +204,9 @@
     </div>
 </div>
 @endsection
+
+@if (!empty(config('icore.captcha.driver')))
+@php
+app(\N1ebieski\ICore\View\Components\CaptchaComponent::class)->render()->render();
+@endphp
+@endif

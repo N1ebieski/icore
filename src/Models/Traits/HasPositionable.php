@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models\Traits;
 
 trait HasPositionable
@@ -27,15 +43,15 @@ trait HasPositionable
      * [decrementSiblings description]
      * @param  int|null $from [description]
      * @param  int|null $to   [description]
-     * @return bool         [description]
+     * @return int         [description]
      */
-    public function decrementSiblings(int $from = null, int $to = null): bool
+    public function decrementSiblings(int $from = null, int $to = null): int
     {
         return $this->siblings()
-            ->when($from !== null, function ($query) use ($from) {
+            ->when(!is_null($from), function ($query) use ($from) {
                 $query->where('position', '>', $from);
             })
-            ->when($to !== null, function ($query) use ($to) {
+            ->when(!is_null($to), function ($query) use ($to) {
                 $query->where('position', '<=', $to);
             })
             ->where('id', '<>', $this->id)
@@ -46,15 +62,15 @@ trait HasPositionable
      * [incrementSiblings description]
      * @param  int|null $from [description]
      * @param  int|null $to   [description]
-     * @return bool         [description]
+     * @return int         [description]
      */
-    public function incrementSiblings(int $from = null, int $to = null): bool
+    public function incrementSiblings(int $from = null, int $to = null): int
     {
         return $this->siblings()
-            ->when($from !== null, function ($query) use ($from) {
+            ->when(!is_null($from), function ($query) use ($from) {
                 $query->where('position', '>=', $from);
             })
-            ->when($to !== null, function ($query) use ($to) {
+            ->when(!is_null($to), function ($query) use ($to) {
                 $query->where('position', '<', $to);
             })
             ->where('id', '<>', $this->id)
@@ -80,6 +96,6 @@ trait HasPositionable
             ->orderBy('position', 'desc')
             ->first('position');
 
-        return is_int(optional($last)->position) ? $last->position + 1 : 0;
+        return is_int($last?->position) ? $last->position + 1 : 0;
     }
 }

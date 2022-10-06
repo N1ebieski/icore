@@ -1,9 +1,28 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Web;
 
 use Mockery;
 use Tests\TestCase;
+use RuntimeException;
+use Mockery\MockInterface;
+use InvalidArgumentException;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -17,76 +36,96 @@ class ProfileTest extends TestCase
 {
     use DatabaseTransactions;
 
+    /**
+     * @var string
+     */
     private const PROVIDER = 'facebook';
 
-    protected static function socialiteMock(array $user)
+    /**
+     *
+     * @param array $user
+     * @return void
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     */
+    protected static function socialiteMock(array $user): void
     {
+        /**
+         * @var MockInterface
+         */
         $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
 
-        $abstractUser->shouldReceive('getId')->andReturn($user['id'])
-            ->shouldReceive('getEmail')->andReturn($user['email'])
-            ->shouldReceive('getName')->andReturn($user['name']);
+        $abstractUser->shouldReceive('getId')->andReturn($user['id']);
+        $abstractUser->shouldReceive('getEmail')->andReturn($user['email']);
+        $abstractUser->shouldReceive('getName')->andReturn($user['name']);
 
+        /**
+         * @var MockInterface
+         */
         $providerUser = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+
+        /** @phpstan-ignore-next-line */
         $providerUser->shouldReceive('user')->andReturn($abstractUser);
 
         Socialite::shouldReceive('driver')->once()->with(self::PROVIDER)->andReturn($providerUser);
     }
 
-    public function testProfileEditGuestUser()
+    public function testProfileEditGuestUser(): void
     {
         $response = $this->get(route('web.profile.edit'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileUpdateGuestUser()
+    public function testProfileUpdateGuestUser(): void
     {
         $response = $this->put(route('web.profile.update'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileEditSocialiteGuestUser()
+    public function testProfileEditSocialiteGuestUser(): void
     {
         $response = $this->get(route('web.profile.socialites'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileRedirectPasswordGuestUser()
+    public function testProfileRedirectPasswordGuestUser(): void
     {
         $response = $this->get(route('web.profile.redirect_password'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileUpdateEmailGuestUser()
+    public function testProfileUpdateEmailGuestUser(): void
     {
         $response = $this->patch(route('web.profile.update_email'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileSocialiteRedirectGuestUser()
+    public function testProfileSocialiteRedirectGuestUser(): void
     {
         $response = $this->get(route('web.profile.socialite.redirect', ['provider' => 'facebook']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileSocialiteCallbackGuestUser()
+    public function testProfileSocialiteCallbackGuestUser(): void
     {
         $response = $this->get(route('web.profile.socialite.callback', ['provider' => 'facebook']));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileEditSocialite()
+    public function testProfileEditSocialite(): void
     {
+        /** @var User $user */
         $user = User::makeFactory()->user()->create();
 
-        Social::makeFactory()->for($user)->create([
+        /** @var Social */
+        $socialite = Social::makeFactory()->for($user)->create([
             'provider_name' => self::PROVIDER
         ]);
 
@@ -95,11 +134,12 @@ class ProfileTest extends TestCase
         $response = $this->get(route('web.profile.socialites'));
 
         $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"', false);
-        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"', false);
+        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $socialite->id]) . '"', false);
     }
 
-    public function testProfileSocialiteCallbackWithoutEmail()
+    public function testProfileSocialiteCallbackWithoutEmail(): void
     {
+        /** @var User $user */
         $user = User::makeFactory()->user()->create();
 
         $this->socialiteMock([
@@ -112,19 +152,25 @@ class ProfileTest extends TestCase
 
         $response = $this->followingRedirects()->get(route('web.profile.socialite.callback', ['provider' => self::PROVIDER]));
 
+        /** @var Social */
+        $socialite = $user->socialites->first();
+
         $response->assertViewIs('icore::web.profile.socialites');
-        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]) . '"', false);
+        $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $socialite->id]) . '"', false);
         $response->assertSee('alert-success', false);
     }
 
-    public function testProfileSocialiteCallbackForeignProviderId()
+    public function testProfileSocialiteCallbackForeignProviderId(): void
     {
+        /** @var User */
         $user1 = User::makeFactory()->user()->create();
 
+        /** @var Social */
         $social = Social::makeFactory()->for($user1)->create([
             'provider_name' => self::PROVIDER
         ]);
 
+        /** @var User */
         $user2 = User::makeFactory()->create();
 
         $this->socialiteMock([
@@ -141,8 +187,9 @@ class ProfileTest extends TestCase
         $response->assertSessionHas('danger');
     }
 
-    public function testProfileEditPassword()
+    public function testProfileEditPassword(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -152,8 +199,9 @@ class ProfileTest extends TestCase
         $response->assertSee('href="' . route('web.profile.redirect_password') . '"', false);
     }
 
-    public function testProfileEditPasswordWithoutVerifyEmail()
+    public function testProfileEditPasswordWithoutVerifyEmail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create([
             'email_verified_at' => null
         ]);
@@ -165,10 +213,11 @@ class ProfileTest extends TestCase
         $response->assertRedirect('/email/verify');
     }
 
-    public function testProfileRedirectPassword()
+    public function testProfileRedirectPassword(): void
     {
         Notification::fake();
 
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -183,15 +232,16 @@ class ProfileTest extends TestCase
         Notification::assertSentTo([$user], ResetPassword::class);
     }
 
-    public function testProfileSocialiteDestroyGuestUser()
+    public function testProfileSocialiteDestroyGuestUser(): void
     {
         $response = $this->delete(route('web.profile.socialite.destroy', ['socialite' => 4]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testProfileEditEmail()
+    public function testProfileEditEmail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -201,9 +251,12 @@ class ProfileTest extends TestCase
         $response->assertSee('value="' . $user->email . '"', false);
     }
 
-    public function testProfileUpdateExistEmail()
+    public function testProfileUpdateExistEmail(): void
     {
+        /** @var User */
         $user1 = User::makeFactory()->user()->create();
+
+        /** @var User */
         $user2 = User::makeFactory()->user()->create();
 
         Auth::login($user2);
@@ -218,8 +271,9 @@ class ProfileTest extends TestCase
         $response->assertSessionHasErrors(['email', 'password_confirmation']);
     }
 
-    public function testProfileUpdateEmailValidationFail()
+    public function testProfileUpdateEmailValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -234,8 +288,9 @@ class ProfileTest extends TestCase
         $response->assertSessionHasErrors(['email', 'password_confirmation']);
     }
 
-    public function testProfileUpdateEmail()
+    public function testProfileUpdateEmail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -257,8 +312,9 @@ class ProfileTest extends TestCase
         ]);
     }
 
-    public function testProfileEdit()
+    public function testProfileEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -268,8 +324,9 @@ class ProfileTest extends TestCase
         $response->assertSee('value="' . $user->name . '"', false);
     }
 
-    public function testProfileUpdateValidationFail()
+    public function testProfileUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -284,8 +341,9 @@ class ProfileTest extends TestCase
         $response->assertSessionHasErrors('name');
     }
 
-    public function testProfileUpdate()
+    public function testProfileUpdate(): void
     {
+        /** @var User $user */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -306,8 +364,9 @@ class ProfileTest extends TestCase
         ]);
     }
 
-    public function testProfileSocialiteDestroyWithInvalidId()
+    public function testProfileSocialiteDestroyWithInvalidId(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -317,34 +376,39 @@ class ProfileTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testProfileSocialiteDestroyForeignId()
+    public function testProfileSocialiteDestroyForeignId(): void
     {
+        /** @var User */
         $user1 = User::makeFactory()->user()->create();
 
-        Social::makeFactory()->for($user1)->create([
+        /** @var Social */
+        $socialite = Social::makeFactory()->for($user1)->create([
             'provider_name' => self::PROVIDER
         ]);
 
+        /** @var User */
         $user2 = User::makeFactory()->create();
 
         Auth::login($user2);
 
-        $response = $this->delete(route('web.profile.socialite.destroy', ['socialite' => $user1->socialites->first()->id]));
+        $response = $this->delete(route('web.profile.socialite.destroy', ['socialite' => $socialite->id]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testProfileSocialiteDestroyId()
+    public function testProfileSocialiteDestroyId(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
-        Social::makeFactory()->for($user)->create([
+        /** @var Social */
+        $socialite = Social::makeFactory()->for($user)->create([
             'provider_name' => self::PROVIDER
         ]);
 
         Auth::login($user);
 
-        $response = $this->followingRedirects()->delete(route('web.profile.socialite.destroy', ['socialite' => $user->socialites->first()->id]));
+        $response = $this->followingRedirects()->delete(route('web.profile.socialite.destroy', ['socialite' => $socialite->id]));
 
         $response->assertSee(route('web.profile.socialite.redirect', ['provider' => self::PROVIDER]), false);
         $response->assertViewIs('icore::web.profile.socialites');

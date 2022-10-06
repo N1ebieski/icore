@@ -1,35 +1,35 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Repositories\Category;
 
 use Closure;
+use InvalidArgumentException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 
 class CategoryRepo
 {
-    /**
-     * [private description]
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
-     * Config
-     * @var Config
-     */
-    protected $config;
-
     /**
      * Undocumented function
      *
@@ -37,12 +37,12 @@ class CategoryRepo
      * @param Config $config
      * @param Auth $auth
      */
-    public function __construct(Category $category, Config $config, Auth $auth)
-    {
-        $this->category = $category;
-
-        $this->auth = $auth;
-        $this->config = $config;
+    public function __construct(
+        protected Category $category,
+        protected Config $config,
+        protected Auth $auth
+    ) {
+        //
     }
 
     /**
@@ -64,22 +64,34 @@ class CategoryRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->category->selectRaw("`{$this->category->getTable()}`.*")
-            ->filterSearch($filter['search'])
-            ->filterExcept($filter['except'])
+        return $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
             ->when(
-                $filter['status'] === null && !optional($this->auth->user())->can('admin.categories.view'),
-                function ($query) {
-                    $query->active();
+                is_null($filter['status']) && !$this->auth->user()?->can('admin.categories.view'),
+                function (Builder|Category $query) {
+                    return $query->active();
                 },
-                function ($query) use ($filter) {
-                    $query->filterStatus($filter['status']);
+                function (Builder|Category $query) use ($filter) {
+                    return $query->filterStatus($filter['status']);
                 }
             )
             ->poliType()
+            ->when(!is_null($filter['search']), function (Builder|Category $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.categories.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->category->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->category->getTable()}.{$attr}", $this->category->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
+            ->filterExcept($filter['except'])
             ->filterParent($filter['parent'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(is_null($filter['orderby']), function (Builder|Category $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->withAncestorsExceptSelf()
@@ -92,10 +104,13 @@ class CategoryRepo
      */
     public function getAsTree(): Collection
     {
-        return  $this->category->poliType()
+        /** @var ClosureTableCollection */
+        $categories = $this->category->newQuery()
+            ->poliType()
             ->orderBy('position', 'asc')
-            ->get()
-            ->toTree();
+            ->get();
+
+        return $categories->toTree();
     }
 
     /**
@@ -104,28 +119,26 @@ class CategoryRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
-        return $this->category->whereNotIn(
-            'id',
-            $this->category->find($this->category->id)
-                    ->descendants()
-                    ->get(['id'])
-                    ->pluck('id')
-                    ->toArray()
-        )
+        /** @var ClosureTableCollection */
+        $categories = $this->category->newQuery()
+            ->whereNotIn('id', $this->category->descendants()->pluck('id')->toArray())
             ->poliType()
             ->orderBy('position', 'asc')
-            ->get()
-            ->toTree();
+            ->get();
+
+        return $categories->toTree();
     }
 
     /**
-     * [getBySearch description]
-     * @param  string     $name [description]
-     * @return Collection|null       [description]
+     *
+     * @param string $name
+     * @return Collection
+     * @throws InvalidArgumentException
      */
-    public function getBySearch(string $name)
+    public function getBySearch(string $name): Collection
     {
-        return $this->category->withAncestorsExceptSelf()
+        return $this->category->newQuery()
+            ->withAncestorsExceptSelf()
             ->search($name)
             ->active()
             ->poliType()
@@ -140,10 +153,7 @@ class CategoryRepo
      */
     public function getAncestorsAsArray(): array
     {
-        return $this->category->ancestors()
-            ->get(['id'])
-            ->pluck('id')
-            ->toArray();
+        return $this->category->ancestors()->pluck('id')->toArray();
     }
 
     /**
@@ -152,10 +162,7 @@ class CategoryRepo
      */
     public function getDescendantsAsArray(): array
     {
-        return $this->category->descendants()
-            ->get(['id'])
-            ->pluck('id')
-            ->toArray();
+        return $this->category->descendants()->pluck('id')->toArray();
     }
 
     /**
@@ -177,10 +184,11 @@ class CategoryRepo
      */
     public function getWithRecursiveChildrens(): Collection
     {
-        return $this->category->withRecursiveAllRels()
+        return $this->category->newQuery()
+            ->withRecursiveAllRels()
             ->withCount([
                 'morphs' => function ($query) {
-                    $query->active();
+                    return $query->active();
                 }
             ])
             ->poliType()
@@ -195,9 +203,10 @@ class CategoryRepo
      * @param  string $slug [description]
      * @return Category|null       [description]
      */
-    public function firstBySlug(string $slug)
+    public function firstBySlug(string $slug): ?Category
     {
-        return $this->category->where('slug', $slug)
+        return $this->category->newQuery()
+            ->where('slug', $slug)
             ->poliType()
             ->active()
             ->withAncestorsExceptSelf()
@@ -216,19 +225,21 @@ class CategoryRepo
     }
 
     /**
-     * Undocumented function
      *
+     * @param int $chunk
      * @param Closure $closure
-     * @return boolean
+     * @return bool
+     * @throws InvalidArgumentException
      */
-    public function chunkActiveWithModelsCount(Closure $closure): bool
+    public function chunkActiveWithModelsCount(int $chunk, Closure $closure): bool
     {
-        return $this->category->active()
+        return $this->category->newQuery()
+            ->active()
             ->poliType()
             ->withCount(['morphs AS models_count' => function ($query) {
                 $query->active();
             }])
-            ->chunk(1000, $closure);
+            ->chunk($chunk, $closure);
     }
 
     /**
@@ -238,8 +249,9 @@ class CategoryRepo
      */
     public function countByStatus(): Collection
     {
-        return $this->category->poliType()
+        return $this->category->newQuery()
             ->selectRaw("`status`, COUNT(`id`) AS `count`")
+            ->poliType()
             ->groupBy('status')
             ->get();
     }

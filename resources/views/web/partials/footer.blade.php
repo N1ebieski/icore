@@ -10,7 +10,7 @@
             @if (app('router')->has('web.newsletter.store'))
             <hr class="clearfix w-100 d-md-none">
             <div class="col-md mx-auto">
-                @render('icore::newsletterComponent')
+                <x-icore::newsletter-component />
             </div>
             @endif
             <hr class="clearfix w-100 d-md-none">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="row justify-content-end">
-            @render('icore::page.footerComponent', ['cols' => 2])
+            <x-icore::page.footer-component cols="2" />
             <div class="col-lg-3 col-sm-6">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -59,13 +59,16 @@
                         </a>
                     </li>  
                 </ul>
-                @render('icore::linkComponent', ['max' => 5, 'cats' => $catsAsArray ?? null])
+                <x-icore::link-component
+                    limit="5"
+                    :cats="$catsAsArray ?? null"
+                />
             </div>    
             <div class="col-lg-3 col-sm-6">
                 <h5 class="mt-4 mt-sm-0 mb-2 d-lg-none">
                     {{ trans('icore::stats.stats') }}:
-                </h5>            
-                @render('icore::statComponent')
+                </h5>       
+                <x-icore::stat-component />
             </div>
         </div>   
         <hr>

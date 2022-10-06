@@ -5,7 +5,7 @@
 >
     <div class="col my-auto d-flex justify-content-between">
         @can('admin.posts.delete')
-        <div class="custom-control custom-checkbox">
+        <div class="custom-control custom-checkbox w-100">
             <input 
                 name="select[]" 
                 type="checkbox" 
@@ -13,18 +13,35 @@
                 id="select{{ $post->id }}" 
                 value="{{ $post->id }}"
             >
-            <label class="custom-control-label" for="select{{ $post->id }}">
+            <label class="custom-control-label w-100" for="select{{ $post->id }}">
         @endcan
                 <ul class="list-unstyled mb-0 pb-0">
                     <li>
-                        <a 
-                            href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}" 
-                            target="_blank" 
-                            title="{{ $post->title }}" 
-                            rel="noopener"
-                        >
-                            {{ $post->title }}
-                        </a>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <a 
+                                    href="{{ route('admin.post.edit_full', ['post' => $post->id]) }}" 
+                                    target="_blank" 
+                                    title="{{ $post->title }}" 
+                                    rel="noopener"
+                                >
+                                    {{ $post->title }}
+                                </a>
+                            </div>
+                            @if ($post->status->isActive())
+                            <div>
+                                <a
+                                    href="{{ route('web.post.show', [$post->slug]) }}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    title="{{ $post->title }}"
+                                    class="badge badge-primary"
+                                >
+                                    {{ trans('icore::default.web') }}
+                                </a>
+                            </div>
+                            @endif
+                        </div>                            
                     </li>
                     <li class="text-break" style="word-break:break-word">
                         {!! $post->shortContent !!}...

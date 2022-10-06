@@ -1,50 +1,57 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Repositories\Page;
 
 use Closure;
+use InvalidArgumentException;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\Comment\Page\Comment;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 
 class PageRepo
 {
     /**
-     * [private description]
-     * @var Page
-     */
-    protected $page;
-
-    /**
-     * Config
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var App
-     */
-    protected $app;
-
-    /**
-     * Undocumented function
      *
      * @param Page $page
      * @param Config $config
+     * @param Auth $auth
      * @param App $app
+     * @return void
      */
-    public function __construct(Page $page, Config $config, App $app)
-    {
-        $this->page = $page;
-
-        $this->app = $app;
-        $this->config = $config;
+    public function __construct(
+        protected Page $page,
+        protected Config $config,
+        protected Auth $auth,
+        protected App $app
+    ) {
+        //
     }
 
     /**
@@ -54,16 +61,28 @@ class PageRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->page->selectRaw("`{$this->page->getTable()}`.*")
-            ->filterSearch($filter['search'])
+        return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->when(!is_null($filter['search']), function (Builder|Page $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.pages.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->page->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->page->getTable()}.{$attr}", $this->page->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->filterParent($filter['parent'])
+            ->when(is_null($filter['orderby']), function (Builder|Page $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
-            ->filterParent($filter['parent'])
-            ->when($filter['parent'] === null, function ($query) {
+            ->when(is_null($filter['parent']), function (Builder|Page $query) {
                 return $query->withAncestorsExceptSelf();
             })
             ->filterPaginate($filter['paginate']);
@@ -75,9 +94,13 @@ class PageRepo
      */
     public function getAsTree(): Collection
     {
-        return $this->page->withAncestorsExceptSelf()
-            ->get()
-            ->toTree();
+        /** @var ClosureTableCollection */
+        $pages = $this->page->newQuery()
+            ->withAncestorsExceptSelf()
+            ->orderBy('position', 'asc')
+            ->get();
+
+        return $pages->toTree();
     }
 
     /**
@@ -86,17 +109,16 @@ class PageRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
-        return $this->page->whereNotIn(
-            'id',
-            $this->page->find($this->page->id)
-                    ->descendants()
-                    ->get(['id'])
-                    ->pluck('id')
-                    ->toArray()
-        )
+        /** @var Page */
+        $self = $this->page->find($this->page->id);
+
+        /** @var ClosureTableCollection */
+        $pages = $this->page->whereNotIn('id', $self->descendants()->pluck('id')->toArray())
             ->withAncestorsExceptSelf()
-            ->get()
-            ->toTree();
+            ->orderBy('position', 'asc')
+            ->get();
+
+        return $pages->toTree();
     }
 
     /**
@@ -105,7 +127,7 @@ class PageRepo
      */
     public function getAncestorsAsArray(): array
     {
-        return $this->page->ancestors()->get(['id'])->pluck('id')->toArray();
+        return $this->page->ancestors()->pluck('id')->toArray();
     }
 
     /**
@@ -114,7 +136,7 @@ class PageRepo
      */
     public function getDescendantsAsArray(): array
     {
-        return $this->page->descendants()->get(['id'])->pluck('id')->toArray();
+        return $this->page->descendants()->pluck('id')->toArray();
     }
 
     /**
@@ -131,33 +153,36 @@ class PageRepo
     /**
      * [getWithChildrensByComponent description]
      * @param  array      $component [description]
-     * @return Collection            [description]
+     * @return Collect            [description]
      */
-    public function getWithChildrensByComponent(array $component): Collection
+    public function getWithChildrensByComponent(array $component): Collect
     {
-        return $this->page->active()
-            ->with(['childrens' => function ($query) {
-                $query->active()->orderBy('position', 'asc');
+        return $this->page->newQuery()
+            ->active()
+            ->with(['childrens' => function (HasMany|Builder|Page $query) {
+                return $query->active()->orderBy('position', 'asc');
             }])
-            ->when($component['pattern'] !== null, function ($query) use ($component) {
+            ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
 
-                $query->whereIn('id', $component['pattern'])
+                return $query->whereIn('id', $component['pattern'])
                     ->orderByRaw("FIELD(id, {$patternString}) ASC");
-            }, function ($query) use ($component) {
-                $query->root()
+            }, function (Builder|Page $query) use ($component) {
+                return $query->root()
                     ->limit($component['limit'])
                     ->orderBy('position', 'asc');
             })
             ->get()
-            ->map(function ($item) {
-                if ($item->childrens->isNotEmpty()) {
-                    $item->urls = $item->childrens->pluck('slug')->map(function ($item) {
-                        return '*/' . $item;
+            // @phpstan-ignore-next-line
+            ->map(function (Page $page) {
+                if ($page->childrens->isNotEmpty()) {
+                    // @phpstan-ignore-next-line
+                    $page->urls = $page->childrens->pluck('slug')->map(function ($page) {
+                        return '*/' . $page;
                     });
                 }
 
-                return $item;
+                return $page;
             });
     }
 
@@ -168,16 +193,17 @@ class PageRepo
      */
     public function getWithRecursiveChildrensByComponent(array $component): Collection
     {
-        return $this->page->withRecursiveAllRels()
-            ->when($component['pattern'] !== null, function ($query) use ($component) {
+        return $this->page->newQuery()
+            ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
 
-                $query->whereIn('id', $component['pattern'])
+                return $query->whereIn('id', $component['pattern'])
                     ->orderByRaw("FIELD(id, ?) DESC", [$patternString]);
-            }, function ($query) {
-                $query->root()->orderBy('position', 'asc');
+            }, function (Builder|Page $query) {
+                return $query->root()->orderBy('position', 'asc');
             })
             ->active()
+            ->withRecursiveAllRels()
             ->get();
     }
 
@@ -188,29 +214,35 @@ class PageRepo
      */
     public function firstBySlug(string $slug): ?Page
     {
-        return $this->page->whereSlug($slug)
-            ->with('tags')
+        return $this->page->newQuery()
+            ->where('slug', $slug)
+            ->active()
             ->when(
                 $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
-                function ($query) {
-                    $query->with('stats');
+                function (Builder $query) {
+                    return $query->with('stats');
                 }
             )
-            ->active()
+            ->with('tags')
             ->withAncestorsExceptSelf()
             ->first();
     }
 
     /**
-     * Comments belong to the Post model
-     * @param  array                $filter [description]
-     * @return LengthAwarePaginator         [description]
+     *
+     * @param array $filter
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentException
      */
     public function paginateCommentsByFilter(array $filter): LengthAwarePaginator
     {
+        /** @var Comment */
+        $comment = $this->page->comments()->make();
+
+        // @phpstan-ignore-next-line
         return $this->page->comments()->where([
-                ['comments.parent_id', null],
-                ['comments.status', Status::ACTIVE]
+                ["{$comment->getTable()}.parent_id", null],
+                ["{$comment->getTable()}.status", Status::ACTIVE]
             ])
             ->withAllRels($filter['orderby'])
             ->filterCommentsOrderBy($filter['orderby'])
@@ -218,18 +250,20 @@ class PageRepo
     }
 
     /**
-     * Undocumented function
      *
+     * @param int $chunk
      * @param Closure $callback
-     * @return boolean
+     * @return bool
+     * @throws InvalidArgumentException
      */
-    public function chunkActiveWithModelsCount(Closure $callback): bool
+    public function chunkActiveWithModelsCount(int $chunk, Closure $callback): bool
     {
-        return $this->page->active()
+        return $this->page->newQuery()
+            ->active()
             ->whereNotNull('content_html')
-            ->withCount(['comments AS models_count' => function ($query) {
-                $query->root()->active();
+            ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
+                return $query->root()->active();
             }])
-            ->chunk(1000, $callback);
+            ->chunk($chunk, $callback);
     }
 }

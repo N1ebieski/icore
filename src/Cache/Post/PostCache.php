@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Cache\Post;
 
 use Illuminate\Http\Request;
@@ -14,39 +30,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class PostCache
 {
     /**
-     * Post model
-     * @var Post
-     */
-    protected $post;
-
-    /**
-     * Cache driver
-     * @var Cache
-     */
-    protected $cache;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Carbon
-     */
-    protected $carbon;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * Undocumented function
      *
      * @param Post $post
@@ -57,20 +40,14 @@ class PostCache
      * @param Request $request
      */
     public function __construct(
-        Post $post,
-        Cache $cache,
-        Config $config,
-        Carbon $carbon,
-        Collect $collect,
-        Request $request
+        protected Post $post,
+        protected Cache $cache,
+        protected Config $config,
+        protected Carbon $carbon,
+        protected Collect $collect,
+        protected Request $request
     ) {
-        $this->post = $post;
-
-        $this->cache = $cache;
-        $this->config = $config;
-        $this->carbon = $carbon;
-        $this->collect = $collect;
-        $this->request = $request;
+        //
     }
 
     /**
@@ -171,20 +148,22 @@ class PostCache
 
     /**
      * [rememberArchives description]
-     * @return Collection [description]
+     * @return Collect [description]
      */
-    public function rememberArchives(): Collection
+    public function rememberArchives(): Collect
     {
         return $this->cache->tags(['posts'])->remember(
             'post.getArchives',
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                $posts = $this->post->makeRepo()->getArchives();
+                $posts = $this->post->makeRepo()->getArchives()->toBase();
 
-                $posts->map(function ($item) {
-                    $item->month_localized = $this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}")
+                $posts->map(function (mixed $item) {
+                    $item->month_localized = optional($this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}"))
                         ->locale($this->config->get('app.locale'))
                         ->isoFormat('MMMM');
+
+                    return $item;
                 });
 
                 return $posts;
@@ -248,14 +227,14 @@ class PostCache
     public function rememberByFilter(array $filter): LengthAwarePaginator
     {
         if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-            $posts = $this->getByFilter($this->request->input('page'));
+            $posts = $this->getByFilter();
         }
 
-        if (!isset($posts) || !$posts) {
+        if (!isset($posts)) {
             $posts = $this->post->makeRepo()->paginateByFilter($filter);
 
             if ($this->collect->make($filter)->isNullItems() && !$this->request->user()) {
-                $this->putByFilter($posts, $this->request->input('page'));
+                $this->putByFilter($posts);
             }
         }
 

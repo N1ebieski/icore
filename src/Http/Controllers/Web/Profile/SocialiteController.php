@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Web\Profile;
 
 use Illuminate\Support\Facades\URL;
@@ -17,8 +33,9 @@ class SocialiteController
      * Hook replacing the provider in config
      *
      * @param string $provider [description]
+     * @return void
      */
-    private static function configRedirect(string $provider)
+    private static function configRedirect(string $provider): void
     {
         // Troche partyzantka, ale musze tak zrobic bo Socialite dla Twittera nie daje
         // zdefiniowac innego callbacku przez metode redirectUrl
@@ -63,16 +80,21 @@ class SocialiteController
         }
 
         $socialiteService = $socialite->makeService();
-        $authUser = $socialiteService->findUser($providerUser, $provider);
 
-        if (!is_null($authUser)) {
+        $user = $socialiteService->findUser($providerUser, $provider);
+
+        if (!is_null($user)) {
             return Response::redirectToRoute('web.profile.socialites')->with(
                 'danger',
                 Lang::get('icore::profile.error.symlink_exist', ['provider' => ucfirst($provider)])
             );
         }
 
-        $socialiteService->setSocialiteUser(Auth::user())->create([]);
+        $socialiteService->create([
+            'provider_id' => $providerUser->getId(),
+            'provider_name' => $provider,
+            'user' => Auth::user()
+        ]);
 
         return Response::redirectToRoute('web.profile.socialites')->with(
             'success',

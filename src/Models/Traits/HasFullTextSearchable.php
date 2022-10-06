@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Support\Str;
@@ -88,10 +104,9 @@ trait HasFullTextSearchable
     }
 
     /**
-     * Undocumented function
      *
-     * @param string $term
-     * @return boolean
+     * @param string $match
+     * @return bool
      */
     protected function isContainsSymbol(string $match): bool
     {
@@ -126,7 +141,7 @@ trait HasFullTextSearchable
      *
      * @return string
      */
-    protected function search(): string
+    protected function getSearchAsString(): string
     {
         return implode(' ', (array)$this->search[$this->className()]);
     }
@@ -136,7 +151,7 @@ trait HasFullTextSearchable
      *
      * @return string
      */
-    protected function columns(): string
+    protected function getColumnsAsString(): string
     {
         $columns = array_map(function (string $column) {
             return '`' . $column . '`';
@@ -160,14 +175,24 @@ trait HasFullTextSearchable
         $this->splitExactMatches();
         $this->splitMatches();
 
-        return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->whereRaw("MATCH ({$this->columns()}) AGAINST (? IN BOOLEAN MODE)", [$this->search()]);
+        return $query->when(array_key_exists($this->className(), $this->search), function (Builder $query) {
+            return $query->whereRaw(
+                "MATCH ({$this->getColumnsAsString()}) AGAINST (? IN BOOLEAN MODE)",
+                [$this->getSearchAsString()]
+            )
+            ->when(
+                App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
+                function (Builder $query) {
+                    foreach ($this->searchable as $column) {
+                        $query->selectRaw(
+                            "MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
+                            [$this->getSearchAsString()]
+                        );
+                    }
 
-            $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
-                foreach ($this->searchable as $column) {
-                    $query->selectRaw("MATCH (`{$column}`) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`", [$this->search()]);
+                    return $query;
                 }
-            });
+            );
         });
     }
 
@@ -187,12 +212,17 @@ trait HasFullTextSearchable
         $this->splitExactMatches();
         $this->splitMatches();
 
-        return $query->when(array_key_exists($this->className(), $this->search), function ($query) {
-            $query->when(App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'), function ($query) {
-                foreach ($this->searchable as $column) {
-                    $query->orderBy("{$column}_relevance", 'desc');
+        return $query->when(array_key_exists($this->className(), $this->search), function (Builder $query) {
+            return $query->when(
+                App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
+                function (Builder $query) {
+                    foreach ($this->searchable as $column) {
+                        $query->orderBy("{$column}_relevance", 'desc');
+                    }
+
+                    return $query;
                 }
-            });
+            );
         });
     }
 }

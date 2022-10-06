@@ -35,7 +35,7 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct(LoginRequest $request)
+    public function __construct()
     {
         $this->middleware('icore.guest')->except('logout');
     }

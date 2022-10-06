@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="form-group mt-2">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-switch">
                 <input 
                     type="checkbox" 
                     class="custom-control-input" 

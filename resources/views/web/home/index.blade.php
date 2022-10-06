@@ -22,9 +22,9 @@
                         class="border border-right-0 form-control-lg" 
                         id="typeahead" 
                         data-route="{{ route('api.tag.index') }}"
-                        placeholder="{{ trans('icore::search.search') }}" 
+                        placeholder="{{ trans('icore::search.search') }}"
                         name="search"
-                        autocomplete="off"                        
+                        autocomplete="off"
                     >
                     <input type="hidden" name="source" value="post">
                     <span class="input-group-append">
@@ -39,10 +39,10 @@
                 </div>
             </form>
             <div class="text-white d-block mt-5">
-                @render('icore::tag.post.tagComponent', [
-                    'limit' => 25,
-                    'colors' => ['text-white']
-                ])
+                <x-icore::tag.post.tag-component
+                    limit="25"
+                    :colors="['text-white']"
+                />
             </div>
         </div>
     </div>
@@ -58,8 +58,12 @@
             </div>
         </div>
         <div class="col-md-4 order-sm-2 order-md-1">
-            @render('icore::category.post.categoryComponent')
-            @render('icore::comment.post.commentComponent')
+            <x-icore::category.post.category-component />
+            <x-icore::comment.post.comment-component
+                limit="5"
+                :max_content="null"
+                orderby="created_at|desc"
+            />
         </div>
         @endif
     </div>

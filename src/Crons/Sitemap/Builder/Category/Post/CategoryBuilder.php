@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Crons\Sitemap\Builder\Category\Post;
 
 use Closure;
@@ -17,22 +33,15 @@ class CategoryBuilder extends Builder
     /**
      * Undocumented variable
      *
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     * Undocumented variable
-     *
      * @var string
      */
-    protected $route = 'web.category.post.show';
+    public $route = 'web.category.post.show';
 
     /**
-     * [protected description]
+     * [public description]
      * @var string
      */
-    protected $path = 'vendor/icore/sitemap/categories/posts';
+    public $path = 'vendor/icore/sitemap/categories/posts';
 
     /**
      * Undocumented variable
@@ -57,7 +66,7 @@ class CategoryBuilder extends Builder
      * @param Storage $storage
      * @param Config $config
      * @param Collect $collect
-     * @param Page $page
+     * @param Category $category
      */
     public function __construct(
         ArrayToXml $arrayToXml,
@@ -66,21 +75,21 @@ class CategoryBuilder extends Builder
         Storage $storage,
         Config $config,
         Collect $collect,
-        Category $category
+        protected Category $category
     ) {
         parent::__construct($arrayToXml, $url, $carbon, $storage, $config, $collect);
-
-        $this->category = $category;
     }
 
     /**
-     * Undocumented function
      *
      * @param Closure $closure
-     * @return void
+     * @return bool
      */
     public function chunkCollection(Closure $closure): bool
     {
-        return $this->category->makeRepo()->chunkActiveWithModelsCount($closure);
+        return $this->category->makeRepo()->chunkActiveWithModelsCount(
+            $this->config->get('icore.sitemap.limit'),
+            $closure
+        );
     }
 }

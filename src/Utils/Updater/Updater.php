@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Utils\Updater;
 
 use Illuminate\Support\Str;
@@ -12,41 +28,6 @@ use N1ebieski\ICore\Utils\Updater\Schema\Interfaces\SchemaInterface;
 class Updater
 {
     /**
-     * Undocumented variable
-     *
-     * @var SchemaInterface
-     */
-    protected $schema;
-
-    /**
-     *
-     * @var Storage
-     */
-    protected $storage;
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Str
-     */
-    protected $str;
-
-    /**
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * @var ActionFactory
-     */
-    protected $actionFactory;
-
-    /**
      *
      * @param SchemaInterface $schema
      * @param Storage $storage
@@ -57,21 +38,14 @@ class Updater
      * @return void
      */
     public function __construct(
-        SchemaInterface $schema,
-        Storage $storage,
-        Filesystem $filesystem,
-        Str $str,
-        Collect $collect,
-        ActionFactory $actionFactory
+        protected SchemaInterface $schema,
+        protected Storage $storage,
+        protected Filesystem $filesystem,
+        protected Str $str,
+        protected Collect $collect,
+        protected ActionFactory $actionFactory
     ) {
-        $this->schema = $schema;
-
-        $this->storage = $storage;
-        $this->filesystem = $filesystem;
-        $this->str = $str;
-        $this->collect = $collect;
-
-        $this->actionFactory = $actionFactory;
+        //
     }
 
     /**
@@ -136,14 +110,14 @@ class Updater
                     foreach ($pattern['actions'] as $action) {
                         $contents = $this->str->of($contents);
 
-                        if ($matches = $contents->matchAll($action['search'])) {
-                            if ($matches->isEmpty()) {
-                                continue;
-                            }
+                        $matches = $contents->matchAll($action['search']);
 
-                            $contents = $this->actionFactory->makeAction($action)
-                                ->handle($contents, $matches->toArray());
+                        if ($matches->isEmpty()) {
+                            continue;
                         }
+
+                        $contents = $this->actionFactory->makeAction($action)
+                            ->handle($contents, $matches->toArray());
                     }
 
                     $this->filesystem->put($filename, $contents);

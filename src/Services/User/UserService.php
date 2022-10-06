@@ -1,46 +1,30 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\User;
 
 use Throwable;
 use N1ebieski\ICore\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
 
-class UserService implements
-    CreateInterface,
-    UpdateInterface,
-    StatusUpdateInterface,
-    DeleteInterface,
-    GlobalDeleteInterface
+class UserService
 {
-    /**
-     * Undocumented variable
-     *
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Hasher
-     */
-    protected $hasher;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
@@ -48,21 +32,21 @@ class UserService implements
      * @param Hasher $hasher
      * @param DB $db
      */
-    public function __construct(User $user, Hasher $hasher, DB $db)
-    {
-        $this->user = $user;
-
-        $this->hasher = $hasher;
-        $this->db = $db;
+    public function __construct(
+        protected User $user,
+        protected Hasher $hasher,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
-     * Undocumented function
      *
      * @param array $attributes
-     * @return Model
+     * @return User
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): User
     {
         return $this->db->transaction(function () use ($attributes) {
             $user = $this->user->create([
@@ -82,22 +66,24 @@ class UserService implements
     }
 
     /**
-     * Undocumented function
      *
      * @param array $attributes
-     * @return boolean
+     * @return User
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): User
     {
         return $this->db->transaction(function () use ($attributes) {
             if (array_key_exists('roles', $attributes)) {
                 $this->user->syncRoles(array_merge($attributes['roles'] ?? [], ['user']));
             }
 
-            return $this->user->update([
+            $this->user->update([
                 'name' => $attributes['name'],
                 'email' => $attributes['email']
             ]);
+
+            return $this->user;
         });
     }
 
@@ -115,11 +101,11 @@ class UserService implements
     }
 
     /**
-     * Undocumented function
      *
-     * @return boolean
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             $this->user->ban()->delete();

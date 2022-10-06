@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Admin\Comment\Post;
 
 use N1ebieski\ICore\Models\Post;
@@ -21,20 +37,13 @@ use N1ebieski\ICore\Http\Controllers\Admin\Comment\CommentController as BaseComm
 class CommentController implements Polymorphic
 {
     /**
-     * Undocumented variable
-     *
-     * @var BaseCommentController
-     */
-    protected $decorated;
-
-    /**
      * Undocumented function
      *
      * @param BaseCommentController $decorated
      */
-    public function __construct(BaseCommentController $decorated)
+    public function __construct(protected BaseCommentController $decorated)
     {
-        $this->decorated = $decorated;
+        //
     }
 
     /**
@@ -76,9 +85,13 @@ class CommentController implements Polymorphic
      */
     public function store(Post $post, Comment $comment, StoreRequest $request): JsonResponse
     {
-        $comment = $comment->setRelations(['morph' => $post])
-            ->makeService()
-            ->create($request->only(['content', 'parent_id']));
+        $comment = $comment->makeService()->create(
+            // @phpstan-ignore-next-line
+            $request->safe()->merge([
+                'morph' => $post,
+                'user' => $request->user()
+            ])->toArray()
+        );
 
         Event::dispatch(App::make(CommentStoreEvent::class, ['comment' => $comment]));
 

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Observers;
 
 use Illuminate\Support\Facades\Cache;
@@ -58,37 +74,35 @@ class PageObserver
     }
 
     /**
-     * Undocumented function
      *
      * @param Page $page
-     * @param [type] $relationName
-     * @param [type] $pivotIds
-     * @param [type] $pivotIdsAttributes
+     * @param mixed $relationName
+     * @param mixed $pivotIds
+     * @param mixed $pivotIdsAttributes
      * @return void
      */
     public function pivotAttached(Page $page, $relationName, $pivotIds, $pivotIdsAttributes)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['tags'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['tags'])) {
             $this->updated($page);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 
     /**
-     * Undocumented function
      *
      * @param Page $page
-     * @param [type] $relationName
-     * @param [type] $pivotIds
+     * @param mixed $relationName
+     * @param mixed $pivotIds
      * @return void
      */
     public function pivotDetached(Page $page, $relationName, $pivotIds)
     {
-        if (static::$pivotEvent === false && in_array($relationName, ['tags'])) {
+        if (self::$pivotEvent === false && in_array($relationName, ['tags'])) {
             $this->updated($page);
 
-            static::$pivotEvent = true;
+            self::$pivotEvent = true;
         }
     }
 

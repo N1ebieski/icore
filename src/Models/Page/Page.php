@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models\Page;
 
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
-use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Lang;
 use Cviebrock\EloquentTaggable\Taggable;
 use Franzose\ClosureTable\Models\Entity;
@@ -13,10 +28,12 @@ use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Page\PageCache;
 use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\ValueObjects\Page\Status;
+use Franzose\ClosureTable\Models\ClosureTable;
 use N1ebieski\ICore\Services\Page\PageService;
 use N1ebieski\ICore\Repositories\Page\PageRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
@@ -33,10 +50,156 @@ use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 
 /**
+ * N1ebieski\ICore\Models\Page\Page
+ *
+ * @property int $real_depth
  * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status
  * @property Commentable $comment
+ * @property int $siblings_count
+ * @property int $id
+ * @property string $slug
+ * @property int $user_id
+ * @property string|null $icon
+ * @property string $title
+ * @property string $content_html
+ * @property string|null $content
+ * @property string|null $seo_title
+ * @property string|null $seo_desc
+ * @property int $parent_id
+ * @property int $position
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $ancestors
+ * @property-read int|null $ancestors_count
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $children
+ * @property-read int|null $children_count
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $childrens
+ * @property-read int|null $childrens_count
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $childrensRecursiveWithAllRels
+ * @property-read int|null $childrens_recursive_with_all_rels_count
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Comment\Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $descendants
+ * @property-read int|null $descendants_count
+ * @property-read string $created_at_diff
+ * @property-read string $less_content_html
+ * @property-read string $meta_desc
+ * @property-read string $meta_title
+ * @property-read string $model_type
+ * @property-read string $no_more_content_html
+ * @property-read string $poli_self
+ * @property-read int $real_position
+ * @property-read string $replacement_content
+ * @property-read string $replacement_content_html
+ * @property-read string $short_content
+ * @property-read string $short_title
+ * @property-read array $tag_array
+ * @property-read array $tag_array_normalized
+ * @property-read string $tag_list
+ * @property-read string $tag_list_normalized
+ * @property-read string $updated_at_diff
+ * @property-read Page|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Stat\Page\Stat[] $stats
+ * @property-read int|null $stats_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @method static Builder|Page active()
+ * @method static Builder|Page activeByDate()
+ * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])
+ * @method static Builder|Entity ancestors()
+ * @method static Builder|Entity ancestorsOf($id)
+ * @method static Builder|Entity ancestorsWithSelf()
+ * @method static Builder|Entity ancestorsWithSelfOf($id)
+ * @method static Builder|Entity childAt($position)
+ * @method static Builder|Entity childNode()
+ * @method static Builder|Entity childNodeOf($id)
+ * @method static Builder|Entity childOf($id, $position)
+ * @method static Builder|Entity childrenRange($from, $to = null)
+ * @method static Builder|Entity childrenRangeOf($id, $from, $to = null)
+ * @method static Builder|Page componentOnly(?array $only = null)
+ * @method static Builder|Entity descendants()
+ * @method static Builder|Entity descendantsOf($id)
+ * @method static Builder|Entity descendantsWithSelf()
+ * @method static Builder|Entity descendantsWithSelfOf($id)
+ * @method static \N1ebieski\ICore\Database\Factories\Page\PageFactory factory(...$parameters)
+ * @method static Builder|Page filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
+ * @method static Builder|Page filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
+ * @method static Builder|Page filterExcept(?array $except = null)
+ * @method static Builder|Page filterOrderBy(?string $orderby = null)
+ * @method static Builder|Page filterOrderBySearch(?string $search = null)
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator filterPaginate(?int $paginate = null)
+ * @method static Builder|Page filterParent($parent = null)
+ * @method static Builder|Page filterReport(?int $report = null)
+ * @method static Builder|Page filterSearch(?string $search = null)
+ * @method static Builder|Page filterStatus(?int $status = null)
+ * @method static Builder|Page findSimilarSlugs(string $attribute, array $config, string $slug)
+ * @method static Builder|Entity firstChild()
+ * @method static Builder|Entity firstChildOf($id)
+ * @method static Builder|Entity firstSibling()
+ * @method static Builder|Entity firstSiblingOf($id)
+ * @method static \Franzose\ClosureTable\Extensions\Collection|static[] get($columns = ['*'])
+ * @method static Builder|Page isNotTagged()
+ * @method static Builder|Page isTagged()
+ * @method static Builder|Entity lastChild()
+ * @method static Builder|Entity lastChildOf($id)
+ * @method static Builder|Entity lastSibling()
+ * @method static Builder|Entity lastSiblingOf($id)
+ * @method static Builder|Entity neighbors()
+ * @method static Builder|Entity neighborsOf($id)
+ * @method static Builder|Page newModelQuery()
+ * @method static Builder|Page newQuery()
+ * @method static Builder|Entity nextSibling()
+ * @method static Builder|Entity nextSiblingOf($id)
+ * @method static Builder|Entity nextSiblings()
+ * @method static Builder|Entity nextSiblingsOf($id)
+ * @method static Builder|Page orderBySearch(string $term)
+ * @method static Builder|Entity prevSibling()
+ * @method static Builder|Entity prevSiblingOf($id)
+ * @method static Builder|Entity prevSiblings()
+ * @method static Builder|Entity prevSiblingsOf($id)
+ * @method static Builder|Page query()
+ * @method static Builder|Page root()
+ * @method static Builder|Page search(string $term)
+ * @method static Builder|Entity sibling()
+ * @method static Builder|Entity siblingAt($position)
+ * @method static Builder|Entity siblingOf($id)
+ * @method static Builder|Entity siblingOfAt($id, $position)
+ * @method static Builder|Entity siblings()
+ * @method static Builder|Entity siblingsOf($id)
+ * @method static Builder|Entity siblingsRange($from, $to = null)
+ * @method static Builder|Entity siblingsRangeOf($id, $from, $to = null)
+ * @method static Builder|Page whereComment($value)
+ * @method static Builder|Page whereContent($value)
+ * @method static Builder|Page whereContentHtml($value)
+ * @method static Builder|Page whereCreatedAt($value)
+ * @method static Builder|Page whereIcon($value)
+ * @method static Builder|Page whereId($value)
+ * @method static Builder|Page whereParentId($value)
+ * @method static Builder|Page wherePosition($value)
+ * @method static Builder|Page whereRealDepth($value)
+ * @method static Builder|Page whereSeoDesc($value)
+ * @method static Builder|Page whereSeoNofollow($value)
+ * @method static Builder|Page whereSeoNoindex($value)
+ * @method static Builder|Page whereSeoTitle($value)
+ * @method static Builder|Page whereSlug($value)
+ * @method static Builder|Page whereStatus($value)
+ * @method static Builder|Page whereTitle($value)
+ * @method static Builder|Page whereUpdatedAt($value)
+ * @method static Builder|Page whereUserId($value)
+ * @method static Builder|Page withAllTags($tags)
+ * @method static Builder|Page withAncestorsExceptSelf()
+ * @method static Builder|Page withAnyTags($tags)
+ * @method static Builder|Page withCountStats(string $stat)
+ * @method static Builder|Page withRecursiveAllRels()
+ * @method static Builder|Page withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ * @method static Builder|Page withoutAllTags($tags, bool $includeUntagged = false)
+ * @method static Builder|Page withoutAnyTags($tags, bool $includeUntagged = false)
+ * @property-read string $less_content_html_attribute
+ * @property-read string|null $first_image
+ * @mixin \Eloquent
  */
 class Page extends Entity
 {
@@ -70,14 +233,15 @@ class Page extends Entity
     /**
      * ClosureTable model instance.
      *
-     * @var PageClosure
+     * @var ClosureTable
      */
+    // @phpstan-ignore-next-line
     protected $closure = 'N1ebieski\ICore\Models\Page\PageClosure';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'title',
@@ -133,7 +297,7 @@ class Page extends Entity
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',
@@ -292,158 +456,154 @@ class Page extends Entity
         );
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getModelTypeAttribute description]
-     * @return string [description]
-     */
-    public function getModelTypeAttribute(): string
-    {
-        return get_class($this);
-    }
-
-    /**
-     * [getPoliAttribute description]
-     * @return string [description]
-     */
-    public function getPoliSelfAttribute(): string
-    {
-        return 'page';
-    }
-
-    /**
-     * [getContentHtmlAttribute description]
-     * @return string [description]
-     */
-    public function getContentHtmlAttribute(): string
-    {
-        return Purifier::clean($this->attributes['content_html']);
-    }
-
-    /**
-     * [getMetaTitleAttribute description]
-     * @return string [description]
-     */
-    public function getMetaTitleAttribute(): string
-    {
-        return (!empty($this->attributes['seo_title'])) ? $this->attributes['seo_title'] : $this->title;
-    }
-
-    /**
-     * [getMetaDescAttribute description]
-     * @return string [description]
-     */
-    public function getMetaDescAttribute(): string
-    {
-        return (!empty($this->attributes['seo_desc'])) ? $this->attributes['seo_desc'] : $this->shortContent;
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getReplacementContentAttribute(): string
+    public function modelType(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-            ->handle($this->content, function ($value) {
-                return $value;
-            });
+        return new Attribute(fn (): string => $this::class);
     }
 
     /**
-     * Short content used in the listing
-     * @return string [description]
-     */
-    public function getShortContentAttribute(): string
-    {
-        return e(mb_substr(strip_tags($this->replacement_content), 0, 500), false);
-    }
-
-    /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getReplacementContentHtmlAttribute(): string
+    public function poliSelf(): Attribute
     {
-        return App::make(Pipeline::class)
-            ->send($this->content_html)
-            ->through([
-                \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
-                \N1ebieski\ICore\Utils\Conversions\Replacement::class
-            ])
-            ->thenReturn();
+        return new Attribute(fn (): string => 'page');
     }
 
     /**
-     * Full content without more link
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getNoMoreContentHtmlAttribute(): string
+    public function contentHtml(): Attribute
     {
-        return str_replace(
-            '<p>[more]</p>',
-            '<span id="more" class="hashtag"></span>',
-            $this->replacement_content_html
-        );
+        return App::make(\N1ebieski\ICore\Attributes\Page\ContentHtml::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * Content to the point of more link
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getLessContentHtmlAttribute(): string
+    public function metaTitle(): Attribute
     {
-        $cut = explode('<p>[more]</p>', $this->replacement_content_html);
-
-        return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.page.show', [
-                'page' => $this->slug,
-                '#more'
-            ]) . '">' . Lang::get('icore::pages.more') . '</a>' : $this->replacement_content_html;
+        return App::make(\N1ebieski\ICore\Attributes\Page\MetaTitle::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * [getRealPositionAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getRealPositionAttribute(): string
+    public function metaDesc(): Attribute
     {
-        return $this->position + 1;
+        return App::make(\N1ebieski\ICore\Attributes\Page\MetaDesc::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * [getShortNameAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getShortTitleAttribute(): string
+    public function replacementContent(): Attribute
     {
-        return (strlen($this->title) > 20) ? substr($this->title, 0, 20) : $this->title;
+        return App::make(\N1ebieski\ICore\Attributes\Page\ReplacementContent::class, [
+            'page' => $this
+        ])();
     }
 
     /**
-     * [getFirstImageAttribute description]
-     * @return string|null [description]
+     *
+     * @return Attribute
      */
-    public function getFirstImageAttribute(): ?string
+    public function shortContent(): Attribute
     {
-        preg_match('/<img.+src=[\'|"](.*?)[\'|"]/', $this->content_html, $image);
-
-        return $image[1] ?? null;
+        return App::make(\N1ebieski\ICore\Attributes\Page\ShortContent::class, [
+            'page' => $this
+        ])();
     }
 
-    // Mutators
+    /**
+     *
+     * @return Attribute
+     */
+    public function replacementContentHtml(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\ReplacementContentHtml::class, [
+            'page' => $this
+        ])();
+    }
 
     /**
-     * [setContentAttribute description]
-     * @param string $value [description]
+     *
+     * @return Attribute
      */
-    public function setContentAttribute($value): void
+    public function noMoreContentHtml(): Attribute
     {
-        $this->attributes['content'] = !empty($value) ?
-            strip_tags(str_replace('[more]', '', $value))
-            : null;
+        return App::make(\N1ebieski\ICore\Attributes\Page\NoMoreContentHtml::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function lessContentHtmlAttribute(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\LessContentHtml::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function realPosition(): Attribute
+    {
+        return new Attribute(fn (): int => $this->position + 1);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function shortTitle(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\ShortTitle::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function firstImage(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\FirstImage::class, [
+            'page' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function content(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Page\Content::class, [
+            'page' => $this
+        ])();
     }
 
     // Checkers
@@ -455,7 +615,7 @@ class Page extends Entity
      */
     public function isRedirect(): bool
     {
-        return preg_match('/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/', $this->content);
+        return (bool)preg_match('/^(https|http):\/\/([\da-z\.-]+)(\.[a-z]{2,6})/', $this->content ?? '');
     }
 
     // Scopes

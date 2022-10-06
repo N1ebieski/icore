@@ -1,35 +1,33 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Repositories\Link;
 
 use N1ebieski\ICore\Models\Link;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Link\Type;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class LinkRepo
 {
-    /**
-     * [protected description]
-     * @var Link
-     */
-    protected $link;
-
-    /**
-     * Config
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var MigrationUtil
-     */
-    protected $migrationUtil;
-
     /**
      * Undocumented function
      *
@@ -37,12 +35,12 @@ class LinkRepo
      * @param Config $config
      * @param MigrationUtil $migrationUtil
      */
-    public function __construct(Link $link, Config $config, MigrationUtil $migrationUtil)
-    {
-        $this->link = $link;
-
-        $this->migrationUtil = $migrationUtil;
-        $this->config = $config;
+    public function __construct(
+        protected Link $link,
+        protected Config $config,
+        protected MigrationUtil $migrationUtil
+    ) {
+        //
     }
 
     /**
@@ -52,7 +50,8 @@ class LinkRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->link->where('type', $filter['type'])
+        return $this->link->newQuery()
+            ->where('type', $filter['type'])
             ->filterExcept($filter['except'])
             ->orderBy('position', 'asc')
             ->paginate($this->config->get('database.paginate'));
@@ -65,13 +64,15 @@ class LinkRepo
      */
     public function getAvailableBacklinksByCats(array $ids): Collection
     {
-        return $this->link->where('type', 'backlink')
-            ->where(function ($query) use ($ids) {
-                $query->whereDoesntHave('categories')
-                    ->orWhereHas('categories', function ($query) use ($ids) {
-                        $query->whereIn('id', array_values($ids));
+        return $this->link->newQuery()
+            ->where('type', 'backlink')
+            ->where(function (Builder $query) use ($ids) {
+                return $query->whereDoesntHave('categories')
+                    ->orWhereHas('categories', function (Builder $query) use ($ids) {
+                        return $query->whereIn('id', array_values($ids));
                     });
-            })->orderBy('position', 'asc')
+            })
+            ->orderBy('position', 'asc')
             ->get();
     }
 
@@ -81,10 +82,7 @@ class LinkRepo
      */
     public function getSiblingsAsArray(): array
     {
-        return $this->link->siblings()
-            ->get(['id', 'position'])
-            ->pluck('position', 'id')
-            ->toArray();
+        return $this->link->siblings()->pluck('position', 'id')->toArray();
     }
 
     /**
@@ -94,23 +92,24 @@ class LinkRepo
      */
     public function getLinksByComponent(array $component): Collection
     {
-        return $this->link->where('type', Type::LINK)
-            ->when($component['home'] === true, function ($query) {
-                $query->whereDoesntHave('categories')
-                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {
-                        $query->orWhere('home', true);
+        return $this->link->newQuery()
+            ->where('type', Type::LINK)
+            ->when($component['home'] === true, function (Builder $query) {
+                return $query->whereDoesntHave('categories')
+                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
+                        return $query->orWhere('home', true);
                     });
-            }, function ($query) {
-                $query->where(function ($query) {
-                    $query->whereDoesntHave('categories')
-                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function ($query) {
-                            $query->where('home', false);
+            }, function (Builder $query) {
+                return $query->where(function (Builder $query) {
+                    return $query->whereDoesntHave('categories')
+                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
+                            return $query->where('home', false);
                         });
                 });
             })
-            ->when($component['cats'] !== null, function ($query) use ($component) {
-                $query->orWhereHas('categories', function ($query) use ($component) {
-                    $query->whereIn('id', $component['cats']);
+            ->when($component['cats'] !== null, function (Builder $query) use ($component) {
+                return $query->orWhereHas('categories', function (Builder $query) use ($component) {
+                    return $query->whereIn('id', $component['cats']);
                 });
             })
             ->orderBy('position', 'asc')

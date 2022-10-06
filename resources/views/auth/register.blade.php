@@ -110,7 +110,7 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-switch">
                                             <input 
                                                 type="checkbox" 
                                                 class="custom-control-input {{ $isValid('privacy_agreement') }}" 
@@ -137,7 +137,7 @@
                                 <label class="col-lg-4 col-form-label text-lg-right d-none d-lg-block"></label>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-switch">
                                             <input 
                                                 type="checkbox" 
                                                 class="custom-control-input {{ $isValid('contact_agreement') }}" 
@@ -160,7 +160,7 @@
                                 <label class="col-lg-4 col-form-label text-lg-right d-none d-lg-block"></label>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-switch">
                                             <input 
                                                 type="checkbox" 
                                                 class="custom-control-input {{ $isValid('marketing_agreement') }}" 
@@ -183,7 +183,7 @@
 
                             <div class="form-group row mb-0">
                                 <div class="col-lg-6 offset-lg-4">
-                                    @render('icore::captchaComponent')
+                                    <x-icore::captcha-component />
                                     <button type="submit" class="btn btn-primary">
                                         {{ trans('icore::auth.register') }}
                                     </button>

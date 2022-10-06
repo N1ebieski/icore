@@ -58,7 +58,7 @@
                     @includeWhen($errors->has('content'), 'icore::web.partials.errors', ['name' => 'content'])
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input 
                             type="checkbox" 
                             class="custom-control-input {{ $isValid('contact_agreement') }}" 
@@ -73,7 +73,7 @@
                     </div>
                     @includeWhen($errors->has('contact_agreement'), 'icore::web.partials.errors', ['name' => 'contact_agreement'])
                 </div>
-                @render('icore::captchaComponent')
+                <x-icore::captcha-component />
                 <button type="submit" class="btn btn-primary btn-send">
                     {{ trans('icore::default.submit') }}
                 </button>
@@ -92,9 +92,9 @@
                 e-mail: xxxxxxx@xxxxxxxxx.pl<br>
             </p>
             <div>
-                @render('icore::map.mapComponent', [
-                    'address_marker' => ['Chmielna 27/33, 80-748 Gdańsk']
-                ])
+                <x-icore::map.map-component
+                    :address_marker="['Chmielna 27/33, 80-748 Gdańsk']"
+                />
             </div>
         </div>
     </div>

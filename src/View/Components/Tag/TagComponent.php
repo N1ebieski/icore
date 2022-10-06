@@ -1,64 +1,52 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Components\Tag;
 
-use Illuminate\View\View;
+use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 use N1ebieski\ICore\Models\Tag\Tag;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class TagComponent implements Htmlable
+class TagComponent extends Component
 {
     /**
-     * [private description]
-     * @var Tag
-     */
-    protected $tag;
-
-    /**
-     * Undocumented variable
-     *
-     * @var ViewFactory
-     */
-    protected $view;
-
-    /**
-     * Undocumented variable
-     *
-     * @var int
-     */
-    protected $limit;
-
-    /**
-     * Undocumented variable
-     *
-     * @var array|null
-     */
-    protected $colors;
-
-    /**
-     * Undocumented function
      *
      * @param Tag $tag
      * @param ViewFactory $view
-     * @param integer $limit
-     * @param array $colors
+     * @param int $limit
+     * @param null|array $colors
+     * @return void
      */
-    public function __construct(Tag $tag, ViewFactory $view, int $limit = 25, array $colors = null)
-    {
-        $this->tag = $tag;
-
-        $this->view = $view;
-
-        $this->limit = $limit;
-        $this->colors = $colors;
+    public function __construct(
+        protected Tag $tag,
+        protected ViewFactory $view,
+        protected int $limit = 25,
+        protected ?array $colors = null
+    ) {
+        //
     }
 
     /**
-     * [toHtml description]
-     * @return View [description]
+     *
+     * @return View
      */
-    public function toHtml(): View
+    public function render(): View
     {
         return $this->view->make('icore::web.components.tag.tag', [
             'tags' => $this->tag->makeCache()->rememberPopularByComponent([

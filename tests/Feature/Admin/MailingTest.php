@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
@@ -10,8 +26,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Crons\MailingCron;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
+use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use N1ebieski\ICore\Models\MailingEmail\User\MailingEmail;
@@ -20,15 +38,16 @@ class MailingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testMailingIndexAsGuest()
+    public function testMailingIndexAsGuest(): void
     {
         $response = $this->get(route('admin.mailing.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingIndexWithoutPermission()
+    public function testMailingIndexWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -38,11 +57,13 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testMailingIndexPaginate()
+    public function testMailingIndexPaginate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
-        $mailing = Mailing::makeFactory()->count(50)->create();
+        /** @var Collection<Mailing>|array<Mailing> */
+        $mailings = Mailing::makeFactory()->count(50)->create();
 
         Auth::login($user);
 
@@ -55,20 +76,22 @@ class MailingTest extends TestCase
 
         $response->assertViewIs('icore::admin.mailing.index');
         $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$mailing[30]->title, $mailing[30]->shortContent], false);
+        $response->assertSeeInOrder([$mailings[30]->title, $mailings[30]->shortContent], false);
     }
 
-    public function testMailingEditAsGuest()
+    public function testMailingEditAsGuest(): void
     {
         $response = $this->get(route('admin.mailing.edit', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingEditWithoutPermission()
+    public function testMailingEditWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -78,8 +101,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistMailingEdit()
+    public function testNoexistMailingEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -89,32 +113,37 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testMailingEdit()
+    public function testMailingEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.mailing.edit', [$mailing->id]));
 
-        $response->assertOk()->assertViewIs('icore::admin.mailing.edit');
-        $response->assertSeeInOrder([$mailing->title, $mailing->content], false);
-        $response->assertSee(route('admin.mailing.update', [$mailing->id]), false);
+        $response->assertOk()
+            ->assertViewIs('icore::admin.mailing.edit')
+            ->assertSeeInOrder([$mailing->title, $mailing->content], false)
+            ->assertSee(route('admin.mailing.update', [$mailing->id]), false);
     }
 
-    public function testMailingUpdateAsGuest()
+    public function testMailingUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.mailing.update', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingUpdateWithoutPermission()
+    public function testMailingUpdateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -124,8 +153,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistMailingUpdate()
+    public function testNoexistMailingUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -135,10 +165,12 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testMailingUpdateValidationFail()
+    public function testMailingUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -152,12 +184,15 @@ class MailingTest extends TestCase
         $response->assertSessionHasErrors(['title', 'date_activation_at', 'time_activation_at']);
     }
 
-    public function testMailingUpdate()
+    public function testMailingUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var User */
         $user2 = User::makeFactory()->marketing()->active()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -165,7 +200,7 @@ class MailingTest extends TestCase
         $response = $this->put(route('admin.mailing.update', [$mailing->id]), [
             'title' => 'Mailing zaktualizowany.',
             'content_html' => 'Ten mailing został zaktualizowany.',
-            'status' => 1,
+            'status' => Status::ACTIVE,
             'users' => 'true'
         ]);
 
@@ -185,17 +220,19 @@ class MailingTest extends TestCase
         ]);
     }
 
-    public function testMailingUpdateStatusAsGuest()
+    public function testMailingUpdateStatusAsGuest(): void
     {
         $response = $this->patch(route('admin.mailing.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingUpdateStatusWithoutPermission()
+    public function testMailingUpdateStatusWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -205,8 +242,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistMailingUpdateStatus()
+    public function testNoexistMailingUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -216,10 +254,12 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testMailingUpdateStatusValidationFail()
+    public function testMailingUpdateStatusValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -231,37 +271,41 @@ class MailingTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function testMailingUpdateStatus()
+    public function testMailingUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->active()->create();
 
         Auth::login($user);
 
         $response = $this->patch(route('admin.mailing.update_status', [$mailing->id]), [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
 
         $response->assertOk()->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('mailings', [
             'id' => $mailing->id,
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 
-    public function testMailingDestroyAsGuest()
+    public function testMailingDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.mailing.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingDestroyWithoutPermission()
+    public function testMailingDestroyWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -271,8 +315,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistMailingDestroy()
+    public function testNoexistMailingDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -282,12 +327,15 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testMailingDestroy()
+    public function testMailingDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
+        /** @var MailingEmail */
         $email = MailingEmail::makeFactory()->withMorph()->for($mailing)->create();
 
         Auth::login($user);
@@ -313,15 +361,16 @@ class MailingTest extends TestCase
         ]);
     }
 
-    public function testMailingDestroyGlobalAsGuest()
+    public function testMailingDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.mailing.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingDestroyGlobalWithoutPermission()
+    public function testMailingDestroyGlobalWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -331,8 +380,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testMailingDestroyGlobalValidationFail()
+    public function testMailingDestroyGlobalValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -345,10 +395,12 @@ class MailingTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testMailingDestroyGlobal()
+    public function testMailingDestroyGlobal(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Collection<Mailing> */
         $mailing = Mailing::makeFactory()->count(10)->create();
 
         Auth::login($user);
@@ -369,15 +421,16 @@ class MailingTest extends TestCase
         $this->assertTrue($deleted->count() === 0);
     }
 
-    public function testMailingCreateAsGuest()
+    public function testMailingCreateAsGuest(): void
     {
         $response = $this->get(route('admin.mailing.create'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingCreateWithoutPermission()
+    public function testMailingCreateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -387,27 +440,30 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testMailingCreate()
+    public function testMailingCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.mailing.create'));
 
-        $response->assertOk()->assertViewIs('icore::admin.mailing.create');
-        $response->assertSee(route('admin.mailing.store'), false);
+        $response->assertOk()
+            ->assertViewIs('icore::admin.mailing.create')
+            ->assertSee(route('admin.mailing.store'), false);
     }
 
-    public function testMailingStoreAsGuest()
+    public function testMailingStoreAsGuest(): void
     {
         $response = $this->post(route('admin.mailing.store'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingStoreWithoutPermission()
+    public function testMailingStoreWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -417,8 +473,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testMailingStoreValidationFail()
+    public function testMailingStoreValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -426,16 +483,17 @@ class MailingTest extends TestCase
         $response = $this->post(route('admin.mailing.store'), [
             'title' => '',
             'emails' => 'true',
-            'status' => 0,
-            'emails_json' => 'dasdad',
+            'status' => Status::INACTIVE,
+            'emails_json' => '',
             'content_html' => 'Ten post został zaktualizowany.'
         ]);
 
         $response->assertSessionHasErrors(['title', 'emails_json']);
     }
 
-    public function testMailingStore()
+    public function testMailingStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -444,19 +502,25 @@ class MailingTest extends TestCase
             'title' => 'Mailing dodany.',
             'content_html' => 'Ten mailing został dodany.',
             'emails' => 'true',
-            'status' => 0,
+            'status' => Status::INACTIVE,
             'emails_json' => '[{"email": "dasds@dsdada.pl"}]'
         ]);
 
-        $response->assertRedirect(route('admin.mailing.index'));
         $response->assertSessionHas('success');
 
+        /** @var Mailing|null */
         $mailing = Mailing::where([
             ['content', 'Ten mailing został dodany.'],
             ['title', 'Mailing dodany.']
         ])->first();
 
-        $this->assertTrue($mailing->exists());
+        $this->assertTrue(!is_null($mailing) && $mailing->exists());
+
+        $response->assertRedirect(route('admin.mailing.index', [
+            'filter' => [
+                'search' => "id:\"{$mailing->id}\""
+            ]
+        ]));
 
         $this->assertDatabaseHas('mailings_emails', [
             'email' => 'dasds@dsdada.pl',
@@ -465,17 +529,19 @@ class MailingTest extends TestCase
         ]);
     }
 
-    public function testMailingResetAsGuest()
+    public function testMailingResetAsGuest(): void
     {
         $response = $this->delete(route('admin.mailing.reset', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testMailingResetWithoutPermission()
+    public function testMailingResetWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
         Auth::login($user);
@@ -485,8 +551,9 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistMailingReset()
+    public function testNoexistMailingReset(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -496,14 +563,18 @@ class MailingTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testMailingReset()
+    public function testMailingReset(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var User */
         $user2 = User::makeFactory()->create();
 
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->create();
 
+        /** @var MailingEmail */
         $email = MailingEmail::makeFactory()->withMorph()->for($mailing)->create();
 
         Auth::login($user);
@@ -563,10 +634,12 @@ class MailingTest extends TestCase
     //     // ]);
     // }
 
-    public function testMailingQueueJob()
+    public function testMailingQueueJob(): void
     {
+        /** @var Mailing */
         $mailing = Mailing::makeFactory()->active()->create();
 
+        /** @var MailingEmail */
         $email = MailingEmail::makeFactory()->email()->for($mailing)->create();
 
         Mail::fake();
@@ -574,7 +647,7 @@ class MailingTest extends TestCase
 
         $this->assertDatabaseHas('mailings_emails', [
             'id' => $email->id,
-            'sent' => 0
+            'sent' => Sent::UNSENT
         ]);
 
         // Uruchamiamy zadanie crona bezpośrednio, bo przez schedule:run ma ustalony delay
@@ -592,7 +665,7 @@ class MailingTest extends TestCase
 
         $this->assertDatabaseHas('mailings_emails', [
             'id' => $email->id,
-            'sent' => 1
+            'sent' => Sent::SENT
         ]);
 
         $schedule = app()->make(MailingCron::class);

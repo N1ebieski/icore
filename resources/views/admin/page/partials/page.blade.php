@@ -5,7 +5,7 @@
 >
     <div class="col my-auto d-flex justify-content-between">
         @can('admin.pages.delete')
-        <div class="custom-control custom-checkbox">
+        <div class="custom-control custom-checkbox w-100">
             <input 
                 name="select[]" 
                 type="checkbox" 
@@ -13,7 +13,7 @@
                 id="select{{ $page->id }}" 
                 value="{{ $page->id }}"
             >
-            <label class="custom-control-label" for="select{{ $page->id }}">
+            <label class="custom-control-label w-100" for="select{{ $page->id }}">
         @endcan
             <ul class="list-unstyled mb-0 pb-0">
                 @if ((!isset($filter) || !collect($filter)->except(['paginate', 'except'])->isEmptyItems())
@@ -31,30 +31,47 @@
                 </li>
                 @endif
                 <li>
-                    <span>{{ str_repeat('-', $page->real_depth) }}</span>
-                    <span>
-                        <a 
-                            href="#" 
-                            class="edit" 
-                            data-route="{{ route('admin.page.edit_position', [$page->id]) }}"
-                            data-toggle="modal" 
-                            data-target="#edit-position-modal" 
-                            role="button"
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <span>{{ str_repeat('-', $page->real_depth) }}</span>
+                        <span>
+                            <a 
+                                href="#" 
+                                class="edit" 
+                                data-route="{{ route('admin.page.edit_position', [$page->id]) }}"
+                                data-toggle="modal" 
+                                data-target="#edit-position-modal" 
+                                role="button"
+                            >
+                                <span id="position" class="badge badge-pill badge-primary">
+                                    {{ $page->real_position }}
+                                </span>
+                            </a>
+                        </span>
+                        <span>
+                            <a 
+                                href="{{ route('admin.page.index', ['filter[parent]' => $page->id]) }}"
+                                title=" {{ $page->title }}"
+                            >
+                                {{ $page->title }}
+                            </a>
+                        </span>
+                        <span class="badge badge-success">ID {{ $page->id }}</span>
+                    </div>
+                    @if ($page->status->isActive())
+                    <div>
+                        <a
+                            href="{{ route('web.page.show', [$page->slug]) }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ $page->title }}"
+                            class="badge badge-primary"
                         >
-                            <span id="position" class="badge badge-pill badge-primary">
-                                {{ $page->real_position }}
-                            </span>
+                            {{ trans('icore::default.web') }}
                         </a>
-                    </span>
-                    <span>
-                        <a 
-                            href="{{ route('admin.page.index', ['filter[parent]' => $page->id]) }}"
-                            title=" {{ $page->title }}"
-                        >
-                            {{ $page->title }}
-                        </a>
-                    </span>
-                    <span class="badge badge-success">ID {{ $page->id }}</span>
+                    </div>
+                    @endif
+                </div>                     
                 </li>
                 <li class="text-break" style="word-break:break-word">
                     {{ str_repeat('-', $page->real_depth) }} {!! $page->shortContent !!}...

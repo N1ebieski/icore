@@ -1,37 +1,42 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Repositories\User;
 
 use N1ebieski\ICore\Models\User;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\Guard as Auth;
+use N1ebieski\ICore\Models\Token\PersonalAccessToken;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserRepo
 {
-    /**
-     * [private description]
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
     /**
      * Undocumented function
      *
      * @param User $user
      * @param Auth $auth
      */
-    public function __construct(User $user, Auth $auth)
-    {
-        $this->user = $user;
-
-        $this->auth = $auth;
+    public function __construct(
+        protected User $user,
+        protected Auth $auth
+    ) {
+        //
     }
 
     /**
@@ -41,21 +46,33 @@ class UserRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->user->selectRaw("`{$this->user->getTable()}`.*")
-            ->filterSearch($filter['search'])
-            ->filterExcept($filter['except'])
+        return $this->user->newQuery()
+            ->selectRaw("`{$this->user->getTable()}`.*")
             ->when(
-                $filter['status'] === null && !optional($this->auth->user())->can('admin.users.view'),
-                function ($query) {
-                    $query->active();
+                is_null($filter['status']) && !$this->auth->user()?->can('admin.users.view'),
+                function (Builder|User $query) {
+                    return $query->active();
                 },
-                function ($query) use ($filter) {
-                    $query->filterStatus($filter['status']);
+                function (Builder|User $query) use ($filter) {
+                    return $query->filterStatus($filter['status']);
                 }
             )
+            ->when(!is_null($filter['search']), function (Builder|User $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.users.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach (['id'] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->user->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->user->getTable()}.{$attr}", $this->user->search[$attr]);
+                                });
+                            }
+                        });
+                    });
+            })
+            ->filterExcept($filter['except'])
             ->filterRole($filter['role'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(is_null($filter['orderby']), function (Builder|User $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->with(['roles', 'socialites'])
@@ -80,19 +97,34 @@ class UserRepo
      */
     public function paginateTokensByFilter(array $filter): LengthAwarePaginator
     {
-        /**
-         * @var \N1ebieski\ICore\Models\Token\PersonalAccessToken $token
-         */
-        $token = $this->user->tokens()->make();
+        /** @var Builder|PersonalAccessToken */
+        $tokens = $this->user->tokens();
 
-        return $this->user->tokens()
-            ->selectRaw("`{$token->getTable()}`.*")
+        /**
+         * @var PersonalAccessToken $token
+         */
+        $token = $tokens->make();
+
+        // @phpstan-ignore-next-line
+        return $tokens->selectRaw("`{$token->getTable()}`.*")
             ->whereJsonDoesntContain('abilities', 'refresh')
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
             ->filterStatus($filter['status'])
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(!is_null($filter['search']), function (Builder|PersonalAccessToken $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->where(function (Builder $query) {
+                        /** @var PersonalAccessToken */
+                        $token = $query->getModel();
+
+                        foreach ([$token->getKeyName()] as $attr) {
+                            return $query->when(array_key_exists($attr, $token->search), function (Builder $query) use ($attr, $token) {
+                                return $query->where("{$token->getTable()}.{$attr}", $token->search[$attr]);
+                            });
+                        }
+                    });
+            })
+            ->when($filter['orderby'] === null, function (Builder|PersonalAccessToken $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);

@@ -1,49 +1,40 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Rating;
 
-use Illuminate\Database\Eloquent\Model;
+use Throwable;
 use N1ebieski\ICore\Models\Rating\Rating;
-use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 
-class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
+class RatingService
 {
-    /**
-     * [private description]
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
-    /**
-     * [private description]
-     * @var Rating
-     */
-    protected $rating;
-
     /**
      * Undocumented function
      *
      * @param Rating $rating
-     * @param Auth $auth
      * @param DB $db
      */
-    public function __construct(Rating $rating, Auth $auth, DB $db)
-    {
-        $this->rating = $rating;
-
-        $this->auth = $auth;
-        $this->db = $db;
+    public function __construct(
+        protected Rating $rating,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
@@ -54,7 +45,7 @@ class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
      * @param  array $attributes
      * @return mixed
      */
-    public function createOrUpdateOrDelete(array $attributes)
+    public function createOrUpdateOrDelete(array $attributes): mixed
     {
         return $this->db->transaction(function () use ($attributes) {
             if ($this->rating->exists) {
@@ -72,16 +63,16 @@ class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
     }
 
     /**
-     * Tworzy nową ocenę przypisaną do modelu i usera
      *
-     * @param  array $attributes
-     * @return Model
+     * @param array $attributes
+     * @return Rating
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Rating
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->rating->user()->associate($this->auth->user());
-            $this->rating->morph()->associate($this->rating->morph);
+            $this->rating->user()->associate($attributes['user']);
+            $this->rating->morph()->associate($attributes['morph']);
 
             $this->rating->rating = $attributes['rating'];
 
@@ -92,11 +83,11 @@ class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
     }
 
     /**
-     * Usuwa ocenę
      *
-     * @return bool
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             return $this->rating->delete();
@@ -104,17 +95,19 @@ class RatingService implements CreateInterface, UpdateInterface, DeleteInterface
     }
 
     /**
-     * Edytuje istniejącą ocenę
      *
      * @param array $attributes
-     * @return bool
+     * @return Rating
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Rating
     {
         return $this->db->transaction(function () use ($attributes) {
-            return $this->rating->update([
+            $this->rating->update([
                 'rating' => $attributes['rating']
             ]);
+
+            return $this->rating;
         });
     }
 }

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Filters\Traits;
 
 use N1ebieski\ICore\Models\Role;
@@ -7,19 +23,20 @@ use N1ebieski\ICore\Models\Role;
 trait HasRole
 {
     /**
-     * [setRole description]
-     * @param Role $role [description]
+     * @param Role $role
+     * @return self
      */
-    public function setRole(Role $role)
+    public function setRole(Role $role): self
     {
         $this->parameters['role'] = $role;
 
-        return $role;
+        return $this;
     }
 
     /**
-     * [filterRole description]
-     * @param int|null $id [description]
+     *
+     * @param int|null $id
+     * @return void
      */
     public function filterRole(int $id = null): void
     {
@@ -33,11 +50,10 @@ trait HasRole
     }
 
     /**
-     * [findRole description]
-     * @param  int|null $id [description]
-     * @return Role       [description]
+     * @param int|null $id
+     * @return null|Role
      */
-    public function findRole(int $id = null): Role
+    public function findRole(int $id = null): ?Role
     {
         return Role::find($id);
     }

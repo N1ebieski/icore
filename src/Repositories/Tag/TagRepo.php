@@ -1,26 +1,41 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Repositories\Tag;
 
 use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TagRepo
 {
     /**
-     * [private description]
-     * @var Tag
-     */
-    protected $tag;
-
-    /**
      * [__construct description]
      * @param Tag $tag [description]
      */
-    public function __construct(Tag $tag)
-    {
-        $this->tag = $tag;
+    public function __construct(
+        protected Tag $tag,
+        protected Auth $auth
+    ) {
+        //
     }
 
     /**
@@ -30,7 +45,7 @@ class TagRepo
      */
     public function firstBySlug(string $slug): ?Tag
     {
-        return $this->tag->whereNormalized($slug)->first();
+        return $this->tag->newQuery()->whereNormalized($slug)->first();
     }
 
     /**
@@ -40,14 +55,26 @@ class TagRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        return $this->tag->selectRaw("`{$this->tag->getTable()}`.*")
+        return $this->tag->newQuery()
+            ->selectRaw("`{$this->tag->getTable()}`.*")
             ->filterExcept($filter['except'])
-            ->filterSearch($filter['search'])
-            ->when(strpos($filter['orderby'], 'sum') !== false, function ($query) {
-                $query->withSum();
+            ->when(!is_null($filter['search']), function (Builder|Tag $query) use ($filter) {
+                return $query->filterSearch($filter['search'])
+                    ->when($this->auth->user()?->can('admin.tags.view'), function (Builder $query) {
+                        return $query->where(function (Builder $query) {
+                            foreach ([$this->tag->getKeyName()] as $attr) {
+                                return $query->when(array_key_exists($attr, $this->tag->search), function (Builder $query) use ($attr) {
+                                    return $query->where("{$this->tag->getTable()}.{$attr}", $this->tag->search[$attr]);
+                                });
+                            }
+                        });
+                    });
             })
-            ->when($filter['orderby'] === null, function ($query) use ($filter) {
-                $query->filterOrderBySearch($filter['search']);
+            ->when(strpos($filter['orderby'], 'sum') !== false, function (Builder|Tag $query) {
+                return $query->withCountSum();
+            })
+            ->when(is_null($filter['orderby']), function (Builder|Tag $query) use ($filter) {
+                return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
             ->filterPaginate($filter['paginate']);
@@ -61,19 +88,21 @@ class TagRepo
      */
     public function getPopularByComponent(array $component): Collection
     {
+        /** @var mixed */
         $morph = $this->tag->morphs()->make();
 
-        return $this->tag->selectRaw('`tags`.*, COUNT(`tags`.`tag_id`) AS taggable_count')
+        return $this->tag->newQuery()
+            ->selectRaw('`tags`.*, COUNT(`tags`.`tag_id`) AS taggable_count')
             ->join('tags_models', 'tags.tag_id', '=', 'tags_models.tag_id')
-            ->join("{$morph->getTable()}", function ($query) use ($morph) {
-                $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
+            ->join("{$morph->getTable()}", function (JoinClause $query) use ($morph) {
+                return $query->on('tags_models.model_id', '=', "{$morph->getTable()}.id")
                     ->where("{$morph->getTable()}.status", $morph->status::ACTIVE);
             })
-            ->where('tags_models.model_type', $this->tag->model_type)
-            ->when($component['cats'] !== null, function ($query) use ($component) {
-                $query->join('categories_models', function ($query) use ($component) {
-                    $query->on('tags_models.model_id', '=', 'categories_models.model_id')
-                        ->where('categories_models.model_type', $this->tag->model_type)
+            ->where('tags_models.model_type', $morph->getMorphClass())
+            ->when($component['cats'] !== null, function (Builder $query) use ($morph, $component) {
+                return $query->join('categories_models', function (JoinClause $query) use ($morph, $component) {
+                    return $query->on('tags_models.model_id', '=', 'categories_models.model_id')
+                        ->where('categories_models.model_type', $morph->getMorphClass())
                         ->whereIn('categories_models.category_id', $component['cats']);
                 });
             })

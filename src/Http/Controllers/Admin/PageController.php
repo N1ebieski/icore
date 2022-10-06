@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
@@ -64,14 +80,27 @@ class PageController
      */
     public function store(Page $page, StoreRequest $request): RedirectResponse
     {
-        $page->makeService()->create($request->all());
+        $page->makeService()->create(
+            $request->safe()->merge(['user' => $request->user()])->toArray()
+        );
 
-        return Response::redirectToRoute('admin.page.index')->with(
+        if (!is_null($request->input('parent_id'))) {
+            /** @var Page|null */
+            $parent = $page->find($request->input('parent_id'));
+        }
+
+        return Response::redirectToRoute('admin.page.index', [
+            'filter' => [
+                'search' => 'id:"' . $page->id . '"'
+            ]
+        ])
+        ->with(
             'success',
+            // @phpstan-ignore-next-line
             Lang::get('icore::pages.success.store') . (
-                $request->input('parent_id') !== null ?
+                !is_null($request->input('parent_id')) ?
                     Lang::get('icore::pages.success.store_parent', [
-                        'parent' => $page->find($request->input('parent_id'))->title
+                        'parent' => $parent?->title
                     ])
                     : null
             )
@@ -128,12 +157,9 @@ class PageController
      */
     public function editFull(Page $page): HttpResponse
     {
-        return Response::view(
-            'icore::admin.page.edit_full',
-            App::make(EditFullViewModel::class, [
-                'page' => $page
-            ])
-        );
+        return Response::view('icore::admin.page.edit_full', App::make(EditFullViewModel::class, [
+            'page' => $page
+        ]));
     }
 
     /**
@@ -144,7 +170,7 @@ class PageController
      */
     public function update(Page $page, UpdateRequest $request): JsonResponse
     {
-        $page->makeService()->update($request->only(['title', 'content_html']));
+        $page->makeService()->update($request->validated());
 
         return Response::json([
             'view' => View::make('icore::admin.page.partials.page', [
@@ -161,7 +187,7 @@ class PageController
      */
     public function updateFull(Page $page, UpdateFullRequest $request): RedirectResponse
     {
-        $page->makeService()->updateFull($request->all());
+        $page->makeService()->updateFull($request->validated());
 
         return Response::redirectToRoute('admin.page.edit_full', [$page->id])
             ->with('success', Lang::get('icore::pages.success.update'));
@@ -181,6 +207,9 @@ class PageController
 
         return Response::json([
             'status' => $page->status->getValue(),
+            'view' => View::make('icore::admin.page.partials.page', [
+                'page' => $page
+            ])->render(),
             // Na potrzebę jQuery pobieramy potomków i przodków, żeby na froncie
             // zaznaczyć odpowiednie rowsy jako aktywowane bądź nieaktywne
             'ancestors' => $pageRepo->getAncestorsAsArray(),

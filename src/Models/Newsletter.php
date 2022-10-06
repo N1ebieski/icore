@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +27,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Newsletter\NewsletterFactory;
 
 /**
+ * N1ebieski\ICore\Models\Newsletter
+ *
  * @property Status $status
+ * @property NewsletterToken $token
+ * @property int $id
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static Builder|Newsletter active()
+ * @method static \N1ebieski\ICore\Database\Factories\Newsletter\NewsletterFactory factory(...$parameters)
+ * @method static Builder|Newsletter newModelQuery()
+ * @method static Builder|Newsletter newQuery()
+ * @method static Builder|Newsletter query()
+ * @method static Builder|Newsletter whereCreatedAt($value)
+ * @method static Builder|Newsletter whereEmail($value)
+ * @method static Builder|Newsletter whereId($value)
+ * @method static Builder|Newsletter whereStatus($value)
+ * @method static Builder|Newsletter whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Newsletter extends Model
 {
@@ -22,14 +56,14 @@ class Newsletter extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = ['email', 'status'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = ['email'];
 
@@ -45,7 +79,7 @@ class Newsletter extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',

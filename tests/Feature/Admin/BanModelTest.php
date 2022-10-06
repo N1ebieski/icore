@@ -4,7 +4,9 @@ namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\BanModel\BanModel;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
@@ -14,17 +16,23 @@ class BanModelTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testBanmodelUserCreateAsGuest()
+    public function testBanmodelUserCreateAsGuest(): void
     {
         $response = $this->get(route('admin.banmodel.user.create', [23]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testBanmodelUserCreateWithoutPermission()
+    public function testBanmodelUserCreateWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->create();
 
         Auth::login($user);
@@ -34,8 +42,11 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testBanmodelNoexistUserCreate()
+    public function testBanmodelNoexistUserCreate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -45,10 +56,16 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testBanmodelUserCreate()
+    public function testBanmodelUserCreate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->create();
 
         Auth::login($user);
@@ -56,19 +73,31 @@ class BanModelTest extends TestCase
         $response = $this->get(route('admin.banmodel.user.create', [$user2->id]));
 
         $response->assertOk()->assertJsonStructure(['view']);
-        $this->assertStringContainsString($user2->name, $response->getData()->view);
-        $this->assertStringContainsString(route('admin.banmodel.user.store', [$user2->id]), $response->getData()->view);
+
+        /**
+         * @var JsonResponse
+         */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString($user2->name, $baseResponse->getData()->view);
+        $this->assertStringContainsString(
+            route('admin.banmodel.user.store', [$user2->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testBanmodelUserStoreAsGuest()
+    public function testBanmodelUserStoreAsGuest(): void
     {
         $response = $this->post(route('admin.banmodel.user.store', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testBanmodelNoexistUserStoreStore()
+    public function testBanmodelNoexistUserStoreStore(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -78,10 +107,16 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testBanmodelUserStoreWithoutPermission()
+    public function testBanmodelUserStoreWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->create();
 
         Auth::login($user);
@@ -91,10 +126,16 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testBanmodelUserStoreValidationFail()
+    public function testBanmodelUserStoreValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->banUser()->create();
 
         Auth::login($user);
@@ -106,10 +147,16 @@ class BanModelTest extends TestCase
         $response->assertSessionHasErrors(['user']);
     }
 
-    public function testBanmodelUserStore()
+    public function testBanmodelUserStore(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->create();
 
         Auth::login($user);
@@ -132,15 +179,18 @@ class BanModelTest extends TestCase
         ]);
     }
 
-    public function testBanmodelUserIndexAsGuest()
+    public function testBanmodelUserIndexAsGuest(): void
     {
         $response = $this->get(route('admin.banmodel.user.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testBanmodelUserIndexWithoutPermission()
+    public function testBanmodelUserIndexWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -150,12 +200,18 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testBanmodelUserIndexPaginate()
+    public function testBanmodelUserIndexPaginate(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
 
+        /**
+         * @var Collection<User>|array<User>
+         */
         $users = User::makeFactory()->count(50)->create();
 
         foreach ($users as $u) {
@@ -174,28 +230,40 @@ class BanModelTest extends TestCase
         $response->assertSeeInOrder([$users[30]->name], false);
     }
 
-    public function testBanmodelDestroyAsGuest()
+    public function testBanmodelDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.banmodel.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testBanmodelDestroyWithoutPermission()
+    public function testBanmodelDestroyWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->banUser()->create();
 
         Auth::login($user);
 
-        $response = $this->delete(route('admin.banmodel.destroy', [$user2->ban->id]));
+        /** @var BanModel */
+        $ban = $user2->ban;
+
+        $response = $this->delete(route('admin.banmodel.destroy', [$ban->id]));
 
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistBanmodelDestroy()
+    public function testNoexistBanmodelDestroy(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -205,36 +273,48 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testBanmodelDestroy()
+    public function testBanmodelDestroy(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var User
+         */
         $user2 = User::makeFactory()->banUser()->create();
 
         Auth::login($user);
 
+        /** @var BanModel */
+        $ban = $user2->ban;
+
         $this->assertDatabaseHas('bans_models', [
-            'id' => $user2->ban->id,
+            'id' => $ban->id,
         ]);
 
-        $response = $this->delete(route('admin.banmodel.destroy', [$user2->ban->id]), []);
+        $response = $this->delete(route('admin.banmodel.destroy', [$ban->id]), []);
 
         $response->assertOk();
 
         $this->assertDatabaseMissing('bans_models', [
-            'id' => $user2->ban->id,
+            'id' => $ban->id,
         ]);
     }
 
-    public function testBanmodelDestroyGlobalAsGuest()
+    public function testBanmodelDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.banmodel.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testBanmodelDestroyGlobalWithoutPermission()
+    public function testBanmodelDestroyGlobalWithoutPermission(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -244,8 +324,11 @@ class BanModelTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testBanmodelDestroyGlobalValidationFail()
+    public function testBanmodelDestroyGlobalValidationFail(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -258,10 +341,16 @@ class BanModelTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testBanmodelDestroyGlobal()
+    public function testBanmodelDestroyGlobal(): void
     {
+        /**
+         * @var User
+         */
         $user = User::makeFactory()->admin()->create();
 
+        /**
+         * @var User
+         */
         $users = User::makeFactory()->count(20)->banUser()->create();
 
         Auth::login($user);

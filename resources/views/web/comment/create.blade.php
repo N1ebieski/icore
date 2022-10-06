@@ -18,7 +18,7 @@
             name="content"
         ></textarea>
     </div>
-    @render('icore::captchaComponent', ['id' => $parent_id])
+    <x-icore::captcha-component :id="$parent_id" />
     <button type="button" class="btn btn-primary store-comment">
         {{ trans('icore::default.submit') }}
     </button>

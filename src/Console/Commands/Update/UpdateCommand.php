@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Console\Commands\Update;
 
 use Illuminate\Console\Command;
@@ -11,46 +27,6 @@ use Illuminate\Contracts\Translation\Translator as Lang;
 
 class UpdateCommand extends Command
 {
-    /**
-     * [protected description]
-     * @var App
-     */
-    protected $app;
-
-    /**
-     * [protected description]
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Storage
-     */
-    protected $storage;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Lang
-     */
-    protected $lang;
-
-    /**
-     * Undocumented variable
-     *
-     * @var SchemaFactory
-     */
-    protected $schemaFactory;
-
-    /**
-     * Undocumented variable
-     *
-     * @var string
-     */
-    protected $backup_path;
-
     /**
      * The name and signature of the console command.
      *
@@ -76,23 +52,14 @@ class UpdateCommand extends Command
      * @param string $backup_path
      */
     public function __construct(
-        App $app,
-        Config $config,
-        Storage $storage,
-        Lang $lang,
-        SchemaFactory $schemaFactory,
-        string $backup_path = 'backup/vendor/icore'
+        protected App $app,
+        protected Config $config,
+        protected Storage $storage,
+        protected Lang $lang,
+        protected SchemaFactory $schemaFactory,
+        protected string $backup_path = 'backup/vendor/icore'
     ) {
         parent::__construct();
-
-        $this->app = $app;
-        $this->config = $config;
-        $this->storage = $storage;
-        $this->lang = $lang;
-
-        $this->schemaFactory = $schemaFactory;
-
-        $this->backup_path = $backup_path;
     }
 
     /**
@@ -102,6 +69,10 @@ class UpdateCommand extends Command
      */
     protected function getFullBackupPath(): string
     {
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
+
         return $this->backup_path . '/' . str_replace('.', '', $this->argument('version'));
     }
 
@@ -146,6 +117,10 @@ class UpdateCommand extends Command
     {
         $this->line($this->lang->get('icore::update.backup'));
 
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
+
         try {
             $updater = $this->app->make(Updater::class, [
                 'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
@@ -169,6 +144,10 @@ class UpdateCommand extends Command
     protected function update(): void
     {
         $this->line($this->lang->get('icore::update.update_files'));
+
+        if (!is_string($this->argument('version'))) {
+            throw new \InvalidArgumentException('The version argument must be a string.');
+        }
 
         try {
             $updater = $this->app->make(Updater::class, [
@@ -198,20 +177,35 @@ class UpdateCommand extends Command
         $this->line("Author: Mariusz Wysokiński");
         $this->line("Version: {$this->config->get('icore.version')}");
         $this->line("\n");
+
         $this->confirmation();
+
         $this->line("\n");
+
         $bar->start();
+
         $this->line("\n");
+
         $this->validateBackup();
+
         $this->line("\n");
+
         $bar->advance();
+
         $this->line("\n");
+
         $this->backup();
+
         $this->line("\n");
+
         $bar->advance();
+
         $this->line("\n");
+
         $this->update();
+
         $this->line("\n");
+
         $bar->finish();
     }
 }

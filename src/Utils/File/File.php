@@ -1,31 +1,29 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Utils\File;
 
 use Illuminate\Http\UploadedFile;
+use N1ebieski\ICore\Exceptions\File\NotFoundException;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 class File
 {
-    /**
-     * [protected description]
-     * @var string
-     */
-    protected $temp_path;
-
-    /**
-     * [protected description]
-     * @var string
-     */
-    protected $disk;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Storage
-     */
-    protected $storage;
-
     /**
      * Undocumented variable
      *
@@ -34,50 +32,40 @@ class File
     protected $filesystem;
 
     /**
-     * [$file description]
-     * @var UploadedFile|null
-     */
-    protected $file;
-
-    /**
-     * Undocumented function
      *
      * @param Storage $storage
-     * @param UploadedFile|null $file
+     * @param UploadedFile $file
+     * @param string $disk
+     * @param string $temp_path
+     * @return void
      */
     public function __construct(
-        Storage $storage,
-        UploadedFile $file = null,
-        string $disk = 'public',
-        string $temp_path = 'vendor/icore/temp'
+        protected Storage $storage,
+        protected UploadedFile $file,
+        protected string $disk = 'public',
+        protected string $temp_path = 'vendor/icore/temp'
     ) {
-        $this->storage = $storage;
         $this->filesystem = $storage->disk($disk);
-
-        $this->file = $file;
-
-        $this->disk = $disk;
-        $this->temp_path = $temp_path;
     }
 
     /**
      * Undocumented function
      *
      * @param UploadedFile $file
-     * @return static
+     * @return self
      */
-    public function makeFromFile(UploadedFile $file)
+    public function makeFromFile(UploadedFile $file): self
     {
-        return new static($this->storage, $file, $this->disk, $this->temp_path);
+        return new self($this->storage, $file, $this->disk, $this->temp_path);
     }
 
     /**
-     * Undocumented function
      *
-     * @param UploadedFile $file
-     * @return static
+     * @param string $path
+     * @return File
+     * @throws NotFoundException
      */
-    public function makeFromPath(string $path)
+    public function makeFromPath(string $path): self
     {
         if (!$this->filesystem->exists($path)) {
             throw new \N1ebieski\ICore\Exceptions\File\NotFoundException();
@@ -86,7 +74,13 @@ class File
         $storagePath = $this->filesystem->path($path);
 
         return $this->makeFromFile(
-            new UploadedFile($storagePath, basename($storagePath), mime_content_type($storagePath), null, true)
+            new UploadedFile(
+                $storagePath,
+                basename($storagePath),
+                (mime_content_type($storagePath) ?: null),
+                null,
+                true
+            )
         );
     }
 
@@ -94,9 +88,9 @@ class File
      * Undocumented function
      *
      * @param array $paths
-     * @return string
+     * @return string|false
      */
-    public function prepare(array $paths = []): string
+    public function prepare(array $paths = []): mixed
     {
         foreach (array_merge($paths, [$this->temp_path]) as $path) {
             if ($this->filesystem->exists($path . "/" . $this->file->getClientOriginalName())) {
@@ -111,18 +105,18 @@ class File
      * Undocumented function
      *
      * @param string $path
-     * @return string
+     * @return string|false
      */
-    public function upload(string $path): string
+    public function upload(string $path): mixed
     {
         return $this->filesystem->putFile($path, $this->file);
     }
 
     /**
      * [uploadFile description]
-     * @return string [description]
+     * @return string|false [description]
      */
-    public function uploadToTemp(): string
+    public function uploadToTemp(): mixed
     {
         return $this->filesystem->putFile($this->temp_path, $this->file);
     }

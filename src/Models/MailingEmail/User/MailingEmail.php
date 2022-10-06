@@ -1,10 +1,56 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models\MailingEmail\User;
 
-use N1ebieski\ICore\Database\Factories\MailingEmail\User\MailingEmailFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail as BaseMailingEmail;
+use N1ebieski\ICore\Database\Factories\MailingEmail\User\MailingEmailFactory;
 
+/**
+ * N1ebieski\ICore\Models\MailingEmail\User\MailingEmail
+ *
+ * @property int $id
+ * @property int $mailing_id
+ * @property string $model_type
+ * @property int|null $model_id
+ * @property string $email
+ * @property \N1ebieski\ICore\ValueObjects\MailingEmail\Sent $sent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $poli
+ * @property-read \N1ebieski\ICore\Models\Mailing $mailing
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $morph
+ * @method static \N1ebieski\ICore\Database\Factories\MailingEmail\User\MailingEmailFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail query()
+ * @method static Builder|MailingEmail unsent()
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereMailingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereSent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MailingEmail whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class MailingEmail extends BaseMailingEmail
 {
     // Configuration
@@ -29,25 +75,24 @@ class MailingEmail extends BaseMailingEmail
         return MailingEmailFactory::new();
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * Undocumented function
      *
-     * @return string
+     * @return Attribute
      */
-    public function getModelTypeAttribute(): string
+    public function modelType(): Attribute
     {
-        return \N1ebieski\ICore\Models\User::class;
+        return new Attribute(fn (): string => \N1ebieski\ICore\Models\User::class);
     }
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        return 'user';
+        return new Attribute(fn (): string => 'user');
     }
 
     // Factories

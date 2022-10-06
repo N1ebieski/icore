@@ -3,6 +3,7 @@
 namespace N1ebieski\ICore\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Foundation\Auth\VerifiesEmails;
@@ -44,12 +45,15 @@ class VerificationController extends Controller
      * Show the email verification notice.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function show(Request $request)
     {
-        return $request->user()->hasVerifiedEmail()
-                        ? Response::redirectTo($this->redirectPath())
-                        : Response::view('icore::auth.verify');
+        /** @var User */
+        $user = $request->user();
+
+        return $user->hasVerifiedEmail()
+            ? Response::redirectTo($this->redirectPath())
+            : Response::view('icore::auth.verify');
     }
 }

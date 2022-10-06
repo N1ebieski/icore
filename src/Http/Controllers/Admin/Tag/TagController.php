@@ -1,7 +1,24 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Admin\Tag;
 
+use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\URL;
 use N1ebieski\ICore\Models\Tag\Tag;
@@ -12,6 +29,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Services\Tag\TagService;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Validation\ValidationException;
 use N1ebieski\ICore\Filters\Admin\Tag\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Tag\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Tag\StoreRequest;
@@ -58,11 +76,17 @@ class TagController
      */
     public function store(Tag $tag, StoreRequest $request): JsonResponse
     {
-        $tag->makeService()->create($request->validated());
+        $tag = $tag->makeService()->create($request->validated());
 
         $request->session()->flash('success', trans('icore::tags.success.store'));
 
-        return Response::json([]);
+        return Response::json([
+            'redirect' => URL::route('admin.tag.index', [
+                'filter' => [
+                    'search' => "{$tag->getKeyName()}:\"{$tag->getKey()}\""
+                ]
+            ])
+        ]);
     }
 
     /**
@@ -81,12 +105,12 @@ class TagController
     }
 
     /**
-     * Undocumented function
      *
      * @param Tag $tag
-     * @param TagService $tagService
      * @param UpdateRequest $request
      * @return JsonResponse
+     * @throws ValidationException
+     * @throws Throwable
      */
     public function update(Tag $tag, UpdateRequest $request): JsonResponse
     {

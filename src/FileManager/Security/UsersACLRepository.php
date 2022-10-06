@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\FileManager\Security;
 
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -23,20 +39,13 @@ class UsersACLRepository implements ACLRepository
     protected const ACCESS_READ_WRITE = 2;
 
     /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
      * Undocumented function
      *
      * @param Auth $auth
      */
-    public function __construct(Auth $auth)
+    public function __construct(protected Auth $auth)
     {
-        $this->auth = $auth;
+        //
     }
 
     /**
@@ -127,13 +136,13 @@ class UsersACLRepository implements ACLRepository
     protected function hasPermission(): int
     {
         if (
-            $this->auth->user()->can('admin.filemanager.read')
+            $this->auth->user()?->can('admin.filemanager.read')
             && $this->auth->user()->can('admin.filemanager.write')
         ) {
             return self::ACCESS_READ_WRITE;
         }
 
-        if ($this->auth->user()->can('admin.filemanager.read')) {
+        if ($this->auth->user()?->can('admin.filemanager.read')) {
             return self::ACCESS_READ;
         }
 

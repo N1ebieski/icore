@@ -1,8 +1,25 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Http\Controllers\Web\Token;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
@@ -40,12 +57,18 @@ class TokenController
      */
     public function store(Token $token, StoreRequest $request): JsonResponse
     {
-        [$accessToken, $refreshToken] = $token->makeService()->create($request->validated());
+        [$newAccessToken, $newRefreshToken] = $token->makeService()->create($request->validated());
 
         $request->session()->flash('success', Lang::get('icore::tokens.success.store'));
-        $request->session()->flash('accessToken', $accessToken->plainTextToken);
+        $request->session()->flash('accessToken', $newAccessToken->plainTextToken);
 
-        return Response::json([], HttpResponse::HTTP_CREATED);
+        return Response::json([
+            'redirect' => URL::route('web.profile.tokens', [
+                'filter' => [
+                    'search' => "id:\"{$newAccessToken->accessToken->id}\""
+                ]
+            ])
+        ], HttpResponse::HTTP_CREATED);
     }
 
     /**

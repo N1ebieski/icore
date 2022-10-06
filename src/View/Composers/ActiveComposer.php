@@ -1,40 +1,32 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\View\Composers;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use N1ebieski\ICore\View\Composers\Composer;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Routing\UrlGenerator as Url;
 
 class ActiveComposer extends Composer
 {
-    /**
-     * [private description]
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * [private description]
-     * @var Str
-     */
-    protected $str;
-
-    /**
-     * [private description]
-     * @var Url
-     */
-    protected $url;
-
-    /**
-     * Undocumented variable
-     *
-     * @var App
-     */
-    protected $app;
-
     /**
      * Undocumented function
      *
@@ -43,12 +35,13 @@ class ActiveComposer extends Composer
      * @param Url $url
      * @param App $app
      */
-    public function __construct(Request $request, Str $str, Url $url, App $app)
-    {
-        $this->request = $request;
-        $this->str = $str;
-        $this->url = $url;
-        $this->app = $app;
+    public function __construct(
+        protected Request $request,
+        protected Str $str,
+        protected Url $url,
+        protected App $app
+    ) {
+        //
     }
 
     /**
@@ -94,7 +87,10 @@ class ActiveComposer extends Composer
     public function isRouteContains($input, string $output = "active"): ?string
     {
         foreach ((array)$input as $string) {
-            if ($this->str->contains($this->request->route()->getName(), $string)) {
+            /** @var Route */
+            $route = $this->request->route();
+
+            if ($this->str->contains($route->getName() ?? '', $string)) {
                 return $output;
             }
         }

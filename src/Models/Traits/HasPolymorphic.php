@@ -1,8 +1,27 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models\Traits;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 trait HasPolymorphic
 {
@@ -28,20 +47,20 @@ trait HasPolymorphic
     public function scopePoli(Builder $query): ?Builder
     {
         return $query->when($this->model_id !== null, function ($query) {
+            // @phpstan-ignore-next-line
             $query->poliType()->where("{$this->getTable()}.model_id", $this->model_id);
         });
     }
 
-    // Accessors
+    // Attributes
 
     /**
-     * [getPoliAttribute description]
-     * @return string [description]
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
      */
-    public function getPoliAttribute(): string
+    public function poli(): Attribute
     {
-        $type = substr($this->model_type, strrpos($this->model_type, "\\") + 1);
-
-        return strtolower($type);
+        return App::make(\N1ebieski\ICore\Attributes\Poli::class, ['model' => $this])();
     }
 }

@@ -1,55 +1,34 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Category;
 
 use Throwable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
-/**
- *
- *
- * @author Mariusz Wysokiński <kontakt@intelekt.net.pl>
- */
-class CategoryService implements
-    CreateInterface,
-    UpdateInterface,
-    StatusUpdateInterface,
-    PositionUpdateInterface,
-    DeleteInterface,
-    GlobalDeleteInterface
+class CategoryService
 {
-    /**
-     * Model
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     * [private description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
@@ -59,16 +38,12 @@ class CategoryService implements
      * @param DB $db
      */
     public function __construct(
-        Category $category,
-        Config $config,
-        Collect $collect,
-        DB $db
+        protected Category $category,
+        protected Config $config,
+        protected Collect $collect,
+        protected DB $db
     ) {
-        $this->category = $category;
-
-        $this->collect = $collect;
-        $this->db = $db;
-        $this->config = $config;
+        //
     }
 
     /**
@@ -120,17 +95,21 @@ class CategoryService implements
     }
 
     /**
-     * [create description]
-     * @param  array $attributes [description]
-     * @return Model             [description]
+     *
+     * @param array $attributes
+     * @return Category
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->category->name = $attributes['name'];
             $this->category->icon = $attributes['icon'] ?? null;
 
             if ($attributes['parent_id'] !== null) {
+                /**
+                 * @var Category $parent
+                 */
                 $parent = $this->category->findOrFail($attributes['parent_id']);
 
                 $this->category->status = $parent->status;
@@ -152,28 +131,33 @@ class CategoryService implements
     {
         return $this->db->transaction(function () use ($attributes) {
             if ($attributes['parent_id'] !== null) {
-                $parent_id = $this->category->find($attributes['parent_id']);
+                /**
+                 * @var Category $parent
+                 */
+                $parent = $this->category->find($attributes['parent_id']);
             }
 
             if (isset($attributes['clear'])) {
                 if ((bool)$attributes['clear'] === true) {
                     $this->category->newQuery()->poliType()->delete();
-                    $parent_id = null;
+
+                    $parent = null;
                 }
             }
 
             return $this->category->createFromArray(
                 json_decode($attributes['names'], true),
-                $parent_id ?? null
+                $parent ?? null
             );
         });
     }
 
     /**
-     * [delete description]
-     * @return bool [description]
+     *
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             return $this->category->delete();
@@ -191,7 +175,7 @@ class CategoryService implements
             $deleted = 0;
 
             foreach ($ids as $id) {
-                if ($c = $this->category->find($id)) {
+                if (($c = $this->category->find($id)) instanceof Category) {
                     $c->makeService()->delete();
 
                     $deleted += 1;
@@ -243,14 +227,15 @@ class CategoryService implements
     }
 
     /**
-     * [update description]
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     *
+     * @param array $attributes
+     * @return Category
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
-            $update = $this->category->update([
+            $this->category->update([
                 'name' => $attributes['name'],
                 'icon' => $attributes['icon'] ?? null
             ]);
@@ -263,39 +248,48 @@ class CategoryService implements
                 }
             }
 
-            return $update;
+            return $this->category;
         });
     }
 
     /**
-     * [moveToRoot description]
-     * @return void [description]
+     *
+     * @return bool
+     * @throws Throwable
      */
-    public function moveToRoot(): void
+    public function moveToRoot(): bool
     {
-        $this->db->transaction(function () {
+        return $this->db->transaction(function () {
             $this->category->makeRoot(0);
+
+            return true;
         });
     }
 
     /**
-     * [moveToParent description]
-     * @param  int    $parent_id [description]
-     * @return void            [description]
+     *
+     * @param int $parent_id
+     * @return bool
+     * @throws Throwable
      */
-    public function moveToParent(int $parent_id): void
+    public function moveToParent(int $parent_id): bool
     {
-        $this->db->transaction(function () use ($parent_id) {
-            if ($parent = $this->category->findOrFail($parent_id)) {
-                // In the case of changing the parent, we must prophylactically
-                // change the status of the category (and descendants) to the same
-                // as the parent to avoid the situation where the subcategory
-                // is active and the parent is not.
-                $this->category->update(['status' => $parent->status]);
-                $this->category->descendants()->update(['status' => $parent->status]);
+        return $this->db->transaction(function () use ($parent_id) {
+            /**
+             * @var Category $parent
+             */
+            $parent = $this->category->findOrFail($parent_id);
 
-                $this->category->moveTo(0, $parent_id);
-            }
+            // In the case of changing the parent, we must prophylactically
+            // change the status of the category (and descendants) to the same
+            // as the parent to avoid the situation where the subcategory
+            // is active and the parent is not.
+            $this->category->update(['status' => $parent->status]);
+            $this->category->descendants()->update(['status' => $parent->status]);
+
+            $this->category->moveTo(0, $parent_id);
+
+            return true;
         });
     }
 }

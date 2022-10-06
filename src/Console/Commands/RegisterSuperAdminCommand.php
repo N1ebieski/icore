@@ -1,11 +1,28 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Console\Commands;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Role\Name;
 use N1ebieski\ICore\ValueObjects\User\Status;
 use Illuminate\Contracts\Translation\Translator as Lang;
@@ -13,41 +30,6 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 
 class RegisterSuperAdminCommand extends Command
 {
-    /**
-     * Undocumented variable
-     *
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Lang
-     */
-    protected $lang;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Validator
-     */
-    protected $validator;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Hasher
-     */
-    protected $hasher;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Carbon
-     */
-    protected $carbon;
-
     /**
      * The name and signature of the console command.
      *
@@ -68,20 +50,13 @@ class RegisterSuperAdminCommand extends Command
      * @param User $user
      */
     public function __construct(
-        User $user,
-        Lang $lang,
-        Validator $validator,
-        Hasher $hasher,
-        Carbon $carbon
+        protected User $user,
+        protected Lang $lang,
+        protected Validator $validator,
+        protected Hasher $hasher,
+        protected Carbon $carbon
     ) {
         parent::__construct();
-
-        $this->user = $user;
-
-        $this->lang = $lang;
-        $this->validator = $validator;
-        $this->hasher = $hasher;
-        $this->carbon = $carbon;
     }
 
     /**
@@ -91,7 +66,7 @@ class RegisterSuperAdminCommand extends Command
      */
     protected function authorize(): bool
     {
-        return $this->user->whereHas('roles', function ($query) {
+        return $this->user->whereHas('roles', function (Builder $query) {
             $query->where('name', Name::SUPER_ADMIN);
         })->count() === 0;
     }
@@ -180,6 +155,7 @@ class RegisterSuperAdminCommand extends Command
     {
         if (!$this->authorize()) {
             $this->error($this->lang->get('icore::superadmin.error.exist'));
+
             exit;
         }
 

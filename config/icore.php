@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 return [
 
     'version' => \N1ebieski\ICore\Providers\ICoreServiceProvider::VERSION,
@@ -12,19 +28,19 @@ return [
 
     'routes' => [
         'auth' => [
-            'prefix' => null,
+            'prefix' => env('ICORE_ROUTES_AUTH_PREFIX', null),
             'enabled' => true
         ],
         'web' => [
-            'prefix' => null,
+            'prefix' => env('ICORE_ROUTES_WEB_PREFIX', null),
             'enabled' => true
         ],
         'admin' => [
-            'prefix' => 'admin',
+            'prefix' => env('ICORE_ROUTES_ADMIN_PREFIX', 'admin'),
             'enabled' => true
         ],
         'api' => [
-            'prefix' => 'api',
+            'prefix' => env('ICORE_ROUTES_API_PREFIX', 'api'),
             'enabled' => true
         ]
     ],
@@ -59,5 +75,10 @@ return [
 
     'home' => [
         'max' => (int)env('ICORE_HOME_MAX', 10)
+    ],
+
+    'sitemap' => [
+        'limit' => (int)env('ICORE_SITEMAP_LIMIT', 1000),
+        'max_items' => (int)env('ICORE_SITEMAP_MAX_ITEMS', 10000)
     ]
 ];

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
@@ -11,6 +27,30 @@ use N1ebieski\ICore\Services\Socialite\SocialiteService;
 use N1ebieski\ICore\Repositories\Socialite\SocialiteRepo;
 use N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory;
 
+/**
+ * N1ebieski\ICore\Models\Socialite
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $provider_name
+ * @property string|null $provider_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string $updated_at_diff
+ * @property-read \N1ebieski\ICore\Models\User $user
+ * @method static \N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereProviderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereProviderName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Socialite whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Socialite extends Model
 {
     use HasCarbonable;
@@ -21,7 +61,7 @@ class Socialite extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'user_id', 'provider_name', 'provider_id',
@@ -30,14 +70,14 @@ class Socialite extends Model
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = ['provider_id'];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'id' => 'integer',

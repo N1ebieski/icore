@@ -155,7 +155,7 @@
                     @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="seo_noindex" value="{{ Page\SeoNoindex::INACTIVE }}">
                         <input 
                             type="checkbox" 
@@ -171,7 +171,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="seo_nofollow" value="{{ Page\SeoNofollow::INACTIVE }}">
                         <input 
                             type="checkbox" 
@@ -187,7 +187,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-switch">
                         <input type="hidden" name="comment" value="{{ Page\Comment::INACTIVE }}">
                         <input 
                             type="checkbox" 

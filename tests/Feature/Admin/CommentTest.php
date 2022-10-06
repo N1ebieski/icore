@@ -1,28 +1,50 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
+use N1ebieski\ICore\ValueObjects\Comment\Status;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CommentTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testCommentPostIndexAsGuest()
+    public function testCommentPostIndexAsGuest(): void
     {
         $response = $this->get(route('admin.comment.post.index'));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentPostIndexWithoutPermission()
+    public function testCommentPostIndexWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -32,41 +54,56 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCommentPostIndexPaginate()
+    public function testCommentPostIndexPaginate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
+        /** @var Collection<Comment>|array<Comment> */
+        $comments = Comment::makeFactory()->count(50)
+            ->sequence(function (Sequence $sequence) {
+                return [
+                    'created_at' => Carbon::now()->addSeconds($sequence->index)
+                ];
+            })
+            ->active()
+            ->withUser()
+            ->for($post, 'morph')
+            ->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.index', [
             'page' => 2,
             'filter' => [
-                'orderby' => 'created_at|desc'
+                'orderby' => 'created_at|asc'
             ]
         ]));
 
         $response->assertViewIs('icore::admin.comment.index');
         $response->assertSee('class="pagination"', false);
-        $response->assertSeeInOrder([$comment[30]->title, $comment[30]->shortContent], false);
+        $response->assertSeeInOrder([$comments[30]->content], false);
     }
 
-    public function testCommentShowAsGuest()
+    public function testCommentShowAsGuest(): void
     {
         $response = $this->get(route('admin.comment.show', [32]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentShowWithoutPermission()
+    public function testCommentShowWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -76,8 +113,9 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCommentShow()
+    public function testNoexistCommentShow(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -87,14 +125,18 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentShow()
+    public function testCommentShow(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create([
             'parent_id' => $parent->id
         ]);
@@ -103,21 +145,26 @@ class CommentTest extends TestCase
 
         $response = $this->get(route('admin.comment.show', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['view']);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString($parent->content, $response->getData()->view);
-        $this->assertStringContainsString($comment->content, $response->getData()->view);
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString($parent->content, $baseResponse->getData()->view);
+        $this->assertStringContainsString($comment->content, $baseResponse->getData()->view);
     }
 
-    public function testCommentPostCreateAsGuest()
+    public function testCommentPostCreateAsGuest(): void
     {
         $response = $this->get(route('admin.comment.post.create', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentNoexistPostCreate()
+    public function testCommentNoexistPostCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -127,10 +174,12 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentPostCreateWithoutPermission()
+    public function testCommentPostCreateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -140,32 +189,43 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testChildrenCommentPostCreate()
+    public function testChildrenCommentPostCreate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.post.create', [$post->id, 'parent_id' => $parent->id]));
 
-        $response->assertOk()->assertJsonStructure(['view']);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString(route('admin.comment.post.store', [$post->id]), $response->getData()->view);
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            route('admin.comment.post.store', [$post->id]),
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testCommentPostStoreAsGuest()
+    public function testCommentPostStoreAsGuest(): void
     {
         $response = $this->post(route('admin.comment.post.store', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentNoexistPostStore()
+    public function testCommentNoexistPostStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -175,10 +235,12 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentPostStoreWithoutPermission()
+    public function testCommentPostStoreWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -188,10 +250,12 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testChildrenNoexistCommentPostStore()
+    public function testChildrenNoexistCommentPostStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
         Auth::login($user);
@@ -204,12 +268,15 @@ class CommentTest extends TestCase
         $response->assertSessionHasErrors(['parent_id']);
     }
 
-    public function testChildrenCommentPostStore()
+    public function testChildrenCommentPostStore(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $parent = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -219,9 +286,17 @@ class CommentTest extends TestCase
             'parent_id' => $parent->id
         ]);
 
-        $response->assertOk()->assertJsonStructure(['view']);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString('Komentarz zostal dodany. dsdasd', $response->getData()->view);
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'Komentarz zostal dodany. dsdasd',
+            $baseResponse->getData()->view
+        );
+
         $this->assertDatabaseHas('comments', [
             'content' => 'Komentarz zostal dodany. dsdasd',
             'parent_id' => $parent->id,
@@ -230,15 +305,16 @@ class CommentTest extends TestCase
         ]);
     }
 
-    public function testCommentEditAsGuest()
+    public function testCommentEditAsGuest(): void
     {
         $response = $this->get(route('admin.comment.edit', [99]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testNoexistCommentEdit()
+    public function testNoexistCommentEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -248,12 +324,15 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentEditWithoutPermission()
+    public function testCommentEditWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -263,33 +342,48 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCommentEdit()
+    public function testCommentEdit(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
         $response = $this->get(route('admin.comment.edit', [$comment->id]));
 
-        $response->assertOk()->assertJsonStructure(['view']);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString(route('admin.comment.update', [$comment->id]), $response->getData()->view);
-        $this->assertStringContainsString($comment->content, $response->getData()->view);
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            route('admin.comment.update', [$comment->id]),
+            $baseResponse->getData()->view
+        );
+
+        $this->assertStringContainsString(
+            $comment->content,
+            $baseResponse->getData()->view
+        );
     }
 
-    public function testCommentUpdateAsGuest()
+    public function testCommentUpdateAsGuest(): void
     {
         $response = $this->put(route('admin.comment.update', [99]), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testNoexistCommentUpdate()
+    public function testNoexistCommentUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -299,12 +393,15 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentUpdateWithoutPermission()
+    public function testCommentUpdateWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -314,12 +411,15 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCommentUpdateValidationFail()
+    public function testCommentUpdateValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -331,12 +431,15 @@ class CommentTest extends TestCase
         $response->assertSessionHasErrors(['content']);
     }
 
-    public function testCommentUpdate()
+    public function testCommentUpdate(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -345,28 +448,39 @@ class CommentTest extends TestCase
             'content' => '<b>Komentarz</b> został zaktualizowany. <script>dsadad</script>'
         ]);
 
-        $response->assertOk()->assertJsonStructure(['view']);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
 
-        $this->assertStringContainsString('Komentarz został zaktualizowany. dsadad', $response->getData()->view);
+        /** @var JsonResponse */
+        $baseResponse = $response->baseResponse;
+
+        $this->assertStringContainsString(
+            'Komentarz został zaktualizowany. dsadad',
+            $baseResponse->getData()->view
+        );
+
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
             'content' => 'Komentarz został zaktualizowany. dsadad'
         ]);
     }
 
-    public function testCommentUpdateStatusAsGuest()
+    public function testCommentUpdateStatusAsGuest(): void
     {
         $response = $this->patch(route('admin.comment.update_status', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentUpdateStatusWithoutPermission()
+    public function testCommentUpdateStatusWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -376,8 +490,9 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCommentUpdateStatus()
+    public function testNoexistCommentUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -387,12 +502,15 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentUpdateStatusValidationFail()
+    public function testCommentUpdateStatusValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -404,41 +522,48 @@ class CommentTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function testCommentUpdateStatus()
+    public function testCommentUpdateStatus(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
         $response = $this->patch(route('admin.comment.update_status', [$comment->id]), [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['ancestors', 'descendants']);
+        $response->assertOk();
+        $response->assertJsonStructure(['ancestors', 'descendants']);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 
-    public function testCommentUpdateCensoredAsGuest()
+    public function testCommentUpdateCensoredAsGuest(): void
     {
         $response = $this->patch(route('admin.comment.update_censored', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentUpdateCensoredWithoutPermission()
+    public function testCommentUpdateCensoredWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -448,8 +573,9 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCommentUpdateCensored()
+    public function testNoexistCommentUpdateCensored(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -459,12 +585,15 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentUpdateCensoredValidationFail()
+    public function testCommentUpdateCensoredValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -476,12 +605,15 @@ class CommentTest extends TestCase
         $response->assertSessionHasErrors(['censored']);
     }
 
-    public function testCommentUpdateCensored()
+    public function testCommentUpdateCensored(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -490,7 +622,8 @@ class CommentTest extends TestCase
             'censored' => 1,
         ]);
 
-        $response->assertOk()->assertJsonStructure(['view']);
+        $response->assertOk();
+        $response->assertJsonStructure(['view']);
 
         $this->assertDatabaseHas('comments', [
             'id' => $comment->id,
@@ -498,19 +631,22 @@ class CommentTest extends TestCase
         ]);
     }
 
-    public function testCommentDestroyAsGuest()
+    public function testCommentDestroyAsGuest(): void
     {
         $response = $this->delete(route('admin.comment.destroy', [43]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentDestroyWithoutPermission()
+    public function testCommentDestroyWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -520,8 +656,9 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testNoexistCommentDestroy()
+    public function testNoexistCommentDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -531,12 +668,15 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testCommentDestroy()
+    public function testCommentDestroy(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
+        /** @var Comment */
         $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
@@ -546,6 +686,7 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->delete(route('admin.comment.destroy', [$comment->id]), []);
+
         $response->assertOk();
 
         $this->assertDatabaseMissing('comments', [
@@ -553,15 +694,16 @@ class CommentTest extends TestCase
         ]);
     }
 
-    public function testCommentDestroyGlobalAsGuest()
+    public function testCommentDestroyGlobalAsGuest(): void
     {
         $response = $this->delete(route('admin.comment.destroy_global'), []);
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testCommentDestroyGlobalWithoutPermission()
+    public function testCommentDestroyGlobalWithoutPermission(): void
     {
+        /** @var User */
         $user = User::makeFactory()->create();
 
         Auth::login($user);
@@ -571,8 +713,9 @@ class CommentTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testCommentDestroyGlobalValidationFail()
+    public function testCommentDestroyGlobalValidationFail(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -585,19 +728,22 @@ class CommentTest extends TestCase
         $response->assertSessionHasErrors(['select']);
     }
 
-    public function testCommentDestroyGlobal()
+    public function testCommentDestroyGlobal(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
+        /** @var Post */
         $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
 
-        $comment = Comment::makeFactory()->count(10)->withUser()->for($post, 'morph')->create();
+        /** @var Collection<Comment> */
+        $comments = Comment::makeFactory()->count(10)->withUser()->for($post, 'morph')->create();
 
         Auth::login($user);
 
         $this->get(route('admin.comment.post.index'));
 
-        $select = collect($comment)->pluck('id')->take(5)->toArray();
+        $select = collect($comments)->pluck('id')->take(5)->toArray();
 
         $response = $this->delete(route('admin.comment.destroy_global'), [
             'select' => $select,

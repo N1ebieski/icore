@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Tests\Feature\Admin;
 
 use Tests\TestCase;
@@ -14,14 +30,14 @@ class FileManagerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testFilemanagerReadPublicDiskAsGuest()
+    public function testFilemanagerReadPublicDiskAsGuest(): void
     {
         $response = $this->getJson(route('fm.content', ['disk' => 'public']));
 
         $response->assertStatus(HttpResponse::HTTP_UNAUTHORIZED);
     }
 
-    public function testFilemanagerWritePublicDiskAsGuest()
+    public function testFilemanagerWritePublicDiskAsGuest(): void
     {
         Storage::fake('public');
 
@@ -39,8 +55,9 @@ class FileManagerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_UNAUTHORIZED);
     }
 
-    public function testFilemanagerReadPublicDiskAsUser()
+    public function testFilemanagerReadPublicDiskAsUser(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -50,8 +67,9 @@ class FileManagerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testFilemanagerWritePublicDiskAsUser()
+    public function testFilemanagerWritePublicDiskAsUser(): void
     {
+        /** @var User */
         $user = User::makeFactory()->user()->create();
 
         Auth::login($user);
@@ -72,8 +90,9 @@ class FileManagerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testFilemanagerWritePublicDiskAsAdmin()
+    public function testFilemanagerWritePublicDiskAsAdmin(): void
     {
+        /** @var User */
         $user = User::makeFactory()->admin()->create();
 
         Auth::login($user);
@@ -95,8 +114,9 @@ class FileManagerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testFilemanagerWritePublicVendorDiskAsSuperadmin()
+    public function testFilemanagerWritePublicVendorDiskAsSuperadmin(): void
     {
+        /** @var User */
         $user = User::makeFactory()->superadmin()->create();
 
         Auth::login($user);

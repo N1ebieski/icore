@@ -4,85 +4,30 @@ namespace N1ebieski\ICore\Services\Page;
 
 use Throwable;
 use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use N1ebieski\ICore\Services\Interfaces\FullUpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\StatusUpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\PositionUpdateInterface;
 
-class PageService implements
-    CreateInterface,
-    UpdateInterface,
-    FullUpdateInterface,
-    StatusUpdateInterface,
-    PositionUpdateInterface,
-    DeleteInterface,
-    GlobalDeleteInterface
+class PageService
 {
-    /**
-     * [protected description]
-     * @var Page
-     */
-    protected $page;
-
-    /**
-     * [protected description]
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * [private description]
-     * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Auth
-     */
-    protected $auth;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
      * @param Page $page
      * @param Config $config
      * @param Collect $collect
-     * @param Auth $auth
      * @param DB $db
      */
     public function __construct(
-        Page $page,
-        Config $config,
-        Collect $collect,
-        Auth $auth,
-        DB $db
+        protected Page $page,
+        protected Config $config,
+        protected Collect $collect,
+        protected DB $db
     ) {
-        $this->page = $page;
-
-        $this->collect = $collect;
-        $this->auth = $auth;
-        $this->db = $db;
-        $this->config = $config;
+        //
     }
 
     /**
@@ -134,18 +79,20 @@ class PageService implements
     }
 
     /**
-     * [create description]
-     * @param  array $attributes [description]
-     * @return Model             [description]
+     *
+     * @param array $attributes
+     * @return Page
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill($attributes);
             $this->page->content = $this->page->content_html;
-            $this->page->user()->associate($this->auth->user());
+            $this->page->user()->associate($attributes['user']);
 
             if ($attributes['parent_id'] !== null) {
+                /** @var Page */
                 $parent = $this->page->findOrFail($attributes['parent_id']);
                 // If the parent is inactive, the child must inherit this state
                 $this->page->status = $parent->status->isInactive() ?
@@ -164,33 +111,35 @@ class PageService implements
     }
 
     /**
-     * Mini-Update the specified Page in storage.
      *
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * @param array $attributes
+     * @return Page
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->title = $attributes['title'];
             $this->page->content_html = $attributes['content_html'];
             $this->page->content = $this->page->content_html;
 
-            return $this->page->save();
+            $this->page->save();
+
+            return $this->page;
         });
     }
 
     /**
-     * Full-Update the specified Page in storage.
      *
-     * @param  array $attributes [description]
-     * @return bool              [description]
+     * @param array $attributes
+     * @return Page
+     * @throws Throwable
      */
-    public function updateFull(array $attributes): bool
+    public function updateFull(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill(
-                $this->collect->make($attributes)->except('parent_id')->toArray()
+                $this->collect->make($attributes)->except(['parent_id'])->toArray()
             );
             $this->page->content = $this->page->content_html;
 
@@ -210,39 +159,48 @@ class PageService implements
                 $this->page->retag($attributes['tags'] ?? []);
             }
 
-            return $this->page->save();
+            $this->page->save();
+
+            return $this->page;
         });
     }
 
     /**
-     * [moveToRoot description]
-     * @return void [description]
+     *
+     * @return bool
+     * @throws Throwable
      */
-    public function moveToRoot(): void
+    public function moveToRoot(): bool
     {
-        $this->db->transaction(function () {
+        return $this->db->transaction(function () {
             $this->page->makeRoot(0);
+
+            return true;
         });
     }
 
     /**
-     * [moveToParent description]
-     * @param  int    $parent_id [description]
-     * @return void            [description]
+     *
+     * @param int $parent_id
+     * @return bool
+     * @throws Throwable
      */
-    public function moveToParent(int $parent_id): void
+    public function moveToParent(int $parent_id): bool
     {
-        $this->db->transaction(function () use ($parent_id) {
-            if ($parent = $this->page->findOrFail($parent_id)) {
-                // In the case of changing the parent, we must prophylactically
-                // change the status of the category (and descendants) to the same
-                // as the parent to avoid the situation where the subcategory
-                // is active and the parent is not.
-                $this->page->update(['status' => $parent->status]);
-                $this->page->descendants()->update(['status' => $parent->status]);
+        return $this->db->transaction(function () use ($parent_id) {
+            /** @var Page */
+            $parent = $this->page->findOrFail($parent_id);
 
-                $this->page->moveTo(0, $parent_id);
-            }
+            // In the case of changing the parent, we must prophylactically
+            // change the status of the category (and descendants) to the same
+            // as the parent to avoid the situation where the subcategory
+            // is active and the parent is not.
+            $this->page->update(['status' => $parent->status]);
+            $this->page->descendants()->update(['status' => $parent->status]);
+
+            $this->page->moveTo(0, $parent_id);
+
+            return true;
         });
     }
 
@@ -287,10 +245,11 @@ class PageService implements
     }
 
     /**
-     * [delete description]
-     * @return bool [description]
+     *
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             $this->page->comments()->delete();
@@ -314,7 +273,10 @@ class PageService implements
             $deleted = 0;
 
             foreach ($ids as $id) {
-                if ($p = $this->page->find($id)) {
+                /** @var Page|null */
+                $p = $this->page->find($id);
+
+                if (!is_null($p)) {
                     $p->makeService()->delete();
 
                     $deleted += 1;

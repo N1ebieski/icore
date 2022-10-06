@@ -1,80 +1,57 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Crons\Sitemap\Builder;
 
 use Closure;
 use Illuminate\Support\Carbon;
 use Spatie\ArrayToXml\ArrayToXml;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
+/**
+ * @property string $route
+ * @property string $changefreq
+ * @property string $priority
+ */
 abstract class Builder
 {
     /**
      * Undocumented variable
      *
-     * @var ArrayToXml
-     */
-    protected $arrayToXml;
-
-    /**
-     * Undocumented variable
-     *
-     * @var URL
-     */
-    protected $url;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Carbon
-     */
-    protected $carbon;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Storage
-     */
-    protected $storage;
-
-    /**
-     * Undocumented variable
-     *
      * @var Collect
-     */
-    protected $collect;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Undocumented variable
-     *
-     * @var Collection
      */
     protected $collection;
 
     /**
      * Undocumented variable
      *
-     * @var Collect|string
+     * @var Collect
      */
     protected $sitemap;
 
     /**
-     * Undocumented variable
      *
-     * @var int
+     * @var string
      */
-    protected $maxItems = 10000;
+    protected $contents;
 
     /**
      * [protected description]
@@ -104,7 +81,6 @@ abstract class Builder
     protected $iterator = 0;
 
     /**
-     * Undocumented function
      *
      * @param ArrayToXml $arrayToXml
      * @param URL $url
@@ -112,22 +88,16 @@ abstract class Builder
      * @param Storage $storage
      * @param Config $config
      * @param Collect $collect
+     * @return void
      */
     public function __construct(
-        ArrayToXml $arrayToXml,
-        URL $url,
-        Carbon $carbon,
-        Storage $storage,
-        Config $config,
-        Collect $collect
+        protected ArrayToXml $arrayToXml,
+        protected URL $url,
+        protected Carbon $carbon,
+        protected Storage $storage,
+        protected Config $config,
+        protected Collect $collect
     ) {
-        $this->arrayToXml = $arrayToXml;
-        $this->url = $url;
-        $this->carbon = $carbon;
-        $this->storage = $storage;
-        $this->collect = $collect;
-        $this->config = $config;
-
         $this->nullSitemap();
     }
 
@@ -135,9 +105,9 @@ abstract class Builder
      * Undocumented function
      *
      * @param Collect $collection
-     * @return void
+     * @return self
      */
-    public function setCollection(Collect $collection)
+    public function setCollection(Collect $collection): self
     {
         $this->collection = $collection;
 
@@ -152,7 +122,7 @@ abstract class Builder
      */
     protected function countPages(int $count): int
     {
-        $pages = ceil($count / $this->config->get('database.paginate'));
+        $pages = (int)ceil($count / $this->config->get('database.paginate'));
 
         return $pages > 0 ? $pages : 1;
     }
@@ -188,7 +158,10 @@ abstract class Builder
     {
         $this->iterator++;
 
-        return $this->storage->disk('public')->put($this->path . '/sitemap-' . $this->iterator . '.xml', $this->sitemap);
+        return $this->storage->disk('public')->put(
+            $this->path . '/sitemap-' . $this->iterator . '.xml',
+            $this->contents
+        );
     }
 
     /**
@@ -204,11 +177,11 @@ abstract class Builder
     /**
      * Undocumented function
      *
-     * @return string
+     * @return void
      */
-    public function prepareSitemap(): string
+    public function prepareSitemapContents(): void
     {
-        return $this->sitemap = $this->arrayToXml->convert(
+        $this->contents = $this->arrayToXml->convert(
             [
                 $this->childElementName => $this->sitemap->toArray()
             ],
@@ -230,7 +203,8 @@ abstract class Builder
      */
     public function isMaxItems(): bool
     {
-        return $this->sitemap->count() >= $this->maxItems || $this->collection->count() < 1000;
+        return $this->sitemap->count() >= $this->config->get('icore.sitemap.max_items')
+            || $this->collection->count() < $this->config->get('icore.sitemap.limit');
     }
 
     abstract public function chunkCollection(Closure $closure): bool;

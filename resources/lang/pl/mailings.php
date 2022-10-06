@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 
 return [
@@ -8,7 +24,10 @@ return [
     'confirm' => 'Czy na pewno chcesz zresetować mailing? Spowoduje to usunięcie wszystkich dotychczasowych odbiorców i pozwoli zdefiniować ich ponownie w oknie edycji.',
     'title' => 'Temat wiadomości',
     'content' => 'Treść wiadomości',
-    'emails_json' => 'Lista adresów email w formacie JSON',
+    'emails_json' => [
+        'label' => 'Lista adresów email w formacie JSON lub TXT',
+        'tooltip' => 'W przypadku TXT adresy wpisuj od nowej linii'
+    ],
     'success' => [
         'store' => 'Mailing dla :recipients odbiorców został dodany.',
         'update' => 'Mailing został zmieniony.',

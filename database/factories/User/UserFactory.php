@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Database\Factories\User;
 
 use Carbon\Carbon;
@@ -15,7 +31,7 @@ class UserFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<User>
      */
     protected $model = User::class;
 
@@ -40,9 +56,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function active()
+    public function active(): self
     {
         return $this->state(function () {
             return [
@@ -54,9 +70,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function marketing()
+    public function marketing(): self
     {
         return $this->state(function () {
             return [
@@ -68,9 +84,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function user()
+    public function user(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::USER);
@@ -80,9 +96,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function admin()
+    public function admin(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::ADMIN);
@@ -92,9 +108,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function superAdmin()
+    public function superAdmin(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::SUPER_ADMIN);
@@ -104,9 +120,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function api()
+    public function api(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->assignRole(Name::API);
@@ -116,9 +132,9 @@ class UserFactory extends Factory
     /**
      * Undocumented function
      *
-     * @return static
+     * @return self
      */
-    public function banUser()
+    public function banUser(): self
     {
         return $this->afterCreating(function (User $user) {
             $user->ban()->create();

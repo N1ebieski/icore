@@ -126,7 +126,13 @@
         >
             <div class="form-group">
                 <label for="names">
-                    {{ trans('icore::categories.names_json') }}
+                    <span>{{ trans('icore::categories.names_json.label') }}</span>
+                    <i 
+                        data-toggle="tooltip" 
+                        data-placement="top"
+                        title="{{ trans('icore::categories.names_json.tooltip') }}" 
+                        class="far fa-question-circle"
+                    ></i>                    
                 </label>
                 <textarea 
                     name="names" 

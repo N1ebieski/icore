@@ -1,49 +1,49 @@
 <?php
 
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is licenced under the Software License Agreement
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://intelekt.net.pl/pages/regulamin
+ *
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
+ * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
+ * @license   https://intelekt.net.pl/pages/regulamin
+ */
+
 namespace N1ebieski\ICore\Services\Tag;
 
+use Throwable;
 use N1ebieski\ICore\Models\Tag\Tag;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager as DB;
-use N1ebieski\ICore\Services\Interfaces\CreateInterface;
-use N1ebieski\ICore\Services\Interfaces\DeleteInterface;
-use N1ebieski\ICore\Services\Interfaces\UpdateInterface;
-use N1ebieski\ICore\Services\Interfaces\GlobalDeleteInterface;
 
-class TagService implements CreateInterface, UpdateInterface, DeleteInterface, GlobalDeleteInterface
+class TagService
 {
-    /**
-     * [private description]
-     * @var Tag
-     */
-    protected $tag;
-
-    /**
-     * Undocumented variable
-     *
-     * @var DB
-     */
-    protected $db;
-
     /**
      * Undocumented function
      *
      * @param Tag $tag
      * @param DB $db
      */
-    public function __construct(Tag $tag, DB $db)
-    {
-        $this->tag = $tag;
-
-        $this->db = $db;
+    public function __construct(
+        protected Tag $tag,
+        protected DB $db
+    ) {
+        //
     }
 
     /**
-     * [create description]
-     * @param  array $attributes [description]
-     * @return Model             [description]
+     *
+     * @param array $attributes
+     * @return Tag
+     * @throws Throwable
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): Tag
     {
         return $this->db->transaction(function () use ($attributes) {
             return $this->tag->create($attributes);
@@ -51,23 +51,26 @@ class TagService implements CreateInterface, UpdateInterface, DeleteInterface, G
     }
 
     /**
-     * Undocumented function
      *
      * @param array $attributes
-     * @return boolean
+     * @return Tag
+     * @throws Throwable
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Tag
     {
         return $this->db->transaction(function () use ($attributes) {
-            return $this->tag->update($attributes);
+            $this->tag->update($attributes);
+
+            return $this->tag;
         });
     }
 
     /**
-     * [delete description]
-     * @return bool [description]
+     *
+     * @return null|bool
+     * @throws Throwable
      */
-    public function delete(): bool
+    public function delete(): ?bool
     {
         return $this->db->transaction(function () {
             return $this->tag->delete();
