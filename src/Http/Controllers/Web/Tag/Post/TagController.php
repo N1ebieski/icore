@@ -19,11 +19,14 @@
 namespace N1ebieski\ICore\Http\Controllers\Web\Tag\Post;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Tag\Tag;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Tag\ShowRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Tag\Post\Polymorphic;
+use N1ebieski\ICore\Events\Web\Tag\Post\ShowEvent as TagShowEvent;
 
 class TagController implements Polymorphic
 {
@@ -37,9 +40,13 @@ class TagController implements Polymorphic
      */
     public function show(Tag $tag, Post $post, ShowRequest $request): HttpResponse
     {
+        $posts = $post->makeRepo()->paginateByTag($tag);
+
+        Event::dispatch(App::make(TagShowEvent::class, ['posts' => $posts]));
+
         return Response::view('icore::web.tag.post.show', [
             'tag' => $tag,
-            'posts' => $post->makeRepo()->paginateByTag($tag),
+            'posts' => $posts,
         ]);
     }
 }

@@ -18,11 +18,14 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Web\Category\Post;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Http\Requests\Web\Category\ShowRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Category\Post\Polymorphic;
+use N1ebieski\ICore\Events\Web\Category\Post\ShowEvent as CategoryShowEvent;
 
 class CategoryController implements Polymorphic
 {
@@ -35,8 +38,12 @@ class CategoryController implements Polymorphic
      */
     public function show(Category $category, ShowRequest $request): HttpResponse
     {
+        $posts = $category->makeCache()->rememberPosts();
+
+        Event::dispatch(App::make(CategoryShowEvent::class, ['posts' => $posts]));
+
         return Response::view('icore::web.category.post.show', [
-            'posts' => $category->makeCache()->rememberPosts(),
+            'posts' => $posts,
             'category' => $category,
             'catsAsArray' => [
                 'ancestors' => $category->ancestors->pluck('id')->toArray(),

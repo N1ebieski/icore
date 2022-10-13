@@ -20,10 +20,9 @@ namespace N1ebieski\ICore\Events\Interfaces\Post;
 
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * @property Collection|LengthAwarePaginator<Post> $posts
+ * @property Collection<Post> $posts
  *
  */
 interface PostCollectionEventInterface

@@ -20,11 +20,14 @@ namespace N1ebieski\ICore\Http\Controllers\Web\Archive\Post;
 
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Archive\IndexRequest;
 use N1ebieski\ICore\Http\Controllers\Web\Archive\Post\Polymorphic;
+use N1ebieski\ICore\Events\Web\Archive\Post\ShowEvent as ArchiveShowEvent;
 
 class ArchiveController implements Polymorphic
 {
@@ -39,8 +42,12 @@ class ArchiveController implements Polymorphic
      */
     public function show(int $month, int $year, Post $post, IndexRequest $request): HttpResponse
     {
+        $posts = $post->makeCache()->rememeberArchiveByDate($month, $year);
+
+        Event::dispatch(App::make(ArchiveShowEvent::class, ['posts' => $posts]));
+
         return Response::view('icore::web.archive.post.show', [
-            'posts' => $post->makeCache()->rememeberArchiveByDate($month, $year),
+            'posts' => $posts,
             'month' => $month,
             /** @phpstan-ignore-next-line */
             'month_localized' => Carbon::createFromFormat('d/m/Y', "1/{$month}/{$year}")

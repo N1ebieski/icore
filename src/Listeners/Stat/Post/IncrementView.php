@@ -121,6 +121,9 @@ class IncrementView
                 \N1ebieski\ICore\Events\Web\Home\IndexEvent::class,
                 \N1ebieski\ICore\Events\Web\Post\IndexEvent::class,
                 \N1ebieski\ICore\Events\Web\Post\SearchEvent::class,
+                \N1ebieski\ICore\Events\Web\Category\Post\ShowEvent::class,
+                \N1ebieski\ICore\Events\Web\Archive\Post\ShowEvent::class,
+                \N1ebieski\ICore\Events\Web\Tag\Post\ShowEvent::class,
                 \N1ebieski\ICore\Events\Api\Post\IndexEvent::class
             ],
             [$this::class, 'handleGlobal']

@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Web\Post;
+namespace N1ebieski\ICore\Events\Web\Tag\Post;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -24,7 +24,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
 
-class SearchEvent implements PostCollectionEventInterface
+class ShowEvent implements PostCollectionEventInterface
 {
     use Dispatchable;
     use InteractsWithSockets;
