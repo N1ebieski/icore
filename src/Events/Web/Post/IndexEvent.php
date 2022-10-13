@@ -20,23 +20,24 @@ namespace N1ebieski\ICore\Events\Web\Post;
 
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use N1ebieski\ICore\Events\Interfaces\Post\PostEventInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
 
-class ShowEvent implements PostEventInterface
+class IndexEvent implements PostCollectionEventInterface
 {
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
 
     /**
-     * Create a new event instance.
      *
-     * @param Post         $post    [description]
+     * @param Collection<Post> $posts
      * @return void
      */
-    public function __construct(public Post $post)
+    public function __construct(public Collection|LengthAwarePaginator $posts)
     {
         //
     }

@@ -16,15 +16,28 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Inerfaces;
+namespace N1ebieski\ICore\Events\Web\Home;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
 
-/**
- * @property Post $post
- *
- */
-interface PostEventInterface
+class IndexEvent implements PostCollectionEventInterface
 {
-    //
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
+
+    /**
+     *
+     * @param Collection<Post> $posts
+     * @return void
+     */
+    public function __construct(public Collection $posts)
+    {
+        //
+    }
 }

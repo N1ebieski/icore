@@ -18,8 +18,10 @@
 
 namespace N1ebieski\ICore\Services\Stat;
 
+use Throwable;
 use N1ebieski\ICore\Models\Stat\Stat;
 use Illuminate\Database\DatabaseManager as DB;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class StatService
 {
@@ -52,6 +54,26 @@ class StatService
                 ]);
 
             return true;
+        });
+    }
+
+    /**
+     *
+     * @param array $ids
+     * @return int
+     * @throws Throwable
+     */
+    public function incrementGlobal(array $ids): int
+    {
+        return $this->db->transaction(function () use ($ids) {
+            /** @var MorphToMany */
+            $morphs = $this->stat->morphs();
+
+            return $morphs->newPivotStatement()
+                ->where('stat_id', $this->stat->id)
+                ->whereIn('model_id', $ids)
+                ->where('model_type', $this->stat->model_type)
+                ->increment('value');
         });
     }
 }

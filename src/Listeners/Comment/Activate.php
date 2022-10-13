@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Listeners\Comment;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
-use N1ebieski\ICore\Events\Inerfaces\CommentEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Comment\CommentEventInterface;
 
 class Activate
 {

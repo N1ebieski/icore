@@ -662,11 +662,11 @@ class PostTest extends TestCase
             ['title', 'Post dodany.']
         ])->first();
 
-        $this->assertTrue(!is_null($post) && $post->exists());
+        $this->assertTrue($post?->exists());
 
         $response->assertRedirect(route('admin.post.index', [
             'filter' => [
-                'search' => "id:\"{$post->id}\""
+                'search' => "id:\"{$post?->id}\""
             ]
         ]));
 

@@ -43,14 +43,24 @@ class EventServiceProvider extends ServiceProvider
             \N1ebieski\ICore\Listeners\Comment\Activate::class
         ],
         \N1ebieski\ICore\Events\Web\Post\ShowEvent::class => [
-            \N1ebieski\ICore\Listeners\Stat\Post\IncrementView::class
+            \N1ebieski\ICore\Listeners\Stat\Post\IncrementVisit::class
         ],
         \N1ebieski\ICore\Events\Web\Page\ShowEvent::class => [
-            \N1ebieski\ICore\Listeners\Stat\Page\IncrementView::class
+            \N1ebieski\ICore\Listeners\Stat\Page\IncrementVisit::class
         ],
         \N1ebieski\ICore\Events\Admin\Comment\StoreEvent::class => [
             \N1ebieski\ICore\Listeners\Comment\Activate::class
         ],
+    ];
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        \N1ebieski\ICore\Listeners\Stat\Post\IncrementView::class,
+        \N1ebieski\ICore\Listeners\Stat\Page\IncrementView::class,
     ];
 
     /**

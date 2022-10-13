@@ -16,15 +16,15 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Inerfaces;
+namespace N1ebieski\ICore\Events\Interfaces\Post;
 
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\Post;
 
 /**
- * @property Page $page
+ * @property Post $post
  *
  */
-interface PageEventInterface
+interface PostEventInterface
 {
     //
 }

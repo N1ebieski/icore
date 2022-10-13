@@ -765,11 +765,11 @@ class PageTest extends TestCase
             ['parent_id', null]
         ])->first();
 
-        $this->assertTrue(!is_null($page) && $page->exists());
+        $this->assertTrue($page?->exists());
 
         $response->assertRedirect(route('admin.page.index', [
             'filter' => [
-                'search' => "id:\"{$page->id}\""
+                'search' => "id:\"{$page?->id}\""
             ]
         ]));        
     }
@@ -804,11 +804,11 @@ class PageTest extends TestCase
             ['parent_id', $parent->id]
         ])->first();
 
-        $this->assertTrue(!is_null($page) && $page->exists());
+        $this->assertTrue($page?->exists());
 
         $response->assertRedirect(route('admin.page.index', [
             'filter' => [
-                'search' => "id:\"{$page->id}\""
+                'search' => "id:\"{$page?->id}\""
             ]
         ]));
 

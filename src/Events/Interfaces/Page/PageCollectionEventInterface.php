@@ -16,15 +16,17 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Inerfaces;
+namespace N1ebieski\ICore\Events\Interfaces\Post;
 
-use N1ebieski\ICore\Models\Comment\Comment;
+use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * @property Comment $comment
+ * @property Collection|LengthAwarePaginator<Page> $pages
  *
  */
-interface CommentEventInterface
+interface PageCollectionEventInterface
 {
     //
 }

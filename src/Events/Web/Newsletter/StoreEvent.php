@@ -22,7 +22,7 @@ use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Newsletter;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use N1ebieski\ICore\Events\Inerfaces\NewsletterEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Newsletter\NewsletterEventInterface;
 
 class StoreEvent implements NewsletterEventInterface
 {

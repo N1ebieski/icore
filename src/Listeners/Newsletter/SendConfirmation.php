@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Listeners\Newsletter;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Container\Container as App;
 use N1ebieski\ICore\Mail\Newsletter\ConfirmationMail;
-use N1ebieski\ICore\Events\Inerfaces\NewsletterEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Newsletter\NewsletterEventInterface;
 
 class SendConfirmation
 {

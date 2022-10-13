@@ -18,10 +18,13 @@
 
 namespace N1ebieski\ICore\Listeners\Stat\Post;
 
+use N1ebieski\ICore\Models\Post;
+use Illuminate\Events\Dispatcher;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use N1ebieski\ICore\Models\Stat\Post\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
-use N1ebieski\ICore\Events\Inerfaces\PostEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Post\PostEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
 
 class IncrementView
 {
@@ -34,23 +37,33 @@ class IncrementView
 
     /**
      *
+     * @var Stat
+     */
+    protected $stat;
+
+    /**
+     *
      * @param Stat $stat
      * @param MigrationUtil $migrationUtil
      * @return void
      */
-    public function __construct(protected Stat $stat, protected MigrationUtil $migrationUtil)
-    {
-        //
+    public function __construct(
+        Stat $stat,
+        protected MigrationUtil $migrationUtil
+    ) {
+        // @phpstan-ignore-next-line
+        $this->stat = $stat->makeCache()->rememberBySlug(Slug::VIEW);
     }
 
     /**
      *
+     * @param Post $post
      * @return bool
      */
-    public function verify(): bool
+    public function verify(Post $post): bool
     {
-        return $this->event->post->status->isActive()
-            && $this->migrationUtil->contains('create_stats_table');
+        return $post->status->isActive()
+            && $this->migrationUtil->contains('copy_view_to_visit_in_stats_table');
     }
 
     /**
@@ -59,19 +72,58 @@ class IncrementView
      * @param  PostEventInterface  $event
      * @return void
      */
-    public function handle($event): void
+    public function handleSingle($event): void
     {
-        $this->event = $event;
-
-        if (!$this->verify()) {
+        if (!$this->verify($event->post)) {
             return;
         }
 
-        /** @var Stat */
-        $stat = $this->stat->makeCache()->rememberBySlug(Slug::VIEW);
-
-        $stat->setRelations(['morph' => $this->event->post])
+        $this->stat->setRelations(['morph' => $event->post])
             ->makeService()
             ->increment();
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  PostCollectionEventInterface  $event
+     * @return void
+     */
+    public function handleGlobal($event): void
+    {
+        /** @var array */
+        $ids = $event->posts->filter(fn (Post $post) => $this->verify($post))
+            ->pluck('id')
+            ->toArray();
+
+        if (count($ids) > 0) {
+            $this->stat->makeService()->incrementGlobal($ids);
+        }
+    }
+
+    /**
+     * Register the listeners for the subscriber.
+     *
+     * @param  Dispatcher  $events
+     * @return void
+     */
+    public function subscribe(Dispatcher $events): void
+    {
+        $events->listen(
+            [
+                \N1ebieski\ICore\Events\Web\Post\ShowEvent::class
+            ],
+            [$this::class, 'handleSingle']
+        );
+
+        $events->listen(
+            [
+                \N1ebieski\ICore\Events\Web\Home\IndexEvent::class,
+                \N1ebieski\ICore\Events\Web\Post\IndexEvent::class,
+                \N1ebieski\ICore\Events\Web\Post\SearchEvent::class,
+                \N1ebieski\ICore\Events\Api\Post\IndexEvent::class
+            ],
+            [$this::class, 'handleGlobal']
+        );
     }
 }

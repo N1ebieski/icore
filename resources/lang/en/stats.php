@@ -21,6 +21,7 @@ use N1ebieski\ICore\ValueObjects\Stat\Slug;
 return [
     Slug::CLICK => 'Clicks',
     Slug::VIEW => 'Views',
+    Slug::VISIT => 'Visits',
     'stats' => 'Statistics',
     'last_activity' => 'Recent activity',
     'user' => [

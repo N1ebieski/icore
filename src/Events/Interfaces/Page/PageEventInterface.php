@@ -16,23 +16,15 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Database\Seeders\Install;
+namespace N1ebieski\ICore\Events\Interfaces\Page;
 
-use Illuminate\Database\Seeder;
-use N1ebieski\ICore\Models\Stat\Stat;
-use N1ebieski\ICore\ValueObjects\Stat\Slug;
+use N1ebieski\ICore\Models\Page\Page;
 
-class DefaultStatsSeeder extends Seeder
+/**
+ * @property Page $page
+ *
+ */
+interface PageEventInterface
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        Stat::firstOrCreate(['slug' => Slug::VIEW]);
-
-        Stat::firstOrCreate(['slug' => Slug::VISIT]);
-    }
+    //
 }

@@ -21,12 +21,14 @@ namespace N1ebieski\ICore\Http\Controllers\Api\Post;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Filters\Api\Post\IndexFilter;
 use N1ebieski\ICore\Http\Resources\Post\PostResource;
 use N1ebieski\ICore\Http\Requests\Api\Post\IndexRequest;
 use N1ebieski\ICore\Http\Resources\Category\CategoryResource;
+use N1ebieski\ICore\Events\Api\Post\IndexEvent as PostIndexEvent;
 
 /**
  * @group Posts
@@ -70,8 +72,12 @@ class PostController
      */
     public function index(Post $post, IndexRequest $request, IndexFilter $filter): JsonResponse
     {
+        $posts = $post->makeCache()->rememberByFilter($filter->all());
+
+        Event::dispatch(App::make(PostIndexEvent::class, ['posts' => $posts]));
+
         return App::make(PostResource::class)
-            ->collection($post->makeCache()->rememberByFilter($filter->all()))
+            ->collection($posts)
             ->additional(['meta' => [
                 'filter' => Collect::make($filter->all())
                     ->replace([

@@ -22,7 +22,7 @@ use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use N1ebieski\ICore\Events\Inerfaces\CommentEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Comment\CommentEventInterface;
 
 class StoreEvent implements CommentEventInterface
 {

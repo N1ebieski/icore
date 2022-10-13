@@ -29,6 +29,8 @@ use N1ebieski\ICore\Http\Requests\Web\Post\ShowRequest;
 use N1ebieski\ICore\Http\Requests\Web\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Web\Post\SearchRequest;
 use N1ebieski\ICore\Events\Web\Post\ShowEvent as PostShowEvent;
+use N1ebieski\ICore\Events\Web\Post\IndexEvent as PostIndexEvent;
+use N1ebieski\ICore\Events\Web\Post\SearchEvent as PostSearchEvent;
 
 class PostController
 {
@@ -41,8 +43,12 @@ class PostController
      */
     public function index(Post $post, IndexRequest $request): HttpResponse
     {
+        $posts = $post->makeCache()->rememberLatest();
+
+        Event::dispatch(App::make(PostIndexEvent::class, ['posts' => $posts]));
+
         return Response::view('icore::web.post.index', [
-            'posts' => $post->makeCache()->rememberLatest(),
+            'posts' => $posts,
         ]);
     }
 
@@ -90,8 +96,12 @@ class PostController
      */
     public function search(Post $post, SearchRequest $request): HttpResponse
     {
+        $posts = $post->makeRepo()->paginateBySearch($request->get('search'));
+
+        Event::dispatch(App::make(PostSearchEvent::class, ['posts' => $posts]));
+
         return Response::view('icore::web.post.search', [
-            'posts' => $post->makeRepo()->paginateBySearch($request->get('search')),
+            'posts' => $posts,
             'search' => $request->get('search')
         ]);
     }

@@ -22,7 +22,7 @@ use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use N1ebieski\ICore\Events\Inerfaces\PageEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Page\PageEventInterface;
 
 class ShowEvent implements PageEventInterface
 {

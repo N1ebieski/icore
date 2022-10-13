@@ -26,6 +26,7 @@ use N1ebieski\ICore\Services\Stat\StatService;
 use N1ebieski\ICore\Repositories\Stat\StatRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 /**
  * N1ebieski\ICore\Models\Stat\Stat
@@ -36,7 +37,9 @@ use N1ebieski\ICore\Models\Traits\HasPolymorphic;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string $created_at_diff
  * @property-read string $poli
+ * @property-read string $model_type
  * @property-read string $updated_at_diff
+ * @method static \Illuminate\Database\Eloquent\Relations\MorphToMany|Builder morphs()
  * @method static \Illuminate\Database\Eloquent\Builder|Stat newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Stat newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Stat poli()

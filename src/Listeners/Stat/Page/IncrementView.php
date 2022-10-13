@@ -18,10 +18,13 @@
 
 namespace N1ebieski\ICore\Listeners\Stat\Page;
 
+use Illuminate\Events\Dispatcher;
+use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use N1ebieski\ICore\Models\Stat\Page\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
-use N1ebieski\ICore\Events\Inerfaces\PageEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Page\PageEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Post\PageCollectionEventInterface;
 
 class IncrementView
 {
@@ -34,23 +37,33 @@ class IncrementView
 
     /**
      *
+     * @var Stat
+     */
+    protected $stat;
+
+    /**
+     *
      * @param Stat $stat
      * @param MigrationUtil $migrationUtil
      * @return void
      */
-    public function __construct(protected Stat $stat, protected MigrationUtil $migrationUtil)
-    {
-        //
+    public function __construct(
+        Stat $stat,
+        protected MigrationUtil $migrationUtil
+    ) {
+        // @phpstan-ignore-next-line
+        $this->stat = $stat->makeCache()->rememberBySlug(Slug::VIEW);
     }
 
     /**
      *
+     * @param Page $page
      * @return bool
      */
-    public function verify(): bool
+    public function verify(Page $page): bool
     {
-        return $this->event->page->status->isActive()
-            && $this->migrationUtil->contains('create_stats_table');
+        return $page->status->isActive()
+            && $this->migrationUtil->contains('copy_view_to_visit_in_stats_table');
     }
 
     /**
@@ -59,19 +72,48 @@ class IncrementView
      * @param  PageEventInterface  $event
      * @return void
      */
-    public function handle($event): void
+    public function handleSingle($event): void
     {
-        $this->event = $event;
-
-        if (!$this->verify()) {
+        if (!$this->verify($event->page)) {
             return;
         }
 
-        /** @var Stat */
-        $stat = $this->stat->makeCache()->rememberBySlug(Slug::VIEW);
-
-        $stat->setRelations(['morph' => $this->event->page])
+        $this->stat->setRelations(['morph' => $event->page])
             ->makeService()
             ->increment();
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  PageCollectionEventInterface  $event
+     * @return void
+     */
+    public function handleGlobal($event): void
+    {
+        /** @var array */
+        $ids = $event->pages->filter(fn (Page $page) => $this->verify($page))
+            ->pluck('id')
+            ->toArray();
+
+        if (count($ids) > 0) {
+            $this->stat->makeService()->incrementGlobal($ids);
+        }
+    }
+
+    /**
+     * Register the listeners for the subscriber.
+     *
+     * @param  Dispatcher  $events
+     * @return void
+     */
+    public function subscribe(Dispatcher $events): void
+    {
+        $events->listen(
+            [
+                \N1ebieski\ICore\Events\Web\Page\ShowEvent::class
+            ],
+            [$this::class, 'handleSingle']
+        );
     }
 }

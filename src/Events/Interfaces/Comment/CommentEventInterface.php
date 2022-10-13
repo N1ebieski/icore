@@ -16,28 +16,15 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Admin\Comment;
+namespace N1ebieski\ICore\Events\Interfaces\Comment;
 
-use Illuminate\Queue\SerializesModels;
 use N1ebieski\ICore\Models\Comment\Comment;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use N1ebieski\ICore\Events\Interfaces\Comment\CommentEventInterface;
 
-class StoreEvent implements CommentEventInterface
+/**
+ * @property Comment $comment
+ *
+ */
+interface CommentEventInterface
 {
-    use Dispatchable;
-    use InteractsWithSockets;
-    use SerializesModels;
-
-    /**
-     * Create a new event instance.
-     *
-     * @param Comment $comment
-     * @return void
-     */
-    public function __construct(public Comment $comment)
-    {
-        //
-    }
+    //
 }

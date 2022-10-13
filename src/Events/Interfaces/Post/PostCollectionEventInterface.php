@@ -16,15 +16,17 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Inerfaces;
+namespace N1ebieski\ICore\Events\Interfaces\Post;
 
-use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\Models\Post;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * @property Newsletter $newsletter
+ * @property Collection|LengthAwarePaginator<Post> $posts
  *
  */
-interface NewsletterEventInterface
+interface PostCollectionEventInterface
 {
     //
 }

@@ -19,8 +19,11 @@
 namespace N1ebieski\ICore\Http\Controllers\Web;
 
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Events\Web\Home\IndexEvent as HomeIndexEvent;
 
 class HomeController
 {
@@ -31,8 +34,12 @@ class HomeController
      */
     public function index(Post $post): HttpResponse
     {
+        $posts = $post->makeCache()->rememberLatestForHome();
+
+        Event::dispatch(App::make(HomeIndexEvent::class, ['posts' => $posts]));
+
         return Response::view('icore::web.home.index', [
-            'posts' => $post->makeCache()->rememberLatestForHome()
+            'posts' => $posts
         ]);
     }
 }

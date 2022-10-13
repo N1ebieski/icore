@@ -514,11 +514,11 @@ class MailingTest extends TestCase
             ['title', 'Mailing dodany.']
         ])->first();
 
-        $this->assertTrue(!is_null($mailing) && $mailing->exists());
+        $this->assertTrue($mailing?->exists());
 
         $response->assertRedirect(route('admin.mailing.index', [
             'filter' => [
-                'search' => "id:\"{$mailing->id}\""
+                'search' => "id:\"{$mailing?->id}\""
             ]
         ]));
 
