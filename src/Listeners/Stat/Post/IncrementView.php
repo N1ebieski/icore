@@ -32,13 +32,6 @@ use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
 class IncrementView
 {
     /**
-     * Undocumented variable
-     *
-     * @var PostEventInterface
-     */
-    protected $event;
-
-    /**
      *
      * @var Stat
      */
