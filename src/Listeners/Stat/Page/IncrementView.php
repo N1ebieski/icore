@@ -27,7 +27,7 @@ use N1ebieski\ICore\ValueObjects\Stat\Slug;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Events\Interfaces\Page\PageEventInterface;
-use N1ebieski\ICore\Events\Interfaces\Post\PageCollectionEventInterface;
+use N1ebieski\ICore\Events\Interfaces\Page\PageCollectionEventInterface;
 
 class IncrementView
 {
