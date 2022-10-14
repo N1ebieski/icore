@@ -187,7 +187,7 @@
         <div class="col-md-4 order-sm-2 order-md-1">
             @if ($post->relationLoaded('stats'))
             <div class="list-group list-group-flush mb-3">
-                @foreach ($post->stats as $stat)
+                @foreach ($post->stats->whereNotIn('slug', [Stat\Slug::VISIT]) as $stat)
                 <div class="list-group-item">
                     <div class="float-left mr-2">
                         {{ trans("icore::stats.{$stat->slug}") }}:
