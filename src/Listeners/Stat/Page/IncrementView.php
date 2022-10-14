@@ -21,8 +21,10 @@ namespace N1ebieski\ICore\Listeners\Stat\Page;
 use Illuminate\Events\Dispatcher;
 use N1ebieski\ICore\Models\Page\Page;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Stat\Page\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Events\Interfaces\Page\PageEventInterface;
 use N1ebieski\ICore\Events\Interfaces\Post\PageCollectionEventInterface;
 
@@ -91,14 +93,16 @@ class IncrementView
      */
     public function handleGlobal($event): void
     {
-        /** @var array */
-        $ids = $event->pages->filter(fn (Page $page) => $this->verify($page))
-            ->pluck('id')
-            ->toArray();
-
-        if (count($ids) > 0) {
-            $this->stat->makeService()->incrementGlobal($ids);
-        }
+        $this->stat->setRelations([
+            'morphs' => $event->pages->load([
+                'stats' => function (MorphToMany|Builder $query) {
+                    return $query->where('slug', Slug::VIEW);
+                }
+            ])
+            ->filter(fn (Page $page) => $this->verify($page))
+        ])
+        ->makeService()
+        ->incrementGlobal();
     }
 
     /**

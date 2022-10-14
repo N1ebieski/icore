@@ -18,8 +18,10 @@
 
 namespace N1ebieski\ICore\Services\Stat;
 
+use Exception;
 use Throwable;
 use N1ebieski\ICore\Models\Stat\Stat;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -45,6 +47,10 @@ class StatService
      */
     public function increment(): bool
     {
+        if (!$this->stat->relationLoaded('morph')) {
+            throw new \Exception('Stat model must have morph model.');
+        }
+
         return $this->db->transaction(function () {
             // @phpstan-ignore-next-line
             $this->stat->morph
@@ -59,19 +65,42 @@ class StatService
 
     /**
      *
-     * @param array $ids
      * @return int
+     * @throws Exception
      * @throws Throwable
      */
-    public function incrementGlobal(array $ids): int
+    public function incrementGlobal(): int
     {
-        return $this->db->transaction(function () use ($ids) {
-            /** @var MorphToMany */
-            $morphs = $this->stat->morphs();
+        if (!$this->stat->relationLoaded('morphs')) {
+            throw new \Exception('Stat model must have morphs collection.');
+        }
 
-            return $morphs->newPivotStatement()
+        return $this->db->transaction(function () {
+            /** @var Collection */
+            $morphs = $this->stat->morphs;
+
+            $morphs->filter(function (mixed $morph) {
+                return $morph->stats->doesntContain('slug', $this->stat->slug->getValue());
+            })
+            ->each(function (mixed $morph) {
+                $this->stat->setRelations(['morph' => $morph])
+                    ->makeService()
+                    ->increment();
+            });
+
+            /** @var MorphToMany */
+            $morphsRelation = $this->stat->morphs();
+
+            return $morphsRelation->newPivotStatement()
                 ->where('stat_id', $this->stat->id)
-                ->whereIn('model_id', $ids)
+                ->whereIn(
+                    'model_id',
+                    $morphs->filter(function (mixed $morph) {
+                        return $morph->stats->contains('slug', $this->stat->slug->getValue());
+                    })
+                    ->pluck('id')
+                    ->toArray()
+                )
                 ->where('model_type', $this->stat->model_type)
                 ->increment('value');
         });

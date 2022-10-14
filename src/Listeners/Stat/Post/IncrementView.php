@@ -21,8 +21,10 @@ namespace N1ebieski\ICore\Listeners\Stat\Post;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Events\Dispatcher;
 use N1ebieski\ICore\Utils\MigrationUtil;
+use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Stat\Post\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Events\Interfaces\Post\PostEventInterface;
 use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
 
@@ -91,14 +93,16 @@ class IncrementView
      */
     public function handleGlobal($event): void
     {
-        /** @var array */
-        $ids = $event->posts->filter(fn (Post $post) => $this->verify($post))
-            ->pluck('id')
-            ->toArray();
-
-        if (count($ids) > 0) {
-            $this->stat->makeService()->incrementGlobal($ids);
-        }
+        $this->stat->setRelations([
+                'morphs' => $event->posts->load([
+                    'stats' => function (MorphToMany|Builder $query) {
+                        return $query->where('slug', Slug::VIEW);
+                    }
+                ])
+                ->filter(fn (Post $post) => $this->verify($post))
+            ])
+            ->makeService()
+            ->incrementGlobal();
     }
 
     /**

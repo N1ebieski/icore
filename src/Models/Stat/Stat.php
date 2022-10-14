@@ -39,6 +39,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
  * @property-read string $poli
  * @property-read string $model_type
  * @property-read string $updated_at_diff
+ * @property-read \Illuminate\Database\Eloquent\Collection $morphs
  * @method static \Illuminate\Database\Eloquent\Relations\MorphToMany|Builder morphs()
  * @method static \Illuminate\Database\Eloquent\Builder|Stat newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Stat newQuery()
