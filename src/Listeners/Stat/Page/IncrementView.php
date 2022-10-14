@@ -24,6 +24,7 @@ use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Stat\Page\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Events\Interfaces\Page\PageEventInterface;
 use N1ebieski\ICore\Events\Interfaces\Post\PageCollectionEventInterface;
