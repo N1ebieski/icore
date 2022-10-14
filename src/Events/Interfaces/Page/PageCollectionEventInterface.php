@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Events\Interfaces\Post;
+namespace N1ebieski\ICore\Events\Interfaces\Page;
 
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Collection;
