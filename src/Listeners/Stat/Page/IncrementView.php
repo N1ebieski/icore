@@ -93,16 +93,19 @@ class IncrementView
      */
     public function handleGlobal($event): void
     {
-        $this->stat->setRelations([
-            'morphs' => $event->pages->load([
-                'stats' => function (MorphToMany|Builder $query) {
-                    return $query->where('slug', Slug::VIEW);
-                }
-            ])
-            ->filter(fn (Page $page) => $this->verify($page))
+        /** @var Collection */
+        $morphs = $event->pages->load([
+            'stats' => function (MorphToMany|Builder $query) {
+                return $query->where('slug', Slug::VIEW);
+            }
         ])
-        ->makeService()
-        ->incrementGlobal();
+        ->filter(fn (Page $page) => $this->verify($page));
+
+        if ($morphs->isNotEmpty()) {
+            $this->stat->setRelations(['morphs' => $morphs])
+                ->makeService()
+                ->incrementGlobal();
+        }
     }
 
     /**

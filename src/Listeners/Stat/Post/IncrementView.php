@@ -24,6 +24,7 @@ use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Stat\Post\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Events\Interfaces\Post\PostEventInterface;
 use N1ebieski\ICore\Events\Interfaces\Post\PostCollectionEventInterface;
@@ -93,16 +94,19 @@ class IncrementView
      */
     public function handleGlobal($event): void
     {
-        $this->stat->setRelations([
-                'morphs' => $event->posts->load([
-                    'stats' => function (MorphToMany|Builder $query) {
-                        return $query->where('slug', Slug::VIEW);
-                    }
-                ])
-                ->filter(fn (Post $post) => $this->verify($post))
-            ])
-            ->makeService()
-            ->incrementGlobal();
+        /** @var Collection */
+        $morphs = $event->posts->load([
+            'stats' => function (MorphToMany|Builder $query) {
+                return $query->where('slug', Slug::VIEW);
+            }
+        ])
+        ->filter(fn (Post $post) => $this->verify($post));
+
+        if ($morphs->isNotEmpty()) {
+            $this->stat->setRelations(['morphs' => $morphs])
+                ->makeService()
+                ->incrementGlobal();
+        }
     }
 
     /**
