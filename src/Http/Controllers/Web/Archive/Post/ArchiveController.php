@@ -22,7 +22,6 @@ use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Http\Requests\Web\Archive\IndexRequest;
@@ -51,7 +50,7 @@ class ArchiveController implements Polymorphic
             'month' => $month,
             /** @phpstan-ignore-next-line */
             'month_localized' => Carbon::createFromFormat('d/m/Y', "1/{$month}/{$year}")
-                ->locale(Config::get('app.locale'))
+                ->locale(App::getLocale())
                 ->isoFormat('MMMM'),
             'year' => $year,
         ]);

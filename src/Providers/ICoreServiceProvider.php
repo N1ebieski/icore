@@ -61,6 +61,7 @@ class ICoreServiceProvider extends ServiceProvider
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            // \N1ebieski\ICore\Http\Middleware\Locale::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
             \N1ebieski\ICore\Http\Middleware\TrimStrings::class,

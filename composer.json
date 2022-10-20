@@ -8,6 +8,7 @@
         "cviebrock/eloquent-sluggable": "^9.0",
         "cviebrock/eloquent-taggable": "^9.0",
         "franzose/closure-table": "6.1.1",
+        "google/cloud-translate": "^1.12",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/socialite": "^5.0",

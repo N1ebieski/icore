@@ -18,10 +18,14 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -45,6 +49,19 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureRateLimiting();
+
+        Route::fallback(function (Request $request) {
+            $url = URL::full();
+
+            if (!Str::match('/\/([a-z]{2})\//', $url)) {
+                $parsed = parse_url($url);
+                $parsed['path'] = '/pl' . ($parsed['path'] ?? null);
+
+                return Response::redirectTo(Str::buildUrl($parsed), HttpResponse::HTTP_MOVED_PERMANENTLY);
+            }
+
+            return App::abort(HttpResponse::HTTP_NOT_FOUND);
+        });
 
         Route::bind('post_cache', function (string $value) {
             return $this->app->make(\N1ebieski\ICore\Cache\Post\PostCache::class)->rememberBySlug($value)
@@ -119,7 +136,8 @@ class RouteServiceProvider extends ServiceProvider
         }
 
         $router = Route::middleware(['icore.web', 'icore.force.verified'])
-            ->prefix(Config::get('icore.routes.web.prefix'))
+            // ->prefix(Config::get('icore.routes.web.prefix') . '{lang}')
+            // ->where(['lang' => '[a-z]{2}'])
             ->as('web.');
 
         $router->group(function () {

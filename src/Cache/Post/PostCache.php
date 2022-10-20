@@ -25,24 +25,27 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Foundation\Application as App;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PostCache
 {
     /**
-     * Undocumented function
      *
      * @param Post $post
      * @param Cache $cache
      * @param Config $config
+     * @param App $app
      * @param Carbon $carbon
      * @param Collect $collect
      * @param Request $request
+     * @return void
      */
     public function __construct(
         protected Post $post,
         protected Cache $cache,
         protected Config $config,
+        protected App $app,
         protected Carbon $carbon,
         protected Collect $collect,
         protected Request $request
@@ -160,7 +163,7 @@ class PostCache
 
                 $posts->map(function (mixed $item) {
                     $item->month_localized = optional($this->carbon->createFromFormat('d/m/Y', "1/{$item->month}/{$item->year}"))
-                        ->locale($this->config->get('app.locale'))
+                        ->locale($this->app->getLocale())
                         ->isoFormat('MMMM');
 
                     return $item;
