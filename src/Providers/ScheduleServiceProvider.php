@@ -25,48 +25,43 @@ use Illuminate\Console\Scheduling\Schedule;
 class ScheduleServiceProvider extends ServiceProvider
 {
     /**
-     * Undocumented variable
-     *
-     * @var Schedule
-     */
-    protected $schedule;
-
-    /**
      * Bootstrap services.
      *
      * @return void
      */
     public function boot()
     {
-        $this->schedule = $this->app->make(Schedule::class);
+        if ($this->app->runningInConsole()) {
+            $this->app->booted(function () {
+                $schedule = $this->app->make(Schedule::class);
 
-        $this->app->booted(function () {
-            $this->callClearCacheSchedule();
+                $this->callClearCacheSchedule($schedule);
 
-            $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
-                ->name('MailingCron')
-                ->everyThirtyMinutes();
+                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
+                    ->name('MailingCron')
+                    ->everyThirtyMinutes();
 
-            $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
-                ->name('PostCron')
-                ->everyThirtyMinutes();
+                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
+                    ->name('PostCron')
+                    ->everyThirtyMinutes();
 
-            $this->schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
-                ->name('SitemapCron')
-                ->daily();
+                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
+                    ->name('SitemapCron')
+                    ->daily();
 
-            $this->schedule->command('clean:directories')
-                ->name('CleanDirectories')
-                ->hourly();
-        });
+                $schedule->command('clean:directories')
+                    ->name('CleanDirectories')
+                    ->hourly();
+            });
+        }
     }
 
     /**
-     * Undocumented function
      *
+     * @param Schedule $schedule
      * @return void
      */
-    protected function callClearCacheSchedule(): void
+    protected function callClearCacheSchedule(Schedule $schedule): void
     {
         $hours = ceil(Config::get('cache.minutes') / 60);
 
@@ -84,12 +79,12 @@ class ScheduleServiceProvider extends ServiceProvider
 
         // TODO: #37 Check is it working with runInBackground @N1ebieski
         if (Config::get('cache.default') === 'tfile') {
-            $this->schedule->exec('cd storage/framework/cache && rm -r data')
+            $schedule->exec('cd storage/framework/cache && rm -r data')
                 ->name('ClearCacheTfile')
                 ->cron($cron);
         }
 
-        $this->schedule->command('cache:clear')
+        $schedule->command('cache:clear')
             ->name('ClearCache')
             ->cron($cron);
     }
