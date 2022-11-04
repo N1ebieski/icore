@@ -155,7 +155,6 @@ class ICoreServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../../public/images' => public_path('images/vendor/icore'),
-            __DIR__ . '/../../public/svg' => public_path('svg/vendor/icore'),
             __DIR__ . '/../../public/fonts/vendor' => public_path('fonts/vendor'),
         ], 'icore.public.images');
 
