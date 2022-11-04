@@ -22,7 +22,7 @@ return [
 
     'license_key' => env('ICORE_LICENSE_KEY'),
 
-    'theme' => env('ICORE_THEME'),
+    'theme' => env('ICORE_THEME', 'light'),
 
     'layout' => env('ICORE_LAYOUT', 'icore'),
 

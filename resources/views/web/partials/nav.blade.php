@@ -2,7 +2,7 @@
 <div id="navbar-logo" class="flex-grow-1 mr-2">
     <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
         <img 
-            src="{{ asset('svg/vendor/icore/logo.svg') }}" 
+            src="{{ asset('images/vendor/icore/logo.svg') }}" 
             class="pb-1 logo" 
             alt="{{ config('app.name_short') }}" 
             title="{{ config('app.name') }}"
@@ -21,7 +21,7 @@
 @endsection
 
 @section('search-toggler')
-<a href="#" class="nav-link search-toggler" role="button">
+<a href="#" class="nav-link search-toggler" style="margin-top:2px;" role="button">
     <i class="fa fa-lg fa-search"></i>
 </a>
 @endsection
@@ -82,11 +82,14 @@
             <x-icore::page.menu-component limit="5" />
             <ul class="navbar-nav pr-3 pr-md-0">
                 @if (!$isUrl(route('web.home.index')))
-                <li class="nav-item d-none d-md-inline mr-1">
+                <li class="nav-item d-none d-md-inline">
                     @yield('search-toggler')
                 </li>
                 @endif
-                <li class="nav-item dropdown {{ $isRouteContains('profile') }}">
+                <li class="nav-item mx-md-1 dropdown">
+                    <x-icore::theme-component />
+                </li>                
+                <li class="nav-item mt-2 mt-md-0 dropdown {{ $isRouteContains('profile') }}">
                     @auth
                     <a 
                         class="nav-link text-nowrap" 
