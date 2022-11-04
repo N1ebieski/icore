@@ -4,7 +4,7 @@
     </a>
     <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
         <img 
-            src="{{ asset('svg/vendor/icore/logo.svg') }}" 
+            src="{{ asset('images/vendor/icore/logo.svg') }}" 
             class="pb-1 pr-1 logo" 
             alt="{{ config('app.name_short') }}" 
             title="{{ config('app.name') }}"
@@ -12,6 +12,37 @@
         <span>{{ config('app.name_short') }}</span>
     </a>
     <ul class="navbar-nav ml-auto">
+        @if (count(config('icore.multi_langs')) > 1)
+        <li class="nav-item dropdown">
+            <a 
+                class="nav-link text-nowrap" 
+                href="#" 
+                role="button" 
+                id="dropdown-multi-lang"
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false"
+            >
+                <span class="fi fil-{{ $currentLang }}"></span>
+                <span>{{ mb_strtoupper($currentLang) }}</span>
+            </a>
+            <div 
+                class="dropdown-menu dropdown-menu-right" 
+                aria-labelledby="dropdown-multi-lang"
+            >
+                @foreach ($langs as $lang)
+                <a 
+                    class="dropdown-item {{ $isLang($lang) }}" 
+                    href="{{ $getCurrentUrlWithLang($lang) }}" 
+                    title="{{ $lang }}"
+                >
+                    <span class="fi fil-{{ $lang }}"></span>
+                    <span>{{ mb_strtoupper($lang) }}</span>
+                </a>
+                @endforeach                       
+            </div>
+        </li>
+        @endif
         <li class="nav-item dropdown">
             <a 
                 class="nav-link text-nowrap" 

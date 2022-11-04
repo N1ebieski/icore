@@ -18,14 +18,10 @@
 
 namespace N1ebieski\ICore\Providers;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -50,18 +46,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
-        Route::fallback(function (Request $request) {
-            $url = URL::full();
+        /** @var \N1ebieski\ICore\Route\Fallback */
+        $fallback = $this->app->make(\N1ebieski\ICore\Route\Fallback::class);
 
-            if (!Str::match('/\/([a-z]{2})\//', $url)) {
-                $parsed = parse_url($url);
-                $parsed['path'] = '/pl' . ($parsed['path'] ?? null);
-
-                return Response::redirectTo(Str::buildUrl($parsed), HttpResponse::HTTP_MOVED_PERMANENTLY);
-            }
-
-            return App::abort(HttpResponse::HTTP_NOT_FOUND);
-        });
+        Route::fallback($fallback());
 
         Route::bind('post_cache', function (string $value) {
             return $this->app->make(\N1ebieski\ICore\Cache\Post\PostCache::class)->rememberBySlug($value)
@@ -108,6 +96,11 @@ class RouteServiceProvider extends ServiceProvider
         $router = Route::middleware('icore.web')
             ->prefix(Config::get('icore.routes.auth.prefix'));
 
+        if (count(Config::get('icore.multi_langs')) > 1) {
+            $router->prefix('{lang}/' . Config::get('icore.routes.auth.prefix'))
+                ->where(['lang' => '[a-z]{2}']);
+        }
+
         $router->group(function () {
             if (!file_exists(base_path('routes') . '/vendor/icore/auth.php')) {
                 require(__DIR__ . '/../../routes/auth.php');
@@ -136,9 +129,13 @@ class RouteServiceProvider extends ServiceProvider
         }
 
         $router = Route::middleware(['icore.web', 'icore.force.verified'])
-            // ->prefix(Config::get('icore.routes.web.prefix') . '{lang}')
-            // ->where(['lang' => '[a-z]{2}'])
+            ->prefix(Config::get('icore.routes.web.prefix'))
             ->as('web.');
+
+        if (count(Config::get('icore.multi_langs')) > 1) {
+            $router->prefix('{lang}/' . Config::get('icore.routes.web.prefix'))
+                ->where(['lang' => '[a-z]{2}']);
+        }
 
         $router->group(function () {
             $filenames = glob(__DIR__ . '/../../routes/web/*.php') ?: [];
@@ -176,6 +173,11 @@ class RouteServiceProvider extends ServiceProvider
         $router = Route::middleware(['icore.api', 'icore.force.verified'])
             ->prefix(Config::get('icore.routes.api.prefix', 'api'))
             ->as('api.');
+
+        if (count(Config::get('icore.multi_langs')) > 1) {
+            $router->prefix('{lang}/' . Config::get('icore.routes.api.prefix'))
+                ->where(['lang' => '[a-z]{2}']);
+        }
 
         $router->group(function () {
             $filenames = glob(__DIR__ . '/../../routes/api/*.php') ?: [];
@@ -218,6 +220,11 @@ class RouteServiceProvider extends ServiceProvider
             ])
             ->prefix(Config::get('icore.routes.admin.prefix', 'admin'))
             ->as('admin.');
+
+        if (count(Config::get('icore.multi_langs')) > 1) {
+            $router->prefix('{lang}/' . Config::get('icore.routes.admin.prefix'))
+                ->where(['lang' => '[a-z]{2}']);
+        }
 
         $router->group(function () {
             $filenames = glob(__DIR__ . '/../../routes/admin/*.php') ?: [];

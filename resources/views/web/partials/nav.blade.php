@@ -2,7 +2,7 @@
 <div id="navbar-logo" class="flex-grow-1 mr-2">
     <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
         <img 
-            src="{{ asset('svg/vendor/icore/logo.svg') }}" 
+            src="{{ asset('images/vendor/icore/logo.svg') }}" 
             class="pb-1 logo" 
             alt="{{ config('app.name_short') }}" 
             title="{{ config('app.name') }}"
@@ -84,6 +84,11 @@
                 @if (!$isUrl(route('web.home.index')))
                 <li class="nav-item d-none d-md-inline mr-1">
                     @yield('search-toggler')
+                </li>
+                @endif
+                @if (count(config('icore.multi_langs')) > 1)
+                <li class="nav-item dropdown">
+                    <x-icore::lang.multi-lang-component />
                 </li>
                 @endif
                 <li class="nav-item dropdown {{ $isRouteContains('profile') }}">

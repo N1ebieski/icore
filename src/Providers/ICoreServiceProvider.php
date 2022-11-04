@@ -61,7 +61,7 @@ class ICoreServiceProvider extends ServiceProvider
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-            // \N1ebieski\ICore\Http\Middleware\Locale::class,
+            \N1ebieski\ICore\Http\Middleware\MultiLang::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \N1ebieski\ICore\Http\Middleware\XSSProtection::class,
             \N1ebieski\ICore\Http\Middleware\TrimStrings::class,
@@ -155,8 +155,10 @@ class ICoreServiceProvider extends ServiceProvider
         ], 'icore.public.css');
 
         $this->publishes([
-            __DIR__ . '/../../public/images' => public_path('images/vendor/icore'),
-            __DIR__ . '/../../public/svg' => public_path('svg/vendor/icore'),
+            __DIR__ . '/../../public/images/background.jpg' => public_path('images/vendor/icore/background.jpg'),
+            __DIR__ . '/../../public/images/logo.png' => public_path('images/vendor/icore/logo.png'),
+            __DIR__ . '/../../public/images/logo.svg' => public_path('images/vendor/icore/logo.svg'),
+            __DIR__ . '/../../public/images/vendor' => public_path('images/vendor'),
             __DIR__ . '/../../public/fonts/vendor' => public_path('fonts/vendor'),
         ], 'icore.public.images');
 

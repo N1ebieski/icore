@@ -91,5 +91,13 @@ class ViewServiceProvider extends ServiceProvider
             Config::get('icore.layout') . '::admin.partials.sidebar',
             $sidebarComposer::class
         );
+
+        /** @var \N1ebieski\ICore\View\Composers\Admin\NavbarComposer */
+        $navbarComposer = $this->app->make(\N1ebieski\ICore\View\Composers\Admin\NavbarComposer::class);
+
+        View::composer(
+            Config::get('icore.layout') . '::admin.partials.nav',
+            $navbarComposer::class
+        );
     }
 }
