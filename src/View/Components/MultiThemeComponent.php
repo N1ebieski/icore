@@ -18,34 +18,25 @@
 
 namespace N1ebieski\ICore\View\Components;
 
-use Illuminate\Http\Request;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
+use N1ebieski\ICore\Loads\ThemeLoad;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
-class ThemeComponent extends Component
+class MultiThemeComponent extends Component
 {
-    /**
-     *
-     * @var array
-     */
-    protected array $themes = [
-        'light' => 'sun',
-        'dark' => 'moon'
-    ];
-
     /**
      *
      * @param ViewFactory $view
      * @param Config $config
-     * @param Request $request
+     * @param ThemeLoad $load
      * @return void
      */
     public function __construct(
         protected ViewFactory $view,
         protected Config $config,
-        protected Request $request
+        protected ThemeLoad $load
     ) {
         //
     }
@@ -56,26 +47,10 @@ class ThemeComponent extends Component
      */
     public function render(): View
     {
-        return $this->view->make('icore::web.components.theme', [
-            'themes' => $this->themes,
-            'currentTheme' => $this->getCurrentTheme()
+        return $this->view->make('icore::web.components.multi_theme', [
+            'themes' => $this->config->get('icore.multi_themes'),
+            'currentTheme' => $this->load->getTheme()
         ]);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getCurrentTheme(): string
-    {
-        return match ($this->request->cookie('theme_toggle')) {
-            'dark' => 'dark',
-            'light' => 'light',
-
-            default => !empty($this->config->get('icore.theme')) ?
-                $this->config->get('icore.theme')
-                : 'light'
-        };
     }
 
     /**
@@ -86,6 +61,6 @@ class ThemeComponent extends Component
      */
     public function isCurrentTheme(string $theme, string $output = 'active'): string|false
     {
-        return $this->getCurrentTheme() === $theme ? $output : false;
+        return $this->load->getTheme() === $theme ? $output : false;
     }
 }

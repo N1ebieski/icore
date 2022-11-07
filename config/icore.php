@@ -24,6 +24,8 @@ return [
 
     'theme' => env('ICORE_THEME', 'light'),
 
+    'multi_themes' => explode(',', env('ICORE_MULTI_THEMES', 'light,dark')),
+
     'layout' => env('ICORE_LAYOUT', 'icore'),
 
     'routes' => [

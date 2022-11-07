@@ -37,10 +37,17 @@ class Schema820 implements SchemaInterface
                     'type' => 'beforeFirst',
                     'search' => '/<li.*dropdown.*isRouteContains\(\'profile\'\).*?>/',
                     'to' => <<<EOD
-                <li class="nav-item mx-md-1 dropdown">
-                    <x-icore::theme-component />
+                @if (count(config('icore.multi_themes')) > 1)
+                <li class="nav-item dropdown">
+                    <x-icore::multi-theme-component />
                 </li>
+                @endif
 EOD
+                ],
+                [
+                    'type' => 'replaceMatches',
+                    'search' => '/(class=".*?)"([^>]*?href="{{\s*route\(\'login\'\)\s*}}")/',
+                    'to' => '$1 ml-md-1"$2'
                 ]
             ]
         ],

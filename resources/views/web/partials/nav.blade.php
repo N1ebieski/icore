@@ -86,10 +86,12 @@
                     @yield('search-toggler')
                 </li>
                 @endif
-                <li class="nav-item mx-md-1 dropdown">
-                    <x-icore::theme-component />
-                </li>                
-                <li class="nav-item mt-2 mt-md-0 dropdown {{ $isRouteContains('profile') }}">
+                @if (count(config('icore.multi_themes')) > 1)
+                <li class="nav-item dropdown">
+                    <x-icore::multi-theme-component />
+                </li>
+                @endif
+                <li class="nav-item my-2 my-md-0 dropdown {{ $isRouteContains('profile') }}">
                     @auth
                     <a 
                         class="nav-link text-nowrap" 
@@ -141,7 +143,7 @@
                     </div>
                     @else
                     <a 
-                        class="nav-link btn btn-sm btn-outline-primary text-nowrap text-center text-primary" 
+                        class="nav-link btn btn-sm btn-outline-primary text-nowrap text-center text-primary ml-md-1" 
                         href="{{ route('login') }}" 
                         role="button" 
                         title="{{ trans('icore::auth.route.login') }}"

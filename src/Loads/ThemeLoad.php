@@ -16,49 +16,49 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\View\Composers\Admin;
+namespace N1ebieski\ICore\Loads;
 
-use N1ebieski\ICore\Loads\ThemeLoad;
-use N1ebieski\ICore\View\Composers\Composer;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Config\Repository as Config;
 
-class NavbarComposer extends Composer
+class ThemeLoad
 {
     /**
      *
      * @var string
      */
-    public string $currentTheme;
-
-    /**
-     *
-     * @var array
-     */
-    public array $themes;
+    protected string $theme;
 
     /**
      *
      * @param Config $config
-     * @param ThemeLoad $load
+     * @param Request $request
      * @return void
      */
     public function __construct(
         protected Config $config,
-        protected ThemeLoad $load
+        protected Request $request
     ) {
-        $this->currentTheme = $this->load->getTheme();
+        $this->theme = !empty($this->config->get('icore.theme')) ?
+            $this->config->get('icore.theme')
+            : 'light';
 
-        $this->themes = $this->config->get('icore.multi_themes');
+        if (
+            count($this->config->get('icore.multi_themes')) > 1
+            && !empty($this->request->cookie('theme_toggle'))
+            && in_array($this->request->cookie('theme_toggle'), $this->config->get('icore.multi_themes'))
+        ) {
+            // @phpstan-ignore-next-line
+            $this->theme = $this->request->cookie('theme_toggle');
+        }
     }
 
     /**
      *
-     * @param string $theme
-     * @param string $output
-     * @return string|false
+     * @return string
      */
-    public function isCurrentTheme(string $theme, string $output = 'active'): string|false
+    public function getTheme(): string
     {
-        return $this->load->getTheme() === $theme ? $output : false;
+        return $this->theme;
     }
 }

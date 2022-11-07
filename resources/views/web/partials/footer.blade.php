@@ -78,7 +78,7 @@
                     2019-{{ now()->year }} Copyright © <a href="https://intelekt.net.pl/icore">iCore 
                     v{{ config('icore.version') }}</a> by Mariusz Wysokiński
                 </small>
-            </div>
-        </div>
+            </div> 
+        </div>      
     </div>
 </footer>

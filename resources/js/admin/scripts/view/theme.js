@@ -42,13 +42,13 @@ $(document).on(
 
 $(document).on(
     'click.n1ebieski/icore/web/scripts/view/theme@dropdown-toggle',
-    'div#theme-dropdown-toggle a',
+    'div#dropdown-multi-theme-toggle a',
     function (e) {
         e.preventDefault();
 
         let $element = $(this);
 
-        $.cookie("theme_toggle", $element.data('theme'), { 
+        $.cookie("theme_toggle", $.sanitize($element.data('theme')), { 
             path: '/',
             expires: 365
         });
