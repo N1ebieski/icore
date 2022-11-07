@@ -73,7 +73,7 @@
         </div>   
         <hr>
         <div class="d-flex justify-content-center">
-            <div class="footer-copyright text-center py-3 mr-3">
+            <div class="footer-copyright text-center py-3">
                 <small>
                     2019-{{ now()->year }} Copyright © <a href="https://intelekt.net.pl/icore">iCore 
                     v{{ config('icore.version') }}</a> by Mariusz Wysokiński
