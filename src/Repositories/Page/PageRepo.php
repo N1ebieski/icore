@@ -82,9 +82,7 @@ class PageRepo
                 return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
-            ->when(is_null($filter['parent']), function (Builder|Page $query) {
-                return $query->withAncestorsExceptSelf();
-            })
+            ->withAncestorsExceptSelf()
             ->filterPaginate($filter['paginate']);
     }
 
