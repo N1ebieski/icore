@@ -47,7 +47,7 @@ class LessContentHtml
 
                 // @phpstan-ignore-next-line
                 return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.page.show', [
-                    'page' => $this->page->slug,
+                    $this->page->slug,
                     '#more'
                 ]) . '" class="more">' . Lang::get('icore::pages.more') . '</a></p>' : $this->page->replacement_content_html;
             }
