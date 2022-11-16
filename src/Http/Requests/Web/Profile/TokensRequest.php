@@ -52,7 +52,7 @@ class TokensRequest extends FormRequest
             'filter.orderby' => [
                 'bail',
                 'nullable',
-                'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,expired_at|asc,expired_at|desc,name|asc,name|desc,sum_rating|desc',
+                'in:created_at|asc,created_at|desc,updated_at|asc,updated_at|desc,expired_at|asc,expired_at|desc,name|asc,name|desc',
                 'no_js_validation'
             ],
             'filter.paginate' => Rule::in([$paginate, ($paginate * 2), ($paginate * 4)]) . '|integer|no_js_validation'

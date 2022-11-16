@@ -39,3 +39,20 @@ $(document).on(
         window.location.reload();
     }
 );
+
+$(document).on(
+    'click.n1ebieski/icore/web/scripts/view/theme@dropdown-toggle',
+    'div#dropdown-multi-theme-toggle a',
+    function (e) {
+        e.preventDefault();
+
+        let $element = $(this);
+
+        $.cookie("theme_toggle", $.sanitize($element.data('theme')), { 
+            path: '/',
+            expires: 365
+        });
+
+        window.location.reload();
+    }
+);

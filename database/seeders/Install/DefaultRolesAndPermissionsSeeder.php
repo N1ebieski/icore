@@ -35,7 +35,7 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // create permdissions
+        // create permissions
         Permission::firstOrCreate(['name' => 'admin.*']);
         Permission::firstOrCreate(['name' => 'admin.access']);
 

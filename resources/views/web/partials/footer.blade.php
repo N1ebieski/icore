@@ -73,35 +73,12 @@
         </div>   
         <hr>
         <div class="d-flex justify-content-center">
-            <div class="footer-copyright text-center py-3 mr-3">
+            <div class="footer-copyright text-center py-3">
                 <small>
                     2019-{{ now()->year }} Copyright © <a href="https://intelekt.net.pl/icore">iCore 
                     v{{ config('icore.version') }}</a> by Mariusz Wysokiński
                 </small>
-            </div>
-            <div 
-                class="btn-group my-auto" 
-                id="theme-toggle" 
-                role="group" 
-                aria-label="{{ trans('icore::default.theme_toggle') }}"
-            >
-                <button 
-                    type="button" 
-                    class="btn btn-sm btn-light border" 
-                    style="width:80px;"
-                    {{ $isTheme(['', null], 'disabled') }}
-                >
-                    {{ trans('icore::default.light') }}
-                </button>
-                <button 
-                    type="button" 
-                    class="btn btn-sm btn-dark border" 
-                    style="width:80px;"
-                    {{ $isTheme('dark', 'disabled') }}
-                >
-                    {{ trans('icore::default.dark') }}
-                </button>
-            </div>
-        </div>
+            </div> 
+        </div>      
     </div>
 </footer>

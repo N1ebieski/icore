@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\View\Composers\Admin;
 
 use Illuminate\Support\Str;
+use N1ebieski\ICore\Loads\ThemeLoad;
 use N1ebieski\ICore\View\Composers\Composer;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
@@ -35,9 +36,21 @@ class NavbarComposer extends Composer
 
     /**
      *
+     * @var string
+     */
+    public string $currentTheme;
+
+    /**
+     *
      * @var array
      */
     public array $langs;
+
+    /**
+     *
+     * @var array
+     */
+    public array $themes;
 
     /**
      *
@@ -46,6 +59,7 @@ class NavbarComposer extends Composer
      * @param URL $url
      * @param Str $str
      * @param App $app
+     * @param ThemeLoad $load
      * @return void
      */
     public function __construct(
@@ -53,11 +67,16 @@ class NavbarComposer extends Composer
         protected Config $config,
         protected URL $url,
         protected Str $str,
-        protected App $app
+        protected App $app,
+        protected ThemeLoad $load
     ) {
         $this->currentLang = $this->app->getLocale();
 
+        $this->currentTheme = $this->load->getTheme();
+
         $this->langs = $this->config->get('icore.multi_langs');
+
+        $this->themes = $this->config->get('icore.multi_themes');
     }
 
     /**
@@ -66,9 +85,19 @@ class NavbarComposer extends Composer
      * @param string $output
      * @return string|false
      */
-    public function isLang(string $lang, string $output = 'active'): string|false
+    public function isCurrentLang(string $lang, string $output = 'active'): string|false
     {
         return $this->app->getLocale() === $lang ? $output : false;
+    }
+
+    /**
+     * @param string $theme
+     * @param string $output
+     * @return string|false
+     */
+    public function isCurrentTheme(string $theme, string $output = 'active'): string|false
+    {
+        return $this->load->getTheme() === $theme ? $output : false;
     }
 
     /**

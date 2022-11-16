@@ -27,7 +27,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var  string
      */
-    public const VERSION = "8.1.0-rc.2";
+    public const VERSION = "9.0.0";
 
     /**
      * Register services.
@@ -155,10 +155,7 @@ class ICoreServiceProvider extends ServiceProvider
         ], 'icore.public.css');
 
         $this->publishes([
-            __DIR__ . '/../../public/images/background.jpg' => public_path('images/vendor/icore/background.jpg'),
-            __DIR__ . '/../../public/images/logo.png' => public_path('images/vendor/icore/logo.png'),
-            __DIR__ . '/../../public/images/logo.svg' => public_path('images/vendor/icore/logo.svg'),
-            __DIR__ . '/../../public/images/vendor' => public_path('images/vendor'),
+            __DIR__ . '/../../public/images' => public_path('images/vendor/icore'),
             __DIR__ . '/../../public/fonts/vendor' => public_path('fonts/vendor'),
         ], 'icore.public.images');
 

@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\View\Composers;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Loads\ThemeLoad;
 use N1ebieski\ICore\View\Composers\Composer;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as Url;
@@ -28,17 +29,20 @@ use Illuminate\Contracts\Routing\UrlGenerator as Url;
 class LayoutComposer extends Composer
 {
     /**
-     * [__construct description]
-     * @param Request $request [description]
-     * @param Config  $config  [description]
-     * @param Str     $str     [description]
-     * @param Url     $url     [description]
+     *
+     * @param Request $request
+     * @param Config $config
+     * @param Str $str
+     * @param Url $url
+     * @param ThemeLoad $load
+     * @return void
      */
     public function __construct(
         protected Request $request,
         protected Config $config,
         protected Str $str,
-        protected Url $url
+        protected Url $url,
+        protected ThemeLoad $load
     ) {
         //
     }
@@ -105,14 +109,11 @@ class LayoutComposer extends Composer
      */
     public function getTheme(): ?string
     {
-        $themeToggle = $this->request->cookie('theme_toggle');
+        if ($this->load->getTheme() === 'light') {
+            return '';
+        }
 
-        return match ($themeToggle) {
-            'dark' => 'dark',
-            'light' => '',
-
-            default => $this->config->get('icore.theme')
-        };
+        return $this->load->getTheme();
     }
 
     /**

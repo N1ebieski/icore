@@ -21,7 +21,7 @@
 @endsection
 
 @section('search-toggler')
-<a href="#" class="nav-link search-toggler" role="button">
+<a href="#" class="nav-link search-toggler" style="margin-top:2px;" role="button">
     <i class="fa fa-lg fa-search"></i>
 </a>
 @endsection
@@ -82,7 +82,7 @@
             <x-icore::page.menu-component limit="5" />
             <ul class="navbar-nav pr-3 pr-md-0">
                 @if (!$isUrl(route('web.home.index')))
-                <li class="nav-item d-none d-md-inline mr-1">
+                <li class="nav-item d-none d-md-inline">
                     @yield('search-toggler')
                 </li>
                 @endif
@@ -91,26 +91,31 @@
                     <x-icore::lang.multi-lang-component />
                 </li>
                 @endif
-                <li class="nav-item dropdown {{ $isRouteContains('profile') }}">
+                @if (count(config('icore.multi_themes')) > 1)
+                <li class="nav-item dropdown">
+                    <x-icore::multi-theme-component />
+                </li>
+                @endif
+                <li class="nav-item my-2 my-md-0 dropdown {{ $isRouteContains('profile') }}">
                     @auth
                     <a 
                         class="nav-link text-nowrap" 
                         href="#" 
                         role="button" 
-                        id="navbarDropdownMenuProfile"
+                        id="navbar-dropdown-menu-profile"
                         data-toggle="dropdown" 
                         aria-haspopup="true" 
                         aria-expanded="false"
                     >
                         <i class="fas fa-fw fa-lg fa-users-cog"></i>
-                        <span class="d-md-none d-lg-inline">{{ auth()->user()->short_name }}</span>
+                        <span class="d-inline d-md-none">{{ auth()->user()->short_name }}</span>
                     </a>
                     <div 
                         class="dropdown-menu dropdown-menu-right" 
-                        aria-labelledby="navbarDropdownMenuProfile"
+                        aria-labelledby="navbar-dropdown-menu-profile"
                     >
                         <h6 class="dropdown-header">
-                            {{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}
+                            {{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}!
                         </h6>
                         <a 
                             class="dropdown-item {{ $isUrl(route('web.profile.edit')) }}" 
@@ -143,7 +148,7 @@
                     </div>
                     @else
                     <a 
-                        class="nav-link btn btn-sm btn-outline-primary text-nowrap text-center text-primary" 
+                        class="nav-link btn btn-sm btn-outline-primary text-nowrap text-center text-primary ml-md-1" 
                         href="{{ route('login') }}" 
                         role="button" 
                         title="{{ trans('icore::auth.route.login') }}"

@@ -9,7 +9,7 @@
             alt="{{ config('app.name_short') }}" 
             title="{{ config('app.name') }}"
         >
-        <span>{{ config('app.name_short') }}</span>
+        <span class="d-none d-md-inline">{{ config('app.name_short') }}</span>
     </a>
     <ul class="navbar-nav ml-auto">
         @if (count(config('icore.multi_langs')) > 1)
@@ -32,7 +32,7 @@
             >
                 @foreach ($langs as $lang)
                 <a 
-                    class="dropdown-item {{ $isLang($lang) }}" 
+                    class="dropdown-item {{ $isCurrentLang($lang) }}" 
                     href="{{ $getCurrentUrlWithLang($lang) }}" 
                     title="{{ $lang }}"
                 >
@@ -43,25 +43,59 @@
             </div>
         </li>
         @endif
+        @if (count(config('icore.multi_themes')) > 1)
         <li class="nav-item dropdown">
             <a 
                 class="nav-link text-nowrap" 
                 href="#" 
                 role="button" 
-                id="navbar-dropdown-menu-link"
+                id="dropdown-multi-theme"
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false"
+            >
+                <span class="fas fa-lg fa-icore-{{ $currentTheme }}"></span>
+            </a>
+            <div 
+                class="dropdown-menu dropdown-menu-right"
+                id="dropdown-multi-theme-toggle"
+                aria-labelledby="dropdown-multi-theme"
+            >
+                <h6 class="dropdown-header">
+                    {{ trans('icore::default.theme_toggle') }}:
+                </h6>
+                @foreach ($themes as $theme)
+                <a 
+                    class="dropdown-item {{ $isCurrentTheme($theme) }}"
+                    data-theme="{{ $theme }}"
+                    href="#{{ $theme }}" 
+                    title="{{ trans('icore::default.' . $theme) }}"
+                >
+                    <span class="fas fa-icore-{{ $theme }}"></span>
+                    <span>{{ trans('icore::default.' . $theme) }}</span>
+                </a>
+                @endforeach                       
+            </div>
+        </li>
+        @endif
+        <li class="nav-item dropdown">
+            <a 
+                class="nav-link text-nowrap" 
+                href="#" 
+                role="button" 
+                id="navbar-dropdown-menu-profile"
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
                 aria-expanded="false"
             >
                 <i class="fas fa-lg fa-users-cog"></i>
-                <span class="d-none d-sm-inline">{{ auth()->user()->short_name }}</span>
             </a>
             <div 
                 class="dropdown-menu dropdown-menu-right" 
-                aria-labelledby="navbar-dropdown-menu-link"
+                aria-labelledby="navbar-dropdown-menu-profile"
             >
                 <h6 class="dropdown-header">
-                    {{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}
+                    {{ trans('icore::auth.hello')}}, {{ auth()->user()->name }}!
                 </h6>
                 <a 
                     class="dropdown-item {{ $isUrl(route('web.profile.edit')) }}" 
