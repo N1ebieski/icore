@@ -107,6 +107,9 @@ class NavbarComposer extends Composer
      */
     public function getCurrentUrlWithLang(string $lang): string
     {
-        return $this->str->replace("/{$this->app->getLocale()}", "/{$lang}", $this->url->full());
+        return $this->str->of($this->url->full())->replaceMatches(
+            '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,6})\/)([a-z]{2})/',
+            '$1' . $lang
+        );
     }
 }

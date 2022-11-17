@@ -65,7 +65,7 @@ class MultiLangComponent extends Component
      * @param string $output
      * @return string|false
      */
-    public function isLang(string $lang, string $output = 'active'): string|false
+    public function isCurrentLang(string $lang, string $output = 'active'): string|false
     {
         return $this->app->getLocale() === $lang ? $output : false;
     }
@@ -77,6 +77,9 @@ class MultiLangComponent extends Component
      */
     public function getCurrentUrlWithLang(string $lang): string
     {
-        return $this->str->replace("/{$this->app->getLocale()}", "/{$lang}", $this->url->full());
+        return $this->str->of($this->url->full())->replaceMatches(
+            '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,6})\/)([a-z]{2})/',
+            '$1' . $lang
+        );
     }
 }

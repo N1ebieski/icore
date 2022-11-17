@@ -12,11 +12,16 @@
 </a>
 <div 
     class="dropdown-menu dropdown-menu-right" 
+    id="dropdown-multi-lang-toggle"
     aria-labelledby="dropdown-multi-lang"
 >
+    <h6 class="dropdown-header">
+        {{ trans('icore::default.lang_toggle') }}:
+    </h6>
     @foreach ($langs as $lang)
     <a 
-        class="dropdown-item {{ $isLang($lang) }}" 
+        class="dropdown-item {{ $isCurrentLang($lang) }}" 
+        data-lang="{{ $lang }}"
         href="{{ $getCurrentUrlWithLang($lang) }}" 
         title="{{ $lang }}"
     >

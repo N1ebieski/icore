@@ -56,5 +56,6 @@ return [
     'current_option' => 'Currently Selected',
     'all' => 'All',
     'admin' => 'admin',
-    'web' => 'web'
+    'web' => 'web',
+    'lang_toggle' => 'Switch language'
 ];
