@@ -1,6 +1,6 @@
 <div class="mb-5" id="row{{ $post->id }}">
-    <div class="d-flex justify-content-between">
-        <h2 class="h5 border-bottom pb-2">
+    <div class="d-flex border-bottom mb-2 justify-content-between">
+        <h2 class="h5">
             <a 
                 href="{{ route('web.post.show', [$post->slug]) }}" 
                 title="{{ $post->title }}"
