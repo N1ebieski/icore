@@ -38,7 +38,7 @@ class Mail extends Mailable
      * @param Lang $lang
      */
     public function __construct(
-        protected MailingEmail $mailingEmail,
+        public MailingEmail $mailingEmail,
         protected URL $url,
         protected Lang $lang
     ) {
