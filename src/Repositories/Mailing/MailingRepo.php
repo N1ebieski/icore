@@ -18,10 +18,10 @@
 
 namespace N1ebieski\ICore\Repositories\Mailing;
 
-use MailingEmail\Sent;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
+use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MailingRepo
