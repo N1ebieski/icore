@@ -78,7 +78,7 @@ class MultiLangComponent extends Component
     public function getCurrentUrlWithLang(string $lang): string
     {
         return $this->str->of($this->url->full())->replaceMatches(
-            '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,6})\/)([a-z]{2})/',
+            '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,7})\/)([a-z]{2})/',
             '$1' . $lang
         );
     }
