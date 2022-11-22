@@ -27,7 +27,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var  string
      */
-    public const VERSION = "8.2.7";
+    public const VERSION = "8.2.8";
 
     /**
      * Register services.
