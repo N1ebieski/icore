@@ -28,7 +28,7 @@ class IndexRequest extends Request
      *
      * @var string
      */
-    protected $method = 'GET';
+    protected $method = 'POST';
 
     /**
      * Undocumented function
