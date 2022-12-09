@@ -64,11 +64,11 @@
             >
                 <i class="fas fa-fw fa-comments"></i>
                 <span> {{ trans('icore::comments.route.index') }} </span>
-                @if ($count = $comments_inactive_count->sum('count'))
+                @if ($count = $commentsInactiveCount->sum('count'))
                 <span class="badge badge-warning">{{ $count }}</span>
                 @endif
-                @if ($count = $comments_reported_count->sum('count'))
-                <span class="badge badge-danger">{{ $comments_reported_count->sum('count') }}</span>
+                @if ($count = $commentsReportedCount->sum('count'))
+                <span class="badge badge-danger">{{ $commentsReportedCount->sum('count') }}</span>
                 @endif
             </a>
             <div class="dropdown-menu" aria-labelledby="comment-dropdown">
@@ -82,7 +82,7 @@
                     style="cursor: pointer;"
                 >
                     {{ trans("icore::comments.{$type}.{$type}") }}
-                    @if ($count = $comments_inactive_count->where('model', $type)->first())
+                    @if ($count = $commentsInactiveCount->where('model', $type)->first())
                     <span>
                         <a 
                             href="{{ route("admin.comment.{$type}.index", ['filter[status]' => Comment\Status::INACTIVE]) }}"
@@ -92,7 +92,7 @@
                         </a>
                     </span>
                     @endif
-                    @if ($count = $comments_reported_count->where('model', $type)->first())
+                    @if ($count = $commentsReportedCount->where('model', $type)->first())
                     <span>
                         <a 
                             href="{{ route("admin.comment.{$type}.index", ['filter[report]' => Report\Reported::ACTIVE]) }}"

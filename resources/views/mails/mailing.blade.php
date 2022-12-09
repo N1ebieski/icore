@@ -14,10 +14,9 @@
 
 {{-- Subcopy --}}
 @isset($subcopy)
-    @slot('subcopy')
-        @component('mail::subcopy')
-            {!! $subcopy !!}
-        @endcomponent
-    @endslot
+@component('mail::subcopy')
+{!! $subcopy !!}
+@endcomponent
 @endisset
+
 @endcomponent

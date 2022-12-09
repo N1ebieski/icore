@@ -10,14 +10,6 @@
 ])
 
 @section('breadcrumb')
-<li class="breadcrumb-item">
-    <a 
-        href="{{ route('admin.home.index') }}" 
-        title="{{ trans('icore::home.route.index') }}"
-    >
-        {{ trans('icore::home.route.index') }}
-    </a>
-</li>
 <li class="breadcrumb-item active" aria-current="page">
     {{ trans('icore::mailings.route.index') }}
 </li>
@@ -65,7 +57,7 @@
                     >
                     <label class="custom-control-label" for="select-all">
                         {{ trans('icore::default.select_all') }}
-                        </label>
+                    </label>
                 </div>
             </div>
         </div>

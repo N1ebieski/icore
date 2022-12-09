@@ -47,8 +47,8 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
-                <div class="d-flex justify-content-between">
-                    <h1 class="h4 border-bottom pb-2">
+                <div class="d-flex border-bottom mb-2 justify-content-between">
+                    <h1 class="h4">
                         @if (!empty($page->icon))
                         <i class="{{ $page->icon }}"></i>
                         @endif

@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Repositories\Mailing;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
+use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MailingRepo
@@ -65,7 +66,15 @@ class MailingRepo
                 return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
-            ->with('emails')
+            ->withCount([
+                'emails',
+                'emails AS emails_success_count' => function (Builder $query) {
+                    return $query->where('sent', Sent::SENT);
+                },
+                'emails AS emails_failed_count' => function (Builder $query) {
+                    return $query->where('sent', Sent::ERROR);
+                }
+            ])
             ->filterPaginate($filter['paginate']);
     }
 }

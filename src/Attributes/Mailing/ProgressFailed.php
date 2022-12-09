@@ -36,9 +36,9 @@ class ProgressFailed
     {
         return new Attribute(
             get: function (): ?int {
-                return $this->mailing->emails->isNotEmpty() ?
+                return $this->mailing?->emails_count > 0 ?
                     (int)round(
-                        ($this->mailing->emails->where('sent', 2)->count() / $this->mailing->emails->count()) * 100,
+                        ($this->mailing->emails_failed_count / $this->mailing->emails_count) * 100,
                         0
                     )
                     : null;
