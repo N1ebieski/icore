@@ -16,31 +16,36 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Providers;
+namespace N1ebieski\ICore\ValueObjects;
 
-use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
+use N1ebieski\ICore\ValueObjects\ValueObject;
 
-class AppServiceProvider extends ServiceProvider
+class Lang extends ValueObject
 {
     /**
-     * Register any application services.
      *
+     * @param string $value
      * @return void
+     * @throws InvalidArgumentException
      */
-    public function register()
+    public function __construct(string $value)
     {
-        $this->app->scoped(\N1ebieski\ICore\Loads\ThemeLoad::class);
+        $this->validate($value);
 
-        $this->app->scoped(\N1ebieski\ICore\Loads\LangLoad::class);
+        $this->value = $value;
     }
 
     /**
-     * Bootstrap any application services.
      *
+     * @param string $value
      * @return void
+     * @throws InvalidArgumentException
      */
-    public function boot()
+    protected function validate(string $value): void
     {
-        //
+        if (strlen($value) !== 2) {
+            throw new \InvalidArgumentException("The given value: '{$value}' must have 2 characters in alpha-2 country code");
+        }
     }
 }

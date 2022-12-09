@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Route\Conversions;
 use Closure;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Foundation\Application as App;
 use N1ebieski\ICore\Route\Conversions\Interfaces\Handler;
 
 class MultiLang implements Handler
@@ -29,11 +30,13 @@ class MultiLang implements Handler
      *
      * @param Str $str
      * @param Config $config
+     * @param App $app
      * @return void
      */
     public function __construct(
         protected Str $str,
-        protected Config $config
+        protected Config $config,
+        protected App $app
     ) {
         //
     }
@@ -73,7 +76,8 @@ class MultiLang implements Handler
     {
         $parsed = parse_url($url);
 
-        $parsed['path'] = '/pl' . ($parsed['path'] ?? '');
+        $parsed['path'] = '/' . $this->app->getLocale() . ($parsed['path'] ?? '');
+        $parsed['query'] = (isset($parsed['query']) ? $parsed['query'] . '&' : '') . 'fallback=true';
 
         return $this->str->buildUrl($parsed);
     }

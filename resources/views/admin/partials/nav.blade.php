@@ -2,7 +2,11 @@
     <a href="#" class="navbar-toggler" role="button" id="sidebar-toggle">
         <span class="navbar-toggler-icon"></span>
     </a>
-    <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
+    <a 
+        href="{{ route('admin.home.index') }}"
+        class="navbar-brand"
+        title="{{ config('app.name') }}"
+    >
         <img 
             src="{{ asset('images/vendor/icore/logo.svg') }}" 
             class="pb-1 pr-1 logo" 

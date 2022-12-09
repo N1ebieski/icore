@@ -41,5 +41,6 @@ return [
         'socialites' => 'Połącz z SocialMedia',
         'tokens' => 'Tokeny API'
     ],
-    'pages' => 'Podstrony'
+    'pages' => 'Podstrony',
+    'pref_lang' => 'Preferowany język'
 ];

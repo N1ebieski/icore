@@ -18,8 +18,11 @@
 
 namespace N1ebieski\ICore\Http\Requests\Web\Profile;
 
+use Illuminate\Validation\Rule;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\ValueObjects\User\Marketing;
 
 class UpdateRequest extends FormRequest
 {
@@ -34,6 +37,20 @@ class UpdateRequest extends FormRequest
     }
 
     /**
+     * [prepareForValidation description]
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->missing('marketing_agreement')) {
+            $this->marge([
+                'marketing_agreement' => Marketing::INACTIVE
+            ]);
+        }
+
+        parent::prepareForValidation();
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -43,14 +60,26 @@ class UpdateRequest extends FormRequest
         /** @var User */
         $user = $this->user();
 
-        return [
-            'name' => [
-                'required',
-                'alpha_dash',
-                'max:255',
-                'unique:users,name, ' . $user->id
+        return array_merge(
+            [
+                'name' => [
+                    'required',
+                    'alpha_dash',
+                    'max:255',
+                    'unique:users,name, ' . $user->id
+                ],
+                'marketing_agreement' => 'bail|nullable|boolean'
             ],
-            'marketing_agreement' => 'bail|nullable|boolean'
-        ];
+            count(Config::get('icore.multi_langs')) > 1 ? [
+                'pref_lang' => [
+                    'bail',
+                    'nullable',
+                    'string',
+                    'min:2',
+                    'max:2',
+                    Rule::in(Config::get('icore.multi_langs'))
+                ]
+            ] : []
+        );
     }
 }

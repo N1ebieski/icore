@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Models;
 
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -139,6 +140,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'status',
         'marketing',
+        'pref_lang',
         'email_verified_at',
         'ip'
     ];
@@ -182,10 +184,24 @@ class User extends Authenticatable implements MustVerifyEmail
         'id' => 'integer',
         'status' => \N1ebieski\ICore\Casts\User\StatusCast::class,
         'marketing' => \N1ebieski\ICore\Casts\User\MarketingCast::class,
+        'pref_lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['pref_lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.

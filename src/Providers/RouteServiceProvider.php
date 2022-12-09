@@ -98,7 +98,7 @@ class RouteServiceProvider extends ServiceProvider
 
         if (count(Config::get('icore.multi_langs')) > 1) {
             $router->prefix('{lang}/' . Config::get('icore.routes.auth.prefix'))
-                ->where(['lang' => '[a-z]{2}']);
+                ->where(['lang' => '(' . implode('|', Config::get('icore.multi_langs')) . ')']);
         }
 
         $router->group(function () {
@@ -134,7 +134,7 @@ class RouteServiceProvider extends ServiceProvider
 
         if (count(Config::get('icore.multi_langs')) > 1) {
             $router->prefix('{lang}/' . Config::get('icore.routes.web.prefix'))
-                ->where(['lang' => '[a-z]{2}']);
+                ->where(['lang' => '(' . implode('|', Config::get('icore.multi_langs')) . ')']);
         }
 
         $router->group(function () {
@@ -176,7 +176,7 @@ class RouteServiceProvider extends ServiceProvider
 
         if (count(Config::get('icore.multi_langs')) > 1) {
             $router->prefix('{lang}/' . Config::get('icore.routes.api.prefix'))
-                ->where(['lang' => '[a-z]{2}']);
+                ->where(['lang' => '(' . implode('|', Config::get('icore.multi_langs')) . ')']);
         }
 
         $router->group(function () {
@@ -223,7 +223,7 @@ class RouteServiceProvider extends ServiceProvider
 
         if (count(Config::get('icore.multi_langs')) > 1) {
             $router->prefix('{lang}/' . Config::get('icore.routes.admin.prefix'))
-                ->where(['lang' => '[a-z]{2}']);
+                ->where(['lang' => '(' . implode('|', Config::get('icore.multi_langs')) . ')']);
         }
 
         $router->group(function () {

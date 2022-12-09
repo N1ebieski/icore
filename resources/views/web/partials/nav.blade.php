@@ -1,6 +1,10 @@
 @section('logo')
 <div id="navbar-logo" class="flex-grow-1 mr-2">
-    <a href="/" class="navbar-brand" title="{{ config('app.name') }}">
+    <a 
+        href="{{ route('web.home.index') }}" 
+        class="navbar-brand" 
+        title="{{ config('app.name') }}"
+    >
         <img 
             src="{{ asset('images/vendor/icore/logo.svg') }}" 
             class="pb-1 logo" 
@@ -88,7 +92,7 @@
                 @endif
                 @if (count(config('icore.multi_langs')) > 1)
                 <li class="nav-item dropdown">
-                    <x-icore::lang.multi-lang-component />
+                    <x-icore::multi-lang-component />
                 </li>
                 @endif
                 @if (count(config('icore.multi_themes')) > 1)

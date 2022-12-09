@@ -78,10 +78,9 @@ class UserService
                 $this->user->syncRoles(array_merge($attributes['roles'] ?? [], ['user']));
             }
 
-            $this->user->update([
-                'name' => $attributes['name'],
-                'email' => $attributes['email']
-            ]);
+            $this->user->fill($attributes);
+
+            $this->user->save();
 
             return $this->user;
         });

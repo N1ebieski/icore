@@ -19,13 +19,33 @@
 namespace N1ebieski\ICore\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
+use N1ebieski\ICore\Loads\LangLoad;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 
 class MultiLang
 {
+    /**
+     *
+     * @var Request
+     */
+    protected Request $request;
+
+    /**
+     *
+     * @param LangLoad $load
+     * @return void
+     */
+    public function __construct(protected LangLoad $load)
+    {
+        //
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -35,20 +55,40 @@ class MultiLang
      */
     public function handle(Request $request, Closure $next)
     {
+        $this->request = $request;
+
         if (count(Config::get('icore.multi_langs')) > 1) {
-            /** @var string */
-            $lang = $request->route('lang') ?? Config::get('app.locale');
+            if ($request->has('fallback')) {
+                return Response::redirectTo(
+                    $this->getCurrentUrlWithLang($this->load->getPrefLang()),
+                    HttpResponse::HTTP_MOVED_PERMANENTLY
+                );
+            }
 
-            Config::set('app.locale', $lang);
+            Config::set('app.locale', $this->load->getLang());
 
-            App::setLocale($lang);
+            App::setLocale($this->load->getLang());
 
-            URL::defaults(['lang' => $lang]);
+            URL::defaults(['lang' => $this->load->getLang()]);
 
             // @phpstan-ignore-next-line
             $request->route()->forgetParameter('lang');
         }
 
         return $next($request);
+    }
+
+    /**
+     *
+     * @param string $lang
+     * @return string
+     */
+    public function getCurrentUrlWithLang(string $lang): string
+    {
+        return Str::of($this->request->fullUrlWithoutQuery('fallback'))
+            ->replaceMatches(
+                '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,7})\/)([a-z]{2})/',
+                '$1' . $lang
+            );
     }
 }

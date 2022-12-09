@@ -121,10 +121,7 @@ class ProfileController
         /** @var User */
         $user = $request->user();
 
-        $user->update([
-            'name' => $request->input('name'),
-            'marketing' => $request->input('marketing_agreement') ?? Marketing::inactive()
-        ]);
+        $user->makeService()->update($request->validated());
 
         return Response::redirectToRoute('web.profile.edit')->with(
             'success',

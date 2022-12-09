@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\View\Components\Lang;
+namespace N1ebieski\ICore\View\Components;
 
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
@@ -53,7 +53,7 @@ class MultiLangComponent extends Component
      */
     public function render(): View
     {
-        return $this->view->make('icore::web.components.lang.multi_lang', [
+        return $this->view->make('icore::web.components.multi_lang', [
             'langs' => $this->config->get('icore.multi_langs'),
             'currentLang' => $this->app->getLocale()
         ]);
