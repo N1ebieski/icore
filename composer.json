@@ -7,6 +7,7 @@
         "php": "^8.0.2",
         "cviebrock/eloquent-sluggable": "^9.0",
         "cviebrock/eloquent-taggable": "^9.0",
+        "divineomega/php-countries": "^2.3",        
         "franzose/closure-table": "6.1.1",
         "google/cloud-translate": "^1.12",
         "guzzlehttp/guzzle": "^7.2",
@@ -27,7 +28,9 @@
         "fico7489/laravel-pivot": "^3.0",
         "spatie/laravel-view-models": "^1.5",
         "alexusmai/laravel-file-manager": "3.0.3+icore",
-        "doctrine/dbal": "^2.12"
+        "doctrine/dbal": "^2.12",
+        "torann/geoip": "^3.0",
+        "whitecube/lingua": "^1.1"        
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

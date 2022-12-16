@@ -25,13 +25,6 @@ interface Handler
     /**
      *
      * @param string $url
-     * @return bool
-     */
-    public function verify(string $url): bool;
-
-    /**
-     *
-     * @param string $url
      * @param Closure $next
      * @return mixed
      */

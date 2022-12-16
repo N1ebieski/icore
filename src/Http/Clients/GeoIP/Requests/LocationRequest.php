@@ -16,33 +16,35 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Providers;
+namespace N1ebieski\ICore\Http\Clients\GeoIP\Requests;
 
-use Illuminate\Support\ServiceProvider;
+use Exception;
+use Torann\GeoIP\GeoIP;
+use Torann\GeoIP\Location;
+use N1ebieski\ICore\Http\Clients\Request;
 
-class AppServiceProvider extends ServiceProvider
+class LocationRequest extends Request
 {
     /**
-     * Register any application services.
      *
+     * @param array $parameters
+     * @param GeoIP $geoIp
      * @return void
      */
-    public function register()
-    {
-        $this->app->scoped(\N1ebieski\ICore\Loads\ThemeLoad::class);
-
-        $this->app->scoped(\N1ebieski\ICore\Loads\LangLoad::class);
-
-        $this->app->scoped(\Torann\GeoIP\GeoIP::class, 'geoip');
+    public function __construct(
+        protected array $parameters,
+        protected GeoIP $geoIp
+    ) {
+        $this->setParameters($parameters);
     }
 
     /**
-     * Bootstrap any application services.
      *
-     * @return void
+     * @return Location
+     * @throws Exception
      */
-    public function boot()
+    public function makeRequest(): Location
     {
-        //
+        return $this->geoIp->getLocation($this->get('ip'));
     }
 }

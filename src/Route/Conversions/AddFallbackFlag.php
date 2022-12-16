@@ -20,36 +20,22 @@ namespace N1ebieski\ICore\Route\Conversions;
 
 use Closure;
 use Illuminate\Support\Str;
-use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Contracts\Foundation\Application as App;
+use Illuminate\Http\Request;
 use N1ebieski\ICore\Route\Conversions\Interfaces\Handler;
 
-class MultiLang implements Handler
+class AddFallbackFlag implements Handler
 {
     /**
      *
+     * @param Request $request
      * @param Str $str
-     * @param Config $config
-     * @param App $app
      * @return void
      */
     public function __construct(
-        protected Str $str,
-        protected Config $config,
-        protected App $app
+        protected Request $request,
+        protected Str $str
     ) {
         //
-    }
-
-    /**
-     *
-     * @param string $url
-     * @return bool
-     */
-    public function verify(string $url): bool
-    {
-        return count($this->config->get('icore.multi_langs')) > 1
-            && empty($this->str->match('/\/([a-z]{2})(?:$|\/)/', $url));
     }
 
     /**
@@ -60,8 +46,8 @@ class MultiLang implements Handler
      */
     public function handle(string $url, Closure $next): mixed
     {
-        if ($this->verify($url)) {
-            return $this->addLangToUrl($url);
+        if (!$this->request->has('fallback')) {
+            return $this->addFallbackToUrl($url);
         }
 
         return $next($url);
@@ -72,11 +58,11 @@ class MultiLang implements Handler
      * @param string $url
      * @return string
      */
-    protected function addLangToUrl(string $url): string
+    protected function addFallbackToUrl(string $url): string
     {
         $parsed = parse_url($url);
 
-        $parsed['path'] = '/' . $this->app->getLocale() . ($parsed['path'] ?? '');
+        $parsed['query'] = (isset($parsed['query']) ? $parsed['query'] . '&' : '') . 'fallback=true';
 
         return $this->str->buildUrl($parsed);
     }

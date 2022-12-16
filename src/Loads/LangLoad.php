@@ -18,8 +18,13 @@
 
 namespace N1ebieski\ICore\Loads;
 
+use Exception;
 use Illuminate\Http\Request;
+use N1ebieski\ICore\Http\Clients\GeoIP\GeoIPClient;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Cookie\QueueingFactory as Cookie;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
 
 class LangLoad
 {
@@ -31,19 +36,20 @@ class LangLoad
 
     /**
      *
-     * @var null|string
-     */
-    protected ?string $pref_lang;
-
-    /**
-     *
      * @param Config $config
      * @param Request $request
+     * @param Cookie $cookie
+     * @param GeoIPClient $client
      * @return void
+     * @throws ConflictingHeadersException
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function __construct(
         protected Config $config,
-        protected Request $request
+        protected Request $request,
+        protected Cookie $cookie,
+        protected GeoIPClient $client
     ) {
         $this->lang = $this->config->get('app.locale');
 
@@ -53,22 +59,6 @@ class LangLoad
                 && in_array($this->request->route('lang'), $this->config->get('icore.multi_langs'))
             ) {
                 $this->lang = $this->request->route('lang');
-            }
-
-            $this->pref_lang = $this->lang;
-
-            if (
-                $this->request->user()
-                && in_array($this->request->user()->pref_lang->getValue(), $this->config->get('icore.multi_langs'))
-            ) {
-                $this->pref_lang = $this->request->user()->pref_lang->getValue();
-            }
-
-            if (
-                $this->request->cookie('lang_toggle')
-                && in_array($this->request->cookie('lang_toggle'), $this->config->get('icore.multi_langs'))
-            ) {
-                $this->pref_lang = $this->request->cookie('lang_toggle');
             }
         }
     }
@@ -88,6 +78,33 @@ class LangLoad
      */
     public function getPrefLang(): ?string
     {
-        return $this->pref_lang;
+        if (
+            $this->request->user()
+            && in_array($this->request->user()->pref_lang->getValue(), $this->config->get('icore.multi_langs'))
+        ) {
+            return $this->request->user()->pref_lang->getValue();
+        } elseif (
+            $this->request->cookie('lang_toggle')
+            && in_array($this->request->cookie('lang_toggle'), $this->config->get('icore.multi_langs'))
+        ) {
+            return $this->request->cookie('lang_toggle');
+        } elseif (
+            ($client = $this->client->location(['ip' => $this->request->ip()]))
+            && $client->get('default') === false
+            && is_string($client->get('language'))
+            && in_array($client->get('language'), $this->config->get('icore.multi_langs'))
+        ) {
+            $this->cookie->queue(
+                $this->cookie->forever(
+                    name: 'lang_toggle',
+                    value: $client->get('language'),
+                    httpOnly: false
+                )
+            );
+
+            return $client->get('language');
+        }
+
+        return $this->getLang();
     }
 }
