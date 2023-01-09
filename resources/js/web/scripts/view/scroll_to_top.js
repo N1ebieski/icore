@@ -15,7 +15,7 @@
  */
 
 $(document).on('scroll.n1ebieski/icore/web/scripts/view/scroll_to_top@init', function () {
-    let  scrollDistance = $(this).scrollTop();
+    let scrollDistance = $(this).scrollTop();
 
     if (scrollDistance > 100) {
         $('.scroll-to-top').fadeIn();

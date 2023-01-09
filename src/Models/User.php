@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Models;
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\ValueObjects\Lang;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,6 +51,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property string $name
  * @property Status $status
  * @property Marketing $marketing
+ * @property Lang $pref_lang
  * @method \N1ebieski\ICore\Models\Token\PersonalAccessToken currentAccessToken()
  * @property int $id
  * @property string|null $ip

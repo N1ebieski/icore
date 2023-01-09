@@ -131,9 +131,7 @@ class CategoryService
     {
         return $this->db->transaction(function () use ($attributes) {
             if ($attributes['parent_id'] !== null) {
-                /**
-                 * @var Category $parent
-                 */
+                /** @var Category $parent */
                 $parent = $this->category->find($attributes['parent_id']);
             }
 

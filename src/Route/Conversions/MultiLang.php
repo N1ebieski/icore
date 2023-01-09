@@ -74,6 +74,7 @@ class MultiLang implements Handler
      */
     protected function addLangToUrl(string $url): string
     {
+        /** @var array */
         $parsed = parse_url($url);
 
         $parsed['path'] = '/' . $this->app->getLocale() . ($parsed['path'] ?? '');

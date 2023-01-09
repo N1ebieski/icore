@@ -58,6 +58,7 @@ class LangLoad
                 $this->request->route('lang')
                 && in_array($this->request->route('lang'), $this->config->get('icore.multi_langs'))
             ) {
+                // @phpstan-ignore-next-line
                 $this->lang = $this->request->route('lang');
             }
         }
@@ -74,23 +75,29 @@ class LangLoad
 
     /**
      *
-     * @return null|string
+     * @return string
      */
-    public function getPrefLang(): ?string
+    public function getPrefLang(): string
     {
         if (
             $this->request->user()
             && in_array($this->request->user()->pref_lang->getValue(), $this->config->get('icore.multi_langs'))
         ) {
             return $this->request->user()->pref_lang->getValue();
-        } elseif (
+        }
+
+        if (
             $this->request->cookie('lang_toggle')
             && in_array($this->request->cookie('lang_toggle'), $this->config->get('icore.multi_langs'))
         ) {
+            /** @var string */
             return $this->request->cookie('lang_toggle');
-        } elseif (
-            ($client = $this->client->location(['ip' => $this->request->ip()]))
-            && $client->get('default') === false
+        }
+
+        $client = $this->client->location(['ip' => $this->request->ip()]);
+
+        if (
+            $client->get('default') === false
             && is_string($client->get('language'))
             && in_array($client->get('language'), $this->config->get('icore.multi_langs'))
         ) {

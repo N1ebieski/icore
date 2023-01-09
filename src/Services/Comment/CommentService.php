@@ -180,6 +180,7 @@ class CommentService
      */
     protected function paginateChildrens(LengthAwarePaginator $collection): LengthAwarePaginator
     {
+        // @phpstan-ignore-next-line
         $collection->map(function ($item) {
             $item->setRelation(
                 'childrens',

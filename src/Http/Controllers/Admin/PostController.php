@@ -28,7 +28,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;

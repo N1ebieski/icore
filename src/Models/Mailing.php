@@ -48,7 +48,9 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\MailingEmail\MailingEmail[] $emails
- * @property-read int|null $emails_count
+ * @property-read int $emails_count
+ * @property-read int $emails_success_count
+ * @property-read int $emails_failed_count
  * @property-read string $activation_at_diff
  * @property-read string $created_at_diff
  * @property-read int|null $progress_failed

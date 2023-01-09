@@ -42,7 +42,7 @@ class UpdateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         if ($this->missing('marketing_agreement')) {
-            $this->marge([
+            $this->merge([
                 'marketing_agreement' => Marketing::INACTIVE
             ]);
         }

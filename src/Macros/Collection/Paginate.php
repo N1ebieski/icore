@@ -37,7 +37,7 @@ class Paginate extends Collection
          * @param int $total
          * @param int $page
          * @param string $pageName
-         * @return array
+         * @return LengthAwarePaginator
          */
         return function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
