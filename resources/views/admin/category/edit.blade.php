@@ -13,9 +13,56 @@
     data-id="{{ $category->id }}" 
     id="edit-category"
 >
+    @if (count(config('icore.multi_langs')) > 1)
+    <div class="form-group">
+        <label for="lang">
+            <span>{{ trans('icore::multi_langs.lang') }} / {{ trans('icore::multi_langs.progress.label') }}:</span>
+            <i 
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="{{ trans('icore::multi_langs.progress.tooltip') }}"
+                class="far fa-question-circle"
+            ></i>            
+        </label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <select 
+                    class="selectpicker select-picker edit-lang" 
+                    data-style="border"
+                    data-width="100%"
+                    data-target="#edit-modal"
+                    id="lang"
+                >
+                    @foreach (config('icore.multi_langs') as $lang)
+                    <option
+                        data-content='<span class="fi fil-{{ $lang }}"></span> <span>{{ mb_strtoupper($lang) }}</span>'
+                        value="{{ route('admin.category.edit', ['lang' => $lang, 'category' => $category->id]) }}"
+                        {{ config('app.locale') === $lang ? 'selected' : '' }}
+                    >
+                        {{ $lang }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <input
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                class="form-control"
+                id="progress"
+                name="progress"
+                value="{{ $category->current_lang->progress }}"
+            >
+            <div class="input-group-append">
+                <span class="input-group-text">%</span>
+            </div>            
+        </div>
+    </div>
+    @endif
     <div class="form-group">
         <label for="name">
-            {{ trans('icore::categories.name') }}
+            {{ trans('icore::categories.name') }}:
         </label>
         <input 
             type="text" value="{{ $category->name }}" 
@@ -26,7 +73,7 @@
     </div>
     <div class="form-group">
         <label for="icon">
-            <span>{{ trans('icore::categories.icon.label') }}</span> 
+            <span>{{ trans('icore::categories.icon.label') }}:</span> 
             <i 
                 data-toggle="tooltip" 
                 data-placement="top" 
@@ -45,7 +92,7 @@
     </div>
     <div class="form-group">
         <label for="parent_id">
-            {{ trans('icore::categories.parent_id') }}
+            {{ trans('icore::categories.parent_id') }}:
         </label>
         <select 
             id="parent_id"            
@@ -58,6 +105,7 @@
             data-abs-ajax-url="{{ route("api.category.{$category->poli}.index") }}"
             data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
             data-abs-filter-except="{{ json_encode($category->descendants->pluck('id')->toArray()) }}"
+            data-lang="{{ config('app.locale') }}"
             data-style="border"
             data-width="100%"
             data-container="body"
@@ -69,12 +117,12 @@
                 @if ($category->parent !== null)
                 <option 
                     @if ($category->parent->ancestors->isNotEmpty())
-                    data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->parent->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $category->parent->name }}'
+                    data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->parent->ancestors->pluck('name')->map(fn ($item) => $item ?? trans('icore::multi_langs.no_trans'))->toArray()) }} &raquo; </small>{{ $category->parent->name ?? trans('icore::multi_langs.no_trans') }}'
                     @endif
                     value="{{ $category->parent->id }}" 
                     selected
                 >
-                    {{ $category->parent->name }}
+                    {{ $category->parent->name ?? trans('icore::multi_langs.no_trans') }}
                 </option>
                 @endif
             </optgroup>

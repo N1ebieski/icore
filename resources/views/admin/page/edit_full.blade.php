@@ -232,6 +232,7 @@
                         data-abs-max-options-length="10"
                         data-abs-text-attr="name"
                         data-abs-ajax-url="{{ route('api.user.index') }}"
+                        data-lang="{{ config('app.locale') }}"
                         data-style="border"
                         data-width="100%"
                         name="user"
@@ -257,6 +258,7 @@
                         data-live-search="true"
                         data-style="border"
                         data-width="100%"
+                        data-lang="{{ config('app.locale') }}"
                         name="parent_id"
                         id="parent_id"
                     >

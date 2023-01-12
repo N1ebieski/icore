@@ -16,20 +16,20 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Database\Factories\Category;
+namespace N1ebieski\ICore\Database\Factories\CategoryLang;
 
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\ValueObjects\Category\Status;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\CategoryLang\CategoryLang;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoryFactory extends Factory
+class CategoryLangFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var class-string<Category>
+     * @var class-string<Model>
      */
-    protected $model = Category::class;
+    protected $model = CategoryLang::class;
 
     /**
      * Define the model's default state.
@@ -39,7 +39,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'status' => rand(Status::INACTIVE, Status::ACTIVE)
+            'name' => ucfirst($this->faker->word)
         ];
     }
 
@@ -48,11 +48,11 @@ class CategoryFactory extends Factory
      *
      * @return static
      */
-    public function active()
+    public function sentence()
     {
         return $this->state(function () {
             return [
-                'status' => Status::ACTIVE
+                'name' => ucfirst($this->faker->word . ' ' . $this->faker->word)
             ];
         });
     }

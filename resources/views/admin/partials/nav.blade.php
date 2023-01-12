@@ -28,7 +28,7 @@
                 aria-expanded="false"
             >
                 <span class="fi fil-{{ $currentLang }}"></span>
-                <span>{{ mb_strtoupper($currentLang) }}</span>
+                <span class="d-sm-inline d-none">{{ mb_strtoupper($currentLang) }}</span>
             </a>
             <div 
                 class="dropdown-menu dropdown-menu-right" 

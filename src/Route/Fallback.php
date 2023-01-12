@@ -49,10 +49,6 @@ class Fallback
                 return App::abort(HttpResponse::HTTP_NOT_FOUND);
             }
 
-            $newUrl = $pipeline->send($newUrl)
-                ->through(\N1ebieski\ICore\Route\Conversions\AddFallbackFlag::class)
-                ->thenReturn();
-
             return Response::redirectTo($newUrl, HttpResponse::HTTP_MOVED_PERMANENTLY);
         };
     }

@@ -60,7 +60,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         \N1ebieski\ICore\Listeners\Stat\Post\IncrementView::class,
-        \N1ebieski\ICore\Listeners\Stat\Page\IncrementView::class,
+        \N1ebieski\ICore\Listeners\Stat\Page\IncrementView::class
     ];
 
     /**

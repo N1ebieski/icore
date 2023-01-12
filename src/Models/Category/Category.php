@@ -19,9 +19,10 @@
 namespace N1ebieski\ICore\Models\Category;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
-use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Query\JoinClause;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -29,6 +30,7 @@ use N1ebieski\ICore\Cache\Category\CategoryCache;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\Category\CategoryService;
 use N1ebieski\ICore\Repositories\Category\CategoryRepo;
@@ -51,6 +53,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property string $name
  * @property int $parent_id
  * @property int $position
+ * @property CategoryLang $current_lang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Category[] $ancestors
@@ -150,7 +153,6 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  */
 class Category extends Entity
 {
-    use Sluggable;
     use HasFilterable;
     use HasFullTextSearchable;
     use HasPolymorphic;
@@ -188,7 +190,7 @@ class Category extends Entity
      *
      * @var array<string>
      */
-    protected $fillable = ['name', 'icon', 'status'];
+    protected $fillable = ['icon', 'status'];
 
     /**
      * The columns of the full text index
@@ -272,6 +274,16 @@ class Category extends Entity
      *
      * @return HasMany
      */
+    public function langs(): HasMany
+    {
+        return $this->hasMany(\N1ebieski\ICore\Models\CategoryLang\CategoryLang::class);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return HasMany
+     */
     public function childrens(): HasMany
     {
         return $this->hasMany(static::class, 'parent_id');
@@ -311,13 +323,21 @@ class Category extends Entity
      */
     public function scopeWithRecursiveAllRels(Builder $query): Builder
     {
+        /** @var CategoryLang */
+        $categoryLang = $this->langs()->make();
+
         return $query->with([
-            'childrensRecursiveWithAllRels' => function ($query) {
-                $query->withCount([
+            'childrensRecursiveWithAllRels' => function ($query) use ($categoryLang) {
+                return $query->join($categoryLang->getTable(), function (JoinClause $join) use ($categoryLang) {
+                    return $join->on("{$this->getTable()}.{$this->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
+                        ->where("{$categoryLang->getTable()}.lang", Config::get('app.locale'));
+                })
+                ->withCount([
                     'morphs' => function ($query) {
                         $query->active();
                     }
                 ])
+                ->with('langs')
                 ->active()
                 ->orderBy('position', 'asc');
             }
@@ -358,6 +378,36 @@ class Category extends Entity
     }
 
     // Attributes
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function currentLang(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Category\CurrentLang::class, [
+            'category' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function name(): Attribute
+    {
+        return new Attribute(fn (): ?string => $this->current_lang?->name);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function slug(): Attribute
+    {
+        return new Attribute(fn (): ?string => $this->current_lang?->slug);
+    }
 
     /**
      *

@@ -19,10 +19,12 @@
 namespace N1ebieski\ICore\Route\Conversions;
 
 use Closure;
+use Exception;
 use Illuminate\Support\Str;
+use N1ebieski\ICore\Loads\LangLoad;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Contracts\Foundation\Application as App;
 use N1ebieski\ICore\Route\Conversions\Interfaces\Handler;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class MultiLang implements Handler
 {
@@ -30,15 +32,30 @@ class MultiLang implements Handler
      *
      * @param Str $str
      * @param Config $config
-     * @param App $app
+     * @param LangLoad $load
      * @return void
      */
     public function __construct(
         protected Str $str,
         protected Config $config,
-        protected App $app
+        protected LangLoad $load
     ) {
         //
+    }
+
+    /**
+     *
+     * @param string $url
+     * @return string
+     * @throws BindingResolutionException
+     * @throws Exception
+     */
+    protected function getLangForUrl(string $url): string
+    {
+        /** @var array */
+        $parsed = parse_url($url);
+
+        return empty($parsed['path']) ? $this->load->getPrefLang() : $this->load->getLang();
     }
 
     /**
@@ -77,7 +94,7 @@ class MultiLang implements Handler
         /** @var array */
         $parsed = parse_url($url);
 
-        $parsed['path'] = '/' . $this->app->getLocale() . ($parsed['path'] ?? '');
+        $parsed['path'] = '/' . $this->getLangForUrl($url) . ($parsed['path'] ?? '');
 
         return $this->str->buildUrl($parsed);
     }

@@ -20,12 +20,11 @@ namespace N1ebieski\ICore\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
 use N1ebieski\ICore\Loads\LangLoad;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
 
-class MultiLang
+class SetMultiLangCookie
 {
     /**
      *
@@ -46,15 +45,18 @@ class MultiLang
      */
     public function handle(Request $request, Closure $next)
     {
-        if (count(Config::get('icore.multi_langs')) > 1) {
-            Config::set('app.locale', $this->load->getLang());
-
-            App::setLocale($this->load->getLang());
-
-            URL::defaults(['lang' => $this->load->getLang()]);
-
-            // @phpstan-ignore-next-line
-            $request->route()->forgetParameter('lang');
+        if (
+            count(Config::get('icore.multi_langs')) > 1
+            && !$request->cookie('lang_toggle')
+            && is_string($this->load->getLangFromUser())
+        ) {
+            Cookie::queue(
+                Cookie::forever(
+                    name: 'lang_toggle',
+                    value: $this->load->getLangFromUser(),
+                    httpOnly: false
+                )
+            );
         }
 
         return $next($request);

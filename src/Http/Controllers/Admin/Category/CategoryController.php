@@ -173,7 +173,7 @@ class CategoryController implements Polymorphic
      */
     public function update(Category $category, UpdateRequest $request): JsonResponse
     {
-        $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
+        $category->makeService()->update($request->validated());
 
         return Response::json([
             'view' => View::make('icore::admin.category.partials.category', [
