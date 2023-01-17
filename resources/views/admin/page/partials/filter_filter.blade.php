@@ -60,6 +60,7 @@
         data-style="border"
         data-width="100%"
         data-container="body"
+        data-lang="{{ config('app.locale') }}"
     >
         <option value="">
             {{ trans('icore::filter.default') }}

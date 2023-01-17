@@ -161,7 +161,7 @@ class SocialiteTest extends TestCase
         $this->assertTrue(!empty($userExist));
 
         $this->assertDatabaseHas('socialites', [
-            'user_id' => $userExist?->id,
+            'user_id' => $userExist->id,
             'provider_name' => self::PROVIDER,
             'provider_id' => 343242342
         ]);

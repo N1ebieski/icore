@@ -31,6 +31,7 @@
                     data-style="border"
                     data-width="100%"
                     data-target="#edit-modal"
+                    data-lang="{{ config('app.locale') }}"
                     id="lang"
                 >
                     @foreach (config('icore.multi_langs') as $lang)
@@ -59,6 +60,22 @@
             </div>            
         </div>
     </div>
+    <div class="form-group">
+        <div class="custom-control custom-switch">
+            <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+            <input 
+                type="checkbox" 
+                class="custom-control-input" 
+                id="auto_translate" 
+                name="auto_translate"
+                value="{{ AutoTranslate::ACTIVE }}" 
+                {{ $category->auto_translate->isActive() ? 'checked' : '' }}
+            >
+            <label class="custom-control-label" for="auto_translate">
+                {{ trans('icore::multi_langs.auto_trans') }}?
+            </label>
+        </div>
+    </div>    
     @endif
     <div class="form-group">
         <label for="name">

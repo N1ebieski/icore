@@ -271,6 +271,7 @@
                         data-style="border"
                         data-width="100%"
                         data-max-options="{{ $maxCategories }}"
+                        data-lang="{{ config('app.locale') }}"
                         multiple
                         name="categories[]"
                         id="categories"

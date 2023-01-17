@@ -19,10 +19,10 @@
 namespace N1ebieski\ICore\Models\Category;
 
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -33,10 +33,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\Category\CategoryService;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Repositories\Category\CategoryRepo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
+use N1ebieski\ICore\Models\Traits\HasFixForMultiLangClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
 
@@ -45,6 +47,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  *
  * @property int $real_depth
  * @property Status $status
+ * @property AutoTranslate $auto_translate
  * @property int $siblings_count
  * @property int $id
  * @property string $model_type
@@ -71,6 +74,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property-read int $real_position
  * @property-read string $updated_at_diff
  * @property-read Category|null $parent
+ * @method static Builder|Category multiLang()
  * @method static Builder|Category active()
  * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])
  * @method static \Illuminate\Database\Eloquent\Relations\MorphToMany|Builder morphs()
@@ -158,8 +162,10 @@ class Category extends Entity
     use HasPolymorphic;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
     use HasFixForRealDepthClosureTable;
     use HasFixForPolymorphicClosureTable;
+    use HasFixForMultiLangClosureTable;
 
     // Configuration
 
@@ -190,7 +196,7 @@ class Category extends Entity
      *
      * @var array<string>
      */
-    protected $fillable = ['icon', 'status'];
+    protected $fillable = ['icon', 'status', 'auto_translate'];
 
     /**
      * The columns of the full text index
@@ -207,6 +213,7 @@ class Category extends Entity
     protected $casts = [
         'id' => 'integer',
         'status' => \N1ebieski\ICore\Casts\Category\StatusCast::class,
+        'auto_translate' => \N1ebieski\ICore\Casts\AutoTranslateCast::class,
         'parent_id' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
@@ -215,26 +222,13 @@ class Category extends Entity
     ];
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
-    }
-
-    /**
      * The model's default values for attributes.
      *
      * @var array
      */
     protected $attributes = [
         'status' => Status::ACTIVE,
+        'auto_translate' => AutoTranslate::INACTIVE
     ];
 
     /**
@@ -274,16 +268,6 @@ class Category extends Entity
      *
      * @return HasMany
      */
-    public function langs(): HasMany
-    {
-        return $this->hasMany(\N1ebieski\ICore\Models\CategoryLang\CategoryLang::class);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return HasMany
-     */
     public function childrens(): HasMany
     {
         return $this->hasMany(static::class, 'parent_id');
@@ -296,9 +280,6 @@ class Category extends Entity
      */
     public function childrensRecursiveWithAllRels(): HasMany
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
         return $this->childrens()->withRecursiveAllRels();
     }
 
@@ -311,8 +292,8 @@ class Category extends Entity
      */
     public function scopeWithAncestorsExceptSelf(Builder $query): Builder
     {
-        return $query->with(['ancestors' => function ($q) {
-            $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+        return $query->with(['ancestors' => function (BelongsToMany|Builder $query) {
+            return $query->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
 
@@ -323,23 +304,16 @@ class Category extends Entity
      */
     public function scopeWithRecursiveAllRels(Builder $query): Builder
     {
-        /** @var CategoryLang */
-        $categoryLang = $this->langs()->make();
-
         return $query->with([
-            'childrensRecursiveWithAllRels' => function ($query) use ($categoryLang) {
-                return $query->join($categoryLang->getTable(), function (JoinClause $join) use ($categoryLang) {
-                    return $join->on("{$this->getTable()}.{$this->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
-                        ->where("{$categoryLang->getTable()}.lang", Config::get('app.locale'));
-                })
-                ->withCount([
-                    'morphs' => function ($query) {
-                        $query->active();
-                    }
-                ])
-                ->with('langs')
-                ->active()
-                ->orderBy('position', 'asc');
+            'childrensRecursiveWithAllRels' => function (HasMany|Builder|Category $query) {
+                return $query->multiLang()
+                    ->withCount([
+                        'morphs' => function (MorphToMany|Builder|Category $query) {
+                            return $query->active();
+                        }
+                    ])
+                    ->active()
+                    ->orderBy('position', 'asc');
             }
         ]);
     }
@@ -382,22 +356,11 @@ class Category extends Entity
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
-     */
-    public function currentLang(): Attribute
-    {
-        return App::make(\N1ebieski\ICore\Attributes\Category\CurrentLang::class, [
-            'category' => $this
-        ])();
-    }
-
-    /**
-     *
-     * @return Attribute
      */
     public function name(): Attribute
     {
-        return new Attribute(fn (): ?string => $this->current_lang?->name);
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->current_lang->name);
     }
 
     /**
@@ -406,7 +369,8 @@ class Category extends Entity
      */
     public function slug(): Attribute
     {
-        return new Attribute(fn (): ?string => $this->current_lang?->slug);
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->current_lang->slug);
     }
 
     /**
@@ -426,8 +390,8 @@ class Category extends Entity
      */
     public function loadAncestorsExceptSelf(): self
     {
-        return $this->load(['ancestors' => function ($q) {
-            $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+        return $this->load(['ancestors' => function (BelongsToMany|Builder $query) {
+            return $query->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
 

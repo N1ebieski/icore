@@ -22,6 +22,7 @@ return [
     'register_with' => 'Zarejestruj się przez',
     'warning' => [
         'no_email' => 'Nie mogliśmy zarejestrować Cię używając danych od :provider. Upewnij się, że zezwalasz na udostępnianie nam swojego adresu e-mail w ustawieniach swojego konta w :provider (zakładka Aplikacje) lub wykonaj pełną rejestrację w formularzu poniżej.',
+        'no_name' => 'Nie mogliśmy zarejestrować Cię używając danych od :provider. Upewnij się, że zezwalasz na udostępnianie nam swojej nazwu użytkownika w ustawieniach swojego konta w :provider (zakładka Aplikacje) lub wykonaj pełną rejestrację w formularzu poniżej.',
         'email_exist' => 'Istnieje już zarejestrowane konto na podany adres e-mail. Połącz swoje konto z :provider z poziomu edycji profilu po zalogowaniu.'
     ],
     'success' => [

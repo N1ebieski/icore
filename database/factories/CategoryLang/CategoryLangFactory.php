@@ -19,8 +19,8 @@
 namespace N1ebieski\ICore\Database\Factories\CategoryLang;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CategoryLang\CategoryLang;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 
 class CategoryLangFactory extends Factory
 {

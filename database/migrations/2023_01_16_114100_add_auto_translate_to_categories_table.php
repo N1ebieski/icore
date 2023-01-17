@@ -16,37 +16,39 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Category;
-
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 
-class CurrentLang
+// phpcs:ignore
+class AddAutoTranslateToCategoriesTable extends Migration
 {
     /**
+     * Run the migrations.
      *
-     * @param Category $category
      * @return void
      */
-    public function __construct(protected Category $category)
+    public function up()
     {
-        //
+        $category = new Category();
+
+        Schema::table($category->getTable(), function (Blueprint $table) {
+            $table->boolean('auto_translate')->unsigned()->default(0)->after('status');
+        });
     }
 
     /**
+     * Reverse the migrations.
      *
-     * @return Attribute
+     * @return void
      */
-    public function __invoke(): Attribute
+    public function down()
     {
-        return new Attribute(
-            get: function (): CategoryLang {
-                $categoryLang = $this->category->langs->firstWhere('lang', Config::get('app.locale'));
+        $category = new Category();
 
-                return $categoryLang ?? $this->category->langs()->make();
-            }
-        );
+        Schema::table($category->getTable(), function (Blueprint $table) {
+            $table->dropColumn('auto_translate');
+        });
     }
 }

@@ -264,6 +264,7 @@
                         data-abs-ajax-url="{{ route('api.user.index') }}"
                         data-style="border"
                         data-width="100%"
+                        data-lang="{{ config('app.locale') }}"
                         name="user"
                         id="user"
                     >
@@ -298,6 +299,7 @@
                         data-style="border"
                         data-width="100%"
                         data-max-options="{{ $maxCategories }}"
+                        data-lang="{{ config('app.locale') }}"
                         multiple
                         name="categories[]"
                         id="categories"

@@ -87,6 +87,11 @@ class SocialiteController
                 'warning',
                 Lang::get('icore::auth.warning.no_email', ['provider' => ucfirst($provider)])
             );
+        } catch (\N1ebieski\ICore\Exceptions\Socialite\NoNameException $e) {
+            return Response::redirectToRoute('register')->with(
+                'warning',
+                Lang::get('icore::auth.warning.no_name', ['provider' => ucfirst($provider)])
+            );
         } catch (\N1ebieski\ICore\Exceptions\Socialite\EmailExistException $e) {
             return Response::redirectToRoute('login')->with(
                 'warning',

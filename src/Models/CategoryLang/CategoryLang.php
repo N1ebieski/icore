@@ -29,6 +29,38 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Services\CategoryLang\CategoryLangService;
 use N1ebieski\ICore\Database\Factories\CategoryLang\CategoryLangFactory;
 
+/**
+ * N1ebieski\ICore\Models\CategoryLang\CategoryLang
+ *
+ * @property int $id
+ * @property int $category_id
+ * @property string $slug
+ * @property string $name
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
+ * @property \N1ebieski\ICore\ValueObjects\Progress $progress
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \N1ebieski\ICore\Models\Category\Category $category
+ * @property-read string $created_at_diff
+ * @property-read string $updated_at_diff
+ * @method static \N1ebieski\ICore\Database\Factories\CategoryLang\CategoryLangFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang findSimilarSlugs(string $attribute, array $config, string $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang orderBySearch(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang search(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereLang($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereProgress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ * @mixin \Eloquent
+ */
 class CategoryLang extends Model
 {
     use Sluggable;
@@ -58,6 +90,19 @@ class CategoryLang extends Model
      * @var array<string>
      */
     protected $fillable = ['name', 'lang', 'progress'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
+        'progress' => \N1ebieski\ICore\Casts\ProgressCast::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
 
     /**
      * The model's default values for attributes.

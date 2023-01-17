@@ -43,6 +43,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $aliasLoader = \Illuminate\Foundation\AliasLoader::getInstance();
+
+        $aliasLoader->alias('AutoTranslate', \N1ebieski\ICore\ValueObjects\AutoTranslate::class);
+        $aliasLoader->alias('Lang', \N1ebieski\ICore\ValueObjects\Lang::class);
     }
 }

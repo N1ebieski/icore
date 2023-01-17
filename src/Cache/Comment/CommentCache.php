@@ -106,9 +106,9 @@ class CommentCache
      * Undocumented function
      *
      * @param array $component
-     * @return Collection
+     * @return Collect
      */
-    public function rememberByComponent(array $component): Collection
+    public function rememberByComponent(array $component): Collect
     {
         $json = json_encode($component);
 

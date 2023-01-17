@@ -61,6 +61,7 @@
         data-abs-text-attr="name"
         data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::filter.default')], ['value' => 0, 'text' => trans('icore::categories.roots')]]) }}"
+        data-lang="{{ config('app.locale') }}"
         data-style="border"
         data-width="100%"
         data-container="body"

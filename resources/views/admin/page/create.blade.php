@@ -225,6 +225,7 @@
                         data-live-search="true"
                         data-style="border"
                         data-width="100%"
+                        data-lang="{{ config('app.locale') }}"
                         name="parent_id"
                         id="parent_id"
                     >

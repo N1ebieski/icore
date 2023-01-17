@@ -21,12 +21,11 @@ namespace N1ebieski\ICore\Repositories\Category;
 use Closure;
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 
@@ -67,15 +66,8 @@ class CategoryRepo
      */
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
-        /** @var CategoryLang */
-        $categoryLang = $this->category->langs()->make();
-
         return $this->category->newQuery()
             ->selectRaw("`{$this->category->getTable()}`.*")
-            ->join($categoryLang->getTable(), function (JoinClause $join) use ($categoryLang) {
-                return $join->on("{$this->category->getTable()}.{$this->category->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
-                    ->where("{$categoryLang->getTable()}.lang", $this->config->get('app.locale'));
-            })
             ->when(
                 is_null($filter['status']) && !$this->auth->user()?->can('admin.categories.view'),
                 function (Builder|Category $query) {
@@ -85,6 +77,7 @@ class CategoryRepo
                     return $query->filterStatus($filter['status']);
                 }
             )
+            ->multiLang()
             ->poliType()
             ->when(!is_null($filter['search']), function (Builder|Category $query) use ($filter) {
                 return $query->filterSearch($filter['search'])
@@ -105,7 +98,6 @@ class CategoryRepo
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->withAncestorsExceptSelf()
-            ->with('langs')
             ->filterPaginate($filter['paginate']);
     }
 
@@ -115,19 +107,12 @@ class CategoryRepo
      */
     public function getAsTree(): Collection
     {
-        /** @var CategoryLang */
-        $categoryLang = $this->category->langs()->make();
-
         /** @var ClosureTableCollection */
         $categories = $this->category->newQuery()
             ->selectRaw("`{$this->category->getTable()}`.*")
-            ->join($categoryLang->getTable(), function (JoinClause $join) use ($categoryLang) {
-                return $join->on("{$this->category->getTable()}.{$this->category->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
-                    ->where("{$categoryLang->getTable()}.lang", $this->config->get('app.locale'));
-            })
+            ->multiLang()
             ->poliType()
             ->orderBy('position', 'asc')
-            ->with('langs')
             ->get();
 
         return $categories->toTree();
@@ -139,20 +124,13 @@ class CategoryRepo
      */
     public function getAsTreeExceptSelf(): Collection
     {
-        /** @var CategoryLang */
-        $categoryLang = $this->category->langs()->make();
-
         /** @var ClosureTableCollection */
         $categories = $this->category->newQuery()
             ->selectRaw("`{$this->category->getTable()}`.*")
-            ->join($categoryLang->getTable(), function (JoinClause $join) use ($categoryLang) {
-                return $join->on("{$this->category->getTable()}.{$this->category->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
-                    ->where("{$categoryLang->getTable()}.lang", $this->config->get('app.locale'));
-            })
             ->whereNotIn('id', $this->category->descendants()->pluck('id')->toArray())
+            ->multiLang()
             ->poliType()
             ->orderBy('position', 'asc')
-            ->with('langs')
             ->get();
 
         return $categories->toTree();
@@ -195,21 +173,14 @@ class CategoryRepo
      */
     public function getWithRecursiveChildrens(): Collection
     {
-        /** @var CategoryLang */
-        $categoryLang = $this->category->langs()->make();
-
         return $this->category->newQuery()
-            ->join($categoryLang->getTable(), function (JoinClause $join) use ($categoryLang) {
-                return $join->on("{$this->category->getTable()}.{$this->category->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
-                    ->where("{$categoryLang->getTable()}.lang", $this->config->get('app.locale'));
-            })
             ->withRecursiveAllRels()
             ->withCount([
-                'morphs' => function ($query) {
+                'morphs' => function (MorphToMany|Builder|Category $query) {
                     return $query->active();
                 }
             ])
-            ->with('langs')
+            ->multiLang()
             ->poliType()
             ->active()
             ->root()
@@ -224,19 +195,12 @@ class CategoryRepo
      */
     public function firstBySlug(string $slug): ?Category
     {
-        /** @var CategoryLang */
-        $categoryLang = $this->category->langs()->make();
-
         return $this->category->newQuery()
-            ->join($categoryLang->getTable(), function (JoinClause $query) use ($categoryLang, $slug) {
-                return $query->on("{$this->category->getTable()}.{$this->category->getKeyName()}", '=', "{$categoryLang->getTable()}.category_id")
-                    ->where("{$categoryLang->getTable()}.slug", $slug)
-                    ->where("{$categoryLang->getTable()}.lang", $this->config->get('app.locale'));
-            })
+            ->multiLang()
             ->poliType()
             ->active()
+            ->where('slug', $slug)
             ->withAncestorsExceptSelf()
-            ->with('langs')
             ->first();
     }
 
@@ -263,7 +227,7 @@ class CategoryRepo
         return $this->category->newQuery()
             ->active()
             ->poliType()
-            ->withCount(['morphs AS models_count' => function ($query) {
+            ->withCount(['morphs AS models_count' => function (MorphToMany|Builder|Category $query) {
                 $query->active();
             }])
             ->with('langs')

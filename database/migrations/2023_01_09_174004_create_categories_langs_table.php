@@ -67,7 +67,7 @@ class CreateCategoriesLangsTable extends Migration
             )
         ");
 
-        Schema::table($category->getTable(), function (Blueprint $table) use ($category) {
+        Schema::table($category->getTable(), function (Blueprint $table) {
             $table->dropColumn(['name', 'slug']);
         });
     }

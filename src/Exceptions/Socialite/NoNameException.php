@@ -16,12 +16,24 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-return [
-    'lang' => 'Język',
-    'progress' => [
-        'label' => 'Progres tłumaczenia',
-        'tooltip' => 'Procentowe oznaczenie (0% odpowiada tłumaczeniu przez bota, 100% przez człowieka)'
-    ],
-    'no_trans' => 'Brak tłumaczenia',
-    'auto_trans' => 'Automatyczne tłumaczenia'
-];
+namespace N1ebieski\ICore\Exceptions\Socialite;
+
+use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Exceptions\CustomException;
+
+class NoNameException extends CustomException
+{
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    public $message = 'Provider has not provided the user\'s name';
+
+    /**
+     * Undocumented variable
+     *
+     * @var int
+     */
+    public $code = HttpResponse::HTTP_FORBIDDEN;
+}

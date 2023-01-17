@@ -22,7 +22,7 @@
                     <small>
                         <span>{{ trans('icore::categories.ancestors') }}:</span>
                         @foreach ($category->ancestors as $ancestor)
-                            <span>{{ $ancestor->name }}</span>
+                            <span>{{ $ancestor->name ?? trans('icore::multi_langs.no_trans') }}</span>
                             @if (!$loop->last)
                             <span>&raquo;</span>
                             @endif

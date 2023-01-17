@@ -47,6 +47,23 @@
             id="create-category"        
             data-route="{{ route("admin.category.{$category->poli}.store") }}" 
         >
+            @if (count(config('icore.multi_langs')) > 1)
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                    <input 
+                        type="checkbox" 
+                        class="custom-control-input" 
+                        id="auto_translate-single" 
+                        name="auto_translate"
+                        value="{{ AutoTranslate::ACTIVE }}" 
+                    >
+                    <label class="custom-control-label" for="auto_translate-single">
+                        {{ trans('icore::multi_langs.auto_trans') }}?
+                    </label>
+                </div>
+            </div>
+            @endif  
             <div class="form-group">
                 <label for="name">
                     {{ trans('icore::categories.name') }}
@@ -86,6 +103,7 @@
                     data-abs-text-attr="name"
                     data-abs-ajax-url="{{ route("api.category.{$category->poli}.index") }}"
                     data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
+                    data-lang="{{ config('app.locale') }}"
                     data-style="border"
                     data-width="100%"
                     data-container="body"
@@ -124,6 +142,23 @@
             id="create-category"        
             data-route="{{ route("admin.category.{$category->poli}.store_global") }}" 
         >
+            @if (count(config('icore.multi_langs')) > 1)
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                    <input 
+                        type="checkbox" 
+                        class="custom-control-input" 
+                        id="auto_translate-json" 
+                        name="auto_translate"
+                        value="{{ AutoTranslate::ACTIVE }}" 
+                    >
+                    <label class="custom-control-label" for="auto_translate-json">
+                        {{ trans('icore::multi_langs.auto_trans') }}?
+                    </label>
+                </div>
+            </div>
+            @endif         
             <div class="form-group">
                 <label for="names">
                     <span>{{ trans('icore::categories.names_json.label') }}</span>
@@ -173,6 +208,7 @@
                         data-abs-text-attr="name"
                         data-abs-ajax-url="{{ route("api.category.{$category->poli}.index") }}"
                         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::categories.null')]]) }}"
+                        data-lang="{{ config('app.locale') }}"
                         data-style="border"
                         data-width="100%"
                         data-container="body"

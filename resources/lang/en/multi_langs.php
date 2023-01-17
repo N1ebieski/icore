@@ -22,5 +22,6 @@ return [
         'label' => 'Translation progress',
         'tooltip' => 'Percentage marking (0% for translation by bot, 100% by human)'
     ],
-    'no_trans' => 'No translation'
+    'no_trans' => 'No translation',
+    'auto_trans' => 'Auto translations'
 ];

@@ -77,10 +77,12 @@ class LangLoad
             return $lang;
         }
 
+        // @phpstan-ignore-next-line
         if (is_string($lang = $this->getLangFromUser())) {
             return $lang;
         }
 
+        // @phpstan-ignore-next-line
         if (is_string($lang = $this->getLangFromGeolocation())) {
             return $lang;
         }
@@ -98,6 +100,7 @@ class LangLoad
             $this->request->route('lang')
             && in_array($this->request->route('lang'), $this->config->get('icore.multi_langs'))
         ) {
+            /** @var string */
             return $this->request->route('lang');
         }
 
@@ -123,7 +126,7 @@ class LangLoad
 
     /**
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLangFromUser(): ?string
     {
@@ -131,6 +134,7 @@ class LangLoad
             $this->request->user()
             && in_array($this->request->user()->pref_lang->getValue(), $this->config->get('icore.multi_langs'))
         ) {
+            /** @var string */
             return $this->request->user()->pref_lang->getValue();
         }
 
