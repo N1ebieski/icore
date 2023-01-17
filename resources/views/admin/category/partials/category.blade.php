@@ -71,18 +71,16 @@
         <div class="text-right ml-3">
             <div class="responsive-btn-group">
                 @can('admin.categories.edit')
-                <div class="btn-group-vertical">
-                    <button 
-                        data-toggle="modal" 
-                        data-target="#edit-modal"
-                        data-route="{{ route('admin.category.edit', ['category' => $category->id]) }}"
-                        type="button" 
-                        class="btn btn-primary edit"
-                    >
-                        <i class="far fa-edit"></i>
-                        <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
-                    </button>
-                </div>
+                <button 
+                    data-toggle="modal" 
+                    data-target="#edit-modal"
+                    data-route="{{ route('admin.category.edit', ['category' => $category->id]) }}"
+                    type="button" 
+                    class="btn btn-primary edit"
+                >
+                    <i class="far fa-edit"></i>
+                    <span class="d-none d-sm-inline">{{ trans('icore::default.edit') }}</span>
+                </button>
                 @endcan
                 @can('admin.categories.status')
                 <button 
@@ -107,24 +105,46 @@
                 </button>
                 @endcan
                 @can('admin.categories.delete')
-                <button 
-                    type="button"                
-                    class="btn btn-danger" 
-                    data-status="delete" 
-                    data-toggle="confirmation"
-                    data-route="{{ route('admin.category.destroy', ['category' => $category->id]) }}" 
-                    data-id="{{ $category->id }}"
-                    data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
-                    data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-category" 
-                    data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-                    data-btn-cancel-icon-class="fas fa-ban mr-1"
-                    data-title="{{ trans('icore::categories.confirm') }}"
-                >
-                    <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
-                </button>
+                <div class="btn-group-vertical">
+                    <button 
+                        type="button"                
+                        class="btn btn-danger" 
+                        data-status="delete" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.category.destroy', ['category' => $category->id]) }}" 
+                        data-id="{{ $category->id }}"
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-category" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::categories.confirm') }}"
+                    >
+                        <i class="far fa-trash-alt"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
+                    </button>
+                    @if ($category->hasAdditionalLangs())
+                    <button 
+                        type="button"                
+                        class="btn btn-danger" 
+                        data-status="delete" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.category_lang.destroy', ['categoryLang' => $category->current_lang->id]) }}" 
+                        data-id="{{ $category->id }}"
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-lang" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::multi_langs.confirm') }}"
+                    >
+                        <i class="fas fa-trash"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::multi_langs.delete') }}</span>
+                    </button>
+                    @endif                    
+                </div>
                 @endcan
             </div>
         </div>

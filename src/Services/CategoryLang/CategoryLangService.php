@@ -92,4 +92,16 @@ class CategoryLangService
             return $this->categoryLang;
         });
     }
+
+    /**
+     *
+     * @return null|bool
+     * @throws Throwable
+     */
+    public function delete(): ?bool
+    {
+        return $this->db->transaction(function () {
+            return $this->categoryLang->delete();
+        });
+    }
 }

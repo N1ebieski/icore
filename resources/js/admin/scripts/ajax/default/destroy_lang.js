@@ -15,8 +15,8 @@
  */
 
 $(document).on(
-    'click.n1ebieski/icore/admin/scripts/ajax/default@destroy',
-    '.destroy',
+    'click.n1ebieski/icore/admin/scripts/ajax/default@destroyLang',
+    '.destroy-lang',
     function (e) {
         e.preventDefault();
 
@@ -29,10 +29,10 @@ $(document).on(
             method: 'delete',
             beforeSend: function () {
                 $row.find('.responsive-btn-group').addClass('disabled');
-                $row.find('[data-btn-ok-class*="destroy"]').loader('show');
+                $row.find('[data-btn-ok-class*="destroy-lang"]').loader('show');
             },
             complete: function () {
-                $row.find('[data-btn-ok-class*="destroy"]').loader('hide');
+                $row.find('[data-btn-ok-class*="destroy-lang]').loader('hide');
             },
             success: function () {
                 $row.fadeOut('slow');

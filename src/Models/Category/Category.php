@@ -395,6 +395,16 @@ class Category extends Entity
         }]);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return self
+     */
+    public function loadAllRels(): self
+    {
+        return $this->loadAncestorsExceptSelf()->load('langs');
+    }
+
     // Factories
 
     /**

@@ -61,6 +61,13 @@ trait HasMultiLang
         ])();
     }
 
+    // Checkers
+
+    public function hasAdditionalLangs(): bool
+    {
+        return count(Config::get('icore.multi_langs')) > 1 && $this->langs->count() > 1;
+    }
+
     // Scopes
 
     /**

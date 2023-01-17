@@ -177,7 +177,7 @@ class CategoryController implements Polymorphic
 
         return Response::json([
             'view' => View::make('icore::admin.category.partials.category', [
-                'category' => $category->loadAncestorsExceptSelf(),
+                'category' => $category->loadAllRels(),
                 'show_ancestors' => true
             ])->render()
         ]);

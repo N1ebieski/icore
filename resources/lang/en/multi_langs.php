@@ -23,5 +23,7 @@ return [
         'tooltip' => 'Percentage marking (0% for translation by bot, 100% by human)'
     ],
     'no_trans' => 'No translation',
-    'auto_trans' => 'Auto translations'
+    'auto_trans' => 'Auto translations',
+    'confirm' => 'Are you sure you want to delete this translation?',
+    'delete' => 'Delete tr.'
 ];

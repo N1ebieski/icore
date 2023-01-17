@@ -117,13 +117,11 @@ class CategoryService
 
             $this->category->save();
 
-            $this->category->setRelation('langs', [
-                $this->category->current_lang->makeService()->create(
-                    array_merge($attributes, [
-                        'category' => $this->category
-                    ])
-                )
-            ]);
+            $this->category->current_lang->makeService()->create(
+                array_merge($attributes, [
+                    'category' => $this->category
+                ])
+            );
 
             return $this->category;
         });
@@ -257,13 +255,11 @@ class CategoryService
                 }
             }
 
-            $this->category->setRelation('langs', [
-                $this->category->current_lang->makeService()->createOrUpdate(
-                    array_merge($attributes, [
-                        'category' => $this->category
-                    ])
-                )
-            ]);
+            $this->category->current_lang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'category' => $this->category
+                ])
+            );
 
             return $this->category;
         });

@@ -16,14 +16,9 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-return [
-    'lang' => 'Język',
-    'progress' => [
-        'label' => 'Progres tłumaczenia',
-        'tooltip' => 'Procentowe oznaczenie (0% odpowiada tłumaczeniu przez bota, 100% przez człowieka)'
-    ],
-    'no_trans' => 'Brak tłumaczenia',
-    'auto_trans' => 'Automatyczne tłumaczenia',
-    'confirm' => 'Czy na pewno chcesz usunąć tłumaczenie?',
-    'delete' => 'Usuń tłu.'
-];
+use N1ebieski\ICore\Http\Controllers\Admin\CategoryLang\CategoryLangController;
+
+Route::delete('categories-langs/{categoryLang}', [CategoryLangController::class, 'destroy'])
+    ->name('category_lang.destroy')
+    ->where('categoryLang', '[0-9]+')
+    ->middleware('permission:admin.categories.delete');
