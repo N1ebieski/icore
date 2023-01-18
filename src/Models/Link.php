@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Link\LinkCache;
 use N1ebieski\ICore\ValueObjects\Link\Type;
+use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Services\Link\LinkService;
 use N1ebieski\ICore\Repositories\Link\LinkRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
@@ -172,8 +173,8 @@ class Link extends Model
      */
     public function scopeFilterType(Builder $query, string $type = null): ?Builder
     {
-        return $query->when($type !== null, function ($query) use ($type) {
-            $query->where('type', $type);
+        return $query->when(!is_null($type), function (Builder $query) use ($type) {
+            return $query->where('type', $type);
         });
     }
 
@@ -211,8 +212,8 @@ class Link extends Model
      */
     public function loadAncestorsWithoutSelf(): self
     {
-        return $this->load(['categories' => function ($query) {
-            $query->withAncestorsExceptSelf();
+        return $this->load(['categories' => function (MorphToMany|Builder|Category $query) {
+            return $query->withAncestorsExceptSelf();
         }]);
     }
 

@@ -25,5 +25,5 @@ return [
     'no_trans' => 'Brak tłumaczenia',
     'auto_trans' => 'Automatyczne tłumaczenia',
     'confirm' => 'Czy na pewno chcesz usunąć tłumaczenie?',
-    'delete' => 'Usuń tłu.'
+    'delete' => 'U.Tłum.'
 ];

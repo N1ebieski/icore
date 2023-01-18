@@ -146,18 +146,18 @@ class PersonalAccessToken extends BasePersonalAccessToken
      */
     public function scopeFilterStatus(Builder $query, int $status = null): ?Builder
     {
-        return $query->when($status !== null, function ($query) use ($status) {
-            $query->when($status === 1, function ($query) {
+        return $query->when(!is_null($status), function (Builder $query) use ($status) {
+            return $query->when($status === 1, function (Builder $query) {
                 return $query->whereNull('expired_at')
                     ->orWhereDate('expired_at', '>', Carbon::now()->format('Y-m-d'))
-                    ->orWhere(function ($query) {
-                        $query->whereDate('expired_at', '=', Carbon::now()->format('Y-m-d'))
+                    ->orWhere(function (Builder $query) {
+                        return $query->whereDate('expired_at', '=', Carbon::now()->format('Y-m-d'))
                             ->whereTime('expired_at', '>', Carbon::now()->format('H:i:s'));
                     });
-            }, function ($query) {
+            }, function (Builder $query) {
                 return $query->whereDate('expired_at', '<', Carbon::now()->format('Y-m-d'))
-                    ->orWhere(function ($query) {
-                        $query->whereDate('expired_at', '=', Carbon::now()->format('Y-m-d'))
+                    ->orWhere(function (Builder $query) {
+                        return $query->whereDate('expired_at', '=', Carbon::now()->format('Y-m-d'))
                             ->whereTime('expired_at', '<', Carbon::now()->format('H:i:s'));
                     });
             });

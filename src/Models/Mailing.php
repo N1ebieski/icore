@@ -18,12 +18,9 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
-use Mews\Purifier\Facades\Purifier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Carbon\Exceptions\InvalidFormatException;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
@@ -194,9 +191,33 @@ class Mailing extends Model
      * @return Attribute
      * @throws BindingResolutionException
      */
+    public function activationAt(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\ActivationAt::class, [
+            'mailing' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
     public function activationAtDiff(): Attribute
     {
         return App::make(\N1ebieski\ICore\Attributes\Mailing\ActivationAtDiff::class, [
+            'mailing' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function content(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\Mailing\Content::class, [
             'mailing' => $this
         ])();
     }
@@ -282,36 +303,6 @@ class Mailing extends Model
     public function scopeScheduled(Builder $query): Builder
     {
         return $query->where('status', Status::SCHEDULED);
-    }
-
-    // Mutators
-
-    /**
-     *
-     * @param null|string $value
-     * @return void
-     * @throws InvalidFormatException
-     */
-    public function setActivationAtAttribute(?string $value): void
-    {
-        if ($value === null) {
-            $this->attributes['activation_at'] = null;
-            return;
-        }
-
-        $this->attributes['activation_at'] = Carbon::parse($value)->format('Y-m-d H:i:s');
-    }
-
-    /**
-     *
-     * @param null|string $value
-     * @return void
-     */
-    public function setContentAttribute(?string $value): void
-    {
-        $this->attributes['content'] = !empty($value) ?
-            strip_tags(str_replace('[more]', '', $value))
-            : null;
     }
 
     // Factories

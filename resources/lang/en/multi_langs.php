@@ -25,5 +25,5 @@ return [
     'no_trans' => 'No translation',
     'auto_trans' => 'Auto translations',
     'confirm' => 'Are you sure you want to delete this translation?',
-    'delete' => 'Delete tr.'
+    'delete' => 'D.Trans.'
 ];

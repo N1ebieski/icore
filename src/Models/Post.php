@@ -25,6 +25,7 @@ use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Post\PostCache;
 use Cviebrock\EloquentSluggable\Sluggable;
+use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Services\Post\PostService;
 use N1ebieski\ICore\Repositories\Post\PostRepo;
@@ -497,8 +498,8 @@ class Post extends Model
     public function loadAllRels()
     {
         return $this->load([
-            'categories' => function ($query) {
-                $query->withAncestorsExceptSelf();
+            'categories' => function (MorphToMany|Builder|Category $query) {
+                return $query->withAncestorsExceptSelf();
             },
             'user',
             App::make(MigrationUtil::class)->contains('create_stats_table') ?

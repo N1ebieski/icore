@@ -16,33 +16,34 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Models\Traits;
+namespace N1ebieski\ICore\Attributes\Mailing;
 
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Carbon;
+use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
-trait HasCarbonable
+class ActivationAt
 {
-    // Accessors
-
     /**
      *
-     * @return Attribute
-     * @throws BindingResolutionException
+     * @param Mailing $mailing
+     * @return void
      */
-    public function createdAtDiff(): Attribute
+    public function __construct(protected Mailing $mailing)
     {
-        return App::make(\N1ebieski\ICore\Attributes\CreatedAtDiff::class, ['model' => $this])();
+        //
     }
 
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
      */
-    public function updatedAtDiff(): Attribute
+    public function __invoke(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\UpdatedAtDiff::class, ['model' => $this])();
+        return new Attribute(
+            set: function (string $value = null): ?string {
+                return !is_null($value) ? Carbon::parse($value)->format('Y-m-d H:i:s') : null;
+            }
+        );
     }
 }

@@ -290,11 +290,6 @@ class Comment extends Entity
         return $this->hasMany(\N1ebieski\ICore\Models\Comment\Comment::class, 'parent_id');
     }
 
-    // public function childrensRecursive()
-    // {
-    //     return $this->childrens()->with('childrensRecursive');
-    // }
-
     /**
      * Undocumented function
      *
@@ -437,7 +432,7 @@ class Comment extends Entity
      */
     public function scopeFilterCensored(Builder $query, int $censored = null)
     {
-        $query->when($censored !== null, function ($query) use ($censored) {
+        $query->when(!is_null($censored), function (Builder $query) use ($censored) {
             return $query->where('censored', $censored);
         });
     }
@@ -450,7 +445,7 @@ class Comment extends Entity
      */
     public function scopeFilterExcept(Builder $query, array $except = null)
     {
-        $query->when($except !== null, function ($query) use ($except) {
+        $query->when(!is_null($except), function (Builder $query) use ($except) {
             return $query->whereNotIn('comments.id', $except);
         });
     }
@@ -463,7 +458,7 @@ class Comment extends Entity
     public function scopeWithSumRating(Builder $query): Builder
     {
         return $query->withCount([
-            'ratings AS sum_rating' => function ($query) {
+            'ratings AS sum_rating' => function (MorphMany|Builder $query) {
                 $query->select(DB::raw('COALESCE(SUM(`ratings`.`rating`), 0) as `sum_rating`'));
             }
         ]);
@@ -477,26 +472,24 @@ class Comment extends Entity
      */
     public function scopeWithAllRels(Builder $query, string $orderby = null): Builder
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
+        /** @phpstan-ignore-next-line */
         return $query->withSumRating()
             ->with([
                 'user:id,name',
                 'morph',
                 'ratings',
-                'childrens' => function ($query) use ($orderby) {
-                    $query->withSumRating()
+                'childrens' => function (HasMany|Builder|Comment $query) use ($orderby) {
+                    return $query->withSumRating()
                         ->with([
                             'user:id,name',
                             'morph',
                             'ratings',
-                            'childrens' => function ($query) use ($orderby) {
-                                $query->withSumRating()
+                            'childrens' => function (HasMany|Builder|Comment $query) use ($orderby) {
+                                return $query->withSumRating()
                                     ->with(['user:id,name', 'ratings', 'morph'])
                                     ->withCount([
-                                        'childrens' => function ($query) {
-                                            $query->active();
+                                        'childrens' => function (HasMany|Builder $query) {
+                                            return $query->active();
                                         }
                                     ])
                                     ->active()
@@ -567,12 +560,14 @@ class Comment extends Entity
     public function loadAncestorsAndChildrens(): self
     {
         return $this->load([
-            'ancestors' => function ($q) {
-                $q->with('user:id,name')->whereColumn('ancestor', '!=', 'descendant')
+            'ancestors' => function (BelongsToMany|Builder $query) {
+                return $query->with('user:id,name')
+                    ->whereColumn('ancestor', '!=', 'descendant')
                     ->orderBy('depth', 'desc');
             },
-            'childrens' => function ($q) {
-                $q->with('user:id,name')->orderBy('created_at', 'asc');
+            'childrens' => function (HasMany|Builder $query) {
+                return $query->with('user:id,name')
+                    ->orderBy('created_at', 'asc');
             }
         ]);
     }

@@ -422,8 +422,8 @@ class Page extends Entity
      */
     public function loadAncestorsExceptSelf(): self
     {
-        return $this->load(['ancestors' => function ($q) {
-            $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+        return $this->load(['ancestors' => function (BelongsToMany|Builder $query) {
+            return $query->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
 
@@ -434,8 +434,8 @@ class Page extends Entity
     public function loadRecursiveChildrens(): self
     {
         return $this->load([
-                'childrensRecursiveWithAllRels' => function ($query) {
-                    $query->active()->orderBy('position', 'asc');
+                'childrensRecursiveWithAllRels' => function (HasMany|Builder $query) {
+                    return $query->active()->orderBy('position', 'asc');
                 },
             ]);
     }
@@ -628,7 +628,7 @@ class Page extends Entity
     */
     public function scopeFilterParent(Builder $query, $parent = null): ?Builder
     {
-        return $query->when($parent !== null, function ($query) use ($parent) {
+        return $query->when(!is_null($parent), function (Builder $query) use ($parent) {
             $query->where('parent_id', $parent->id ?? null);
         });
     }
@@ -640,8 +640,8 @@ class Page extends Entity
     */
     public function scopeWithAncestorsExceptSelf(Builder $query): Builder
     {
-        return $query->with(['ancestors' => function ($q) {
-            $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+        return $query->with(['ancestors' => function (BelongsToMany|Builder $query) {
+            return $query->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
         }]);
     }
 
@@ -673,8 +673,8 @@ class Page extends Entity
     public function scopeWithRecursiveAllRels(Builder $query): Builder
     {
         return $query->with([
-            'childrensRecursiveWithAllRels' => function ($query) {
-                $query->active()->orderBy('position', 'asc');
+            'childrensRecursiveWithAllRels' => function (HasMany|Builder $query) {
+                return $query->active()->orderBy('position', 'asc');
             }
         ]);
     }
@@ -687,8 +687,8 @@ class Page extends Entity
      */
     public function scopeComponentOnly(Builder $query, array $only = null): ?Builder
     {
-        return $query->when($only !== null, function ($query) use ($only) {
-            $query->whereIn('id', $only);
+        return $query->when(!is_null($only), function (Builder $query) use ($only) {
+            return $query->whereIn('id', $only);
         });
     }
 

@@ -277,11 +277,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeFilterRole(Builder $query, Role $role = null): ?Builder
     {
-        return $query->when($role !== null, function (Builder $query) use ($role) {
-            /**
-             * @phpstan-ignore-next-line
-             */
-            $query->role($role->name);
+        return $query->when(!is_null($role), function (Builder $query) use ($role) {
+            /** @phpstan-ignore-next-line */
+            return $query->role($role->name);
         });
     }
 

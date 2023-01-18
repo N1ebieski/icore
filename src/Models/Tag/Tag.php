@@ -125,7 +125,7 @@ class Tag extends Taggable
      */
     public function scopeFilterOrderBySearch(Builder $query, string $search = null): Builder
     {
-        return $query->when($search !== null, function ($query) {
+        return $query->when(!is_null($search), function (Builder $query) {
             return $query->orderByRaw('LENGTH(name) ASC');
         });
     }
