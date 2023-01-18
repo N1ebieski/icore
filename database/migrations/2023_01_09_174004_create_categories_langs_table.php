@@ -40,8 +40,8 @@ class CreateCategoriesLangsTable extends Migration
             $table->bigInteger('category_id')->unsigned()->index();
             $table->string('slug')->unique();
             $table->string('name');
-            $table->string('lang')->index();
             $table->integer('progress')->default(0);
+            $table->string('lang')->index();
             $table->timestamps();
 
             $table->unique(['category_id', 'lang']);
@@ -60,9 +60,9 @@ class CreateCategoriesLangsTable extends Migration
 
         DB::statement("
             INSERT INTO `{$categoryLang->getTable()}` (
-                `category_id`, `slug`, `name`, `lang`, `progress`, `created_at`, `updated_at`
+                `category_id`, `slug`, `name`, `progress`, `lang`, `created_at`, `updated_at`
             ) (
-                SELECT `id`, `slug`, `name`, '{$lang}', 100, `created_at`, `updated_at`
+                SELECT `id`, `slug`, `name`, 100, '{$lang}', `created_at`, `updated_at`
                 FROM `{$category->getTable()}`
             )
         ");

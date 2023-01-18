@@ -174,6 +174,7 @@ class CategoryRepo
     public function getWithRecursiveChildrens(): Collection
     {
         return $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
             ->withRecursiveAllRels()
             ->withCount([
                 'morphs' => function (MorphToMany|Builder|Category $query) {
@@ -196,6 +197,7 @@ class CategoryRepo
     public function firstBySlug(string $slug): ?Category
     {
         return $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
             ->multiLang()
             ->poliType()
             ->active()

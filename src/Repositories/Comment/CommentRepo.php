@@ -62,6 +62,7 @@ class CommentRepo
                         ]);
                     });
             })
+            ->lang()
             ->poliType()
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
@@ -129,8 +130,9 @@ class CommentRepo
      */
     public function countByModelTypeAndStatus(): Collection
     {
-        return $this->comment
+        return $this->comment->newQuery()
             ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, `status`, COUNT(*) AS `count`')
+            ->lang()
             ->groupBy('model_type', 'status')
             ->get();
     }
@@ -141,8 +143,10 @@ class CommentRepo
      */
     public function countReportedByModelType(): Collection
     {
-        return $this->comment->whereHas('reports')
+        return $this->comment->newQuery()
+            ->whereHas('reports')
             ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, COUNT(*) AS `count`')
+            ->lang()
             ->groupBy('model_type')
             ->get();
     }
@@ -156,6 +160,7 @@ class CommentRepo
     public function getByComponent(array $component): Collect
     {
         return $this->comment->newQuery()
+            ->lang()
             ->active()
             ->uncensored()
             ->whereHasMorph('morph', [$this->comment->model_type], function ($query) {

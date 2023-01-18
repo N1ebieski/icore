@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Database\Factories\Category;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 
 class CategoryFactory extends Factory
 {
@@ -41,6 +42,18 @@ class CategoryFactory extends Factory
         return [
             'status' => rand(Status::INACTIVE, Status::ACTIVE)
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Category $category) {
+            return CategoryLang::makeFactory()->for($category)->create();
+        });
     }
 
     /**

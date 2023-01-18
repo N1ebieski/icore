@@ -28,6 +28,7 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CategoryTest extends TestCase
@@ -64,7 +65,7 @@ class CategoryTest extends TestCase
                 return [
                     'created_at' => Carbon::now()->addSeconds($sequence->index)
                 ];
-            })        
+            })
             ->active()
             ->create();
 
@@ -297,8 +298,12 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
-            'name' => 'Kategoria Testowa',
             'parent_id' => null
+        ]);
+
+        $this->assertDatabaseHas('categories_langs', [
+            'category_id' => $category->id,
+            'name' => 'Kategoria Testowa'
         ]);
     }
 
@@ -333,8 +338,12 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
-            'name' => 'Kategoria Testowa',
             'parent_id' => $parent->id
+        ]);
+
+        $this->assertDatabaseHas('categories_langs', [
+            'category_id' => $category->id,
+            'name' => 'Kategoria Testowa',
         ]);
 
         $this->assertDatabaseHas('categories_closure', [
@@ -417,8 +426,13 @@ class CategoryTest extends TestCase
         $response->assertOk();
         $response->assertSessionHas('success');
 
+        /** @var CategoryLang|null */
+        $categoryLang = CategoryLang::where('name', 'Kategoria OK')->first();
+
+        $this->assertTrue($categoryLang?->exists());
+
         $this->assertDatabaseHas('categories', [
-            'name' => 'Kategoria OK',
+            'id' => $categoryLang->category_id,
             'parent_id' => null,
             'model_type' => 'N1ebieski\\ICore\\Models\\Post'
         ]);
@@ -442,16 +456,13 @@ class CategoryTest extends TestCase
         $response->assertOk();
         $response->assertSessionHas('success');
 
-        /** @var Category|null */
-        $category = Category::where([
-            ['name', 'Kategoria OK'],
-            ['parent_id', $parent->id]
-        ])->first();
+        /** @var CategoryLang|null */
+        $categoryLang = CategoryLang::where('name', 'Kategoria OK')->first();
 
-        $this->assertTrue(!is_null($category) && $category->exists());
+        $this->assertTrue($categoryLang?->exists());
 
         $this->assertDatabaseHas('categories_closure', [
-            'descendant' => $category->id,
+            'descendant' => $categoryLang->category_id,
             'ancestor' => $parent->id,
             'depth' => 1
         ]);
@@ -525,15 +536,13 @@ class CategoryTest extends TestCase
         $response->assertOk();
         $response->assertSessionHas('success');
 
-        /** @var Category|null */
-        $category = Category::where([
-            ['name', 'Dziecko 1']
-        ])->first();
+        /** @var CategoryLang|null */
+        $categoryLang = CategoryLang::where('name', 'Dziecko 1')->first();
 
-        $this->assertTrue(!is_null($category) && $category->exists());
+        $this->assertTrue($categoryLang?->exists());
 
         $this->assertDatabaseHas('categories_closure', [
-            'descendant' => $category->id,
+            'descendant' => $categoryLang->category_id,
             'ancestor' => $parent->id,
             'depth' => 2
         ]);

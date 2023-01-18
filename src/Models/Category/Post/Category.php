@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Models\Category\Post;
 
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -145,7 +146,8 @@ class Category extends BaseCategory
      */
     protected $attributes = [
         'model_type' => \N1ebieski\ICore\Models\Post::class,
-        'status' => Status::ACTIVE
+        'status' => Status::ACTIVE,
+        'auto_translate' => AutoTranslate::INACTIVE
     ];
 
     /**

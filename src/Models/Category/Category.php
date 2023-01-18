@@ -306,7 +306,8 @@ class Category extends Entity
     {
         return $query->with([
             'childrensRecursiveWithAllRels' => function (HasMany|Builder|Category $query) {
-                return $query->multiLang()
+                return $query->selectRaw("`{$this->getTable()}`.*")
+                    ->multiLang()
                     ->withCount([
                         'morphs' => function (MorphToMany|Builder|Category $query) {
                             return $query->active();

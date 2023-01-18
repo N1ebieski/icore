@@ -127,7 +127,13 @@ class PostRepo
             ->active()
             ->with([
                 'categories' => function (MorphToMany|Builder|Category $query) {
-                    return $query->withAncestorsExceptSelf()->multiLang()->active();
+                    /** @var Category */
+                    $category = $query->getModel();
+
+                    return $query->selectRaw("`{$category->getTable()}`.*")
+                        ->withAncestorsExceptSelf()
+                        ->multiLang()
+                        ->active();
                 },
                 'user',
                 'tags'

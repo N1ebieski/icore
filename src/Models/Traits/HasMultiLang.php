@@ -95,9 +95,6 @@ trait HasMultiLang
      */
     public function scopeLang(Builder $query)
     {
-        /** @var Model */
-        $lang = $this->langs()->make();
-
-        return $query->where("{$lang->getTable()}.lang", Config::get('app.locale'));
+        return $query->where("{$this->getTable()}.lang", Config::get('app.locale'));
     }
 }

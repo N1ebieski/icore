@@ -135,7 +135,7 @@ class CategoryService
     public function createGlobal(array $attributes): Collection
     {
         return $this->db->transaction(function () use ($attributes) {
-            if ($attributes['parent_id'] !== null) {
+            if (!is_null($attributes['parent_id'])) {
                 /** @var Category $parent */
                 $parent = $this->category->find($attributes['parent_id']);
             }
@@ -153,8 +153,10 @@ class CategoryService
                 $parent ?? null
             );
 
-            $this->category->newQuery()->whereIn('id', $categories->pluck('id')->toArray())
-                ->update(['auto_translate' => $attributes['auto_translate']]);
+            if (isset($attributes['auto_translate'])) {
+                $this->category->newQuery()->whereIn('id', $categories->pluck('id')->toArray())
+                    ->update(['auto_translate' => $attributes['auto_translate']]);
+            }
 
             return $categories;
         });
