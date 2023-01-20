@@ -106,7 +106,6 @@ class PostService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
-            $this->post->content = $this->post->content_html;
 
             if (!$this->post->status->isInactive()) {
                 // @phpstan-ignore-next-line
@@ -128,6 +127,12 @@ class PostService
 
             $this->post->save();
 
+            $this->post->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'post' => $this->post
+                ])
+            );
+
             return $this->post;
         });
     }
@@ -136,16 +141,18 @@ class PostService
      * Mini-Update the specified Post in storage.
      *
      * @param  array $attributes [description]
-     * @return bool              [description]
+     * @return Post              [description]
      */
-    public function update(array $attributes): bool
+    public function update(array $attributes): Post
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->post->title = $attributes['title'];
-            $this->post->content_html = $attributes['content_html'];
-            $this->post->content = $this->post->content_html;
+            $this->post->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'post' => $this->post
+                ])
+            );
 
-            return $this->post->save();
+            return $this->post;
         });
     }
 

@@ -78,6 +78,13 @@ class CategoryLang extends Model
     protected $table = 'categories_langs';
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['category'];
+
+    /**
      * The columns of the full text index
      *
      * @var array

@@ -49,3 +49,19 @@ $(document).on(
         });
     }
 );
+
+$(document).on(
+    'change.n1ebieski/icore/admin/scripts/ajax/default@editLang',
+    'select.edit-full-lang',
+    function (e) {
+        e.preventDefault();
+
+        let $element = $(this);
+
+        if ($element.data('loaded') !== true) {
+            return;
+        }
+
+        window.location.replace($.sanitize($element.val()));        
+    }
+);

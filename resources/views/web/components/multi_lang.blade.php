@@ -7,7 +7,7 @@
     aria-haspopup="true" 
     aria-expanded="false"
 >
-    <span class="fi fil-{{ $currentLang }}"></span>
+    <span class="fi fil-{{ $currentLang }} pb-1"></span>
     <span class="d-md-none d-lg-inline">{{ mb_strtoupper($currentLang) }}</span>
 </a>
 <div 

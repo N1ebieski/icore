@@ -128,12 +128,11 @@ class CommentRepo
      * [countByModelType description]
      * @return Collection [description]
      */
-    public function countByModelTypeAndStatus(): Collection
+    public function countByModelTypeAndStatusAndLang(): Collection
     {
         return $this->comment->newQuery()
-            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, `status`, COUNT(*) AS `count`')
-            ->lang()
-            ->groupBy('model_type', 'status')
+            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, `status`, `lang`, COUNT(*) AS `count`')
+            ->groupBy('model_type', 'status', 'lang')
             ->get();
     }
 
@@ -141,13 +140,12 @@ class CommentRepo
      * [countReportedByModelType description]
      * @return Collection [description]
      */
-    public function countReportedByModelType(): Collection
+    public function countReportedByModelTypeAndLang(): Collection
     {
         return $this->comment->newQuery()
             ->whereHas('reports')
-            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, COUNT(*) AS `count`')
-            ->lang()
-            ->groupBy('model_type')
+            ->selectRaw('TRIM(LOWER(SUBSTRING_INDEX(model_type, "\\\", -1))) AS `model`, `lang`, COUNT(*) AS `count`')
+            ->groupBy('model_type', 'lang')
             ->get();
     }
 

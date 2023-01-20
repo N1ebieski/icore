@@ -16,13 +16,13 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Migrations\Migration;
 
 // phpcs:ignore
-class AddLangToCommentsTable extends Migration
+class AddLangToTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -31,18 +31,15 @@ class AddLangToCommentsTable extends Migration
      */
     public function up()
     {
-        $comment = new Comment();
+        $tag = new Tag();
 
-        Schema::table($comment->getTable(), function (Blueprint $table) {
-            $table->string('lang', 2)->index()->after('real_depth');
-
-            $table->index(['model_type', 'model_id', 'lang']);
-            $table->index(['model_type', 'model_id', 'user_id', 'lang']);
+        Schema::table($tag->getTable(), function (Blueprint $table) {
+            $table->string('lang', 2)->index()->after('normalized');
         });
 
         $lang = Config::get('app.locale');
 
-        DB::statement("UPDATE `{$comment->getTable()}` SET `{$comment->getTable()}`.`lang` = '{$lang}'");
+        DB::statement("UPDATE `{$tag->getTable()}` SET `{$tag->getTable()}`.`lang` = '{$lang}'");
     }
 
     /**
@@ -52,13 +49,10 @@ class AddLangToCommentsTable extends Migration
      */
     public function down()
     {
-        $comment = new Comment();
+        $tag = new Tag();
 
-        Schema::table($comment->getTable(), function (Blueprint $table) {
+        Schema::table($tag->getTable(), function (Blueprint $table) {
             $table->dropColumn('lang');
-
-            $table->dropIndex('comments_model_type_model_id_lang_index');
-            $table->dropIndex('comments_model_type_model_id_user_id_lang_index');
         });
     }
 }

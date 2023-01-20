@@ -53,7 +53,7 @@
                 class="form-control"
                 id="progress"
                 name="progress"
-                value="{{ $category->current_lang->progress }}"
+                value="{{ $category->currentLang->progress }}"
             >
             <div class="input-group-append">
                 <span class="input-group-text">%</span>

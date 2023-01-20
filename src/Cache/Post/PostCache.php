@@ -60,7 +60,7 @@ class PostCache
     public function rememberLatest(): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "post.paginateLatest.{$this->request->input('page')}",
+            "post.{$this->config->get('app.locale')}.paginateLatest.{$this->request->input('page')}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->paginateLatest();
@@ -75,7 +75,7 @@ class PostCache
     public function rememberPrevious()
     {
         return $this->cache->tags(['post.' . $this->post->slug])->remember(
-            "post.firstPrevious.{$this->post->id}",
+            "post.{$this->config->get('app.locale')}.firstPrevious.{$this->post->id}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->firstPrevious();
@@ -90,7 +90,7 @@ class PostCache
     public function rememberNext()
     {
         return $this->cache->tags(['post.' . $this->post->slug])->remember(
-            "post.firstNext.{$this->post->id}",
+            "post.{$this->config->get('app.locale')}.firstNext.{$this->post->id}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->firstNext();
@@ -105,7 +105,7 @@ class PostCache
     public function rememberRelated(): Collection
     {
         return $this->cache->tags(['post.' . $this->post->slug])->remember(
-            "post.getRelated.{$this->post->id}",
+            "post.{$this->config->get('app.locale')}.getRelated.{$this->post->id}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->getRelated();
@@ -121,7 +121,7 @@ class PostCache
     public function rememberBySlug(string $slug)
     {
         return $this->cache->tags(['post.' . $slug])->remember(
-            "post.firstBySlug.{$slug}",
+            "post.{$this->config->get('app.locale')}.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->post->makeRepo()->firstBySlug($slug);
@@ -138,7 +138,7 @@ class PostCache
     public function rememeberArchiveByDate(int $month, int $year): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "post.paginateArchiveByDate.{$month}.{$year}.{$this->request->input('page')}",
+            "post.{$this->config->get('app.locale')}.paginateArchiveByDate.{$month}.{$year}.{$this->request->input('page')}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($month, $year) {
                 return $this->post->makeRepo()->paginateArchiveByDate([
@@ -156,7 +156,7 @@ class PostCache
     public function rememberArchives(): Collect
     {
         return $this->cache->tags(['posts'])->remember(
-            'post.getArchives',
+            "post.{$this->config->get('app.locale')}.getArchives",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 $posts = $this->post->makeRepo()->getArchives()->toBase();
@@ -213,7 +213,7 @@ class PostCache
     public function rememberLatestForHome(): Collection
     {
         return $this->cache->tags(["posts"])->remember(
-            "post.getLatestForHome",
+            "post.{$this->config->get('app.locale')}.getLatestForHome",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->post->makeRepo()->getLatestForHome();
@@ -252,7 +252,7 @@ class PostCache
     {
         return $this->cache->tags(["posts"])
             ->get(
-                "post.paginateByFilter.{$this->request->input('page')}"
+                "post.{$this->config->get('app.locale')}.paginateByFilter.{$this->request->input('page')}"
             );
     }
 
@@ -265,7 +265,7 @@ class PostCache
     {
         return $this->cache->tags(["posts"])
             ->put(
-                "post.paginateByFilter.{$this->request->input('page')}",
+                "post.{$this->config->get('app.locale')}.paginateByFilter.{$this->request->input('page')}",
                 $posts,
                 $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
             );

@@ -18,13 +18,19 @@
 
 namespace N1ebieski\ICore\View\Composers\Admin;
 
+use Comment\Status;
+use RuntimeException;
 use Illuminate\Support\Str;
 use N1ebieski\ICore\Loads\ThemeLoad;
+use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\View\Composers\Composer;
+use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Utils\Route\RouteRecognize;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\Foundation\Application as App;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class NavbarComposer extends Composer
 {
@@ -54,21 +60,25 @@ class NavbarComposer extends Composer
 
     /**
      *
+     * @param Comment $comment
      * @param ViewFactory $view
      * @param Config $config
      * @param URL $url
      * @param Str $str
      * @param App $app
      * @param ThemeLoad $load
+     * @param RouteRecognize $routeRecognize
      * @return void
      */
     public function __construct(
+        protected Comment $comment,
         protected ViewFactory $view,
         protected Config $config,
         protected URL $url,
         protected Str $str,
         protected App $app,
-        protected ThemeLoad $load
+        protected ThemeLoad $load,
+        protected RouteRecognize $routeRecognize
     ) {
         $this->currentLang = $this->app->getLocale();
 
@@ -107,9 +117,50 @@ class NavbarComposer extends Composer
      */
     public function getCurrentUrlWithLang(string $lang): string
     {
-        return $this->str->of($this->url->full())->replaceMatches(
-            '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,7})\/)([a-z]{2})/',
-            '$1' . $lang
-        );
+        $newUrl = $this->routeRecognize->getCurrentUrlWithLang($lang);
+
+        if (is_string($newUrl)) {
+            return $newUrl;
+        }
+
+        return $this->url->route('admin.home.index', ['lang' => $lang]);
+    }
+
+    /**
+     *
+     * @return Collect
+     * @throws BindingResolutionException
+     */
+    public function inactiveCount(): Collect
+    {
+        $countComments = $this->comment->makeRepo()->countByModelTypeAndStatusAndLang()
+            ->where('status', Status::inactive());
+
+        return $countComments->map(function ($item) use ($countComments) {
+            $item = clone $item;
+
+            $item->count = $countComments->where('lang', $item->lang)->sum('count');
+
+            return $item;
+        })->unique('lang');
+    }
+
+    /**
+     *
+     * @return Collect
+     * @throws BindingResolutionException
+     * @throws RuntimeException
+     */
+    public function reportedCount(): Collect
+    {
+        $countComments = $this->comment->makeRepo()->countReportedByModelTypeAndLang();
+
+        return $countComments->map(function ($item) use ($countComments) {
+            $item = clone $item;
+
+            $item->count = $countComments->where('lang', $item->lang)->sum('count');
+
+            return $item;
+        })->unique('lang');
     }
 }

@@ -67,6 +67,7 @@ class PostRepo
 
         // @phpstan-ignore-next-line
         return $comments->active()
+            ->lang()
             ->root()
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
@@ -83,6 +84,7 @@ class PostRepo
     {
         return $this->post->newQuery()
             ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->when(
                 is_null($filter['status']) && !$this->auth->user()?->can('admin.categories.view'),
                 function (Builder|Post $query) {
@@ -123,7 +125,9 @@ class PostRepo
     {
         // @phpstan-ignore-next-line
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
             ->where('slug', $slug)
+            ->multiLang()
             ->active()
             ->with([
                 'categories' => function (MorphToMany|Builder|Category $query) {
@@ -154,10 +158,12 @@ class PostRepo
     public function firstPrevious(): ?Post
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
-            ->where('id', '<', $this->post->id)
-            ->orderBy('id', 'desc')
-            ->first(['slug', 'title']);
+            ->where("{$this->post->getTable()}.id", '<', $this->post->id)
+            ->orderBy("{$this->post->getTable()}.id", 'desc')
+            ->first();
     }
 
     /**
@@ -167,10 +173,12 @@ class PostRepo
     public function firstNext(): ?Post
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
-            ->where('id', '>', $this->post->id)
-            ->orderBy('id')
-            ->first(['slug', 'title']);
+            ->where("{$this->post->getTable()}.id", '>', $this->post->id)
+            ->orderBy("{$this->post->getTable()}.id")
+            ->first();
     }
 
     /**
@@ -182,6 +190,8 @@ class PostRepo
     public function getRelated(int $limit = 5): Collection
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->withAnyTags($this->post->tagList)
             ->where("{$this->post->getTable()}.{$this->post->getKeyName()}", '<>', $this->post->id)
@@ -198,6 +208,8 @@ class PostRepo
     public function paginateArchiveByDate(array $date): LengthAwarePaginator
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->whereRaw(
                 'MONTH(published_at) = ? and YEAR(published_at) = ?',
@@ -216,6 +228,7 @@ class PostRepo
     {
         return $this->post->newQuery()
             ->selectRaw('YEAR(published_at) year, MONTH(published_at) month, COUNT(*) posts_count')
+            ->multiLang()
             ->active()
             ->groupBy('year')
             ->groupBy('month')
@@ -232,7 +245,9 @@ class PostRepo
     public function paginateByTag(string $tag): LengthAwarePaginator
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
             ->withAnyTags($tag)
+            ->multiLang()
             ->active()
             ->orderBy('published_at', 'desc')
             ->with('user:id,name')
@@ -246,6 +261,8 @@ class PostRepo
     public function paginateLatest(): LengthAwarePaginator
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->orderBy('published_at', 'desc')
             ->with('user:id,name')
@@ -285,6 +302,7 @@ class PostRepo
                     })->getQuery(),
                 'posts'
             )
+            ->multiLang()
             ->active()
             ->groupBy('posts.id')
             ->orderBySearch($name)
@@ -307,6 +325,7 @@ class PostRepo
             ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
                 $query->root()->active();
             }])
+            ->with('langs')
             ->chunk($chunk, $callback);
     }
 
@@ -347,6 +366,8 @@ class PostRepo
     public function getLatestForHome(): Collection
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->latest()
             ->orderBy('published_at', 'desc')

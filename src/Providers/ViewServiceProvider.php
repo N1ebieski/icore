@@ -39,15 +39,9 @@ class ViewServiceProvider extends ServiceProvider
 
         // Directives
 
-        /** @var \N1ebieski\ICore\View\Directives\PushOnceDirective */
-        $pushOnceDirective = $this->app->make(\N1ebieski\ICore\View\Directives\PushOnceDirective::class);
+        Blade::directive('pushonce', $this->app->make(\N1ebieski\ICore\View\Directives\PushOnceDirective::class));
 
-        Blade::directive('pushonce', $pushOnceDirective);
-
-        /** @var \N1ebieski\ICore\View\Directives\EndPushOnceDirective */
-        $endPushOnceDirective = $this->app->make(\N1ebieski\ICore\View\Directives\EndPushOnceDirective::class);
-
-        Blade::directive('endpushonce', $endPushOnceDirective);
+        Blade::directive('endpushonce', $this->app->make(\N1ebieski\ICore\View\Directives\EndPushOnceDirective::class));
 
         $bladeCompiler = new \Illuminate\View\Compilers\BladeCompiler(
             $this->app->make(\Illuminate\Filesystem\Filesystem::class),
@@ -56,15 +50,9 @@ class ViewServiceProvider extends ServiceProvider
 
         $bladeCompiler->componentNamespace('N1ebieski\\ICore\\View\\Components', 'icore');
 
-        /** @var \N1ebieski\ICore\View\Directives\RenderDirective */
-        $renderDirective = $this->app->make(\N1ebieski\ICore\View\Directives\RenderDirective::class, [
+        Blade::directive('render', $this->app->make(\N1ebieski\ICore\View\Directives\RenderDirective::class, [
             'bladeCompiler' => $bladeCompiler
-        ]);
-
-        Blade::directive('render', $renderDirective);
-
-        /** @var \N1ebieski\ICore\View\Composers\LayoutComposer */
-        $layoutComposer = $this->app->make(\N1ebieski\ICore\View\Composers\LayoutComposer::class);
+        ]));
 
         // Composers
 
@@ -72,32 +60,20 @@ class ViewServiceProvider extends ServiceProvider
             Config::get('icore.layout') . '::web.layouts.layout',
             Config::get('icore.layout') . '::admin.layouts.layout',
             'file-manager::fmButton',
-        ], $layoutComposer::class);
+        ], \N1ebieski\ICore\View\Composers\LayoutComposer::class);
 
-        /** @var \N1ebieski\ICore\View\Composers\ActiveComposer */
-        $activeComposer = $this->app->make(\N1ebieski\ICore\View\Composers\ActiveComposer::class);
+        View::composer('*', \N1ebieski\ICore\View\Composers\ActiveComposer::class);
 
-        View::composer('*', $activeComposer::class);
-
-        /** @var \N1ebieski\ICore\View\Composers\ValidComposer */
-        $validComposer = $this->app->make(\N1ebieski\ICore\View\Composers\ValidComposer::class);
-
-        View::composer('*', $validComposer::class);
-
-        /** @var \N1ebieski\ICore\View\Composers\Admin\SidebarComposer */
-        $sidebarComposer = $this->app->make(\N1ebieski\ICore\View\Composers\Admin\SidebarComposer::class);
+        View::composer('*', \N1ebieski\ICore\View\Composers\ValidComposer::class);
 
         View::composer(
             Config::get('icore.layout') . '::admin.partials.sidebar',
-            $sidebarComposer::class
+            \N1ebieski\ICore\View\Composers\Admin\SidebarComposer::class
         );
-
-        /** @var \N1ebieski\ICore\View\Composers\Admin\NavbarComposer */
-        $navbarComposer = $this->app->make(\N1ebieski\ICore\View\Composers\Admin\NavbarComposer::class);
 
         View::composer(
             Config::get('icore.layout') . '::admin.partials.nav',
-            $navbarComposer::class
+            \N1ebieski\ICore\View\Composers\Admin\NavbarComposer::class
         );
     }
 }

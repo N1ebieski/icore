@@ -51,7 +51,7 @@ class TagCache
     public function rememberBySlug(string $slug): ?Tag
     {
         return $this->cache->remember(
-            "tag.firstBySlug.{$slug}",
+            "tag.{$this->config->get('app.locale')}.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->tag->makeRepo()->firstBySlug($slug);
@@ -69,7 +69,7 @@ class TagCache
         $json = json_encode($component);
 
         return $this->cache->remember(
-            "tag.{$this->tag->poli}.getPopularByComponent.{$json}",
+            "tag.{$this->tag->poli}.{$this->config->get('app.locale')}.getPopularByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->tag->makeRepo()->getPopularByComponent($component);
@@ -89,7 +89,7 @@ class TagCache
         $json = json_encode($component);
 
         return $this->cache->put(
-            "tag.{$this->tag->poli}.getPopularByComponent.{$json}",
+            "tag.{$this->tag->poli}.{$this->config->get('app.locale')}.getPopularByComponent.{$json}",
             $tags,
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
         );

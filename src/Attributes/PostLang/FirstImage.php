@@ -16,19 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class MetaTitle
+class FirstImage
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -40,9 +40,10 @@ class MetaTitle
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return !empty($this->post->seo_title) ?
-                    $this->post->seo_title : $this->post->title;
+            get: function (): ?string {
+                preg_match('/<img.+src=(?:\'|")(.*?)(?:\'|")/', $this->postLang->content_html, $image);
+
+                return $image[1] ?? null;
             }
         );
     }

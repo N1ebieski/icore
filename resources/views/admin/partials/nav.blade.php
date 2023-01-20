@@ -3,7 +3,7 @@
         <span class="navbar-toggler-icon"></span>
     </a>
     <a 
-        href="{{ route('admin.home.index') }}"
+        href="{{ route('web.home.index') }}"
         class="navbar-brand"
         title="{{ config('app.name') }}"
     >
@@ -27,8 +27,16 @@
                 aria-haspopup="true" 
                 aria-expanded="false"
             >
-                <span class="fi fil-{{ $currentLang }}"></span>
+                <span class="fi fil-{{ $currentLang }} pb-1"></span>
                 <span class="d-sm-inline d-none">{{ mb_strtoupper($currentLang) }}</span>
+                <span class="d-inline">
+                    @if ($count = $inactiveCount->sum('count'))
+                    <span class="badge badge-warning">{{ $count }}</span>
+                    @endif
+                    @if ($count = $reportedCount->sum('count'))
+                    <span class="badge badge-danger">{{ $count }}</span>
+                    @endif
+                </span>             
             </a>
             <div 
                 class="dropdown-menu dropdown-menu-right" 
@@ -47,6 +55,14 @@
                 >
                     <span class="fi fil-{{ $lang }}"></span>
                     <span>{{ mb_strtoupper($lang) }}</span>
+                    <span class="d-inline">
+                        @if ($count = $inactiveCount->firstWhere('lang', $lang))
+                        <span class="badge badge-warning">{{ $count->count }}</span>
+                        @endif
+                        @if ($count = $reportedCount->firstWhere('lang', $lang))
+                        <span class="badge badge-danger">{{ $count->count }}</span>
+                        @endif
+                    </span>
                 </a>
                 @endforeach                       
             </div>

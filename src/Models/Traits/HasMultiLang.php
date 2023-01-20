@@ -82,7 +82,9 @@ trait HasMultiLang
         $lang = $this->langs()->make();
 
         return $query->join($lang->getTable(), function (JoinClause $join) use ($lang) {
-            return $join->on("{$this->getTable()}.{$this->getKeyName()}", '=', "{$lang->getTable()}.category_id")
+            $className = mb_strtolower(class_basename($this::class));
+
+            return $join->on("{$this->getTable()}.{$this->getKeyName()}", '=', "{$lang->getTable()}.{$className}_id")
                 ->where("{$lang->getTable()}.lang", Config::get('app.locale'));
         })
         ->with('langs');

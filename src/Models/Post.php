@@ -24,11 +24,13 @@ use Cviebrock\EloquentTaggable\Taggable;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Post\PostCache;
-use Cviebrock\EloquentSluggable\Sluggable;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Services\Post\PostService;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Repositories\Post\PostRepo;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -48,18 +50,20 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 /**
  * N1ebieski\ICore\Models\Post
  *
- * @property string $title
+ * @property string|null $title
  * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status
  * @property Commentable $comment
+ * @property AutoTranslate $auto_translate
  * @property int $id
- * @property string $slug
+ * @property string|null $slug
  * @property int $user_id
- * @property string $content_html
+ * @property string|null $content_html
  * @property string|null $content
  * @property string|null $seo_title
  * @property string|null $seo_desc
+ * @property PostLang $currentLang
  * @property \Illuminate\Support\Carbon|null $published_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -69,16 +73,16 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property-read int|null $comments_count
  * @property-read string $created_at_diff
  * @property-read string|null $first_image
- * @property-read string $less_content_html
- * @property-read string $meta_desc
- * @property-read string $meta_title
+ * @property-read string|null $less_content_html
+ * @property-read string|null $meta_desc
+ * @property-read string|null $meta_title
  * @property-read string $model_type
- * @property-read string $no_more_content_html
+ * @property-read string|null $no_more_content_html
  * @property-read string $poli_self
  * @property-read string $published_at_diff
- * @property-read string $replacement_content
- * @property-read string $replacement_content_html
- * @property-read string $short_content
+ * @property-read string|null $replacement_content
+ * @property-read string|null $replacement_content_html
+ * @property-read string|null $short_content
  * @property-read array $tag_array
  * @property-read array $tag_array_normalized
  * @property-read string $tag_list
@@ -89,6 +93,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User $user
+ * @method static Builder|Category multiLang()
  * @method static Builder|Post active()
  * @method static \N1ebieski\ICore\Database\Factories\Post\PostFactory factory(...$parameters)
  * @method static Builder|Post filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
@@ -134,12 +139,12 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class Post extends Model
 {
-    use Sluggable;
     use Taggable;
     use HasFullTextSearchable;
     use PivotEventTrait;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
     use HasFilterable, HasStatFilterable {
         HasStatFilterable::scopeFilterOrderBy insteadof HasFilterable;
     }
@@ -152,15 +157,11 @@ class Post extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'title',
-        'content_html',
-        'content',
-        'seo_title',
-        'seo_desc',
         'seo_noindex',
         'seo_nofollow',
         'status',
         'comment',
+        'auto_translate',
         'published_at'
     ];
 
@@ -182,23 +183,10 @@ class Post extends Model
     protected $attributes = [
         'comment' => Commentable::ACTIVE,
         'status' => Status::INACTIVE,
+        'auto_translate' => AutoTranslate::INACTIVE,
         'seo_noindex' => SeoNoindex::INACTIVE,
         'seo_nofollow' => SeoNofollow::INACTIVE
     ];
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
 
     /**
      * The attributes that should be cast to native types.
@@ -212,6 +200,7 @@ class Post extends Model
         'seo_nofollow' => \N1ebieski\ICore\Casts\Post\SeoNofollowCast::class,
         'status' => \N1ebieski\ICore\Casts\Post\StatusCast::class,
         'comment' => \N1ebieski\ICore\Casts\Post\CommentCast::class,
+        'auto_translate' => \N1ebieski\ICore\Casts\AutoTranslateCast::class,
         'published_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
@@ -331,13 +320,54 @@ class Post extends Model
     /**
      *
      * @return Attribute
+     */
+    public function slug(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->slug);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function title(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->title);
+    }
+
+    /**
+     *
+     * @return Attribute
      * @throws BindingResolutionException
      */
     public function contentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->content_html);
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function seoTitle(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->seo_title);
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function seoDesc(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->seo_desc);
     }
 
     /**
@@ -347,9 +377,8 @@ class Post extends Model
      */
     public function metaTitle(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\MetaTitle::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->meta_title);
     }
 
     /**
@@ -359,9 +388,8 @@ class Post extends Model
      */
     public function metaDesc(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\MetaDesc::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->meta_desc);
     }
 
     /**
@@ -371,9 +399,8 @@ class Post extends Model
      */
     public function replacementContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ReplacementContent::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content);
     }
 
     /**
@@ -383,9 +410,8 @@ class Post extends Model
      */
     public function shortContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ShortContent::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->short_content);
     }
 
     /**
@@ -395,9 +421,8 @@ class Post extends Model
      */
     public function replacementContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ReplacementContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content_html);
     }
 
     /**
@@ -407,9 +432,8 @@ class Post extends Model
      */
     public function noMoreContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\NoMoreContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->no_more_content_html);
     }
 
     /**
@@ -419,9 +443,8 @@ class Post extends Model
      */
     public function lessContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\LessContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->less_content_html);
     }
 
     /**
@@ -431,9 +454,8 @@ class Post extends Model
      */
     public function firstImage(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\FirstImage::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->first_image);
     }
 
     /**
@@ -455,9 +477,8 @@ class Post extends Model
      */
     public function content(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\Content::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->content);
     }
 
     // Scopes

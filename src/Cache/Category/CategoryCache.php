@@ -73,7 +73,7 @@ class CategoryCache
     public function rememberPosts(): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "category.{$this->category->id}.paginatePosts.{$this->request->input('page')}",
+            "category.{$this->category->id}.{$this->config->get('app.locale')}.paginatePosts.{$this->request->input('page')}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->category->makeRepo()->paginatePosts();

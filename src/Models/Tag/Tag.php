@@ -20,10 +20,12 @@ namespace N1ebieski\ICore\Models\Tag;
 
 use DateTime;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Cache\Tag\TagCache;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Services\Tag\TagService;
 use N1ebieski\ICore\Repositories\Tag\TagRepo;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
@@ -40,9 +42,11 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
  * @property string $normalized
  * @property DateTime $created_at
  * @property DateTime $updated_at
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
  * @property-read string $created_at_diff
  * @property-read string $poli
  * @property-read string $updated_at_diff
+ * @method static Builder|Tag lang()
  * @method static \Illuminate\Database\Eloquent\Relations\MorphToMany|Builder morphs()
  * @method static Builder|Tag byName(string $value)
  * @method static \N1ebieski\ICore\Database\Factories\Tag\TagFactory factory(...$parameters)
@@ -77,6 +81,7 @@ class Tag extends Taggable
     use HasFilterable;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
 
     // Configuration
 
@@ -101,9 +106,24 @@ class Tag extends Taggable
      */
     protected $casts = [
         'tag_id' => 'integer',
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['lang'] = Config::get('app.locale');
+        $this->fillable[] = 'lang';
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.

@@ -41,7 +41,7 @@ class CreateCategoriesLangsTable extends Migration
             $table->string('slug')->unique();
             $table->string('name');
             $table->integer('progress')->default(0);
-            $table->string('lang')->index();
+            $table->string('lang', 2)->index();
             $table->timestamps();
 
             $table->unique(['category_id', 'lang']);

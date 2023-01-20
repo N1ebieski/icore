@@ -16,21 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class LessContentHtml
+class Content
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -42,14 +40,10 @@ class LessContentHtml
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                $cut = explode('<p>[more]</p>', $this->post->replacement_content_html);
-
-                // @phpstan-ignore-next-line
-                return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [
-                    $this->post->slug,
-                    '#more'
-                ]) . '" class="more">' . Lang::get('icore::posts.more') . '</a></p>' : $this->post->replacement_content_html;
+            set: function ($value): ?string {
+                return !empty($value) ?
+                    strip_tags(str_replace('[more]', '', $value))
+                    : null;
             }
         );
     }

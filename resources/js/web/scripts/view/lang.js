@@ -28,9 +28,6 @@ $(document).on(
             expires: 365
         });
 
-        window.location.replace(window.location.href.replace(
-            /^((?:https|http):\/\/(?:[\da-z.-]+)(?:\.[a-z]{2,6})\/)([a-z]{2})/,
-            '$1' + lang
-        ));
+        window.location.replace($.sanitize($element.attr('href')));
     }
 );

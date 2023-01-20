@@ -16,20 +16,24 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
+use Mews\Purifier\Purifier;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class NoMoreContentHtml
+class ContentHtml
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
+     * @param Purifier $purifier
      * @return void
      */
-    public function __construct(protected Post $post)
-    {
+    public function __construct(
+        protected PostLang $postLang,
+        protected Purifier $purifier
+    ) {
         //
     }
 
@@ -40,12 +44,8 @@ class NoMoreContentHtml
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return str_replace(
-                    '<p>[more]</p>',
-                    '<span id="more" class="hashtag"></span>',
-                    $this->post->replacement_content_html
-                );
+            get: function ($value): string {
+                return $this->purifier->clean($value ?? '');
             }
         );
     }

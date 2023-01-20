@@ -54,7 +54,7 @@ trait HasFixForMultiLangClosureTable
                 $entity->parent_id = $parent ? $parent->getKey() : null;
                 $entity->save();
 
-                $entity->current_lang->makeService()->create([
+                $entity->currentLang->makeService()->create([
                     'name' => $item['name'],
                     'category' => $entity
                 ]);

@@ -21,6 +21,8 @@ namespace N1ebieski\ICore\View\Components;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Utils\Route\RouteRecognize;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -35,6 +37,8 @@ class MultiLangComponent extends Component
      * @param URL $url
      * @param Str $str
      * @param App $app
+     * @param Collect $collect
+     * @param RouteRecognize $routeRecognize
      * @return void
      */
     public function __construct(
@@ -42,7 +46,9 @@ class MultiLangComponent extends Component
         protected Config $config,
         protected URL $url,
         protected Str $str,
-        protected App $app
+        protected App $app,
+        protected Collect $collect,
+        protected RouteRecognize $routeRecognize
     ) {
         //
     }
@@ -77,9 +83,12 @@ class MultiLangComponent extends Component
      */
     public function getCurrentUrlWithLang(string $lang): string
     {
-        return $this->str->of($this->url->full())->replaceMatches(
-            '/^((?:https|http):\/\/(?:[\da-z\.-]+)(?:\.[a-z]{2,7})\/)([a-z]{2})/',
-            '$1' . $lang
-        );
+        $newUrl = $this->routeRecognize->getCurrentUrlWithLang($lang);
+
+        if (is_string($newUrl)) {
+            return $newUrl;
+        }
+
+        return $this->url->route('web.home.index', ['lang' => $lang]);
     }
 }

@@ -16,38 +16,39 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
-
 use N1ebieski\ICore\Models\Post;
-use Illuminate\Support\Facades\App;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use N1ebieski\ICore\Utils\Conversions\Replacement;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class ReplacementContent
+// phpcs:ignore
+class AddAutoTranslateToPostsTable extends Migration
 {
     /**
+     * Run the migrations.
      *
-     * @param Post $post
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function up()
     {
-        //
+        $post = new Post();
+
+        Schema::table($post->getTable(), function (Blueprint $table) {
+            $table->boolean('auto_translate')->unsigned()->default(0)->after('comment');
+        });
     }
 
     /**
+     * Reverse the migrations.
      *
-     * @return Attribute
+     * @return void
      */
-    public function __invoke(): Attribute
+    public function down()
     {
-        return new Attribute(
-            get: function (): string {
-                return App::make(Replacement::class)
-                    ->handle($this->post->content ?? '', function ($value) {
-                        return $value;
-                    });
-            }
-        );
+        $post = new Post();
+
+        Schema::table($post->getTable(), function (Blueprint $table) {
+            $table->dropColumn('auto_translate');
+        });
     }
 }

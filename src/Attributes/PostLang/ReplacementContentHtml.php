@@ -16,19 +16,21 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class FirstImage
+class ReplacementContentHtml
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -40,10 +42,14 @@ class FirstImage
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): ?string {
-                preg_match('/<img.+src=(?:\'|")(.*?)(?:\'|")/', $this->post->content_html, $image);
-
-                return $image[1] ?? null;
+            get: function (): string {
+                return App::make(Pipeline::class)
+                    ->send($this->postLang->content_html ?? '')
+                    ->through([
+                        \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
+                        \N1ebieski\ICore\Utils\Conversions\Replacement::class
+                    ])
+                    ->thenReturn();
             }
         );
     }

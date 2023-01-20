@@ -16,20 +16,21 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use N1ebieski\ICore\Utils\Conversions\Replacement;
 
-class ShortContent
+class ReplacementContent
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -42,11 +43,10 @@ class ShortContent
     {
         return new Attribute(
             get: function (): string {
-                return mb_substr(
-                    e(strip_tags($this->post->replacement_content), false),
-                    0,
-                    Config::get('icore.post.short_content')
-                );
+                return App::make(Replacement::class)
+                    ->handle($this->postLang->content ?? '', function ($value) {
+                        return $value;
+                    });
             }
         );
     }

@@ -126,13 +126,13 @@ class CommentCache
      *
      * @return Collection
      */
-    public function rememberCountByModelTypeAndStatus(): Collection
+    public function rememberCountByModelTypeAndStatusAndLang(): Collection
     {
         return $this->cache->tags(['comments'])->remember(
-            "comment.{$this->config->get('app.locale')}.countByModelTypeAndStatus",
+            "comment.{$this->config->get('app.locale')}.countByModelTypeAndStatusAndLang",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                return $this->comment->makeRepo()->countByModelTypeAndStatus();
+                return $this->comment->makeRepo()->countByModelTypeAndStatusAndLang();
             }
         );
     }

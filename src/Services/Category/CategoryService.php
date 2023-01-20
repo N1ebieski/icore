@@ -117,7 +117,7 @@ class CategoryService
 
             $this->category->save();
 
-            $this->category->current_lang->makeService()->create(
+            $this->category->currentLang->makeService()->create(
                 array_merge($attributes, [
                     'category' => $this->category
                 ])
@@ -257,7 +257,7 @@ class CategoryService
                 }
             }
 
-            $this->category->current_lang->makeService()->createOrUpdate(
+            $this->category->currentLang->makeService()->createOrUpdate(
                 array_merge($attributes, [
                     'category' => $this->category
                 ])

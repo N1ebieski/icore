@@ -16,19 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Content
+class MetaTitle
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -40,10 +40,9 @@ class Content
     public function __invoke(): Attribute
     {
         return new Attribute(
-            set: function ($value): ?string {
-                return !empty($value) ?
-                    strip_tags(str_replace('[more]', '', $value))
-                    : null;
+            get: function (): string {
+                return !empty($this->postLang->seo_title) ?
+                    $this->postLang->seo_title : $this->postLang->title;
             }
         );
     }

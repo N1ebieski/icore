@@ -24,12 +24,16 @@
 @if ($category->ancestors->count() > 0)
 @foreach ($category->ancestors as $ancestor)
 <li class="breadcrumb-item">
+    @if ($ancestor->slug)
     <a 
         href="{{ route('web.category.post.show', [$ancestor->slug]) }}"
         title="{{ $ancestor->name }}"
     >
         {{ $ancestor->name }}
     </a>
+    @else
+        {{ trans('icore::multi_langs.no_trans') }}
+    @endif
 </li>
 @endforeach
 @endif

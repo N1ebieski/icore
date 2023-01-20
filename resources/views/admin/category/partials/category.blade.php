@@ -130,7 +130,7 @@
                         class="btn btn-danger" 
                         data-status="delete" 
                         data-toggle="confirmation"
-                        data-route="{{ route('admin.category_lang.destroy', ['categoryLang' => $category->current_lang->id]) }}" 
+                        data-route="{{ route('admin.category_lang.destroy', ['categoryLang' => $category->currentLang->id]) }}" 
                         data-id="{{ $category->id }}"
                         data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
                         data-btn-ok-icon-class="fas fa-check mr-1"

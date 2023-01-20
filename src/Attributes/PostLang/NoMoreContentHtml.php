@@ -16,21 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class ReplacementContentHtml
+class NoMoreContentHtml
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -43,13 +41,11 @@ class ReplacementContentHtml
     {
         return new Attribute(
             get: function (): string {
-                return App::make(Pipeline::class)
-                    ->send($this->post->content_html ?? '')
-                    ->through([
-                        \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
-                        \N1ebieski\ICore\Utils\Conversions\Replacement::class
-                    ])
-                    ->thenReturn();
+                return str_replace(
+                    '<p>[more]</p>',
+                    '<span id="more" class="hashtag"></span>',
+                    $this->postLang->replacement_content_html
+                );
             }
         );
     }

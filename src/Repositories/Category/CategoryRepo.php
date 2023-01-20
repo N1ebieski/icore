@@ -161,6 +161,7 @@ class CategoryRepo
     public function paginatePosts(): LengthAwarePaginator
     {
         return $this->category->morphs()
+            ->multiLang()
             ->active()
             ->with('user')
             ->orderBy('published_at', 'desc')

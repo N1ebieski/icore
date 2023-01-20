@@ -16,19 +16,20 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Post;
+namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\Post;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class MetaDesc
+class ShortContent
 {
     /**
      *
-     * @param Post $post
+     * @param PostLang $postLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected PostLang $postLang)
     {
         //
     }
@@ -41,8 +42,11 @@ class MetaDesc
     {
         return new Attribute(
             get: function (): string {
-                return !empty($this->post->seo_desc) ?
-                    $this->post->seo_desc : $this->post->short_content;
+                return mb_substr(
+                    e(strip_tags($this->postLang->replacement_content), false),
+                    0,
+                    Config::get('icore.post.short_content')
+                );
             }
         );
     }

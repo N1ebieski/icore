@@ -45,7 +45,7 @@ class TagRepo
      */
     public function firstBySlug(string $slug): ?Tag
     {
-        return $this->tag->newQuery()->whereNormalized($slug)->first();
+        return $this->tag->newQuery()->whereNormalized($slug)->lang()->first();
     }
 
     /**
@@ -57,6 +57,7 @@ class TagRepo
     {
         return $this->tag->newQuery()
             ->selectRaw("`{$this->tag->getTable()}`.*")
+            ->lang()
             ->filterExcept($filter['except'])
             ->when(!is_null($filter['search']), function (Builder|Tag $query) use ($filter) {
                 return $query->filterSearch($filter['search'])
@@ -106,6 +107,7 @@ class TagRepo
                         ->whereIn('categories_models.category_id', $component['cats']);
                 });
             })
+            ->lang()
             ->groupBy('tags.tag_id')
             ->havingRaw('COUNT(`tags`.`tag_id`) >= 1')
             ->orderBy('taggable_count', 'desc')

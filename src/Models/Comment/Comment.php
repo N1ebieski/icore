@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Models\Comment;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Comment\CommentCache;
@@ -60,6 +61,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property string $content_html
  * @property string $content
  * @property int $position
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Comment[] $ancestors
@@ -204,7 +206,7 @@ class Comment extends Entity
      *
      * @var array<string>
      */
-    protected $fillable = ['content_html', 'status', 'censored'];
+    protected $fillable = ['content_html', 'status', 'censored', 'lang'];
 
     /**
      * The columns of the full text index
@@ -237,9 +239,23 @@ class Comment extends Entity
         'censored' => \N1ebieski\ICore\Casts\Comment\CensoredCast::class,
         'position' => 'integer',
         'real_depth' => 'integer',
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.

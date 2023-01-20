@@ -70,40 +70,6 @@ class PostFactory extends Factory
      *
      * @return static
      */
-    public function image()
-    {
-        return $this->state(function () {
-            $this->faker->addProvider(new \Mmo\Faker\PicsumProvider($this->faker));
-
-            $content = $this->faker->text(2000);
-
-            $split = explode('. ', $content);
-            $rands = (array)array_rand(array_slice($split, 0, array_key_last($split) - 5), rand(1, 3));
-
-            $split = array_map(function ($item) use ($split) {
-                return $item . ($item !== end($split) ? '.' : null);
-            }, $split);
-
-            foreach ($rands as $rand) {
-                $image = ['</p><p><img src="' . $this->faker->picsumUrl(1920, 1080) . '" alt=""></p><p>'];
-
-                array_splice($split, $rand, 0, $image);
-            }
-
-            $content = '<p>' . implode(' ', $split) . '</p>';
-
-            return [
-                'content_html' => $content,
-                'content' => strip_tags($content),
-            ];
-        });
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return static
-     */
     public function active()
     {
         return $this->state(function () {

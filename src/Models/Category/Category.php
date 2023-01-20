@@ -56,7 +56,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property string $name
  * @property int $parent_id
  * @property int $position
- * @property CategoryLang $current_lang
+ * @property CategoryLang $currentLang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Category[] $ancestors
@@ -361,7 +361,7 @@ class Category extends Entity
     public function name(): Attribute
     {
         // @phpstan-ignore-next-line
-        return new Attribute(fn (): ?string => $this->current_lang->name);
+        return new Attribute(fn (): ?string => $this->currentLang->name);
     }
 
     /**
@@ -371,7 +371,7 @@ class Category extends Entity
     public function slug(): Attribute
     {
         // @phpstan-ignore-next-line
-        return new Attribute(fn (): ?string => $this->current_lang->slug);
+        return new Attribute(fn (): ?string => $this->currentLang->slug);
     }
 
     /**
