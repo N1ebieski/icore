@@ -52,7 +52,6 @@ class PostService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
-            $this->post->content = $this->post->content_html;
 
             if (!$this->post->status->isInactive()) {
                 // @phpstan-ignore-next-line
@@ -63,6 +62,12 @@ class PostService
             $this->post->user()->associate($attributes['user']);
 
             $this->post->save();
+
+            $this->post->currentLang->makeService()->create(
+                array_merge($attributes, [
+                    'post' => $this->post
+                ])
+            );
 
             if (array_key_exists('tags', $attributes)) {
                 $this->post->tag($attributes['tags'] ?? []);
