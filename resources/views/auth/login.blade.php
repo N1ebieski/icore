@@ -25,7 +25,7 @@
                                     for="email" 
                                     class="col-lg-4 col-form-label text-lg-right"
                                 >
-                                    {{ trans('icore::auth.address.label') }}
+                                    {{ trans('icore::auth.address.label') }}:
                                 </label>
 
                                 <div class="col-lg-6">
@@ -52,7 +52,7 @@
                                     for="password" 
                                     class="col-lg-4 col-form-label text-lg-right"
                                 >
-                                    {{ trans('icore::auth.password') }}
+                                    {{ trans('icore::auth.password') }}:
                                 </label>
 
                                 <div class="col-lg-6">

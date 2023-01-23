@@ -66,13 +66,13 @@
             @endif  
             <div class="form-group">
                 <label for="name">
-                    {{ trans('icore::categories.name') }}
+                    {{ trans('icore::categories.name') }}:
                 </label>
                 <input type="text" value="" name="name" class="form-control" id="name">
             </div>
             <div class="form-group">
                 <label for="icon">
-                    <span>{{ trans('icore::categories.icon.label') }}</span> 
+                    <span>{{ trans('icore::categories.icon.label') }}:</span> 
                     <i 
                         data-toggle="tooltip" 
                         data-placement="top"
@@ -91,7 +91,7 @@
             </div>
             <div class="form-group">
                 <label for="parent_id">
-                    {{ trans('icore::categories.parent_id') }}
+                    {{ trans('icore::categories.parent_id') }}:
                 </label>
                 <select 
                     id="parent_id"                     
@@ -161,7 +161,7 @@
             @endif         
             <div class="form-group">
                 <label for="names">
-                    <span>{{ trans('icore::categories.names_json.label') }}</span>
+                    <span>{{ trans('icore::categories.names_json.label') }}:</span>
                     <i 
                         data-toggle="tooltip" 
                         data-placement="top"
@@ -196,7 +196,7 @@
             <div class="collapse show" id="collapse-parent-id">
                 <div class="form-group">
                     <label for="parent_id">
-                        {{ trans('icore::categories.parent_id') }}
+                        {{ trans('icore::categories.parent_id') }}:
                     </label>
                     <select 
                         id="parent_id"                      

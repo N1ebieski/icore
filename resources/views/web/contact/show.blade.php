@@ -19,7 +19,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="email">
-                        {{ trans('icore::contact.address.label') }}
+                        {{ trans('icore::contact.address.label') }}:
                     </label>
                     <input 
                         type="email" 
@@ -33,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::contact.title.label') }}
+                        {{ trans('icore::contact.title.label') }}:
                     </label>
                     <input 
                         type="text" 
@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <label for="content">
-                        {{ trans('icore::contact.content') }}
+                        {{ trans('icore::contact.content') }}:
                     </label>
                     <textarea 
                         name="content" 

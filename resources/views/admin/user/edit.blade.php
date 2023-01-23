@@ -15,7 +15,7 @@
 >
     <div class="form-group">
         <label for="name">
-            {{ trans('icore::auth.name.label') }}
+            {{ trans('icore::auth.name.label') }}:
         </label>
         <input 
             type="text" 
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
         <label for="email">
-            {{ trans('icore::auth.address.label') }}
+            {{ trans('icore::auth.address.label') }}:
         </label>
         <input 
             type="email" 
@@ -39,7 +39,7 @@
     </div>
     <div class="form-group">
         <label for="roles">
-            {{ trans('icore::users.roles') }}
+            {{ trans('icore::users.roles') }}:
         </label>
         <input type="hidden" name="roles" value="">
         <select multiple class="form-control custom-select" id="roles" name="roles[]">

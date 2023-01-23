@@ -9,7 +9,7 @@
 @slot('modal_body')
 <div class="form-group">
     <label for="filter-search">
-        {{ trans('icore::filter.search.label') }}
+        {{ trans('icore::filter.search.label') }}:
     </label>
     <input 
         type="text" 
@@ -22,7 +22,7 @@
 </div>
 <div class="form-group">
     <label for="filter-status">
-        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}":
     </label>
     <select 
         class="form-control custom-select" 
@@ -54,7 +54,7 @@
 </div>
 <div class="form-group">
     <label for="filter-category">
-        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.category') }}"
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.category') }}":
     </label>
     <select 
         id="filter-category"

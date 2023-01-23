@@ -25,7 +25,7 @@
                                     for="email" 
                                     class="col-md-4 col-form-label text-md-right"
                                 >
-                                        {{ trans('icore::auth.address.label') }}
+                                        {{ trans('icore::auth.address.label') }}:
                                 </label>
 
                                 <div class="col-md-6">
@@ -52,7 +52,7 @@
                                     for="password" 
                                     class="col-md-4 col-form-label text-md-right"
                                 >
-                                    {{ trans('icore::auth.password') }}
+                                    {{ trans('icore::auth.password') }}:
                                 </label>
 
                                 <div class="col-md-6">
@@ -77,7 +77,7 @@
                                     for="password-confirm" 
                                     class="col-md-4 col-form-label text-md-right"
                                 >
-                                    {{ trans('icore::auth.password_confirm') }}
+                                    {{ trans('icore::auth.password_confirm') }}:
                                 </label>
 
                                 <div class="col-md-6">

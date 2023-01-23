@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="fas fa-edit"></i>
-        <span>{{ trans('icore::posts.route.edit') }}:</span>
+        <span>{{ trans('icore::posts.route.edit') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -36,7 +36,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::posts.title') }}
+                        {{ trans('icore::posts.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -44,7 +44,6 @@
                         name="title" 
                         id="title" 
                         class="form-control {{ $isValid('title') }}"
-                        placeholder="Wpisz tytuł posta"
                     >
                     @includeWhen($errors->has('title'), 'icore::admin.partials.errors', ['name' => 'title'])
                 </div>
@@ -71,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        <span>{{ trans('icore::posts.tags.label') }}</span>
+                        <span>{{ trans('icore::posts.tags.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -93,7 +92,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        <span>SEO title</span>
+                        <span>SEO title:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -107,13 +106,12 @@
                         name="seo_title" 
                         id="seo_title"
                         class="form-control {{ $isValid('seo_title') }}"
-                        placeholder="Wpisz SEO title"
                     >
                     @includeWhen($errors->has('seo_title'), 'icore::admin.partials.errors', ['name' => 'seo_title'])
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        <span>SEO description</span>
+                        <span>SEO description:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -245,7 +243,7 @@
                 </div>              
                 <div class="form-group">
                     <label for="status">
-                        {{ trans('icore::filter.status.label') }}
+                        {{ trans('icore::filter.status.label') }}:
                     </label>
                     <select 
                         class="custom-select" 
@@ -280,7 +278,7 @@
                     id="collapse-published-at"
                 >
                     <label for="published_at">
-                        <span>{{ trans('icore::posts.published_at.label') }}</span>
+                        <span>{{ trans('icore::posts.published_at.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -344,7 +342,7 @@
                 </div>
                 <div class="form-group">
                     <label for="category">
-                        <span>{{ trans('icore::categories.categories.label') }}</span>
+                        <span>{{ trans('icore::categories.categories.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top"

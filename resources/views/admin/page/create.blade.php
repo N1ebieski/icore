@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="far fa-plus-square"></i>
-        <span>{{ trans('icore::pages.route.create') }}:</span>
+        <span>{{ trans('icore::pages.route.create') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -35,7 +35,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::pages.title') }}
+                        {{ trans('icore::pages.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        <span>{{ trans('icore::pages.tags.label') }} </span>
+                        <span>{{ trans('icore::pages.tags.label') }}: </span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -92,7 +92,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        <span>SEO Title</span>
+                        <span>SEO Title:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -112,7 +112,7 @@
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        <span>SEO Description</span>
+                        <span>SEO Description:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -132,7 +132,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="icon">
-                        <span>{{ trans('icore::pages.icon.label') }}</span>
+                        <span>{{ trans('icore::pages.icon.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -218,7 +218,7 @@
                 @if ($parents->count() > 0)
                 <div class="form-group">
                     <label for="parent_id">
-                        {{ trans('icore::filter.parent') }}
+                        {{ trans('icore::filter.parent') }}:
                     </label>
                     <select 
                         class="selectpicker select-picker" 

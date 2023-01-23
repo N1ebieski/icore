@@ -10,7 +10,7 @@
 @slot('modal_body')
 <div class="form-group">
     <label for="filter-search">
-        {{ trans('icore::filter.search.label') }}
+        {{ trans('icore::filter.search.label') }}:
     </label>
     <input 
         id="filter-search"    

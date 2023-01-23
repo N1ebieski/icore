@@ -10,7 +10,7 @@
 @slot('modal_body')
 <div class="form-group">
     <label for="filter-search">
-        {{ trans('icore::filter.search.label') }}
+        {{ trans('icore::filter.search.label') }}:
     </label>
     <input 
         type="text" 
@@ -23,7 +23,7 @@
 </div>
 <div class="form-group">
     <label for="filter-status">
-        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}":
     </label>
     <select 
         class="form-control custom-select" 
@@ -50,7 +50,7 @@
 @if ($parents->count() > 0)
 <div class="form-group">
     <label for="filter-parent">
-        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}"
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}":
     </label>
     <select 
         id="filter-parent"  

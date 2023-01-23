@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="fas fa-edit"></i>
-        <span>{{ trans('icore::mailings.route.edit') }}:</span>
+        <span>{{ trans('icore::mailings.route.edit') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -36,7 +36,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::mailings.title') }}
+                        {{ trans('icore::mailings.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -76,7 +76,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="status">
-                        {{ trans('icore::filter.status.label') }}
+                        {{ trans('icore::filter.status.label') }}:
                     </label>
                     <select 
                         class="custom-select" 
@@ -111,7 +111,7 @@
                     id="collapse-activation-at"
                 >
                     <label for="activation_at">
-                        <span>{{ trans('icore::mailings.activation_at.label') }}</span> 
+                        <span>{{ trans('icore::mailings.activation_at.label') }}:</span> 
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top"
@@ -204,7 +204,7 @@
                 >
                     <div class="form-group">
                         <label for="emails_json">
-                            <span>{{ trans('icore::mailings.emails_json.label') }}</span>
+                            <span>{{ trans('icore::mailings.emails_json.label') }}:</span>
                             <i 
                                 data-toggle="tooltip" 
                                 data-placement="top"

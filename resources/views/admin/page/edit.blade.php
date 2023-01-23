@@ -17,7 +17,7 @@
 >
     <div class="form-group">
         <label for="title">
-            {{ trans('icore::pages.title') }}
+            {{ trans('icore::pages.title') }}:
         </label>
         <input 
             type="text" 

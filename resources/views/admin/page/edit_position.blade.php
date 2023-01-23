@@ -16,7 +16,7 @@
     @if ((int)$page->siblings_count > 0)
     <div class="form-group">
         <label for="position">
-            {{ trans('icore::pages.position') }}
+            {{ trans('icore::pages.position') }}:
         </label>
         <select class="form-control custom-select" id="position" name="position">
         @for ($i=0; $i<$page->siblings_count; $i++)

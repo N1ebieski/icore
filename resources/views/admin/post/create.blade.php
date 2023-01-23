@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="far fa-plus-square"></i>
-        <span>{{ trans('icore::posts.route.create') }}:</span>
+        <span>{{ trans('icore::posts.route.create') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -35,7 +35,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::posts.title') }}
+                        {{ trans('icore::posts.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -72,7 +72,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        <span>{{ trans('icore::posts.tags.label') }} </span>
+                        <span>{{ trans('icore::posts.tags.label') }}: </span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -94,7 +94,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        <span>SEO Title</span>
+                        <span>SEO Title:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -108,13 +108,12 @@
                         name="seo_title" 
                         id="seo_title"
                         class="form-control {{ $isValid('seo_title') }}" 
-                        placeholder="Wpisz SEO title"
                     >
                     @includeWhen($errors->has('seo_title'), 'icore::admin.partials.errors', ['name' => 'seo_title'])
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        <span>SEO Description</span>
+                        <span>SEO Description:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -132,6 +131,23 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if (count(config('icore.multi_langs')) > 1)
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="auto_translate-single" 
+                            name="auto_translate"
+                            value="{{ AutoTranslate::ACTIVE }}" 
+                        >
+                        <label class="custom-control-label" for="auto_translate-single">
+                            {{ trans('icore::multi_langs.auto_trans') }}?
+                        </label>
+                    </div>
+                </div>
+                @endif                 
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input 
@@ -180,7 +196,7 @@
                 </div>
                 <div class="form-group">
                     <label for="status">
-                        {{ trans('icore::filter.status.label') }}
+                        {{ trans('icore::filter.status.label') }}:
                     </label>
                     <select 
                         class="custom-select" 
@@ -215,7 +231,7 @@
                     id="collapse-published-at"
                 >
                     <label for="published_at">
-                        <span>{{ trans('icore::posts.published_at.label') }}</span>
+                        <span>{{ trans('icore::posts.published_at.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top"
@@ -252,7 +268,7 @@
                 </div>
                 <div class="form-group">
                     <label for="category">
-                        <span>{{ trans('icore::categories.categories.label') }}</span>
+                        <span>{{ trans('icore::categories.categories.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top"
