@@ -193,7 +193,7 @@ class PostService
 
             $this->post->stats()->detach();
 
-            $this->post->detag();
+            $this->post->tags()->detach();
 
             return $this->post->delete();
         });

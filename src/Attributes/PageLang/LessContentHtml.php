@@ -16,21 +16,21 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use N1ebieski\ICore\Utils\Conversions\Replacement;
 
-class ReplacementContent
+class LessContentHtml
 {
     /**
      *
-     * @param Page $page
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected PageLang $pageLang)
     {
         //
     }
@@ -43,10 +43,13 @@ class ReplacementContent
     {
         return new Attribute(
             get: function (): string {
-                return App::make(Replacement::class)
-                    ->handle($this->page->content ?? '', function ($value) {
-                        return $value;
-                    });
+                $cut = explode('<p>[more]</p>', $this->pageLang->replacement_content_html);
+
+                // @phpstan-ignore-next-line
+                return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.page.show', [
+                    $this->pageLang->slug,
+                    '#more'
+                ]) . '" class="more">' . Lang::get('icore::pages.more') . '</a></p>' : $this->pageLang->replacement_content_html;
             }
         );
     }

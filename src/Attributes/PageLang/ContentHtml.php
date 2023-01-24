@@ -16,22 +16,24 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Models\Page\Page;
+use Mews\Purifier\Purifier;
+use N1ebieski\ICore\Models\Pagelang\Pagelang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class LessContentHtml
+class ContentHtml
 {
     /**
      *
-     * @param Page $page
+     * @param Pagelang $pageLang
+     * @param Purifier $purifier
      * @return void
      */
-    public function __construct(protected Page $page)
-    {
+    public function __construct(
+        protected Pagelang $pageLang,
+        protected Purifier $purifier
+    ) {
         //
     }
 
@@ -42,14 +44,8 @@ class LessContentHtml
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                $cut = explode('<p>[more]</p>', $this->page->replacement_content_html);
-
-                // @phpstan-ignore-next-line
-                return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.page.show', [
-                    $this->page->slug,
-                    '#more'
-                ]) . '" class="more">' . Lang::get('icore::pages.more') . '</a></p>' : $this->page->replacement_content_html;
+            get: function ($value): string {
+                return $this->purifier->clean($value ?? '');
             }
         );
     }

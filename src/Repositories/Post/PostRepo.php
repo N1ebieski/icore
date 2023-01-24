@@ -112,7 +112,7 @@ class PostRepo
                 return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
-            ->with(['tags', 'user'])
+            ->withAllRels()
             ->filterPaginate($filter['paginate']);
     }
 
@@ -129,7 +129,7 @@ class PostRepo
             ->where('slug', $slug)
             ->multiLang()
             ->active()
-            ->with([
+            ->withAllRels([
                 'categories' => function (MorphToMany|Builder|Category $query) {
                     /** @var Category */
                     $category = $query->getModel();
@@ -138,9 +138,7 @@ class PostRepo
                         ->withAncestorsExceptSelf()
                         ->multiLang()
                         ->active();
-                },
-                'user',
-                'tags'
+                }
             ])
             ->when(
                 $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
@@ -285,7 +283,7 @@ class PostRepo
                 $this->post->newQuery()
                     ->selectRaw("`{$this->post->getTable()}`.*")
                     ->search($name)
-                    ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
+                    ->when($tag = $tag->lang()->byName($name)->first(), function (Builder $query) use ($tag) {
                         // @phpstan-ignore-next-line
                         return $query->unionAll(
                             $this->post->newQuery()
@@ -307,7 +305,7 @@ class PostRepo
             ->groupBy('posts.id')
             ->orderBySearch($name)
             ->orderBy('published_at', 'desc')
-            ->with('user:id,name')
+            ->withAllRels()
             ->paginate($this->config->get('database.paginate'));
     }
 
@@ -372,7 +370,7 @@ class PostRepo
             ->latest()
             ->orderBy('published_at', 'desc')
             ->limit($this->config->get('icore.home.max'))
-            ->with(['user', 'categories', 'tags'])
+            ->withAllRels()
             ->get();
     }
 

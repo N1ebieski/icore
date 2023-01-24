@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Database\Factories\Page;
 
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use N1ebieski\ICore\ValueObjects\Page\Comment;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
@@ -42,19 +43,24 @@ class PageFactory extends Factory
      */
     public function definition(): array
     {
-        $content = $this->faker->text(2000);
-
         return [
-            'title' => $this->faker->sentence(3),
-            'content_html' => $content,
-            'content' => $content,
-            'seo_title' => $this->faker->randomElement([$this->faker->sentence(5), null]),
-            'seo_desc' => $this->faker->text(),
             'seo_noindex' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'seo_nofollow' => rand(SeoNofollow::INACTIVE, SeoNofollow::ACTIVE),
             'status' => rand(Status::INACTIVE, Status::ACTIVE),
             'comment' => rand(Comment::INACTIVE, Comment::ACTIVE)
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Page $page) {
+            return PageLang::makeFactory()->for($page)->create();
+        });
     }
 
     /**

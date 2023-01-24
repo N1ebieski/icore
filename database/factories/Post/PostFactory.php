@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Database\Factories\Post;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\ValueObjects\Post\Comment;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
@@ -63,6 +64,18 @@ class PostFactory extends Factory
                 null
             ]),
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Post $post) {
+            return PostLang::makeFactory()->for($post)->create();
+        });
     }
 
     /**

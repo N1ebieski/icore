@@ -28,6 +28,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Loads\Admin\Post\EditFullLoad;
 use N1ebieski\ICore\Filters\Admin\Post\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Post\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Post\StoreRequest;
@@ -112,10 +113,10 @@ class PostController
      * Show the full-form for editing the specified Post.
      *
      * @param  Post     $post     [description]
-     *
+     * @param  EditFullLoad $load
      * @return HttpResponse               [description]
      */
-    public function editFull(Post $post): HttpResponse
+    public function editFull(Post $post, EditFullLoad $load): HttpResponse
     {
         return Response::view('icore::admin.post.edit_full', App::make(EditFullViewModel::class, [
             'post' => $post

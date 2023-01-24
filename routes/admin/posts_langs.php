@@ -1,45 +1,24 @@
-/*
+<?php
+
+/**
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is licenced under the Software License Agreement
  * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
  * https://intelekt.net.pl/pages/regulamin
- * 
+ *
  * With the purchase or the installation of the software in your application
  * you accept the licence agreement.
- * 
+ *
  * @author    Mariusz Wysokiński <kontakt@intelekt.net.pl>
  * @copyright Since 2019 INTELEKT - Usługi Komputerowe Mariusz Wysokiński
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-.responsive-btn-group {
-    @extend .btn-group;
-    @include media-breakpoint-down(lg) {
-        flex-direction: column;
-        align-items: flex-start;
+use N1ebieski\ICore\Http\Controllers\Admin\PostLang\PostLangController;
 
-        .btn:not(:first-child) {
-            margin-left: 0;
-        }
-    }
-
-    .btn-group-vertical .btn {
-        max-height: 40px;
-    }
-
-    .btn {
-        width: 40px;
-        height: 40px;
-        @include media-breakpoint-up(sm) {
-            width: 120px;
-            height: 40px;
-        }
-    }
-}
-
-.btn-popover {
-    width: 100px;
-    text-align: center;
-}
+Route::delete('posts-langs/{postLang}', [PostLangController::class, 'destroy'])
+    ->name('post_lang.destroy')
+    ->where('postLang', '[0-9]+')
+    ->middleware('permission:admin.posts.delete');

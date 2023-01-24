@@ -29,10 +29,10 @@ $(document).on(
             method: 'delete',
             beforeSend: function () {
                 $row.find('.responsive-btn-group').addClass('disabled');
-                $row.find('[data-btn-ok-class*="destroy-lang"]').loader('show');
+                $row.find('[data-status="delete-lang"]').loader('show');
             },
             complete: function () {
-                $row.find('[data-btn-ok-class*="destroy-lang]').loader('hide');
+                $row.find('[data-status="delete-lang]').loader('hide');
             },
             success: function () {
                 $row.fadeOut('slow');

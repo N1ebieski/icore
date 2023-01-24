@@ -163,7 +163,7 @@ class CategoryRepo
         return $this->category->morphs()
             ->multiLang()
             ->active()
-            ->with('user')
+            ->withAllRels()
             ->orderBy('published_at', 'desc')
             ->paginate($this->config->get('database.paginate'));
     }

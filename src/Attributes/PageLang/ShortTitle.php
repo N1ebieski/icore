@@ -16,19 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ShortTitle
 {
     /**
      *
-     * @param Page $page
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected PageLang $pageLang)
     {
         //
     }
@@ -41,8 +41,8 @@ class ShortTitle
     {
         return new Attribute(
             get: function (): string {
-                return strlen($this->page->title) > 20 ?
-                    substr($this->page->title, 0, 20) : $this->page->title;
+                return strlen($this->pageLang->title) > 20 ?
+                    substr($this->pageLang->title, 0, 20) : $this->pageLang->title;
             }
         );
     }

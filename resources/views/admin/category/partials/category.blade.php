@@ -128,7 +128,7 @@
                     <button 
                         type="button"                
                         class="btn btn-danger" 
-                        data-status="delete" 
+                        data-status="delete-lang" 
                         data-toggle="confirmation"
                         data-route="{{ route('admin.category_lang.destroy', ['categoryLang' => $category->currentLang->id]) }}" 
                         data-id="{{ $category->id }}"

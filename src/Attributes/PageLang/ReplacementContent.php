@@ -16,24 +16,22 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use Mews\Purifier\Purifier;
-use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use N1ebieski\ICore\Utils\Conversions\Replacement;
 
-class ContentHtml
+class ReplacementContent
 {
     /**
      *
-     * @param Page $page
-     * @param Purifier $purifier
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(
-        protected Page $page,
-        protected Purifier $purifier
-    ) {
+    public function __construct(protected PageLang $pageLang)
+    {
         //
     }
 
@@ -44,8 +42,11 @@ class ContentHtml
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function ($value): string {
-                return $this->purifier->clean($value ?? '');
+            get: function (): string {
+                return App::make(Replacement::class)
+                    ->handle($this->pageLang->content ?? '', function ($value) {
+                        return $value;
+                    });
             }
         );
     }

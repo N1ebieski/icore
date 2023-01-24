@@ -16,19 +16,21 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class MetaTitle
+class ReplacementContentHtml
 {
     /**
      *
-     * @param Page $page
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected PageLang $pageLang)
     {
         //
     }
@@ -41,8 +43,13 @@ class MetaTitle
     {
         return new Attribute(
             get: function (): string {
-                return !empty($this->page->seo_title) ?
-                    $this->page->seo_title : $this->page->title;
+                return App::make(Pipeline::class)
+                    ->send($this->pageLang->content_html ?? '')
+                    ->through([
+                        \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
+                        \N1ebieski\ICore\Utils\Conversions\Replacement::class
+                    ])
+                    ->thenReturn();
             }
         );
     }

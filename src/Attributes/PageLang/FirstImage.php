@@ -16,19 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class FirstImage
 {
     /**
      *
-     * @param Page $page
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected PageLang $pageLang)
     {
         //
     }
@@ -41,7 +41,7 @@ class FirstImage
     {
         return new Attribute(
             get: function (): ?string {
-                preg_match('/<img.+src=[\'|"](.*?)[\'|"]/', $this->page->content_html, $image);
+                preg_match('/<img.+src=[\'|"](.*?)[\'|"]/', $this->pageLang->content_html, $image);
 
                 return $image[1] ?? null;
             }

@@ -19,8 +19,8 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentTaggable\Taggable;
 use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Post\PostCache;
@@ -44,6 +44,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -93,7 +94,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User $user
- * @method static Builder|Category multiLang()
+ * @method static Builder|Post multiLang()
  * @method static Builder|Post active()
  * @method static \N1ebieski\ICore\Database\Factories\Post\PostFactory factory(...$parameters)
  * @method static Builder|Post filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
@@ -135,16 +136,17 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @method static Builder|Post withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static Builder|Post withoutAllTags($tags, bool $includeUntagged = false)
  * @method static Builder|Post withoutAnyTags($tags, bool $includeUntagged = false)
+ * @method static Builder|Post withAllRels(array $relations = [])
  * @mixin \Eloquent
  */
 class Post extends Model
 {
-    use Taggable;
     use HasFullTextSearchable;
     use PivotEventTrait;
     use HasCarbonable;
     use HasFactory;
     use HasMultiLang;
+    use HasFixForMultiLangTaggable;
     use HasFilterable, HasStatFilterable {
         HasStatFilterable::scopeFilterOrderBy insteadof HasFilterable;
     }
@@ -214,21 +216,6 @@ class Post extends Model
     protected static function newFactory()
     {
         return \N1ebieski\ICore\Database\Factories\Post\PostFactory::new();
-    }
-
-    // Overrides
-
-    /**
-     * Override relacji tags, bo ma hardcodowane nazwy pól
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags(): MorphToMany
-    {
-        $model = config('taggable.model');
-
-        return $this->morphToMany($model, 'model', 'tags_models', 'model_id', 'tag_id')
-            ->withTimestamps();
     }
 
     // Relations
@@ -510,22 +497,59 @@ class Post extends Model
         ]);
     }
 
-    // Loads
-
     /**
      *
-     * @return static
+     * @param Builder $query
+     * @param array $relations
+     * @return Builder
+     * @throws BindingResolutionException
      */
-    public function loadAllRels()
+    public function scopeWithAllRels(Builder $query, array $relations = []): Builder
     {
-        return $this->load([
+        return $query->with(array_merge([
+            'tags' => function (MorphToMany|Builder|Tag $query) {
+                return $query->lang();
+            },
             'categories' => function (MorphToMany|Builder|Category $query) {
-                return $query->withAncestorsExceptSelf();
+                /** @var Category */
+                $category = $query->getModel();
+
+                return $query->selectRaw("`{$category->getTable()}`.*")
+                    ->multiLang()
+                    ->withAncestorsExceptSelf();
             },
             'user',
             App::make(MigrationUtil::class)->contains('create_stats_table') ?
                 'stats' : null
-        ]);
+        ], $relations));
+    }
+
+    // Loads
+
+    /**
+     *
+     * @param array $relations
+     * @return $this
+     * @throws BindingResolutionException
+     */
+    public function loadAllRels(array $relations = [])
+    {
+        return $this->load(array_merge([
+            'tags' => function (MorphToMany|Builder|Tag $query) {
+                return $query->lang();
+            },
+            'categories' => function (MorphToMany|Builder|Category $query) {
+                /** @var Category */
+                $category = $query->getModel();
+
+                return $query->selectRaw("`{$category->getTable()}`.*")
+                    ->multiLang()
+                    ->withAncestorsExceptSelf();
+            },
+            'user',
+            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+                'stats' : null
+        ], $relations));
     }
 
     // Factories

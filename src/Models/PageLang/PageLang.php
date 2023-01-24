@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Models\PostLang;
+namespace N1ebieski\ICore\Models\PageLang;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -26,59 +26,11 @@ use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use N1ebieski\ICore\Services\PostLang\PostLangService;
+use N1ebieski\ICore\Services\PageLang\PageLangService;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
-use N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory;
+use N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory;
 
-/**
- * N1ebieski\ICore\Models\PostLang\PostLang
- *
- * @property int $id
- * @property int $post_id
- * @property string $slug
- * @property string $title
- * @property string $content_html
- * @property string|null $content
- * @property string|null $seo_title
- * @property string|null $seo_desc
- * @property \N1ebieski\ICore\ValueObjects\Progress $progress
- * @property \N1ebieski\ICore\ValueObjects\Lang $lang
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read string $created_at_diff
- * @property-read string|null $first_image
- * @property-read string $less_content_html
- * @property-read string $meta_desc
- * @property-read string $meta_title
- * @property-read string $no_more_content_html
- * @property-read \N1ebieski\ICore\Models\Post $post
- * @property-read string $replacement_content
- * @property-read string $replacement_content_html
- * @property-read string $short_content
- * @property-read string $updated_at_diff
- * @method static \N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang findSimilarSlugs(string $attribute, array $config, string $slug)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang orderBySearch(string $term)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang query()
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang search(string $term)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereContentHtml($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereLang($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang wherePostId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereProgress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereSeoDesc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereSeoTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PostLang withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
- * @mixin \Eloquent
- */
-class PostLang extends Model
+class PageLang extends Model
 {
     use Sluggable;
     use HasFullTextSearchable;
@@ -92,14 +44,14 @@ class PostLang extends Model
      *
      * @var string
      */
-    protected $table = 'posts_langs';
+    protected $table = 'pages_langs';
 
     /**
      * All of the relationships to be touched.
      *
      * @var array
      */
-    protected $touches = ['post'];
+    protected $touches = ['page'];
 
     /**
      * The columns of the full text index
@@ -178,11 +130,11 @@ class PostLang extends Model
     /**
      * Create a new factory instance for the model.
      *
-     * @return \N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory
+     * @return \N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory
      */
     protected static function newFactory()
     {
-        return \N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory::new();
+        return \N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory::new();
     }
 
     // Relations
@@ -192,9 +144,9 @@ class PostLang extends Model
      *
      * @return BelongsTo
      */
-    public function post(): BelongsTo
+    public function page(): BelongsTo
     {
-        return $this->belongsTo(\N1ebieski\ICore\Models\Post::class);
+        return $this->belongsTo(\N1ebieski\ICore\Models\Page\Page::class);
     }
 
     // Attributes
@@ -206,8 +158,8 @@ class PostLang extends Model
      */
     public function content(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\Content::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\Content::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -218,8 +170,8 @@ class PostLang extends Model
      */
     public function contentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\ContentHtml::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\ContentHtml::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -230,8 +182,8 @@ class PostLang extends Model
      */
     public function metaTitle(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\MetaTitle::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\MetaTitle::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -242,8 +194,8 @@ class PostLang extends Model
      */
     public function metaDesc(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\MetaDesc::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\MetaDesc::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -254,8 +206,8 @@ class PostLang extends Model
      */
     public function replacementContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\ReplacementContent::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\ReplacementContent::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -266,8 +218,8 @@ class PostLang extends Model
      */
     public function shortContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\ShortContent::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\ShortContent::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -278,8 +230,8 @@ class PostLang extends Model
      */
     public function replacementContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\ReplacementContentHtml::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\ReplacementContentHtml::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -290,8 +242,8 @@ class PostLang extends Model
      */
     public function noMoreContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\NoMoreContentHtml::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\NoMoreContentHtml::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -302,8 +254,8 @@ class PostLang extends Model
      */
     public function lessContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\LessContentHtml::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\LessContentHtml::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -314,8 +266,20 @@ class PostLang extends Model
      */
     public function firstImage(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\PostLang\FirstImage::class, [
-            'postLang' => $this
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\FirstImage::class, [
+            'pageLang' => $this
+        ])();
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function shortTitle(): Attribute
+    {
+        return App::make(\N1ebieski\ICore\Attributes\PageLang\ShortTitle::class, [
+            'pageLang' => $this
         ])();
     }
 
@@ -323,18 +287,18 @@ class PostLang extends Model
 
     /**
      *
-     * @return PostLangService
+     * @return PageLangService
      */
     public function makeService()
     {
-        return App::make(PostLangService::class, ['postLang' => $this]);
+        return App::make(PageLangService::class, ['pageLang' => $this]);
     }
 
     /**
      * Undocumented function
      *
      * @param mixed $parameters
-     * @return PostLangFactory
+     * @return PageLangFactory
      */
     public static function makeFactory(...$parameters)
     {

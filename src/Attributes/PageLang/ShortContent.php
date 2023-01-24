@@ -16,21 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class ReplacementContentHtml
+class ShortContent
 {
     /**
      *
-     * @param Page $page
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected PageLang $pageLang)
     {
         //
     }
@@ -43,13 +41,7 @@ class ReplacementContentHtml
     {
         return new Attribute(
             get: function (): string {
-                return App::make(Pipeline::class)
-                    ->send($this->page->content_html ?? '')
-                    ->through([
-                        \N1ebieski\ICore\Utils\Conversions\Lightbox::class,
-                        \N1ebieski\ICore\Utils\Conversions\Replacement::class
-                    ])
-                    ->thenReturn();
+                return e(mb_substr(strip_tags($this->pageLang->replacement_content), 0, 500), false);
             }
         );
     }

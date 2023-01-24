@@ -254,7 +254,7 @@ class PageService
         return $this->db->transaction(function () {
             $this->page->comments()->delete();
 
-            $this->page->detag();
+            $this->page->tags()->detach();
 
             $this->page->stats()->detach();
 

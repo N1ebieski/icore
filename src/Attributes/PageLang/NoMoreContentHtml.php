@@ -16,19 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Content
+class NoMoreContentHtml
 {
     /**
      *
-     * @param Page $page
+     * @param PageLang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected PageLang $pageLang)
     {
         //
     }
@@ -40,10 +40,12 @@ class Content
     public function __invoke(): Attribute
     {
         return new Attribute(
-            set: function ($value): ?string {
-                return !empty($value) ?
-                    strip_tags(str_replace('[more]', '', $value))
-                    : null;
+            get: function (): string {
+                return str_replace(
+                    '<p>[more]</p>',
+                    '<span id="more" class="hashtag"></span>',
+                    $this->pageLang->replacement_content_html
+                );
             }
         );
     }

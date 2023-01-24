@@ -16,19 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Attributes\PageLang;
 
-use N1ebieski\ICore\Models\Page\Page;
+use N1ebieski\ICore\Models\Pagelang\Pagelang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class MetaDesc
+class Content
 {
     /**
      *
-     * @param Page $page
+     * @param Pagelang $pageLang
      * @return void
      */
-    public function __construct(protected Page $page)
+    public function __construct(protected Pagelang $pageLang)
     {
         //
     }
@@ -40,9 +40,10 @@ class MetaDesc
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return !empty($this->page->seo_desc) ?
-                    $this->page->seo_desc : $this->page->short_content;
+            set: function ($value): ?string {
+                return !empty($value) ?
+                    strip_tags(str_replace('[more]', '', $value))
+                    : null;
             }
         );
     }

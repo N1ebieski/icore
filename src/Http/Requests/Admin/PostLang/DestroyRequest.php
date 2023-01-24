@@ -16,37 +16,33 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Page;
+namespace N1ebieski\ICore\Http\Requests\Admin\PostLang;
 
-use N1ebieski\ICore\Models\Page\Page;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 
-class NoMoreContentHtml
+/**
+ * @property PostLang $postLang
+ */
+class DestroyRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
      *
-     * @param Page $page
-     * @return void
+     * @return bool
      */
-    public function __construct(protected Page $page)
+    public function authorize()
     {
-        //
+        return $this->postLang->post->hasAdditionalLangs();
     }
 
     /**
+     * Get the validation rules that apply to the request.
      *
-     * @return Attribute
+     * @return array
      */
-    public function __invoke(): Attribute
+    public function rules()
     {
-        return new Attribute(
-            get: function (): string {
-                return str_replace(
-                    '<p>[more]</p>',
-                    '<span id="more" class="hashtag"></span>',
-                    $this->page->replacement_content_html
-                );
-            }
-        );
+        return [];
     }
 }

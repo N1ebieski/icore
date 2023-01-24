@@ -293,7 +293,9 @@ class Category extends Entity
     public function scopeWithAncestorsExceptSelf(Builder $query): Builder
     {
         return $query->with(['ancestors' => function (BelongsToMany|Builder $query) {
-            return $query->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+            return $query->whereColumn('ancestor', '!=', 'descendant')
+                ->orderBy('depth', 'desc')
+                ->with('langs');
         }]);
     }
 
@@ -392,7 +394,9 @@ class Category extends Entity
     public function loadAncestorsExceptSelf(): self
     {
         return $this->load(['ancestors' => function (BelongsToMany|Builder $query) {
-            return $query->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+            return $query->whereColumn('ancestor', '!=', 'descendant')
+                ->orderBy('depth', 'desc')
+                ->with('langs');
         }]);
     }
 
