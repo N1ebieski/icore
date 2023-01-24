@@ -34,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scoped(\N1ebieski\ICore\Loads\LangLoad::class);
 
         $this->app->scoped(\Torann\GeoIP\GeoIP::class, 'geoip');
+
+        $this->app->bind(\Cviebrock\EloquentTaggable\Services\TagService::class, \N1ebieski\ICore\Services\Tag\TagService::class);
     }
 
     /**
