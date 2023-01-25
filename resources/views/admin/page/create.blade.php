@@ -130,26 +130,23 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if (count(config('icore.multi_langs')) > 1)
                 <div class="form-group">
-                    <label for="icon">
-                        <span>{{ trans('icore::pages.icon.label') }}:</span>
-                        <i 
-                            data-toggle="tooltip" 
-                            data-placement="top" 
-                            title="{{ trans('icore::pages.icon.tooltip') }}"
-                            class="far fa-question-circle"
-                        ></i>
-                    </label>
-                    <input 
-                        type="text" 
-                        value="{{ old('icon') }}" 
-                        name="icon" 
-                        id="icon"
-                        class="form-control {{ $isValid('icon') }}" 
-                        placeholder="{{ trans('icore::pages.icon.placeholder') }}"
-                    >
-                    @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="auto_translate-single" 
+                            name="auto_translate"
+                            value="{{ AutoTranslate::ACTIVE }}" 
+                        >
+                        <label class="custom-control-label" for="auto_translate-single">
+                            {{ trans('icore::multi_langs.auto_trans') }}?
+                        </label>
+                    </div>
                 </div>
+                @endif                 
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input 
@@ -196,6 +193,26 @@
                         </label>
                     </div>
                 </div>
+                <div class="form-group">                     
+                    <label for="icon">
+                        <span>{{ trans('icore::pages.icon.label') }}:</span>
+                        <i 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="{{ trans('icore::pages.icon.tooltip') }}"
+                            class="far fa-question-circle"
+                        ></i>
+                    </label>
+                    <input 
+                        type="text" 
+                        value="{{ old('icon') }}" 
+                        name="icon" 
+                        id="icon"
+                        class="form-control {{ $isValid('icon') }}" 
+                        placeholder="{{ trans('icore::pages.icon.placeholder') }}"
+                    >
+                    @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
+                </div>                
                 <div class="form-group">
                     <label for="status">
                         {{ trans('icore::filter.status.label') }}

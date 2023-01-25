@@ -283,7 +283,7 @@ class PostRepo
                 $this->post->newQuery()
                     ->selectRaw("`{$this->post->getTable()}`.*")
                     ->search($name)
-                    ->when($tag = $tag->lang()->byName($name)->first(), function (Builder $query) use ($tag) {
+                    ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
                         // @phpstan-ignore-next-line
                         return $query->unionAll(
                             $this->post->newQuery()

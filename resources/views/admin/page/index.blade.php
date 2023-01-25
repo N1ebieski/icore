@@ -33,9 +33,9 @@
 <li class="breadcrumb-item">
     <a 
         href="{{ route('admin.page.index', ['filter[parent]' => $ancestor->id]) }}"
-        title="{{ $ancestor->title }}"
+        title="{{ $ancestor->title ?? trans('icore::multi_langs.no_trans') }}"
     >
-        {{ $ancestor->title }}
+        {{ $ancestor->title ?? trans('icore::multi_langs.no_trans') }}
     </a>
 </li>
 @endforeach

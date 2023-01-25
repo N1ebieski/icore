@@ -25,7 +25,7 @@
                     <small>
                         <span>{{ trans('icore::pages.ancestors') }}:</span>
                         @foreach ($page->ancestors as $ancestor)
-                            <span>{{ $ancestor->title }}</span>
+                            <span>{{ $ancestor->title ?? trans('icore::multi_langs.no_trans') }}</span>
                             @if (!$loop->last)
                             <span>&raquo;</span>
                             @endif
@@ -141,24 +141,46 @@
                 </button>
                 @endcan
                 @can('admin.pages.delete')
-                <button 
-                    type="button"                
-                    class="btn btn-danger" 
-                    data-status="delete" 
-                    data-toggle="confirmation"
-                    data-route="{{ route('admin.page.destroy', ['page' => $page->id]) }}" 
-                    data-id="{{ $page->id }}" 
-                    data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
-                    data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-page" 
-                    data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-                    data-btn-cancel-icon-class="fas fa-ban mr-1"
-                    data-title="{{ trans('icore::pages.confirm') }}"
-                >
-                    <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
-                </button>
+                <div class="btn-group-vertical justify-content-start">                
+                    <button 
+                        type="button"                
+                        class="btn btn-danger" 
+                        data-status="delete" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.page.destroy', ['page' => $page->id]) }}" 
+                        data-id="{{ $page->id }}" 
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-page" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::pages.confirm') }}"
+                    >
+                        <i class="far fa-trash-alt"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
+                    </button>
+                    @if ($page->hasAdditionalLangs())
+                    <button 
+                        type="button"                
+                        class="btn btn-danger" 
+                        data-status="delete-lang" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.page_lang.destroy', ['pageLang' => $page->currentLang->id]) }}" 
+                        data-id="{{ $page->id }}"
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-lang" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::multi_langs.confirm') }}"
+                    >
+                        <i class="fas fa-trash"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::multi_langs.delete') }}</span>
+                    </button>
+                    @endif
+                </div>                    
                 @endcan
             </div>
         </div>

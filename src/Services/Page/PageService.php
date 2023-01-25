@@ -88,7 +88,7 @@ class PageService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill($attributes);
-            $this->page->content = $this->page->content_html;
+
             $this->page->user()->associate($attributes['user']);
 
             if ($attributes['parent_id'] !== null) {
@@ -101,6 +101,12 @@ class PageService
             }
 
             $this->page->save();
+
+            $this->page->currentLang->makeService()->create(
+                array_merge($attributes, [
+                    'page' => $this->page
+                ])
+            );
 
             if (array_key_exists('tags', $attributes)) {
                 $this->page->tag($attributes['tags'] ?? []);
@@ -119,11 +125,11 @@ class PageService
     public function update(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->page->title = $attributes['title'];
-            $this->page->content_html = $attributes['content_html'];
-            $this->page->content = $this->page->content_html;
-
-            $this->page->save();
+            $this->page->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'page' => $this->page
+                ])
+            );
 
             return $this->page;
         });
@@ -138,13 +144,10 @@ class PageService
     public function updateFull(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->page->fill(
-                $this->collect->make($attributes)->except(['parent_id'])->toArray()
-            );
-            $this->page->content = $this->page->content_html;
+            $this->page->fill($attributes);
 
             if ($attributes['parent_id'] != $this->page->parent_id) {
-                if ($attributes['parent_id'] === null) {
+                if (is_null($attributes['parent_id'])) {
                     $this->moveToRoot();
                 } else {
                     $this->moveToParent($attributes['parent_id']);
@@ -160,6 +163,12 @@ class PageService
             }
 
             $this->page->save();
+
+            $this->page->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'page' => $this->page
+                ])
+            );
 
             return $this->page;
         });

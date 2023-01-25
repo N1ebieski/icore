@@ -21,11 +21,13 @@ namespace N1ebieski\ICore\Models\Page;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Franzose\ClosureTable\Models\Entity;
+use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Page\PageCache;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Franzose\ClosureTable\Models\ClosureTable;
 use N1ebieski\ICore\Services\Page\PageService;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Repositories\Page\PageRepo;
 use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
@@ -106,7 +108,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User|null $user
- * @method static Builder|Post multiLang()
+ * @method static Builder|Page multiLang()
  * @method static Builder|Page active()
  * @method static Builder|Page activeByDate()
  * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])
@@ -208,6 +210,7 @@ class Page extends Entity
     use PivotEventTrait;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
     use HasFixForRealDepthClosureTable;
     use HasFixForMultiLangTaggable;
     use HasFilterable, HasStatFilterable {
@@ -248,6 +251,7 @@ class Page extends Entity
         'seo_nofollow',
         'status',
         'comment',
+        'auto_translate',
         'position',
         'icon'
     ];
@@ -408,6 +412,26 @@ class Page extends Entity
      *
      * @return Attribute
      */
+    public function slug(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->slug);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function title(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->title);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
     public function contentHtml(): Attribute
     {
         // @phpstan-ignore-next-line
@@ -524,6 +548,15 @@ class Page extends Entity
     }
 
     // Checkers
+
+    /**
+     *
+     * @return bool
+     */
+    public function isRoot(): bool
+    {
+        return is_null($this->parent_id);
+    }
 
     /**
      * Undocumented function
@@ -675,8 +708,10 @@ class Page extends Entity
     {
         return $this->setRelation(
             'siblings',
-            $this->where('parent_id', $this->parent_id)
+            $this->selectRaw("`{$this->getTable()}`.*")
+                ->multiLang()
                 ->active()
+                ->where('parent_id', $this->parent_id)
                 ->orderBy('position', 'asc')
                 ->get()
         );

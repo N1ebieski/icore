@@ -63,6 +63,7 @@ class PageRepo
     {
         return $this->page->newQuery()
             ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->when(!is_null($filter['search']), function (Builder|Page $query) use ($filter) {
                 return $query->filterSearch($filter['search'])
                     ->when($this->auth->user()?->can('admin.pages.view'), function (Builder $query) {
@@ -94,6 +95,8 @@ class PageRepo
     {
         /** @var ClosureTableCollection */
         $pages = $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->withAncestorsExceptSelf()
             ->orderBy('position', 'asc')
             ->get();
@@ -111,7 +114,10 @@ class PageRepo
         $self = $this->page->find($this->page->id);
 
         /** @var ClosureTableCollection */
-        $pages = $this->page->whereNotIn('id', $self->descendants()->pluck('id')->toArray())
+        $pages = $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
+            ->whereNotIn("{$this->page->getTable()}.id", $self->descendants()->pluck('id')->toArray())
             ->withAncestorsExceptSelf()
             ->orderBy('position', 'asc')
             ->get();
@@ -156,9 +162,14 @@ class PageRepo
     public function getWithChildrensByComponent(array $component): Collect
     {
         return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->with(['childrens' => function (HasMany|Builder|Page $query) {
-                return $query->active()->orderBy('position', 'asc');
+                return $query->selectRaw("`{$this->page->getTable()}`.*")
+                    ->active()
+                    ->multiLang()
+                    ->orderBy('position', 'asc');
             }])
             ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
@@ -192,6 +203,8 @@ class PageRepo
     public function getWithRecursiveChildrensByComponent(array $component): Collection
     {
         return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
 
@@ -213,7 +226,9 @@ class PageRepo
     public function firstBySlug(string $slug): ?Page
     {
         return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
             ->where('slug', $slug)
+            ->multiLang()
             ->active()
             ->when(
                 $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
@@ -235,13 +250,12 @@ class PageRepo
     public function paginateCommentsByFilter(array $filter): LengthAwarePaginator
     {
         /** @var Comment */
-        $comment = $this->page->comments()->make();
+        $comments = $this->page->comments();
 
         // @phpstan-ignore-next-line
-        return $this->page->comments()->where([
-                ["{$comment->getTable()}.parent_id", null],
-                ["{$comment->getTable()}.status", Status::ACTIVE]
-            ])
+        return $comments->active()
+            ->lang()
+            ->root()
             ->withAllRels($filter['orderby'])
             ->filterCommentsOrderBy($filter['orderby'])
             ->filterPaginate($this->config->get('database.paginate'));
@@ -262,6 +276,7 @@ class PageRepo
             ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
                 return $query->root()->active();
             }])
+            ->with('langs')
             ->chunk($chunk, $callback);
     }
 }

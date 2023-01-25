@@ -89,8 +89,7 @@ class StoreRequest extends FormRequest
                 'parent_id' => 'nullable|integer|exists:categories,id'
             ],
             count(Config::get('icore.multi_langs')) > 1 ? [
-                'auto_translate' => 'boolean',
-                'progress' => 'integer|between:0,100'
+                'auto_translate' => 'boolean'
             ] : []
         );
     }

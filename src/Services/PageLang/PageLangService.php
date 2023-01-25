@@ -16,24 +16,24 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Services\PostLang;
+namespace N1ebieski\ICore\Services\PageLang;
 
 use Throwable;
 use Illuminate\Config\Repository as Config;
-use N1ebieski\ICore\Models\PostLang\PostLang;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\DatabaseManager as DB;
 
-class PostLangService
+class PageLangService
 {
     /**
      *
-     * @param PostLang $postLang
+     * @param PageLang $pageLang
      * @param Config $config
      * @param DB $db
      * @return void
      */
     public function __construct(
-        protected PostLang $postLang,
+        protected PageLang $pageLang,
         protected Config $config,
         protected DB $db
     ) {
@@ -43,13 +43,13 @@ class PostLangService
     /**
      *
      * @param array $attributes
-     * @return PostLang
+     * @return PageLang
      * @throws Throwable
      */
-    public function createOrUpdate(array $attributes): PostLang
+    public function createOrUpdate(array $attributes): PageLang
     {
         return $this->db->transaction(function () use ($attributes) {
-            if ($this->postLang->exists) {
+            if ($this->pageLang->exists) {
                 return $this->update($attributes);
             }
 
@@ -60,38 +60,38 @@ class PostLangService
     /**
      *
      * @param array $attributes
-     * @return PostLang
+     * @return PageLang
      * @throws Throwable
      */
-    public function create(array $attributes): PostLang
+    public function create(array $attributes): PageLang
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->postLang->fill($attributes);
-            $this->postLang->content = $this->postLang->content_html;
+            $this->pageLang->fill($attributes);
+            $this->pageLang->content = $this->pageLang->content_html;
 
-            $this->postLang->post()->associate($attributes['post']);
+            $this->pageLang->page()->associate($attributes['page']);
 
-            $this->postLang->save();
+            $this->pageLang->save();
 
-            return $this->postLang;
+            return $this->pageLang;
         });
     }
 
     /**
      *
      * @param array $attributes
-     * @return PostLang
+     * @return PageLang
      * @throws Throwable
      */
-    public function update(array $attributes): PostLang
+    public function update(array $attributes): PageLang
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->postLang->fill($attributes);
-            $this->postLang->content = $this->postLang->content_html;
+            $this->pageLang->fill($attributes);
+            $this->pageLang->content = $this->pageLang->content_html;
 
-            $this->postLang->save();
+            $this->pageLang->save();
 
-            return $this->postLang;
+            return $this->pageLang;
         });
     }
 
@@ -103,11 +103,11 @@ class PostLangService
     public function delete(): ?bool
     {
         return $this->db->transaction(function () {
-            $this->postLang->post->comments()->lang()->delete();
+            $this->pageLang->page->comments()->lang()->delete();
 
-            $this->postLang->post->tags()->lang()->detach();
+            $this->pageLang->page->tags()->lang()->detach();
 
-            return $this->postLang->delete();
+            return $this->pageLang->delete();
         });
     }
 }

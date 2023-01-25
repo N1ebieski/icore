@@ -385,6 +385,17 @@ class Category extends Entity
         return new Attribute(fn (): int => $this->position + 1);
     }
 
+    // Checkers
+
+    /**
+     * 
+     * @return bool 
+     */
+    public function isRoot(): bool
+    {
+        return is_null($this->parent_id);
+    }
+
     // Loads
 
     /**

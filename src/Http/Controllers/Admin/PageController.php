@@ -28,10 +28,12 @@ use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Loads\Admin\Page\EditFullLoad;
 use N1ebieski\ICore\Filters\Admin\Page\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Page\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateRequest;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateStatusRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Page\EditFullViewModel;
@@ -151,11 +153,13 @@ class PageController
     }
 
     /**
-     * [editFull description]
-     * @param  Page $page [description]
-     * @return HttpResponse       [description]
+     *
+     * @param Page $page
+     * @param EditFullLoad $load
+     * @return HttpResponse
+     * @throws BindingResolutionException
      */
-    public function editFull(Page $page): HttpResponse
+    public function editFull(Page $page, EditFullLoad $load): HttpResponse
     {
         return Response::view('icore::admin.page.edit_full', App::make(EditFullViewModel::class, [
             'page' => $page

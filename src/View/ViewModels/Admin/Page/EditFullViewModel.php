@@ -48,7 +48,16 @@ class EditFullViewModel extends ViewModel
      */
     public function parents(): Collection
     {
-        return $this->page->makeService()->getAsFlatTreeExceptSelf();
+        $parents = $this->page->makeService()->getAsFlatTreeExceptSelf();
+
+        if (
+            !$this->page->isRoot()
+            && $parents->doesntContain(fn (Page $page) => $page->parent_id === $this->page->parent_id)
+        ) {
+            $parents = $parents->merge([$this->page->parent->loadAncestorsExceptSelf()->load('langs')]);
+        }
+
+        return $parents;
     }
 
     /**
@@ -61,9 +70,7 @@ class EditFullViewModel extends ViewModel
         $userId = $this->request->old('user');
 
         if (!is_null($userId)) {
-            /**
-             * @var User|null
-             */
+            /** @var User|null */
             return $this->user->find($userId);
         }
 

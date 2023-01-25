@@ -111,8 +111,7 @@ class StoreRequest extends FormRequest
                 'time_published_at' => 'required_unless:status,0|date_format:"H:i"|no_js_validation'
             ],
             count(Config::get('icore.multi_langs')) > 1 ? [
-                'auto_translate' => 'boolean',
-                'progress' => 'integer|between:0,100'
+                'auto_translate' => 'boolean'
             ] : []
         );
     }

@@ -67,30 +67,35 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'required|min:3|max:255',
-            'content_html' => 'bail|nullable|string',
-            'tags' => 'array|between:0,' . Config::get('icore.page.max_tags'),
-            'tags.*' => [
-                'bail',
-                'min:3',
-                'distinct',
-                'max:' . Config::get('icore.tag.max_chars'),
-                'alpha_num_spaces'
+        return array_merge(
+            [
+                'title' => 'required|min:3|max:255',
+                'content_html' => 'bail|nullable|string',
+                'tags' => 'array|between:0,' . Config::get('icore.page.max_tags'),
+                'tags.*' => [
+                    'bail',
+                    'min:3',
+                    'distinct',
+                    'max:' . Config::get('icore.tag.max_chars'),
+                    'alpha_num_spaces'
+                ],
+                'seo_title' => 'max:255',
+                'seo_desc' => 'max:255',
+                'icon' => 'nullable|string|max:255',
+                'seo_noindex' => 'boolean',
+                'seo_nofollow' => 'boolean',
+                'comment' => 'boolean',
+                'status' => [
+                    'bail',
+                    'required',
+                    'integer',
+                    Rule::in([Status::ACTIVE, Status::INACTIVE])
+                ],
+                'parent_id' => 'nullable|integer|exists:pages,id|no_js_validation'
             ],
-            'seo_title' => 'max:255',
-            'seo_desc' => 'max:255',
-            'icon' => 'nullable|string|max:255',
-            'seo_noindex' => 'boolean',
-            'seo_nofollow' => 'boolean',
-            'comment' => 'boolean',
-            'status' => [
-                'bail',
-                'required',
-                'integer',
-                Rule::in([Status::ACTIVE, Status::INACTIVE])
-            ],
-            'parent_id' => 'nullable|integer|exists:pages,id|no_js_validation'
-        ];
+            count(Config::get('icore.multi_langs')) > 1 ? [
+                'auto_translate' => 'boolean'
+            ] : []
+        );
     }
 }

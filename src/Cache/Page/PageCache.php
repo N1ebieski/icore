@@ -54,7 +54,7 @@ class PageCache
         $json = json_encode($component);
 
         return $this->cache->tags(['pages'])->remember(
-            "page.getWithChildrensByComponent.{$json}",
+            "page.{$this->config->get('app.locale')}.getWithChildrensByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithChildrensByComponent($component);
@@ -72,7 +72,7 @@ class PageCache
         $json = json_encode($component);
 
         return $this->cache->tags(['pages'])->remember(
-            "page.getWithRecursiveChildrensByComponent.{$json}",
+            "page.{$this->config->get('app.locale')}.getWithRecursiveChildrensByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithRecursiveChildrensByComponent($component);
@@ -88,7 +88,7 @@ class PageCache
     public function rememberBySlug(string $slug): ?Page
     {
         return $this->cache->tags(['page.' . $slug])->remember(
-            "page.firstBySlug.{$slug}",
+            "page.{$this->config->get('app.locale')}.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->page->makeRepo()->firstBySlug($slug);
@@ -103,7 +103,7 @@ class PageCache
     public function rememberLoadSiblingsAndRecursiveChildrens(): Page
     {
         return $this->cache->tags(['page.' . $this->page->slug])->remember(
-            "page.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
+            "page.{$this->config->get('app.locale')}.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->page->loadRecursiveChildrens()->loadActiveSiblings();
