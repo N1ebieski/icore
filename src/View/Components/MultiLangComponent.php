@@ -22,11 +22,11 @@ use Illuminate\Support\Str;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Utils\Route\RouteRecognize;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\Foundation\Application as App;
+use N1ebieski\ICore\Utils\Route\Interfaces\RouteRecognizeInterface;
 
 class MultiLangComponent extends Component
 {
@@ -38,7 +38,7 @@ class MultiLangComponent extends Component
      * @param Str $str
      * @param App $app
      * @param Collect $collect
-     * @param RouteRecognize $routeRecognize
+     * @param RouteRecognizeInterface $routeRecognize
      * @return void
      */
     public function __construct(
@@ -48,7 +48,7 @@ class MultiLangComponent extends Component
         protected Str $str,
         protected App $app,
         protected Collect $collect,
-        protected RouteRecognize $routeRecognize
+        protected RouteRecognizeInterface $routeRecognize
     ) {
         //
     }

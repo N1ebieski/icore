@@ -42,7 +42,7 @@ class SendConfirmation
      * @param  NewsletterEventInterface $event
      * @return void
      */
-    public function handle($event): void
+    public function handle(NewsletterEventInterface $event): void
     {
         $this->mailer->send($this->app->make(ConfirmationMail::class, [
             'newsletter' => $event->newsletter

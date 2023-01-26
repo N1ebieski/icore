@@ -35,6 +35,16 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->scoped(\Torann\GeoIP\GeoIP::class, 'geoip');
 
+        $this->app->bind(\N1ebieski\ICore\Utils\Route\Interfaces\RouteRecognizeInterface::class, \N1ebieski\ICore\Utils\Route\RouteRecognize::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\DOMDocument\Interfaces\DOMDocumentAdapterInterface::class, \N1ebieski\ICore\Utils\DOMDocument\DOMDocumentAdapter::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\File\Interfaces\FileInterface::class, \N1ebieski\ICore\Utils\File\File::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\Updater\Interfaces\UpdaterInterface::class, \N1ebieski\ICore\Utils\Updater\Updater::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface::class, \N1ebieski\ICore\Utils\Migration\MigrationRecognize::class);
+
         $this->app->bind(\Cviebrock\EloquentTaggable\Services\TagService::class, \N1ebieski\ICore\Services\Tag\TagService::class);
     }
 

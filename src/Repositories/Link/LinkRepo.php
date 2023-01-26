@@ -19,7 +19,7 @@
 namespace N1ebieski\ICore\Repositories\Link;
 
 use N1ebieski\ICore\Models\Link;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Link\Type;
 use Illuminate\Database\Eloquent\Collection;
@@ -33,12 +33,12 @@ class LinkRepo
      *
      * @param Link $link
      * @param Config $config
-     * @param MigrationUtil $migrationUtil
+     * @param MigrationRecognizeInterface $migrationRecognize
      */
     public function __construct(
         protected Link $link,
         protected Config $config,
-        protected MigrationUtil $migrationUtil
+        protected MigrationRecognizeInterface $migrationRecognize
     ) {
         //
     }
@@ -96,13 +96,13 @@ class LinkRepo
             ->where('type', Type::LINK)
             ->when($component['home'] === true, function (Builder $query) {
                 return $query->whereDoesntHave('categories')
-                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
+                    ->when($this->migrationRecognize->contains('add_home_to_links_table'), function (Builder $query) {
                         return $query->orWhere('home', true);
                     });
             }, function (Builder $query) {
                 return $query->where(function (Builder $query) {
                     return $query->whereDoesntHave('categories')
-                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
+                        ->when($this->migrationRecognize->contains('add_home_to_links_table'), function (Builder $query) {
                             return $query->where('home', false);
                         });
                 });

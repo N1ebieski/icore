@@ -23,9 +23,10 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use N1ebieski\ICore\Utils\Updater\Action\ActionFactory;
+use N1ebieski\ICore\Utils\Updater\Interfaces\UpdaterInterface;
 use N1ebieski\ICore\Utils\Updater\Schema\Interfaces\SchemaInterface;
 
-class Updater
+class Updater implements UpdaterInterface
 {
     /**
      *

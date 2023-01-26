@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Feature\Admin;
+namespace N1ebieski\ICore\Tests\Feature\Admin\Report\Comment;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
@@ -29,18 +29,18 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ReportTest extends TestCase
+class ShowReportCommentTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testReportCommentShowAsGuest(): void
+    public function testShowAsGuest(): void
     {
         $response = $this->get(route('admin.report.comment.show', [32]));
 
         $response->assertRedirect(route('login'));
     }
 
-    public function testReportCommentShowWithoutPermission(): void
+    public function testShowWithoutPermission(): void
     {
         /** @var User */
         $user = User::makeFactory()->create();
@@ -58,7 +58,7 @@ class ReportTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testReportNoexistCommentShow(): void
+    public function testShowNoExist(): void
     {
         /** @var User */
         $user = User::makeFactory()->admin()->create();
@@ -70,7 +70,7 @@ class ReportTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
     }
 
-    public function testReportCommentShow(): void
+    public function testShow(): void
     {
         /** @var User */
         $user = User::makeFactory()->admin()->create();
@@ -94,67 +94,5 @@ class ReportTest extends TestCase
         $baseResponse = $response->baseResponse;
 
         $this->assertStringContainsString($reports[6]->content, $baseResponse->getData()->view);
-    }
-
-    public function testReportCommentClearAsGuest(): void
-    {
-        $response = $this->delete(route('admin.report.comment.clear', [32]));
-
-        $response->assertRedirect(route('login'));
-    }
-
-    public function testReportCommentClearWithoutPermission(): void
-    {
-        /** @var User */
-        $user = User::makeFactory()->create();
-
-        /** @var Post */
-        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
-
-        /** @var Comment */
-        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
-
-        Auth::login($user);
-
-        $response = $this->delete(route('admin.report.comment.clear', [$comment->id]));
-
-        $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
-    }
-
-    public function testReportNoexistCommentClear(): void
-    {
-        /** @var User */
-        $user = User::makeFactory()->admin()->create();
-
-        Auth::login($user);
-
-        $response = $this->delete(route('admin.report.comment.clear', [4343434]));
-
-        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
-    }
-
-    public function testReportCommentClear(): void
-    {
-        /** @var User */
-        $user = User::makeFactory()->admin()->create();
-
-        /** @var Post */
-        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->create();
-
-        /** @var Comment */
-        $comment = Comment::makeFactory()->active()->withUser()->for($post, 'morph')->create();
-
-        /** @var Collection<Report> */
-        $reports = Report::makeFactory()->count(10)->withUser()->for($comment, 'morph')->create();
-
-        Auth::login($user);
-
-        $response = $this->delete(route('admin.report.comment.clear', [$comment->id]));
-
-        $response->assertOk()->assertJsonStructure(['view']);
-
-        $deleted = Report::whereIn('id', collect($reports)->pluck('id')->toArray())->count();
-
-        $this->assertTrue($deleted === 0);
     }
 }

@@ -16,11 +16,12 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Utils;
+namespace N1ebieski\ICore\Utils\DOMDocument;
 
 use DOMDocument;
+use N1ebieski\ICore\Utils\DOMDocument\Interfaces\DOMDocumentAdapterInterface;
 
-class DOMDocumentAdapter
+class DOMDocumentAdapter implements DOMDocumentAdapterInterface
 {
     /**
      * Undocumented variable

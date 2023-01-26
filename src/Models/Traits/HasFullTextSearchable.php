@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Models\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 
 trait HasFullTextSearchable
@@ -181,7 +181,7 @@ trait HasFullTextSearchable
                 [$this->getSearchAsString()]
             )
             ->when(
-                App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
+                App::make(MigrationRecognizeInterface::class)->contains('add_column_fulltext_index_to_all_tables'),
                 function (Builder $query) {
                     foreach ($this->searchable as $column) {
                         $query->selectRaw(
@@ -214,7 +214,7 @@ trait HasFullTextSearchable
 
         return $query->when(array_key_exists($this->className(), $this->search), function (Builder $query) {
             return $query->when(
-                App::make(MigrationUtil::class)->contains('add_column_fulltext_index_to_all_tables'),
+                App::make(MigrationRecognizeInterface::class)->contains('add_column_fulltext_index_to_all_tables'),
                 function (Builder $query) {
                     foreach ($this->searchable as $column) {
                         $query->orderBy("{$column}_relevance", 'desc');

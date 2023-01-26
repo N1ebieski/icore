@@ -16,37 +16,25 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Listeners\User;
+namespace N1ebieski\ICore\Utils\DOMDocument\Interfaces;
 
-use Illuminate\Http\Request;
-use N1ebieski\ICore\Models\User;
-use Illuminate\Contracts\Auth\Guard as Auth;
+use DOMDocument;
 
-class RefreshIp
+interface DOMDocumentAdapterInterface
 {
     /**
      * Undocumented function
      *
-     * @param Auth $auth
+     * @param string $source
+     * @param integer $options
+     * @return DOMDocument|bool
      */
-    public function __construct(protected Auth $auth, protected Request $request)
-    {
-        //
-    }
+    public function loadHTML(string $source, int $options = 0);
 
     /**
-     * Handle the event.
+     * Undocumented function
      *
-     * @param  object  $event
-     * @return void
+     * @return string|false
      */
-    public function handle($event): void
-    {
-        /** @var User */
-        $user = $this->auth->user();
-
-        $user->update([
-            'ip' => $this->request->ip()
-        ]);
-    }
+    public function saveHTML();
 }

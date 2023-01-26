@@ -20,8 +20,8 @@ namespace N1ebieski\ICore\Services\Link;
 
 use Throwable;
 use N1ebieski\ICore\Models\Link;
-use N1ebieski\ICore\Utils\File\File;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\Utils\File\Interfaces\FileInterface;
 
 class LinkService
 {
@@ -29,12 +29,12 @@ class LinkService
      * Undocumented function
      *
      * @param Link $link
-     * @param File $file
+     * @param FileInterface $file
      * @param DB $db
      */
     public function __construct(
         protected Link $link,
-        protected File $file,
+        protected FileInterface $file,
         protected DB $db
     ) {
         //

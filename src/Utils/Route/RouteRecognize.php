@@ -23,8 +23,9 @@ use Illuminate\Routing\Route;
 use InvalidArgumentException;
 use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
+use N1ebieski\ICore\Utils\Route\Interfaces\RouteRecognizeInterface;
 
-class RouteRecognize
+class RouteRecognize implements RouteRecognizeInterface
 {
     /**
      *

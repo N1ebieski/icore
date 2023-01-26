@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Models\Page;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Franzose\ClosureTable\Models\Entity;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Page\PageCache;
 use N1ebieski\ICore\ValueObjects\Page\Status;
@@ -663,7 +663,7 @@ class Page extends Entity
                 return $query->lang();
             },
             'user',
-            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
                 'stats' : null
         ], $relations));
     }
@@ -730,7 +730,7 @@ class Page extends Entity
                 return $query->lang();
             },
             'user',
-            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
                 'stats' : null
         ], $relations));
     }

@@ -22,7 +22,7 @@ use Closure;
 use InvalidArgumentException;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -141,7 +141,7 @@ class PostRepo
                 }
             ])
             ->when(
-                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                $this->app->make(MigrationRecognizeInterface::class)->contains('create_stats_table'),
                 function (Builder $query) {
                     return $query->with('stats');
                 }

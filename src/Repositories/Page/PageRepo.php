@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Repositories\Page;
 use Closure;
 use InvalidArgumentException;
 use N1ebieski\ICore\Models\Page\Page;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
@@ -231,7 +231,7 @@ class PageRepo
             ->multiLang()
             ->active()
             ->when(
-                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                $this->app->make(MigrationRecognizeInterface::class)->contains('create_stats_table'),
                 function (Builder $query) {
                     return $query->with('stats');
                 }

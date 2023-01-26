@@ -16,37 +16,15 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Listeners\User;
+namespace N1ebieski\ICore\Utils\Migration\Interfaces;
 
-use Illuminate\Http\Request;
-use N1ebieski\ICore\Models\User;
-use Illuminate\Contracts\Auth\Guard as Auth;
-
-class RefreshIp
+interface MigrationRecognizeInterface
 {
     /**
      * Undocumented function
      *
-     * @param Auth $auth
+     * @param string $migration
+     * @return boolean
      */
-    public function __construct(protected Auth $auth, protected Request $request)
-    {
-        //
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
-     */
-    public function handle($event): void
-    {
-        /** @var User */
-        $user = $this->auth->user();
-
-        $user->update([
-            'ip' => $this->request->ip()
-        ]);
-    }
+    public function contains(string $migration): bool;
 }

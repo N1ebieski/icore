@@ -19,7 +19,6 @@
 namespace N1ebieski\ICore\Tests\Integration\Category;
 
 use Tests\TestCase;
-use Category\Status;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Rules\UniqueLangRule;
 use N1ebieski\ICore\Models\Category\Category;

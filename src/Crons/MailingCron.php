@@ -18,11 +18,13 @@
 
 namespace N1ebieski\ICore\Crons;
 
+use Throwable;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\Jobs\SendMailingJob;
 use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class MailingCron
 {
@@ -97,9 +99,9 @@ class MailingCron
     }
 
     /**
-     * Adds new jobs to the queue or (if there are none), disables mailing.
      *
-     * @param MailingEmail   $mailingEmail   [description]
+     * @param MailingEmail $mailingEmail
+     * @return void
      */
     protected function addToQueue(MailingEmail $mailingEmail): void
     {
@@ -107,9 +109,10 @@ class MailingCron
     }
 
     /**
-     * Activates all scheduled mailings with a date earlier than now()
      *
      * @return void
+     * @throws BindingResolutionException
+     * @throws Throwable
      */
     protected function activateScheduled(): void
     {

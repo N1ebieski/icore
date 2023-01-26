@@ -21,7 +21,6 @@ namespace N1ebieski\ICore\Models;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Post\PostCache;
 use N1ebieski\ICore\Models\Category\Category;
@@ -47,6 +46,7 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 /**
  * N1ebieski\ICore\Models\Post
@@ -519,7 +519,7 @@ class Post extends Model
                     ->withAncestorsExceptSelf();
             },
             'user',
-            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
                 'stats' : null
         ], $relations));
     }
@@ -547,7 +547,7 @@ class Post extends Model
                     ->withAncestorsExceptSelf();
             },
             'user',
-            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
                 'stats' : null
         ], $relations));
     }

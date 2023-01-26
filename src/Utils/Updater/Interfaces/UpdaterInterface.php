@@ -16,37 +16,22 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Utils;
+namespace N1ebieski\ICore\Utils\Updater\Interfaces;
 
-use Illuminate\Support\Str;
-use N1ebieski\ICore\Cache\Migration\MigrationCache;
-
-class MigrationUtil
+interface UpdaterInterface
 {
     /**
      * Undocumented function
      *
-     * @param MigrationCache $migrationCache
-     * @param Str $str
+     * @param string $path
+     * @return void
      */
-    public function __construct(
-        protected MigrationCache $migrationCache,
-        protected Str $str
-    ) {
-        //
-    }
+    public function backup(string $path = 'backup'): void;
 
     /**
      * Undocumented function
      *
-     * @param string $migration
-     * @return boolean
+     * @return void
      */
-    public function contains(string $migration): bool
-    {
-        return $this->migrationCache->rememberAll()
-            ->contains(function ($item) use ($migration) {
-                return $this->str->contains($item->migration, $migration);
-            });
-    }
+    public function update(): void;
 }

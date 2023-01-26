@@ -20,7 +20,7 @@ namespace N1ebieski\ICore\Listeners\Stat\Page;
 
 use Illuminate\Events\Dispatcher;
 use N1ebieski\ICore\Models\Page\Page;
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Models\Stat\Page\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
@@ -34,12 +34,12 @@ class IncrementView
     /**
      *
      * @param Stat $stat
-     * @param MigrationUtil $migrationUtil
+     * @param MigrationRecognizeInterface $migrationRecognize
      * @return void
      */
     public function __construct(
         protected Stat $stat,
-        protected MigrationUtil $migrationUtil
+        protected MigrationRecognizeInterface $migrationRecognize
     ) {
         //
     }
@@ -52,7 +52,7 @@ class IncrementView
     public function verify(Page $page): bool
     {
         return $page->status->isActive()
-            && $this->migrationUtil->contains('copy_view_to_visit_in_stats_table');
+            && $this->migrationRecognize->contains('copy_view_to_visit_in_stats_table');
     }
 
     /**
@@ -61,7 +61,7 @@ class IncrementView
      * @param  PageEventInterface  $event
      * @return void
      */
-    public function handleSingle($event): void
+    public function handleSingle(PageEventInterface $event): void
     {
         if (!$this->verify($event->page)) {
             return;
@@ -81,7 +81,7 @@ class IncrementView
      * @param  PageCollectionEventInterface  $event
      * @return void
      */
-    public function handleGlobal($event): void
+    public function handleGlobal(PageCollectionEventInterface $event): void
     {
         /** @var Collection */
         $morphs = $event->pages->load([

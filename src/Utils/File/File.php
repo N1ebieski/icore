@@ -21,8 +21,9 @@ namespace N1ebieski\ICore\Utils\File;
 use Illuminate\Http\UploadedFile;
 use N1ebieski\ICore\Exceptions\File\NotFoundException;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use N1ebieski\ICore\Utils\File\Interfaces\FileInterface;
 
-class File
+class File implements FileInterface
 {
     /**
      * Undocumented variable
