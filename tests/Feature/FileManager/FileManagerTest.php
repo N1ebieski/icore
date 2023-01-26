@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Feature\Admin;
+namespace N1ebieski\ICore\Tests\Feature\FileManager;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
@@ -30,14 +30,14 @@ class FileManagerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testFilemanagerReadPublicDiskAsGuest(): void
+    public function testReadPublicDiskAsGuest(): void
     {
         $response = $this->getJson(route('fm.content', ['disk' => 'public']));
 
         $response->assertStatus(HttpResponse::HTTP_UNAUTHORIZED);
     }
 
-    public function testFilemanagerWritePublicDiskAsGuest(): void
+    public function testWritePublicDiskAsGuest(): void
     {
         Storage::fake('public');
 
@@ -55,7 +55,7 @@ class FileManagerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_UNAUTHORIZED);
     }
 
-    public function testFilemanagerReadPublicDiskAsUser(): void
+    public function testReadPublicDiskAsUser(): void
     {
         /** @var User */
         $user = User::makeFactory()->user()->create();
@@ -67,7 +67,7 @@ class FileManagerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testFilemanagerWritePublicDiskAsUser(): void
+    public function testWritePublicDiskAsUser(): void
     {
         /** @var User */
         $user = User::makeFactory()->user()->create();
@@ -90,7 +90,7 @@ class FileManagerTest extends TestCase
         $response->assertStatus(HttpResponse::HTTP_FORBIDDEN);
     }
 
-    public function testFilemanagerWritePublicDiskAsAdmin(): void
+    public function testWritePublicDiskAsAdmin(): void
     {
         /** @var User */
         $user = User::makeFactory()->admin()->create();
@@ -114,7 +114,7 @@ class FileManagerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testFilemanagerWritePublicVendorDiskAsSuperadmin(): void
+    public function testWritePublicVendorDiskAsSuperadmin(): void
     {
         /** @var User */
         $user = User::makeFactory()->superadmin()->create();

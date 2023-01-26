@@ -47,14 +47,7 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $content = $this->faker->text(2000);
-
         return [
-            'title' => $this->faker->sentence(5),
-            'content_html' => $content,
-            'content' => strip_tags($content),
-            'seo_title' => $this->faker->randomElement([$this->faker->sentence(5), null]),
-            'seo_desc' => $this->faker->text(),
             'seo_noindex' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'seo_nofollow' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'status' => rand(Status::INACTIVE, Status::ACTIVE),
