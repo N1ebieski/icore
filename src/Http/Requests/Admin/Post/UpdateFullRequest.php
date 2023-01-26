@@ -19,8 +19,11 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Rules\ExistsLangRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Database\Query\Builder;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\ValueObjects\Post\Status as PostStatus;
 use N1ebieski\ICore\ValueObjects\Category\Status as CategoryStatus;
@@ -88,12 +91,16 @@ class UpdateFullRequest extends FormRequest
                 'categories.*' => [
                     'integer',
                     'distinct',
-                    Rule::exists('categories', 'id')->where(function ($query) {
-                        $query->where([
-                            ['status', CategoryStatus::ACTIVE],
-                            ['model_type', $this->category->model_type]
-                        ]);
-                    }),
+                    App::make(ExistsLangRule::class, [
+                        'table' => $this->category->getTable(),
+                        'column' => 'id',
+                        'query' => function (Builder $query) {
+                            return $query->where([
+                                ['status', CategoryStatus::ACTIVE],
+                                ['model_type', $this->category->model_type]
+                            ]);
+                        }
+                    ]),
                     'no_js_validation'
                 ],
                 'user' => 'bail|required|integer|exists:users,id',

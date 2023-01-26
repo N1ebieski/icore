@@ -61,6 +61,20 @@ class CategoryFactory extends Factory
      *
      * @return static
      */
+    public function inactive()
+    {
+        return $this->state(function () {
+            return [
+                'status' => Status::INACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
     public function active()
     {
         return $this->state(function () {

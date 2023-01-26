@@ -19,13 +19,12 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Rules\UniqueLangRule;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Contracts\Database\Query\Builder;
-use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 
 class UpdateRequest extends FormRequest
 {
@@ -61,7 +60,6 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         $category = new Category();
-        $categoryLang = new CategoryLang();
 
         return array_merge(
             [
@@ -69,23 +67,18 @@ class UpdateRequest extends FormRequest
                     'required',
                     'string',
                     'between:3,255',
-                    function ($attribute, $value, $fail) use ($category, $categoryLang) {
-                        $count = DB::table($categoryLang->getTable())
-                            ->join($category->getTable(), "{$category->getTable()}.id", '=', "{$categoryLang->getTable()}.category_id")
-                            ->when(is_null($this->category->parent_id), function (Builder $query) use ($category) {
+                    App::make(UniqueLangRule::class, [
+                        'table' => $category->getTable(),
+                        'column' => 'name',
+                        'ignore' => $this->category->id,
+                        'query' => function (Builder $query) use ($category) {
+                            return $query->when(is_null($this->category->parent_id), function (Builder $query) use ($category) {
                                 return $query->whereNull("{$category->getTable()}.parent_id");
                             }, function (Builder $query) use ($category) {
                                 return $query->where("{$category->getTable()}.parent_id", $this->category->parent_id);
-                            })
-                            ->where("{$categoryLang->getTable()}.{$attribute}", $value)
-                            ->where("{$categoryLang->getTable()}.lang", Config::get('app.locale'))
-                            ->where("{$category->getTable()}.id", '<>', $this->category->id)
-                            ->count();
-
-                        if ($count > 0) {
-                            $fail(Lang::get('validation.unique', [$attribute]));
+                            });
                         }
-                    }
+                    ])
                 ],
                 'icon' => 'nullable|string|max:255',
                 'parent_id' => [

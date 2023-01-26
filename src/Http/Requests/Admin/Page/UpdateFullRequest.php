@@ -19,7 +19,9 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Page;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Rules\ExistsLangRule;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 
@@ -95,7 +97,10 @@ class UpdateFullRequest extends FormRequest
                 'parent_id' => [
                     'nullable',
                     'integer',
-                    'exists:pages,id',
+                    App::make(ExistsLangRule::class, [
+                        'table' => $this->page->getTable(),
+                        'column' => 'id'
+                    ]),
                     Rule::notIn($this->page->makeRepo()->getDescendantsAsArray()),
                     'no_js_validation'
                 ]

@@ -255,12 +255,12 @@
                         @foreach ($parents as $parent)
                         <option 
                             @if ($parent->ancestors->isNotEmpty())
-                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->toArray()) }} &raquo; </small>{{ $parent->title }}'
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->map(fn ($item) => $item ?? trans('icore::multi_langs.no_trans'))->toArray()) }} &raquo; </small>{{ $parent->title ?? trans('icore::multi_langs.no_trans') }}'
                             @endif                        
                             value="{{ $parent->id }}" 
                             {{ (old('parent_id') == $parent->id) ? 'selected' : '' }}
                         >
-                            {{ $parent->title }}
+                            {{ $parent->title ?? trans('icore::multi_langs.no_trans') }}
                         </option>
                         @endforeach
                     </select>
