@@ -79,9 +79,15 @@ class SendMailingJob implements ShouldQueue
 
         if ($this->mailingEmail->sent->isUnsent()) {
             if ($this->mailingEmail->mailing->status->isInprogress()) {
-                $this->mailer->send(
-                    $this->app->make(MailingMail::class, ['mailingEmail' => $this->mailingEmail])
-                );
+                try {
+                    $this->mailer->send(
+                        $this->app->make(MailingMail::class, ['mailingEmail' => $this->mailingEmail])
+                    );
+                } catch (\Throwable $e) {
+                    $this->failed($e);
+
+                    throw $e;
+                }
 
                 $this->mailingEmail->makeService()->markAsSent();
             }
