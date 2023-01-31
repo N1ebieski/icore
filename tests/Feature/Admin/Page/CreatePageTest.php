@@ -122,7 +122,7 @@ class CreatePageTest extends TestCase
 
         $response->assertSessionHas('success');
 
-        /** @var Page|null */
+        /** @var PageLang|null */
         $pageLang = PageLang::where('title', 'Page dodany.')->first();
 
         $this->assertTrue($pageLang?->exists());
@@ -157,7 +157,7 @@ class CreatePageTest extends TestCase
 
         $response->assertSessionHas('success');
 
-        /** @var Page|null */
+        /** @var PageLang|null */
         $pageLang = PageLang::where('title', 'Page dodany.')->first();
 
         $this->assertTrue($pageLang?->exists());

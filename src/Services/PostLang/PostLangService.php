@@ -105,6 +105,7 @@ class PostLangService
         return $this->db->transaction(function () {
             $this->postLang->post->comments()->lang()->delete();
 
+            // @phpstan-ignore-next-line
             $this->postLang->post->tags()->lang()->detach();
 
             return $this->postLang->delete();

@@ -31,6 +31,7 @@ class UniqueLangRuleTest extends TestCase
 
     public function testNoUnique(): void
     {
+        /** @var Category */
         $category = Category::makeFactory()->create();
 
         /** @var UniqueLangRule */
@@ -44,8 +45,10 @@ class UniqueLangRuleTest extends TestCase
 
     public function testNoUniqueWithAdditionalQuery(): void
     {
+        /** @var Category */
         $parent = Category::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->for($parent, 'parent')->create();
 
         /** @var UniqueLangRule */
@@ -62,6 +65,7 @@ class UniqueLangRuleTest extends TestCase
 
     public function testUnique(): void
     {
+        /** @var Category */
         $category = Category::makeFactory()->create();
 
         /** @var UniqueLangRule */
@@ -75,6 +79,7 @@ class UniqueLangRuleTest extends TestCase
 
     public function testUniqueWithIgnore(): void
     {
+        /** @var Category */
         $category = Category::makeFactory()->create();
 
         /** @var UniqueLangRule */
@@ -89,8 +94,10 @@ class UniqueLangRuleTest extends TestCase
 
     public function testUniqueWithAdditionalQuery(): void
     {
+        /** @var Category */
         $parent = Category::makeFactory()->create();
 
+        /** @var Category */
         $category = Category::makeFactory()->for($parent, 'parent')->create();
 
         /** @var UniqueLangRule */

@@ -47,12 +47,12 @@ class CategoryFactory extends Factory
     /**
      * Configure the model factory.
      *
-     * @return $this
+     * @return static
      */
     public function configure()
     {
         return $this->afterCreating(function (Category $category) {
-            return CategoryLang::makeFactory()->for($category)->create();
+            CategoryLang::makeFactory()->for($category)->create();
         });
     }
 
@@ -81,6 +81,17 @@ class CategoryFactory extends Factory
             return [
                 'status' => Status::ACTIVE
             ];
+        });
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Category $category) {
+            $category->langs()->delete();
         });
     }
 }

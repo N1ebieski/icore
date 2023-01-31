@@ -22,7 +22,9 @@ use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory;
 
 class PostsSeeder extends Seeder
 {
@@ -35,18 +37,32 @@ class PostsSeeder extends Seeder
     {
         $categories = Category::get(['id'])->pluck('id')->toArray();
 
-        User::makeFactory()->count(100)->user()->create()
-            ->each(function ($u) use ($categories) {
+        User::makeFactory()->count(1)->user()->create()
+            ->each(function ($user) use ($categories) {
                 for ($i = 0; $i < rand(0, 5); $i++) {
-                    $post = $u->posts()
-                        ->save(
-                            rand(0, 1) === 1 ?
-                                Post::makeFactory()->image()->make()
-                                : Post::makeFactory()->make()
-                        );
+                    /** @var Post */
+                    $post = Post::makeFactory()->make();
+
+                    $post->user()->associate($user);
+
+                    $post->save();
+
                     $post->tag(Faker::create()->words(rand(1, 5)));
+
                     shuffle($categories);
+
                     $post->categories()->attach(array_slice($categories, 0, rand(1, 5)));
+
+                    /** @var PostLang */
+                    $postLang = PostLang::makeFactory()
+                        ->when(rand(0, 1) === 1, function (PostLangFactory $factory) {
+                            return $factory->image();
+                        })
+                        ->make();
+
+                    $postLang->post()->associate($post);
+
+                    $postLang->save();
                 }
             });
     }

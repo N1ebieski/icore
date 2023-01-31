@@ -27,10 +27,6 @@ use N1ebieski\ICore\ValueObjects\Post\Comment;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @property \Faker\Generator&\Mmo\Faker\PicsumProvider $faker
- *
- */
 class PostFactory extends Factory
 {
     /**
@@ -62,12 +58,12 @@ class PostFactory extends Factory
     /**
      * Configure the model factory.
      *
-     * @return $this
+     * @return static
      */
     public function configure()
     {
         return $this->afterCreating(function (Post $post) {
-            return PostLang::makeFactory()->for($post)->create();
+            PostLang::makeFactory()->for($post)->create();
         });
     }
 
@@ -150,5 +146,16 @@ class PostFactory extends Factory
     public function withUser()
     {
         return $this->for(User::makeFactory());
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Post $post) {
+            $post->langs()->delete();
+        });
     }
 }

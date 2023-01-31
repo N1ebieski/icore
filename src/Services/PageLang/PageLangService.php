@@ -105,6 +105,7 @@ class PageLangService
         return $this->db->transaction(function () {
             $this->pageLang->page->comments()->lang()->delete();
 
+            // @phpstan-ignore-next-line
             $this->pageLang->page->tags()->lang()->detach();
 
             return $this->pageLang->delete();

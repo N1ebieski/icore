@@ -170,7 +170,7 @@ class CommentRepo
                 return $query->filterOrderBy($component['orderby']);
             })
             ->limit($component['limit'])
-            ->with(['morph', 'user'])
+            ->with(['morph', 'morph.langs', 'user'])
             ->get()
             // @phpstan-ignore-next-line
             ->map(function (Comment $comment) use ($component) {

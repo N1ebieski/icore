@@ -51,14 +51,14 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 /**
  * N1ebieski\ICore\Models\Post
  *
- * @property string|null $title
+ * @property string $title
  * @property SeoNofollow $seo_nofollow
  * @property SeoNoindex $seo_noindex
  * @property Status $status
  * @property Commentable $comment
  * @property AutoTranslate $auto_translate
  * @property int $id
- * @property string|null $slug
+ * @property string $slug
  * @property int $user_id
  * @property string|null $content_html
  * @property string|null $content
@@ -68,6 +68,7 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
  * @property \Illuminate\Support\Carbon|null $published_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|PostLang[] $langs
  * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Category\Category[] $categories
  * @property-read int|null $categories_count
  * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Comment\Comment[] $comments
@@ -342,7 +343,6 @@ class Post extends Model
      */
     public function seoTitle(): Attribute
     {
-        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->seo_title);
     }
 
@@ -353,7 +353,6 @@ class Post extends Model
      */
     public function seoDesc(): Attribute
     {
-        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->seo_desc);
     }
 
@@ -441,7 +440,6 @@ class Post extends Model
      */
     public function firstImage(): Attribute
     {
-        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->first_image);
     }
 
@@ -464,7 +462,6 @@ class Post extends Model
      */
     public function content(): Attribute
     {
-        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->content);
     }
 

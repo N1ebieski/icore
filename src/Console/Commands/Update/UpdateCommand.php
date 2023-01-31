@@ -122,7 +122,7 @@ class UpdateCommand extends Command
         }
 
         try {
-            /** @var Updater */
+            /** @var UpdaterInterface */
             $updater = $this->app->make(UpdaterInterface::class, [
                 'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
             ]);
@@ -151,7 +151,7 @@ class UpdateCommand extends Command
         }
 
         try {
-            /** @var Updater */
+            /** @var UpdaterInterface */
             $updater = $this->app->make(UpdaterInterface::class, [
                 'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
             ]);

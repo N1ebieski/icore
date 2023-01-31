@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Feature\Admin;
+namespace N1ebieski\ICore\Tests\Feature\Admin\Category;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;

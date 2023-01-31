@@ -19,7 +19,6 @@
 namespace N1ebieski\ICore\Utils\File\Interfaces;
 
 use Illuminate\Http\UploadedFile;
-use N1ebieski\ICore\Exceptions\File\NotFoundException;
 
 interface FileInterface
 {
@@ -34,8 +33,7 @@ interface FileInterface
     /**
      *
      * @param string $path
-     * @return File
-     * @throws NotFoundException
+     * @return self
      */
     public function makeFromPath(string $path): self;
 

@@ -22,7 +22,6 @@ use Closure;
 use InvalidArgumentException;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
-use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -35,6 +34,7 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class PostRepo
 {
@@ -282,6 +282,7 @@ class PostRepo
             ->from(
                 $this->post->newQuery()
                     ->selectRaw("`{$this->post->getTable()}`.*")
+                    ->multiLang()
                     ->search($name)
                     ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
                         // @phpstan-ignore-next-line
@@ -300,7 +301,6 @@ class PostRepo
                     })->getQuery(),
                 'posts'
             )
-            ->multiLang()
             ->active()
             ->groupBy('posts.id')
             ->orderBySearch($name)

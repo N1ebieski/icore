@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\PostLang\PostLangService;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory;
 
 /**

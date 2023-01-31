@@ -19,7 +19,7 @@
 namespace N1ebieski\ICore\Attributes\PageLang;
 
 use Mews\Purifier\Purifier;
-use N1ebieski\ICore\Models\Pagelang\Pagelang;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ContentHtml
@@ -31,7 +31,7 @@ class ContentHtml
      * @return void
      */
     public function __construct(
-        protected Pagelang $pageLang,
+        protected PageLang $pageLang,
         protected Purifier $purifier
     ) {
         //

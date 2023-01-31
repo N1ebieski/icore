@@ -45,9 +45,8 @@ class ExistsLangRuleTest extends TestCase
 
     public function testNoExistsLang(): void
     {
-        $category = Category::makeFactory()->create();
-
-        $category->langs()->delete();
+        /** @var Category */
+        $category = Category::makeFactory()->withoutLangs()->create();
 
         /** @var ExistsLangRule */
         $rule = App::make(ExistsLangRule::class, [
@@ -60,6 +59,7 @@ class ExistsLangRuleTest extends TestCase
 
     public function testNoExistsWithAdditionalQuery(): void
     {
+        /** @var Category */
         $category = Category::makeFactory()->inactive()->create();
 
         /** @var ExistsLangRule */
@@ -76,6 +76,7 @@ class ExistsLangRuleTest extends TestCase
 
     public function testExists(): void
     {
+        /** @var Category */
         $category = Category::makeFactory()->create();
 
         /** @var ExistsLangRule */
@@ -89,6 +90,7 @@ class ExistsLangRuleTest extends TestCase
 
     public function testExistsWithAdditionalQuery(): void
     {
+        /** @var Category */
         $category = Category::makeFactory()->active()->create();
 
         /** @var ExistsLangRule */

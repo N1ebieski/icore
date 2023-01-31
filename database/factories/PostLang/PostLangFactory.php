@@ -22,6 +22,10 @@ use Illuminate\Database\Eloquent\Model;
 use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @property \Faker\Generator&\Mmo\Faker\PicsumProvider $faker
+ *
+ */
 class PostLangFactory extends Factory
 {
     /**

@@ -54,11 +54,12 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property string $slug
  * @property string|null $icon
  * @property string $name
- * @property int $parent_id
+ * @property int|null $parent_id
  * @property int $position
  * @property CategoryLang $currentLang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|CategoryLang[] $langs
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Category[] $ancestors
  * @property-read int|null $ancestors_count
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Category[] $children
@@ -388,11 +389,12 @@ class Category extends Entity
     // Checkers
 
     /**
-     * 
-     * @return bool 
+     *
+     * @return bool
      */
     public function isRoot(): bool
     {
+        // @phpstan-ignore-next-line
         return is_null($this->parent_id);
     }
 

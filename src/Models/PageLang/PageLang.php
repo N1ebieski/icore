@@ -28,8 +28,58 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\PageLang\PageLangService;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory;
 
+/**
+ * N1ebieski\ICore\Models\PageLang\PageLang
+ *
+ * @property int $id
+ * @property int $page_id
+ * @property string $slug
+ * @property string $title
+ * @property string $content_html
+ * @property string|null $content
+ * @property string|null $seo_title
+ * @property string|null $seo_desc
+ * @property \N1ebieski\ICore\ValueObjects\Progress $progress
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string $created_at_diff
+ * @property-read string|null $first_image
+ * @property-read string $less_content_html
+ * @property-read string $meta_desc
+ * @property-read string $meta_title
+ * @property-read string $no_more_content_html
+ * @property-read \N1ebieski\ICore\Models\Page\Page $page
+ * @property-read string $replacement_content
+ * @property-read string $replacement_content_html
+ * @property-read string $short_content
+ * @property-read string $short_title
+ * @property-read string $updated_at_diff
+ * @method static \N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang findSimilarSlugs(string $attribute, array $config, string $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang orderBySearch(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang search(string $term)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereContentHtml($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereLang($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang wherePageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereProgress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereSeoDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereSeoTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageLang withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ * @mixin \Eloquent
+ */
 class PageLang extends Model
 {
     use Sluggable;

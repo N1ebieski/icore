@@ -54,6 +54,7 @@ class EditFullViewModel extends ViewModel
             !$this->page->isRoot()
             && $parents->doesntContain(fn (Page $page) => $page->parent_id === $this->page->parent_id)
         ) {
+            // @phpstan-ignore-next-line
             $parents = $parents->merge([$this->page->parent->loadAncestorsExceptSelf()->load('langs')]);
         }
 

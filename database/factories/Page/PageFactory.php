@@ -54,12 +54,12 @@ class PageFactory extends Factory
     /**
      * Configure the model factory.
      *
-     * @return $this
+     * @return static
      */
     public function configure()
     {
         return $this->afterCreating(function (Page $page) {
-            return PageLang::makeFactory()->for($page)->create();
+            PageLang::makeFactory()->for($page)->create();
         });
     }
 
@@ -113,5 +113,16 @@ class PageFactory extends Factory
     public function withUser()
     {
         return $this->for(User::makeFactory());
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Page $page) {
+            $page->langs()->delete();
+        });
     }
 }

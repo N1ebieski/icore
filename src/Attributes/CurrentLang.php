@@ -40,12 +40,12 @@ class CurrentLang
      */
     public function __invoke(): Attribute
     {
-        return new Attribute(
+        return Attribute::make(
             get: function (): mixed {
                 $modelLang = $this->model->langs->firstWhere('lang', Config::get('app.locale'));
 
                 return $modelLang ?? $this->model->langs()->make();
             }
-        );
+        )->withoutObjectCaching();
     }
 }

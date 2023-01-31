@@ -21,9 +21,9 @@ namespace N1ebieski\ICore\Models\Page;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Franzose\ClosureTable\Models\Entity;
-use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Page\PageCache;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Franzose\ClosureTable\Models\ClosureTable;
 use N1ebieski\ICore\Services\Page\PageService;
@@ -47,7 +47,9 @@ use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 /**
  * N1ebieski\ICore\Models\Page\Page
@@ -68,11 +70,12 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property string|null $content
  * @property string|null $seo_title
  * @property string|null $seo_desc
- * @property int $parent_id
+ * @property int|null $parent_id
  * @property int $position
- * @property PostLang $currentLang
+ * @property PageLang $currentLang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|PageLang[] $langs
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $ancestors
  * @property-read int|null $ancestors_count
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $children
@@ -533,7 +536,6 @@ class Page extends Entity
      */
     public function firstImage(): Attribute
     {
-        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->first_image);
     }
 
@@ -543,7 +545,6 @@ class Page extends Entity
      */
     public function content(): Attribute
     {
-        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->content);
     }
 
@@ -555,6 +556,7 @@ class Page extends Entity
      */
     public function isRoot(): bool
     {
+        // @phpstan-ignore-next-line
         return is_null($this->parent_id);
     }
 

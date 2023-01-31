@@ -136,7 +136,8 @@ class NavbarComposer extends Composer
         $countComments = $this->comment->makeRepo()->countByModelTypeAndStatusAndLang()
             ->where('status', Status::inactive());
 
-        return $countComments->map(function ($item) use ($countComments) {
+        return $countComments->map(function (mixed $item) use ($countComments) {
+            /** @var mixed */
             $item = clone $item;
 
             $item->count = $countComments->where('lang', $item->lang)->sum('count');
@@ -155,7 +156,8 @@ class NavbarComposer extends Composer
     {
         $countComments = $this->comment->makeRepo()->countReportedByModelTypeAndLang();
 
-        return $countComments->map(function ($item) use ($countComments) {
+        return $countComments->map(function (mixed $item) use ($countComments) {
+            /** @var mixed */
             $item = clone $item;
 
             $item->count = $countComments->where('lang', $item->lang)->sum('count');

@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Feature\Admin;
+namespace N1ebieski\ICore\Tests\Feature\Admin\Mailing;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
@@ -26,7 +26,7 @@ use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class MailingTest extends TestCase
+class UpdateStatusMailingTest extends TestCase
 {
     use DatabaseTransactions;
 

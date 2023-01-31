@@ -24,8 +24,6 @@ interface RouteRecognizeInterface
      *
      * @param string $lang
      * @return string|false
-     * @throws LogicException
-     * @throws InvalidArgumentException
      */
     public function getCurrentUrlWithLang(string $lang): string|false;
 }

@@ -29,15 +29,26 @@ use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
 use N1ebieski\ICore\Mail\Mailing\Mail as MailingMail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use N1ebieski\ICore\Models\MailingEmail\User\MailingEmail;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class SendMailingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testQueueFailJob()
+    /**
+     *
+     * @return void
+     * @throws BindingResolutionException
+     */
+    protected function setUp(): void
     {
-        Config::set('queue.default', 'database');
+        parent::setUp();
 
+        Config::set('queue.default', 'database');
+    }
+
+    public function testQueueFailJob(): void
+    {
         /** @var Mailing */
         $mailing = Mailing::makeFactory()->active()->create();
 
@@ -71,7 +82,6 @@ class SendMailingTest extends TestCase
         $email = MailingEmail::makeFactory()->email()->for($mailing)->create();
 
         Mail::fake();
-        Config::set('queue.default', 'database');
 
         $this->assertDatabaseHas('mailings_emails', [
             'id' => $email->id,

@@ -21,7 +21,6 @@ namespace N1ebieski\ICore\Repositories\Page;
 use Closure;
 use InvalidArgumentException;
 use N1ebieski\ICore\Models\Page\Page;
-use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
@@ -34,6 +33,7 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class PageRepo
 {
@@ -272,7 +272,9 @@ class PageRepo
     {
         return $this->page->newQuery()
             ->active()
-            ->whereNotNull('content_html')
+            ->whereHas('langs', function (Builder $query) {
+                return $query->whereNotNull('content_html');
+            })
             ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
                 return $query->root()->active();
             }])

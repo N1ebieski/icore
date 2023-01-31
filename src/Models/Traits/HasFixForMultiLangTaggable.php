@@ -51,6 +51,7 @@ trait HasFixForMultiLangTaggable
      */
     public function detag(): self
     {
+        // @phpstan-ignore-next-line
         $this->tags()->lang()->detach();
 
         return $this->load('tags');
