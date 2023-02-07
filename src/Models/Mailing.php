@@ -21,11 +21,14 @@ namespace N1ebieski\ICore\Models;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 use N1ebieski\ICore\Services\Mailing\MailingService;
 use N1ebieski\ICore\Repositories\Mailing\MailingRepo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,13 +40,16 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  * N1ebieski\ICore\Models\Mailing
  *
  * @property Status $status
+ * @property AutoTranslate $auto_translate
  * @property int $id
  * @property string $title
  * @property string $content_html
  * @property string|null $content
+ * @property MailingLang $currentLang
  * @property \Illuminate\Support\Carbon|null $activation_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|MailingLang[] $langs
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\MailingEmail\MailingEmail[] $emails
  * @property-read int $emails_count
  * @property-read int $emails_success_count
@@ -56,6 +62,7 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  * @property-read string $replacement_content_html
  * @property-read string $short_content
  * @property-read string $updated_at_diff
+ * @method static Builder|Mailing multiLang()
  * @method static Builder|Mailing active()
  * @method static \N1ebieski\ICore\Database\Factories\Mailing\MailingFactory factory(...$parameters)
  * @method static Builder|Mailing filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
@@ -90,6 +97,7 @@ class Mailing extends Model
     use HasFilterable;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
 
     // Configuration
 
@@ -99,10 +107,8 @@ class Mailing extends Model
     * @var array<string>
     */
     protected $fillable = [
-        'title',
-        'content',
-        'content_html',
         'status',
+        'auto_translate',
         'activation_at'
     ];
 
@@ -123,6 +129,7 @@ class Mailing extends Model
      */
     protected $attributes = [
         'status' => Status::INACTIVE,
+        'auto_translate' => AutoTranslate::INACTIVE,
     ];
 
     /**
@@ -133,6 +140,7 @@ class Mailing extends Model
     protected $casts = [
         'id' => 'integer',
         'status' => \N1ebieski\ICore\Casts\Mailing\StatusCast::class,
+        'auto_translate' => \N1ebieski\ICore\Casts\AutoTranslateCast::class,
         'activation_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
@@ -213,61 +221,58 @@ class Mailing extends Model
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
+     */
+    public function title(): Attribute
+    {
+        return new Attribute(fn (): ?string => $this->currentLang->title);
+    }
+
+    /**
+     *
+     * @return Attribute
      */
     public function content(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Mailing\Content::class, [
-            'mailing' => $this
-        ])();
+        return new Attribute(fn (): ?string => $this->currentLang->content);
     }
 
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
      */
     public function contentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Mailing\ContentHtml::class, [
-            'mailing' => $this
-        ])();
+        return new Attribute(fn (): ?string => $this->currentLang->content_html);
     }
 
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
      */
     public function replacementContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Mailing\ReplacementContentHtml::class, [
-            'mailing' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content_html);
     }
 
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
      */
     public function replacementContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Mailing\ReplacementContent::class, [
-            'mailing' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content);
     }
 
     /**
      *
      * @return Attribute
-     * @throws BindingResolutionException
      */
     public function shortContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Mailing\ShortContent::class, [
-            'mailing' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->short_content);
     }
 
     // Scopes

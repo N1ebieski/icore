@@ -41,6 +41,10 @@ class AddPrefLangToUsersTable extends Migration
         $lang = Config::get('app.locale');
 
         DB::statement("UPDATE `{$user->getTable()}` SET `pref_lang` = \"{$lang}\"");
+
+        Schema::table($user->getTable(), function (Blueprint $table) {
+            $table->string('pref_lang', 2)->nullable(false)->change();
+        });
     }
 
     /**

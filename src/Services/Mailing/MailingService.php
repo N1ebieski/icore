@@ -54,10 +54,7 @@ class MailingService
     public function create(array $attributes): Mailing
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->mailing->content_html = $attributes['content_html'];
-            $this->mailing->content = $this->mailing->content_html;
-            $this->mailing->title = $attributes['title'];
-            $this->mailing->status = $attributes['status'];
+            $this->mailing->fill($attributes);
 
             if ($this->mailing->status->isScheduled()) {
                 // @phpstan-ignore-next-line
@@ -66,6 +63,12 @@ class MailingService
             }
 
             $this->mailing->save();
+
+            $this->mailing->currentLang->makeService()->create(
+                array_merge($attributes, [
+                    'mailing' => $this->mailing
+                ])
+            );
 
             /** @var MailingEmail */
             $mailingEmail = $this->mailing->emails()->make();
@@ -87,10 +90,7 @@ class MailingService
     public function update(array $attributes): Mailing
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->mailing->content_html = $attributes['content_html'];
-            $this->mailing->content = $this->mailing->content_html;
-            $this->mailing->title = $attributes['title'];
-            $this->mailing->status = $attributes['status'];
+            $this->mailing->fill($attributes);
 
             if ($this->mailing->status->isScheduled()) {
                 // @phpstan-ignore-next-line
@@ -98,7 +98,7 @@ class MailingService
                     $attributes['date_activation_at'] . $attributes['time_activation_at'];
             }
 
-            if ($this->mailing->emails->count() === 0) {
+            if ($this->mailing->emails->isEmpty()) {
                 /** @var MailingEmail */
                 $mailingEmail = $this->mailing->emails()->make();
 
@@ -108,6 +108,12 @@ class MailingService
             }
 
             $this->mailing->save();
+
+            $this->mailing->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'mailing' => $this->mailing
+                ])
+            );
 
             return $this->mailing;
         });

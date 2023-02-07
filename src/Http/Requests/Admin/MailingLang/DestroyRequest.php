@@ -16,33 +16,33 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Mailing;
+namespace N1ebieski\ICore\Http\Requests\Admin\MailingLang;
 
-use N1ebieski\ICore\Models\Mailing;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 
-class ShortContent
+/**
+ * @property MailingLang $mailingLang
+ */
+class DestroyRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
      *
-     * @param Mailing $mailing
-     * @return void
+     * @return bool
      */
-    public function __construct(protected Mailing $mailing)
+    public function authorize()
     {
-        //
+        return $this->mailingLang->mailing->hasAdditionalLangs();
     }
 
     /**
+     * Get the validation rules that apply to the request.
      *
-     * @return Attribute
+     * @return array
      */
-    public function __invoke(): Attribute
+    public function rules()
     {
-        return new Attribute(
-            get: function (): string {
-                return mb_substr(strip_tags($this->mailing->replacement_content), 0, 300);
-            }
-        );
+        return [];
     }
 }

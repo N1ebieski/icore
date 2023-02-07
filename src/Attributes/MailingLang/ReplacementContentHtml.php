@@ -16,20 +16,20 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Mailing;
+namespace N1ebieski\ICore\Attributes\MailingLang;
 
-use Mews\Purifier\Facades\Purifier;
-use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 
-class ContentHtml
+class ReplacementContentHtml
 {
     /**
      *
-     * @param Mailing $mailing
+     * @param MailingLang $mailingLang
      * @return void
      */
-    public function __construct(protected Mailing $mailing)
+    public function __construct(protected MailingLang $mailingLang)
     {
         //
     }
@@ -41,8 +41,11 @@ class ContentHtml
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function ($value): string {
-                return Purifier::clean($value);
+            get: function (): string {
+                return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
+                    ->handle($this->mailingLang->content_html, function ($value) {
+                        return $value;
+                    });
             }
         );
     }

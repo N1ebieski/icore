@@ -48,6 +48,7 @@ class MailingRepo
     {
         return $this->mailing->newQuery()
             ->selectRaw("`{$this->mailing->getTable()}`.*")
+            ->multiLang()
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->when(!is_null($filter['search']), function (Builder|Mailing $query) use ($filter) {

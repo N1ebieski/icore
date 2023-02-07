@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Database\Factories\Mailing;
 use N1ebieski\ICore\Models\Mailing;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 
 class MailingFactory extends Factory
 {
@@ -38,14 +39,21 @@ class MailingFactory extends Factory
      */
     public function definition(): array
     {
-        $content = $this->faker->text(2000);
-
         return [
-            'title' => $this->faker->sentence(5),
-            'content_html' => $content,
-            'content' => $content,
             'status' => Status::INACTIVE
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return static
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Mailing $mailing) {
+            MailingLang::makeFactory()->for($mailing)->create();
+        });
     }
 
     /**
@@ -59,6 +67,17 @@ class MailingFactory extends Factory
             return [
                 'status' => Status::ACTIVE
             ];
+        });
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Mailing $mailing) {
+            $mailing->langs()->delete();
         });
     }
 }

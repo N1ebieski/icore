@@ -16,35 +16,39 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Mailing;
-
 use N1ebieski\ICore\Models\Mailing;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class Content
+// phpcs:ignore
+class AddAutoTranslateToMailingsTable extends Migration
 {
     /**
+     * Run the migrations.
      *
-     * @param Mailing $mailing
      * @return void
      */
-    public function __construct(protected Mailing $mailing)
+    public function up()
     {
-        //
+        $mailing = new Mailing();
+
+        Schema::table($mailing->getTable(), function (Blueprint $table) {
+            $table->boolean('auto_translate')->unsigned()->default(0)->after('status');
+        });
     }
 
     /**
+     * Reverse the migrations.
      *
-     * @return Attribute
+     * @return void
      */
-    public function __invoke(): Attribute
+    public function down()
     {
-        return new Attribute(
-            set: function (string $value = null): ?string {
-                return !empty($value) ?
-                    strip_tags(str_replace('[more]', '', $value))
-                    : null;
-            }
-        );
+        $mailing = new Mailing();
+
+        Schema::table($mailing->getTable(), function (Blueprint $table) {
+            $table->dropColumn('auto_translate');
+        });
     }
 }

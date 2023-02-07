@@ -16,20 +16,19 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Attributes\Mailing;
+namespace N1ebieski\ICore\Attributes\MailingLang;
 
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 
-class ReplacementContent
+class Content
 {
     /**
      *
-     * @param Mailing $mailing
+     * @param MailingLang $mailingLang
      * @return void
      */
-    public function __construct(protected Mailing $mailing)
+    public function __construct(protected MailingLang $mailingLang)
     {
         //
     }
@@ -41,11 +40,10 @@ class ReplacementContent
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return App::make(\N1ebieski\ICore\Utils\Conversions\Replacement::class)
-                    ->handle($this->mailing->content, function ($value) {
-                        return $value;
-                    });
+            set: function (string $value = null): ?string {
+                return !empty($value) ?
+                    strip_tags(str_replace('[more]', '', $value))
+                    : null;
             }
         );
     }

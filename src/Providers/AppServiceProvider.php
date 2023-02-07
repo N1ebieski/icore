@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->scoped(\N1ebieski\ICore\Loads\LangLoad::class);
 
+        $this->app->scoped(\N1ebieski\ICore\StaticCache\Comment\CommentStaticCache::class);
+
         $this->app->scoped(\Torann\GeoIP\GeoIP::class, 'geoip');
 
         $this->app->bind(\N1ebieski\ICore\Utils\Route\Interfaces\RouteRecognizeInterface::class, \N1ebieski\ICore\Utils\Route\RouteRecognize::class);
