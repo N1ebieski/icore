@@ -22,7 +22,6 @@ use Comment\Status;
 use RuntimeException;
 use Illuminate\Support\Str;
 use N1ebieski\ICore\Loads\ThemeLoad;
-use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\View\Composers\Composer;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Utils\Route\RouteRecognize;
@@ -30,6 +29,7 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator as URL;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\Foundation\Application as App;
+use N1ebieski\ICore\StaticCache\Comment\CommentStaticCache;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class NavbarComposer extends Composer
@@ -60,7 +60,7 @@ class NavbarComposer extends Composer
 
     /**
      *
-     * @param Comment $comment
+     * @param CommentStaticCache $commentStaticCache
      * @param ViewFactory $view
      * @param Config $config
      * @param URL $url
@@ -71,7 +71,7 @@ class NavbarComposer extends Composer
      * @return void
      */
     public function __construct(
-        protected Comment $comment,
+        protected CommentStaticCache $commentStaticCache,
         protected ViewFactory $view,
         protected Config $config,
         protected URL $url,
@@ -133,7 +133,7 @@ class NavbarComposer extends Composer
      */
     public function inactiveCount(): Collect
     {
-        $countComments = $this->comment->makeRepo()->countByModelTypeAndStatusAndLang()
+        $countComments = $this->commentStaticCache->rememberCountByModelTypeAndStatusAndLang()
             ->where('status', Status::inactive());
 
         return $countComments->map(function (mixed $item) use ($countComments) {
@@ -154,7 +154,7 @@ class NavbarComposer extends Composer
      */
     public function reportedCount(): Collect
     {
-        $countComments = $this->comment->makeRepo()->countReportedByModelTypeAndLang();
+        $countComments = $this->commentStaticCache->rememberCountReportedByModelTypeAndLang();
 
         return $countComments->map(function (mixed $item) use ($countComments) {
             /** @var mixed */

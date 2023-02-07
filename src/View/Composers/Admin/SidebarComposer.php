@@ -18,22 +18,22 @@
 
 namespace N1ebieski\ICore\View\Composers\Admin;
 
-use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\View\Composers\Composer;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
 use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\StaticCache\Comment\CommentStaticCache;
 
 class SidebarComposer extends Composer
 {
     /**
      *
-     * @param Comment $comment
+     * @param CommentStaticCache $commentStaticCache
      * @param Config $config
      * @return void
      */
     public function __construct(
-        protected Comment $comment,
+        protected CommentStaticCache $commentStaticCache,
         protected Config $config
     ) {
         //
@@ -45,7 +45,7 @@ class SidebarComposer extends Composer
      */
     public function commentsInactiveCount(): Collection
     {
-        return $this->comment->makeRepo()->countByModelTypeAndStatusAndLang()
+        return $this->commentStaticCache->rememberCountByModelTypeAndStatusAndLang()
             ->where('lang', $this->config->get('app.locale'))
             ->where('status', Status::inactive());
     }
@@ -56,7 +56,7 @@ class SidebarComposer extends Composer
      */
     public function commentsReportedCount(): Collection
     {
-        return $this->comment->makeRepo()->countReportedByModelTypeAndLang()
+        return $this->commentStaticCache->rememberCountReportedByModelTypeAndLang()
             ->where('lang', $this->config->get('app.locale'));
     }
 }
