@@ -28,7 +28,7 @@ return [
 
     'layout' => env('ICORE_LAYOUT', 'icore'),
 
-    'multi_langs' => explode(',', env('ICORE_MULTI_LANGS', '')),
+    'multi_langs' => explode(',', env('ICORE_MULTI_LANGS', env('APP_LANG'))),
 
     'routes' => [
         'auth' => [
