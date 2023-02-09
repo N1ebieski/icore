@@ -53,7 +53,7 @@ class LinkCache
         $json = json_encode($component);
 
         return $this->cache->tags(['links'])->remember(
-            "link.getLinksByComponent.{$json}",
+            "link.{$this->config->get('app.locale')}.getLinksByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->link->makeRepo()->getLinksByComponent($component);
