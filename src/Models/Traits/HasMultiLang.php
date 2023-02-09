@@ -44,7 +44,8 @@ trait HasMultiLang
     {
         $className = class_basename($this::class);
 
-        return $this->hasMany('N1ebieski\\ICore\\Models\\' . $className . 'Lang\\' . $className . 'Lang');
+        return $this->hasMany('N1ebieski\\ICore\\Models\\' . $className . 'Lang\\' . $className . 'Lang')
+            ->whereIn('lang', Config::get('icore.multi_langs'));
     }
 
     // Attributes
