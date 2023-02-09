@@ -107,7 +107,7 @@ class SitemapBuilder extends Builder
      */
     public function addToSitemap(): void
     {
-        $this->collection->each(function ($item) {
+        $this->collection->each(function (mixed $item) {
             $this->sitemap->push([
                 'loc' => $this->storage->disk('public')->url($item->slug),
                 'lastmod' => $this->carbon->createFromTimestamp($item->updated_at)->format('Y-m-d'),

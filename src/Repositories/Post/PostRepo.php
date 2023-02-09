@@ -318,13 +318,17 @@ class PostRepo
      */
     public function chunkActiveWithModelsCount(int $chunk, Closure $callback): bool
     {
-        return $this->post->newQuery()
-            ->active()
-            ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
-                $query->root()->active();
-            }])
-            ->with('langs')
-            ->chunk($chunk, $callback);
+        $query = $this->post->newQuery()->active()->with('langs');
+
+        foreach ($this->config->get('icore.multi_langs') as $lang) {
+            $query->withCount([
+                "comments AS models_count_{$lang}" => function (MorphMany|Builder|Comment $query) use ($lang) {
+                    return $query->root()->active()->where('lang', $lang);
+                }
+            ]);
+        }
+
+        return $query->chunk($chunk, $callback);
     }
 
     /**

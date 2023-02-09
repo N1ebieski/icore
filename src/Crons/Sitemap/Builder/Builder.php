@@ -134,17 +134,23 @@ abstract class Builder
      */
     public function addToSitemap(): void
     {
-        $this->collection->each(function ($item) {
-            for ($i = 1; $i <= $this->countPages($item->models_count); $i++) {
-                $this->sitemap->push([
-                    'loc' => $this->url->route($this->route, [
-                        $item->slug,
-                        'page' => ($i > 1 ? $i : null)
-                    ]),
-                    'lastmod' => $this->carbon->parse($item->updated_at)->format('Y-m-d'),
-                    'changefreq' => $this->changefreq,
-                    'priority' => $this->priority
-                ]);
+        $this->collection->each(function (mixed $model) {
+            foreach ($model->langs as $modelLang) {
+                $key = "models_count_{$modelLang->lang->getValue()}";
+
+                for ($i = 1; $i <= $this->countPages($model->{$key}); $i++) {
+                    $this->sitemap->push([
+                        'loc' => $this->url->route($this->route, [
+                            'lang' => count($this->config->get('icore.multi_langs')) > 1 ?
+                                $modelLang->lang->getValue() : null,
+                            $modelLang->slug,
+                            'page' => ($i > 1 ? $i : null)
+                        ]),
+                        'lastmod' => $this->carbon->parse($model->updated_at)->format('Y-m-d'),
+                        'changefreq' => $this->changefreq,
+                        'priority' => $this->priority
+                    ]);
+                }
             }
         });
     }

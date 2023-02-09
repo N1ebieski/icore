@@ -51,6 +51,8 @@ class SitemapTest extends TestCase
         Config::set('icore.sitemap.limit', 5);
         Config::set('icore.sitemap.max_items', 50);
 
+        URL::defaults(['lang' => 'pl']);
+
         File::deleteDirectory(App::storagePath('app/public/vendor/icore/sitemap'));
     }
 
