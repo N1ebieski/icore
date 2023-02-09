@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Resources\Json\JsonResource;
 use N1ebieski\ICore\Http\Resources\User\UserResource;
+use N1ebieski\ICore\Http\Resources\PostLang\PostLangResource;
 
 /**
  * @mixin Post
@@ -66,6 +67,7 @@ class PostResource extends JsonResource
      * @responseField created_at string
      * @responseField updated_at string
      * @responseField user object Contains relationship User author.
+     * @responseField langs object[] Contains relationship PostLangs (available languages).
      * @responseField links object Contains links to resources on the website and in the administration panel.
      * @responseField meta object Paging, filtering and sorting information.
      *
@@ -106,6 +108,19 @@ class PostResource extends JsonResource
 
                     return [
                         'user' => App::make(UserResource::class, ['user' => $user->setAttribute('depth', 1)])
+                    ];
+                }
+            ),
+            $this->mergeWhen(
+                $this->relationLoaded('langs'),
+                function () {
+                    return [
+                        'langs' => App::make(PostLangResource::class)
+                            ->collection($this->langs->map(function ($item) {
+                                $item->setAttribute('depth', 1);
+
+                                return $item;
+                            }))
                     ];
                 }
             ),

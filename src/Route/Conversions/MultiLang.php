@@ -22,6 +22,7 @@ use Closure;
 use Exception;
 use Illuminate\Support\Str;
 use N1ebieski\ICore\Loads\LangLoad;
+use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\ICore\Route\Conversions\Interfaces\Handler;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -31,12 +32,14 @@ class MultiLang implements Handler
     /**
      *
      * @param Str $str
+     * @param Collect $collect
      * @param Config $config
      * @param LangLoad $load
      * @return void
      */
     public function __construct(
         protected Str $str,
+        protected Collect $collect,
         protected Config $config,
         protected LangLoad $load
     ) {
@@ -94,7 +97,14 @@ class MultiLang implements Handler
         /** @var array */
         $parsed = parse_url($url);
 
-        $parsed['path'] = '/' . $this->getLangForUrl($url) . ($parsed['path'] ?? '');
+        $prefixes = $this->collect->make($this->config->get('icore.routes'))
+            ->pluck('prefix')
+            ->filter(fn (mixed $prefix): bool => is_string($prefix))
+            ->map(fn (string $prefix): string => '\/' . $prefix)
+            ->implode('|');
+
+        $parsed['path'] = $this->str->of($parsed['path'] ?? '')
+            ->replaceMatches('/(' . $prefixes . '|^)(?:$|\/)/', '$1/' . $this->getLangForUrl($url) . '/', 1);
 
         return $this->str->buildUrl($parsed);
     }
