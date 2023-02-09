@@ -158,10 +158,10 @@ class UpdateMailingTest extends TestCase
         $response->assertRedirect(route('admin.mailing.index'));
         $response->assertSessionHas('success');
 
-        $this->assertDatabaseHas('mailings', [
+        $this->assertDatabaseHas('mailings_langs', [
             'content' => 'Ten mailing został zaktualizowany.',
             'title' => 'Mailing zaktualizowany.',
-            'id' => $mailing->id
+            'mailing_id' => $mailing->id
         ]);
 
         $this->assertDatabaseHas('mailings_emails', [

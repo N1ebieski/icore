@@ -24,6 +24,7 @@ use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CreateMailingTest extends TestCase
@@ -117,17 +118,14 @@ class CreateMailingTest extends TestCase
 
         $response->assertSessionHas('success');
 
-        /** @var Mailing|null */
-        $mailing = Mailing::where([
-            ['content', 'Ten mailing został dodany.'],
-            ['title', 'Mailing dodany.']
-        ])->first();
+        /** @var MailingLang|null */
+        $mailingLang = MailingLang::where('title', 'Mailing dodany.')->first();
 
-        $this->assertTrue($mailing?->exists());
+        $this->assertTrue($mailingLang?->exists());
 
         $response->assertRedirect(route('admin.mailing.index', [
             'filter' => [
-                'search' => "id:\"{$mailing->id}\""
+                'search' => "id:\"{$mailingLang->mailing->id}\""
             ]
         ]));
 

@@ -59,10 +59,10 @@ class MultiLangTest extends TestCase
         $langs = ['en', 'pl'];
 
         foreach ($langs as $lang) {
-            Config::set('app.locale', $lang);
-
             /** @var array<MailingLang> */
-            $mailingsLang[$lang] = MailingLang::makeFactory()->for($mailing)->create();
+            $mailingsLang[$lang] = MailingLang::makeFactory()->for($mailing)->create([
+                'lang' => $lang
+            ]);
         }
 
         /** @var Newsletter */
