@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Database\Factories\Post;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\ValueObjects\Post\Comment;
@@ -63,7 +64,11 @@ class PostFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Post $post) {
-            PostLang::makeFactory()->for($post)->create();
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                PostLang::makeFactory()->for($post)->create([
+                    'lang' => $lang
+                ]);
+            }
         });
     }
 

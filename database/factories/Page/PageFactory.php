@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Database\Factories\Page;
 
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use N1ebieski\ICore\ValueObjects\Page\Comment;
@@ -59,7 +60,11 @@ class PageFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Page $page) {
-            PageLang::makeFactory()->for($page)->create();
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                PageLang::makeFactory()->for($page)->create([
+                    'lang' => $lang
+                ]);
+            }
         });
     }
 

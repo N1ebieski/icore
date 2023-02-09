@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Database\Factories\Mailing;
 
 use N1ebieski\ICore\Models\Mailing;
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use N1ebieski\ICore\Models\MailingLang\MailingLang;
@@ -52,7 +53,11 @@ class MailingFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Mailing $mailing) {
-            MailingLang::makeFactory()->for($mailing)->create();
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                MailingLang::makeFactory()->for($mailing)->create([
+                    'lang' => $lang
+                ]);
+            }
         });
     }
 
