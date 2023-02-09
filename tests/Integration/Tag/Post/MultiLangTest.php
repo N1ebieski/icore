@@ -49,10 +49,10 @@ class MultiLangTest extends TestCase
         $postFactory = Post::makeFactory()->active()->publish()->withUser();
 
         foreach (['pl', 'en'] as $lang) {
-            App::setLocale($lang);
-
             /** @var array<Collection<Tag>> */
-            $tags[$lang] = Tag::makeFactory()->count(rand(1, 5))->create();
+            $tags[$lang] = Tag::makeFactory()->count(rand(1, 5))->create([
+                'lang' => $lang
+            ]);
 
             $postFactory = $postFactory->hasAttached($tags[$lang]);
         }
@@ -73,11 +73,10 @@ class MultiLangTest extends TestCase
         $postFactory = Post::makeFactory()->active()->publish()->withUser();
 
         foreach (['pl', 'en'] as $lang) {
-            App::setLocale($lang);
-
             /** @var array<Tag> */
             $tags[$lang] = Tag::makeFactory()->create([
-                'name' => 'same name but different lang'
+                'name' => 'same name but different lang',
+                'lang' => $lang
             ]);
 
             $postFactory = $postFactory->hasAttached($tags[$lang]);
@@ -100,11 +99,10 @@ class MultiLangTest extends TestCase
         $postFactory = Post::makeFactory()->active()->publish()->withUser();
 
         foreach (['pl', 'en'] as $lang) {
-            App::setLocale($lang);
-
             /** @var array<Tag> */
             $tags[$lang] = Tag::makeFactory()->create([
-                'name' => 'same name but different lang'
+                'name' => 'same name but different lang',
+                'lang' => $lang
             ]);
 
             $postFactory = $postFactory->hasAttached($tags[$lang]);
