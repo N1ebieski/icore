@@ -69,10 +69,10 @@ class BanValueCache
     public function rememberAllWordsAsString(): string
     {
         return $this->cache->tags('bans.word')->remember(
-            "banValue.getAllWordsAsString",
+            "banValue.{$this->config->get('app.locale')}.getAllWordsAsString",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                $words = $this->banValue->where('type', Type::WORD)->get();
+                $words = $this->banValue->where('type', Type::WORD)->lang()->get();
 
                 return $this->str->escaped($words->implode('value', '|'));
             }
