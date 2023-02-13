@@ -48,7 +48,7 @@ class ProgressCast implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes): int
     {
-        if (!$value instanceof Progress && filter_var($value, FILTER_VALIDATE_INT)) {
+        if (!$value instanceof Progress && (filter_var($value, FILTER_VALIDATE_INT) !== false)) {
             $value = new Progress($value);
         }
 

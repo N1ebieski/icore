@@ -27,7 +27,7 @@
                 aria-haspopup="true" 
                 aria-expanded="false"
             >
-                <span class="fi fil-{{ $currentLang }} pb-1"></span>
+                <span class="fi fil-{{ $currentLang }}"></span>
                 <span class="d-sm-inline d-none">{{ mb_strtoupper($currentLang) }}</span>
                 <span class="d-inline">
                     @if ($count = $inactiveCount->sum('count'))
