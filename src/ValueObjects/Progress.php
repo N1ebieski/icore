@@ -47,4 +47,22 @@ class Progress extends ValueObject
             throw new \InvalidArgumentException("The given value '{$value}' must be between 0 and 100");
         }
     }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isAutoTrans(): bool
+    {
+        return $this->value === 0;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function isFullTrans(): bool
+    {
+        return $this->value === 100;
+    }
 }

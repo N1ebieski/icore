@@ -22,8 +22,9 @@ use Throwable;
 use Illuminate\Config\Repository as Config;
 use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\Services\Interfaces\LangServiceInterface;
 
-class PostLangService
+class PostLangService implements LangServiceInterface
 {
     /**
      *

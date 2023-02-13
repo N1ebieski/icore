@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,22 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface::class, \N1ebieski\ICore\Utils\Migration\MigrationRecognize::class);
 
         $this->app->bind(\Cviebrock\EloquentTaggable\Services\TagService::class, \N1ebieski\ICore\Services\Tag\TagService::class);
+
+        $this->app->bind(\Google\Cloud\Translate\V2\TranslateClient::class, function (Application $app) {
+            /** @var \Illuminate\Contracts\Config\Repository */
+            $config = $app->make(\Illuminate\Contracts\Config\Repository::class);
+
+            return new \Google\Cloud\Translate\V2\TranslateClient([
+                'key' => $config->get('services.googletranslate.api_key'),
+                'restOptions' => [
+                   'headers' => [
+                       'referer' => $config->get('app.url')
+                   ]
+                ]
+            ]);
+        });
+
+        $this->app->bind(\Illuminate\Contracts\Pipeline\Pipeline::class, \Illuminate\Pipeline\Pipeline::class);
     }
 
     /**

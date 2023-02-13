@@ -107,7 +107,8 @@ class MailingLang extends Model
         'content_html',
         'content',
         'lang',
-        'progress'
+        'progress',
+        'translated_at'
     ];
 
     /**
@@ -119,6 +120,7 @@ class MailingLang extends Model
         'id' => 'integer',
         'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'progress' => \N1ebieski\ICore\Casts\ProgressCast::class,
+        'translated_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -129,7 +131,8 @@ class MailingLang extends Model
      * @var array
      */
     protected $attributes = [
-        'progress' => 100
+        'progress' => 100,
+        'translated_at' => null
     ];
 
     /**

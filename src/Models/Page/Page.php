@@ -112,6 +112,7 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User|null $user
  * @method static Builder|Page multiLang()
+ * @method static Builder|Page autoTrans()
  * @method static Builder|Page active()
  * @method static Builder|Page activeByDate()
  * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])

@@ -43,6 +43,7 @@ class CreateMailingsLangsTable extends Migration
             $table->longText('content')->nullable();
             $table->integer('progress')->default(0);
             $table->string('lang', 2)->index();
+            $table->timestamp('translated_at')->nullable();
             $table->timestamps();
 
             $table->unique(['mailing_id', 'lang']);

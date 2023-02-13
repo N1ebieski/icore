@@ -30,6 +30,10 @@ return [
 
     'multi_langs' => explode(',', env('ICORE_MULTI_LANGS', env('APP_LANG'))),
 
+    'auto_translate' => [
+        'check_days' => env('ICORE_AUTO_TRANSLATE_CHECK_DAYS', null),
+    ],
+
     'routes' => [
         'auth' => [
             'prefix' => env('ICORE_ROUTES_AUTH_PREFIX', null),

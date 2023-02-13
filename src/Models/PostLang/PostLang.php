@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\PostLang\PostLangService;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\TransableInterface;
+use N1ebieski\ICore\Http\Resources\PostLang\PostLangResource;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory;
 
@@ -79,7 +81,7 @@ use N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|PostLang withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
  */
-class PostLang extends Model
+class PostLang extends Model implements TransableInterface
 {
     use Sluggable;
     use HasFullTextSearchable;
@@ -113,6 +115,18 @@ class PostLang extends Model
     ];
 
     /**
+     * The columns for translate
+     *
+     * @var array<string>
+     */
+    protected $transable = [
+        'title',
+        'content_html',
+        'seo_title',
+        'seo_desc'
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
@@ -124,7 +138,8 @@ class PostLang extends Model
         'seo_title',
         'seo_desc',
         'lang',
-        'progress'
+        'progress',
+        'translated_at'
     ];
 
     /**
@@ -136,6 +151,7 @@ class PostLang extends Model
         'id' => 'integer',
         'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'progress' => \N1ebieski\ICore\Casts\ProgressCast::class,
+        'translated_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -146,7 +162,8 @@ class PostLang extends Model
      * @var array
      */
     protected $attributes = [
-        'progress' => 100
+        'progress' => 100,
+        'translated_at' => null
     ];
 
     /**
@@ -184,6 +201,15 @@ class PostLang extends Model
     protected static function newFactory()
     {
         return \N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory::new();
+    }
+
+    /**
+     *
+     * @return array<string>
+     */
+    public function getTransable(): array
+    {
+        return $this->transable;
     }
 
     // Relations
@@ -326,7 +352,7 @@ class PostLang extends Model
      *
      * @return PostLangService
      */
-    public function makeService()
+    public function makeService(): PostLangService
     {
         return App::make(PostLangService::class, ['postLang' => $this]);
     }
@@ -340,5 +366,14 @@ class PostLang extends Model
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return PostLangResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(PostLangResource::class, ['postLang' => $this]);
     }
 }

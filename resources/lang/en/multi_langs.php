@@ -18,6 +18,9 @@
 
 return [
     'lang' => 'Language',
+    'warning' => [
+        'auto_trans' => 'This content has been translated by Google Translate'
+    ],
     'progress' => [
         'label' => 'Translation progress',
         'tooltip' => 'Percentage marking (0% for translation by bot, 100% by human)'

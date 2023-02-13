@@ -16,17 +16,27 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-return [
-    'lang' => 'Język',
-    'warning' => [
-        'auto_trans' => 'Ta treść została przetłumaczona przez Google Translate'
-    ],
-    'progress' => [
-        'label' => 'Progres tłumaczenia',
-        'tooltip' => 'Procentowe oznaczenie (0% odpowiada tłumaczeniu przez bota, 100% przez człowieka)'
-    ],
-    'no_trans' => 'Brak tłumaczenia',
-    'auto_trans' => 'Automatyczne tłumaczenia',
-    'confirm' => 'Czy na pewno chcesz usunąć tłumaczenie?',
-    'delete' => 'U.Tłum.'
-];
+namespace N1ebieski\ICore\Models\Interfaces;
+
+use N1ebieski\ICore\Services\Interfaces\LangServiceInterface;
+
+/**
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
+ * @property \N1ebieski\ICore\ValueObjects\Progress $progress
+ * @property \Illuminate\Support\Carbon|null $translated_at
+ * @property-read array<string> $transable
+ */
+interface TransableInterface
+{
+    /**
+     *
+     * @return array<string>
+     */
+    public function getTransable(): array;
+
+    /**
+     *
+     * @return LangServiceInterface
+     */
+    public function makeService(): LangServiceInterface;
+}

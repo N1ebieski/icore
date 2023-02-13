@@ -46,6 +46,7 @@ class CreatePostsLangsTable extends Migration
             $table->text('seo_desc')->nullable();
             $table->integer('progress')->default(0);
             $table->string('lang', 2)->index();
+            $table->timestamp('translated_at')->nullable();
             $table->timestamps();
 
             $table->unique(['post_id', 'lang']);

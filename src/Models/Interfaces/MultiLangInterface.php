@@ -16,17 +16,21 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-return [
-    'lang' => 'Język',
-    'warning' => [
-        'auto_trans' => 'Ta treść została przetłumaczona przez Google Translate'
-    ],
-    'progress' => [
-        'label' => 'Progres tłumaczenia',
-        'tooltip' => 'Procentowe oznaczenie (0% odpowiada tłumaczeniu przez bota, 100% przez człowieka)'
-    ],
-    'no_trans' => 'Brak tłumaczenia',
-    'auto_trans' => 'Automatyczne tłumaczenia',
-    'confirm' => 'Czy na pewno chcesz usunąć tłumaczenie?',
-    'delete' => 'U.Tłum.'
-];
+namespace N1ebieski\ICore\Models\Interfaces;
+
+use Illuminate\Database\Eloquent\Model;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/**
+ * @property AutoTranslate $auto_translate
+ * @property-read \Illuminate\Database\Eloquent\Collection|Model[] $langs
+ */
+interface MultiLangInterface
+{
+    /**
+     *
+     * @return HasMany
+     */
+    public function langs(): HasMany;
+}

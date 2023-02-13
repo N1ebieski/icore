@@ -16,17 +16,17 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-return [
-    'lang' => 'Język',
-    'warning' => [
-        'auto_trans' => 'Ta treść została przetłumaczona przez Google Translate'
-    ],
-    'progress' => [
-        'label' => 'Progres tłumaczenia',
-        'tooltip' => 'Procentowe oznaczenie (0% odpowiada tłumaczeniu przez bota, 100% przez człowieka)'
-    ],
-    'no_trans' => 'Brak tłumaczenia',
-    'auto_trans' => 'Automatyczne tłumaczenia',
-    'confirm' => 'Czy na pewno chcesz usunąć tłumaczenie?',
-    'delete' => 'U.Tłum.'
-];
+namespace N1ebieski\ICore\Crons\AutoTranslate\Builder\Interfaces;
+
+use Closure;
+
+interface BuilderInterface
+{
+    /**
+     *
+     * @param Closure $closure
+     * @param string|null $timestamp
+     * @return bool
+     */
+    public function chunkCollection(Closure $closure, string $timestamp = null): bool;
+}
