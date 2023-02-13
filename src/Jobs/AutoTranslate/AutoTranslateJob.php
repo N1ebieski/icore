@@ -45,7 +45,7 @@ class AutoTranslateJob implements ShouldQueue
      *
      * @var bool
      */
-    public $deleteWhenMissingModels = true;
+    public bool $deleteWhenMissingModels = true;
 
     /**
      *
