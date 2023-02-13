@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Http\Clients\Recaptcha;
+namespace N1ebieski\ICore\Http\Clients\Google\Recaptcha;
 
 use N1ebieski\ICore\Http\Clients\Request as BaseRequest;
 

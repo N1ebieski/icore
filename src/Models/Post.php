@@ -39,10 +39,12 @@ use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
 use N1ebieski\ICore\Models\Traits\HasStatFilterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use N1ebieski\ICore\Http\Resources\Post\PostResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\MultiLangInterface;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -96,6 +98,7 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User $user
  * @method static Builder|Post multiLang()
+ * @method static Builder|Post autoTrans()
  * @method static Builder|Post active()
  * @method static \N1ebieski\ICore\Database\Factories\Post\PostFactory factory(...$parameters)
  * @method static Builder|Post filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
@@ -140,7 +143,7 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
  * @method static Builder|Post withAllRels(array $relations = [])
  * @mixin \Eloquent
  */
-class Post extends Model
+class Post extends Model implements MultiLangInterface
 {
     use HasFullTextSearchable;
     use PivotEventTrait;
@@ -587,5 +590,14 @@ class Post extends Model
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return PostResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(PostResource::class, ['post' => $this]);
     }
 }

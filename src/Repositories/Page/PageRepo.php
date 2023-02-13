@@ -269,21 +269,23 @@ class PageRepo
      */
     public function chunkActiveWithModelsCount(int $chunk, Closure $callback): bool
     {
-        $query = $this->page->newQuery()
+        return $this->page->newQuery()
             ->active()
             ->whereHas('langs', function (Builder $query) {
                 return $query->whereNotNull('content_html');
             })
-            ->with('langs');
-
-        foreach ($this->config->get('icore.multi_langs') as $lang) {
-            $query->withCount([
-                "comments AS models_count_{$lang}" => function (MorphMany|Builder|Comment $query) use ($lang) {
-                    return $query->root()->active()->where('lang', $lang);
+            ->with('langs')
+            ->when(true, function (Builder $query) {
+                foreach ($this->config->get('icore.multi_langs') as $lang) {
+                    $query->withCount([
+                        "comments AS models_count_{$lang}" => function (MorphMany|Builder|Comment $query) use ($lang) {
+                            return $query->root()->active()->where('lang', $lang);
+                        }
+                    ]);
                 }
-            ]);
-        }
 
-        return $query->chunk($chunk, $callback);
+                return $query;
+            })
+            ->chunk($chunk, $callback);
     }
 }

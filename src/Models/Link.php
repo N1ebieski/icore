@@ -23,10 +23,10 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Link\LinkCache;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\ValueObjects\Link\Type;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Services\Link\LinkService;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Repositories\Link\LinkRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
@@ -90,7 +90,7 @@ class Link extends Model
     use HasCarbonable;
     use HasFilterable;
     use HasFactory;
-    use HasMultiLang;
+    use HasLang;
 
     // Configuration
 

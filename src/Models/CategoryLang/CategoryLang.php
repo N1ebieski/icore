@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use N1ebieski\ICore\Services\CategoryLang\CategoryLangService;
+use N1ebieski\ICore\Http\Resources\CategoryLang\CategoryLangResource;
 use N1ebieski\ICore\Database\Factories\CategoryLang\CategoryLangFactory;
 
 /**
@@ -96,7 +97,7 @@ class CategoryLang extends Model
      *
      * @var array<string>
      */
-    protected $fillable = ['name', 'lang', 'progress'];
+    protected $fillable = ['name', 'lang', 'progress', 'translated_at'];
 
     /**
      * The attributes that should be cast to native types.
@@ -107,6 +108,7 @@ class CategoryLang extends Model
         'id' => 'integer',
         'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'progress' => \N1ebieski\ICore\Casts\ProgressCast::class,
+        'translated_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -117,7 +119,8 @@ class CategoryLang extends Model
      * @var array
      */
     protected $attributes = [
-        'progress' => 100
+        'progress' => 100,
+        'translated_at' => null
     ];
 
     /**
@@ -189,5 +192,14 @@ class CategoryLang extends Model
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return CategoryLangResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(CategoryLangResource::class, ['categoryLang' => $this]);
     }
 }

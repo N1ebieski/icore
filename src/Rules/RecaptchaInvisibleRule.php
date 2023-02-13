@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Rules;
 use Stringable;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Translation\Translator as Lang;
-use N1ebieski\ICore\Http\Clients\Recaptcha\Invisible\RecaptchaClient;
+use N1ebieski\ICore\Http\Clients\Google\Recaptcha\Invisible\RecaptchaClient;
 
 class RecaptchaInvisibleRule implements Rule, Stringable
 {

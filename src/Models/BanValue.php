@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
@@ -72,7 +72,7 @@ class BanValue extends Model
     use HasFullTextSearchable;
     use HasCarbonable;
     use HasFactory;
-    use HasMultiLang;
+    use HasLang;
 
     // Configuration
 

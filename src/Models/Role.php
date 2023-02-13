@@ -26,6 +26,7 @@ use Spatie\Permission\Models\Role as BaseRole;
 use N1ebieski\ICore\Repositories\Role\RoleRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
+use N1ebieski\ICore\Http\Resources\Role\RoleResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Role\RoleFactory;
 
@@ -134,4 +135,13 @@ class Role extends BaseRole
     {
         return static::factory($parameters);
     }
+
+    /**
+     * [makeResource description]
+     * @return RoleResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(RoleResource::class, ['role' => $this]);
+    }    
 }

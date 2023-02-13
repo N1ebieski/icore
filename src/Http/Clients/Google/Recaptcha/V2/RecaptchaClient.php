@@ -16,12 +16,12 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Http\Clients\Recaptcha\V2;
+namespace N1ebieski\ICore\Http\Clients\Google\Recaptcha\V2;
 
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Http\Clients\Recaptcha\V2\Requests\VerifyRequest;
-use N1ebieski\ICore\Http\Clients\Recaptcha\V2\Responses\VerifyResponse;
+use N1ebieski\ICore\Http\Clients\Google\Recaptcha\V2\Requests\VerifyRequest;
+use N1ebieski\ICore\Http\Clients\Google\Recaptcha\V2\Responses\VerifyResponse;
 
 class RecaptchaClient
 {

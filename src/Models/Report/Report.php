@@ -21,7 +21,7 @@ namespace N1ebieski\ICore\Models\Report;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\Services\Report\ReportService;
@@ -66,7 +66,7 @@ class Report extends Model
     use HasPolymorphic;
     use HasCarbonable;
     use HasFactory;
-    use HasMultiLang;
+    use HasLang;
 
     // Configuration
 

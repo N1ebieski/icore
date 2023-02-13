@@ -63,6 +63,7 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  * @property-read string $short_content
  * @property-read string $updated_at_diff
  * @method static Builder|Mailing multiLang()
+ * @method static Builder|Mailing autoTrans()
  * @method static Builder|Mailing active()
  * @method static \N1ebieski\ICore\Database\Factories\Mailing\MailingFactory factory(...$parameters)
  * @method static Builder|Mailing filterAuthor(?\N1ebieski\ICore\Models\User $author = null)

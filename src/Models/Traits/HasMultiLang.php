@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -77,7 +78,7 @@ trait HasMultiLang
      * @return Builder
      * @throws MassAssignmentException
      */
-    public function scopeMultiLang(Builder $query)
+    public function scopeMultiLang(Builder $query): Builder
     {
         /** @var Model */
         $lang = $this->langs()->make();
@@ -96,8 +97,8 @@ trait HasMultiLang
      * @param Builder $query
      * @return Builder
      */
-    public function scopeLang(Builder $query)
+    public function scopeAutoTrans(Builder $query): Builder
     {
-        return $query->where("{$this->getTable()}.lang", Config::get('app.locale'));
+        return $query->where('auto_translate', AutoTranslate::ACTIVE);
     }
 }

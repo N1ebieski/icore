@@ -20,13 +20,11 @@ namespace N1ebieski\ICore\Http\Resources\Post;
 
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Http\Resources\Json\JsonResource;
-use N1ebieski\ICore\Http\Resources\User\UserResource;
-use N1ebieski\ICore\Http\Resources\PostLang\PostLangResource;
 
 /**
  * @mixin Post
@@ -104,18 +102,21 @@ class PostResource extends JsonResource
                 $this->relationLoaded('user'),
                 function () {
                     /** @var User */
-                    $user = $this->user;
+                    $user = $this->user->setAttribute('depth', 1);
 
                     return [
-                        'user' => App::make(UserResource::class, ['user' => $user->setAttribute('depth', 1)])
+                        'user' => $user->makeResource()
                     ];
                 }
             ),
             $this->mergeWhen(
-                $this->relationLoaded('langs'),
+                count(Config::get('icore.multi_langs')) > 1 && $this->relationLoaded('langs'),
                 function () {
+                    /** @var PostLang */
+                    $postLang = $this->langs()->make();
+
                     return [
-                        'langs' => App::make(PostLangResource::class)
+                        'langs' => $postLang->makeResource()
                             ->collection($this->langs->map(function ($item) {
                                 $item->setAttribute('depth', 1);
 

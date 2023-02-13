@@ -23,8 +23,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\Cache\Comment\CommentCache;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
@@ -175,7 +175,7 @@ class Comment extends Entity
     use HasFixForRealDepthClosureTable;
     use HasFixForPolymorphicClosureTable;
     use HasFactory;
-    use HasMultiLang;
+    use HasLang;
 
     // Configuration
 

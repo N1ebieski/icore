@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\Socialite\SocialiteService;
 use N1ebieski\ICore\Repositories\Socialite\SocialiteRepo;
+use N1ebieski\ICore\Http\Resources\Socialite\SocialiteResource;
 use N1ebieski\ICore\Database\Factories\Socialite\SocialiteFactory;
 
 /**
@@ -136,5 +137,14 @@ class Socialite extends Model
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return SocialiteResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(SocialiteResource::class, ['socialite' => $this]);
     }
 }

@@ -16,10 +16,10 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Http\Clients\Recaptcha\V2\Requests;
+namespace N1ebieski\ICore\Http\Clients\Google\Recaptcha\V2\Requests;
 
 use Psr\Http\Message\ResponseInterface;
-use N1ebieski\ICore\Http\Clients\Recaptcha\Request;
+use N1ebieski\ICore\Http\Clients\Google\Recaptcha\Request;
 
 class VerifyRequest extends Request
 {

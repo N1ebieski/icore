@@ -16,18 +16,17 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Http\Resources\Category;
+namespace N1ebieski\ICore\Http\Resources\Category\Post;
 
-use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
-use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Http\Resources\Json\JsonResource;
-use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
+use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Http\Resources\Category\CategoryResource as BaseCategoryResource;
 
 /**
  * @mixin Category
  */
-class CategoryResource extends JsonResource
+class CategoryResource extends BaseCategoryResource
 {
     /**
      * Undocumented function
@@ -59,33 +58,25 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'icon' => $this->icon,
-            'status' => [
-                'value' => $this->status->getValue(),
-                'label' => Lang::get("icore::filter.status.{$this->status}")
-            ],
-            'real_depth' => $this->real_depth,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'ancestors' => $this->makeResource()->collection($this->whenLoaded('ancestors')),
-            $this->mergeWhen(
-                count(Config::get('icore.multi_langs')) > 1 && $this->relationLoaded('langs'),
-                function () {
-                    /** @var CategoryLang */
-                    $categoryLang = $this->langs()->make();
-
-                    return [
-                        'langs' => $categoryLang->makeResource()
-                            ->collection($this->langs->map(function ($item) {
-                                $item->setAttribute('depth', 1);
-
-                                return $item;
-                            }))
-                    ];
-                }
-            ),
-        ];
+        return array_merge(parent::toArray($request), [
+            'links' => [
+                $this->mergeWhen(
+                    Config::get('icore.routes.web.enabled') === true && $this->status->isActive(),
+                    function () {
+                        return [
+                            'web' => URL::route('web.category.post.show', [$this->slug])
+                        ];
+                    }
+                ),
+                $this->mergeWhen(
+                    Config::get('icore.routes.admin.enabled') === true && $request->user()?->can('admin.categories.view'),
+                    function () {
+                        return [
+                            'admin' => URL::route('admin.category.post.index', ['filter[search]' => 'id:"' . $this->id . '"'])
+                        ];
+                    }
+                )
+            ]
+        ]);
     }
 }

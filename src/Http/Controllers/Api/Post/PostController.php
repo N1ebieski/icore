@@ -25,9 +25,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Filters\Api\Post\IndexFilter;
-use N1ebieski\ICore\Http\Resources\Post\PostResource;
 use N1ebieski\ICore\Http\Requests\Api\Post\IndexRequest;
-use N1ebieski\ICore\Http\Resources\Category\CategoryResource;
 use N1ebieski\ICore\Events\Api\Post\IndexEvent as PostIndexEvent;
 
 /**
@@ -76,14 +74,17 @@ class PostController
 
         Event::dispatch(App::make(PostIndexEvent::class, ['posts' => $posts]));
 
-        return App::make(PostResource::class)
+        /** @var Category|null */
+        $category = $filter->get('category');
+
+        return $post->makeResource()
             ->collection($posts)
             ->additional(['meta' => [
                 'filter' => Collect::make($filter->all())
                     ->replace([
-                        'category' => $filter->get('category') instanceof Category ?
-                            App::make(CategoryResource::class, ['category' => $filter->get('category')])
-                            : $filter->get('category')
+                        'category' => $category instanceof Category ?
+                            $category->makeResource()
+                            : $category
                     ])
                     ->toArray()
             ]])

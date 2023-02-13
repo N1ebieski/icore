@@ -23,12 +23,13 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Cache\Tag\TagCache;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\Services\Tag\TagService;
 use N1ebieski\ICore\Repositories\Tag\TagRepo;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
+use N1ebieski\ICore\Http\Resources\Tag\TagResource;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Tag\TagFactory;
@@ -81,7 +82,7 @@ class Tag extends Taggable
     use HasFilterable;
     use HasCarbonable;
     use HasFactory;
-    use HasMultiLang;
+    use HasLang;
 
     // Configuration
 
@@ -200,5 +201,14 @@ class Tag extends Taggable
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return TagResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(TagResource::class, ['tag' => $this]);
     }
 }

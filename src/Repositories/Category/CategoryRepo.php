@@ -227,22 +227,24 @@ class CategoryRepo
      */
     public function chunkActiveWithModelsCount(int $chunk, Closure $closure): bool
     {
-        $query = $this->category->newQuery()
+        return $this->category->newQuery()
             ->active()
             ->poliType()
-            ->with('langs');
-
-        foreach ($this->config->get('icore.multi_langs') as $lang) {
-            $query->withCount([
-                "morphs AS models_count_{$lang}" => function (mixed $query) use ($lang) {
-                    return $query->active()->whereHas('langs', function (mixed $query) use ($lang) {
-                        return $query->where('lang', $lang);
-                    });
+            ->with('langs')
+            ->when(true, function (Builder $query) {
+                foreach ($this->config->get('icore.multi_langs') as $lang) {
+                    $query->withCount([
+                        "morphs AS models_count_{$lang}" => function (mixed $query) use ($lang) {
+                            return $query->active()->whereHas('langs', function (mixed $query) use ($lang) {
+                                return $query->where('lang', $lang);
+                            });
+                        }
+                    ]);
                 }
-            ]);
-        }
 
-        return $query->chunk($chunk, $closure);
+                return $query;
+            })
+            ->chunk($chunk, $closure);
     }
 
     /**

@@ -18,11 +18,13 @@
 
 namespace N1ebieski\ICore\Models\Category\Post;
 
+use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Models\Category\Category as BaseCategory;
+use N1ebieski\ICore\Http\Resources\Category\Post\CategoryResource;
 use N1ebieski\ICore\Database\Factories\Category\Post\CategoryFactory;
 
 /**
@@ -204,5 +206,14 @@ class Category extends BaseCategory
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeRepo description]
+     * @return CategoryResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(CategoryResource::class, ['category' => $this]);
     }
 }

@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Http\Clients\Recaptcha\V2\Responses;
+namespace N1ebieski\ICore\Http\Clients\Google\Recaptcha\Invisible\Responses;
 
 use N1ebieski\ICore\Http\Clients\Response;
 

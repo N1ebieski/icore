@@ -39,6 +39,7 @@ use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use N1ebieski\ICore\Http\Resources\User\UserResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use N1ebieski\ICore\Database\Factories\User\UserFactory;
@@ -343,5 +344,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return UserResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(UserResource::class, ['user' => $this]);
     }
 }
