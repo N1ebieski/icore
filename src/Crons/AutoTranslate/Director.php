@@ -24,7 +24,8 @@ use Illuminate\Contracts\Bus\Dispatcher as Job;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\ICore\Jobs\AutoTranslate\AutoTranslateJob;
-use N1ebieski\ICore\Models\Interfaces\MultiLangInterface;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Crons\AutoTranslate\Builder\Interfaces\BuilderInterface;
 
 class Director
@@ -54,7 +55,7 @@ class Director
     public function build(BuilderInterface $builder): void
     {
         $builder->chunkCollection(function (Collection $collection) {
-            $collection->each(function (MultiLangInterface $model) {
+            $collection->each(function (AutoTranslateInterface $model) {
                 $this->addToQueue($model);
             });
         }, $this->getCheckTimestamp());
@@ -62,10 +63,11 @@ class Director
 
     /**
      *
-     * @param MultiLangInterface $model
+     * @param AutoTranslateInterface $model
      * @return void
+     * @throws BindingResolutionException
      */
-    protected function addToQueue(MultiLangInterface $model): void
+    protected function addToQueue(AutoTranslateInterface $model): void
     {
         $this->job->dispatch($this->app->make(AutoTranslateJob::class, [
             'model' => $model

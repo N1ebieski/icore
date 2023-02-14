@@ -6,10 +6,12 @@ use Throwable;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 
 class PageService
 {
@@ -94,6 +96,7 @@ class PageService
             if ($attributes['parent_id'] !== null) {
                 /** @var Page */
                 $parent = $this->page->findOrFail($attributes['parent_id']);
+
                 // If the parent is inactive, the child must inherit this state
                 $this->page->status = $parent->status->isInactive() ?
                     Status::INACTIVE : $attributes['status'];
@@ -123,25 +126,6 @@ class PageService
      * @throws Throwable
      */
     public function update(array $attributes): Page
-    {
-        return $this->db->transaction(function () use ($attributes) {
-            $this->page->currentLang->makeService()->createOrUpdate(
-                array_merge($attributes, [
-                    'page' => $this->page
-                ])
-            );
-
-            return $this->page;
-        });
-    }
-
-    /**
-     *
-     * @param array $attributes
-     * @return Page
-     * @throws Throwable
-     */
-    public function updateFull(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill($attributes);

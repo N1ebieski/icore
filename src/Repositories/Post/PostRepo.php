@@ -401,7 +401,7 @@ class PostRepo
                     return $query;
                 });
             })
-            ->with('langs')
+            ->with(['langs', 'tags'])
             ->chunk(1000, $closure);
     }
 

@@ -16,21 +16,13 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Models\Interfaces;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces;
 
-use Illuminate\Database\Eloquent\Model;
-use N1ebieski\ICore\ValueObjects\AutoTranslate;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
-/**
- * @property AutoTranslate $auto_translate
- * @property-read \Illuminate\Database\Eloquent\Collection|Model[] $langs
- */
-interface MultiLangInterface
+interface InputDataInterface
 {
     /**
      *
-     * @return HasMany
+     * @return array
      */
-    public function langs(): HasMany;
+    public function getInputToArray(): array;
 }

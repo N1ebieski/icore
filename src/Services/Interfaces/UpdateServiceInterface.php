@@ -16,15 +16,16 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Models\Interfaces;
+namespace N1ebieski\ICore\Services\Interfaces;
 
-/**
- * @property \N1ebieski\ICore\ValueObjects\Lang $lang
- * @property \N1ebieski\ICore\ValueObjects\Progress $progress
- * @property \Illuminate\Support\Carbon|null $translated_at
- * @property-read array<string> $transable
- */
-interface TransableInterface
+use Illuminate\Database\Eloquent\Model;
+
+interface UpdateServiceInterface
 {
-    //
+    /**
+     *
+     * @param array $attributes
+     * @return Model
+     */
+    public function update(array $attributes): Model;
 }

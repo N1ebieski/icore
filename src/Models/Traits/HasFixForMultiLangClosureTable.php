@@ -56,7 +56,7 @@ trait HasFixForMultiLangClosureTable
 
                 $entity->currentLang->makeService()->create([
                     'name' => $item['name'],
-                    'category' => $entity
+                    $this->getBaseName() => $entity
                 ]);
 
                 if ($children !== null) {
@@ -72,5 +72,14 @@ trait HasFixForMultiLangClosureTable
         $create($tree, $parent);
 
         return new Collection($collection);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getBaseName(): string
+    {
+        return lcfirst(class_basename($this::class));
     }
 }

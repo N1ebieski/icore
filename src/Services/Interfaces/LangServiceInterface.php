@@ -20,7 +20,7 @@ namespace N1ebieski\ICore\Services\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
 
-interface LangServiceInterface
+interface LangServiceInterface extends UpdateServiceInterface
 {
     /**
      *
@@ -35,13 +35,6 @@ interface LangServiceInterface
      * @return Model
      */
     public function create(array $attributes): Model;
-
-    /**
-     *
-     * @param array $attributes
-     * @return Model
-     */
-    public function update(array $attributes): Model;
 
     /**
      *

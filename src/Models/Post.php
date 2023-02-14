@@ -44,7 +44,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
-use N1ebieski\ICore\Models\Interfaces\MultiLangInterface;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -143,7 +143,7 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
  * @method static Builder|Post withAllRels(array $relations = [])
  * @mixin \Eloquent
  */
-class Post extends Model implements MultiLangInterface
+class Post extends Model implements AutoTranslateInterface
 {
     use HasFullTextSearchable;
     use PivotEventTrait;
@@ -576,7 +576,7 @@ class Post extends Model implements MultiLangInterface
      * [makeService description]
      * @return PostService [description]
      */
-    public function makeService()
+    public function makeService(): PostService
     {
         return App::make(PostService::class, ['post' => $this]);
     }

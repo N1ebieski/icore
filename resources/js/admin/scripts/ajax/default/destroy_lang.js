@@ -21,7 +21,7 @@ $(document).on(
         e.preventDefault();
 
         let $element = $(this);
-        
+
         let $row = $('#row' + $element.data('id'));
 
         $.ajax({

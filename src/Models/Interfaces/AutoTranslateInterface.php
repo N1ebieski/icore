@@ -18,13 +18,26 @@
 
 namespace N1ebieski\ICore\Models\Interfaces;
 
+use Illuminate\Database\Eloquent\Model;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
+
 /**
- * @property \N1ebieski\ICore\ValueObjects\Lang $lang
- * @property \N1ebieski\ICore\ValueObjects\Progress $progress
- * @property \Illuminate\Support\Carbon|null $translated_at
- * @property-read array<string> $transable
+ * @property AutoTranslate $auto_translate
+ * @property-read \Illuminate\Database\Eloquent\Collection|Model[] $langs
  */
-interface TransableInterface
+interface AutoTranslateInterface
 {
-    //
+    /**
+     *
+     * @return HasMany
+     */
+    public function langs(): HasMany;
+
+    /**
+     *
+     * @return UpdateServiceInterface
+     */
+    public function makeService(): UpdateServiceInterface;
 }

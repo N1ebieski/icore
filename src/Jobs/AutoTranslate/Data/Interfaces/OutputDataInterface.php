@@ -16,15 +16,14 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Models\Interfaces;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces;
 
-/**
- * @property \N1ebieski\ICore\ValueObjects\Lang $lang
- * @property \N1ebieski\ICore\ValueObjects\Progress $progress
- * @property \Illuminate\Support\Carbon|null $translated_at
- * @property-read array<string> $transable
- */
-interface TransableInterface
+interface OutputDataInterface
 {
-    //
+    /**
+     *
+     * @param array $attributes
+     * @return array
+     */
+    public function getOutputToArray(array $attributes): array;
 }

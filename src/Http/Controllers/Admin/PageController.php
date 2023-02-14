@@ -191,7 +191,7 @@ class PageController
      */
     public function updateFull(Page $page, UpdateFullRequest $request): RedirectResponse
     {
-        $page->makeService()->updateFull($request->validated());
+        $page->makeService()->update($request->validated());
 
         return Response::redirectToRoute('admin.page.edit_full', [$page->id])
             ->with('success', Lang::get('icore::pages.success.update'));

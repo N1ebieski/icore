@@ -151,7 +151,7 @@ class PostController
      */
     public function updateFull(Post $post, UpdateFullRequest $request): RedirectResponse
     {
-        $post->makeService()->updateFull($request->validated());
+        $post->makeService()->update($request->validated());
 
         return Response::redirectToRoute('admin.post.edit_full', ['post' => $post->id])
             ->with('success', Lang::get('icore::posts.success.update'));

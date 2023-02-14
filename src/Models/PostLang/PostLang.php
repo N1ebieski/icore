@@ -115,18 +115,6 @@ class PostLang extends Model implements TransableInterface
     ];
 
     /**
-     * The columns for translate
-     *
-     * @var array<string>
-     */
-    protected $transable = [
-        'title',
-        'content_html',
-        'seo_title',
-        'seo_desc'
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
@@ -201,15 +189,6 @@ class PostLang extends Model implements TransableInterface
     protected static function newFactory()
     {
         return \N1ebieski\ICore\Database\Factories\PostLang\PostLangFactory::new();
-    }
-
-    /**
-     *
-     * @return array<string>
-     */
-    public function getTransable(): array
-    {
-        return $this->transable;
     }
 
     // Relations

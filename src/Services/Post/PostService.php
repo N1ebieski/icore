@@ -24,8 +24,9 @@ use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class PostService
+class PostService implements UpdateServiceInterface
 {
     /**
      * Undocumented function
@@ -107,12 +108,19 @@ class PostService
      * @return Post
      * @throws Throwable
      */
-    public function updateFull(array $attributes): Post
+    public function update(array $attributes): Post
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
 
-            if (!$this->post->status->isInactive()) {
+            if (
+                !$this->post->status->isInactive() && (is_null($this->post->published_at)
+                    || (
+                        array_key_exists('date_published_at', $attributes)
+                        && array_key_exists('time_published_at', $attributes)
+                    )
+                )
+            ) {
                 // @phpstan-ignore-next-line
                 $this->post->published_at =
                     $attributes['date_published_at'] . $attributes['time_published_at'];
@@ -132,25 +140,6 @@ class PostService
 
             $this->post->save();
 
-            $this->post->currentLang->makeService()->createOrUpdate(
-                array_merge($attributes, [
-                    'post' => $this->post
-                ])
-            );
-
-            return $this->post;
-        });
-    }
-
-    /**
-     * Mini-Update the specified Post in storage.
-     *
-     * @param  array $attributes [description]
-     * @return Post              [description]
-     */
-    public function update(array $attributes): Post
-    {
-        return $this->db->transaction(function () use ($attributes) {
             $this->post->currentLang->makeService()->createOrUpdate(
                 array_merge($attributes, [
                     'post' => $this->post

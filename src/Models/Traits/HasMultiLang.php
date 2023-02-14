@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Models\Traits;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\ValueObjects\Lang;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use N1ebieski\ICore\ValueObjects\AutoTranslate;

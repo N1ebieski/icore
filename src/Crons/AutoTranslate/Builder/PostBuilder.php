@@ -20,6 +20,8 @@ namespace N1ebieski\ICore\Crons\AutoTranslate\Builder;
 
 use Closure;
 use N1ebieski\ICore\Models\Post;
+use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Crons\AutoTranslate\Builder\Interfaces\BuilderInterface;
 
@@ -28,10 +30,15 @@ class PostBuilder implements BuilderInterface
     /**
      *
      * @param Post $post
+     * @param Config $config
+     * @param App $app
      * @return void
      */
-    public function __construct(protected Post $post)
-    {
+    public function __construct(
+        protected Post $post,
+        protected Config $config,
+        protected App $app
+    ) {
         //
     }
 

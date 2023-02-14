@@ -18,8 +18,6 @@
 
 namespace N1ebieski\ICore\Jobs\AutoTranslate;
 
-use Eloquent;
-use Throwable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Carbon;
 use Illuminate\Queue\SerializesModels;
@@ -29,9 +27,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Contracts\Config\Repository as Config;
-use N1ebieski\ICore\Models\Interfaces\MultiLangInterface;
+use Illuminate\Contracts\Foundation\Application as App;
 use N1ebieski\ICore\Models\Interfaces\TransableInterface;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Http\Clients\Google\Translate\TranslateClient;
+use N1ebieski\ICore\Jobs\AutoTranslate\Data\Factories\InputDataFactory;
+use N1ebieski\ICore\Jobs\AutoTranslate\Data\Factories\OutputDataFactory;
 
 class AutoTranslateJob implements ShouldQueue
 {
@@ -61,10 +63,16 @@ class AutoTranslateJob implements ShouldQueue
 
     /**
      *
-     * @param Eloquent&MultiLangInterface $model
+     * @var App
+     */
+    protected App $app;
+
+    /**
+     *
+     * @param AutoTranslateInterface $model
      * @return void
      */
-    public function __construct(protected MultiLangInterface $model)
+    public function __construct(protected AutoTranslateInterface $model)
     {
         //
     }
@@ -100,32 +108,44 @@ class AutoTranslateJob implements ShouldQueue
                     $this->carbon->now()->subDays($this->config->get('icore.auto_translate.check_days'))
                 )
             );
+        } else {
+            $verify &= $toModel->translated_at === null;
         }
 
         return $verify;
     }
 
     /**
-     * Execute the job.
      *
      * @param TranslateClient $client
      * @param Carbon $carbon
-     * @param Config $carbon
+     * @param Config $config
+     * @param App $app
+     * @param InputDataFactory $inputDataFactory
+     * @param OutputDataFactory $outputDataFactory
      * @return void
+     * @throws BindingResolutionException
+     * @throws InvalidFormatException
      */
     public function handle(
         TranslateClient $client,
         Carbon $carbon,
         Config $config,
+        App $app,
+        InputDataFactory $inputDataFactory,
+        OutputDataFactory $outputDataFactory
     ) {
         $this->carbon = $carbon;
         $this->config = $config;
+        $this->app = $app;
 
         if (!$this->verify()) {
             return;
         }
 
         $fromModel = $this->getFromModel();
+
+        $inputData = $inputDataFactory->makeData($fromModel)->getInputToArray();
 
         foreach ($this->config->get('icore.multi_langs') as $lang) {
             $toModel = $this->getToModelByLang($lang);
@@ -134,14 +154,8 @@ class AutoTranslateJob implements ShouldQueue
                 continue;
             }
 
-            $strings = [];
-
-            foreach ($fromModel->getTransable() as $field) {
-                $strings[] = $fromModel->{$field} ?? '';
-            }
-
             $response = $client->translateMany([
-                'strings' => $strings,
+                'strings' => array_values($inputData),
                 'source' => $fromModel->lang->getValue(),
                 'target' => $toModel->lang->getValue()
             ]);
@@ -149,34 +163,17 @@ class AutoTranslateJob implements ShouldQueue
             $attributes = [];
 
             foreach ($response->get('results') as $key => $value) {
-                $attributes[$toModel->getTransable()[$key]] = $value['text'];
+                $attributes[array_keys($inputData)[$key]] = $value['text'];
             }
 
-            $toModel->makeService()->createOrUpdate(array_merge($attributes, [
-                $this->getBaseName() => $this->model->getKey(),
+            $outputData = $outputDataFactory->makeData($toModel)->getOutputToArray($attributes);
+
+            $this->app->setLocale($lang);
+
+            $this->model->makeService()->update(array_merge($outputData, [
                 'translated_at' => $this->carbon->now()
             ]));
         }
-    }
-
-    /**
-     * The job failed to process.
-     *
-     * @param  Throwable  $exception
-     * @return void
-     */
-    public function failed(Throwable $exception)
-    {
-        //
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getBaseName(): string
-    {
-        return lcfirst(class_basename($this->model::class));
     }
 
     /**
