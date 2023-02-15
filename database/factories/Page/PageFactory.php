@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use N1ebieski\ICore\ValueObjects\Page\Comment;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -78,6 +79,20 @@ class PageFactory extends Factory
         return $this->state(function () {
             return [
                 'status' => Status::ACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function autoTrans()
+    {
+        return $this->state(function () {
+            return [
+                'auto_translate' => AutoTranslate::ACTIVE
             ];
         });
     }

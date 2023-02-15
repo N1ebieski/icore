@@ -45,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Page\PageFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -208,7 +209,7 @@ use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
  * @property-read string|null $first_image
  * @mixin \Eloquent
  */
-class Page extends Entity
+class Page extends Entity implements AutoTranslateInterface
 {
     use HasFullTextSearchable;
     use PivotEventTrait;
@@ -762,7 +763,7 @@ class Page extends Entity
      * [makeService description]
      * @return PageService [description]
      */
-    public function makeService()
+    public function makeService(): PageService
     {
         return App::make(PageService::class, ['page' => $this]);
     }

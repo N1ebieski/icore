@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Services\PageLang\PageLangService;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\TransableInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory;
 
@@ -80,7 +81,7 @@ use N1ebieski\ICore\Database\Factories\PageLang\PageLangFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|PageLang withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
  */
-class PageLang extends Model
+class PageLang extends Model implements TransableInterface
 {
     use Sluggable;
     use HasFullTextSearchable;

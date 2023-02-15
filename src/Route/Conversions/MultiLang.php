@@ -97,6 +97,7 @@ class MultiLang implements Handler
         /** @var array */
         $parsed = parse_url($url);
 
+        // @phpstan-ignore-next-line
         $prefixes = $this->collect->make($this->config->get('icore.routes'))
             ->pluck('prefix')
             ->filter(fn (mixed $prefix): bool => is_string($prefix))

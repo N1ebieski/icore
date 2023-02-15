@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Category;
+namespace N1ebieski\ICore\Tests\Integration\Rules\ExistsLang\Category;
 
 use Tests\TestCase;
 use Category\Status;

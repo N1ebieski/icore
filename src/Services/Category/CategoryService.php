@@ -26,8 +26,9 @@ use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class CategoryService
+class CategoryService implements UpdateServiceInterface
 {
     /**
      * Undocumented function
@@ -249,7 +250,10 @@ class CategoryService
 
             $this->category->save();
 
-            if ($attributes['parent_id'] != $this->category->parent_id) {
+            if (
+                array_key_exists('parent_id', $attributes)
+                && $attributes['parent_id'] != $this->category->parent_id
+            ) {
                 if ($attributes['parent_id'] === null) {
                     $this->moveToRoot();
                 } else {

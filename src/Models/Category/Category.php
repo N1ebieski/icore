@@ -38,6 +38,7 @@ use N1ebieski\ICore\Repositories\Category\CategoryRepo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use N1ebieski\ICore\Http\Resources\Category\CategoryResource;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
 use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
@@ -158,7 +159,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @method static Builder|Category withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
  */
-class Category extends Entity
+class Category extends Entity implements AutoTranslateInterface
 {
     use HasFilterable;
     use HasFullTextSearchable;
@@ -449,7 +450,7 @@ class Category extends Entity
      * [makeService description]
      * @return CategoryService [description]
      */
-    public function makeService()
+    public function makeService(): CategoryService
     {
         return App::make(CategoryService::class, ['category' => $this]);
     }

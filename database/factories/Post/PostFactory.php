@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\ValueObjects\Post\Comment;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -82,6 +83,20 @@ class PostFactory extends Factory
         return $this->state(function () {
             return [
                 'status' => Status::ACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function autoTrans()
+    {
+        return $this->state(function () {
+            return [
+                'auto_translate' => AutoTranslate::ACTIVE
             ];
         });
     }

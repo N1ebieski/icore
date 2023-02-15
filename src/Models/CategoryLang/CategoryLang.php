@@ -26,6 +26,7 @@ use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\TransableInterface;
 use N1ebieski\ICore\Services\CategoryLang\CategoryLangService;
 use N1ebieski\ICore\Http\Resources\CategoryLang\CategoryLangResource;
 use N1ebieski\ICore\Database\Factories\CategoryLang\CategoryLangFactory;
@@ -62,7 +63,7 @@ use N1ebieski\ICore\Database\Factories\CategoryLang\CategoryLangFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|CategoryLang withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @mixin \Eloquent
  */
-class CategoryLang extends Model
+class CategoryLang extends Model implements TransableInterface
 {
     use Sluggable;
     use HasFullTextSearchable;

@@ -32,9 +32,9 @@ class AutoTranslateCron
      */
     protected $builders = [
         \N1ebieski\ICore\Crons\AutoTranslate\Builder\PostBuilder::class,
-        // \N1ebieski\ICore\Crons\AutoTrans\Builder\PageBuilder::class,
-        // \N1ebieski\ICore\Crons\AutoTrans\Builder\Category\Post\CategoryBuilder::class,
-        // \N1ebieski\ICore\Crons\AutoTrans\Builder\MailingBuilder::class
+        \N1ebieski\ICore\Crons\AutoTranslate\Builder\PageBuilder::class,
+        \N1ebieski\ICore\Crons\AutoTranslate\Builder\Category\Post\CategoryBuilder::class,
+        \N1ebieski\ICore\Crons\AutoTranslate\Builder\MailingBuilder::class
     ];
 
     /**

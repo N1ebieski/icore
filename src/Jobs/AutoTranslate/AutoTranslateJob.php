@@ -25,9 +25,11 @@ use N1ebieski\ICore\ValueObjects\Lang;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Database\Eloquent\Collection;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Foundation\Application as App;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 use N1ebieski\ICore\Models\Interfaces\TransableInterface;
 use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -112,6 +114,7 @@ class AutoTranslateJob implements ShouldQueue
             $verify &= $toModel->translated_at === null;
         }
 
+        /** @var bool */
         return $verify;
     }
 
@@ -145,7 +148,7 @@ class AutoTranslateJob implements ShouldQueue
 
         $fromModel = $this->getFromModel();
 
-        $inputData = $inputDataFactory->makeData($fromModel)->getInputToArray();
+        $inputData = $inputDataFactory->makeData($fromModel)->getInput();
 
         foreach ($this->config->get('icore.multi_langs') as $lang) {
             $toModel = $this->getToModelByLang($lang);
@@ -166,7 +169,7 @@ class AutoTranslateJob implements ShouldQueue
                 $attributes[array_keys($inputData)[$key]] = $value['text'];
             }
 
-            $outputData = $outputDataFactory->makeData($toModel)->getOutputToArray($attributes);
+            $outputData = $outputDataFactory->makeData($toModel)->getOutput($attributes);
 
             $this->app->setLocale($lang);
 
@@ -179,15 +182,16 @@ class AutoTranslateJob implements ShouldQueue
     /**
      *
      * @return TransableInterface
-     * @throws MassAssignmentException
      */
     protected function getFromModel(): TransableInterface
     {
+        /** @var Collection<TransableInterface> */
+        $langs = $this->model->langs;
+
         /** @var TransableInterface */
-        $fromModel = $this->model->langs
-            ->filter(function (TransableInterface $langModel) {
+        $fromModel = $langs->filter(function (TransableInterface $langModel) {
                 return $langModel->progress->isFullTrans();
-            })
+        })
             ->sortBy(function (TransableInterface $langModel) {
                 return array_search($langModel->lang->getValue(), $this->config->get('icore.multi_langs'));
             })
@@ -204,7 +208,7 @@ class AutoTranslateJob implements ShouldQueue
      */
     protected function getToModelByLang(string $lang): TransableInterface
     {
-        /** @var TransableInterface */
+        /** @var TransableInterface|null */
         $toModel = $this->model->langs->firstWhere('lang', new Lang($lang));
 
         if (is_null($toModel)) {

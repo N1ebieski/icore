@@ -48,6 +48,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property string|null $img_url
  * @property bool $home
  * @property int $position
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Category\Category[] $categories
@@ -163,7 +164,6 @@ class Link extends Model
      */
     public function siblings(): HasMany
     {
-        // @phpstan-ignore-next-line
         return $this->hasMany(\N1ebieski\ICore\Models\Link::class, 'type', 'type')
             ->where('lang', $this->lang);
     }

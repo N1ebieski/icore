@@ -24,11 +24,11 @@ use N1ebieski\ICore\Crons\PostCron;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class PublicateScheduledTest extends TestCase
+class PublicateScheduledCronTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testQueueJob(): void
+    public function testCron(): void
     {
         /** @var Post */
         $post = Post::makeFactory()->scheduled()->withUser()->commentable()->create();

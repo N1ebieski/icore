@@ -114,7 +114,8 @@ class PostService implements UpdateServiceInterface
             $this->post->fill($attributes);
 
             if (
-                !$this->post->status->isInactive() && (is_null($this->post->published_at)
+                !$this->post->status->isInactive() && (
+                    is_null($this->post->published_at)
                     || (
                         array_key_exists('date_published_at', $attributes)
                         && array_key_exists('time_published_at', $attributes)

@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Sitemap;
+namespace N1ebieski\ICore\Tests\Integration\Crons\Sitemap;
 
 use Closure;
 use XMLReader;
@@ -35,7 +35,7 @@ use N1ebieski\ICore\Models\Category\Post\Category;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
-class SitemapTest extends TestCase
+class SitemapCronTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -60,7 +60,7 @@ class SitemapTest extends TestCase
      *
      * @return array
      */
-    protected function sitemapCronProvider(): array
+    protected function cronProvider(): array
     {
         return [
             [
@@ -94,9 +94,9 @@ class SitemapTest extends TestCase
     }
 
     /**
-     * @dataProvider sitemapCronProvider
+     * @dataProvider cronProvider
      */
-    public function testSitemapCron(string $namespace, Closure $seed, Closure $route): void
+    public function testCron(string $namespace, Closure $seed, Closure $route): void
     {
         /** @var mixed */
         $modelBuilder = App::make($namespace);

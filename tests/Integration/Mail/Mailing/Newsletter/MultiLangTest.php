@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Mailing\User;
+namespace N1ebieski\ICore\Tests\Integration\Mail\Mailing\Newsletter;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\User;
@@ -26,10 +26,13 @@ use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Mail\Mailing\Mail;
+use N1ebieski\ICore\Models\Newsletter;
+use N1ebieski\ICore\Models\NewsletterToken;
 use N1ebieski\ICore\Models\MailingLang\MailingLang;
+use N1ebieski\ICore\ValueObjects\Newsletter\Status;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use N1ebieski\ICore\Models\MailingEmail\User\MailingEmail;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use N1ebieski\ICore\Models\MailingEmail\Newsletter\MailingEmail;
 
 class MultiLangTest extends TestCase
 {
@@ -45,41 +48,7 @@ class MultiLangTest extends TestCase
         parent::setUp();
 
         App::setLocale('pl');
-        URL::defaults(['lang' => 'pl']);
         Config::set('icore.multi_langs', ['pl', 'en']);
-    }
-
-    public function testViewDataIfPrefLangExists(): void
-    {
-        /** @var Mailing */
-        $mailing = Mailing::makeFactory()->active()->withoutLangs()->create();
-
-        foreach (['pl', 'en'] as $lang) {
-            /** @var array<MailingLang> */
-            $mailingsLang[$lang] = MailingLang::makeFactory()->for($mailing)->create([
-                'lang' => $lang
-            ]);
-        }
-
-        /** @var User */
-        $user = User::makeFactory()->active()->user()->create([
-            'pref_lang' => 'en'
-        ]);
-
-        /** @var MailingEmail */
-        $mailingEmail = MailingEmail::makeFactory()->for($mailing)->for($user, 'morph')->create();
-
-        /** @var Mail */
-        $mail = $this->app->make(Mail::class, [
-            'mailingEmail' => $mailingEmail
-        ])->build();
-
-        App::setLocale('en');
-
-        $this->assertTrue($mail->viewData['content'] === $mailingsLang['en']->replacement_content_html);
-        $this->assertTrue($mail->viewData['subcopy'] === Lang::get('icore::newsletter.subcopy.user', [
-            'cancel' => URL::route('web.profile.edit')
-        ]));
     }
 
     public function testViewDataIfPrefLangDoesntExist(): void
@@ -90,19 +59,19 @@ class MultiLangTest extends TestCase
         $langs = ['en', 'pl'];
 
         foreach ($langs as $lang) {
-            /** @var array<MailingLang> */
+            /** @var array<string, MailingLang> $mailingsLang */
             $mailingsLang[$lang] = MailingLang::makeFactory()->for($mailing)->create([
                 'lang' => $lang
             ]);
         }
 
-        /** @var User */
-        $user = User::makeFactory()->active()->user()->create([
-            'pref_lang' => 'de'
-        ]);
+        /** @var Newsletter */
+        $newsletter = Newsletter::makeFactory()->active()->create();
+
+        NewsletterToken::makeFactory()->for($newsletter)->create();
 
         /** @var MailingEmail */
-        $mailingEmail = MailingEmail::makeFactory()->for($mailing)->for($user, 'morph')->create();
+        $mailingEmail = MailingEmail::makeFactory()->for($mailing)->for($newsletter, 'morph')->create();
 
         /** @var Mail */
         $mail = $this->app->make(Mail::class, [
@@ -111,5 +80,13 @@ class MultiLangTest extends TestCase
 
         $this->assertStringStartsWith($mailingsLang['pl']->replacement_content_html, $mail->viewData['content']);
         $this->assertStringContainsString($mailingsLang['en']->replacement_content_html, $mail->viewData['content']);
+
+        $this->assertTrue($mail->viewData['subcopy'] === Lang::get('icore::newsletter.subcopy.subscribe', [
+            'cancel' => URL::route('web.newsletter.update_status', [
+                $newsletter->id,
+                'token' => $newsletter->token->token,
+                'status' => Status::INACTIVE
+            ]),
+        ]));
     }
 }

@@ -6,14 +6,13 @@ use Throwable;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\MassAssignmentException;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class PageService
+class PageService implements UpdateServiceInterface
 {
     /**
      * Undocumented function
@@ -130,7 +129,10 @@ class PageService
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill($attributes);
 
-            if ($attributes['parent_id'] != $this->page->parent_id) {
+            if (
+                array_key_exists('parent_id', $attributes)
+                && $attributes['parent_id'] != $this->page->parent_id
+            ) {
                 if (is_null($attributes['parent_id'])) {
                     $this->moveToRoot();
                 } else {

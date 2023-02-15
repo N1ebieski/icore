@@ -20,6 +20,7 @@ namespace N1ebieski\ICore\Database\Factories\Mailing;
 
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use N1ebieski\ICore\Models\MailingLang\MailingLang;
@@ -71,6 +72,20 @@ class MailingFactory extends Factory
         return $this->state(function () {
             return [
                 'status' => Status::ACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function autoTrans()
+    {
+        return $this->state(function () {
+            return [
+                'auto_translate' => AutoTranslate::ACTIVE
             ];
         });
     }

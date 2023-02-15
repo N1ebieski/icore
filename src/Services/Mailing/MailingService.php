@@ -27,8 +27,9 @@ use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Mailing\Status;
 use N1ebieski\ICore\Models\MailingEmail\MailingEmail;
 use Illuminate\Database\Eloquent\MassAssignmentException;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class MailingService
+class MailingService implements UpdateServiceInterface
 {
     /**
      *
@@ -92,7 +93,15 @@ class MailingService
         return $this->db->transaction(function () use ($attributes) {
             $this->mailing->fill($attributes);
 
-            if ($this->mailing->status->isScheduled()) {
+            if (
+                $this->mailing->status->isScheduled() && (
+                    is_null($this->mailing->activation_at)
+                    || (
+                        array_key_exists('date_activation_at', $attributes)
+                        && array_key_exists('time_activation_at', $attributes)
+                    )
+                )
+            ) {
                 // @phpstan-ignore-next-line
                 $this->mailing->activation_at =
                     $attributes['date_activation_at'] . $attributes['time_activation_at'];

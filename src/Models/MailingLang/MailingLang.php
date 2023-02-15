@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\TransableInterface;
 use N1ebieski\ICore\Services\MailingLang\MailingLangService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\MailingLang\MailingLangFactory;
@@ -36,7 +37,7 @@ use N1ebieski\ICore\Database\Factories\MailingLang\MailingLangFactory;
  * @property int $id
  * @property int $mailing_id
  * @property string $title
- * @property string $content_html
+ * @property string|null $content_html
  * @property string|null $content
  * @property \N1ebieski\ICore\ValueObjects\Progress $progress
  * @property \N1ebieski\ICore\ValueObjects\Lang $lang
@@ -65,7 +66,7 @@ use N1ebieski\ICore\Database\Factories\MailingLang\MailingLangFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|MailingLang whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class MailingLang extends Model
+class MailingLang extends Model implements TransableInterface
 {
     use HasFullTextSearchable;
     use HasCarbonable;

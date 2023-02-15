@@ -16,17 +16,18 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Category;
+namespace N1ebieski\ICore\Tests\Integration\Repositories\Post;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\PostLang\PostLang;
-use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Models\Comment\Post\Comment;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
-class MultiLangTest extends TestCase
+class ChunkActiveWithModelsCountTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -42,28 +43,28 @@ class MultiLangTest extends TestCase
         Config::set('icore.multi_langs', ['pl', 'en']);
     }
 
-    public function testChunkActiveWithModelsCount(): void
+    public function testModelsCountWithLang(): void
     {
-        /** @var Category */
-        $category = Category::makeFactory()->active()->create();
+        /** @var Post */
+        $post = Post::makeFactory()->active()->commentable()->publish()->withUser()->withoutLangs()->create();
 
         foreach (['pl' => 1, 'en' => 2] as $lang => $count) {
-            /** @var array<Collection<Post>> */
-            $posts[$lang] = Post::makeFactory()->active()->publish()->count($count)->hasAttached($category)->withoutLangs()->create();
+            PostLang::makeFactory()->for($post)->create([
+                'lang' => $lang
+            ]);
 
-            foreach ($posts[$lang] as $post) {
-                PostLang::makeFactory()->for($post)->create([
-                    'lang' => $lang
-                ]);
-            }
+            /** @var array<string, Collection<Comment>> $comments */
+            $comments[$lang] = Comment::makeFactory()->active()->count($count)->for($post, 'morph')->create([
+                'lang' => $lang
+            ]);
         }
 
-        $category->makeRepo()->chunkActiveWithModelsCount(1, function (Collection $collection) use ($posts) {
-            $collection->each(function (Category $category) use ($posts) {
-                foreach ($category->langs as $categoryLang) {
-                    $key = "models_count_{$categoryLang->lang->getValue()}";
+        $post->makeRepo()->chunkActiveWithModelsCount(1, function (Collection $collection) use ($comments) {
+            $collection->each(function (Post $post) use ($comments) {
+                foreach ($post->langs as $postLang) {
+                    $key = "models_count_{$postLang->lang->getValue()}";
 
-                    $this->assertEquals(count($posts[$categoryLang->lang->getValue()]), $category->{$key});
+                    $this->assertEquals(count($comments[$postLang->lang->getValue()]), $post->{$key});
                 }
             });
         });

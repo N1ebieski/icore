@@ -16,13 +16,14 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Link\Link;
+namespace N1ebieski\ICore\Tests\Integration\Models\Link\Link;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Link;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class MultiLangTest extends TestCase
 {
@@ -43,7 +44,7 @@ class MultiLangTest extends TestCase
     public function testSiblings(): void
     {
         foreach (['pl', 'en'] as $lang) {
-            /** @var array<array<Link>> */
+            /** @var array<string, array<Link>> $links */
             $links[$lang] = Link::makeFactory()->link()->count(rand(2, 5))->create([
                 'lang' => $lang
             ]);

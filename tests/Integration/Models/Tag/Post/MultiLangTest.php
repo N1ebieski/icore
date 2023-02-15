@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Tag\Post;
+namespace N1ebieski\ICore\Tests\Integration\Models\Tag\Post;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Post;
@@ -26,6 +26,7 @@ use N1ebieski\ICore\Models\Tag\Post\Tag;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class MultiLangTest extends TestCase
 {
@@ -49,7 +50,7 @@ class MultiLangTest extends TestCase
         $postFactory = Post::makeFactory()->active()->publish()->withUser();
 
         foreach (['pl', 'en'] as $lang) {
-            /** @var array<Collection<Tag>> */
+            /** @var array<string, Collection<Tag>> $tags */
             $tags[$lang] = Tag::makeFactory()->count(rand(1, 5))->create([
                 'lang' => $lang
             ]);
@@ -73,7 +74,7 @@ class MultiLangTest extends TestCase
         $postFactory = Post::makeFactory()->active()->publish()->withUser();
 
         foreach (['pl', 'en'] as $lang) {
-            /** @var array<Tag> */
+            /** @var array<string, Tag> $tags */
             $tags[$lang] = Tag::makeFactory()->create([
                 'name' => 'same name but different lang',
                 'lang' => $lang
@@ -99,7 +100,7 @@ class MultiLangTest extends TestCase
         $postFactory = Post::makeFactory()->active()->publish()->withUser();
 
         foreach (['pl', 'en'] as $lang) {
-            /** @var array<Tag> */
+            /** @var array<string, Tag> $tags */
             $tags[$lang] = Tag::makeFactory()->create([
                 'name' => 'same name but different lang',
                 'lang' => $lang

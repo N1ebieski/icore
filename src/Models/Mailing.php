@@ -33,6 +33,7 @@ use N1ebieski\ICore\Services\Mailing\MailingService;
 use N1ebieski\ICore\Repositories\Mailing\MailingRepo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
 
@@ -43,7 +44,7 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  * @property AutoTranslate $auto_translate
  * @property int $id
  * @property string $title
- * @property string $content_html
+ * @property string|null $content_html
  * @property string|null $content
  * @property MailingLang $currentLang
  * @property \Illuminate\Support\Carbon|null $activation_at
@@ -92,7 +93,7 @@ use N1ebieski\ICore\Database\Factories\Mailing\MailingFactory;
  * @method static Builder|Mailing whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Mailing extends Model
+class Mailing extends Model implements AutoTranslateInterface
 {
     use HasFullTextSearchable;
     use HasFilterable;
@@ -225,6 +226,7 @@ class Mailing extends Model
      */
     public function title(): Attribute
     {
+        // @phpstan-ignore-next-line
         return new Attribute(fn (): ?string => $this->currentLang->title);
     }
 
@@ -326,7 +328,7 @@ class Mailing extends Model
      * [makeService description]
      * @return MailingService [description]
      */
-    public function makeService()
+    public function makeService(): MailingService
     {
         return App::make(MailingService::class, ['mailing' => $this]);
     }

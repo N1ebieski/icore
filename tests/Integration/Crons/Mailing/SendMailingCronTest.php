@@ -16,7 +16,7 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Tests\Integration\Mailing;
+namespace N1ebieski\ICore\Tests\Integration\Crons\Mailing;
 
 use Tests\TestCase;
 use N1ebieski\ICore\Models\Mailing;
@@ -31,7 +31,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use N1ebieski\ICore\Models\MailingEmail\User\MailingEmail;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
-class SendMailingTest extends TestCase
+class SendMailingCronTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -47,7 +47,7 @@ class SendMailingTest extends TestCase
         Config::set('queue.default', 'database');
     }
 
-    public function testQueueFailJob(): void
+    public function testCronIfEmailIsInvalid(): void
     {
         /** @var Mailing */
         $mailing = Mailing::makeFactory()->active()->create();
@@ -73,7 +73,7 @@ class SendMailingTest extends TestCase
         ]);
     }
 
-    public function testQueueJob(): void
+    public function testCron(): void
     {
         /** @var Mailing */
         $mailing = Mailing::makeFactory()->active()->create();

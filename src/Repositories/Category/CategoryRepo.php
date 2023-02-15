@@ -19,7 +19,9 @@
 namespace N1ebieski\ICore\Repositories\Category;
 
 use Closure;
+use RuntimeException;
 use InvalidArgumentException;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,15 +34,17 @@ use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 class CategoryRepo
 {
     /**
-     * Undocumented function
      *
      * @param Category $category
      * @param Config $config
+     * @param Carbon $carbon
      * @param Auth $auth
+     * @return void
      */
     public function __construct(
         protected Category $category,
         protected Config $config,
+        protected Carbon $carbon,
         protected Auth $auth
     ) {
         //
@@ -259,5 +263,70 @@ class CategoryRepo
             ->poliType()
             ->groupBy('status')
             ->get();
+    }
+
+    /**
+     *
+     * @param Closure $closure
+     * @param string|null $timestamp
+     * @return bool
+     * @throws RuntimeException
+     */
+    public function chunkAutoTransWithLangsByTranslatedAt(
+        Closure $closure,
+        string $timestamp = null
+    ): bool {
+        return $this->category->newQuery()
+            ->autoTrans()
+            ->whereHas('langs', function (Builder $query) {
+                return $query->where('progress', 100);
+            })
+            ->when(!is_null($timestamp), function (Builder $query) use ($timestamp) {
+                return $query->where(function (Builder $query) use ($timestamp) {
+                    return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
+                        return $query->where('progress', 0)
+                            ->where(function (Builder $query) use ($timestamp) {
+                                return $query->whereDate(
+                                    'translated_at',
+                                    '<',
+                                    $this->carbon->parse($timestamp)->format('Y-m-d')
+                                )
+                                ->orWhere(function (Builder $query) use ($timestamp) {
+                                    return $query->whereDate(
+                                        'translated_at',
+                                        '=',
+                                        $this->carbon->parse($timestamp)->format('Y-m-d')
+                                    )
+                                    ->whereTime(
+                                        'translated_at',
+                                        '<=',
+                                        $this->carbon->parse($timestamp)->format('H:i:s')
+                                    );
+                                })
+                                ->orWhere('translated_at', null);
+                            });
+                    })
+                    ->orWhere(function (Builder $query) {
+                        foreach ($this->config->get('icore.multi_langs') as $lang) {
+                            $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
+                                return $query->where('lang', $lang);
+                            });
+                        }
+
+                        return $query;
+                    });
+                });
+            }, function (Builder $query) {
+                return $query->where(function (Builder $query) {
+                    foreach ($this->config->get('icore.multi_langs') as $lang) {
+                        $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
+                            return $query->where('lang', $lang);
+                        });
+                    }
+
+                    return $query;
+                });
+            })
+            ->chunk(1000, $closure);
     }
 }
