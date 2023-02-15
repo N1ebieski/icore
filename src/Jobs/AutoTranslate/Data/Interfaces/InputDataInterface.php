@@ -24,5 +24,5 @@ interface InputDataInterface
      *
      * @return array
      */
-    public function getInputToArray(): array;
+    public function getInput(): array;
 }

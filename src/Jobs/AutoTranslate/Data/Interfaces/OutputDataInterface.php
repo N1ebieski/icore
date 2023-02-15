@@ -25,5 +25,5 @@ interface OutputDataInterface
      * @param array $attributes
      * @return array
      */
-    public function getOutputToArray(array $attributes): array;
+    public function getOutput(array $attributes): array;
 }

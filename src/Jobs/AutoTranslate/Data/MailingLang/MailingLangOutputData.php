@@ -16,25 +16,22 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\PostLang;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\MailingLang;
 
 use Illuminate\Contracts\Pipeline\Pipeline;
-use N1ebieski\ICore\Models\PostLang\PostLang;
-use Illuminate\Contracts\Config\Repository as Config;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 use N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces\OutputDataInterface;
 
-class PostLangOutputData implements OutputDataInterface
+class MailingLangOutputData implements OutputDataInterface
 {
     /**
      *
-     * @param PostLang $postLang
-     * @param Config $config
+     * @param MailingLang $mailingLang
      * @param Pipeline $pipeline
      * @return void
      */
     public function __construct(
-        protected PostLang $postLang,
-        protected Config $config,
+        protected MailingLang $mailingLang,
         protected Pipeline $pipeline
     ) {
         //
@@ -47,15 +44,6 @@ class PostLangOutputData implements OutputDataInterface
      */
     public function getOutput(array $attributes): array
     {
-        if (array_key_exists('tags', $attributes)) {
-            $attributes['tags'] = explode(
-                ',',
-                !is_null($this->config->get('icore.tag.normalizer')) ?
-                    $this->config->get('icore.tag.normalizer')($attributes['tags'])
-                    : $attributes['tags']
-            );
-        }
-
         if (array_key_exists('content_html', $attributes)) {
             $attributes['content_html'] = !empty($attributes['content_html']) ?
                 $this->pipeline->send($attributes['content_html'])

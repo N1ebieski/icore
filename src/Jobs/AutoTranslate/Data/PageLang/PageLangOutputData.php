@@ -16,24 +16,24 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\PostLang;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\PageLang;
 
 use Illuminate\Contracts\Pipeline\Pipeline;
-use N1ebieski\ICore\Models\PostLang\PostLang;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Contracts\Config\Repository as Config;
 use N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces\OutputDataInterface;
 
-class PostLangOutputData implements OutputDataInterface
+class PageLangOutputData implements OutputDataInterface
 {
     /**
      *
-     * @param PostLang $postLang
+     * @param PageLang $pageLang
      * @param Config $config
      * @param Pipeline $pipeline
      * @return void
      */
     public function __construct(
-        protected PostLang $postLang,
+        protected PageLang $pageLang,
         protected Config $config,
         protected Pipeline $pipeline
     ) {

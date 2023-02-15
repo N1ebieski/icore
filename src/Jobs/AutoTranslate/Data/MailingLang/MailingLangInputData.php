@@ -16,22 +16,22 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\PostLang;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\MailingLang;
 
 use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Models\PostLang\PostLang;
+use N1ebieski\ICore\Models\MailingLang\MailingLang;
 use N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces\InputDataInterface;
 
-class PostLangInputData implements InputDataInterface
+class MailingLangInputData implements InputDataInterface
 {
     /**
      *
-     * @param PostLang $postLang
+     * @param MailingLang $mailingLang
      * @param Collect $collect
      * @return void
      */
     public function __construct(
-        protected PostLang $postLang,
+        protected MailingLang $mailingLang,
         protected Collect $collect
     ) {
         //
@@ -44,14 +44,8 @@ class PostLangInputData implements InputDataInterface
     public function getInput(): array
     {
         return $this->collect->make([
-            'title' => $this->postLang->title,
-            'content_html' => $this->postLang->content_html,
-            'seo_title' => $this->postLang->seo_title,
-            'seo_desc' => $this->postLang->seo_desc,
-            'tags' => $this->postLang->post->tags
-                ->where('lang', $this->postLang->lang)
-                ->pluck('name')
-                ->implode(', ')
+            'title' => $this->mailingLang->title,
+            'content_html' => $this->mailingLang->content_html
         ])
         ->transform(fn ($item) => $item ?? '')
         ->toArray();

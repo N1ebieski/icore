@@ -16,34 +16,30 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Crons\AutoTranslate\Builder;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\CategoryLang;
 
-use Closure;
-use N1ebieski\ICore\Models\Post;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use N1ebieski\ICore\Crons\AutoTranslate\Builder\Interfaces\BuilderInterface;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
+use N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces\OutputDataInterface;
 
-class PostBuilder implements BuilderInterface
+class CategoryLangOutputData implements OutputDataInterface
 {
     /**
      *
-     * @param Post $post
+     * @param CategoryLang $categoryLang
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected CategoryLang $categoryLang,)
     {
         //
     }
 
     /**
      *
-     * @param Closure $closure
-     * @param string|null $timestamp
-     * @return bool
-     * @throws BindingResolutionException
+     * @param array $attributes
+     * @return array
      */
-    public function chunkCollection(Closure $closure, string $timestamp = null): bool
+    public function getOutput(array $attributes): array
     {
-        return $this->post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt($closure, $timestamp);
+        return $attributes;
     }
 }

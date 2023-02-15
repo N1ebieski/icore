@@ -19,18 +19,18 @@
 namespace N1ebieski\ICore\Crons\AutoTranslate\Builder;
 
 use Closure;
-use N1ebieski\ICore\Models\Post;
+use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Crons\AutoTranslate\Builder\Interfaces\BuilderInterface;
 
-class PostBuilder implements BuilderInterface
+class PageBuilder implements BuilderInterface
 {
     /**
      *
-     * @param Post $post
+     * @param Page $page
      * @return void
      */
-    public function __construct(protected Post $post)
+    public function __construct(protected Page $page)
     {
         //
     }
@@ -44,6 +44,6 @@ class PostBuilder implements BuilderInterface
      */
     public function chunkCollection(Closure $closure, string $timestamp = null): bool
     {
-        return $this->post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt($closure, $timestamp);
+        return $this->page->makeRepo()->chunkAutoTransWithLangsByTranslatedAt($closure, $timestamp);
     }
 }

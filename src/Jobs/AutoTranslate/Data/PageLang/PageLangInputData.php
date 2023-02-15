@@ -16,22 +16,22 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\PostLang;
+namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\PageLang;
 
 use Illuminate\Support\Collection as Collect;
-use N1ebieski\ICore\Models\PostLang\PostLang;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces\InputDataInterface;
 
-class PostLangInputData implements InputDataInterface
+class PageLangInputData implements InputDataInterface
 {
     /**
      *
-     * @param PostLang $postLang
+     * @param PageLang $pageLang
      * @param Collect $collect
      * @return void
      */
     public function __construct(
-        protected PostLang $postLang,
+        protected PageLang $pageLang,
         protected Collect $collect
     ) {
         //
@@ -44,12 +44,12 @@ class PostLangInputData implements InputDataInterface
     public function getInput(): array
     {
         return $this->collect->make([
-            'title' => $this->postLang->title,
-            'content_html' => $this->postLang->content_html,
-            'seo_title' => $this->postLang->seo_title,
-            'seo_desc' => $this->postLang->seo_desc,
-            'tags' => $this->postLang->post->tags
-                ->where('lang', $this->postLang->lang)
+            'title' => $this->pageLang->title,
+            'content_html' => $this->pageLang->content_html,
+            'seo_title' => $this->pageLang->seo_title,
+            'seo_desc' => $this->pageLang->seo_desc,
+            'tags' => $this->pageLang->page->tags
+                ->where('lang', $this->pageLang->lang)
                 ->pluck('name')
                 ->implode(', ')
         ])
