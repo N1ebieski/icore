@@ -68,7 +68,8 @@ class PostLangService implements LangServiceInterface
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->postLang->fill($attributes);
-            $this->postLang->content = $this->postLang->content_html;
+
+            $this->postLang->content = $attributes['content_html'];
 
             $this->postLang->post()->associate($attributes['post']);
 
@@ -88,7 +89,10 @@ class PostLangService implements LangServiceInterface
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->postLang->fill($attributes);
-            $this->postLang->content = $this->postLang->content_html;
+
+            if (array_key_exists('content_html', $attributes)) {
+                $this->postLang->content = $attributes['content_html'];
+            }
 
             $this->postLang->save();
 

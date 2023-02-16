@@ -67,7 +67,8 @@ class PageLangService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->pageLang->fill($attributes);
-            $this->pageLang->content = $this->pageLang->content_html;
+
+            $this->pageLang->content = $attributes['content_html'];
 
             $this->pageLang->page()->associate($attributes['page']);
 
@@ -87,7 +88,10 @@ class PageLangService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->pageLang->fill($attributes);
-            $this->pageLang->content = $this->pageLang->content_html;
+
+            if (array_key_exists('content_html', $attributes)) {
+                $this->pageLang->content = $attributes['content_html'];
+            }
 
             $this->pageLang->save();
 

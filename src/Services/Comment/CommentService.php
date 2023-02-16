@@ -77,7 +77,8 @@ class CommentService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->comment->fill($attributes);
-            $this->comment->content = $this->comment->content_html;
+
+            $this->comment->content = $attributes['content_html'];
 
             $this->comment->user()->associate($attributes['user']);
             $this->comment->morph()->associate($attributes['morph']);
@@ -100,7 +101,10 @@ class CommentService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->comment->fill($attributes);
-            $this->comment->content = $this->comment->content_html;
+
+            if (array_key_exists('content_html', $attributes)) {
+                $this->comment->content = $attributes['content_html'];
+            }
 
             $this->comment->save();
 
