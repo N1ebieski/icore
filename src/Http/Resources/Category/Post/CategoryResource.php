@@ -16,16 +16,17 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
-namespace N1ebieski\ICore\Http\Resources\Category;
+namespace N1ebieski\ICore\Http\Resources\Category\Post;
 
-use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Models\Category\Category;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\Category\Post\Category;
+use N1ebieski\ICore\Http\Resources\Category\CategoryResource as BaseCategoryResource;
 
 /**
  * @mixin Category
  */
-class CategoryResource extends JsonResource
+class CategoryResource extends BaseCategoryResource
 {
     /**
      * Undocumented function
@@ -49,6 +50,8 @@ class CategoryResource extends JsonResource
      * @responseField created_at string
      * @responseField updated_at string
      * @responseField ancestors object[] Contains relationship Category ancestors (parent and higher).
+     * @responseField langs object[] Contains relationship CategoryLangs (available languages).
+     * @responseField links object Contains links to resources on the website and in the administration panel.
      * @responseField meta object Paging, filtering and sorting information.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -56,19 +59,25 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'icon' => $this->icon,
-            'status' => [
-                'value' => $this->status->getValue(),
-                'label' => Lang::get("icore::filter.status.{$this->status}")
-            ],
-            'real_depth' => $this->real_depth,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'ancestors' => $this->makeResource()->collection($this->whenLoaded('ancestors'))
-        ];
+        return array_merge(parent::toArray($request), [
+            'links' => [
+                $this->mergeWhen(
+                    Config::get('icore.routes.web.enabled') === true && $this->status->isActive(),
+                    function () {
+                        return [
+                            'web' => URL::route('web.category.post.show', [$this->slug])
+                        ];
+                    }
+                ),
+                $this->mergeWhen(
+                    Config::get('icore.routes.admin.enabled') === true && $request->user()?->can('admin.categories.view'),
+                    function () {
+                        return [
+                            'admin' => URL::route('admin.category.post.index', ['filter[search]' => 'id:"' . $this->id . '"'])
+                        ];
+                    }
+                )
+            ]
+        ]);
     }
 }

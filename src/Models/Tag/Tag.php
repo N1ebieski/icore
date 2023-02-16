@@ -27,6 +27,7 @@ use N1ebieski\ICore\Repositories\Tag\TagRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
+use N1ebieski\ICore\Http\Resources\Tag\TagResource;
 use Cviebrock\EloquentTaggable\Models\Tag as Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use N1ebieski\ICore\Database\Factories\Tag\TagFactory;
@@ -180,5 +181,14 @@ class Tag extends Taggable
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return TagResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(TagResource::class, ['tag' => $this]);
     }
 }

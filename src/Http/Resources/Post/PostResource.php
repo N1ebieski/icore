@@ -20,12 +20,10 @@ namespace N1ebieski\ICore\Http\Resources\Post;
 
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Resources\Json\JsonResource;
-use N1ebieski\ICore\Http\Resources\User\UserResource;
 
 /**
  * @mixin Post
@@ -102,10 +100,10 @@ class PostResource extends JsonResource
                 $this->relationLoaded('user'),
                 function () {
                     /** @var User */
-                    $user = $this->user;
+                    $user = $this->user->setAttribute('depth', 1);
 
                     return [
-                        'user' => App::make(UserResource::class, ['user' => $user->setAttribute('depth', 1)])
+                        'user' => $user->makeResource()
                     ];
                 }
             ),

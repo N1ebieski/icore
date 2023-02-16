@@ -34,6 +34,7 @@ use N1ebieski\ICore\Services\Category\CategoryService;
 use N1ebieski\ICore\Repositories\Category\CategoryRepo;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\Http\Resources\Category\CategoryResource;
 use N1ebieski\ICore\Database\Factories\Category\CategoryFactory;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
 use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
@@ -419,5 +420,14 @@ class Category extends Entity
     public static function makeFactory(...$parameters)
     {
         return static::factory($parameters);
+    }
+
+    /**
+     * [makeResource description]
+     * @return CategoryResource [description]
+     */
+    public function makeResource()
+    {
+        return App::make(CategoryResource::class, ['category' => $this]);
     }
 }

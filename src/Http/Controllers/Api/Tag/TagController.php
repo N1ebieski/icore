@@ -19,10 +19,8 @@
 namespace N1ebieski\ICore\Http\Controllers\Api\Tag;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Tag\Tag;
 use N1ebieski\ICore\Filters\Api\Tag\IndexFilter;
-use N1ebieski\ICore\Http\Resources\Tag\TagResource;
 use N1ebieski\ICore\Http\Requests\Api\Tag\IndexRequest;
 
 /**
@@ -61,7 +59,7 @@ class TagController
      */
     public function index(Tag $tag, IndexRequest $request, IndexFilter $filter): JsonResponse
     {
-        return App::make(TagResource::class)
+        return $tag->makeResource()
             ->collection(
                 $tag->makeRepo()->paginateByFilter($filter->all())
             )

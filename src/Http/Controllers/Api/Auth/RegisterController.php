@@ -20,10 +20,8 @@ namespace N1ebieski\ICore\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Http\Resources\User\UserResource;
 use N1ebieski\ICore\Http\Controllers\Auth\RegisterController as BaseRegisterController;
 
 /**
@@ -73,7 +71,7 @@ class RegisterController
 
         Auth::logout();
 
-        return App::make(UserResource::class, ['user' => $user])
+        return $user->makeResource()
             ->response()
             ->setStatusCode(HttpResponse::HTTP_CREATED);
     }

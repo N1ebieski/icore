@@ -21,9 +21,9 @@ namespace N1ebieski\ICore\Http\Resources\User;
 use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use N1ebieski\ICore\Models\Socialite;
 use Illuminate\Http\Resources\Json\JsonResource;
 use N1ebieski\ICore\Http\Resources\Role\RoleResource;
-use N1ebieski\ICore\Http\Resources\Socialite\SocialiteResource;
 
 /**
  * @mixin User
@@ -101,7 +101,10 @@ class UserResource extends JsonResource
                         'socialites' => $this->when(
                             optional($request->user())->can('view', $this->resource),
                             function () {
-                                return  App::make(SocialiteResource::class)->collection($this->whenLoaded('socialites'));
+                                /** @var Socialite */
+                                $socialite = $this->socialites()->make();
+
+                                return  $socialite->makeResource()->collection($this->whenLoaded('socialites'));
                             }
                         )
                     ];
