@@ -67,7 +67,8 @@ class MailingLangService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->mailingLang->fill($attributes);
-            $this->mailingLang->content = $this->mailingLang->content_html;
+
+            $this->mailingLang->content = $attributes['content_html'];
 
             $this->mailingLang->mailing()->associate($attributes['mailing']);
 
@@ -87,7 +88,10 @@ class MailingLangService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->mailingLang->fill($attributes);
-            $this->mailingLang->content = $this->mailingLang->content_html;
+
+            if (array_key_exists('content_html', $attributes)) {
+                $this->mailingLang->content = $attributes['content_html'];
+            }
 
             $this->mailingLang->save();
 
