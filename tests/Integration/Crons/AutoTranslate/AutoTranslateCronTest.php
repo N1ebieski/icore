@@ -56,6 +56,7 @@ class AutoTranslateCronTest extends TestCase
 
         App::setLocale('pl');
 
+        Config::set('icore.auto_translate.enabled', true);
         Config::set('icore.auto_translate.check_days', null);
         Config::set('icore.multi_langs', ['pl', 'en']);
     }

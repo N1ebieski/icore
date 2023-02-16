@@ -86,6 +86,7 @@ class AutoTranslateJob implements ShouldQueue
     protected function verify(): bool
     {
         return count($this->config->get('icore.multi_langs')) > 1
+            && $this->config->get('icore.auto_translate.enabled') === true
             && $this->model->auto_translate->isActive()
             && $this->model->langs->isNotEmpty();
     }
