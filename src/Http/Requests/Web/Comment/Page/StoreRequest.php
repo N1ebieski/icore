@@ -119,4 +119,21 @@ class StoreRequest extends FormRequest
             ])
         ];
     }
+
+    /**
+     * Get a validated input container for the validated input.
+     *
+     * @param  array|null  $keys
+     * @return \Illuminate\Support\ValidatedInput|array
+     */
+    public function safe(array $keys = null)
+    {
+        $safe = parent::safe($keys);
+
+        if ($safe->missing('content_html')) {
+            return $safe->merge(['content_html' => $this->input('content')]);
+        }
+
+        return $safe;
+    }
 }

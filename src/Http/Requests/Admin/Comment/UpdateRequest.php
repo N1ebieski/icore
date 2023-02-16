@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 
 class UpdateRequest extends FormRequest
 {
@@ -42,5 +43,25 @@ class UpdateRequest extends FormRequest
         return [
             'content' => 'required|min:3|max:10000',
         ];
+    }
+
+    /**
+     *
+     * @param array|int|string|null $key
+     * @param mixed $default
+     * @return array
+     * @throws ValidationException
+     */
+    public function validated($key = null, $default = null): array
+    {
+        $validated = parent::validated($key, $default);
+
+        if ($this->missing('content_html')) {
+            return array_merge($validated, [
+                'content_html' => $this->input('content')
+            ]);
+        }
+
+        return $validated;
     }
 }

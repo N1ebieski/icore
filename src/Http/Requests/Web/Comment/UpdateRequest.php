@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\Models\Comment\Comment;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @property Comment $comment
@@ -83,5 +84,25 @@ class UpdateRequest extends FormRequest
                 'words' => str_replace('|', ', ', $this->bans)
             ])
         ];
+    }
+
+    /**
+     *
+     * @param array|int|string|null $key
+     * @param mixed $default
+     * @return array
+     * @throws ValidationException
+     */
+    public function validated($key = null, $default = null): array
+    {
+        $validated = parent::validated($key, $default);
+
+        if ($this->missing('content_html')) {
+            return array_merge($validated, [
+                'content_html' => $this->input('content')
+            ]);
+        }
+
+        return $validated;
     }
 }
