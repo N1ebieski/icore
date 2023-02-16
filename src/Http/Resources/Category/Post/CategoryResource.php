@@ -51,6 +51,7 @@ class CategoryResource extends BaseCategoryResource
      * @responseField updated_at string
      * @responseField ancestors object[] Contains relationship Category ancestors (parent and higher).
      * @responseField langs object[] Contains relationship CategoryLangs (available languages).
+     * @responseField links object Contains links to resources on the website and in the administration panel.
      * @responseField meta object Paging, filtering and sorting information.
      *
      * @param  \Illuminate\Http\Request  $request

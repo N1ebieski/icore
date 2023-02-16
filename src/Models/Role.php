@@ -143,5 +143,5 @@ class Role extends BaseRole
     public function makeResource()
     {
         return App::make(RoleResource::class, ['role' => $this]);
-    }    
+    }
 }

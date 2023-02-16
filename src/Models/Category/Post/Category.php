@@ -209,7 +209,7 @@ class Category extends BaseCategory
     }
 
     /**
-     * [makeRepo description]
+     * [makeResource description]
      * @return CategoryResource [description]
      */
     public function makeResource()
