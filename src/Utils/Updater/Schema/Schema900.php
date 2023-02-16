@@ -20,7 +20,7 @@ namespace N1ebieski\ICore\Utils\Updater\Schema;
 
 use N1ebieski\ICore\Utils\Updater\Schema\Interfaces\SchemaInterface;
 
-class Schema820 implements SchemaInterface
+class Schema900 implements SchemaInterface
 {
     /**
      * Undocumented variable
@@ -68,7 +68,7 @@ EOD
             'actions' => [
                 [
                     'type' => 'beforeFirst',
-                    'search' => '/@if\s*\(\$ancestor->slug\)/',
+                    'search' => '/@if\s*\(!empty\(\$ancestor->content\)\)/',
                     'to' => '@if ($ancestor->slug)'
                 ],
                 [
@@ -137,27 +137,27 @@ EOD
             {{ trans('icore::profile.pref_lang') }}:
         </label>
         <div class="col-lg-6">
-            <select 
-                class="selectpicker select-picker" 
+            <select
+                class="selectpicker select-picker"
                 data-style="border"
                 data-width="100%"
                 name="pref_lang"
                 id="pref_lang"
             >
-                @foreach (config('icore.multi_langs') as $lang)
+                @foreach (config('icore.multi_langs') as \$lang)
                 <option
-                    data-content='<span class="fi fil-{{ $lang }}"></span> <span>{{ mb_strtoupper($lang) }}</span>'
-                    value="{{ $lang }}"
-                    {{ $user->pref_lang->getValue() === $lang ? 'selected' : '' }}
+                    data-content='<span class="fi fil-{{ \$lang }}"></span> <span>{{ mb_strtoupper(\$lang) }}</span>'
+                    value="{{ \$lang }}"
+                    {{ \$user->pref_lang->getValue() === \$lang ? 'selected' : '' }}
                 >
-                    {{ $lang }}
+                    {{ \$lang }}
                 </option>
                 @endforeach
             </select>
-            @includeWhen($errors->has('pref_lang'), 'icore::web.partials.errors', ['name' => 'pref_lang'])
+            @includeWhen(\$errors->has('pref_lang'), 'icore::web.partials.errors', ['name' => 'pref_lang'])
         </div>
     </div>
-    @endif 
+    @endif
 EOD
                 ]
             ]
