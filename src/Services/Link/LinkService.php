@@ -78,7 +78,7 @@ class LinkService
             $this->link->fill($attributes);
 
             if (isset($attributes['delete_img'])) {
-                if ($this->link->img_url !== null) {
+                if (!is_null($this->link->img_url)) {
                     $this->file->delete($this->link->img_url);
                 }
 
@@ -121,7 +121,7 @@ class LinkService
     public function delete(): ?bool
     {
         return $this->db->transaction(function () {
-            if ($this->link->img_url !== null) {
+            if (!is_null($this->link->img_url)) {
                 $this->file->delete($this->link->img_url);
             }
 

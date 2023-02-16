@@ -92,7 +92,7 @@ class PageService implements UpdateServiceInterface
 
             $this->page->user()->associate($attributes['user']);
 
-            if ($attributes['parent_id'] !== null) {
+            if (!is_null($attributes['parent_id'])) {
                 /** @var Page */
                 $parent = $this->page->findOrFail($attributes['parent_id']);
 

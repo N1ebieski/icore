@@ -37,6 +37,10 @@ class ScheduleServiceProvider extends ServiceProvider
 
                 $this->callClearCacheSchedule($schedule);
 
+                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\AutoTranslate\AutoTranslateCron::class))
+                    ->name('AutoTranslateCron')
+                    ->everyFifteenMinutes();
+
                 $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
                     ->name('MailingCron')
                     ->everyThirtyMinutes();

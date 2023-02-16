@@ -76,7 +76,7 @@ class CommentService
     public function create(array $attributes): Comment
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->comment->content_html = $attributes['content'];
+            $this->comment->fill($attributes);
             $this->comment->content = $this->comment->content_html;
 
             $this->comment->user()->associate($attributes['user']);
@@ -99,7 +99,7 @@ class CommentService
     public function update(array $attributes): Comment
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->comment->content_html = $attributes['content'];
+            $this->comment->fill($attributes);
             $this->comment->content = $this->comment->content_html;
 
             $this->comment->save();

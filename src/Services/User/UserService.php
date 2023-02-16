@@ -49,19 +49,19 @@ class UserService
     public function create(array $attributes): User
     {
         return $this->db->transaction(function () use ($attributes) {
-            $user = $this->user->create([
-                'name' => $attributes['name'],
-                'email' => $attributes['email'],
-                'password' => isset($attributes['password']) ?
-                    $this->hasher->make($attributes['password'])
-                    : null
-            ]);
+            $this->user->fill($attributes);
+
+            $this->user->password = isset($attributes['password']) ?
+                $this->hasher->make($attributes['password'])
+                : null;
+
+            $this->user->save();
 
             if (array_key_exists('roles', $attributes)) {
-                $user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
+                $this->user->assignRole(array_merge($attributes['roles'] ?? [], ['user']));
             }
 
-            return $user;
+            return $this->user;
         });
     }
 

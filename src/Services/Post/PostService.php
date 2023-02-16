@@ -94,7 +94,7 @@ class PostService implements UpdateServiceInterface
             // @phpstan-ignore-next-line
             $this->post->status = $status;
 
-            if ($this->post->published_at === null) {
+            if (is_null($this->post->published_at)) {
                 $this->post->published_at = $this->carbon->now();
             }
 

@@ -106,10 +106,8 @@ class CategoryService implements UpdateServiceInterface
         return $this->db->transaction(function () use ($attributes) {
             $this->category->fill($attributes);
 
-            if ($attributes['parent_id'] !== null) {
-                /**
-                 * @var Category $parent
-                 */
+            if (!is_null($attributes['parent_id'])) {
+                /** @var Category $parent */
                 $parent = $this->category->findOrFail($attributes['parent_id']);
 
                 $this->category->status = $parent->status;
@@ -294,9 +292,7 @@ class CategoryService implements UpdateServiceInterface
     public function moveToParent(int $parent_id): bool
     {
         return $this->db->transaction(function () use ($parent_id) {
-            /**
-             * @var Category $parent
-             */
+            /** @var Category $parent */
             $parent = $this->category->findOrFail($parent_id);
 
             // In the case of changing the parent, we must prophylactically
