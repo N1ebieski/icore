@@ -19,19 +19,25 @@
 namespace N1ebieski\ICore\Jobs\AutoTranslate\Data\MailingLang;
 
 use Illuminate\Contracts\Pipeline\Pipeline;
+use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\MailingLang\MailingLang;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use N1ebieski\ICore\Jobs\AutoTranslate\Data\Interfaces\OutputDataInterface;
 
 class MailingLangOutputData implements OutputDataInterface
 {
+    use ConditionallyLoadsAttributes;
+
     /**
      *
      * @param MailingLang $mailingLang
+     * @param Collect $collect
      * @param Pipeline $pipeline
      * @return void
      */
     public function __construct(
         protected MailingLang $mailingLang,
+        protected Collect $collect,
         protected Pipeline $pipeline
     ) {
         //
@@ -44,21 +50,22 @@ class MailingLangOutputData implements OutputDataInterface
      */
     public function getOutput(array $attributes): array
     {
-        $attributes = array_map(
-            fn ($item) => !empty($item) ? $item : null,
-            $attributes
-        );
-
-        if (array_key_exists('content_html', $attributes)) {
-            $attributes['content_html'] = !empty($attributes['content_html']) ?
-                $this->pipeline->send($attributes['content_html'])
-                    ->through([
-                        \N1ebieski\ICore\Utils\Conversions\ClearWhitespacesBeforeCode::class
-                    ])
-                    ->thenReturn()
-                : null;
-        }
-
-        return $attributes;
+        return $this->collect->make($attributes)
+            ->merge([
+                $this->mergeWhen(
+                    array_key_exists('content_html', $attributes),
+                    function () use ($attributes) {
+                        return !empty($attributes['content_html']) ?
+                            $this->pipeline->send($attributes['content_html'])
+                                ->through([
+                                    \N1ebieski\ICore\Utils\Conversions\ClearWhitespacesBeforeCode::class
+                                ])
+                                ->thenReturn()
+                            : null;
+                    }
+                )
+            ])
+            ->transform(fn ($item) => !empty($item) ? $item : null)
+            ->toArray();
     }
 }
