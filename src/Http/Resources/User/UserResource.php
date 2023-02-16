@@ -104,7 +104,7 @@ class UserResource extends JsonResource
                                 /** @var Socialite */
                                 $socialite = $this->socialites()->make();
 
-                                return  $socialite->makeResource()->collection($this->whenLoaded('socialites'));
+                                return $socialite->makeResource()->collection($this->whenLoaded('socialites'));
                             }
                         )
                     ];

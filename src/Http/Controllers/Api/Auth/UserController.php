@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Http\Controllers\Api\Auth;
 
+use N1ebieski\ICore\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,6 +52,9 @@ class UserController
      */
     public function show(): JsonResponse
     {
-        return Auth::user()->makeResource()->response();
+        /** @var User */
+        $user = Auth::user();
+
+        return $user->makeResource()->response();
     }
 }
