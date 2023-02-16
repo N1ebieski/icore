@@ -44,6 +44,11 @@ class MailingLangOutputData implements OutputDataInterface
      */
     public function getOutput(array $attributes): array
     {
+        $attributes = array_map(
+            fn ($item) => !empty($item) ? $item : null,
+            $attributes
+        );
+
         if (array_key_exists('content_html', $attributes)) {
             $attributes['content_html'] = !empty($attributes['content_html']) ?
                 $this->pipeline->send($attributes['content_html'])

@@ -47,6 +47,11 @@ class PageLangOutputData implements OutputDataInterface
      */
     public function getOutput(array $attributes): array
     {
+        $attributes = array_map(
+            fn ($item) => !empty($item) ? $item : null,
+            $attributes
+        );
+
         if (array_key_exists('tags', $attributes)) {
             $attributes['tags'] = explode(
                 ',',
