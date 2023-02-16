@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Comment\Page;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\ValidatedInput;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response as HttpResponse;
 use N1ebieski\ICore\ValueObjects\Comment\Status;
@@ -70,16 +71,17 @@ class StoreRequest extends FormRequest
      * Get a validated input container for the validated input.
      *
      * @param  array|null  $keys
-     * @return \Illuminate\Support\ValidatedInput|array
+     * @return ValidatedInput|array
      */
     public function safe(array $keys = null)
     {
-        $safe = parent::safe($keys);
+        /** @var ValidatedInput */
+        $safe = parent::safe();
 
         if ($safe->missing('content_html')) {
-            return $safe->merge(['content_html' => $this->input('content')]);
+            $safe = $safe->merge(['content_html' => $this->input('content')]);
         }
 
-        return $safe;
+        return !is_null($keys) ? $safe->only($keys) : $safe;
     }
 }

@@ -97,7 +97,7 @@ class UpdateRequest extends FormRequest
     {
         $validated = parent::validated($key, $default);
 
-        if ($this->missing('content_html')) {
+        if (is_null($key) && $this->missing('content_html')) {
             return array_merge($validated, [
                 'content_html' => $this->input('content')
             ]);
