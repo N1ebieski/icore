@@ -76,7 +76,7 @@ class RoleController
      */
     public function store(Role $role, StoreRequest $request): RedirectResponse
     {
-        $role->makeService()->create($request->only(['name', 'perm']));
+        $role->makeService()->create($request->validated());
 
         return Response::redirectToRoute('admin.role.index')
             ->with('success', Lang::get('icore::roles.success.store'));
@@ -109,7 +109,7 @@ class RoleController
      */
     public function update(Role $role, UpdateRequest $request): RedirectResponse
     {
-        $role->makeService()->update($request->only(['perm', 'name']));
+        $role->makeService()->update($request->validated());
 
         return Response::redirectToRoute('admin.role.edit', [$role->id])
             ->with('success', Lang::get('icore::roles.success.update'));

@@ -112,7 +112,7 @@ class CommentController implements Polymorphic
      */
     public function updateCensored(Comment $comment, UpdateCensoredRequest $request): JsonResponse
     {
-        $comment->update($request->only('censored'));
+        $comment->update($request->validated());
 
         return Response::json([
             'censored' => $comment->censored->getValue(),

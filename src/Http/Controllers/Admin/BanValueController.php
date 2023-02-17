@@ -79,7 +79,7 @@ class BanValueController
      */
     public function update(BanValue $banValue, UpdateRequest $request): JsonResponse
     {
-        $banValue->update($request->only(['value']));
+        $banValue->update($request->validated());
 
         return Response::json([
             'view' => View::make('icore::admin.banvalue.partials.ban', [
@@ -114,10 +114,7 @@ class BanValueController
      */
     public function store(string $type, BanValue $banValue, StoreRequest $request): JsonResponse
     {
-        $banValue = $banValue->create([
-            'type' => $type,
-            'value' => $request->get('value')
-        ]);
+        $banValue = $banValue->create($request->validated());
 
         $request->session()->flash('success', Lang::get('icore::bans.value.success.store'));
 

@@ -55,7 +55,7 @@ class AutoTranslateCron
     protected function verify(): bool
     {
         return count($this->config->get('icore.multi_langs')) > 1
-            && $this->config->get('icore.auto_translate.enabled') === true;
+            && $this->config->get('icore.auto_translate.check_days') > 0;
     }
 
     /**

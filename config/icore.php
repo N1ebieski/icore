@@ -74,8 +74,7 @@ return [
     ],
 
     'auto_translate' => [
-        'enabled' => env('ICORE_AUTO_TRANSLATE', true),
-        'check_days' => env('ICORE_AUTO_TRANSLATE_CHECK_DAYS', null),
+        'check_days' => (int)env('ICORE_AUTO_TRANSLATE_CHECK_DAYS', 0),
     ],
 
     'captcha' => [

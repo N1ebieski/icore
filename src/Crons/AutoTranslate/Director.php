@@ -81,12 +81,8 @@ class Director
      */
     protected function getCheckTimestamp(): ?string
     {
-        if (!is_null($this->config->get('icore.auto_translate.check_days'))) {
-            return $this->carbon->now()->subDays(
-                $this->config->get('icore.auto_translate.check_days')
-            );
-        }
-
-        return null;
+        return $this->carbon->now()->subDays(
+            $this->config->get('icore.auto_translate.check_days')
+        );
     }
 }

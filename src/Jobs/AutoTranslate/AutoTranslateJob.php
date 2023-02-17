@@ -86,7 +86,6 @@ class AutoTranslateJob implements ShouldQueue
     protected function verify(): bool
     {
         return count($this->config->get('icore.multi_langs')) > 1
-            && $this->config->get('icore.auto_translate.enabled') === true
             && $this->model->auto_translate->isActive()
             && $this->model->langs->isNotEmpty();
     }
@@ -102,21 +101,14 @@ class AutoTranslateJob implements ShouldQueue
         TransableInterface $fromModel,
         TransableInterface $toModel
     ): bool {
-        $verify = $toModel->progress->isAutoTrans() && !$toModel->lang->isEquals($fromModel->lang);
-
-        if (!is_null($this->config->get('icore.auto_translate.check_days'))) {
-            $verify &= (
-                $toModel->translated_at === null
+        return $toModel->progress->isAutoTrans()
+            && !$toModel->lang->isEquals($fromModel->lang)
+            && (
+                is_null($toModel->translated_at)
                 || $this->carbon->parse($toModel->translated_at)->lessThanOrEqualTo(
                     $this->carbon->now()->subDays($this->config->get('icore.auto_translate.check_days'))
                 )
             );
-        } else {
-            $verify &= $toModel->translated_at === null;
-        }
-
-        /** @var bool */
-        return $verify;
     }
 
     /**
@@ -175,7 +167,8 @@ class AutoTranslateJob implements ShouldQueue
             $this->app->setLocale($lang);
 
             $this->model->makeService()->update(array_merge($outputData, [
-                'translated_at' => $this->carbon->now()
+                'translated_at' => $this->carbon->now(),
+                'progress' => 0
             ]));
         }
     }
@@ -191,12 +184,12 @@ class AutoTranslateJob implements ShouldQueue
 
         /** @var TransableInterface */
         $fromModel = $langs->filter(function (TransableInterface $langModel) {
-                return $langModel->progress->isFullTrans();
+            return $langModel->progress->isFullTrans();
         })
-            ->sortBy(function (TransableInterface $langModel) {
-                return array_search($langModel->lang->getValue(), $this->config->get('icore.multi_langs'));
-            })
-            ->first();
+        ->sortBy(function (TransableInterface $langModel) {
+            return array_search($langModel->lang->getValue(), $this->config->get('icore.multi_langs'));
+        })
+        ->first();
 
         return $fromModel;
     }

@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
@@ -38,6 +39,9 @@ use N1ebieski\ICore\View\ViewModels\Admin\Post\CreateViewModel;
 use N1ebieski\ICore\Http\Requests\Admin\Post\UpdateStatusRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Post\EditFullViewModel;
 use N1ebieski\ICore\Http\Requests\Admin\Post\DestroyGlobalRequest;
+use N1ebieski\ICore\Events\Admin\Post\StoreEvent as PostStoreEvent;
+use N1ebieski\ICore\Events\Admin\Post\UpdateEvent as PostUpdateEvent;
+use N1ebieski\ICore\Events\Admin\Post\UpdateFullEvent as PostUpdateFullEvent;
 
 class PostController
 {
@@ -82,6 +86,8 @@ class PostController
         $post->makeService()->create(
             $request->safe()->merge(['user' => $request->user()])->toArray()
         );
+
+        Event::dispatch(App::make(PostStoreEvent::class, ['post' => $post]));
 
         return Response::redirectToRoute('admin.post.index', [
             'filter' => [
@@ -153,6 +159,8 @@ class PostController
     {
         $post->makeService()->update($request->validated());
 
+        Event::dispatch(App::make(PostUpdateFullEvent::class, ['post' => $post]));
+
         return Response::redirectToRoute('admin.post.edit_full', ['post' => $post->id])
             ->with('success', Lang::get('icore::posts.success.update'));
     }
@@ -166,7 +174,9 @@ class PostController
      */
     public function update(Post $post, UpdateRequest $request): JsonResponse
     {
-        $post->makeService()->update($request->only(['title', 'content_html']));
+        $post->makeService()->update($request->validated());
+
+        Event::dispatch(App::make(PostUpdateEvent::class, ['post' => $post]));
 
         return Response::json([
             'view' => View::make('icore::admin.post.partials.post', [

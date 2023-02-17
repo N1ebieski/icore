@@ -296,56 +296,44 @@ class PageRepo
     /**
      *
      * @param Closure $closure
-     * @param string|null $timestamp
+     * @param string $timestamp
      * @return bool
      * @throws RuntimeException
      */
     public function chunkAutoTransWithLangsByTranslatedAt(
         Closure $closure,
-        string $timestamp = null
+        string $timestamp
     ): bool {
         return $this->page->newQuery()
             ->autoTrans()
             ->whereHas('langs', function (Builder $query) {
                 return $query->where('progress', 100);
             })
-            ->when(!is_null($timestamp), function (Builder $query) use ($timestamp) {
-                return $query->where(function (Builder $query) use ($timestamp) {
-                    return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
-                        return $query->where('progress', 0)
-                            ->where(function (Builder $query) use ($timestamp) {
+            ->where(function (Builder $query) use ($timestamp) {
+                return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
+                    return $query->where('progress', 0)
+                        ->where(function (Builder $query) use ($timestamp) {
+                            return $query->whereDate(
+                                'translated_at',
+                                '<',
+                                $this->carbon->parse($timestamp)->format('Y-m-d')
+                            )
+                            ->orWhere(function (Builder $query) use ($timestamp) {
                                 return $query->whereDate(
                                     'translated_at',
-                                    '<',
+                                    '=',
                                     $this->carbon->parse($timestamp)->format('Y-m-d')
                                 )
-                                ->orWhere(function (Builder $query) use ($timestamp) {
-                                    return $query->whereDate(
-                                        'translated_at',
-                                        '=',
-                                        $this->carbon->parse($timestamp)->format('Y-m-d')
-                                    )
-                                    ->whereTime(
-                                        'translated_at',
-                                        '<=',
-                                        $this->carbon->parse($timestamp)->format('H:i:s')
-                                    );
-                                })
-                                ->orWhere('translated_at', null);
-                            });
-                    })
-                    ->orWhere(function (Builder $query) {
-                        foreach ($this->config->get('icore.multi_langs') as $lang) {
-                            $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
-                                return $query->where('lang', $lang);
-                            });
-                        }
-
-                        return $query;
-                    });
-                });
-            }, function (Builder $query) {
-                return $query->where(function (Builder $query) {
+                                ->whereTime(
+                                    'translated_at',
+                                    '<=',
+                                    $this->carbon->parse($timestamp)->format('H:i:s')
+                                );
+                            })
+                            ->orWhere('translated_at', null);
+                        });
+                })
+                ->orWhere(function (Builder $query) {
                     foreach ($this->config->get('icore.multi_langs') as $lang) {
                         $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
                             return $query->where('lang', $lang);
