@@ -42,6 +42,7 @@ class TagResource extends JsonResource
      * @responseField id int
      * @responseField name string
      * @responseField slug string
+     * @responseField lang string
      * @responseField created_at string
      * @responseField updated_at string
      * @responseField meta object Paging, filtering and sorting information.
@@ -55,6 +56,7 @@ class TagResource extends JsonResource
             'id' => $this->tag_id,
             'name' => $this->name,
             'slug' => $this->normalized,
+            'lang' => $this->lang->getValue(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

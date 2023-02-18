@@ -36,7 +36,7 @@ class CategoryController implements Polymorphic
      * @bodyParam filter.status int Must be one of 1 or 0 (available only for admin.categories.view). Example: 1
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Category\CategoryResource
-     * @apiResourceModel N1ebieski\ICore\Models\Category\Category states=active,sentence
+     * @apiResourceModel N1ebieski\ICore\Models\Category\Category states=active,sentence with=langs
      *
      * @param Category $category
      * @param IndexRequest $request

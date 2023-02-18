@@ -51,20 +51,22 @@ class MailingLangOutputData implements OutputDataInterface
     public function getOutput(array $attributes): array
     {
         return $this->collect->make($attributes)
-            ->merge([
+            ->merge($this->filter([
                 $this->mergeWhen(
                     array_key_exists('content_html', $attributes),
                     function () use ($attributes) {
-                        return !empty($attributes['content_html']) ?
-                            $this->pipeline->send($attributes['content_html'])
-                                ->through([
-                                    \N1ebieski\ICore\Utils\Conversions\ClearWhitespacesBeforeCode::class
-                                ])
-                                ->thenReturn()
-                            : null;
+                        return [
+                            'content_html' => !empty($attributes['content_html']) ?
+                                $this->pipeline->send($attributes['content_html'])
+                                    ->through([
+                                        \N1ebieski\ICore\Utils\Conversions\ClearWhitespacesBeforeCode::class
+                                    ])
+                                    ->thenReturn()
+                                : null
+                        ];
                     }
                 )
-            ])
+            ]))
             ->transform(fn ($item) => !empty($item) ? $item : null)
             ->toArray();
     }

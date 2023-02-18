@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Database\Factories\Category;
 
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Category\Status;
@@ -53,7 +54,11 @@ class CategoryFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Category $category) {
-            CategoryLang::makeFactory()->for($category)->create();
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                CategoryLang::makeFactory()->for($category)->create([
+                    'lang' => $lang
+                ]);
+            }
         });
     }
 
