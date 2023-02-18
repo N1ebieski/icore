@@ -188,10 +188,13 @@ class PageRepo
             // @phpstan-ignore-next-line
             ->map(function (Page $page) {
                 if ($page->childrens->isNotEmpty()) {
-                    // @phpstan-ignore-next-line
-                    $page->urls = $page->childrens->pluck('slug')->map(function ($page) {
-                        return '*/' . $page;
+                    $urls = [];
+
+                    $page->childrens->each(function (Page $page) use (&$urls) {
+                        array_push($urls, '*/' . $page->currentLang->slug);
                     });
+
+                    $page->urls = $urls;
                 }
 
                 return $page;
