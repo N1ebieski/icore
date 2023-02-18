@@ -190,10 +190,12 @@ class PageRepo
                 if ($page->childrens->isNotEmpty()) {
                     $urls = [];
 
+                    // @phpstan-ignore-next-line
                     $page->childrens->each(function (Page $page) use (&$urls) {
                         array_push($urls, '*/' . $page->currentLang->slug);
                     });
 
+                    // @phpstan-ignore-next-line
                     $page->urls = $urls;
                 }
 
