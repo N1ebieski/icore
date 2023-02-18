@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +31,40 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->scoped(\N1ebieski\ICore\Loads\ThemeLoad::class);
+
+        $this->app->scoped(\N1ebieski\ICore\Loads\LangLoad::class);
+
+        $this->app->scoped(\N1ebieski\ICore\StaticCache\Comment\CommentStaticCache::class);
+
+        $this->app->scoped(\Torann\GeoIP\GeoIP::class, 'geoip');
+
+        $this->app->bind(\N1ebieski\ICore\Utils\Route\Interfaces\RouteRecognizeInterface::class, \N1ebieski\ICore\Utils\Route\RouteRecognize::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\DOMDocument\Interfaces\DOMDocumentAdapterInterface::class, \N1ebieski\ICore\Utils\DOMDocument\DOMDocumentAdapter::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\File\Interfaces\FileInterface::class, \N1ebieski\ICore\Utils\File\File::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\Updater\Interfaces\UpdaterInterface::class, \N1ebieski\ICore\Utils\Updater\Updater::class);
+
+        $this->app->bind(\N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface::class, \N1ebieski\ICore\Utils\Migration\MigrationRecognize::class);
+
+        $this->app->bind(\Cviebrock\EloquentTaggable\Services\TagService::class, \N1ebieski\ICore\Services\Tag\TagService::class);
+
+        $this->app->bind(\Google\Cloud\Translate\V2\TranslateClient::class, function (Application $app) {
+            /** @var \Illuminate\Contracts\Config\Repository */
+            $config = $app->make(\Illuminate\Contracts\Config\Repository::class);
+
+            return new \Google\Cloud\Translate\V2\TranslateClient([
+                'key' => $config->get('services.googletranslate.api_key'),
+                'restOptions' => [
+                   'headers' => [
+                       'referer' => $config->get('app.url')
+                   ]
+                ]
+            ]);
+        });
+
+        $this->app->bind(\Illuminate\Contracts\Pipeline\Pipeline::class, \Illuminate\Pipeline\Pipeline::class);
     }
 
     /**
@@ -39,6 +74,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $aliasLoader = \Illuminate\Foundation\AliasLoader::getInstance();
+
+        $aliasLoader->alias('AutoTranslate', \N1ebieski\ICore\ValueObjects\AutoTranslate::class);
+        $aliasLoader->alias('Lang', \N1ebieski\ICore\ValueObjects\Lang::class);
     }
 }

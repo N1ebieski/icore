@@ -19,11 +19,13 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
@@ -34,6 +36,8 @@ use N1ebieski\ICore\Http\Requests\Admin\Mailing\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Mailing\DestroyGlobalRequest;
+use N1ebieski\ICore\Events\Admin\Mailing\StoreEvent as MailingStoreEvent;
+use N1ebieski\ICore\Events\Admin\Mailing\UpdateEvent as MailingUpdateEvent;
 
 class MailingController
 {
@@ -75,6 +79,8 @@ class MailingController
     {
         $mailing = $mailing->makeService()->create($request->all());
 
+        Event::dispatch(App::make(MailingStoreEvent::class, ['mailing' => $mailing]));
+
         return Response::redirectToRoute('admin.mailing.index', [
                 'filter' => [
                     'search' => "id:\"{$mailing->id}\""
@@ -110,6 +116,8 @@ class MailingController
     public function update(Mailing $mailing, UpdateRequest $request): RedirectResponse
     {
         $mailing->makeService()->update($request->all());
+
+        Event::dispatch(App::make(MailingUpdateEvent::class, ['mailing' => $mailing]));
 
         if ($mailing->status->isActive()) {
             return Response::redirectToRoute('admin.mailing.index')

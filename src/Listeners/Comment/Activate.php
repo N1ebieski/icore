@@ -41,7 +41,7 @@ class Activate
      * @param  CommentEventInterface  $event
      * @return void
      */
-    public function handle($event)
+    public function handle(CommentEventInterface $event): void
     {
         /** @var User */
         $user = $this->auth->user();

@@ -58,7 +58,7 @@ class CategoryCache
     public function rememberBySlug(string $slug)
     {
         return $this->cache->remember(
-            "category.firstBySlug.{$slug}",
+            "category.{$this->config->get('app.locale')}.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->category->makeRepo()->firstBySlug($slug);
@@ -73,7 +73,7 @@ class CategoryCache
     public function rememberPosts(): LengthAwarePaginator
     {
         return $this->cache->tags(['posts'])->remember(
-            "category.{$this->category->id}.paginatePosts.{$this->request->input('page')}",
+            "category.{$this->category->id}.{$this->config->get('app.locale')}.paginatePosts.{$this->request->input('page')}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->category->makeRepo()->paginatePosts();
@@ -88,7 +88,7 @@ class CategoryCache
     public function rememberWithRecursiveChildrens(): Collection
     {
         return $this->cache->tags(['categories'])->remember(
-            "category.{$this->category->poli}.getWithRecursiveChildrens",
+            "category.{$this->category->poli}.{$this->config->get('app.locale')}.getWithRecursiveChildrens",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->category->makeRepo()->getWithRecursiveChildrens();
@@ -143,7 +143,7 @@ class CategoryCache
     {
         return $this->cache->tags(["categories"])
             ->get(
-                "category.{$this->category->poli}.paginateByFilter.{$this->request->input('page')}"
+                "category.{$this->category->poli}.{$this->config->get('app.locale')}.paginateByFilter.{$this->request->input('page')}"
             );
     }
 
@@ -156,7 +156,7 @@ class CategoryCache
     {
         return $this->cache->tags(["categories"])
             ->put(
-                "category.{$this->category->poli}.paginateByFilter.{$this->request->input('page')}",
+                "category.{$this->category->poli}.{$this->config->get('app.locale')}.paginateByFilter.{$this->request->input('page')}",
                 $categories,
                 $this->carbon->now()->addMinutes($this->config->get('cache.minutes'))
             );

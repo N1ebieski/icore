@@ -15,11 +15,38 @@
  */
 
 $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-select/category@init', function () {
+    $.extend($.fn.ajaxSelectPicker.locale.pl, {
+        noTranslation: 'Brak tłumaczenia'
+    });
+
+    $.extend($.fn.ajaxSelectPicker.locale.en, {
+        noTranslation: 'No translation'
+    });
+
     $('select.select-picker-category').each(function () {
         let $sp = $(this);
 
         if ($sp.data('loaded') === true) {
             return;
+        }
+
+        if ($sp.data('lang') === 'en') {
+            $.extend($.fn.selectpicker.defaults, {
+                noneSelectedText: 'Nothing selected',
+                noneResultsText: 'No results match {0}',
+                countSelectedText: function (numSelected, numTotal) {
+                    return (numSelected == 1) ? '{0} item selected' : '{0} items selected';
+                },
+                maxOptionsText: function (numAll, numGroup) {
+                    return [
+                        (numAll == 1) ? 'Limit reached ({n} item max)' : 'Limit reached ({n} items max)',
+                        (numGroup == 1) ? 'Group limit reached ({n} item max)' : 'Group limit reached ({n} items max)'
+                    ];
+                },
+                selectAllText: 'Select All',
+                deselectAllText: 'Deselect All',
+                multipleSeparator: ', ',
+            });
         }
 
         $sp.selectpicker().on('changed.bs.select', function () {
@@ -65,7 +92,7 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-sel
                             text: $sp.data('abs-text-attr') ? value[$sp.data('abs-text-attr')] : value.name,
                             data: {
                                 content: value.ancestors.length ?
-                                    '<small class="p-0 m-0">' + value.ancestors.map(item => item.name).join(' &raquo; ') + ' &raquo; </small>' + value.name
+                                    '<small class="p-0 m-0">' + value.ancestors.map(item => item.name || $sp.data('AjaxBootstrapSelect').t('noTranslation')).join(' &raquo; ') + ' &raquo; </small>' + value.name
                                     : null
                             }
                         });
@@ -76,7 +103,7 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-sel
                 minLength: 3,
                 preserveSelected: typeof $sp.data('abs-preserve-selected') === "boolean" ? $sp.data('abs-preserve-selected') : true,
                 preserveSelectedPosition: $sp.data('abs-preserve-selected-position') || 'before',
-                langCode: $sp.data('abs-lang-code') || null
+                langCode: $sp.data('lang') || null
             });
 
             // Fix Cannot unselect option element when preserveSelected is true #85

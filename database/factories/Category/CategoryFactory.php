@@ -18,9 +18,12 @@
 
 namespace N1ebieski\ICore\Database\Factories\Category;
 
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 
 class CategoryFactory extends Factory
 {
@@ -39,9 +42,38 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => ucfirst($this->faker->word),
             'status' => rand(Status::INACTIVE, Status::ACTIVE)
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return static
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Category $category) {
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                CategoryLang::makeFactory()->for($category)->create([
+                    'lang' => $lang
+                ]);
+            }
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function inactive()
+    {
+        return $this->state(function () {
+            return [
+                'status' => Status::INACTIVE
+            ];
+        });
     }
 
     /**
@@ -63,12 +95,23 @@ class CategoryFactory extends Factory
      *
      * @return static
      */
-    public function sentence()
+    public function autoTrans()
     {
         return $this->state(function () {
             return [
-                'name' => ucfirst($this->faker->word . ' ' . $this->faker->word)
+                'auto_translate' => AutoTranslate::ACTIVE
             ];
+        });
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Category $category) {
+            $category->langs()->delete();
         });
     }
 }

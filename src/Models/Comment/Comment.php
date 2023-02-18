@@ -20,8 +20,10 @@ namespace N1ebieski\ICore\Models\Comment;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\Cache\Comment\CommentCache;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
@@ -59,6 +61,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property string $content_html
  * @property string $content
  * @property int $position
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Comment[] $ancestors
@@ -80,6 +83,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForPolymorphicClosureTable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Report\Comment\Report[] $reports
  * @property-read int|null $reports_count
  * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @method static Builder|Comment lang()
  * @method static Builder|Comment active()
  * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])
  * @method static Builder|Entity ancestors()
@@ -171,6 +175,7 @@ class Comment extends Entity
     use HasFixForRealDepthClosureTable;
     use HasFixForPolymorphicClosureTable;
     use HasFactory;
+    use HasLang;
 
     // Configuration
 
@@ -201,7 +206,7 @@ class Comment extends Entity
      *
      * @var array<string>
      */
-    protected $fillable = ['content_html', 'status', 'censored'];
+    protected $fillable = ['content_html', 'status', 'censored', 'lang'];
 
     /**
      * The columns of the full text index
@@ -234,9 +239,23 @@ class Comment extends Entity
         'censored' => \N1ebieski\ICore\Casts\Comment\CensoredCast::class,
         'position' => 'integer',
         'real_depth' => 'integer',
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.
@@ -289,11 +308,6 @@ class Comment extends Entity
     {
         return $this->hasMany(\N1ebieski\ICore\Models\Comment\Comment::class, 'parent_id');
     }
-
-    // public function childrensRecursive()
-    // {
-    //     return $this->childrens()->with('childrensRecursive');
-    // }
 
     /**
      * Undocumented function
@@ -437,7 +451,7 @@ class Comment extends Entity
      */
     public function scopeFilterCensored(Builder $query, int $censored = null)
     {
-        $query->when($censored !== null, function ($query) use ($censored) {
+        $query->when(!is_null($censored), function (Builder $query) use ($censored) {
             return $query->where('censored', $censored);
         });
     }
@@ -450,7 +464,7 @@ class Comment extends Entity
      */
     public function scopeFilterExcept(Builder $query, array $except = null)
     {
-        $query->when($except !== null, function ($query) use ($except) {
+        $query->when(!is_null($except), function (Builder $query) use ($except) {
             return $query->whereNotIn('comments.id', $except);
         });
     }
@@ -463,7 +477,7 @@ class Comment extends Entity
     public function scopeWithSumRating(Builder $query): Builder
     {
         return $query->withCount([
-            'ratings AS sum_rating' => function ($query) {
+            'ratings AS sum_rating' => function (MorphMany|Builder $query) {
                 $query->select(DB::raw('COALESCE(SUM(`ratings`.`rating`), 0) as `sum_rating`'));
             }
         ]);
@@ -477,26 +491,24 @@ class Comment extends Entity
      */
     public function scopeWithAllRels(Builder $query, string $orderby = null): Builder
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
+        /** @phpstan-ignore-next-line */
         return $query->withSumRating()
             ->with([
                 'user:id,name',
                 'morph',
                 'ratings',
-                'childrens' => function ($query) use ($orderby) {
-                    $query->withSumRating()
+                'childrens' => function (HasMany|Builder|Comment $query) use ($orderby) {
+                    return $query->withSumRating()
                         ->with([
                             'user:id,name',
                             'morph',
                             'ratings',
-                            'childrens' => function ($query) use ($orderby) {
-                                $query->withSumRating()
+                            'childrens' => function (HasMany|Builder|Comment $query) use ($orderby) {
+                                return $query->withSumRating()
                                     ->with(['user:id,name', 'ratings', 'morph'])
                                     ->withCount([
-                                        'childrens' => function ($query) {
-                                            $query->active();
+                                        'childrens' => function (HasMany|Builder $query) {
+                                            return $query->active();
                                         }
                                     ])
                                     ->active()
@@ -567,12 +579,14 @@ class Comment extends Entity
     public function loadAncestorsAndChildrens(): self
     {
         return $this->load([
-            'ancestors' => function ($q) {
-                $q->with('user:id,name')->whereColumn('ancestor', '!=', 'descendant')
+            'ancestors' => function (BelongsToMany|Builder $query) {
+                return $query->with('user:id,name')
+                    ->whereColumn('ancestor', '!=', 'descendant')
                     ->orderBy('depth', 'desc');
             },
-            'childrens' => function ($q) {
-                $q->with('user:id,name')->orderBy('created_at', 'asc');
+            'childrens' => function (HasMany|Builder $query) {
+                return $query->with('user:id,name')
+                    ->orderBy('created_at', 'asc');
             }
         ]);
     }

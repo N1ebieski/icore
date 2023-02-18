@@ -22,20 +22,24 @@
 
 @section('breadcrumb')
 @if ($page->ancestors->isNotEmpty())
-    @foreach ($page->ancestors as $ancestor)
-        <li class="breadcrumb-item">
-            @if (!empty($ancestor->content))
-            <a 
-                href="{{ route('web.page.show', [$ancestor->slug]) }}"
-                title="{{ $ancestor->title }}"
-            >
-                {{ $ancestor->title }}
-            </a>
-            @else
-                {{ $ancestor->title }}
-            @endif
-        </li>
-    @endforeach
+@foreach ($page->ancestors as $ancestor)
+<li class="breadcrumb-item">
+    @if ($ancestor->slug)
+    @if (!empty($ancestor->content))
+    <a 
+        href="{{ route('web.page.show', [$ancestor->slug]) }}"
+        title="{{ $ancestor->title }}"
+    >
+        {{ $ancestor->title }}
+    </a>
+    @else
+        {{ $ancestor->title }}
+    @endif
+    @else
+        {{ trans('icore::multi_langs.no_trans') }}
+    @endif    
+</li>
+@endforeach
 @endif
 <li class="breadcrumb-item active" aria-current="page">
     {{ $page->title }}
@@ -47,6 +51,7 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
+                @includeWhen($page->currentLang->progress->isAutoTrans(), 'icore::web.partials.auto_trans')                
                 <div class="d-flex border-bottom mb-2 justify-content-between">
                     <h1 class="h4">
                         @if (!empty($page->icon))

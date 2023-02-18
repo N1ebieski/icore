@@ -19,7 +19,12 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Rules\UniqueLangRule;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\Category\Category;
+use Illuminate\Contracts\Database\Query\Builder;
 
 class UpdateRequest extends FormRequest
 {
@@ -54,17 +59,41 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|string|min:3|max:255',
-            'icon' => 'nullable|string|max:255',
-            'parent_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('categories', 'id')->where(function ($query) {
-                    $query->where('model_type', $this->category->model_type);
-                }),
-                Rule::notIn($this->category->makeRepo()->getDescendantsAsArray()),
-            ]
-        ];
+        $category = new Category();
+
+        return array_merge(
+            [
+                'name' => [
+                    'required',
+                    'string',
+                    'between:3,255',
+                    App::make(UniqueLangRule::class, [
+                        'table' => $category->getTable(),
+                        'column' => 'name',
+                        'ignore' => $this->category->id,
+                        'query' => function (Builder $query) use ($category) {
+                            return $query->when(is_null($this->category->parent_id), function (Builder $query) use ($category) {
+                                return $query->whereNull("{$category->getTable()}.parent_id");
+                            }, function (Builder $query) use ($category) {
+                                return $query->where("{$category->getTable()}.parent_id", $this->category->parent_id);
+                            });
+                        }
+                    ])
+                ],
+                'icon' => 'nullable|string|max:255',
+                'parent_id' => [
+                    'nullable',
+                    'integer',
+                    Rule::exists('categories', 'id')->where(function ($query) {
+                        $query->where('model_type', $this->category->model_type);
+                    }),
+                    Rule::notIn($this->category->makeRepo()->getDescendantsAsArray()),
+                ]
+            ],
+            count(Config::get('icore.multi_langs')) > 1 ? [
+                'auto_translate' => 'boolean',
+                'progress' => 'integer|between:0,100'
+            ] : []
+        );
     }
 }

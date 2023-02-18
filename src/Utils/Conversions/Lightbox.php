@@ -6,19 +6,19 @@ use Closure;
 use DOMDocument;
 use DOMException;
 use Illuminate\Support\Str;
-use N1ebieski\ICore\Utils\DOMDocumentAdapter;
 use N1ebieski\ICore\Utils\Conversions\Interfaces\Handler;
+use N1ebieski\ICore\Utils\DOMDocument\Interfaces\DOMDocumentAdapterInterface;
 
 class Lightbox implements Handler
 {
     /**
      * Undocumented function
      *
-     * @param DOMDocumentAdapter $dom
+     * @param DOMDocumentAdapterInterface $dom
      * @param Str $str
      */
     public function __construct(
-        protected DOMDocumentAdapter $dom,
+        protected DOMDocumentAdapterInterface $dom,
         protected Str $str
     ) {
         //

@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="fas fa-edit"></i>
-        <span>{{ trans('icore::roles.route.edit') }}:</span>
+        <span>{{ trans('icore::roles.route.edit') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -62,7 +62,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="form-group">
                     <label for="name">
-                        {{ trans('icore::roles.name') }}
+                        {{ trans('icore::roles.name') }}:
                     </label>
                     <input 
                         type="text" 

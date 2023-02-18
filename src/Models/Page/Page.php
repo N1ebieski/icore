@@ -18,19 +18,18 @@
 
 namespace N1ebieski\ICore\Models\Page;
 
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use Cviebrock\EloquentTaggable\Taggable;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Page\PageCache;
-use Cviebrock\EloquentSluggable\Sluggable;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use Franzose\ClosureTable\Models\ClosureTable;
 use N1ebieski\ICore\Services\Page\PageService;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Repositories\Page\PageRepo;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -46,8 +45,12 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Page\PageFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
+use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 /**
  * N1ebieski\ICore\Models\Page\Page
@@ -57,6 +60,7 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property SeoNoindex $seo_noindex
  * @property Status $status
  * @property Commentable $comment
+ * @property AutoTranslate $auto_translate
  * @property int $siblings_count
  * @property int $id
  * @property string $slug
@@ -67,10 +71,12 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property string|null $content
  * @property string|null $seo_title
  * @property string|null $seo_desc
- * @property int $parent_id
+ * @property int|null $parent_id
  * @property int $position
+ * @property PageLang $currentLang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|PageLang[] $langs
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $ancestors
  * @property-read int|null $ancestors_count
  * @property-read \Franzose\ClosureTable\Extensions\Collection|Page[] $children
@@ -106,6 +112,8 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @method static Builder|Page multiLang()
+ * @method static Builder|Page autoTrans()
  * @method static Builder|Page active()
  * @method static Builder|Page activeByDate()
  * @method static \Franzose\ClosureTable\Extensions\Collection|static[] all($columns = ['*'])
@@ -201,15 +209,15 @@ use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
  * @property-read string|null $first_image
  * @mixin \Eloquent
  */
-class Page extends Entity
+class Page extends Entity implements AutoTranslateInterface
 {
-    use Sluggable;
-    use Taggable;
     use HasFullTextSearchable;
     use PivotEventTrait;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
     use HasFixForRealDepthClosureTable;
+    use HasFixForMultiLangTaggable;
     use HasFilterable, HasStatFilterable {
         HasStatFilterable::scopeFilterOrderBy insteadof HasFilterable;
     }
@@ -244,15 +252,11 @@ class Page extends Entity
      * @var array<string>
      */
     protected $fillable = [
-        'title',
-        'content_html',
-        'content',
-        'seo_title',
-        'seo_desc',
         'seo_noindex',
         'seo_nofollow',
         'status',
         'comment',
+        'auto_translate',
         'position',
         'icon'
     ];
@@ -268,20 +272,6 @@ class Page extends Entity
     ];
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
-
-    /**
      * The model's default values for attributes.
      *
      * @var array
@@ -290,6 +280,7 @@ class Page extends Entity
         'seo_noindex' => SeoNoindex::INACTIVE,
         'seo_nofollow' => SeoNofollow::INACTIVE,
         'status' => Status::INACTIVE,
+        'auto_translate' => AutoTranslate::INACTIVE,
         'comment' => Commentable::INACTIVE,
         'icon' => null
     ];
@@ -306,6 +297,7 @@ class Page extends Entity
         'seo_nofollow' => \N1ebieski\ICore\Casts\Page\SeoNofollowCast::class,
         'status' => \N1ebieski\ICore\Casts\Page\StatusCast::class,
         'comment' => \N1ebieski\ICore\Casts\Page\CommentCast::class,
+        'auto_translate' => \N1ebieski\ICore\Casts\AutoTranslateCast::class,
         'parent_id' => 'integer',
         'position' => 'integer',
         'real_depth' => 'integer',
@@ -324,19 +316,6 @@ class Page extends Entity
     }
 
     // Relations
-
-    /**
-     * Override relacji tags, bo ma hardcodowane nazwy pól
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags(): MorphToMany
-    {
-        $model = config('taggable.model');
-
-        return $this->morphToMany($model, 'model', 'tags_models', 'model_id', 'tag_id')
-            ->withTimestamps();
-    }
 
     /**
      * Undocumented function
@@ -414,48 +393,6 @@ class Page extends Entity
         )->withPivot('value');
     }
 
-    // Loads
-
-    /**
-     * [loadAncestorsExceptSelf description]
-     * @return self [description]
-     */
-    public function loadAncestorsExceptSelf(): self
-    {
-        return $this->load(['ancestors' => function ($q) {
-            $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
-        }]);
-    }
-
-    /**
-     * [loadRecursiveAllRels description]
-     * @return self [description]
-     */
-    public function loadRecursiveChildrens(): self
-    {
-        return $this->load([
-                'childrensRecursiveWithAllRels' => function ($query) {
-                    $query->active()->orderBy('position', 'asc');
-                },
-            ]);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return self
-     */
-    public function loadActiveSiblings(): self
-    {
-        return $this->setRelation(
-            'siblings',
-            $this->where('parent_id', $this->parent_id)
-                ->active()
-                ->orderBy('position', 'asc')
-                ->get()
-        );
-    }
-
     // Attributes
 
     /**
@@ -480,11 +417,30 @@ class Page extends Entity
      *
      * @return Attribute
      */
+    public function slug(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->slug);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function title(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->title);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
     public function contentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\ContentHtml::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->content_html);
     }
 
     /**
@@ -493,9 +449,8 @@ class Page extends Entity
      */
     public function metaTitle(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\MetaTitle::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->meta_title);
     }
 
     /**
@@ -504,9 +459,8 @@ class Page extends Entity
      */
     public function metaDesc(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\MetaDesc::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->meta_desc);
     }
 
     /**
@@ -515,9 +469,8 @@ class Page extends Entity
      */
     public function replacementContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\ReplacementContent::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content);
     }
 
     /**
@@ -526,9 +479,8 @@ class Page extends Entity
      */
     public function shortContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\ShortContent::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->short_content);
     }
 
     /**
@@ -537,9 +489,8 @@ class Page extends Entity
      */
     public function replacementContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\ReplacementContentHtml::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content_html);
     }
 
     /**
@@ -548,9 +499,8 @@ class Page extends Entity
      */
     public function noMoreContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\NoMoreContentHtml::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->no_more_content_html);
     }
 
     /**
@@ -559,9 +509,8 @@ class Page extends Entity
      */
     public function lessContentHtmlAttribute(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\LessContentHtml::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->less_content_html);
     }
 
     /**
@@ -579,9 +528,8 @@ class Page extends Entity
      */
     public function shortTitle(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\ShortTitle::class, [
-            'page' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->short_title);
     }
 
     /**
@@ -590,9 +538,7 @@ class Page extends Entity
      */
     public function firstImage(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\FirstImage::class, [
-            'page' => $this
-        ])();
+        return new Attribute(fn (): ?string => $this->currentLang->first_image);
     }
 
     /**
@@ -601,12 +547,20 @@ class Page extends Entity
      */
     public function content(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Page\Content::class, [
-            'page' => $this
-        ])();
+        return new Attribute(fn (): ?string => $this->currentLang->content);
     }
 
     // Checkers
+
+    /**
+     *
+     * @return bool
+     */
+    public function isRoot(): bool
+    {
+        // @phpstan-ignore-next-line
+        return is_null($this->parent_id);
+    }
 
     /**
      * Undocumented function
@@ -628,7 +582,7 @@ class Page extends Entity
     */
     public function scopeFilterParent(Builder $query, $parent = null): ?Builder
     {
-        return $query->when($parent !== null, function ($query) use ($parent) {
+        return $query->when(!is_null($parent), function (Builder $query) use ($parent) {
             $query->where('parent_id', $parent->id ?? null);
         });
     }
@@ -640,8 +594,10 @@ class Page extends Entity
     */
     public function scopeWithAncestorsExceptSelf(Builder $query): Builder
     {
-        return $query->with(['ancestors' => function ($q) {
-            $q->whereColumn('ancestor', '!=', 'descendant')->orderBy('depth', 'desc');
+        return $query->with(['ancestors' => function (BelongsToMany|Builder $query) {
+            return $query->whereColumn('ancestor', '!=', 'descendant')
+                ->orderBy('depth', 'desc')
+                ->with('langs');
         }]);
     }
 
@@ -673,23 +629,13 @@ class Page extends Entity
     public function scopeWithRecursiveAllRels(Builder $query): Builder
     {
         return $query->with([
-            'childrensRecursiveWithAllRels' => function ($query) {
-                $query->active()->orderBy('position', 'asc');
+            'childrensRecursiveWithAllRels' => function (HasMany|Builder|Page $query) {
+                return $query->selectRaw("`{$this->getTable()}`.*")
+                    ->multiLang()
+                    ->active()
+                    ->orderBy('position', 'asc');
             }
         ]);
-    }
-
-    /**
-     * [scopeComponentOnly description]
-     * @param  Builder $query [description]
-     * @param  array|null  $only  [description]
-     * @return Builder|null         [description]
-     */
-    public function scopeComponentOnly(Builder $query, array $only = null): ?Builder
-    {
-        return $query->when($only !== null, function ($query) use ($only) {
-            $query->whereIn('id', $only);
-        });
     }
 
     /**
@@ -705,6 +651,92 @@ class Page extends Entity
             ->where('page.status', Status::ACTIVE)
             ->groupBy('year')
             ->groupBy('month');
+    }
+
+    /**
+     *
+     * @param Builder $query
+     * @param array $relations
+     * @return Builder
+     * @throws BindingResolutionException
+     */
+    public function scopeWithAllRels(Builder $query, array $relations = []): Builder
+    {
+        return $query->with(array_merge([
+            'tags' => function (MorphToMany|Builder|Tag $query) {
+                return $query->lang();
+            },
+            'user',
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
+                'stats' : null
+        ], $relations));
+    }
+
+    // Loads
+
+    /**
+     * [loadAncestorsExceptSelf description]
+     * @return self [description]
+     */
+    public function loadAncestorsExceptSelf(): self
+    {
+        return $this->load(['ancestors' => function (BelongsToMany|Builder $query) {
+            return $query->whereColumn('ancestor', '!=', 'descendant')
+                ->orderBy('depth', 'desc')
+                ->with('langs');
+        }]);
+    }
+
+    /**
+     * [loadRecursiveAllRels description]
+     * @return self [description]
+     */
+    public function loadRecursiveChildrens(): self
+    {
+        return $this->load([
+                'childrensRecursiveWithAllRels' => function (HasMany|Builder|Page $query) {
+                    return $query->selectRaw("`{$this->getTable()}`.*")
+                        ->multiLang()
+                        ->active()
+                        ->orderBy('position', 'asc');
+                },
+            ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return self
+     */
+    public function loadActiveSiblings(): self
+    {
+        return $this->setRelation(
+            'siblings',
+            $this->selectRaw("`{$this->getTable()}`.*")
+                ->multiLang()
+                ->active()
+                ->where('parent_id', $this->parent_id)
+                ->orderBy('position', 'asc')
+                ->get()
+        );
+    }
+
+    /**
+     *
+     * @param array $relations
+     * @return $this
+     * @throws BindingResolutionException
+     */
+    public function loadAllRels(array $relations = [])
+    {
+        return $this->load(array_merge([
+            'tags' => function (MorphToMany|Builder|Tag $query) {
+                return $query->lang();
+            },
+            'user',
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
+                'stats' : null
+        ], $relations));
     }
 
     // Factories
@@ -731,7 +763,7 @@ class Page extends Entity
      * [makeService description]
      * @return PageService [description]
      */
-    public function makeService()
+    public function makeService(): PageService
     {
         return App::make(PageService::class, ['page' => $this]);
     }

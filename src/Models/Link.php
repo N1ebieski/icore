@@ -19,10 +19,13 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Link\LinkCache;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\ValueObjects\Link\Type;
+use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Services\Link\LinkService;
 use N1ebieski\ICore\Repositories\Link\LinkRepo;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
@@ -45,6 +48,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property string|null $img_url
  * @property bool $home
  * @property int $position
+ * @property \N1ebieski\ICore\ValueObjects\Lang $lang
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Category\Category[] $categories
@@ -55,6 +59,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property-read string $updated_at_diff
  * @property-read \Illuminate\Database\Eloquent\Collection|Link[] $siblings
  * @property-read int|null $siblings_count
+ * @method static Builder|Link lang()
  * @method static \N1ebieski\ICore\Database\Factories\Link\LinkFactory factory(...$parameters)
  * @method static Builder|Link filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
  * @method static Builder|Link filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
@@ -86,6 +91,7 @@ class Link extends Model
     use HasCarbonable;
     use HasFilterable;
     use HasFactory;
+    use HasLang;
 
     // Configuration
 
@@ -100,7 +106,8 @@ class Link extends Model
         'name',
         'img_url',
         'home',
-        'position'
+        'position',
+        'lang'
     ];
 
     /**
@@ -113,6 +120,7 @@ class Link extends Model
         'type' => \N1ebieski\ICore\Casts\Link\TypeCast::class,
         'home' => 'boolean',
         'position' => 'integer',
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -123,6 +131,19 @@ class Link extends Model
      * @var string
      */
     public $path = 'vendor/icore/links';
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.
@@ -143,7 +164,8 @@ class Link extends Model
      */
     public function siblings(): HasMany
     {
-        return $this->hasMany(\N1ebieski\ICore\Models\Link::class, 'type', 'type');
+        return $this->hasMany(\N1ebieski\ICore\Models\Link::class, 'type', 'type')
+            ->where('lang', $this->lang);
     }
 
     /**
@@ -172,8 +194,8 @@ class Link extends Model
      */
     public function scopeFilterType(Builder $query, string $type = null): ?Builder
     {
-        return $query->when($type !== null, function ($query) use ($type) {
-            $query->where('type', $type);
+        return $query->when(!is_null($type), function (Builder $query) use ($type) {
+            return $query->where('type', $type);
         });
     }
 
@@ -211,8 +233,8 @@ class Link extends Model
      */
     public function loadAncestorsWithoutSelf(): self
     {
-        return $this->load(['categories' => function ($query) {
-            $query->withAncestorsExceptSelf();
+        return $this->load(['categories' => function (MorphToMany|Builder|Category $query) {
+            return $query->withAncestorsExceptSelf();
         }]);
     }
 

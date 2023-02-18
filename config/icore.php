@@ -28,6 +28,8 @@ return [
 
     'layout' => env('ICORE_LAYOUT', 'icore'),
 
+    'multi_langs' => explode(',', env('ICORE_MULTI_LANGS', env('APP_LANG'))),
+
     'routes' => [
         'auth' => [
             'prefix' => env('ICORE_ROUTES_AUTH_PREFIX', null),
@@ -69,6 +71,10 @@ return [
     'mailing' => [
         'delay' => (int)env('ICORE_MAILING_DELAY_MINUTES', 1),
         'limit' => (int)env('ICORE_MAILING_LIMIT', 100),
+    ],
+
+    'auto_translate' => [
+        'check_days' => (int)env('ICORE_AUTO_TRANSLATE_CHECK_DAYS', 0),
     ],
 
     'captcha' => [

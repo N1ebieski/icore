@@ -21,8 +21,9 @@ namespace N1ebieski\ICore\Services\Tag;
 use Throwable;
 use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\DatabaseManager as DB;
+use Cviebrock\EloquentTaggable\Services\TagService as BaseTagService;
 
-class TagService
+class TagService extends BaseTagService
 {
     /**
      * Undocumented function
@@ -34,7 +35,7 @@ class TagService
         protected Tag $tag,
         protected DB $db
     ) {
-        //
+        parent::__construct();
     }
 
     /**
@@ -87,5 +88,38 @@ class TagService
         return $this->db->transaction(function () use ($ids) {
             return $this->tag->whereIn($this->tag->GetKeyName(), $ids)->delete();
         });
+    }
+
+    // Overrides
+
+    /**
+     * Find an existing tag by name and lang.
+     *
+     * @param string $tagName
+     *
+     * @return Tag|null
+     */
+    public function find(string $tagName)
+    {
+        return $this->tag->lang()->byName($tagName)->first();
+    }
+
+    /**
+     * Return an array of tag models for the given normalized tags and lang
+     *
+     * @param array $normalized
+     *
+     * @return array
+     */
+    public function getTagModelKeys(array $normalized = []): array
+    {
+        if (count($normalized) === 0) {
+            return [];
+        }
+
+        return $this->tag->lang()
+            ->whereIn('normalized', $normalized)
+            ->pluck('tag_id')
+            ->toArray();
     }
 }

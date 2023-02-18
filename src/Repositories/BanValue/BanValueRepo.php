@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Repositories\BanValue;
 
+use BanValue\Type;
 use N1ebieski\ICore\Models\BanValue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -47,6 +48,9 @@ class BanValueRepo
     {
         return $this->banValue->newQuery()
             ->selectRaw("`{$this->banValue->getTable()}`.*")
+            ->when($filter['type'] === Type::WORD, function (Builder|BanValue $query) {
+                return $query->lang();
+            })
             ->filterType($filter['type'])
             ->filterExcept($filter['except'])
             ->when(!is_null($filter['search']), function (Builder|BanValue $query) use ($filter) {

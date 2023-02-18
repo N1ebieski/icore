@@ -16,7 +16,7 @@
 @section('content')
 <h1 class="h5 mb-4 border-bottom pb-2">
     <i class="fas fa-fw fa-user-edit"></i>
-    <span>{{ trans('icore::profile.route.edit') }}:</span>
+    <span>{{ trans('icore::profile.route.edit') }}</span>
 </h1>
 <form 
     class="mb-3" 
@@ -28,7 +28,7 @@
     @method('put')
     <div class="form-group row">
         <label for="name" class="col-lg-3 col-form-label text-lg-left">
-            {{ trans('icore::auth.name.label') }}
+            {{ trans('icore::auth.name.label') }}:
         </label>
         <div class="col-lg-6">
             <input 
@@ -42,6 +42,33 @@
             @includeWhen($errors->has('name'), 'icore::web.partials.errors', ['name' => 'name'])
         </div>
     </div>
+    @if (count(config('icore.multi_langs')) > 1)
+    <div class="form-group row">
+        <label for="pref_lang" class="col-lg-3 col-form-label text-lg-left">
+            {{ trans('icore::profile.pref_lang') }}:
+        </label>
+        <div class="col-lg-6">
+            <select 
+                class="selectpicker select-picker" 
+                data-style="border"
+                data-width="100%"
+                name="pref_lang"
+                id="pref_lang"
+            >
+                @foreach (config('icore.multi_langs') as $lang)
+                <option
+                    data-content='<span class="fi fil-{{ $lang }}"></span> <span>{{ mb_strtoupper($lang) }}</span>'
+                    value="{{ $lang }}"
+                    {{ $user->pref_lang->getValue() === $lang ? 'selected' : '' }}
+                >
+                    {{ $lang }}
+                </option>
+                @endforeach
+            </select>
+            @includeWhen($errors->has('pref_lang'), 'icore::web.partials.errors', ['name' => 'pref_lang'])
+        </div>
+    </div>
+    @endif  
     <div class="form-group row mb-0">
         <label class="col-lg-3 col-form-label text-lg-left d-none d-lg-block"></label>
         <div class="col-lg-6">
@@ -74,7 +101,7 @@
 </form>
 <div class="form-group row">
     <label class="col-lg-3 col-form-label text-lg-left">
-        {{ trans('icore::profile.change_password') }}
+        {{ trans('icore::profile.change_password') }}:
     </label>
     <div class="col-lg-6">
         <a 
@@ -96,7 +123,7 @@
 </div>
 <div class="form-group row">
     <label class="col-lg-3 col-form-label text-lg-left">
-        {{ trans('icore::profile.change_email') }}
+        {{ trans('icore::profile.change_email') }}:
     </label>
     <div class="col-lg-6">
         <button 

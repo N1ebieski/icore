@@ -15,7 +15,7 @@
     @method('patch')
     <div class="form-group">
         <label for="email">
-            {{ trans('icore::auth.address.label') }}
+            {{ trans('icore::auth.address.label') }}:
         </label>
         <input 
             type="email" 
@@ -28,7 +28,7 @@
     </div>
     <div class="form-group">
         <label for="password">
-            {{ trans('icore::auth.password_confirm') }}
+            {{ trans('icore::auth.password_confirm') }}:
         </label>
         <input 
             id="password_confirmation" 

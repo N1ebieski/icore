@@ -14,7 +14,7 @@
 >
     <div class="form-group">
         <label for="name">
-            {{ trans('icore::auth.name.label') }}
+            {{ trans('icore::auth.name.label') }}:
         </label>
         <input 
             type="text" 
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
         <label for="email">
-            {{ trans('icore::auth.address.label') }}
+            {{ trans('icore::auth.address.label') }}:
         </label>
         <input 
             type="email" 
@@ -40,7 +40,7 @@
     </div>
     <div class="form-group">
         <label for="password">
-            {{ trans('icore::auth.password') }}
+            {{ trans('icore::auth.password') }}:
         </label>
         <input 
             id="password" 
@@ -52,7 +52,7 @@
     </div>
     <div class="form-group">
         <label for="password">
-            {{ trans('icore::auth.password_confirm') }}
+            {{ trans('icore::auth.password_confirm') }}:
         </label>
         <input 
             id="password-confirm" 
@@ -64,7 +64,7 @@
     </div>
     <div class="form-group">
         <label for="roles">
-            {{ trans('icore::users.roles') }}
+            {{ trans('icore::users.roles') }}:
         </label>
         <select multiple class="form-control custom-select" id="roles" name="roles[]">
             @foreach ($roles as $role)

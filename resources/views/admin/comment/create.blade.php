@@ -24,7 +24,7 @@
     >
     <div class="form-group">
         <label for="content">
-            {{ trans('icore::comments.content') }}
+            {{ trans('icore::comments.content') }}:
         </label>
         <textarea 
             name="content" 

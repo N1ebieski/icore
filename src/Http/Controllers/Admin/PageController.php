@@ -24,19 +24,25 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Event;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Loads\Admin\Page\EditFullLoad;
 use N1ebieski\ICore\Filters\Admin\Page\IndexFilter;
 use N1ebieski\ICore\Http\Requests\Admin\Page\IndexRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\StoreRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateRequest;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateFullRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdateStatusRequest;
 use N1ebieski\ICore\View\ViewModels\Admin\Page\EditFullViewModel;
 use N1ebieski\ICore\Http\Requests\Admin\Page\DestroyGlobalRequest;
+use N1ebieski\ICore\Events\Admin\Page\StoreEvent as PageStoreEvent;
 use N1ebieski\ICore\Http\Requests\Admin\Page\UpdatePositionRequest;
+use N1ebieski\ICore\Events\Admin\Page\UpdateEvent as PageUpdateEvent;
+use N1ebieski\ICore\Events\Admin\Page\UpdateFullEvent as PageUpdateFullEvent;
 
 class PageController
 {
@@ -88,6 +94,8 @@ class PageController
             /** @var Page|null */
             $parent = $page->find($request->input('parent_id'));
         }
+
+        Event::dispatch(App::make(PageStoreEvent::class, ['page' => $page]));
 
         return Response::redirectToRoute('admin.page.index', [
             'filter' => [
@@ -151,11 +159,13 @@ class PageController
     }
 
     /**
-     * [editFull description]
-     * @param  Page $page [description]
-     * @return HttpResponse       [description]
+     *
+     * @param Page $page
+     * @param EditFullLoad $load
+     * @return HttpResponse
+     * @throws BindingResolutionException
      */
-    public function editFull(Page $page): HttpResponse
+    public function editFull(Page $page, EditFullLoad $load): HttpResponse
     {
         return Response::view('icore::admin.page.edit_full', App::make(EditFullViewModel::class, [
             'page' => $page
@@ -172,6 +182,8 @@ class PageController
     {
         $page->makeService()->update($request->validated());
 
+        Event::dispatch(App::make(PageUpdateEvent::class, ['page' => $page]));
+
         return Response::json([
             'view' => View::make('icore::admin.page.partials.page', [
                 'page' => $page->loadAncestorsExceptSelf()
@@ -187,7 +199,9 @@ class PageController
      */
     public function updateFull(Page $page, UpdateFullRequest $request): RedirectResponse
     {
-        $page->makeService()->updateFull($request->validated());
+        $page->makeService()->update($request->validated());
+
+        Event::dispatch(App::make(PageUpdateFullEvent::class, ['page' => $page]));
 
         return Response::redirectToRoute('admin.page.edit_full', [$page->id])
             ->with('success', Lang::get('icore::pages.success.update'));

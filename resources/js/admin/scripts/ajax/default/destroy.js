@@ -29,12 +29,12 @@ $(document).on(
             method: 'delete',
             beforeSend: function () {
                 $row.find('.responsive-btn-group').addClass('disabled');
-                $row.find('[data-btn-ok-class*="destroy"]').loader('show');
+                $row.find('[data-status="delete"]').loader('show');
             },
             complete: function () {
-                $row.find('[data-btn-ok-class*="destroy"]').loader('hide');
+                $row.find('[data-status="delete"]').loader('hide');
             },
-            success: function (response) {
+            success: function () {
                 $row.fadeOut('slow');
             }
         });

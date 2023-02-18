@@ -18,7 +18,6 @@
 
 namespace N1ebieski\ICore\Models\Traits;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Container\BindingResolutionException;

@@ -61,7 +61,7 @@ class PostController
      * @bodyParam filter.status int Must be one of 1 or (available only for admin.categories.view) 0, 2. Example: 1
      *
      * @apiResourceCollection N1ebieski\ICore\Http\Resources\Post\PostResource
-     * @apiResourceModel N1ebieski\ICore\Models\Post states=active,publish,withUser with=user
+     * @apiResourceModel N1ebieski\ICore\Models\Post states=active,publish,withUser with=user,langs
      *
      * @param Post $post
      * @param IndexRequest $request

@@ -21,7 +21,6 @@ namespace N1ebieski\ICore\View\Components;
 use Illuminate\View\Component;
 use N1ebieski\ICore\Models\Post;
 use Illuminate\Contracts\View\View;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use N1ebieski\ICore\Models\Comment\Comment;
 use N1ebieski\ICore\Cache\Session\SessionCache;
 use N1ebieski\ICore\Models\Category\Post\Category;
@@ -30,6 +29,7 @@ use Illuminate\Contracts\View\Factory as ViewFactory;
 use N1ebieski\ICore\ValueObjects\Post\Status as PostStatus;
 use N1ebieski\ICore\ValueObjects\Comment\Status as CommentStatus;
 use N1ebieski\ICore\ValueObjects\Category\Status as CategoryStatus;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class StatComponent extends Component
 {
@@ -40,7 +40,7 @@ class StatComponent extends Component
      * @param Category $category
      * @param Comment $comment
      * @param SessionCache $sessionCache
-     * @param MigrationUtil $migrationUtil
+     * @param MigrationRecognizeInterface $migrationRecognize
      * @param Config $config
      * @param ViewFactory $view
      */
@@ -49,7 +49,7 @@ class StatComponent extends Component
         protected Category $category,
         protected Comment $comment,
         protected SessionCache $sessionCache,
-        protected MigrationUtil $migrationUtil,
+        protected MigrationRecognizeInterface $migrationRecognize,
         protected Config $config,
         protected ViewFactory $view
     ) {
@@ -62,7 +62,7 @@ class StatComponent extends Component
      */
     protected function verifySession(): bool
     {
-        return $this->migrationUtil->contains('create_sessions_table')
+        return $this->migrationRecognize->contains('create_sessions_table')
             && $this->config->get('session.driver') === 'database';
     }
 
@@ -72,6 +72,9 @@ class StatComponent extends Component
      */
     public function render(): View
     {
+        $countComments = $this->comment->makeCache()->rememberCountByModelTypeAndStatusAndLang()
+            ->where('status', CommentStatus::active());
+
         return $this->view->make('icore::web.components.stat', [
             'countCategories' => $this->category->makeCache()->rememberCountByStatus()
                 ->firstWhere('status', CategoryStatus::active()),
@@ -79,8 +82,14 @@ class StatComponent extends Component
             'countPosts' => $this->post->makeCache()->rememberCountByStatus()
                 ->firstWhere('status', PostStatus::active()),
 
-            'countComments' => $this->comment->makeCache()->rememberCountByModelTypeAndStatus()
-                ->where('status', CommentStatus::active()),
+            'countComments' => $countComments->map(function (mixed $item) use ($countComments) {
+                /** @var mixed */
+                $item = clone $item;
+
+                $item->count = $countComments->where('model', $item->model)->sum('count');
+
+                return $item;
+            })->unique(),
 
             'lastActivity' => $this->post->makeCache()->rememberLastActivity(),
 

@@ -76,8 +76,9 @@ class CommentService
     public function create(array $attributes): Comment
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->comment->content_html = $attributes['content'];
-            $this->comment->content = $this->comment->content_html;
+            $this->comment->fill($attributes);
+
+            $this->comment->content = $attributes['content_html'];
 
             $this->comment->user()->associate($attributes['user']);
             $this->comment->morph()->associate($attributes['morph']);
@@ -99,8 +100,11 @@ class CommentService
     public function update(array $attributes): Comment
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->comment->content_html = $attributes['content'];
-            $this->comment->content = $this->comment->content_html;
+            $this->comment->fill($attributes);
+
+            if (array_key_exists('content_html', $attributes)) {
+                $this->comment->content = $attributes['content_html'];
+            }
 
             $this->comment->save();
 
@@ -180,6 +184,7 @@ class CommentService
      */
     protected function paginateChildrens(LengthAwarePaginator $collection): LengthAwarePaginator
     {
+        // @phpstan-ignore-next-line
         $collection->map(function ($item) {
             $item->setRelation(
                 'childrens',

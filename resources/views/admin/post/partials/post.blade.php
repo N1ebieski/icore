@@ -112,24 +112,46 @@
                 </button>
                 @endcan
                 @can('admin.posts.delete')
-                <button 
-                    type="button" 
-                    class="btn btn-danger" 
-                    data-status="delete" 
-                    data-toggle="confirmation"
-                    data-route="{{ route('admin.post.destroy', ['post' => $post->id]) }}" 
-                    data-id="{{ $post->id }}"
-                    data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
-                    data-btn-ok-icon-class="fas fa-check mr-1"
-                    data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy" 
-                    data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
-                    data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
-                    data-btn-cancel-icon-class="fas fa-ban mr-1"
-                    data-title="{{ trans('icore::default.confirm') }}"
-                >
-                    <i class="far fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
-                </button>
+                <div class="btn-group-vertical justify-content-start">
+                    <button 
+                        type="button" 
+                        class="btn btn-danger"
+                        data-status="delete" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.post.destroy', ['post' => $post->id]) }}" 
+                        data-id="{{ $post->id }}"
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::default.confirm') }}"
+                    >
+                        <i class="far fa-trash-alt"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
+                    </button>
+                    @if ($post->hasAdditionalLangs())
+                    <button 
+                        type="button"                
+                        class="btn btn-danger" 
+                        data-status="delete-lang" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.post_lang.destroy', ['postLang' => $post->currentLang->id]) }}" 
+                        data-id="{{ $post->id }}"
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-lang" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::multi_langs.confirm') }}"
+                    >
+                        <i class="fas fa-trash"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::multi_langs.delete') }}</span>
+                    </button>
+                    @endif
+                </div>                     
                 @endcan
             </div>
         </div>

@@ -20,8 +20,11 @@ namespace N1ebieski\ICore\Database\Factories\Page;
 
 use N1ebieski\ICore\Models\User;
 use N1ebieski\ICore\Models\Page\Page;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\ValueObjects\Page\Status;
 use N1ebieski\ICore\ValueObjects\Page\Comment;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
 use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -42,19 +45,28 @@ class PageFactory extends Factory
      */
     public function definition(): array
     {
-        $content = $this->faker->text(2000);
-
         return [
-            'title' => $this->faker->sentence(3),
-            'content_html' => $content,
-            'content' => $content,
-            'seo_title' => $this->faker->randomElement([$this->faker->sentence(5), null]),
-            'seo_desc' => $this->faker->text(),
             'seo_noindex' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'seo_nofollow' => rand(SeoNofollow::INACTIVE, SeoNofollow::ACTIVE),
             'status' => rand(Status::INACTIVE, Status::ACTIVE),
             'comment' => rand(Comment::INACTIVE, Comment::ACTIVE)
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return static
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Page $page) {
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                PageLang::makeFactory()->for($page)->create([
+                    'lang' => $lang
+                ]);
+            }
+        });
     }
 
     /**
@@ -67,6 +79,20 @@ class PageFactory extends Factory
         return $this->state(function () {
             return [
                 'status' => Status::ACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function autoTrans()
+    {
+        return $this->state(function () {
+            return [
+                'auto_translate' => AutoTranslate::ACTIVE
             ];
         });
     }
@@ -107,5 +133,16 @@ class PageFactory extends Factory
     public function withUser()
     {
         return $this->for(User::makeFactory());
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Page $page) {
+            $page->langs()->delete();
+        });
     }
 }

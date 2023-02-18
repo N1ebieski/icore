@@ -19,8 +19,10 @@
 namespace N1ebieski\ICore\Models;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\ValueObjects\BanValue\Type;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
@@ -40,6 +42,7 @@ use N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string $created_at_diff
  * @property-read string $updated_at_diff
+ * @method static Builder|BanValue lang()
  * @method static \N1ebieski\ICore\Database\Factories\BanValue\BanValueFactory factory(...$parameters)
  * @method static Builder|BanValue filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
  * @method static Builder|BanValue filterCategory(?\N1ebieski\ICore\Models\Category\Category $category = null)
@@ -69,6 +72,7 @@ class BanValue extends Model
     use HasFullTextSearchable;
     use HasCarbonable;
     use HasFactory;
+    use HasLang;
 
     // Configuration
 
@@ -78,7 +82,7 @@ class BanValue extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'type', 'value'
+        'type', 'value', 'lang'
     ];
 
     /**
@@ -103,9 +107,23 @@ class BanValue extends Model
     protected $casts = [
         'id' => 'integer',
         'type' => \N1ebieski\ICore\Casts\BanValue\TypeCast::class,
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.
@@ -127,8 +145,8 @@ class BanValue extends Model
      */
     public function scopeFilterType(Builder $query, string $type = null): ?Builder
     {
-        return $query->when($type !== null, function ($query) use ($type) {
-            $query->where('type', $type);
+        return $query->when(!is_null($type), function (Builder $query) use ($type) {
+            return $query->where('type', $type);
         });
     }
 

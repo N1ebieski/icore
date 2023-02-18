@@ -19,8 +19,10 @@
 namespace N1ebieski\ICore\Http\Resources\Category;
 
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
+use N1ebieski\ICore\Models\CategoryLang\CategoryLang;
 
 /**
  * @mixin Category
@@ -49,6 +51,7 @@ class CategoryResource extends JsonResource
      * @responseField created_at string
      * @responseField updated_at string
      * @responseField ancestors object[] Contains relationship Category ancestors (parent and higher).
+     * @responseField langs object[] Contains relationship CategoryLangs (available languages).
      * @responseField meta object Paging, filtering and sorting information.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -58,8 +61,6 @@ class CategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
             'icon' => $this->icon,
             'status' => [
                 'value' => $this->status->getValue(),
@@ -68,7 +69,23 @@ class CategoryResource extends JsonResource
             'real_depth' => $this->real_depth,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'ancestors' => $this->makeResource()->collection($this->whenLoaded('ancestors'))
+            'ancestors' => $this->makeResource()->collection($this->whenLoaded('ancestors')),
+            $this->mergeWhen(
+                count(Config::get('icore.multi_langs')) > 1 && $this->relationLoaded('langs'),
+                function () {
+                    /** @var CategoryLang */
+                    $categoryLang = $this->langs()->make();
+
+                    return [
+                        'langs' => $categoryLang->makeResource()
+                            ->collection($this->langs->map(function ($item) {
+                                $item->setAttribute('depth', 1);
+
+                                return $item;
+                            }))
+                    ];
+                }
+            ),
         ];
     }
 }

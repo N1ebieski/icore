@@ -22,6 +22,7 @@ return [
     'register_with' => 'Sign up via',
     'warning' => [
         'no_email' => 'We could not register you using data from :provider. Make sure you share your email address in your account settings in :provider (Applications tab) or complete registration in the form below.',
+        'no_name' => 'We could not register you using data from :provider. Make sure you share your username in your account settings in :provider (Applications tab) or complete registration in the form below.',
         'email_exist' => 'There is already a registered account at the given e-mail address. Connect your account with :provider from your profile (Social Media tab) after logging in.'
     ],
     'success' => [

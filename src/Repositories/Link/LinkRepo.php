@@ -19,12 +19,12 @@
 namespace N1ebieski\ICore\Repositories\Link;
 
 use N1ebieski\ICore\Models\Link;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Link\Type;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class LinkRepo
 {
@@ -33,12 +33,12 @@ class LinkRepo
      *
      * @param Link $link
      * @param Config $config
-     * @param MigrationUtil $migrationUtil
+     * @param MigrationRecognizeInterface $migrationRecognize
      */
     public function __construct(
         protected Link $link,
         protected Config $config,
-        protected MigrationUtil $migrationUtil
+        protected MigrationRecognizeInterface $migrationRecognize
     ) {
         //
     }
@@ -51,7 +51,8 @@ class LinkRepo
     public function paginateByFilter(array $filter): LengthAwarePaginator
     {
         return $this->link->newQuery()
-            ->where('type', $filter['type'])
+            ->lang()
+            ->filterType($filter['type'])
             ->filterExcept($filter['except'])
             ->orderBy('position', 'asc')
             ->paginate($this->config->get('database.paginate'));
@@ -65,7 +66,8 @@ class LinkRepo
     public function getAvailableBacklinksByCats(array $ids): Collection
     {
         return $this->link->newQuery()
-            ->where('type', 'backlink')
+            ->lang()
+            ->where('type', Type::BACKLINK)
             ->where(function (Builder $query) use ($ids) {
                 return $query->whereDoesntHave('categories')
                     ->orWhereHas('categories', function (Builder $query) use ($ids) {
@@ -93,16 +95,17 @@ class LinkRepo
     public function getLinksByComponent(array $component): Collection
     {
         return $this->link->newQuery()
+            ->lang()
             ->where('type', Type::LINK)
             ->when($component['home'] === true, function (Builder $query) {
                 return $query->whereDoesntHave('categories')
-                    ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
+                    ->when($this->migrationRecognize->contains('add_home_to_links_table'), function (Builder $query) {
                         return $query->orWhere('home', true);
                     });
             }, function (Builder $query) {
                 return $query->where(function (Builder $query) {
                     return $query->whereDoesntHave('categories')
-                        ->when($this->migrationUtil->contains('add_home_to_links_table'), function (Builder $query) {
+                        ->when($this->migrationRecognize->contains('add_home_to_links_table'), function (Builder $query) {
                             return $query->where('home', false);
                         });
                 });
@@ -114,6 +117,6 @@ class LinkRepo
             })
             ->orderBy('position', 'asc')
             ->limit($component['limit'])
-            ->get(['id', 'url', 'name', 'img_url']);
+            ->get();
     }
 }

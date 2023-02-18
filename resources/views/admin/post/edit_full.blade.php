@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="fas fa-edit"></i>
-        <span>{{ trans('icore::posts.route.edit') }}:</span>
+        <span>{{ trans('icore::posts.route.edit') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -36,7 +36,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::posts.title') }}
+                        {{ trans('icore::posts.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -44,7 +44,6 @@
                         name="title" 
                         id="title" 
                         class="form-control {{ $isValid('title') }}"
-                        placeholder="Wpisz tytuł posta"
                     >
                     @includeWhen($errors->has('title'), 'icore::admin.partials.errors', ['name' => 'title'])
                 </div>
@@ -71,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        <span>{{ trans('icore::posts.tags.label') }}</span>
+                        <span>{{ trans('icore::posts.tags.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -93,7 +92,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        <span>SEO title</span>
+                        <span>SEO title:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -107,13 +106,12 @@
                         name="seo_title" 
                         id="seo_title"
                         class="form-control {{ $isValid('seo_title') }}"
-                        placeholder="Wpisz SEO title"
                     >
                     @includeWhen($errors->has('seo_title'), 'icore::admin.partials.errors', ['name' => 'seo_title'])
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        <span>SEO description</span>
+                        <span>SEO description:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -131,6 +129,70 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if (count(config('icore.multi_langs')) > 1)
+                <div class="form-group">
+                    <label for="lang">
+                        <span>{{ trans('icore::multi_langs.lang') }} / {{ trans('icore::multi_langs.progress.label') }}:</span>
+                        <i 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="{{ trans('icore::multi_langs.progress.tooltip') }}"
+                            class="far fa-question-circle"
+                        ></i>            
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select 
+                                class="selectpicker select-picker edit-full-lang" 
+                                data-style="border"
+                                data-width="100%"
+                                data-target="#edit-modal"
+                                data-lang="{{ config('app.locale') }}"
+                                id="lang"
+                            >
+                                @foreach (config('icore.multi_langs') as $lang)
+                                <option
+                                    data-content='<span class="fi fil-{{ $lang }}"></span> <span>{{ mb_strtoupper($lang) }}</span>'
+                                    value="{{ route('admin.post.edit_full', ['lang' => $lang, 'post' => $post->id]) }}"
+                                    {{ config('app.locale') === $lang ? 'selected' : '' }}
+                                >
+                                    {{ $lang }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            step="1"
+                            class="form-control"
+                            id="progress"
+                            name="progress"
+                            value="{{ $post->currentLang->progress }}"
+                        >
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>            
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="auto_translate" 
+                            name="auto_translate"
+                            value="{{ AutoTranslate::ACTIVE }}" 
+                            {{ $post->auto_translate->isActive() ? 'checked' : '' }}
+                        >
+                        <label class="custom-control-label" for="auto_translate">
+                            {{ trans('icore::multi_langs.auto_trans') }}?
+                        </label>
+                    </div>
+                </div>    
+                @endif                
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input type="hidden" name="seo_noindex" value="{{ Post\SeoNoindex::INACTIVE }}">
@@ -181,7 +243,7 @@
                 </div>              
                 <div class="form-group">
                     <label for="status">
-                        {{ trans('icore::filter.status.label') }}
+                        {{ trans('icore::filter.status.label') }}:
                     </label>
                     <select 
                         class="custom-select" 
@@ -216,7 +278,7 @@
                     id="collapse-published-at"
                 >
                     <label for="published_at">
-                        <span>{{ trans('icore::posts.published_at.label') }}</span>
+                        <span>{{ trans('icore::posts.published_at.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -264,6 +326,7 @@
                         data-abs-ajax-url="{{ route('api.user.index') }}"
                         data-style="border"
                         data-width="100%"
+                        data-lang="{{ config('app.locale') }}"
                         name="user"
                         id="user"
                     >
@@ -279,7 +342,7 @@
                 </div>
                 <div class="form-group">
                     <label for="category">
-                        <span>{{ trans('icore::categories.categories.label') }}</span>
+                        <span>{{ trans('icore::categories.categories.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top"
@@ -298,6 +361,7 @@
                         data-style="border"
                         data-width="100%"
                         data-max-options="{{ $maxCategories }}"
+                        data-lang="{{ config('app.locale') }}"
                         multiple
                         name="categories[]"
                         id="categories"
@@ -307,12 +371,12 @@
                             @foreach ($categoriesSelection as $category)
                             <option
                                 @if ($category->ancestors->isNotEmpty())
-                                data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->ancestors->pluck('name')->toArray()) }} &raquo; </small>{{ $category->name }}'
+                                data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $category->ancestors->pluck('name')->map(fn ($item) => $item ?? trans('icore::multi_langs.no_trans'))->toArray()) }} &raquo; </small>{{ $category->name ?? trans('icore::multi_langs.no_trans') }}'
                                 @endif
                                 value="{{ $category->id }}"
                                 selected
                             >
-                                {{ $category->name }}
+                                {{ $category->name ?? trans('icore::multi_langs.no_trans') }}
                             </option>
                             @endforeach
                         </optgroup>

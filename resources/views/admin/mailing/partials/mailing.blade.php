@@ -102,10 +102,11 @@
                 </button>
                 @endcan
                 @can('admin.mailings.delete')
-                <div class="btn-group-vertical">
+                <div class="btn-group-vertical justify-content-start">
                     <button 
                         type="button"                     
                         class="btn btn-danger" 
+                        data-status="delete" 
                         data-toggle="confirmation"
                         data-route="{{ route('admin.mailing.destroy', [$mailing->id]) }}" 
                         data-id="{{ $mailing->id }}"
@@ -120,10 +121,31 @@
                         <i class="far fa-trash-alt"></i>
                         <span class="d-none d-sm-inline">{{ trans('icore::default.delete') }}</span>
                     </button>
-                    @if ($mailing->emails->count() !== 0)
+                    @if ($mailing->hasAdditionalLangs())
+                    <button 
+                        type="button"                
+                        class="btn btn-danger" 
+                        data-status="delete-lang" 
+                        data-toggle="confirmation"
+                        data-route="{{ route('admin.mailing_lang.destroy', ['mailingLang' => $mailing->currentLang->id]) }}" 
+                        data-id="{{ $mailing->id }}"
+                        data-btn-ok-label=" {{ trans('icore::default.yes') }}" 
+                        data-btn-ok-icon-class="fas fa-check mr-1"
+                        data-btn-ok-class="btn h-100 d-flex justify-content-center btn-primary btn-popover destroy-lang" 
+                        data-btn-cancel-label=" {{ trans('icore::default.cancel') }}"
+                        data-btn-cancel-class="btn h-100 d-flex justify-content-center btn-secondary btn-popover" 
+                        data-btn-cancel-icon-class="fas fa-ban mr-1"
+                        data-title="{{ trans('icore::multi_langs.confirm') }}"
+                    >
+                        <i class="fas fa-trash"></i>
+                        <span class="d-none d-sm-inline">{{ trans('icore::multi_langs.delete') }}</span>
+                    </button>
+                    @endif                    
+                    @if ($mailing->emails_count > 0)
                     <button 
                         type="button"                     
                         class="btn btn-danger"
+                        data-status="reset-mailing" 
                         data-toggle="confirmation"
                         data-route="{{ route('admin.mailing.reset', [$mailing->id]) }}" 
                         data-id="{{ $mailing->id }}"

@@ -39,6 +39,7 @@
     <div class="row">
         <div class="col-md-8 order-sm-1 order-md-2">
             <div class="mb-5">
+                @includeWhen($post->currentLang->progress->isAutoTrans(), 'icore::web.partials.auto_trans')
                 <div class="d-flex border-bottom mb-2 justify-content-between">
                     <h1 class="h4">
                         {{ $post->title }}

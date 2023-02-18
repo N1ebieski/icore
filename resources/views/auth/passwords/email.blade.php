@@ -29,7 +29,7 @@
                                     for="email" 
                                     class="col-md-4 col-form-label text-md-right"
                                 >
-                                        {{ trans('icore::auth.address.label') }}
+                                        {{ trans('icore::auth.address.label') }}:
                                 </label>
 
                                 <div class="col-md-6">

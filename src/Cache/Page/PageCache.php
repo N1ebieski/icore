@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Cache\Page;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 
@@ -46,14 +47,14 @@ class PageCache
     /**
      * [rememberWithChildrensByComponent description]
      * @param  array      $component [description]
-     * @return Collection            [description]
+     * @return Collect            [description]
      */
-    public function rememberWithChildrensByComponent(array $component): Collection
+    public function rememberWithChildrensByComponent(array $component): Collect
     {
         $json = json_encode($component);
 
         return $this->cache->tags(['pages'])->remember(
-            "page.getWithChildrensByComponent.{$json}",
+            "page.{$this->config->get('app.locale')}.getWithChildrensByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithChildrensByComponent($component);
@@ -71,7 +72,7 @@ class PageCache
         $json = json_encode($component);
 
         return $this->cache->tags(['pages'])->remember(
-            "page.getWithRecursiveChildrensByComponent.{$json}",
+            "page.{$this->config->get('app.locale')}.getWithRecursiveChildrensByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->page->makeRepo()->getWithRecursiveChildrensByComponent($component);
@@ -87,7 +88,7 @@ class PageCache
     public function rememberBySlug(string $slug): ?Page
     {
         return $this->cache->tags(['page.' . $slug])->remember(
-            "page.firstBySlug.{$slug}",
+            "page.{$this->config->get('app.locale')}.firstBySlug.{$slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($slug) {
                 return $this->page->makeRepo()->firstBySlug($slug);
@@ -102,7 +103,7 @@ class PageCache
     public function rememberLoadSiblingsAndRecursiveChildrens(): Page
     {
         return $this->cache->tags(['page.' . $this->page->slug])->remember(
-            "page.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
+            "page.{$this->config->get('app.locale')}.loadSiblingsAndRecursiveChildrens.{$this->page->slug}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
                 return $this->page->loadRecursiveChildrens()->loadActiveSiblings();

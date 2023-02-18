@@ -49,6 +49,10 @@ class ScheduleServiceProvider extends ServiceProvider
                     ->name('SitemapCron')
                     ->daily();
 
+                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\AutoTranslate\AutoTranslateCron::class))
+                    ->name('AutoTranslateCron')
+                    ->daily();
+
                 $schedule->command('clean:directories')
                     ->name('CleanDirectories')
                     ->hourly();

@@ -26,8 +26,9 @@ use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Category\Status;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class CategoryService
+class CategoryService implements UpdateServiceInterface
 {
     /**
      * Undocumented function
@@ -103,13 +104,10 @@ class CategoryService
     public function create(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->category->name = $attributes['name'];
-            $this->category->icon = $attributes['icon'] ?? null;
+            $this->category->fill($attributes);
 
-            if ($attributes['parent_id'] !== null) {
-                /**
-                 * @var Category $parent
-                 */
+            if (!is_null($attributes['parent_id'])) {
+                /** @var Category $parent */
                 $parent = $this->category->findOrFail($attributes['parent_id']);
 
                 $this->category->status = $parent->status;
@@ -117,6 +115,12 @@ class CategoryService
             }
 
             $this->category->save();
+
+            $this->category->currentLang->makeService()->create(
+                array_merge($attributes, [
+                    'category' => $this->category
+                ])
+            );
 
             return $this->category;
         });
@@ -130,10 +134,8 @@ class CategoryService
     public function createGlobal(array $attributes): Collection
     {
         return $this->db->transaction(function () use ($attributes) {
-            if ($attributes['parent_id'] !== null) {
-                /**
-                 * @var Category $parent
-                 */
+            if (!is_null($attributes['parent_id'])) {
+                /** @var Category $parent */
                 $parent = $this->category->find($attributes['parent_id']);
             }
 
@@ -145,10 +147,17 @@ class CategoryService
                 }
             }
 
-            return $this->category->createFromArray(
+            $categories = $this->category->createFromArray(
                 json_decode($attributes['names'], true),
                 $parent ?? null
             );
+
+            if (isset($attributes['auto_translate'])) {
+                $this->category->newQuery()->whereIn('id', $categories->pluck('id')->toArray())
+                    ->update(['auto_translate' => $attributes['auto_translate']]);
+            }
+
+            return $categories;
         });
     }
 
@@ -235,18 +244,26 @@ class CategoryService
     public function update(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->category->update([
-                'name' => $attributes['name'],
-                'icon' => $attributes['icon'] ?? null
-            ]);
+            $this->category->fill($attributes);
 
-            if ($attributes['parent_id'] != $this->category->parent_id) {
+            $this->category->save();
+
+            if (
+                array_key_exists('parent_id', $attributes)
+                && $attributes['parent_id'] != $this->category->parent_id
+            ) {
                 if ($attributes['parent_id'] === null) {
                     $this->moveToRoot();
                 } else {
                     $this->moveToParent($attributes['parent_id']);
                 }
             }
+
+            $this->category->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'category' => $this->category
+                ])
+            );
 
             return $this->category;
         });
@@ -275,9 +292,7 @@ class CategoryService
     public function moveToParent(int $parent_id): bool
     {
         return $this->db->transaction(function () use ($parent_id) {
-            /**
-             * @var Category $parent
-             */
+            /** @var Category $parent */
             $parent = $this->category->findOrFail($parent_id);
 
             // In the case of changing the parent, we must prophylactically

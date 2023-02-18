@@ -19,27 +19,32 @@
 namespace N1ebieski\ICore\Repositories\Category;
 
 use Closure;
+use RuntimeException;
 use InvalidArgumentException;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use N1ebieski\ICore\Models\Category\Category;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 
 class CategoryRepo
 {
     /**
-     * Undocumented function
      *
      * @param Category $category
      * @param Config $config
+     * @param Carbon $carbon
      * @param Auth $auth
+     * @return void
      */
     public function __construct(
         protected Category $category,
         protected Config $config,
+        protected Carbon $carbon,
         protected Auth $auth
     ) {
         //
@@ -54,6 +59,7 @@ class CategoryRepo
     {
         return $this->category->withAncestorsExceptSelf()
             ->whereIn('id', $ids)
+            ->with('langs')
             ->get();
     }
 
@@ -75,6 +81,7 @@ class CategoryRepo
                     return $query->filterStatus($filter['status']);
                 }
             )
+            ->multiLang()
             ->poliType()
             ->when(!is_null($filter['search']), function (Builder|Category $query) use ($filter) {
                 return $query->filterSearch($filter['search'])
@@ -106,6 +113,8 @@ class CategoryRepo
     {
         /** @var ClosureTableCollection */
         $categories = $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
+            ->multiLang()
             ->poliType()
             ->orderBy('position', 'asc')
             ->get();
@@ -121,30 +130,14 @@ class CategoryRepo
     {
         /** @var ClosureTableCollection */
         $categories = $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
             ->whereNotIn('id', $this->category->descendants()->pluck('id')->toArray())
+            ->multiLang()
             ->poliType()
             ->orderBy('position', 'asc')
             ->get();
 
         return $categories->toTree();
-    }
-
-    /**
-     *
-     * @param string $name
-     * @return Collection
-     * @throws InvalidArgumentException
-     */
-    public function getBySearch(string $name): Collection
-    {
-        return $this->category->newQuery()
-            ->withAncestorsExceptSelf()
-            ->search($name)
-            ->active()
-            ->poliType()
-            ->orderBy('real_depth', 'desc')
-            ->limit(10)
-            ->get();
     }
 
     /**
@@ -172,8 +165,9 @@ class CategoryRepo
     public function paginatePosts(): LengthAwarePaginator
     {
         return $this->category->morphs()
+            ->multiLang()
             ->active()
-            ->with('user')
+            ->withAllRels()
             ->orderBy('published_at', 'desc')
             ->paginate($this->config->get('database.paginate'));
     }
@@ -185,12 +179,14 @@ class CategoryRepo
     public function getWithRecursiveChildrens(): Collection
     {
         return $this->category->newQuery()
+            ->selectRaw("`{$this->category->getTable()}`.*")
             ->withRecursiveAllRels()
             ->withCount([
-                'morphs' => function ($query) {
+                'morphs' => function (MorphToMany|Builder|Category $query) {
                     return $query->active();
                 }
             ])
+            ->multiLang()
             ->poliType()
             ->active()
             ->root()
@@ -206,9 +202,11 @@ class CategoryRepo
     public function firstBySlug(string $slug): ?Category
     {
         return $this->category->newQuery()
-            ->where('slug', $slug)
+            ->selectRaw("`{$this->category->getTable()}`.*")
+            ->multiLang()
             ->poliType()
             ->active()
+            ->where('slug', $slug)
             ->withAncestorsExceptSelf()
             ->first();
     }
@@ -236,9 +234,20 @@ class CategoryRepo
         return $this->category->newQuery()
             ->active()
             ->poliType()
-            ->withCount(['morphs AS models_count' => function ($query) {
-                $query->active();
-            }])
+            ->with('langs')
+            ->when(true, function (Builder $query) {
+                foreach ($this->config->get('icore.multi_langs') as $lang) {
+                    $query->withCount([
+                        "morphs AS models_count_{$lang}" => function (mixed $query) use ($lang) {
+                            return $query->active()->whereHas('langs', function (mixed $query) use ($lang) {
+                                return $query->where('lang', $lang);
+                            });
+                        }
+                    ]);
+                }
+
+                return $query;
+            })
             ->chunk($chunk, $closure);
     }
 
@@ -254,5 +263,58 @@ class CategoryRepo
             ->poliType()
             ->groupBy('status')
             ->get();
+    }
+
+    /**
+     *
+     * @param Closure $closure
+     * @param string $timestamp
+     * @return bool
+     * @throws RuntimeException
+     */
+    public function chunkAutoTransWithLangsByTranslatedAt(
+        Closure $closure,
+        string $timestamp
+    ): bool {
+        return $this->category->newQuery()
+            ->autoTrans()
+            ->whereHas('langs', function (Builder $query) {
+                return $query->where('progress', 100);
+            })
+            ->where(function (Builder $query) use ($timestamp) {
+                return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
+                    return $query->where('progress', 0)
+                        ->where(function (Builder $query) use ($timestamp) {
+                            return $query->whereDate(
+                                'translated_at',
+                                '<',
+                                $this->carbon->parse($timestamp)->format('Y-m-d')
+                            )
+                            ->orWhere(function (Builder $query) use ($timestamp) {
+                                return $query->whereDate(
+                                    'translated_at',
+                                    '=',
+                                    $this->carbon->parse($timestamp)->format('Y-m-d')
+                                )
+                                ->whereTime(
+                                    'translated_at',
+                                    '<=',
+                                    $this->carbon->parse($timestamp)->format('H:i:s')
+                                );
+                            })
+                            ->orWhere('translated_at', null);
+                        });
+                })
+                ->orWhere(function (Builder $query) {
+                    foreach ($this->config->get('icore.multi_langs') as $lang) {
+                        $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
+                            return $query->where('lang', $lang);
+                        });
+                    }
+
+                    return $query;
+                });
+            })
+            ->chunk(1000, $closure);
     }
 }

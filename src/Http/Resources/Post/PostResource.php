@@ -23,6 +23,7 @@ use N1ebieski\ICore\Models\User;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -64,6 +65,7 @@ class PostResource extends JsonResource
      * @responseField created_at string
      * @responseField updated_at string
      * @responseField user object Contains relationship User author.
+     * @responseField langs object[] Contains relationship PostLangs (available languages).
      * @responseField links object Contains links to resources on the website and in the administration panel.
      * @responseField meta object Paging, filtering and sorting information.
      *
@@ -104,6 +106,22 @@ class PostResource extends JsonResource
 
                     return [
                         'user' => $user->makeResource()
+                    ];
+                }
+            ),
+            $this->mergeWhen(
+                count(Config::get('icore.multi_langs')) > 1 && $this->relationLoaded('langs'),
+                function () {
+                    /** @var PostLang */
+                    $postLang = $this->langs()->make();
+
+                    return [
+                        'langs' => $postLang->makeResource()
+                            ->collection($this->langs->map(function ($item) {
+                                $item->setAttribute('depth', 1);
+
+                                return $item;
+                            }))
                     ];
                 }
             ),

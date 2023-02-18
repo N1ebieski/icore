@@ -19,11 +19,11 @@
 namespace N1ebieski\ICore\Console\Commands\Update;
 
 use Illuminate\Console\Command;
-use N1ebieski\ICore\Utils\Updater\Updater;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Contracts\Translation\Translator as Lang;
+use N1ebieski\ICore\Utils\Updater\Interfaces\UpdaterInterface;
 
 class UpdateCommand extends Command
 {
@@ -122,7 +122,8 @@ class UpdateCommand extends Command
         }
 
         try {
-            $updater = $this->app->make(Updater::class, [
+            /** @var UpdaterInterface */
+            $updater = $this->app->make(UpdaterInterface::class, [
                 'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
             ]);
 
@@ -150,7 +151,8 @@ class UpdateCommand extends Command
         }
 
         try {
-            $updater = $this->app->make(Updater::class, [
+            /** @var UpdaterInterface */
+            $updater = $this->app->make(UpdaterInterface::class, [
                 'schema' => $this->schemaFactory->makeSchema($this->argument('version'))
             ]);
 

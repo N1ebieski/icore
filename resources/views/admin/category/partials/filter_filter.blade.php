@@ -10,7 +10,7 @@
 @slot('modal_body')
 <div class="form-group">
     <label for="filter-search">
-        {{ trans('icore::filter.search.label') }}
+        {{ trans('icore::filter.search.label') }}:
     </label>
     <input 
         type="text" 
@@ -23,7 +23,7 @@
 </div>
 <div class="form-group">
     <label for="filter-status">
-        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}"
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.status.label') }}":
     </label>
     <select 
         class="form-control custom-select" 
@@ -49,7 +49,7 @@
 </div>
 <div class="form-group">
     <label for="filter-parent">
-        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}"
+        {{ trans('icore::filter.filter') }} "{{ trans('icore::filter.parent') }}":
     </label>
     <select 
         id="filter-parent"       
@@ -61,6 +61,7 @@
         data-abs-text-attr="name"
         data-abs-ajax-url="{{ route("api.category.{$model->poli}.index") }}"
         data-abs-default-options="{{ json_encode([['value' => '', 'text' => trans('icore::filter.default')], ['value' => 0, 'text' => trans('icore::categories.roots')]]) }}"
+        data-lang="{{ config('app.locale') }}"
         data-style="border"
         data-width="100%"
         data-container="body"

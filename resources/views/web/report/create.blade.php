@@ -16,7 +16,7 @@
 >
     <div class="form-group">
         <label for="content">
-            {{ trans('icore::reports.reason') }}
+            {{ trans('icore::reports.reason') }}:
         </label>
         <input type="text" value="" name="content" class="form-control" id="content">    
     </div>

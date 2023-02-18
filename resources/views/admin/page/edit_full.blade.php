@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="fas fa-edit"></i>
-        <span> {{ trans('icore::pages.route.edit') }}:<span>
+        <span> {{ trans('icore::pages.route.edit') }}<span>
     </h1>
     <form 
         class="mb-3" 
@@ -36,7 +36,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::pages.title') }}
+                        {{ trans('icore::pages.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        <span>{{ trans('icore::pages.tags.label') }} </span>
+                        <span>{{ trans('icore::pages.tags.label') }}: </span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -96,7 +96,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        <span>SEO Title</span>
+                        <span>SEO Title:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -116,7 +116,7 @@
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        <span>SEO Description</span>
+                        <span>SEO Description:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -134,26 +134,70 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if (count(config('icore.multi_langs')) > 1)
                 <div class="form-group">
-                    <label for="icon">
-                        <span>{{ trans('icore::pages.icon.label') }}</span>
+                    <label for="lang">
+                        <span>{{ trans('icore::multi_langs.lang') }} / {{ trans('icore::multi_langs.progress.label') }}:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
-                            title="{{ trans('icore::pages.icon.tooltip') }}"
+                            title="{{ trans('icore::multi_langs.progress.tooltip') }}"
                             class="far fa-question-circle"
-                        ></i>
+                        ></i>            
                     </label>
-                    <input 
-                        type="text" 
-                        value="{{ old('icon', $page->icon) }}" 
-                        name="icon" 
-                        id="icon"
-                        class="form-control {{ $isValid('icon') }}" 
-                        placeholder="{{ trans('icore::pages.icon.placeholder') }}"
-                    >
-                    @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select 
+                                class="selectpicker select-picker edit-full-lang" 
+                                data-style="border"
+                                data-width="100%"
+                                data-target="#edit-modal"
+                                data-lang="{{ config('app.locale') }}"
+                                id="lang"
+                            >
+                                @foreach (config('icore.multi_langs') as $lang)
+                                <option
+                                    data-content='<span class="fi fil-{{ $lang }}"></span> <span>{{ mb_strtoupper($lang) }}</span>'
+                                    value="{{ route('admin.page.edit_full', ['lang' => $lang, 'page' => $page->id]) }}"
+                                    {{ config('app.locale') === $lang ? 'selected' : '' }}
+                                >
+                                    {{ $lang }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            step="1"
+                            class="form-control"
+                            id="progress"
+                            name="progress"
+                            value="{{ $page->currentLang->progress }}"
+                        >
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>            
+                    </div>
                 </div>
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="auto_translate" 
+                            name="auto_translate"
+                            value="{{ AutoTranslate::ACTIVE }}" 
+                            {{ $page->auto_translate->isActive() ? 'checked' : '' }}
+                        >
+                        <label class="custom-control-label" for="auto_translate">
+                            {{ trans('icore::multi_langs.auto_trans') }}?
+                        </label>
+                    </div>
+                </div>
+                @endif                
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input type="hidden" name="seo_noindex" value="{{ Page\SeoNoindex::INACTIVE }}">
@@ -203,8 +247,28 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="icon">
+                        <span>{{ trans('icore::pages.icon.label') }}:</span>
+                        <i 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="{{ trans('icore::pages.icon.tooltip') }}"
+                            class="far fa-question-circle"
+                        ></i>
+                    </label>
+                    <input 
+                        type="text" 
+                        value="{{ old('icon', $page->icon) }}" 
+                        name="icon" 
+                        id="icon"
+                        class="form-control {{ $isValid('icon') }}" 
+                        placeholder="{{ trans('icore::pages.icon.placeholder') }}"
+                    >
+                    @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
+                </div>                
+                <div class="form-group">
                     <label for="status">
-                        {{ trans('icore::filter.status.label') }}
+                        {{ trans('icore::filter.status.label') }}:
                     </label>
                     <select class="custom-select" id="status" name="status">
                         <option 
@@ -232,6 +296,7 @@
                         data-abs-max-options-length="10"
                         data-abs-text-attr="name"
                         data-abs-ajax-url="{{ route('api.user.index') }}"
+                        data-lang="{{ config('app.locale') }}"
                         data-style="border"
                         data-width="100%"
                         name="user"
@@ -250,31 +315,32 @@
                 @if ($parents->count() > 0)
                 <div class="form-group">
                     <label for="parent_id">
-                        {{ trans('icore::filter.parent') }}
+                        {{ trans('icore::filter.parent') }}:
                     </label>
                     <select 
                         class="selectpicker select-picker" 
                         data-live-search="true"
                         data-style="border"
                         data-width="100%"
+                        data-lang="{{ config('app.locale') }}"
                         name="parent_id"
                         id="parent_id"
                     >
                         <option 
                             value="0" 
-                            {{ (old('parent_id') == null) ? 'selected' : '' }}
+                            {{ (old('parent_id', $page->parent_id) == null) ? 'selected' : '' }}
                         >
                             {{ trans('icore::pages.null') }}
                         </option>
                         @foreach ($parents as $parent)
                         <option 
                             @if ($parent->ancestors->isNotEmpty())
-                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->toArray()) }} &raquo; </small>{{ $parent->title }}'
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->map(fn ($item) => $item ?? trans('icore::multi_langs.no_trans'))->toArray()) }} &raquo; </small>{{ $parent->title ?? trans('icore::multi_langs.no_trans') }}'
                             @endif                        
                             value="{{ $parent->id }}" 
                             {{ (old('parent_id', $page->parent_id) == $parent->id) ? 'selected' : '' }}
                         >
-                            {{ $parent->title }}
+                            {{ $parent->title ?? trans('icore::multi_langs.no_trans') }}
                         </option>
                         @endforeach
                     </select>

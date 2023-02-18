@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="fas fa-edit"></i>
-        <span>{{ trans('icore::mailings.route.edit') }}:</span>
+        <span>{{ trans('icore::mailings.route.edit') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -36,7 +36,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::mailings.title') }}
+                        {{ trans('icore::mailings.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -74,9 +74,73 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if (count(config('icore.multi_langs')) > 1)
+                <div class="form-group">
+                    <label for="lang">
+                        <span>{{ trans('icore::multi_langs.lang') }} / {{ trans('icore::multi_langs.progress.label') }}:</span>
+                        <i 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="{{ trans('icore::multi_langs.progress.tooltip') }}"
+                            class="far fa-question-circle"
+                        ></i>            
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select 
+                                class="selectpicker select-picker edit-full-lang" 
+                                data-style="border"
+                                data-width="100%"
+                                data-target="#edit-modal"
+                                data-lang="{{ config('app.locale') }}"
+                                id="lang"
+                            >
+                                @foreach (config('icore.multi_langs') as $lang)
+                                <option
+                                    data-content='<span class="fi fil-{{ $lang }}"></span> <span>{{ mb_strtoupper($lang) }}</span>'
+                                    value="{{ route('admin.mailing.edit', ['lang' => $lang, 'mailing' => $mailing->id]) }}"
+                                    {{ config('app.locale') === $lang ? 'selected' : '' }}
+                                >
+                                    {{ $lang }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            step="1"
+                            class="form-control"
+                            id="progress"
+                            name="progress"
+                            value="{{ $mailing->currentLang->progress }}"
+                        >
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>            
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="auto_translate" 
+                            name="auto_translate"
+                            value="{{ AutoTranslate::ACTIVE }}" 
+                            {{ $mailing->auto_translate->isActive() ? 'checked' : '' }}
+                        >
+                        <label class="custom-control-label" for="auto_translate">
+                            {{ trans('icore::multi_langs.auto_trans') }}?
+                        </label>
+                    </div>
+                </div>    
+                @endif                 
                 <div class="form-group">
                     <label for="status">
-                        {{ trans('icore::filter.status.label') }}
+                        {{ trans('icore::filter.status.label') }}:
                     </label>
                     <select 
                         class="custom-select" 
@@ -111,7 +175,7 @@
                     id="collapse-activation-at"
                 >
                     <label for="activation_at">
-                        <span>{{ trans('icore::mailings.activation_at.label') }}</span> 
+                        <span>{{ trans('icore::mailings.activation_at.label') }}:</span> 
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top"
@@ -204,7 +268,7 @@
                 >
                     <div class="form-group">
                         <label for="emails_json">
-                            <span>{{ trans('icore::mailings.emails_json.label') }}</span>
+                            <span>{{ trans('icore::mailings.emails_json.label') }}:</span>
                             <i 
                                 data-toggle="tooltip" 
                                 data-placement="top"

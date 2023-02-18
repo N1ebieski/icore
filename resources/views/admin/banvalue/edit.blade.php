@@ -16,7 +16,7 @@
 >
     <div class="form-group">
         <label for="value">
-            {{ trans('icore::bans.value.value') }}
+            {{ trans('icore::bans.value.value') }}:
         </label>
         <input 
             class="form-control" 

@@ -27,7 +27,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var  string
      */
-    public const VERSION = "8.2.12";
+    public const VERSION = "9.0.0";
 
     /**
      * Register services.
@@ -58,6 +58,8 @@ class ICoreServiceProvider extends ServiceProvider
             \N1ebieski\ICore\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            \N1ebieski\ICore\Http\Middleware\MultiLang::class,
+            \N1ebieski\ICore\Http\Middleware\SetMultiLangCookie::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
@@ -77,7 +79,8 @@ class ICoreServiceProvider extends ServiceProvider
             \N1ebieski\ICore\Http\Middleware\ClearWhitespacesInStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \N1ebieski\ICore\Http\Middleware\OptionalAuthSanctum::class
+            \N1ebieski\ICore\Http\Middleware\OptionalAuthSanctum::class,
+            \N1ebieski\ICore\Http\Middleware\MultiLang::class
         ]);
 
         Route::aliasMiddleware('abilities', \Laravel\Sanctum\Http\Middleware\CheckAbilities::class);

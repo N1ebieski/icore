@@ -62,6 +62,7 @@ class CommentController implements PagePolymorphic
     {
         /** @var Comment */
         $comment = $comment->makeService()->create(
+            // @phpstan-ignore-next-line
             $request->safe()->merge([
                 'morph' => $page,
                 'user' => $request->user()

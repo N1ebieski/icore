@@ -24,8 +24,9 @@ use N1ebieski\ICore\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use Illuminate\Database\DatabaseManager as DB;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class PostService
+class PostService implements UpdateServiceInterface
 {
     /**
      * Undocumented function
@@ -52,7 +53,6 @@ class PostService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
-            $this->post->content = $this->post->content_html;
 
             if (!$this->post->status->isInactive()) {
                 // @phpstan-ignore-next-line
@@ -63,6 +63,12 @@ class PostService
             $this->post->user()->associate($attributes['user']);
 
             $this->post->save();
+
+            $this->post->currentLang->makeService()->create(
+                array_merge($attributes, [
+                    'post' => $this->post
+                ])
+            );
 
             if (array_key_exists('tags', $attributes)) {
                 $this->post->tag($attributes['tags'] ?? []);
@@ -88,7 +94,7 @@ class PostService
             // @phpstan-ignore-next-line
             $this->post->status = $status;
 
-            if ($this->post->published_at === null) {
+            if (is_null($this->post->published_at)) {
                 $this->post->published_at = $this->carbon->now();
             }
 
@@ -102,13 +108,20 @@ class PostService
      * @return Post
      * @throws Throwable
      */
-    public function updateFull(array $attributes): Post
+    public function update(array $attributes): Post
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->post->fill($attributes);
-            $this->post->content = $this->post->content_html;
 
-            if (!$this->post->status->isInactive()) {
+            if (
+                !$this->post->status->isInactive() && (
+                    is_null($this->post->published_at)
+                    || (
+                        array_key_exists('date_published_at', $attributes)
+                        && array_key_exists('time_published_at', $attributes)
+                    )
+                )
+            ) {
                 // @phpstan-ignore-next-line
                 $this->post->published_at =
                     $attributes['date_published_at'] . $attributes['time_published_at'];
@@ -128,24 +141,13 @@ class PostService
 
             $this->post->save();
 
+            $this->post->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'post' => $this->post
+                ])
+            );
+
             return $this->post;
-        });
-    }
-
-    /**
-     * Mini-Update the specified Post in storage.
-     *
-     * @param  array $attributes [description]
-     * @return bool              [description]
-     */
-    public function update(array $attributes): bool
-    {
-        return $this->db->transaction(function () use ($attributes) {
-            $this->post->title = $attributes['title'];
-            $this->post->content_html = $attributes['content_html'];
-            $this->post->content = $this->post->content_html;
-
-            return $this->post->save();
         });
     }
 
@@ -181,7 +183,7 @@ class PostService
 
             $this->post->stats()->detach();
 
-            $this->post->detag();
+            $this->post->tags()->detach();
 
             return $this->post->delete();
         });

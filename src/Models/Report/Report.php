@@ -19,7 +19,9 @@
 namespace N1ebieski\ICore\Models\Report;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
+use N1ebieski\ICore\Models\Traits\HasLang;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasPolymorphic;
 use N1ebieski\ICore\Services\Report\ReportService;
@@ -43,6 +45,7 @@ use N1ebieski\ICore\Database\Factories\Report\ReportFactory;
  * @property-read string $updated_at_diff
  * @property-read Model|\Eloquent $morph
  * @property-read \N1ebieski\ICore\Models\User|null $user
+ * @method static Builder|Report lang()
  * @method static \N1ebieski\ICore\Database\Factories\Report\ReportFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
@@ -63,8 +66,16 @@ class Report extends Model
     use HasPolymorphic;
     use HasCarbonable;
     use HasFactory;
+    use HasLang;
 
     // Configuration
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = ['content', 'lang'];
 
     /**
      * The attributes that should be cast to native types.
@@ -75,9 +86,23 @@ class Report extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'model_id' => 'integer',
+        'lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.

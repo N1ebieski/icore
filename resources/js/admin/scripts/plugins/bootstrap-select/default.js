@@ -14,12 +14,33 @@
  * @license   https://intelekt.net.pl/pages/regulamin
  */
 
+$(window).off('load.bs.select.data-api');
+
 $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-select/default@init', function () {
     $('select.select-picker').each(function () {
         let $sp = $(this);
 
         if ($sp.data('loaded') === true) {
             return;
+        }
+
+        if ($sp.data('lang') === 'en') {
+            $.extend($.fn.selectpicker.defaults, {
+                noneSelectedText: 'Nothing selected',
+                noneResultsText: 'No results match {0}',
+                countSelectedText: function (numSelected, numTotal) {
+                    return (numSelected == 1) ? '{0} item selected' : '{0} items selected';
+                },
+                maxOptionsText: function (numAll, numGroup) {
+                    return [
+                        (numAll == 1) ? 'Limit reached ({n} item max)' : 'Limit reached ({n} items max)',
+                        (numGroup == 1) ? 'Group limit reached ({n} item max)' : 'Group limit reached ({n} items max)'
+                    ];
+                },
+                selectAllText: 'Select All',
+                deselectAllText: 'Deselect All',
+                multipleSeparator: ', ',
+            });
         }
 
         $sp.selectpicker().on('changed.bs.select', function () {
@@ -70,7 +91,7 @@ $(document).on('readyAndAjax.n1ebieski/icore/admin/scripts/plugins/bootstrap-sel
                 minLength: 3,
                 preserveSelected: typeof $sp.data('abs-preserve-selected') === "boolean" ? $sp.data('abs-preserve-selected') : true,
                 preserveSelectedPosition: $sp.data('abs-preserve-selected-position') || 'before',
-                langCode: $sp.data('abs-lang-code') || null
+                langCode: $sp.data('lang') || null
             });
 
             // Fix Cannot unselect option element when preserveSelected is true #85

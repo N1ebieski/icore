@@ -41,7 +41,7 @@ $(document).on(
 );
 
 $(document).on(
-    'click.n1ebieski/icore/web/scripts/view/theme@dropdown-toggle',
+    'click.n1ebieski/icore/admin/scripts/view/theme@dropdown-toggle',
     'div#dropdown-multi-theme-toggle a',
     function (e) {
         e.preventDefault();

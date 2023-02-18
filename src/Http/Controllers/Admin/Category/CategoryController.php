@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
@@ -40,6 +41,8 @@ use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
 use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
+use N1ebieski\ICore\Events\Admin\Category\StoreEvent as CategoryStoreEvent;
+use N1ebieski\ICore\Events\Admin\Category\UpdateEvent as CategoryUpdateEvent;
 
 class CategoryController implements Polymorphic
 {
@@ -107,6 +110,8 @@ class CategoryController implements Polymorphic
             )
         );
 
+        Event::dispatch(App::make(CategoryStoreEvent::class, ['category' => $category]));
+
         return Response::json([
             'redirect' => URL::route("admin.category.{$category->poli}.index", [
                 'filter' => [
@@ -173,11 +178,13 @@ class CategoryController implements Polymorphic
      */
     public function update(Category $category, UpdateRequest $request): JsonResponse
     {
-        $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
+        $category->makeService()->update($request->validated());
+
+        Event::dispatch(App::make(CategoryUpdateEvent::class, ['category' => $category]));
 
         return Response::json([
             'view' => View::make('icore::admin.category.partials.category', [
-                'category' => $category->loadAncestorsExceptSelf(),
+                'category' => $category->loadAllRels(),
                 'show_ancestors' => true
             ])->render()
         ]);

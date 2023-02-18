@@ -46,7 +46,7 @@ class MailingEmailRepo
         return $this->mailingEmail->newQuery()
             ->unsent()
             ->whereHas('mailing', function (Builder|Mailing $query) {
-                return $query->active();
+                return $query->active()->with('langs');
             })
             ->orderBy('mailing_id', 'asc')
             ->chunk($chunk, $callback);

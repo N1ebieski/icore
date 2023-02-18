@@ -10,8 +10,9 @@ use N1ebieski\ICore\ValueObjects\Page\Status;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Services\Interfaces\UpdateServiceInterface;
 
-class PageService
+class PageService implements UpdateServiceInterface
 {
     /**
      * Undocumented function
@@ -88,12 +89,13 @@ class PageService
     {
         return $this->db->transaction(function () use ($attributes) {
             $this->page->fill($attributes);
-            $this->page->content = $this->page->content_html;
+
             $this->page->user()->associate($attributes['user']);
 
-            if ($attributes['parent_id'] !== null) {
+            if (!is_null($attributes['parent_id'])) {
                 /** @var Page */
                 $parent = $this->page->findOrFail($attributes['parent_id']);
+
                 // If the parent is inactive, the child must inherit this state
                 $this->page->status = $parent->status->isInactive() ?
                     Status::INACTIVE : $attributes['status'];
@@ -101,6 +103,12 @@ class PageService
             }
 
             $this->page->save();
+
+            $this->page->currentLang->makeService()->create(
+                array_merge($attributes, [
+                    'page' => $this->page
+                ])
+            );
 
             if (array_key_exists('tags', $attributes)) {
                 $this->page->tag($attributes['tags'] ?? []);
@@ -119,32 +127,13 @@ class PageService
     public function update(array $attributes): Page
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->page->title = $attributes['title'];
-            $this->page->content_html = $attributes['content_html'];
-            $this->page->content = $this->page->content_html;
+            $this->page->fill($attributes);
 
-            $this->page->save();
-
-            return $this->page;
-        });
-    }
-
-    /**
-     *
-     * @param array $attributes
-     * @return Page
-     * @throws Throwable
-     */
-    public function updateFull(array $attributes): Page
-    {
-        return $this->db->transaction(function () use ($attributes) {
-            $this->page->fill(
-                $this->collect->make($attributes)->except(['parent_id'])->toArray()
-            );
-            $this->page->content = $this->page->content_html;
-
-            if ($attributes['parent_id'] != $this->page->parent_id) {
-                if ($attributes['parent_id'] === null) {
+            if (
+                array_key_exists('parent_id', $attributes)
+                && $attributes['parent_id'] != $this->page->parent_id
+            ) {
+                if (is_null($attributes['parent_id'])) {
                     $this->moveToRoot();
                 } else {
                     $this->moveToParent($attributes['parent_id']);
@@ -160,6 +149,12 @@ class PageService
             }
 
             $this->page->save();
+
+            $this->page->currentLang->makeService()->createOrUpdate(
+                array_merge($attributes, [
+                    'page' => $this->page
+                ])
+            );
 
             return $this->page;
         });
@@ -254,7 +249,7 @@ class PageService
         return $this->db->transaction(function () {
             $this->page->comments()->delete();
 
-            $this->page->detag();
+            $this->page->tags()->detach();
 
             $this->page->stats()->detach();
 

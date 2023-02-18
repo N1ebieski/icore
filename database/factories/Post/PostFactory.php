@@ -21,15 +21,14 @@ namespace N1ebieski\ICore\Database\Factories\Post;
 use Carbon\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\User;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\ValueObjects\Post\Comment;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @property \Faker\Generator&\Mmo\Faker\PicsumProvider $faker
- *
- */
 class PostFactory extends Factory
 {
     /**
@@ -46,14 +45,7 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $content = $this->faker->text(2000);
-
         return [
-            'title' => $this->faker->sentence(5),
-            'content_html' => $content,
-            'content' => strip_tags($content),
-            'seo_title' => $this->faker->randomElement([$this->faker->sentence(5), null]),
-            'seo_desc' => $this->faker->text(),
             'seo_noindex' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'seo_nofollow' => rand(SeoNoindex::INACTIVE, SeoNoindex::ACTIVE),
             'status' => rand(Status::INACTIVE, Status::ACTIVE),
@@ -66,36 +58,18 @@ class PostFactory extends Factory
     }
 
     /**
-     * Undocumented function
+     * Configure the model factory.
      *
      * @return static
      */
-    public function image()
+    public function configure()
     {
-        return $this->state(function () {
-            $this->faker->addProvider(new \Mmo\Faker\PicsumProvider($this->faker));
-
-            $content = $this->faker->text(2000);
-
-            $split = explode('. ', $content);
-            $rands = (array)array_rand(array_slice($split, 0, array_key_last($split) - 5), rand(1, 3));
-
-            $split = array_map(function ($item) use ($split) {
-                return $item . ($item !== end($split) ? '.' : null);
-            }, $split);
-
-            foreach ($rands as $rand) {
-                $image = ['</p><p><img src="' . $this->faker->picsumUrl(1920, 1080) . '" alt=""></p><p>'];
-
-                array_splice($split, $rand, 0, $image);
+        return $this->afterCreating(function (Post $post) {
+            foreach (Config::get('icore.multi_langs') as $lang) {
+                PostLang::makeFactory()->for($post)->create([
+                    'lang' => $lang
+                ]);
             }
-
-            $content = '<p>' . implode(' ', $split) . '</p>';
-
-            return [
-                'content_html' => $content,
-                'content' => strip_tags($content),
-            ];
         });
     }
 
@@ -109,6 +83,20 @@ class PostFactory extends Factory
         return $this->state(function () {
             return [
                 'status' => Status::ACTIVE
+            ];
+        });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return static
+     */
+    public function autoTrans()
+    {
+        return $this->state(function () {
+            return [
+                'auto_translate' => AutoTranslate::ACTIVE
             ];
         });
     }
@@ -178,5 +166,16 @@ class PostFactory extends Factory
     public function withUser()
     {
         return $this->for(User::makeFactory());
+    }
+
+    /**
+     *
+     * @return static
+     */
+    public function withoutLangs()
+    {
+        return $this->afterCreating(function (Post $post) {
+            $post->langs()->delete();
+        });
     }
 }

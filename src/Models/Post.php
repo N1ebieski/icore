@@ -18,22 +18,18 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Carbon\Carbon;
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
-use Mews\Purifier\Facades\Purifier;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Models\Tag\Tag;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentTaggable\Taggable;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use N1ebieski\ICore\Cache\Post\PostCache;
-use Cviebrock\EloquentSluggable\Sluggable;
+use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 use N1ebieski\ICore\ValueObjects\Post\Status;
 use N1ebieski\ICore\Services\Post\PostService;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
 use N1ebieski\ICore\Repositories\Post\PostRepo;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -48,8 +44,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
 use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
+use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
 use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 /**
  * N1ebieski\ICore\Models\Post
@@ -59,32 +58,35 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property SeoNoindex $seo_noindex
  * @property Status $status
  * @property Commentable $comment
+ * @property AutoTranslate $auto_translate
  * @property int $id
  * @property string $slug
  * @property int $user_id
- * @property string $content_html
+ * @property string|null $content_html
  * @property string|null $content
  * @property string|null $seo_title
  * @property string|null $seo_desc
+ * @property PostLang $currentLang
  * @property \Illuminate\Support\Carbon|null $published_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|PostLang[] $langs
  * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Category\Category[] $categories
  * @property-read int|null $categories_count
  * @property-read \Franzose\ClosureTable\Extensions\Collection|\N1ebieski\ICore\Models\Comment\Comment[] $comments
  * @property-read int|null $comments_count
  * @property-read string $created_at_diff
  * @property-read string|null $first_image
- * @property-read string $less_content_html
- * @property-read string $meta_desc
- * @property-read string $meta_title
+ * @property-read string|null $less_content_html
+ * @property-read string|null $meta_desc
+ * @property-read string|null $meta_title
  * @property-read string $model_type
- * @property-read string $no_more_content_html
+ * @property-read string|null $no_more_content_html
  * @property-read string $poli_self
  * @property-read string $published_at_diff
- * @property-read string $replacement_content
- * @property-read string $replacement_content_html
- * @property-read string $short_content
+ * @property-read string|null $replacement_content
+ * @property-read string|null $replacement_content_html
+ * @property-read string|null $short_content
  * @property-read array $tag_array
  * @property-read array $tag_array_normalized
  * @property-read string $tag_list
@@ -95,6 +97,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property-read \Illuminate\Database\Eloquent\Collection|\N1ebieski\ICore\Models\Tag\Tag[] $tags
  * @property-read int|null $tags_count
  * @property-read \N1ebieski\ICore\Models\User $user
+ * @method static Builder|Post multiLang()
+ * @method static Builder|Post autoTrans()
  * @method static Builder|Post active()
  * @method static \N1ebieski\ICore\Database\Factories\Post\PostFactory factory(...$parameters)
  * @method static Builder|Post filterAuthor(?\N1ebieski\ICore\Models\User $author = null)
@@ -136,16 +140,17 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @method static Builder|Post withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static Builder|Post withoutAllTags($tags, bool $includeUntagged = false)
  * @method static Builder|Post withoutAnyTags($tags, bool $includeUntagged = false)
+ * @method static Builder|Post withAllRels(array $relations = [])
  * @mixin \Eloquent
  */
-class Post extends Model
+class Post extends Model implements AutoTranslateInterface
 {
-    use Sluggable;
-    use Taggable;
     use HasFullTextSearchable;
     use PivotEventTrait;
     use HasCarbonable;
     use HasFactory;
+    use HasMultiLang;
+    use HasFixForMultiLangTaggable;
     use HasFilterable, HasStatFilterable {
         HasStatFilterable::scopeFilterOrderBy insteadof HasFilterable;
     }
@@ -158,15 +163,11 @@ class Post extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'title',
-        'content_html',
-        'content',
-        'seo_title',
-        'seo_desc',
         'seo_noindex',
         'seo_nofollow',
         'status',
         'comment',
+        'auto_translate',
         'published_at'
     ];
 
@@ -188,23 +189,10 @@ class Post extends Model
     protected $attributes = [
         'comment' => Commentable::ACTIVE,
         'status' => Status::INACTIVE,
+        'auto_translate' => AutoTranslate::INACTIVE,
         'seo_noindex' => SeoNoindex::INACTIVE,
         'seo_nofollow' => SeoNofollow::INACTIVE
     ];
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
 
     /**
      * The attributes that should be cast to native types.
@@ -218,6 +206,7 @@ class Post extends Model
         'seo_nofollow' => \N1ebieski\ICore\Casts\Post\SeoNofollowCast::class,
         'status' => \N1ebieski\ICore\Casts\Post\StatusCast::class,
         'comment' => \N1ebieski\ICore\Casts\Post\CommentCast::class,
+        'auto_translate' => \N1ebieski\ICore\Casts\AutoTranslateCast::class,
         'published_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
@@ -231,21 +220,6 @@ class Post extends Model
     protected static function newFactory()
     {
         return \N1ebieski\ICore\Database\Factories\Post\PostFactory::new();
-    }
-
-    // Overrides
-
-    /**
-     * Override relacji tags, bo ma hardcodowane nazwy pól
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags(): MorphToMany
-    {
-        $model = config('taggable.model');
-
-        return $this->morphToMany($model, 'model', 'tags_models', 'model_id', 'tag_id')
-            ->withTimestamps();
     }
 
     // Relations
@@ -337,13 +311,52 @@ class Post extends Model
     /**
      *
      * @return Attribute
+     */
+    public function slug(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->slug);
+    }
+
+    /**
+     *
+     * @return Attribute
+     */
+    public function title(): Attribute
+    {
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->title);
+    }
+
+    /**
+     *
+     * @return Attribute
      * @throws BindingResolutionException
      */
     public function contentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->content_html);
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function seoTitle(): Attribute
+    {
+        return new Attribute(fn (): ?string => $this->currentLang->seo_title);
+    }
+
+    /**
+     *
+     * @return Attribute
+     * @throws BindingResolutionException
+     */
+    public function seoDesc(): Attribute
+    {
+        return new Attribute(fn (): ?string => $this->currentLang->seo_desc);
     }
 
     /**
@@ -353,9 +366,8 @@ class Post extends Model
      */
     public function metaTitle(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\MetaTitle::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->meta_title);
     }
 
     /**
@@ -365,9 +377,8 @@ class Post extends Model
      */
     public function metaDesc(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\MetaDesc::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->meta_desc);
     }
 
     /**
@@ -377,9 +388,8 @@ class Post extends Model
      */
     public function replacementContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ReplacementContent::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content);
     }
 
     /**
@@ -389,9 +399,8 @@ class Post extends Model
      */
     public function shortContent(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ShortContent::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->short_content);
     }
 
     /**
@@ -401,9 +410,8 @@ class Post extends Model
      */
     public function replacementContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\ReplacementContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->replacement_content_html);
     }
 
     /**
@@ -413,9 +421,8 @@ class Post extends Model
      */
     public function noMoreContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\NoMoreContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->no_more_content_html);
     }
 
     /**
@@ -425,9 +432,8 @@ class Post extends Model
      */
     public function lessContentHtml(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\LessContentHtml::class, [
-            'post' => $this
-        ])();
+        // @phpstan-ignore-next-line
+        return new Attribute(fn (): ?string => $this->currentLang->less_content_html);
     }
 
     /**
@@ -437,9 +443,7 @@ class Post extends Model
      */
     public function firstImage(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\FirstImage::class, [
-            'post' => $this
-        ])();
+        return new Attribute(fn (): ?string => $this->currentLang->first_image);
     }
 
     /**
@@ -461,9 +465,7 @@ class Post extends Model
      */
     public function content(): Attribute
     {
-        return App::make(\N1ebieski\ICore\Attributes\Post\Content::class, [
-            'post' => $this
-        ])();
+        return new Attribute(fn (): ?string => $this->currentLang->content);
     }
 
     // Scopes
@@ -495,22 +497,59 @@ class Post extends Model
         ]);
     }
 
+    /**
+     *
+     * @param Builder $query
+     * @param array $relations
+     * @return Builder
+     * @throws BindingResolutionException
+     */
+    public function scopeWithAllRels(Builder $query, array $relations = []): Builder
+    {
+        return $query->with(array_merge([
+            'tags' => function (MorphToMany|Builder|Tag $query) {
+                return $query->lang();
+            },
+            'categories' => function (MorphToMany|Builder|Category $query) {
+                /** @var Category */
+                $category = $query->getModel();
+
+                return $query->selectRaw("`{$category->getTable()}`.*")
+                    ->multiLang()
+                    ->withAncestorsExceptSelf();
+            },
+            'user',
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
+                'stats' : null
+        ], $relations));
+    }
+
     // Loads
 
     /**
      *
-     * @return static
+     * @param array $relations
+     * @return $this
+     * @throws BindingResolutionException
      */
-    public function loadAllRels()
+    public function loadAllRels(array $relations = [])
     {
-        return $this->load([
-            'categories' => function ($query) {
-                $query->withAncestorsExceptSelf();
+        return $this->load(array_merge([
+            'tags' => function (MorphToMany|Builder|Tag $query) {
+                return $query->lang();
+            },
+            'categories' => function (MorphToMany|Builder|Category $query) {
+                /** @var Category */
+                $category = $query->getModel();
+
+                return $query->selectRaw("`{$category->getTable()}`.*")
+                    ->multiLang()
+                    ->withAncestorsExceptSelf();
             },
             'user',
-            App::make(MigrationUtil::class)->contains('create_stats_table') ?
+            App::make(MigrationRecognizeInterface::class)->contains('create_stats_table') ?
                 'stats' : null
-        ]);
+        ], $relations));
     }
 
     // Factories
@@ -537,7 +576,7 @@ class Post extends Model
      * [makeService description]
      * @return PostService [description]
      */
-    public function makeService()
+    public function makeService(): PostService
     {
         return App::make(PostService::class, ['post' => $this]);
     }

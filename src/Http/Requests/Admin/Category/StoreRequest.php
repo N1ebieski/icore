@@ -18,8 +18,12 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Rules\UniqueLangRule;
 use Illuminate\Foundation\Http\FormRequest;
+use N1ebieski\ICore\Models\Category\Category;
+use Illuminate\Contracts\Database\Query\Builder;
 
 class StoreRequest extends FormRequest
 {
@@ -54,22 +58,32 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => [
-                'required',
-                'string',
-                'between:3,255',
-                Rule::unique('categories', 'name')
-                    ->where(function ($query) {
-                        if ($this->input('parent_id') === null) {
-                            $query->whereNull('parent_id');
-                        } else {
-                            $query->where('parent_id', $this->input('parent_id'));
+        $category = new Category();
+
+        return array_merge(
+            [
+                'name' => [
+                    'required',
+                    'string',
+                    'between:3,255',
+                    App::make(UniqueLangRule::class, [
+                        'table' => $category->getTable(),
+                        'column' => 'name',
+                        'query' => function (Builder $query) use ($category) {
+                            return $query->when(is_null($this->input('parent_id')), function (Builder $query) use ($category) {
+                                return $query->whereNull("{$category->getTable()}.parent_id");
+                            }, function (Builder $query) use ($category) {
+                                return $query->where("{$category->getTable()}.parent_id", $this->input('parent_id'));
+                            });
                         }
-                    })
+                    ])
+                ],
+                'icon' => 'nullable|string|max:255',
+                'parent_id' => 'nullable|integer|exists:categories,id'
             ],
-            'icon' => 'nullable|string|max:255',
-            'parent_id' => 'nullable|integer|exists:categories,id'
-        ];
+            count(Config::get('icore.multi_langs')) > 1 ? [
+                'auto_translate' => 'boolean'
+            ] : []
+        );
     }
 }

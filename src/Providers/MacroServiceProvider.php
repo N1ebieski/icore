@@ -60,5 +60,10 @@ class MacroServiceProvider extends ServiceProvider
         $escaped = $this->app->make(\N1ebieski\ICore\Macros\Str\Escaped::class);
 
         Str::macro('escaped', $escaped());
+
+        /** @var \N1ebieski\ICore\Macros\Str\BuildUrl */
+        $buildUrl = $this->app->make(\N1ebieski\ICore\Macros\Str\BuildUrl::class);
+
+        Str::macro('buildUrl', $buildUrl());
     }
 }

@@ -18,7 +18,7 @@
 
 namespace N1ebieski\ICore\Listeners\Stat\Page;
 
-use N1ebieski\ICore\Utils\MigrationUtil;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use N1ebieski\ICore\Models\Stat\Page\Stat;
 use N1ebieski\ICore\ValueObjects\Stat\Slug;
 use N1ebieski\ICore\Events\Interfaces\Page\PageEventInterface;
@@ -35,12 +35,12 @@ class IncrementVisit
     /**
      *
      * @param Stat $stat
-     * @param MigrationUtil $migrationUtil
+     * @param MigrationRecognizeInterface $migrationRecognize
      * @return void
      */
     public function __construct(
         protected Stat $stat,
-        protected MigrationUtil $migrationUtil
+        protected MigrationRecognizeInterface $migrationRecognize
     ) {
         //
     }
@@ -52,7 +52,7 @@ class IncrementVisit
     public function verify(): bool
     {
         return $this->event->page->status->isActive()
-            && $this->migrationUtil->contains('create_stats_table');
+            && $this->migrationRecognize->contains('create_stats_table');
     }
 
     /**
@@ -61,7 +61,7 @@ class IncrementVisit
      * @param  PageEventInterface  $event
      * @return void
      */
-    public function handle($event): void
+    public function handle(PageEventInterface $event): void
     {
         $this->event = $event;
 
@@ -83,7 +83,7 @@ class IncrementVisit
      */
     protected function getSlug(): string
     {
-        if ($this->migrationUtil->contains('copy_view_to_visit_in_stats_table')) {
+        if ($this->migrationRecognize->contains('copy_view_to_visit_in_stats_table')) {
             return Slug::VISIT;
         }
 

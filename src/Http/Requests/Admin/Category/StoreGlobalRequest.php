@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Category;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -86,10 +87,15 @@ class StoreGlobalRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'names' => 'required|json',
-            'clear' => 'boolean',
-            'parent_id' => 'nullable|integer|exists:categories,id'
-        ];
+        return array_merge(
+            [
+                'names' => 'required|json',
+                'clear' => 'boolean',
+                'parent_id' => 'nullable|integer|exists:categories,id'
+            ],
+            count(Config::get('icore.multi_langs')) > 1 ? [
+                'auto_translate' => 'boolean'
+            ] : []
+        );
     }
 }

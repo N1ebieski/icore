@@ -71,10 +71,10 @@ class RatingService
     public function create(array $attributes): Rating
     {
         return $this->db->transaction(function () use ($attributes) {
+            $this->rating->fill($attributes);
+
             $this->rating->user()->associate($attributes['user']);
             $this->rating->morph()->associate($attributes['morph']);
-
-            $this->rating->rating = $attributes['rating'];
 
             $this->rating->save();
 
@@ -103,9 +103,9 @@ class RatingService
     public function update(array $attributes): Rating
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->rating->update([
-                'rating' => $attributes['rating']
-            ]);
+            $this->rating->fill($attributes);
+
+            $this->rating->save();
 
             return $this->rating;
         });

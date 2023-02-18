@@ -19,21 +19,22 @@
 namespace N1ebieski\ICore\Repositories\Page;
 
 use Closure;
+use RuntimeException;
 use InvalidArgumentException;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Page\Page;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as Collect;
 use N1ebieski\ICore\Models\Comment\Page\Comment;
-use N1ebieski\ICore\ValueObjects\Comment\Status;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Contracts\Container\Container as App;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class PageRepo
 {
@@ -41,6 +42,7 @@ class PageRepo
      *
      * @param Page $page
      * @param Config $config
+     * @param Carbon $carbon
      * @param Auth $auth
      * @param App $app
      * @return void
@@ -48,6 +50,7 @@ class PageRepo
     public function __construct(
         protected Page $page,
         protected Config $config,
+        protected Carbon $carbon,
         protected Auth $auth,
         protected App $app
     ) {
@@ -63,6 +66,7 @@ class PageRepo
     {
         return $this->page->newQuery()
             ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->when(!is_null($filter['search']), function (Builder|Page $query) use ($filter) {
                 return $query->filterSearch($filter['search'])
                     ->when($this->auth->user()?->can('admin.pages.view'), function (Builder $query) {
@@ -94,6 +98,8 @@ class PageRepo
     {
         /** @var ClosureTableCollection */
         $pages = $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->withAncestorsExceptSelf()
             ->orderBy('position', 'asc')
             ->get();
@@ -111,7 +117,10 @@ class PageRepo
         $self = $this->page->find($this->page->id);
 
         /** @var ClosureTableCollection */
-        $pages = $this->page->whereNotIn('id', $self->descendants()->pluck('id')->toArray())
+        $pages = $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
+            ->whereNotIn("{$this->page->getTable()}.id", $self->descendants()->pluck('id')->toArray())
             ->withAncestorsExceptSelf()
             ->orderBy('position', 'asc')
             ->get();
@@ -156,9 +165,14 @@ class PageRepo
     public function getWithChildrensByComponent(array $component): Collect
     {
         return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->with(['childrens' => function (HasMany|Builder|Page $query) {
-                return $query->active()->orderBy('position', 'asc');
+                return $query->selectRaw("`{$this->page->getTable()}`.*")
+                    ->active()
+                    ->multiLang()
+                    ->orderBy('position', 'asc');
             }])
             ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
@@ -192,6 +206,8 @@ class PageRepo
     public function getWithRecursiveChildrensByComponent(array $component): Collection
     {
         return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
+            ->multiLang()
             ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
 
@@ -213,10 +229,12 @@ class PageRepo
     public function firstBySlug(string $slug): ?Page
     {
         return $this->page->newQuery()
+            ->selectRaw("`{$this->page->getTable()}`.*")
             ->where('slug', $slug)
+            ->multiLang()
             ->active()
             ->when(
-                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                $this->app->make(MigrationRecognizeInterface::class)->contains('create_stats_table'),
                 function (Builder $query) {
                     return $query->with('stats');
                 }
@@ -235,13 +253,12 @@ class PageRepo
     public function paginateCommentsByFilter(array $filter): LengthAwarePaginator
     {
         /** @var Comment */
-        $comment = $this->page->comments()->make();
+        $comments = $this->page->comments();
 
         // @phpstan-ignore-next-line
-        return $this->page->comments()->where([
-                ["{$comment->getTable()}.parent_id", null],
-                ["{$comment->getTable()}.status", Status::ACTIVE]
-            ])
+        return $comments->active()
+            ->lang()
+            ->root()
             ->withAllRels($filter['orderby'])
             ->filterCommentsOrderBy($filter['orderby'])
             ->filterPaginate($this->config->get('database.paginate'));
@@ -258,10 +275,74 @@ class PageRepo
     {
         return $this->page->newQuery()
             ->active()
-            ->whereNotNull('content_html')
-            ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
-                return $query->root()->active();
-            }])
+            ->whereHas('langs', function (Builder $query) {
+                return $query->whereNotNull('content_html');
+            })
+            ->with('langs')
+            ->when(true, function (Builder $query) {
+                foreach ($this->config->get('icore.multi_langs') as $lang) {
+                    $query->withCount([
+                        "comments AS models_count_{$lang}" => function (MorphMany|Builder|Comment $query) use ($lang) {
+                            return $query->root()->active()->where('lang', $lang);
+                        }
+                    ]);
+                }
+
+                return $query;
+            })
             ->chunk($chunk, $callback);
+    }
+
+    /**
+     *
+     * @param Closure $closure
+     * @param string $timestamp
+     * @return bool
+     * @throws RuntimeException
+     */
+    public function chunkAutoTransWithLangsByTranslatedAt(
+        Closure $closure,
+        string $timestamp
+    ): bool {
+        return $this->page->newQuery()
+            ->autoTrans()
+            ->whereHas('langs', function (Builder $query) {
+                return $query->where('progress', 100);
+            })
+            ->where(function (Builder $query) use ($timestamp) {
+                return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
+                    return $query->where('progress', 0)
+                        ->where(function (Builder $query) use ($timestamp) {
+                            return $query->whereDate(
+                                'translated_at',
+                                '<',
+                                $this->carbon->parse($timestamp)->format('Y-m-d')
+                            )
+                            ->orWhere(function (Builder $query) use ($timestamp) {
+                                return $query->whereDate(
+                                    'translated_at',
+                                    '=',
+                                    $this->carbon->parse($timestamp)->format('Y-m-d')
+                                )
+                                ->whereTime(
+                                    'translated_at',
+                                    '<=',
+                                    $this->carbon->parse($timestamp)->format('H:i:s')
+                                );
+                            })
+                            ->orWhere('translated_at', null);
+                        });
+                })
+                ->orWhere(function (Builder $query) {
+                    foreach ($this->config->get('icore.multi_langs') as $lang) {
+                        $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
+                            return $query->where('lang', $lang);
+                        });
+                    }
+
+                    return $query;
+                });
+            })
+            ->chunk(1000, $closure);
     }
 }

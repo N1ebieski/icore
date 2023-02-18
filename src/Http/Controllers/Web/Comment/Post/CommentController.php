@@ -62,6 +62,7 @@ class CommentController implements PostPolymorphic
     {
         /** @var Comment */
         $comment = $comment->makeService()->create(
+            // @phpstan-ignore-next-line
             $request->safe()->merge([
                 'morph' => $post,
                 'user' => $request->user()

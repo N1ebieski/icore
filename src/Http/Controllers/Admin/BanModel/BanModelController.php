@@ -19,7 +19,9 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin\BanModel;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Response;
 use N1ebieski\ICore\Models\BanModel\BanModel;
 use N1ebieski\ICore\Http\Controllers\Admin\BanModel\Polymorphic;
 use N1ebieski\ICore\Http\Requests\Admin\BanModel\DestroyGlobalRequest;
@@ -36,7 +38,7 @@ class BanModelController implements Polymorphic
     {
         $banModel->delete();
 
-        return response()->json([]);
+        return Response::json([]);
     }
 
     /**
@@ -50,6 +52,7 @@ class BanModelController implements Polymorphic
     {
         $deleted = $banModel->whereIn('id', $request->get('select'))->delete();
 
-        return redirect()->back()->with('success', trans('icore::bans.success.destroy_global', ['affected' => $deleted]));
+        return Response::redirectTo(URL::previous())
+            ->with('success', trans('icore::bans.success.destroy_global', ['affected' => $deleted]));
     }
 }

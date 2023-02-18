@@ -22,7 +22,7 @@
 <div class="w-100">
     <h1 class="h5 mb-4 border-bottom pb-2">
         <i class="far fa-plus-square"></i>
-        <span>{{ trans('icore::pages.route.create') }}:</span>
+        <span>{{ trans('icore::pages.route.create') }}</span>
     </h1>
     <form 
         class="mb-3" 
@@ -35,7 +35,7 @@
             <div class="col-lg-9 form-group">
                 <div class="form-group">
                     <label for="title">
-                        {{ trans('icore::pages.title') }}
+                        {{ trans('icore::pages.title') }}:
                     </label>
                     <input 
                         type="text" 
@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">
-                        <span>{{ trans('icore::pages.tags.label') }} </span>
+                        <span>{{ trans('icore::pages.tags.label') }}: </span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -92,7 +92,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="seo_title">
-                        <span>SEO Title</span>
+                        <span>SEO Title:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -112,7 +112,7 @@
                 </div>
                 <div class="form-group">
                     <label for="seo_desc">
-                        <span>SEO Description</span>
+                        <span>SEO Description:</span>
                         <i 
                             data-toggle="tooltip" 
                             data-placement="top" 
@@ -130,26 +130,23 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if (count(config('icore.multi_langs')) > 1)
                 <div class="form-group">
-                    <label for="icon">
-                        <span>{{ trans('icore::pages.icon.label') }}</span>
-                        <i 
-                            data-toggle="tooltip" 
-                            data-placement="top" 
-                            title="{{ trans('icore::pages.icon.tooltip') }}"
-                            class="far fa-question-circle"
-                        ></i>
-                    </label>
-                    <input 
-                        type="text" 
-                        value="{{ old('icon') }}" 
-                        name="icon" 
-                        id="icon"
-                        class="form-control {{ $isValid('icon') }}" 
-                        placeholder="{{ trans('icore::pages.icon.placeholder') }}"
-                    >
-                    @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="auto_translate" value="{{ AutoTranslate::INACTIVE }}">
+                        <input 
+                            type="checkbox" 
+                            class="custom-control-input" 
+                            id="auto_translate-single" 
+                            name="auto_translate"
+                            value="{{ AutoTranslate::ACTIVE }}" 
+                        >
+                        <label class="custom-control-label" for="auto_translate-single">
+                            {{ trans('icore::multi_langs.auto_trans') }}?
+                        </label>
+                    </div>
                 </div>
+                @endif                 
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input 
@@ -196,6 +193,26 @@
                         </label>
                     </div>
                 </div>
+                <div class="form-group">                     
+                    <label for="icon">
+                        <span>{{ trans('icore::pages.icon.label') }}:</span>
+                        <i 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="{{ trans('icore::pages.icon.tooltip') }}"
+                            class="far fa-question-circle"
+                        ></i>
+                    </label>
+                    <input 
+                        type="text" 
+                        value="{{ old('icon') }}" 
+                        name="icon" 
+                        id="icon"
+                        class="form-control {{ $isValid('icon') }}" 
+                        placeholder="{{ trans('icore::pages.icon.placeholder') }}"
+                    >
+                    @includeWhen($errors->has('icon'), 'icore::admin.partials.errors', ['name' => 'icon'])
+                </div>                
                 <div class="form-group">
                     <label for="status">
                         {{ trans('icore::filter.status.label') }}
@@ -218,13 +235,14 @@
                 @if ($parents->count() > 0)
                 <div class="form-group">
                     <label for="parent_id">
-                        {{ trans('icore::filter.parent') }}
+                        {{ trans('icore::filter.parent') }}:
                     </label>
                     <select 
                         class="selectpicker select-picker" 
                         data-live-search="true"
                         data-style="border"
                         data-width="100%"
+                        data-lang="{{ config('app.locale') }}"
                         name="parent_id"
                         id="parent_id"
                     >
@@ -237,12 +255,12 @@
                         @foreach ($parents as $parent)
                         <option 
                             @if ($parent->ancestors->isNotEmpty())
-                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->toArray()) }} &raquo; </small>{{ $parent->title }}'
+                            data-content='<small class="p-0 m-0">{{ implode(' &raquo; ', $parent->ancestors->pluck('title')->map(fn ($item) => $item ?? trans('icore::multi_langs.no_trans'))->toArray()) }} &raquo; </small>{{ $parent->title ?? trans('icore::multi_langs.no_trans') }}'
                             @endif                        
                             value="{{ $parent->id }}" 
                             {{ (old('parent_id') == $parent->id) ? 'selected' : '' }}
                         >
-                            {{ $parent->title }}
+                            {{ $parent->title ?? trans('icore::multi_langs.no_trans') }}
                         </option>
                         @endforeach
                     </select>

@@ -46,13 +46,15 @@ class RoleService
     public function create(array $attributes): Role
     {
         return $this->db->transaction(function () use ($attributes) {
-            $role = $this->role->create(['name' => $attributes['name']]);
+            $this->role->fill($attributes);
+
+            $this->role->save();
 
             if (array_key_exists('perm', $attributes)) {
-                $role->givePermissionTo(array_filter($attributes['perm']) ?? []);
+                $this->role->givePermissionTo(array_filter($attributes['perm']) ?? []);
             }
 
-            return $role;
+            return $this->role;
         });
     }
 
@@ -65,11 +67,13 @@ class RoleService
     public function update(array $attributes): Role
     {
         return $this->db->transaction(function () use ($attributes) {
+            $this->role->fill($attributes);
+
+            $this->role->save();
+
             if (array_key_exists('perm', $attributes)) {
                 $this->role->syncPermissions(array_filter($attributes['perm']) ?? []);
             }
-
-            $this->role->update(['name' => $attributes['name']]);
 
             return $this->role;
         });

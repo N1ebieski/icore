@@ -46,10 +46,10 @@ class ReportService
     public function create(array $attributes): Report
     {
         return $this->db->transaction(function () use ($attributes) {
+            $this->report->fill($attributes);
+
             $this->report->user()->associate($attributes['user']);
             $this->report->morph()->associate($attributes['morph']);
-
-            $this->report->content = $attributes['content'];
 
             $this->report->save();
 

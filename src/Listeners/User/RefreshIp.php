@@ -40,7 +40,7 @@ class RefreshIp
      * @param  object  $event
      * @return void
      */
-    public function handle($event)
+    public function handle($event): void
     {
         /** @var User */
         $user = $this->auth->user();

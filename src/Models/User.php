@@ -20,6 +20,8 @@ namespace N1ebieski\ICore\Models;
 
 use N1ebieski\ICore\Models\Role;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\ValueObjects\Lang;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,6 +52,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @property string $name
  * @property Status $status
  * @property Marketing $marketing
+ * @property Lang $pref_lang
  * @method \N1ebieski\ICore\Models\Token\PersonalAccessToken currentAccessToken()
  * @property int $id
  * @property string|null $ip
@@ -140,6 +143,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'status',
         'marketing',
+        'pref_lang',
         'email_verified_at',
         'ip'
     ];
@@ -183,10 +187,24 @@ class User extends Authenticatable implements MustVerifyEmail
         'id' => 'integer',
         'status' => \N1ebieski\ICore\Casts\User\StatusCast::class,
         'marketing' => \N1ebieski\ICore\Casts\User\MarketingCast::class,
+        'pref_lang' => \N1ebieski\ICore\Casts\LangCast::class,
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes['pref_lang'] = Config::get('app.locale');
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Create a new factory instance for the model.
@@ -260,11 +278,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeFilterRole(Builder $query, Role $role = null): ?Builder
     {
-        return $query->when($role !== null, function (Builder $query) use ($role) {
-            /**
-             * @phpstan-ignore-next-line
-             */
-            $query->role($role->name);
+        return $query->when(!is_null($role), function (Builder $query) use ($role) {
+            /** @phpstan-ignore-next-line */
+            return $query->role($role->name);
         });
     }
 

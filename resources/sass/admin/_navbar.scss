@@ -55,6 +55,14 @@
     }
 
     .nav-item {
+        .dropdown-menu {
+            .badge {
+                font-size: 0.7rem;
+                margin-left: 0;
+                min-width: 2rem;
+            }
+        }
+
         &.active {
             .nav-link {
                 color: $white;
@@ -95,7 +103,10 @@
             }
 
             .badge {
+                display: inline-block;
                 font-size: 0.7rem;
+                margin-left: 0;
+                min-width: 2rem;
             }
         }
     }

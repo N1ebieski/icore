@@ -19,8 +19,11 @@
 namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use N1ebieski\ICore\Rules\ExistsLangRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Database\Query\Builder;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\ValueObjects\Post\Status as PostStatus;
 use N1ebieski\ICore\ValueObjects\Category\Status as CategoryStatus;
@@ -72,43 +75,53 @@ class UpdateFullRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'required|min:3|max:255',
-            'content_html' => 'bail|nullable|string',
-            'tags' => 'array|between:0,' . Config::get('icore.post.max_tags'),
-            'tags.*' => [
-                'bail',
-                'min:3',
-                'distinct',
-                'max:' . Config::get('icore.tag.max_chars'),
-                'alpha_num_spaces'
+        return array_merge(
+            [
+                'title' => 'required|min:3|max:255',
+                'content_html' => 'bail|nullable|string',
+                'tags' => 'array|between:0,' . Config::get('icore.post.max_tags'),
+                'tags.*' => [
+                    'bail',
+                    'min:3',
+                    'distinct',
+                    'max:' . Config::get('icore.tag.max_chars'),
+                    'alpha_num_spaces'
+                ],
+                'categories' => 'required|array|between:1,' . Config::get('icore.post.max_categories'),
+                'categories.*' => [
+                    'integer',
+                    'distinct',
+                    App::make(ExistsLangRule::class, [
+                        'table' => $this->category->getTable(),
+                        'column' => 'id',
+                        'query' => function (Builder $query) {
+                            return $query->where([
+                                ['status', CategoryStatus::ACTIVE],
+                                ['model_type', $this->category->model_type]
+                            ]);
+                        }
+                    ]),
+                    'no_js_validation'
+                ],
+                'user' => 'bail|required|integer|exists:users,id',
+                'seo_title' => 'max:255',
+                'seo_desc' => 'max:255',
+                'seo_noindex' => 'boolean',
+                'seo_nofollow' => 'boolean',
+                'comment' => 'boolean',
+                'status' => [
+                    'bail',
+                    'required',
+                    'integer',
+                    Rule::in([PostStatus::ACTIVE, PostStatus::INACTIVE, PostStatus::SCHEDULED])
+                ],
+                'date_published_at' => 'required_unless:status,0|date|no_js_validation',
+                'time_published_at' => 'required_unless:status,0|date_format:"H:i"|no_js_validation'
             ],
-            'categories' => 'required|array|between:1,' . Config::get('icore.post.max_categories'),
-            'categories.*' => [
-                'integer',
-                'distinct',
-                Rule::exists('categories', 'id')->where(function ($query) {
-                    $query->where([
-                        ['status', CategoryStatus::ACTIVE],
-                        ['model_type', $this->category->model_type]
-                    ]);
-                }),
-                'no_js_validation'
-            ],
-            'user' => 'bail|required|integer|exists:users,id',
-            'seo_title' => 'max:255',
-            'seo_desc' => 'max:255',
-            'seo_noindex' => 'boolean',
-            'seo_nofollow' => 'boolean',
-            'comment' => 'boolean',
-            'status' => [
-                'bail',
-                'required',
-                'integer',
-                Rule::in([PostStatus::ACTIVE, PostStatus::INACTIVE, PostStatus::SCHEDULED])
-            ],
-            'date_published_at' => 'required_unless:status,0|date|no_js_validation',
-            'time_published_at' => 'required_unless:status,0|date_format:"H:i"|no_js_validation'
-        ];
+            count(Config::get('icore.multi_langs')) > 1 ? [
+                'auto_translate' => 'boolean',
+                'progress' => 'integer|between:0,100'
+            ] : []
+        );
     }
 }

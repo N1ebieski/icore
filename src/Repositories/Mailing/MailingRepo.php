@@ -18,10 +18,14 @@
 
 namespace N1ebieski\ICore\Repositories\Mailing;
 
+use Closure;
+use RuntimeException;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Mailing;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use N1ebieski\ICore\ValueObjects\MailingEmail\Sent;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MailingRepo
@@ -29,11 +33,15 @@ class MailingRepo
     /**
      *
      * @param Mailing $mailing
+     * @param Config $config
+     * @param Carbon $carbon
      * @param Auth $auth
      * @return void
      */
     public function __construct(
         protected Mailing $mailing,
+        protected Config $config,
+        protected Carbon $carbon,
         protected Auth $auth
     ) {
         //
@@ -48,6 +56,7 @@ class MailingRepo
     {
         return $this->mailing->newQuery()
             ->selectRaw("`{$this->mailing->getTable()}`.*")
+            ->multiLang()
             ->filterExcept($filter['except'])
             ->filterStatus($filter['status'])
             ->when(!is_null($filter['search']), function (Builder|Mailing $query) use ($filter) {
@@ -76,5 +85,58 @@ class MailingRepo
                 }
             ])
             ->filterPaginate($filter['paginate']);
+    }
+
+    /**
+     *
+     * @param Closure $closure
+     * @param string $timestamp
+     * @return bool
+     * @throws RuntimeException
+     */
+    public function chunkAutoTransWithLangsByTranslatedAt(
+        Closure $closure,
+        string $timestamp
+    ): bool {
+        return $this->mailing->newQuery()
+            ->autoTrans()
+            ->whereHas('langs', function (Builder $query) {
+                return $query->where('progress', 100);
+            })
+            ->where(function (Builder $query) use ($timestamp) {
+                return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
+                    return $query->where('progress', 0)
+                        ->where(function (Builder $query) use ($timestamp) {
+                            return $query->whereDate(
+                                'translated_at',
+                                '<',
+                                $this->carbon->parse($timestamp)->format('Y-m-d')
+                            )
+                            ->orWhere(function (Builder $query) use ($timestamp) {
+                                return $query->whereDate(
+                                    'translated_at',
+                                    '=',
+                                    $this->carbon->parse($timestamp)->format('Y-m-d')
+                                )
+                                ->whereTime(
+                                    'translated_at',
+                                    '<=',
+                                    $this->carbon->parse($timestamp)->format('H:i:s')
+                                );
+                            })
+                            ->orWhere('translated_at', null);
+                        });
+                })
+                ->orWhere(function (Builder $query) {
+                    foreach ($this->config->get('icore.multi_langs') as $lang) {
+                        $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
+                            return $query->where('lang', $lang);
+                        });
+                    }
+
+                    return $query;
+                });
+            })
+            ->chunk(1000, $closure);
     }
 }

@@ -94,7 +94,7 @@ class CommentController implements Polymorphic
      */
     public function update(Comment $comment, UpdateRequest $request): JsonResponse
     {
-        $comment->makeService()->update($request->only('content'));
+        $comment->makeService()->update($request->validated());
 
         return Response::json([
             'view' => View::make('icore::admin.comment.partials.comment', [
@@ -112,7 +112,7 @@ class CommentController implements Polymorphic
      */
     public function updateCensored(Comment $comment, UpdateCensoredRequest $request): JsonResponse
     {
-        $comment->update($request->only('censored'));
+        $comment->update($request->validated());
 
         return Response::json([
             'censored' => $comment->censored->getValue(),

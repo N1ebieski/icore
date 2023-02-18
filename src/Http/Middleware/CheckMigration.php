@@ -20,16 +20,16 @@ namespace N1ebieski\ICore\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Http\Response as HttpResponse;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class CheckMigration
 {
     /**
      * [__construct description]
-     * @param MigrationUtil $migrationUtil [description]
+     * @param MigrationRecognizeInterface $migrationRecognize [description]
      */
-    public function __construct(protected MigrationUtil $migrationUtil)
+    public function __construct(protected MigrationRecognizeInterface $migrationRecognize)
     {
         //
     }
@@ -44,7 +44,7 @@ class CheckMigration
      */
     public function handle($request, Closure $next, string $migration)
     {
-        if (!$this->migrationUtil->contains($migration)) {
+        if (!$this->migrationRecognize->contains($migration)) {
             return App::abort(HttpResponse::HTTP_NOT_FOUND);
         }
 

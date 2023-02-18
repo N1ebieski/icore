@@ -79,7 +79,7 @@ class CommentCache
     public function getRootsByFilter(): ?LengthAwarePaginator
     {
         return $this->cache->tags([
-            "comment.{$this->comment->poli}.{$this->comment->morph->id}"
+            "comment.{$this->comment->poli}.{$this->config->get('app.locale')}.{$this->comment->morph->id}"
         ])->get(
             "{$this->comment->poli}.getRootsByFilter.{$this->comment->morph->id}.{$this->request->input('page')}"
         );
@@ -93,7 +93,7 @@ class CommentCache
     public function putRootsByFilter(LengthAwarePaginator $comments): bool
     {
         return $this->cache->tags([
-            "comment.{$this->comment->poli}.{$this->comment->morph->id}"
+            "comment.{$this->comment->poli}.{$this->config->get('app.locale')}.{$this->comment->morph->id}"
         ])
         ->put(
             "{$this->comment->poli}.getRootsByFilter.{$this->comment->morph->id}.{$this->request->input('page')}",
@@ -106,14 +106,14 @@ class CommentCache
      * Undocumented function
      *
      * @param array $component
-     * @return Collection
+     * @return Collect
      */
-    public function rememberByComponent(array $component): Collection
+    public function rememberByComponent(array $component): Collect
     {
         $json = json_encode($component);
 
         return $this->cache->tags(['comments'])->remember(
-            "comment.{$this->comment->poli}.getByComponent.{$json}",
+            "comment.{$this->comment->poli}.{$this->config->get('app.locale')}.getByComponent.{$json}",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () use ($component) {
                 return $this->comment->makeRepo()->getByComponent($component);
@@ -126,13 +126,13 @@ class CommentCache
      *
      * @return Collection
      */
-    public function rememberCountByModelTypeAndStatus(): Collection
+    public function rememberCountByModelTypeAndStatusAndLang(): Collection
     {
         return $this->cache->tags(['comments'])->remember(
-            "comment.countByModelTypeAndStatus",
+            "comment.{$this->config->get('app.locale')}.countByModelTypeAndStatusAndLang",
             $this->carbon->now()->addMinutes($this->config->get('cache.minutes')),
             function () {
-                return $this->comment->makeRepo()->countByModelTypeAndStatus();
+                return $this->comment->makeRepo()->countByModelTypeAndStatusAndLang();
             }
         );
     }

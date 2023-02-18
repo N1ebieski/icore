@@ -96,6 +96,11 @@ class SocialiteService
             throw new \N1ebieski\ICore\Exceptions\Socialite\NoEmailException();
         }
 
+        // Sprawdzenie czy provider zwraca nazwę usera
+        if (empty($providerUser->getName())) {
+            throw new \N1ebieski\ICore\Exceptions\Socialite\NoNameException();
+        }
+
         /** @var User */
         $user = $this->socialite->user()->make();
 

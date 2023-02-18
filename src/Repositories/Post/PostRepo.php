@@ -19,10 +19,11 @@
 namespace N1ebieski\ICore\Repositories\Post;
 
 use Closure;
+use RuntimeException;
 use InvalidArgumentException;
+use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Post;
 use N1ebieski\ICore\Models\Tag\Post\Tag;
-use N1ebieski\ICore\Utils\MigrationUtil;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -35,22 +36,25 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 class PostRepo
 {
     /**
-     * Undocumented function
      *
      * @param Post $post
      * @param Config $config
      * @param App $app
      * @param Auth $auth
+     * @param Carbon $carbon
+     * @return void
      */
     public function __construct(
         protected Post $post,
         protected Config $config,
         protected App $app,
-        protected Auth $auth
+        protected Auth $auth,
+        protected Carbon $carbon
     ) {
         //
     }
@@ -67,6 +71,7 @@ class PostRepo
 
         // @phpstan-ignore-next-line
         return $comments->active()
+            ->lang()
             ->root()
             ->withAllRels($filter['orderby'])
             ->filterExcept($filter['except'])
@@ -83,6 +88,7 @@ class PostRepo
     {
         return $this->post->newQuery()
             ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->when(
                 is_null($filter['status']) && !$this->auth->user()?->can('admin.categories.view'),
                 function (Builder|Post $query) {
@@ -110,7 +116,7 @@ class PostRepo
                 return $query->filterOrderBySearch($filter['search']);
             })
             ->filterOrderBy($filter['orderby'])
-            ->with(['tags', 'user'])
+            ->withAllRels()
             ->filterPaginate($filter['paginate']);
     }
 
@@ -123,17 +129,23 @@ class PostRepo
     {
         // @phpstan-ignore-next-line
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
             ->where('slug', $slug)
+            ->multiLang()
             ->active()
-            ->with([
+            ->withAllRels([
                 'categories' => function (MorphToMany|Builder|Category $query) {
-                    return $query->withAncestorsExceptSelf()->active();
-                },
-                'user',
-                'tags'
+                    /** @var Category */
+                    $category = $query->getModel();
+
+                    return $query->selectRaw("`{$category->getTable()}`.*")
+                        ->withAncestorsExceptSelf()
+                        ->multiLang()
+                        ->active();
+                }
             ])
             ->when(
-                $this->app->make(MigrationUtil::class)->contains('create_stats_table'),
+                $this->app->make(MigrationRecognizeInterface::class)->contains('create_stats_table'),
                 function (Builder $query) {
                     return $query->with('stats');
                 }
@@ -148,10 +160,12 @@ class PostRepo
     public function firstPrevious(): ?Post
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
-            ->where('id', '<', $this->post->id)
-            ->orderBy('id', 'desc')
-            ->first(['slug', 'title']);
+            ->where("{$this->post->getTable()}.id", '<', $this->post->id)
+            ->orderBy("{$this->post->getTable()}.id", 'desc')
+            ->first();
     }
 
     /**
@@ -161,10 +175,12 @@ class PostRepo
     public function firstNext(): ?Post
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
-            ->where('id', '>', $this->post->id)
-            ->orderBy('id')
-            ->first(['slug', 'title']);
+            ->where("{$this->post->getTable()}.id", '>', $this->post->id)
+            ->orderBy("{$this->post->getTable()}.id")
+            ->first();
     }
 
     /**
@@ -176,6 +192,8 @@ class PostRepo
     public function getRelated(int $limit = 5): Collection
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->withAnyTags($this->post->tagList)
             ->where("{$this->post->getTable()}.{$this->post->getKeyName()}", '<>', $this->post->id)
@@ -192,6 +210,8 @@ class PostRepo
     public function paginateArchiveByDate(array $date): LengthAwarePaginator
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->whereRaw(
                 'MONTH(published_at) = ? and YEAR(published_at) = ?',
@@ -210,6 +230,7 @@ class PostRepo
     {
         return $this->post->newQuery()
             ->selectRaw('YEAR(published_at) year, MONTH(published_at) month, COUNT(*) posts_count')
+            ->multiLang()
             ->active()
             ->groupBy('year')
             ->groupBy('month')
@@ -226,7 +247,9 @@ class PostRepo
     public function paginateByTag(string $tag): LengthAwarePaginator
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
             ->withAnyTags($tag)
+            ->multiLang()
             ->active()
             ->orderBy('published_at', 'desc')
             ->with('user:id,name')
@@ -240,6 +263,8 @@ class PostRepo
     public function paginateLatest(): LengthAwarePaginator
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->orderBy('published_at', 'desc')
             ->with('user:id,name')
@@ -261,6 +286,7 @@ class PostRepo
             ->from(
                 $this->post->newQuery()
                     ->selectRaw("`{$this->post->getTable()}`.*")
+                    ->multiLang()
                     ->search($name)
                     ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
                         // @phpstan-ignore-next-line
@@ -283,25 +309,87 @@ class PostRepo
             ->groupBy('posts.id')
             ->orderBySearch($name)
             ->orderBy('published_at', 'desc')
-            ->with('user:id,name')
+            ->withAllRels()
             ->paginate($this->config->get('database.paginate'));
     }
 
     /**
      *
      * @param int $chunk
-     * @param Closure $callback
+     * @param Closure $closure
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function chunkActiveWithModelsCount(int $chunk, Closure $callback): bool
+    public function chunkActiveWithModelsCount(int $chunk, Closure $closure): bool
     {
         return $this->post->newQuery()
             ->active()
-            ->withCount(['comments AS models_count' => function (MorphMany|Builder|Comment $query) {
-                $query->root()->active();
-            }])
-            ->chunk($chunk, $callback);
+            ->with('langs')
+            ->when(true, function (Builder $query) {
+                foreach ($this->config->get('icore.multi_langs') as $lang) {
+                    $query->withCount([
+                        "comments AS models_count_{$lang}" => function (MorphMany|Builder|Comment $query) use ($lang) {
+                            return $query->root()->active()->where('lang', $lang);
+                        }
+                    ]);
+                }
+
+                return $query;
+            })
+            ->chunk($chunk, $closure);
+    }
+
+    /**
+     *
+     * @param Closure $closure
+     * @param string $timestamp
+     * @return bool
+     * @throws RuntimeException
+     */
+    public function chunkAutoTransWithLangsByTranslatedAt(
+        Closure $closure,
+        string $timestamp
+    ): bool {
+        return $this->post->newQuery()
+            ->autoTrans()
+            ->whereHas('langs', function (Builder $query) {
+                return $query->where('progress', 100);
+            })
+            ->where(function (Builder $query) use ($timestamp) {
+                return $query->whereHas('langs', function (Builder $query) use ($timestamp) {
+                    return $query->where('progress', 0)
+                        ->where(function (Builder $query) use ($timestamp) {
+                            return $query->whereDate(
+                                'translated_at',
+                                '<',
+                                $this->carbon->parse($timestamp)->format('Y-m-d')
+                            )
+                            ->orWhere(function (Builder $query) use ($timestamp) {
+                                return $query->whereDate(
+                                    'translated_at',
+                                    '=',
+                                    $this->carbon->parse($timestamp)->format('Y-m-d')
+                                )
+                                ->whereTime(
+                                    'translated_at',
+                                    '<=',
+                                    $this->carbon->parse($timestamp)->format('H:i:s')
+                                );
+                            })
+                            ->orWhere('translated_at', null);
+                        });
+                })
+                ->orWhere(function (Builder $query) {
+                    foreach ($this->config->get('icore.multi_langs') as $lang) {
+                        $query->orWhereDoesntHave('langs', function (Builder $query) use ($lang) {
+                            return $query->where('lang', $lang);
+                        });
+                    }
+
+                    return $query;
+                });
+            })
+            ->chunk(1000, $closure);
     }
 
     /**
@@ -341,11 +429,13 @@ class PostRepo
     public function getLatestForHome(): Collection
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->multiLang()
             ->active()
             ->latest()
             ->orderBy('published_at', 'desc')
             ->limit($this->config->get('icore.home.max'))
-            ->with(['user', 'categories', 'tags'])
+            ->withAllRels()
             ->get();
     }
 
