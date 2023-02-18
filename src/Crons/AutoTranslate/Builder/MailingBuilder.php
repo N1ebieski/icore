@@ -38,11 +38,11 @@ class MailingBuilder implements BuilderInterface
     /**
      *
      * @param Closure $closure
-     * @param string|null $timestamp
+     * @param string $timestamp
      * @return bool
      * @throws BindingResolutionException
      */
-    public function chunkCollection(Closure $closure, string $timestamp = null): bool
+    public function chunkCollection(Closure $closure, string $timestamp): bool
     {
         return $this->mailing->makeRepo()->chunkAutoTransWithLangsByTranslatedAt($closure, $timestamp);
     }

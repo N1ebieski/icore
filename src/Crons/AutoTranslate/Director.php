@@ -77,9 +77,9 @@ class Director
     /**
      * Undocumented function
      *
-     * @return string|null
+     * @return string
      */
-    protected function getCheckTimestamp(): ?string
+    protected function getCheckTimestamp(): string
     {
         return $this->carbon->now()->subDays(
             $this->config->get('icore.auto_translate.check_days')

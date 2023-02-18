@@ -56,6 +56,7 @@ class SocialiteController
         $this->configRedirect($provider);
 
         try {
+            // @phpstan-ignore-next-line
             return Socialite::driver($provider)->redirect();
         } catch (\Exception $e) {
             return Response::redirectToRoute('web.profile.socialites');
