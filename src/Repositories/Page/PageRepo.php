@@ -177,8 +177,8 @@ class PageRepo
             ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
 
-                return $query->whereIn('id', $component['pattern'])
-                    ->orderByRaw("FIELD(id, {$patternString}) ASC");
+                return $query->whereIn("{$this->page->getTable()}.{$this->page->getKey()}", $component['pattern'])
+                    ->orderByRaw("FIELD({$this->page->getTable()}.{$this->page->getKey()}, {$patternString}) ASC");
             }, function (Builder|Page $query) use ($component) {
                 return $query->root()
                     ->limit($component['limit'])
@@ -211,8 +211,8 @@ class PageRepo
             ->when(!is_null($component['pattern']), function (Builder|Page $query) use ($component) {
                 $patternString = implode(', ', $component['pattern']);
 
-                return $query->whereIn('id', $component['pattern'])
-                    ->orderByRaw("FIELD(id, ?) DESC", [$patternString]);
+                return $query->whereIn("{$this->page->getTable()}.{$this->page->getKey()}", $component['pattern'])
+                    ->orderByRaw("FIELD({$this->page->getTable()}.{$this->page->getKey()}, ?) DESC", [$patternString]);
             }, function (Builder|Page $query) {
                 return $query->root()->orderBy('position', 'asc');
             })
