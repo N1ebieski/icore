@@ -34,6 +34,12 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
 
     /**
      *
+     * @var int
+     */
+    private int $days = 7;
+
+    /**
+     *
      * @return void
      * @throws BindingResolutionException
      */
@@ -43,7 +49,7 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
 
         App::setLocale('pl');
 
-        Config::set('icore.auto_translate.check_days', null);
+        Config::set('icore.auto_translate.check_days', $this->days);
         Config::set('icore.multi_langs', ['pl', 'en', 'de']);
     }
 
@@ -55,13 +61,14 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
         foreach (['pl', 'en', 'de'] as $lang) {
             PostLang::makeFactory()->for($post)->create([
                 'lang' => $lang,
-                'progress' => 100
+                'progress' => 100,
+                'translated_at' => Carbon::now()->subDays($this->days)
             ]);
         }
 
         $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) {
             $this->assertEmpty($collection);
-        });
+        }, Carbon::now()->subDays($this->days));
 
         $this->assertTrue(true);
     }
@@ -74,13 +81,14 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
         foreach (['pl', 'en'] as $lang) {
             PostLang::makeFactory()->for($post)->create([
                 'lang' => $lang,
-                'progress' => rand(1, 99)
+                'progress' => rand(1, 99),
+                'translated_at' => Carbon::now()->subDays($this->days)
             ]);
         }
 
         $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) {
             $this->assertEmpty($collection);
-        });
+        }, Carbon::now()->subDays($this->days));
 
         $this->assertTrue(true);
     }
@@ -93,21 +101,18 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
         foreach (['pl', 'en'] as $lang) {
             PostLang::makeFactory()->for($post)->create([
                 'lang' => $lang,
-                'progress' => 100
+                'progress' => 100,
+                'translated_at' => Carbon::now()->subDays($this->days)
             ]);
         }
 
         $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) use ($post) {
             $this->assertEquals($post->getKey(), $collection->first()->getKey());
-        });
+        }, Carbon::now()->subDays($this->days));
     }
 
     public function testIfHasAllLangsWithProgressGreaterThan0WithOldTranslatedAt(): void
     {
-        $days = 7;
-
-        Config::set('icore.auto_translate.check_days', $days);
-
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withoutLangs()->autoTrans()->create();
 
@@ -120,23 +125,19 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
             PostLang::makeFactory()->for($post)->create([
                 'lang' => $lang,
                 'progress' => rand(1, 99),
-                'translated_at' => Carbon::now()->subDays($days)
+                'translated_at' => Carbon::now()->subDays($this->days)
             ]);
         }
 
-        $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) use ($post) {
-            $this->assertEquals($post->getKey(), $collection->first()->getKey());
-        }, Carbon::now()->subDays($days));
+        $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) {
+            $this->assertEmpty($collection);
+        }, Carbon::now()->subDays($this->days));
 
         $this->assertTrue(true);
     }
 
     public function testIfHasAllLangsButOneHasNullTranslatedAt(): void
     {
-        $days = 7;
-
-        Config::set('icore.auto_translate.check_days', $days);
-
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withoutLangs()->autoTrans()->create();
 
@@ -155,15 +156,11 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
 
         $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) use ($post) {
             $this->assertEquals($post->getKey(), $collection->first()->getKey());
-        }, Carbon::now()->subDays($days));
+        }, Carbon::now()->subDays($this->days));
     }
 
     public function testIfHasAllLangsButOneHasOldTranslatedAt(): void
     {
-        $days = 7;
-
-        Config::set('icore.auto_translate.check_days', $days);
-
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withoutLangs()->autoTrans()->create();
 
@@ -177,11 +174,36 @@ class ChunkAutoTransWithLangsByTranslatedAtTest extends TestCase
         PostLang::makeFactory()->for($post)->create([
             'lang' => 'de',
             'progress' => 0,
-            'translated_at' => Carbon::now()->subDays($days)
+            'translated_at' => Carbon::now()->subDays($this->days)
         ]);
 
         $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) use ($post) {
             $this->assertEquals($post->getKey(), $collection->first()->getKey());
-        }, Carbon::now()->subDays($days));
+        }, Carbon::now()->subDays($this->days));
+    }
+
+    public function testIfHasAllLangsButOneHasRecentTranslatedAt(): void
+    {
+        /** @var Post */
+        $post = Post::makeFactory()->active()->publish()->withoutLangs()->autoTrans()->create();
+
+        foreach (['pl', 'en'] as $lang) {
+            PostLang::makeFactory()->for($post)->create([
+                'lang' => $lang,
+                'progress' => 100
+            ]);
+        }
+
+        PostLang::makeFactory()->for($post)->create([
+            'lang' => 'de',
+            'progress' => 0,
+            'translated_at' => Carbon::now()->subDays($this->days - 1)
+        ]);
+
+        $post->makeRepo()->chunkAutoTransWithLangsByTranslatedAt(function (Collection $collection) {
+            $this->assertEmpty($collection);
+        }, Carbon::now()->subDays($this->days));
+
+        $this->assertTrue(true);
     }
 }
