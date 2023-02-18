@@ -44,8 +44,12 @@ class ContentHtml
     public function __invoke(): Attribute
     {
         return new Attribute(
-            get: function ($value): string {
-                return $this->purifier->clean($value ?? '');
+            set: function ($value): ?string {
+                if (is_string($value)) {
+                    return $this->purifier->clean($value);
+                }
+
+                return null;
             }
         );
     }
