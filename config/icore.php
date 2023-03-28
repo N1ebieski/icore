@@ -68,6 +68,10 @@ return [
         //
     ],
 
+    'schedule' => [
+        'resync' => env('ICORE_SCHEDULE_RESYNC', '00')
+    ],
+
     'mailing' => [
         'delay' => (int)env('ICORE_MAILING_DELAY_MINUTES', 1),
         'limit' => (int)env('ICORE_MAILING_LIMIT', 100),
