@@ -35,23 +35,25 @@ class ScheduleServiceProvider extends ServiceProvider
             $this->app->booted(function () {
                 $schedule = $this->app->make(Schedule::class);
 
+                $resync = Config::get('icore.schedule.resync');
+
                 $this->callClearCacheSchedule($schedule);
 
                 $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
                     ->name('MailingCron')
-                    ->everyThirtyMinutes();
+                    ->hourlyAt((int)$resync);
 
                 $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
                     ->name('PostCron')
-                    ->everyThirtyMinutes();
+                    ->hourlyAt((int)$resync);
 
                 $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
                     ->name('SitemapCron')
-                    ->daily();
+                    ->daily("00:{$resync}");
 
                 $schedule->command('clean:directories')
                     ->name('CleanDirectories')
-                    ->hourly();
+                    ->hourlyAt((int)$resync);
             });
         }
     }
@@ -65,16 +67,18 @@ class ScheduleServiceProvider extends ServiceProvider
     {
         $hours = ceil(Config::get('cache.minutes') / 60);
 
+        $resync = (int)Config::get('icore.schedule.resync');
+
         if ($hours <= 0 || $hours > 672) {
             return;
         }
 
         if ($hours < 24) {
-            $cron = "0 */{$hours} * * *";
+            $cron = "{$resync} */{$hours} * * *";
         } else {
             $days = ceil($hours / 24);
 
-            $cron = "0 0 */{$days} * *";
+            $cron = "{$resync} 0 */{$days} * *";
         }
 
         // TODO: #37 Check is it working with runInBackground @N1ebieski
