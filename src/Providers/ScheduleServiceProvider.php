@@ -33,6 +33,7 @@ class ScheduleServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->app->booted(function () {
+                /** @var Schedule */
                 $schedule = $this->app->make(Schedule::class);
 
                 $resync = Config::get('icore.schedule.resync');
@@ -49,7 +50,7 @@ class ScheduleServiceProvider extends ServiceProvider
 
                 $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
                     ->name('SitemapCron')
-                    ->daily("00:{$resync}");
+                    ->dailyAt("00:{$resync}");
 
                 $schedule->command('clean:directories')
                     ->name('CleanDirectories')
