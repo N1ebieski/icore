@@ -40,13 +40,9 @@ class ScheduleServiceProvider extends ServiceProvider
 
                 $this->callClearCacheSchedule($schedule);
 
-                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
-                    ->name('MailingCron')
-                    ->hourlyAt((int)$resync);
+                $this->callPostCronSchedule($schedule);
 
-                $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
-                    ->name('PostCron')
-                    ->hourlyAt((int)$resync);
+                $this->callMailingCronSchedule($schedule);
 
                 $schedule->call($this->app->make(\N1ebieski\ICore\Crons\Sitemap\SitemapCron::class))
                     ->name('SitemapCron')
@@ -57,6 +53,48 @@ class ScheduleServiceProvider extends ServiceProvider
                     ->hourlyAt((int)$resync);
             });
         }
+    }
+
+    protected function callPostCronSchedule(Schedule $schedule): void
+    {
+        $resync = (int)Config::get('icore.schedule.resync');
+
+        $minutes = [];
+
+        if ($resync >= 30) {
+            $minutes[] = $resync - 30;
+            $minutes[] = $resync;
+        } else {
+            $minutes[] = $resync;
+            $minutes[] = $resync + 30;
+        }
+
+        $minutes = implode(',', $minutes);
+
+        $schedule->call($this->app->make(\N1ebieski\ICore\Crons\PostCron::class))
+            ->name('PostCron')
+            ->cron("{$minutes} * * * *");
+    }
+
+    protected function callMailingCronSchedule(Schedule $schedule): void
+    {
+        $resync = (int)Config::get('icore.schedule.resync');
+
+        $minutes = [];
+
+        if ($resync >= 30) {
+            $minutes[] = $resync - 30;
+            $minutes[] = $resync;
+        } else {
+            $minutes[] = $resync;
+            $minutes[] = $resync + 30;
+        }
+
+        $minutes = implode(',', $minutes);
+
+        $schedule->call($this->app->make(\N1ebieski\ICore\Crons\MailingCron::class))
+            ->name('MailingCron')
+            ->cron("{$minutes} * * * *");
     }
 
     /**
