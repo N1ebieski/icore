@@ -26,7 +26,9 @@ Route::group(['namespace' => 'N1ebieski\ICore\Http\Controllers'], function () {
 
 Route::get('login/{provider}', [SocialiteController::class, 'redirect'])
     ->name('auth.socialite.redirect')
-    ->middleware('icore.guest');
+    ->middleware('icore.guest')
+    ->where('provider', '[0-9A-Za-z,_-]+');
 Route::get('login/{provider}/callback', [SocialiteController::class, 'callback'])
     ->name('auth.socialite.callback')
-    ->middleware('icore.guest');
+    ->middleware('icore.guest')
+    ->where('provider', '[0-9A-Za-z,_-]+');

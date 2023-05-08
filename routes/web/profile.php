@@ -26,10 +26,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('symlink/{provider}', [SocialiteController::class, 'redirect'])
         ->name('profile.socialite.redirect')
-        ->where('provider', '[A-Za-z]+');
+        ->where('provider', '[0-9A-Za-z,_-]+');
     Route::get('symlink/{provider}/callback', [SocialiteController::class, 'callback'])
         ->name('profile.socialite.callback')
-        ->where('provider', '[A-Za-z]+');
+        ->where('provider', '[0-9A-Za-z,_-]+');
 
     Route::delete('symlink/socialites/{socialite}', [SocialiteController::class, 'destroy'])
         ->name('profile.socialite.destroy')

@@ -39,7 +39,7 @@ class SocialiteFactory extends Factory
     public function definition(): array
     {
         return [
-            'provider_name' => $this->faker->randomElement(['facebook', 'twitter']),
+            'provider_name' => $this->faker->randomElement(['facebook', 'twitter-oauth-2']),
             'provider_id' => Str::random(8)
         ];
     }
