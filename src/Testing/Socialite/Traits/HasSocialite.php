@@ -32,7 +32,7 @@ trait HasSocialite
      */
     private function providerProvider(): array
     {
-        return [['facebook'], ['twitter']];
+        return [['facebook'], ['twitter-oauth-2']];
     }
 
     /**
