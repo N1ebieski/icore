@@ -50,7 +50,8 @@ class SocialiteTest extends TestCase
             'facebook' => 'https://www.facebook.com/v3.3/dialog/oauth',
             'google'   => 'https://accounts.google.com/o/oauth2/auth',
             'github'   => 'https://github.com/login/oauth/authorize',
-            'twitter-oauth-2'  => 'https://api.twitter.com/oauth/authenticate'
+            'twitter'  => 'https://api.twitter.com/oauth/authenticate',
+            'twitter-oauth-2'  => 'https://twitter.com/i/oauth2/authorize'
         ];
     }
 
