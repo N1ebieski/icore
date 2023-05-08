@@ -142,7 +142,7 @@
                                                 <span> Facebook</span>
                                             </a>
                                             <a 
-                                                href="{{ route('auth.socialite.redirect', ['provider' => 'twitter']) }}" 
+                                                href="{{ route('auth.socialite.redirect', ['provider' => 'twitter-oauth-2']) }}" 
                                                 class="mr-2 text-nowrap" 
                                                 title="Twitter"
                                             >

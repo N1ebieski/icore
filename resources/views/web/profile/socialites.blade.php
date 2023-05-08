@@ -69,7 +69,7 @@
     <i class="fas fa-table"></i>
     <span>{{ trans('icore::profile.list_socialite') }}</span>
 </h1>
-@foreach (['facebook', 'twitter'] as $provider)
+@foreach (['facebook', 'twitter-oauth-2'] as $provider)
     @if (!$user->socialites->contains('provider_name', $provider))
     <div class="row border-bottom py-3 position-relative transition mb-3">
         <div class="col my-auto d-flex justify-content-between">

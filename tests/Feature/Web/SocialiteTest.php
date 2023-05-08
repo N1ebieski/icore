@@ -50,7 +50,7 @@ class SocialiteTest extends TestCase
             'facebook' => 'https://www.facebook.com/v3.3/dialog/oauth',
             'google'   => 'https://accounts.google.com/o/oauth2/auth',
             'github'   => 'https://github.com/login/oauth/authorize',
-            'twitter'  => 'https://api.twitter.com/oauth/authenticate'
+            'twitter-oauth-2'  => 'https://api.twitter.com/oauth/authenticate'
         ];
     }
 
@@ -73,7 +73,7 @@ class SocialiteTest extends TestCase
 
     public function testRedirectProvider(): void
     {
-        $providers = ['twitter', 'facebook'];
+        $providers = ['twitter-oauth-2', 'facebook'];
 
         foreach ($providers as $provider) {
             // Check that the user is redirected to the Social Platform Login Page

@@ -133,7 +133,7 @@ class ProfileTest extends TestCase
 
         $response = $this->get(route('web.profile.socialites'));
 
-        $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter']) . '"', false);
+        $response->assertSee('href="' . route('web.profile.socialite.redirect', ['provider' => 'twitter-oauth-2']) . '"', false);
         $response->assertSee('action="' . route('web.profile.socialite.destroy', ['socialite' => $socialite->id]) . '"', false);
     }
 
