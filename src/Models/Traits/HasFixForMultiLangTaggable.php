@@ -51,8 +51,13 @@ trait HasFixForMultiLangTaggable
      */
     public function detag(): self
     {
+        /** @var Tag */
+        $tag = $this->tags()->make();
+
         // @phpstan-ignore-next-line
-        $this->tags()->lang()->detach();
+        $this->tags()->detach(
+            $this->tags()->lang()->pluck("{$tag->getTable()}.{$tag->getKeyName()}")->toArray()
+        );
 
         return $this->load('tags');
     }
