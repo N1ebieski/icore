@@ -21,8 +21,8 @@ namespace N1ebieski\ICore\Models\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
-use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 trait HasFullTextSearchable
 {
@@ -185,7 +185,7 @@ trait HasFullTextSearchable
                 function (Builder $query) {
                     foreach ($this->searchable as $column) {
                         $query->selectRaw(
-                            "MATCH ({$column}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
+                            "MATCH (`{$column}`) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
                             [$this->getSearchAsString()]
                         );
                     }
