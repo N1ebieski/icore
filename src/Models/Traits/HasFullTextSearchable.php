@@ -153,11 +153,23 @@ trait HasFullTextSearchable
      */
     protected function getColumnsAsString(): string
     {
-        $columns = array_map(function (string $column) {
-            return '`' . $column . '`';
-        }, $this->searchable);
+        $columns = array_map([$this, 'getColumnAsString'], $this->searchable);
 
         return implode(',', $columns);
+    }
+
+    /**
+     *
+     * @param string $column
+     * @return string
+     */
+    protected function getColumnAsString(string $column): string
+    {
+        $parts = explode('.', $column);
+
+        return implode('.', array_map(function (string $part) {
+            return '`' . $part . '`';
+        }, $parts));
     }
 
     /**
@@ -185,7 +197,7 @@ trait HasFullTextSearchable
                 function (Builder $query) {
                     foreach ($this->searchable as $column) {
                         $query->selectRaw(
-                            "MATCH (`{$column}`) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
+                            "MATCH ({$this->getColumnsAsString($column)}) AGAINST (? IN BOOLEAN MODE) AS `{$column}_relevance`",
                             [$this->getSearchAsString()]
                         );
                     }
