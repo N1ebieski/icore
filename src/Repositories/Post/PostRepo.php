@@ -148,8 +148,15 @@ class PostRepo
     public function firstPrevious(): ?Post
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->join('categories_models', function (JoinClause $join) {
+                return $join->on("{$this->post->getTable()}.id", '=', "categories_models.model_id")
+                    ->where('categories_models.model_type', $this->post->getMorphClass())
+                    ->whereIn('categories_models.category_id', $this->post->categories->pluck('id')->toArray());
+            })
             ->active()
-            ->where('id', '<', $this->post->id)
+            ->where("{$this->post->getTable()}.id", '<', $this->post->id)
+            ->groupBy("{$this->post->getTable()}.id")
             ->orderBy('id', 'desc')
             ->first(['slug', 'title']);
     }
@@ -161,8 +168,15 @@ class PostRepo
     public function firstNext(): ?Post
     {
         return $this->post->newQuery()
+            ->selectRaw("`{$this->post->getTable()}`.*")
+            ->join('categories_models', function (JoinClause $join) {
+                return $join->on("{$this->post->getTable()}.id", '=', "categories_models.model_id")
+                    ->where('categories_models.model_type', $this->post->getMorphClass())
+                    ->whereIn('categories_models.category_id', $this->post->categories->pluck('id')->toArray());
+            })
             ->active()
-            ->where('id', '>', $this->post->id)
+            ->where("{$this->post->getTable()}.id", '>', $this->post->id)
+            ->groupBy("{$this->post->getTable()}.id")
             ->orderBy('id')
             ->first(['slug', 'title']);
     }
