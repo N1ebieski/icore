@@ -18,7 +18,6 @@
 
 namespace N1ebieski\ICore\Http\Requests\Admin\Page;
 
-use App;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\App;
 use N1ebieski\ICore\Models\Page\Page;
