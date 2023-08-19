@@ -18,6 +18,7 @@
 
 return [
     'alpha_num_spaces' => ':attribute może zawierać jedynie litery, cyfry i spacje.',
+    'alpha_num_spaces_dash' => ':attribute może zawierać jedynie litery, cyfry, spacje oraz myślniki.',
     'captcha' => 'Proszę prawidłowo rozwiązać token i udowodnić swoje człowieczeństwo.',
     'not_regex_contains' => ':attribute zawiera któreś ze zbanowanych słów: :words',
     'not_present' => ':attribute jest zabroniony.'

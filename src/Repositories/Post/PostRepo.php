@@ -161,9 +161,15 @@ class PostRepo
     {
         return $this->post->newQuery()
             ->selectRaw("`{$this->post->getTable()}`.*")
+            ->join('categories_models', function (JoinClause $join) {
+                return $join->on("{$this->post->getTable()}.id", '=', "categories_models.model_id")
+                    ->where('categories_models.model_type', $this->post->getMorphClass())
+                    ->whereIn('categories_models.category_id', $this->post->categories->pluck('id')->toArray());
+            })
             ->multiLang()
             ->active()
             ->where("{$this->post->getTable()}.id", '<', $this->post->id)
+            ->groupBy("{$this->post->getTable()}.id")
             ->orderBy("{$this->post->getTable()}.id", 'desc')
             ->first();
     }
@@ -176,9 +182,15 @@ class PostRepo
     {
         return $this->post->newQuery()
             ->selectRaw("`{$this->post->getTable()}`.*")
+            ->join('categories_models', function (JoinClause $join) {
+                return $join->on("{$this->post->getTable()}.id", '=', "categories_models.model_id")
+                    ->where('categories_models.model_type', $this->post->getMorphClass())
+                    ->whereIn('categories_models.category_id', $this->post->categories->pluck('id')->toArray());
+            })
             ->multiLang()
             ->active()
             ->where("{$this->post->getTable()}.id", '>', $this->post->id)
+            ->groupBy("{$this->post->getTable()}.id")
             ->orderBy("{$this->post->getTable()}.id")
             ->first();
     }

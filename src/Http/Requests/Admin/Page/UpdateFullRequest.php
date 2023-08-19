@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Config;
 use N1ebieski\ICore\Rules\ExistsLangRule;
 use Illuminate\Foundation\Http\FormRequest;
 use N1ebieski\ICore\ValueObjects\Page\Status;
+use N1ebieski\ICore\Rules\AlphaNumSpacesDashRule;
 
 class UpdateFullRequest extends FormRequest
 {
@@ -79,7 +80,7 @@ class UpdateFullRequest extends FormRequest
                     'min:3',
                     'distinct',
                     'max:' . Config::get('icore.tag.max_chars'),
-                    'alpha_num_spaces'
+                    App::make(AlphaNumSpacesDashRule::class)
                 ],
                 'seo_title' => 'max:255',
                 'seo_desc' => 'max:255',
