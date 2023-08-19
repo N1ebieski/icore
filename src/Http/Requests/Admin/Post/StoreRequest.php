@@ -21,6 +21,8 @@ namespace N1ebieski\ICore\Http\Requests\Admin\Post;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Rules\AlphaNumSpacesDashRule;
 use N1ebieski\ICore\Models\Category\Post\Category;
 use N1ebieski\ICore\ValueObjects\Post\Status as PostStatus;
 use N1ebieski\ICore\ValueObjects\Category\Status as CategoryStatus;
@@ -81,7 +83,7 @@ class StoreRequest extends FormRequest
                 'min:3',
                 'distinct',
                 'max:' . Config::get('icore.tag.max_chars'),
-                'alpha_num_spaces'
+                App::make(AlphaNumSpacesDashRule::class)
             ],
             'categories' => 'required|array|between:1,' . Config::get('icore.post.max_categories'),
             'categories.*' => [
