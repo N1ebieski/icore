@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-md-8">
             @include('icore::web.partials.alerts')
-            <form method="post" action="{{ url()->current() }}" id="contact">
+            <form method="post" action="{{ route('web.contact.send') }}" id="contact">
                 @csrf
                 <div class="form-group">
                     <label for="email">
