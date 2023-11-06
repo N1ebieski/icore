@@ -100,7 +100,7 @@ class LayoutComposer extends Composer
      */
     public function getUrl(): string
     {
-        return $this->config->get('app.url') . $this->request->getRequestUri();
+        return $this->url->full();
     }
 
     /**
