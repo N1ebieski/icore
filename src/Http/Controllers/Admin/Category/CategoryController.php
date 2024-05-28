@@ -70,7 +70,7 @@ class CategoryController implements Polymorphic
      */
     public function store(Category $category, StoreRequest $request): JsonResponse
     {
-        $category->makeService()->create($request->only(['name', 'icon', 'parent_id']));
+        $category->makeService()->create($request->validated());
 
         $request->session()->flash(
             'success',
@@ -95,7 +95,7 @@ class CategoryController implements Polymorphic
      */
     public function storeGlobal(Category $category, StoreGlobalRequest $request): JsonResponse
     {
-        $category->makeService()->createGlobal($request->only(['names', 'parent_id', 'clear']));
+        $category->makeService()->createGlobal($request->validated());
 
         $request->session()->flash(
             'success',
@@ -136,7 +136,7 @@ class CategoryController implements Polymorphic
      */
     public function update(Category $category, UpdateRequest $request): JsonResponse
     {
-        $category->makeService()->update($request->only(['parent_id', 'icon', 'name']));
+        $category->makeService()->update($request->validated());
 
         return Response::json([
             'view' => View::make('icore::admin.category.partials.category', [
