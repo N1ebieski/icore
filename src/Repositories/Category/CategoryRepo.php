@@ -98,7 +98,8 @@ class CategoryRepo
             ->filterExcept($filter['except'])
             ->filterParent($filter['parent'])
             ->when(is_null($filter['orderby']), function (Builder|Category $query) use ($filter) {
-                return $query->filterOrderBySearch($filter['search']);
+                return $query->filterOrderBySearch($filter['search'])
+                    ->orderByRaw("LENGTH(`{$this->category->getTable()}`.`name`)");
             })
             ->filterOrderBy($filter['orderby'] ?? 'position|asc')
             ->withAncestorsExceptSelf()
