@@ -18,37 +18,37 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Models\Tag\Tag;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Cache\Post\PostCache;
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Models\PostLang\PostLang;
-use N1ebieski\ICore\ValueObjects\Post\Status;
-use N1ebieski\ICore\Services\Post\PostService;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
-use N1ebieski\ICore\Repositories\Post\PostRepo;
-use N1ebieski\ICore\ValueObjects\AutoTranslate;
-use N1ebieski\ICore\Models\Traits\HasCarbonable;
-use N1ebieski\ICore\Models\Traits\HasFilterable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
-use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
-use N1ebieski\ICore\Models\Traits\HasStatFilterable;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Http\Resources\Post\PostResource;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\App;
+use N1ebieski\ICore\Cache\Post\PostCache;
 use N1ebieski\ICore\Database\Factories\Post\PostFactory;
-use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Http\Resources\Post\PostResource;
+use N1ebieski\ICore\Models\Category\Category;
 use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
+use N1ebieski\ICore\Models\PostLang\PostLang;
+use N1ebieski\ICore\Models\Tag\Tag;
+use N1ebieski\ICore\Models\Traits\HasCarbonable;
+use N1ebieski\ICore\Models\Traits\HasFilterable;
 use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
-use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
+use N1ebieski\ICore\Models\Traits\HasStatFilterable;
+use N1ebieski\ICore\Repositories\Post\PostRepo;
+use N1ebieski\ICore\Services\Post\PostService;
 use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
+use N1ebieski\ICore\ValueObjects\Post\Comment as Commentable;
+use N1ebieski\ICore\ValueObjects\Post\SeoNofollow;
+use N1ebieski\ICore\ValueObjects\Post\SeoNoindex;
+use N1ebieski\ICore\ValueObjects\Post\Status;
 
 /**
  * N1ebieski\ICore\Models\Post

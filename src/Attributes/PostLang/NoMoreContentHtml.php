@@ -18,8 +18,8 @@
 
 namespace N1ebieski\ICore\Attributes\PostLang;
 
-use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 
 class NoMoreContentHtml
 {
@@ -41,8 +41,8 @@ class NoMoreContentHtml
     {
         return new Attribute(
             get: function (): string {
-                return str_replace(
-                    '<p>[more]</p>',
+                return preg_replace(
+                    '/<p>.*?\[more\].*?<\/p>/',
                     '<span id="more" class="hashtag"></span>',
                     $this->postLang->replacement_content_html
                 );

@@ -19,30 +19,30 @@
 namespace N1ebieski\ICore\Http\Controllers\Admin\Category;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Response as HttpResponse;
-use N1ebieski\ICore\Models\Category\Category;
-use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
-use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
-use N1ebieski\ICore\Http\Requests\Admin\Category\IndexRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
-use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
-use N1ebieski\ICore\View\ViewModels\Admin\Category\CreateViewModel;
-use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
-use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use N1ebieski\ICore\Events\Admin\Category\StoreEvent as CategoryStoreEvent;
 use N1ebieski\ICore\Events\Admin\Category\UpdateEvent as CategoryUpdateEvent;
+use N1ebieski\ICore\Filters\Admin\Category\IndexFilter;
+use N1ebieski\ICore\Http\Controllers\Admin\Category\Polymorphic;
+use N1ebieski\ICore\Http\Requests\Admin\Category\CreateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\DestroyGlobalRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\IndexRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreGlobalRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\StoreRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdatePositionRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateRequest;
+use N1ebieski\ICore\Http\Requests\Admin\Category\UpdateStatusRequest;
+use N1ebieski\ICore\Loads\Admin\Category\EditLoad;
+use N1ebieski\ICore\Models\Category\Category;
+use N1ebieski\ICore\View\ViewModels\Admin\Category\CreateViewModel;
 
 class CategoryController implements Polymorphic
 {

@@ -18,10 +18,10 @@
 
 namespace N1ebieski\ICore\Attributes\PostLang;
 
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Models\PostLang\PostLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
+use N1ebieski\ICore\Models\PostLang\PostLang;
 
 class LessContentHtml
 {
@@ -43,7 +43,7 @@ class LessContentHtml
     {
         return new Attribute(
             get: function (): string {
-                $cut = explode('<p>[more]</p>', $this->postLang->replacement_content_html);
+                $cut = preg_split('/<p>.*?\[more\].*?<\/p>/', $this->postLang->replacement_content_html);
 
                 // @phpstan-ignore-next-line
                 return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [

@@ -18,8 +18,8 @@
 
 namespace N1ebieski\ICore\Attributes\PageLang;
 
-use N1ebieski\ICore\Models\PageLang\PageLang;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use N1ebieski\ICore\Models\PageLang\PageLang;
 
 class NoMoreContentHtml
 {
@@ -41,8 +41,8 @@ class NoMoreContentHtml
     {
         return new Attribute(
             get: function (): string {
-                return str_replace(
-                    '<p>[more]</p>',
+                return preg_replace(
+                    '/<p>.*?\[more\].*?<\/p>/',
                     '<span id="more" class="hashtag"></span>',
                     $this->pageLang->replacement_content_html
                 );

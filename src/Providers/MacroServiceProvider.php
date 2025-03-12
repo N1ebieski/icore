@@ -18,9 +18,9 @@
 
 namespace N1ebieski\ICore\Providers;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class MacroServiceProvider extends ServiceProvider
 {
