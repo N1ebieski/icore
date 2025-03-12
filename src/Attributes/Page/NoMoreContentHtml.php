@@ -41,8 +41,8 @@ class NoMoreContentHtml
     {
         return new Attribute(
             get: function (): string {
-                return str_replace(
-                    '<p>[more]</p>',
+                return preg_replace(
+                    '/<p>.*?\[more\].*?<\/p>/',
                     '<span id="more" class="hashtag"></span>',
                     $this->page->replacement_content_html
                 );

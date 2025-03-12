@@ -18,13 +18,7 @@
 
 namespace N1ebieski\ICore\Models;
 
-use Carbon\Carbon;
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
-use Mews\Purifier\Facades\Purifier;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentTaggable\Taggable;
 use N1ebieski\ICore\Utils\MigrationUtil;

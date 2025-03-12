@@ -43,7 +43,7 @@ class LessContentHtml
     {
         return new Attribute(
             get: function (): string {
-                $cut = explode('<p>[more]</p>', $this->post->replacement_content_html);
+                $cut = preg_split('/<p>.*?\[more\].*?<\/p>/', $this->post->replacement_content_html);
 
                 // @phpstan-ignore-next-line
                 return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.post.show', [

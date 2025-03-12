@@ -103,8 +103,7 @@ class CategoryService
     public function create(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->category->name = $attributes['name'];
-            $this->category->icon = $attributes['icon'] ?? null;
+            $this->category->fill($attributes);
 
             if ($attributes['parent_id'] !== null) {
                 /**
@@ -235,10 +234,9 @@ class CategoryService
     public function update(array $attributes): Category
     {
         return $this->db->transaction(function () use ($attributes) {
-            $this->category->update([
-                'name' => $attributes['name'],
-                'icon' => $attributes['icon'] ?? null
-            ]);
+            $this->category->fill($attributes);
+
+            $update = $this->category->save();
 
             if ($attributes['parent_id'] != $this->category->parent_id) {
                 if ($attributes['parent_id'] === null) {
