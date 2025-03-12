@@ -3,27 +3,27 @@
 namespace N1ebieski\ICore\Models;
 
 use Carbon\Carbon;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
-use Mews\Purifier\Facades\Purifier;
-use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Cache\PostCache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentTaggable\Taggable;
-use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\PostService;
 use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Repositories\PostRepo;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Traits\StatFilterable;
+use Cviebrock\EloquentTaggable\Taggable;
 use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
+use Mews\Purifier\Facades\Purifier;
+use N1ebieski\ICore\Cache\PostCache;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\StatFilterable;
+use N1ebieski\ICore\Repositories\PostRepo;
+use N1ebieski\ICore\Services\PostService;
 
 class Post extends Model
 {
@@ -357,8 +357,8 @@ class Post extends Model
      */
     public function getNoMoreContentHtmlAttribute(): string
     {
-        return str_replace(
-            '<p>[more]</p>',
+        return preg_replace(
+            '/<p>.*?\[more\].*?<\/p>/',
             '<span id="more" class="hashtag"></span>',
             $this->replacement_content_html
         );
@@ -370,7 +370,7 @@ class Post extends Model
      */
     public function getLessContentHtmlAttribute(): string
     {
-        $cut = explode('<p>[more]</p>', $this->replacement_content_html);
+        $cut = preg_split('/<p>.*?\[more\].*?<\/p>/', $this->replacement_content_html);
 
         return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.post.show', [
                 $this->slug,

@@ -2,29 +2,29 @@
 
 namespace N1ebieski\ICore\Models\Page;
 
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
-use Mews\Purifier\Facades\Purifier;
-use Illuminate\Support\Facades\Lang;
-use N1ebieski\ICore\Cache\PageCache;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentTaggable\Taggable;
+use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Franzose\ClosureTable\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
-use N1ebieski\ICore\Services\PageService;
-use Cviebrock\EloquentSluggable\Sluggable;
-use N1ebieski\ICore\Repositories\PageRepo;
-use N1ebieski\ICore\Models\Traits\Carbonable;
-use N1ebieski\ICore\Models\Traits\Filterable;
-use N1ebieski\ICore\Models\Page\PageInterface;
-use N1ebieski\ICore\Models\Traits\StatFilterable;
-use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use N1ebieski\ICore\Models\Traits\FullTextSearchable;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
+use Mews\Purifier\Facades\Purifier;
+use N1ebieski\ICore\Cache\PageCache;
+use N1ebieski\ICore\Models\Page\PageInterface;
+use N1ebieski\ICore\Models\Traits\Carbonable;
+use N1ebieski\ICore\Models\Traits\Filterable;
+use N1ebieski\ICore\Models\Traits\FullTextSearchable;
+use N1ebieski\ICore\Models\Traits\StatFilterable;
+use N1ebieski\ICore\Repositories\PageRepo;
+use N1ebieski\ICore\Services\PageService;
 
 class Page extends Entity implements PageInterface
 {
@@ -409,8 +409,8 @@ class Page extends Entity implements PageInterface
      */
     public function getNoMoreContentHtmlAttribute(): string
     {
-        return str_replace(
-            '<p>[more]</p>',
+        return preg_replace(
+            '/<p>.*?\[more\].*?<\/p>/',
             '<span id="more" class="hashtag"></span>',
             $this->replacement_content_html
         );
@@ -422,7 +422,7 @@ class Page extends Entity implements PageInterface
      */
     public function getLessContentHtmlAttribute(): string
     {
-        $cut = explode('<p>[more]</p>', $this->replacement_content_html);
+        $cut = preg_split('/<p>.*?\[more\].*?<\/p>/', $this->replacement_content_html);
 
         return (!empty($cut[1])) ? $cut[0] . '<a href="' . URL::route('web.page.show', [
                 'page' => $this->slug,
