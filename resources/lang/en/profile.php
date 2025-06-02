@@ -38,7 +38,7 @@ return [
     'route' => [
         'index' => 'Profile',
         'edit' => 'Edit profile',
-        'edit_socialite' => 'Connect via SocialMedia',
+        'socialites' => 'Connect via SocialMedia',
         'tokens' => 'API Tokens'
     ],
     'pages' => 'Subpages'

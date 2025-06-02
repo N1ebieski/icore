@@ -98,10 +98,12 @@ class PostRepo
                     ->when($this->auth->user()?->can('admin.posts.view'), function (Builder $query) {
                         return $query->where(function (Builder $query) {
                             foreach (['id'] as $attr) {
-                                return $query->when(array_key_exists($attr, $this->post->search), function (Builder $query) use ($attr) {
+                                $query = $query->when(array_key_exists($attr, $this->post->search), function (Builder $query) use ($attr) {
                                     return $query->where("{$this->post->getTable()}.{$attr}", $this->post->search[$attr]);
                                 });
                             }
+
+                            return $query;
                         });
                     });
             })
