@@ -64,10 +64,12 @@ class TagRepo
                     ->when($this->auth->user()?->can('admin.tags.view'), function (Builder $query) {
                         return $query->where(function (Builder $query) {
                             foreach ([$this->tag->getKeyName()] as $attr) {
-                                return $query->when(array_key_exists($attr, $this->tag->search), function (Builder $query) use ($attr) {
+                                $query = $query->when(array_key_exists($attr, $this->tag->search), function (Builder $query) use ($attr) {
                                     return $query->where("{$this->tag->getTable()}.{$attr}", $this->tag->search[$attr]);
                                 });
                             }
+
+                            return $query;
                         });
                     });
             })

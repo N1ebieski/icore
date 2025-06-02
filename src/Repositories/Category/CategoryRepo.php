@@ -88,10 +88,12 @@ class CategoryRepo
                     ->when($this->auth->user()?->can('admin.categories.view'), function (Builder $query) {
                         return $query->where(function (Builder $query) {
                             foreach (['id'] as $attr) {
-                                return $query->when(array_key_exists($attr, $this->category->search), function (Builder $query) use ($attr) {
+                                $query = $query->when(array_key_exists($attr, $this->category->search), function (Builder $query) use ($attr) {
                                     return $query->where("{$this->category->getTable()}.{$attr}", $this->category->search[$attr]);
                                 });
                             }
+
+                            return $query;
                         });
                     });
             })

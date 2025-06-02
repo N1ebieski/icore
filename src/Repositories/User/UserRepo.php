@@ -62,10 +62,12 @@ class UserRepo
                     ->when($this->auth->user()?->can('admin.users.view'), function (Builder $query) {
                         return $query->where(function (Builder $query) {
                             foreach (['id'] as $attr) {
-                                return $query->when(array_key_exists($attr, $this->user->search), function (Builder $query) use ($attr) {
+                                $query = $query->when(array_key_exists($attr, $this->user->search), function (Builder $query) use ($attr) {
                                     return $query->where("{$this->user->getTable()}.{$attr}", $this->user->search[$attr]);
                                 });
                             }
+
+                            return $query;
                         });
                     });
             })
@@ -117,10 +119,12 @@ class UserRepo
                         $token = $query->getModel();
 
                         foreach ([$token->getKeyName()] as $attr) {
-                            return $query->when(array_key_exists($attr, $token->search), function (Builder $query) use ($attr, $token) {
+                            $query = $query->when(array_key_exists($attr, $token->search), function (Builder $query) use ($attr, $token) {
                                 return $query->where("{$token->getTable()}.{$attr}", $token->search[$attr]);
                             });
                         }
+
+                        return $query;
                     });
             })
             ->when($filter['orderby'] === null, function (Builder|PersonalAccessToken $query) use ($filter) {

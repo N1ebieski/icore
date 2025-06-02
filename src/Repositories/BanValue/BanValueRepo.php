@@ -58,10 +58,12 @@ class BanValueRepo
                     ->when($this->auth->user()?->can('admin.bans.view'), function (Builder $query) {
                         return $query->where(function (Builder $query) {
                             foreach (['id'] as $attr) {
-                                return $query->when(array_key_exists($attr, $this->banValue->search), function (Builder $query) use ($attr) {
+                                $query = $query->when(array_key_exists($attr, $this->banValue->search), function (Builder $query) use ($attr) {
                                     return $query->where("{$this->banValue->getTable()}.{$attr}", $this->banValue->search[$attr]);
                                 });
                             }
+
+                            return $query;
                         });
                     });
             })

@@ -72,10 +72,12 @@ class PageRepo
                     ->when($this->auth->user()?->can('admin.pages.view'), function (Builder $query) {
                         return $query->where(function (Builder $query) {
                             foreach (['id'] as $attr) {
-                                return $query->when(array_key_exists($attr, $this->page->search), function (Builder $query) use ($attr) {
+                                $query = $query->when(array_key_exists($attr, $this->page->search), function (Builder $query) use ($attr) {
                                     return $query->where("{$this->page->getTable()}.{$attr}", $this->page->search[$attr]);
                                 });
                             }
+
+                            return $query;
                         });
                     });
             })
