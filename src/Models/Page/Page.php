@@ -18,39 +18,39 @@
 
 namespace N1ebieski\ICore\Models\Page;
 
-use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
-use Franzose\ClosureTable\Models\ClosureTable;
-use Franzose\ClosureTable\Models\Entity;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\App;
-use N1ebieski\ICore\Cache\Page\PageCache;
-use N1ebieski\ICore\Database\Factories\Page\PageFactory;
-use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
-use N1ebieski\ICore\Models\PageLang\PageLang;
 use N1ebieski\ICore\Models\Tag\Tag;
+use Franzose\ClosureTable\Models\Entity;
+use Illuminate\Database\Eloquent\Builder;
+use N1ebieski\ICore\Cache\Page\PageCache;
+use N1ebieski\ICore\Models\PageLang\PageLang;
+use N1ebieski\ICore\ValueObjects\Page\Status;
+use Franzose\ClosureTable\Models\ClosureTable;
+use N1ebieski\ICore\Services\Page\PageService;
+use N1ebieski\ICore\Models\Traits\HasMultiLang;
+use N1ebieski\ICore\Repositories\Page\PageRepo;
+use N1ebieski\ICore\ValueObjects\AutoTranslate;
 use N1ebieski\ICore\Models\Traits\HasCarbonable;
 use N1ebieski\ICore\Models\Traits\HasFilterable;
-use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
-use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
-use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
-use N1ebieski\ICore\Models\Traits\HasMultiLang;
-use N1ebieski\ICore\Models\Traits\HasStatFilterable;
-use N1ebieski\ICore\Repositories\Page\PageRepo;
-use N1ebieski\ICore\Services\Page\PageService;
-use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
-use N1ebieski\ICore\ValueObjects\AutoTranslate;
-use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
-use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use N1ebieski\ICore\ValueObjects\Page\SeoNoindex;
-use N1ebieski\ICore\ValueObjects\Page\Status;
+use Fico7489\Laravel\Pivot\Traits\PivotEventTrait;
+use N1ebieski\ICore\ValueObjects\Page\SeoNofollow;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use N1ebieski\ICore\Models\Traits\HasStatFilterable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use N1ebieski\ICore\Database\Factories\Page\PageFactory;
+use N1ebieski\ICore\Models\Traits\HasFullTextSearchable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use N1ebieski\ICore\Models\Interfaces\AutoTranslateInterface;
+use N1ebieski\ICore\Models\Traits\HasFixForMultiLangTaggable;
+use N1ebieski\ICore\ValueObjects\Page\Comment as Commentable;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use N1ebieski\ICore\Models\Traits\HasFixForRealDepthClosureTable;
+use N1ebieski\ICore\Utils\Migration\Interfaces\MigrationRecognizeInterface;
 
 /**
  * N1ebieski\ICore\Models\Page\Page

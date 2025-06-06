@@ -22,26 +22,23 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Database\DatabaseManager as DB;
 use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Contracts\Config\Repository as Config;
 
 class SessionCache
 {
     /**
-     * Configuration
-     * @var int
-     */
-    protected $minutes = 5;
-
-    /**
-     * Undocumented function
      *
      * @param DB $db
      * @param Cache $cache
      * @param Carbon $carbon
+     * @param Config $config
+     * @return void
      */
     public function __construct(
         protected DB $db,
         protected Cache $cache,
-        protected Carbon $carbon
+        protected Carbon $carbon,
+        protected Config $config
     ) {
         //
     }
@@ -55,14 +52,14 @@ class SessionCache
     {
         return $this->cache->tags(['sessions'])->remember(
             "session.countByType",
-            $this->carbon->now()->addMinutes($this->minutes),
+            $this->carbon->now()->addMinutes($this->config->get('icore.session.count_minutes')),
             function () {
                 return $this->db->table('sessions')
                     ->selectRaw("IF(`user_id` IS NULL, 'guest', 'user') AS `type`, COUNT(`id`) AS `count`")
                     ->where(
                         'last_activity',
                         '>=',
-                        $this->carbon->now()->subMinutes($this->minutes)->timestamp
+                        $this->carbon->now()->subMinutes($this->config->get('icore.session.count_minutes'))->timestamp
                     )
                     ->groupBy('user_id')
                     ->get();

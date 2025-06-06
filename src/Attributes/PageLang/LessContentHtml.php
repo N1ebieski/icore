@@ -18,10 +18,10 @@
 
 namespace N1ebieski\ICore\Attributes\PageLang;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
 use N1ebieski\ICore\Models\PageLang\PageLang;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class LessContentHtml
 {
