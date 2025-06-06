@@ -86,5 +86,9 @@ return [
     'sitemap' => [
         'limit' => (int)env('ICORE_SITEMAP_LIMIT', 1000),
         'max_items' => (int)env('ICORE_SITEMAP_MAX_ITEMS', 10000)
+    ],
+
+    'session' => [
+        'count_minutes' => (int)env('ICORE_SESSION_COUNT_MINUTES', 5)
     ]
 ];
