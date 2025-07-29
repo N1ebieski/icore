@@ -89,6 +89,7 @@ class ICoreServiceProvider extends ServiceProvider
         Route::aliasMiddleware('icore.force.verified', \N1ebieski\ICore\Http\Middleware\VerifyEmail::class);
         Route::aliasMiddleware('icore.guest', \N1ebieski\ICore\Http\Middleware\RedirectIfAuthenticated::class);
         Route::aliasMiddleware('icore.migration', \N1ebieski\ICore\Http\Middleware\CheckMigration::class);
+        Route::aliasMiddleware('icore.rate.limiter.per.hour', \N1ebieski\ICore\Http\Middleware\Web\RateLimiterPerHour::class);
     }
 
     /**
