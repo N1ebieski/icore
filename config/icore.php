@@ -94,11 +94,11 @@ return [
 
     'ai' => [
         'driver' => \N1ebieski\ICore\ValueObjects\AI\Driver::from(
-            env('IDIR_AI_DRIVER', 'openai')
+            env('ICORE_AI_DRIVER', 'openai')
         ),
 
         'openai' => [
-            'model' => env('IDIR_AI_OPENAI_MODEL', 'gpt-4.1-mini'),
+            'model' => env('ICORE_AI_OPENAI_MODEL', 'gpt-4.1-mini'),
         ]
     ],
 ];

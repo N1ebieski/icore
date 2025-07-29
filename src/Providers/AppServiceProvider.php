@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,18 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->scoped(\N1ebieski\ICore\Loads\ThemeLoad::class);
+
+        $this->app->bind(\N1ebieski\ICore\Http\Clients\AI\Interfaces\AIClientInterface::class, function (Application $app) {
+            /** @var \N1ebieski\ICore\Http\Clients\AI\Factories\AIClientFactory $factory */
+            $factory = $app->make(\N1ebieski\ICore\Http\Clients\AI\Factories\AIClientFactory::class, [
+                'app' => $app
+            ]);
+
+            /** @var \N1ebieski\ICore\ValueObjects\AI\Driver $driver */
+            $driver = Config::get('icore.ai.driver');
+
+            return $factory->makeClient($driver);
+        });
     }
 
     /**
