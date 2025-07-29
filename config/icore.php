@@ -90,5 +90,15 @@ return [
 
     'session' => [
         'count_minutes' => (int)env('ICORE_SESSION_COUNT_MINUTES', 5)
-    ]
+    ],
+
+    'ai' => [
+        'driver' => \N1ebieski\ICore\ValueObjects\AI\Driver::from(
+            env('IDIR_AI_DRIVER', 'openai')
+        ),
+
+        'openai' => [
+            'model' => env('IDIR_AI_OPENAI_MODEL', 'gpt-4.1-mini'),
+        ]
+    ],
 ];
