@@ -18,6 +18,7 @@
 
 namespace N1ebieski\ICore\Providers;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
