@@ -25,8 +25,12 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class RateLimiterPerHour
 {
-    public function handle(Request $request, Closure $next, int $maxAttempts)
+    public function handle(Request $request, Closure $next, ?int $maxAttempts = null)
     {
+        if ($maxAttempts === null) {
+            return $next($request);
+        }
+
         $key = 'custom-rate-limit:' . $request->ip();
 
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
