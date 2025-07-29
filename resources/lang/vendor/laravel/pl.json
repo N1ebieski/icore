@@ -52,5 +52,6 @@
     "Verify Your Email Address": "Zweryfikuj swój adres e-mail",
     "Whoops!": "Ups!",
     "You are logged in!": "Jesteś zalogowany!",
-    "You are receiving this email because we received a password reset request for your account.": "Otrzymujesz ten email, ponieważ otrzymaliśmy prośbę o zresetowanie hasła dla Twojego konta."
+    "You are receiving this email because we received a password reset request for your account.": "Otrzymujesz ten email, ponieważ otrzymaliśmy prośbę o zresetowanie hasła dla Twojego konta.",
+    "Too many attempts. You may try again in :minutes minutes.": "Za duzo proby logowania. Sprobuj ponownie za :minutes minut."
 }
