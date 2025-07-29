@@ -27,7 +27,7 @@ class RateLimiterPerHour
 {
     public function handle(Request $request, Closure $next, ?int $maxAttempts = null)
     {
-        if ($maxAttempts === null) {
+        if ($maxAttempts === null || $maxAttempts === 0) {
             return $next($request);
         }
 
