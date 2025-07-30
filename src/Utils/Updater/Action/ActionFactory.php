@@ -60,10 +60,16 @@ class ActionFactory
      */
     public function makeAction(array $action): ActionInterface
     {
-        if ($this->isClassExists($action['type'])) {
-            return $this->app->make($this->className($action['type']), ['action' => $action]);
+        $type = $action['type'];
+
+        if (is_array($action['type'])) {
+            $type = $action['type'][0];
         }
 
-        throw new \Exception("Updater action \"{$action['type']}\" not found");
+        if ($this->isClassExists($type)) {
+            return $this->app->make($this->className($type), ['action' => $action]);
+        }
+
+        throw new \Exception("Updater action \"{$type}\" not found");
     }
 }
