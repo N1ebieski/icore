@@ -39,11 +39,13 @@ class Move implements ActionInterface
             'search' => $matches[0],
         ])->handle($contents, [$matches[0]]);
 
+        $match = $this->str->of($contents)->match($this->action['to'])->toString();
+
         $contents = $this->actionFactory->makeAction([
             'type' => $this->action['type'][1],
             'search' => $this->action['to'],
             'to' => $matches[0]
-        ])->handle($contents, [$this->action['to']]);
+        ])->handle($contents, [$match]);
 
         return $contents;
     }
