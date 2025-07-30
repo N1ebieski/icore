@@ -34,8 +34,6 @@ class Move implements ActionInterface
 
     public function handle(string $contents, array $matches): string
     {
-        $match = $this->str->of($contents)->match($matches[0])->toString();
-
         $contents = $this->actionFactory->makeAction([
             'type' => 'removeFirst',
             'search' => $matches[0],
@@ -44,7 +42,7 @@ class Move implements ActionInterface
         $contents = $this->actionFactory->makeAction([
             'type' => $this->action['type'][1],
             'search' => $this->action['to'],
-            'to' => $match
+            'to' => $matches[0]
         ])->handle($contents, [$this->action['to']]);
 
         return $contents;
