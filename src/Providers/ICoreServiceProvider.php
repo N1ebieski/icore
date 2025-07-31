@@ -27,7 +27,7 @@ class ICoreServiceProvider extends ServiceProvider
      * [public description]
      * @var  string
      */
-    public const VERSION = "9.1.7";
+    public const VERSION = "9.2.0";
 
     /**
      * Register services.
@@ -92,6 +92,7 @@ class ICoreServiceProvider extends ServiceProvider
         Route::aliasMiddleware('icore.force.verified', \N1ebieski\ICore\Http\Middleware\VerifyEmail::class);
         Route::aliasMiddleware('icore.guest', \N1ebieski\ICore\Http\Middleware\RedirectIfAuthenticated::class);
         Route::aliasMiddleware('icore.migration', \N1ebieski\ICore\Http\Middleware\CheckMigration::class);
+        Route::aliasMiddleware('icore.rate.limiter.per.hour', \N1ebieski\ICore\Http\Middleware\Web\RateLimiterPerHour::class);
     }
 
     /**

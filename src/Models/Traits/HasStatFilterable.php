@@ -59,6 +59,7 @@ trait HasStatFilterable
             $order = explode('|', $orderby);
 
             if (count($order) === 2) {
+                // @phpstan-ignore-next-line
                 return $query->when(
                     in_array($order[0], Slug::getAvailable()),
                     function ($query) use ($order) {

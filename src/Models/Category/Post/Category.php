@@ -144,7 +144,7 @@ class Category extends BaseCategory
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'model_type' => \N1ebieski\ICore\Models\Post::class,

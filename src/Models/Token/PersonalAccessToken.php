@@ -39,7 +39,7 @@ use Laravel\Sanctum\PersonalAccessToken as BasePersonalAccessToken;
  * @property int|null $symlink_id
  * @property string $name
  * @property string $token
- * @property array|null $abilities
+ * @property array $abilities
  * @property \Illuminate\Support\Carbon|null $last_used_at
  * @property \Illuminate\Support\Carbon|null $expired_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -144,7 +144,7 @@ class PersonalAccessToken extends BasePersonalAccessToken
      * @param  int|null  $status [description]
      * @return Builder|null          [description]
      */
-    public function scopeFilterStatus(Builder $query, int $status = null): ?Builder
+    public function scopeFilterStatus(Builder $query, ?int $status = null): ?Builder
     {
         return $query->when(!is_null($status), function (Builder $query) use ($status) {
             return $query->when($status === 1, function (Builder $query) {

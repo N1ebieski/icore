@@ -41,6 +41,7 @@ class NoMoreContentHtml
     {
         return new Attribute(
             get: function (): string {
+                /** @var string */
                 return preg_replace(
                     '/<p>.*?\[more\].*?<\/p>/',
                     '<span id="more" class="hashtag"></span>',

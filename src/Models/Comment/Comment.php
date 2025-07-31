@@ -204,7 +204,7 @@ class Comment extends Entity
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = ['content_html', 'status', 'censored', 'lang'];
 
@@ -218,7 +218,7 @@ class Comment extends Entity
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'status' => Status::INACTIVE,

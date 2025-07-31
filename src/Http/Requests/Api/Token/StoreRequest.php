@@ -93,7 +93,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 'distinct',
-                Rule::in($this->token::$abilities)
+                Rule::in($this->token::$abilities) //@phpstan-ignore-line
             ]
         ];
     }

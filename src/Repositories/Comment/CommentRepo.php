@@ -172,7 +172,6 @@ class CommentRepo
             ->limit($component['limit'])
             ->with(['morph', 'morph.langs', 'user'])
             ->get()
-            // @phpstan-ignore-next-line
             ->map(function (Comment $comment) use ($component) {
                 if ($component['max_content'] !== null) {
                     $comment->content = mb_substr($comment->content, 0, $component['max_content']) . '...';

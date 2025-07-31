@@ -79,7 +79,7 @@ class BanValue extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'type', 'value', 'lang'

@@ -117,7 +117,7 @@ class SocialiteService
         return $this->db->transaction(function () use ($providerUser, $provider) {
             /** @var User */
             $socialiteUser = $this->socialite->user()->create([
-                'name' => str_replace(' ', '_', $providerUser->getName()),
+                'name' => str_replace(' ', '_', $providerUser->getName() ?? ''),
                 'email' => $providerUser->getEmail(),
             ]);
 

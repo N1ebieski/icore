@@ -39,6 +39,7 @@ class EditLoad
             $parent->loadAncestorsExceptSelf();
         }
 
+        //@phpstan-ignore-next-line
         $category->setRelations(['parent' => $parent])->with('descendants');
     }
 }

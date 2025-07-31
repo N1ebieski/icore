@@ -19,6 +19,7 @@
 namespace N1ebieski\ICore\Services\Comment;
 
 use Throwable;
+use Illuminate\Support\Collection;
 use N1ebieski\ICore\Models\Comment\Comment;
 use Illuminate\Database\DatabaseManager as DB;
 use N1ebieski\ICore\ValueObjects\Comment\Status;

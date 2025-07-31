@@ -249,7 +249,7 @@ class Page extends Entity implements AutoTranslateInterface
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'seo_noindex',
@@ -274,7 +274,7 @@ class Page extends Entity implements AutoTranslateInterface
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'seo_noindex' => SeoNoindex::INACTIVE,

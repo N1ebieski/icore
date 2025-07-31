@@ -187,7 +187,6 @@ class PageRepo
                     ->orderBy('position', 'asc');
             })
             ->get()
-            // @phpstan-ignore-next-line
             ->map(function (Page $page) {
                 if ($page->childrens->isNotEmpty()) {
                     $urls = [];

@@ -38,7 +38,7 @@ class TokenController
      */
     public function create(Token $token): JsonResponse
     {
-        $abilities = Collect::make($token::$abilities);
+        $abilities = Collect::make($token::$abilities); //@phpstan-ignore-line
 
         return Response::json([
             'view' => View::make('icore::web.token.create', [
