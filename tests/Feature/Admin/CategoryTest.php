@@ -64,7 +64,7 @@ class CategoryTest extends TestCase
                 return [
                     'created_at' => Carbon::now()->addSeconds($sequence->index)
                 ];
-            })        
+            })
             ->active()
             ->create();
 
@@ -451,7 +451,7 @@ class CategoryTest extends TestCase
         $this->assertTrue(!is_null($category) && $category->exists());
 
         $this->assertDatabaseHas('categories_closure', [
-            'descendant' => $category?->id,
+            'descendant' => $category->id,
             'ancestor' => $parent->id,
             'depth' => 1
         ]);
@@ -533,7 +533,7 @@ class CategoryTest extends TestCase
         $this->assertTrue(!is_null($category) && $category->exists());
 
         $this->assertDatabaseHas('categories_closure', [
-            'descendant' => $category?->id,
+            'descendant' => $category->id,
             'ancestor' => $parent->id,
             'depth' => 2
         ]);

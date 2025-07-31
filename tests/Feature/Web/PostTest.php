@@ -55,7 +55,7 @@ class PostTest extends TestCase
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->hasAttached($category)->create();
 
-        /** @var Collection<Tag> */
+        /** @var Collection<int, Tag> */
         $tags = Tag::makeFactory()->hasAttached($post, [], 'morphs')->count(5)->create();
 
         $response = $this->get(route('web.post.show', [$post->slug]));
@@ -63,7 +63,7 @@ class PostTest extends TestCase
         $response->assertSee($post->title, false)
             ->assertSee($category->name, false)
             ->assertSee($post->user->name, false)
-            ->assertSee($tags[0]->name, false);
+            ->assertSee($tags[0]->name, false); //@phpstan-ignore-line
     }
 
     public function testPostShowCommentsDisable(): void
@@ -71,11 +71,12 @@ class PostTest extends TestCase
         /** @var Post */
         $post = Post::makeFactory()->active()->publish()->withUser()->notCommentable()->create();
 
-        /** @var Collection<Comment> */
+        /** @var Collection<int, Comment> */
         $comments = Comment::makeFactory()->count(50)->active()->withUser()->for($post, 'morph')->create();
 
         $response = $this->get(route('web.post.show', [$post->slug]));
 
+        //@phpstan-ignore-next-line
         $response->assertDontSee($comments[1]->content)->assertSee($post->title, false);
     }
 

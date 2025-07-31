@@ -149,7 +149,7 @@ class Post extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'title',
@@ -177,7 +177,7 @@ class Post extends Model
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'comment' => Commentable::ACTIVE,

@@ -69,7 +69,7 @@ class BanModel extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'model_type', 'model_id'

@@ -25,6 +25,13 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class RateLimiterPerHour
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
     public function handle(Request $request, Closure $next, ?int $maxAttempts = null)
     {
         if ($maxAttempts === null || $maxAttempts === 0) {

@@ -518,7 +518,7 @@ class MailingTest extends TestCase
 
         $response->assertRedirect(route('admin.mailing.index', [
             'filter' => [
-                'search' => "id:\"{$mailing?->id}\""
+                'search' => "id:\"{$mailing->id}\""
             ]
         ]));
 

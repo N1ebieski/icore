@@ -80,6 +80,7 @@ class StatService
             $morphs = $this->stat->morphs;
 
             $morphs->filter(function (mixed $morph) {
+                //@phpstan-ignore-next-line
                 return $morph->stats->doesntContain('slug', $this->stat->slug->getValue());
             })
             ->each(function (mixed $morph) {
@@ -96,6 +97,7 @@ class StatService
                 ->whereIn(
                     'model_id',
                     $morphs->filter(function (mixed $morph) {
+                        //@phpstan-ignore-next-line
                         return $morph->stats->contains('slug', $this->stat->slug->getValue());
                     })
                     ->pluck('id')

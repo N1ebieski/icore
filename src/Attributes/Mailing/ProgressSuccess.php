@@ -36,7 +36,7 @@ class ProgressSuccess
     {
         return new Attribute(
             get: function (): ?int {
-                return $this->mailing?->emails_count > 0 ?
+                return $this->mailing->emails_count > 0 ?
                     (int)round(
                         ($this->mailing->emails_success_count / $this->mailing->emails_count) * 100,
                         0

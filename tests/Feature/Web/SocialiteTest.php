@@ -47,7 +47,7 @@ class SocialiteTest extends TestCase
         parent::setUp();
 
         $this->socialLoginRedirects = [
-            'facebook' => 'https://www.facebook.com/v3.3/dialog/oauth',
+            'facebook' => 'https://www.facebook.com/v23.0/dialog/oauth',
             'google'   => 'https://accounts.google.com/o/oauth2/auth',
             'github'   => 'https://github.com/login/oauth/authorize',
             'twitter'  => 'https://api.twitter.com/oauth/authenticate',
@@ -162,7 +162,7 @@ class SocialiteTest extends TestCase
         $this->assertTrue(!empty($userExist));
 
         $this->assertDatabaseHas('socialites', [
-            'user_id' => $userExist?->id,
+            'user_id' => $userExist->id,
             'provider_name' => self::PROVIDER,
             'provider_id' => 343242342
         ]);

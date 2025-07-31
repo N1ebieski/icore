@@ -187,7 +187,7 @@ class Category extends Entity
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'icon', 'status'];
 
@@ -230,7 +230,7 @@ class Category extends Entity
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'status' => Status::ACTIVE,
@@ -285,9 +285,6 @@ class Category extends Entity
      */
     public function childrensRecursiveWithAllRels(): HasMany
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
         return $this->childrens()->withRecursiveAllRels();
     }
 

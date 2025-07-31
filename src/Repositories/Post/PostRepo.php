@@ -123,7 +123,6 @@ class PostRepo
      */
     public function firstBySlug(string $slug): ?Post
     {
-        // @phpstan-ignore-next-line
         return $this->post->newQuery()
             ->where('slug', $slug)
             ->active()
@@ -279,7 +278,6 @@ class PostRepo
                     ->selectRaw("`{$this->post->getTable()}`.*")
                     ->search($name)
                     ->when($tag = $tag->findByName($name), function (Builder $query) use ($tag) {
-                        // @phpstan-ignore-next-line
                         return $query->unionAll(
                             $this->post->newQuery()
                                 ->selectRaw('`posts`.*, 0 AS `title_relevance`, 0 AS `content_relevance`')

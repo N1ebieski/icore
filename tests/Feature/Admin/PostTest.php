@@ -666,19 +666,19 @@ class PostTest extends TestCase
 
         $response->assertRedirect(route('admin.post.index', [
             'filter' => [
-                'search' => "id:\"{$post?->id}\""
+                'search' => "id:\"{$post->id}\""
             ]
         ]));
 
         $this->assertDatabaseHas('categories_models', [
-            'model_id' => $post?->id,
-            'model_type' => $post?->getMorphClass(),
+            'model_id' => $post->id,
+            'model_type' => $post->getMorphClass(),
             'category_id' => $category->id
         ]);
 
         $this->assertDatabaseHas('tags_models', [
-            'model_id' => $post?->id,
-            'model_type' => $post?->getMorphClass(),
+            'model_id' => $post->id,
+            'model_type' => $post->getMorphClass(),
         ]);
     }
 }

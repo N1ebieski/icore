@@ -769,9 +769,9 @@ class PageTest extends TestCase
 
         $response->assertRedirect(route('admin.page.index', [
             'filter' => [
-                'search' => "id:\"{$page?->id}\""
+                'search' => "id:\"{$page->id}\""
             ]
-        ]));        
+        ]));
     }
 
     public function testChildrenPageStore(): void
@@ -808,12 +808,12 @@ class PageTest extends TestCase
 
         $response->assertRedirect(route('admin.page.index', [
             'filter' => [
-                'search' => "id:\"{$page?->id}\""
+                'search' => "id:\"{$page->id}\""
             ]
         ]));
 
         $this->assertDatabaseHas('pages_closure', [
-            'descendant' => $page?->id,
+            'descendant' => $page->id,
             'ancestor' => $parent->id,
             'depth' => 1
         ]);

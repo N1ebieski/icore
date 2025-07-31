@@ -45,7 +45,6 @@ class LessContentHtml
             get: function (): string {
                 $cut = preg_split('/<p>.*?\[more\].*?<\/p>/', $this->page->replacement_content_html);
 
-                // @phpstan-ignore-next-line
                 return (!empty($cut[1])) ? $cut[0] . '<p><a href="' . URL::route('web.page.show', [
                     $this->page->slug,
                     '#more'

@@ -54,6 +54,7 @@ class TimelineData implements DataInterface
         $data = [];
 
         $collection->each(function ($item) use (&$data) {
+            /** @var object{year: int, month: int, type: string, count: int} $item */
             $data[] = [
                 'year' => $item->year,
                 'month' => $item->month,

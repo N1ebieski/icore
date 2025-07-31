@@ -19,7 +19,6 @@
 namespace N1ebieski\ICore\Http\Clients\AI\Factories;
 
 use N1ebieski\ICore\ValueObjects\AI\Driver;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Contracts\Container\Container as App;
 use N1ebieski\ICore\Http\Clients\AI\Interfaces\AIClientInterface;
 
@@ -34,11 +33,6 @@ class AIClientFactory
     {
         return match ($driver) {
             Driver::OpenAI => $this->app->make(\N1ebieski\ICore\Http\Clients\AI\OpenAI\OpenAIClient::class),
-
-            default => throw new \N1ebieski\ICore\Exceptions\AI\DriverNotFoundException(
-                "Driver {$driver->value} not found",
-                HttpResponse::HTTP_FORBIDDEN
-            )
         };
     }
 }

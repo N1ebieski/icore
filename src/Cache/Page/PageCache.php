@@ -21,6 +21,7 @@ namespace N1ebieski\ICore\Cache\Page;
 use Illuminate\Support\Carbon;
 use N1ebieski\ICore\Models\Page\Page;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Config\Repository as Config;
 
@@ -46,9 +47,9 @@ class PageCache
     /**
      * [rememberWithChildrensByComponent description]
      * @param  array      $component [description]
-     * @return Collection            [description]
+     * @return Collect           [description]
      */
-    public function rememberWithChildrensByComponent(array $component): Collection
+    public function rememberWithChildrensByComponent(array $component): Collect
     {
         $json = json_encode($component);
 

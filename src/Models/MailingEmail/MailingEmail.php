@@ -66,7 +66,7 @@ class MailingEmail extends Model
     /**
     * The attributes that are mass assignable.
     *
-    * @var array<string>
+    * @var array<int, string>
     */
     protected $fillable = ['sent'];
 
@@ -80,7 +80,7 @@ class MailingEmail extends Model
     /**
      * The model's default values for attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'sent' => Sent::UNSENT,

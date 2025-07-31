@@ -86,7 +86,6 @@ class CommentController implements Polymorphic
     public function store(Post $post, Comment $comment, StoreRequest $request): JsonResponse
     {
         $comment = $comment->makeService()->create(
-            // @phpstan-ignore-next-line
             $request->safe()->merge([
                 'morph' => $post,
                 'user' => $request->user()

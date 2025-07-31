@@ -33,8 +33,9 @@ trait HasFilterable
      * @param  string|null  $search [description]
      * @return Builder          [description]
      */
-    public function scopeFilterSearch(Builder $query, string $search = null): Builder
+    public function scopeFilterSearch(Builder $query, ?string $search = null): Builder
     {
+        /** @phpstan-ignore-next-line */
         return $query->when(!is_null($search), function (Builder $query) use ($search) {
             /** @phpstan-ignore-next-line */
             return $query->search($search);
@@ -47,7 +48,7 @@ trait HasFilterable
      * @param  int|null  $status [description]
      * @return Builder          [description]
      */
-    public function scopeFilterStatus(Builder $query, int $status = null): Builder
+    public function scopeFilterStatus(Builder $query, ?int $status = null): Builder
     {
         return $query->when(!is_null($status), function (Builder $query) use ($status) {
             return $query->where("{$this->getTable()}.status", $status);
@@ -60,7 +61,7 @@ trait HasFilterable
      * @param  int|null  $paginate [description]
      * @return LengthAwarePaginator [description]
      */
-    public function scopeFilterPaginate(Builder $query, int $paginate = null): LengthAwarePaginator
+    public function scopeFilterPaginate(Builder $query, ?int $paginate = null): LengthAwarePaginator
     {
         return $query->paginate($paginate ?? Config::get('database.paginate'));
     }
@@ -72,8 +73,9 @@ trait HasFilterable
      * @param string $search
      * @return Builder
      */
-    public function scopeFilterOrderBySearch(Builder $query, string $search = null): Builder
+    public function scopeFilterOrderBySearch(Builder $query, ?string $search = null): Builder
     {
+        /** @phpstan-ignore-next-line */
         return $query->when(!is_null($search), function (Builder $query) use ($search) {
             /** @phpstan-ignore-next-line */
             return $query->orderBySearch($search);
@@ -86,7 +88,7 @@ trait HasFilterable
      * @param  string|null  $orderby [description]
      * @return Builder           [description]
      */
-    public function scopeFilterOrderBy(Builder $query, string $orderby = null): Builder
+    public function scopeFilterOrderBy(Builder $query, ?string $orderby = null): Builder
     {
         return $query->when(!is_null($orderby), function (Builder $query) use ($orderby) {
             // @phpstan-ignore-next-line
@@ -108,7 +110,7 @@ trait HasFilterable
      * @param  int|null $report [description]
      * @return Builder          [description]
      */
-    public function scopeFilterReport(Builder $query, int $report = null): Builder
+    public function scopeFilterReport(Builder $query, ?int $report = null): Builder
     {
         return $query->when($report === Reported::ACTIVE, function (Builder $query) {
             return $query->whereHas('reports');
@@ -123,7 +125,7 @@ trait HasFilterable
      * @param  User|null  $author [description]
      * @return Builder          [description]
      */
-    public function scopeFilterAuthor(Builder $query, User $author = null): Builder
+    public function scopeFilterAuthor(Builder $query, ?User $author = null): Builder
     {
         return $query->when(!is_null($author), function (Builder $query) use ($author) {
             // @phpstan-ignore-next-line
@@ -137,7 +139,7 @@ trait HasFilterable
      * @param  Category|null  $category [description]
      * @return Builder            [description]
      */
-    public function scopeFilterCategory(Builder $query, Category $category = null): Builder
+    public function scopeFilterCategory(Builder $query, ?Category $category = null): Builder
     {
         return $query->when(!is_null($category), function (Builder $query) use ($category) {
             return $query->whereHas('categories', function (Builder $query) use ($category) {
@@ -153,7 +155,7 @@ trait HasFilterable
      * @param  array|null  $except [description]
      * @return Builder         [description]
      */
-    public function scopeFilterExcept(Builder $query, array $except = null): Builder
+    public function scopeFilterExcept(Builder $query, ?array $except = null): Builder
     {
         return $query->when(!is_null($except), function (Builder $query) use ($except) {
             $query->whereNotIn("{$this->getTable()}.{$this->getKeyName()}", $except);
