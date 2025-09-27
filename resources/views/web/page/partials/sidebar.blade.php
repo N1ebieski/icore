@@ -14,7 +14,7 @@
         <a 
             href="{{ route('web.page.show', $siblingWithContent->slug) }}" 
             title="{{ $sibling->title }}"
-            class="{{ $isUrl(route('web.page.show', $siblingWithContent->slug), 'font-weight-bold') }}"
+            class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}"
         >
         @endif
             @if ($page->real_depth > 0)
