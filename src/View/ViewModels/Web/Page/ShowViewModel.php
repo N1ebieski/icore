@@ -52,7 +52,7 @@ class ShowViewModel extends ViewModel
         return $this->filter->all();
     }
 
-    public function getFirstSiblingWithContent(Page $page): ?Page
+    public function getFirstChildrenWithContent(Page $page): ?Page
     {
         if (!empty($page->content)) {
             return $page;
@@ -60,7 +60,7 @@ class ShowViewModel extends ViewModel
 
         if ($page->relationLoaded('childrensRecursiveWithAllRels')) {
             foreach ($page->childrensRecursiveWithAllRels as $child) {
-                return $this->getFirstSiblingWithContent($child);
+                return $this->getFirstChildrenWithContent($child);
             }
         }
 

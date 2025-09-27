@@ -8,11 +8,11 @@
     @foreach ($page->siblings as $sibling)
     <div class="list-group-item d-flex justify-content-between align-items-center">
         @php
-            $siblingWithContent = $getFirstSiblingWithContent($sibling) ?? $sibling;
+            $childrenWithContent = $getFirstChildrenWithContent($sibling) ?? $sibling;
         @endphp
         @if (!empty($siblingWithContent->content))
         <a 
-            href="{{ route('web.page.show', $siblingWithContent->slug) }}" 
+            href="{{ route('web.page.show', $childrenWithContent->slug) }}" 
             title="{{ $sibling->title }}"
             class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}"
         >
@@ -24,7 +24,7 @@
             <i class="{{ $sibling->icon }} text-center" style="width:1.5rem"></i>
             @endif
             <span>{{ $sibling->title }}</span>
-        @if (!empty($siblingWithContent->content)) 
+        @if (!empty($childrenWithContent->content)) 
         </a>
         @endif    
     </div>
