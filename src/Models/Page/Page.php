@@ -447,6 +447,7 @@ class Page extends Entity
         return $this->setRelation(
             'siblings',
             $this->where('parent_id', $this->parent_id)
+                ->withRecursiveAllRels()
                 ->active()
                 ->orderBy('position', 'asc')
                 ->get()
