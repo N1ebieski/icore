@@ -7,11 +7,14 @@
     @endif
     @foreach ($page->siblings as $sibling)
     <div class="list-group-item d-flex justify-content-between align-items-center">
-        @if (!empty($sibling->content))    
+        @php
+            $siblingWithContent = $getFirstSiblingWithContent($sibling) ?? $sibling;
+        @endphp
+        @if (!empty($siblingWithContent->content))
         <a 
-            href="{{ route('web.page.show', $sibling->slug) }}" 
+            href="{{ route('web.page.show', $siblingWithContent->slug) }}" 
             title="{{ $sibling->title }}"
-            class="{{ $isUrl(route('web.page.show', $sibling->slug), 'font-weight-bold') }}"
+            class="{{ $isUrl(route('web.page.show', $siblingWithContent->slug), 'font-weight-bold') }}"
         >
         @endif
             @if ($page->real_depth > 0)
@@ -21,7 +24,7 @@
             <i class="{{ $sibling->icon }} text-center" style="width:1.5rem"></i>
             @endif
             <span>{{ $sibling->title }}</span>
-        @if (!empty($sibling->content)) 
+        @if (!empty($siblingWithContent->content)) 
         </a>
         @endif    
     </div>

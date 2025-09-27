@@ -714,6 +714,7 @@ class Page extends Entity implements AutoTranslateInterface
             'siblings',
             $this->selectRaw("`{$this->getTable()}`.*")
                 ->multiLang()
+                ->withRecursiveAllRels()
                 ->active()
                 ->where('parent_id', $this->parent_id)
                 ->orderBy('position', 'asc')
