@@ -10,7 +10,7 @@
         @php
             $childrenWithContent = $getFirstChildrenWithContent($sibling) ?? $sibling;
         @endphp
-        @if (!empty($siblingWithContent->content))
+        @if (!empty($childrenWithContent->content))
         <a 
             href="{{ route('web.page.show', $childrenWithContent->slug) }}" 
             title="{{ $sibling->title }}"
