@@ -150,7 +150,7 @@ class File implements FileInterface
     public function delete(string $path): bool
     {
         if (!$this->filesystem->exists($path)) {
-            throw new \N1ebieski\ICore\Exceptions\File\NotFoundException();
+            return true;
         }
 
         return $this->filesystem->delete($path);
